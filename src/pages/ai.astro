@@ -275,6 +275,144 @@ const platformInputs = [
     </div>
   </section>
 
+  {/* === Section 2c — AI trends 2022→2026 === v7.6
+       Maps the 2022→2026 public AI trend line onto the 5-rung spine
+       (prompt → skills → agents → loops → graphs). Each rung is a
+       forced move by the frontier labs; each rung is matched by a
+       specific deliverable on the portfolio surface. NDA-clean by
+       construction: public events only, no employer naming. */}
+  <section class="section" id="ai-trends" data-toc-id="ai-trends" data-toc-label="AI trends 2022→2026">
+    <div class="container">
+      <header class="section__head">
+        <p class="section__eyebrow">AI trends 2022→2026</p>
+        <h2 class="section__title">How the graph rung emerged.</h2>
+        <p class="section__sub">
+          The 5-rung spine — <b>prompt → skills → agents → loops → graphs</b> — is not a roadmap
+          we invented. It is what the public AI trend line actually produced, year by year, from
+          2022-11 to 2026-03. Each rung was a forced move by the frontier labs; each rung was
+          matched, in the portfolio, by a specific deliverable on the matching surface. The
+          lesson per year is the institutional takeaway that survived contact with the next year.
+        </p>
+      </header>
+
+      <ol class="ai-trend-grid" aria-label="AI trends 2022 to 2026, mapped to the 5-rung spine">
+        <li class="ai-trend">
+          <p class="ai-trend__year mono">2022</p>
+          <h3 class="ai-trend__name">Prompt · ChatGPT goes public</h3>
+          <p class="ai-trend__body">
+            <b>Trend.</b> 2022-11 ChatGPT reaches 100M users in two months. The public
+            surface discovers the prompt as the unit of work.
+          </p>
+          <p class="ai-trend__body">
+            <b>Then.</b> A single-prompt demonstrator. No harness, no eval, no contract.
+          </p>
+          <p class="ai-trend__body">
+            <b>Lesson.</b> Prompting is not engineering. The variable that survives
+            is the eval set, not the wording.
+          </p>
+          <a href={path('/workbooks/ai-engineering/')} class="ai-trend__link">
+            W1: prompt chapter →
+          </a>
+        </li>
+
+        <li class="ai-trend">
+          <p class="ai-trend__year mono">2023</p>
+          <h3 class="ai-trend__name">Skills · GPT-4, function calling, RAG</h3>
+          <p class="ai-trend__body">
+            <b>Trend.</b> 2023-03 GPT-4 + plugins. 2023-06 function calling. 2023-10
+            RAG becomes the default retrieval pattern. The model becomes a tool
+            user, not a search replacement.
+          </p>
+          <p class="ai-trend__body">
+            <b>Then.</b> Skills module: tool schemas, JSON-mode contracts,
+            retrieval-graded chunks. The first eval harness ships.
+          </p>
+          <p class="ai-trend__body">
+            <b>Lesson.</b> Grounding beats fluency. A tool-using model with a real
+            corpus beats a fluent model hallucinating.
+          </p>
+          <a href={path('/research/frontier-models')} class="ai-trend__link">
+            Frontier models benchmark →
+          </a>
+        </li>
+
+        <li class="ai-trend">
+          <p class="ai-trend__year mono">2024</p>
+          <h3 class="ai-trend__name">Agents · Claude Sonnet 3.5, Computer Use</h3>
+          <p class="ai-trend__body">
+            <b>Trend.</b> 2024-06 Claude Sonnet 3.5 ships agentic coding. 2024-10
+            Anthropic Computer Use beta. The agent becomes a first-class product
+            surface.
+          </p>
+          <p class="ai-trend__body">
+            <b>Then.</b> Solo agent with a planner + tool belt. Eval harness measures
+            plan quality, not just answer quality.
+          </p>
+          <p class="ai-trend__body">
+            <b>Lesson.</b> An agent without a loop is a long prompt. The harness
+            is the product.
+          </p>
+          <a href={path('/workbooks/ai-engineering/')} class="ai-trend__link">
+            W1: agent chapter →
+          </a>
+        </li>
+
+        <li class="ai-trend">
+          <p class="ai-trend__year mono">2025</p>
+          <h3 class="ai-trend__name">Loops · MCP, DeepSeek-R1, eval-driven rollout</h3>
+          <p class="ai-trend__body">
+            <b>Trend.</b> 2025-02 Anthropic MCP. 2025 DeepSeek-R1 ships reasoning
+            on par with closed models. Teams adopt eval-driven rollout, not
+            vibe-driven rollout.
+          </p>
+          <p class="ai-trend__body">
+            <b>Then.</b> The 5-must-have loop contract lands in production: terminal
+            state, idempotent write, dedupe key, coverage filter, AAR.
+          </p>
+          <p class="ai-trend__body">
+            <b>Lesson.</b> A loop without a coverage filter is a leak. The AAR is
+            the reliability primitive.
+          </p>
+          <a href={path('/methodology')} class="ai-trend__link">
+            Methodology: 5-must-have loop contract →
+          </a>
+        </li>
+
+        <li class="ai-trend">
+          <p class="ai-trend__year mono">2026</p>
+          <h3 class="ai-trend__name">Graphs · Claude Opus 4.5, multi-agent offices</h3>
+          <p class="ai-trend__body">
+            <b>Trend.</b> 2026-03 Claude Opus 4.5. Frontier agents stop being
+            prompted and start composing. Multi-agent offices stop being demos
+            and start compounding across missions.
+          </p>
+          <p class="ai-trend__body">
+            <b>Now.</b> STELLA: {profile.stats.aiAgentCount} agents, 6 sub-teams, knowledge
+            graph with 9 entity types and 9 predicates. Every AAR writes back to
+            the graph.
+          </p>
+          <p class="ai-trend__body">
+            <b>Lesson.</b> The graph rung is where the office starts compounding.
+            Without it, every agent re-derives the corpus and shipping velocity
+            collapses.
+          </p>
+          <a href={path('/workbooks/graph-engineering/')} class="ai-trend__link">
+            W3: graph engineering →
+          </a>
+        </li>
+      </ol>
+
+      <p class="section__sub section__sub--narrow">
+        The graph rung is not a destination — it is the first rung where a multi-agent office
+        can compound. Every prior rung (prompt, skills, agents, loops) is a per-call primitive.
+        The graph is the per-office primitive: a shared, typed, queryable memory that turns
+        {' '}{profile.stats.aiAgentCount} agents from collaboration cost into collaboration yield. The
+        {' '}<a href={path('/workbooks')}>workbook trilogy</a> is the public-facing narrative; the
+        portfolio is the running example.
+      </p>
+    </div>
+  </section>
+
   {/* === Section 3 — 6 AI projects === */}
   <section
     class="section section--alt"
@@ -673,5 +811,104 @@ const platformInputs = [
   }
   .stella-cell__link:hover {
     opacity: 0.7;
+  }
+
+  /* ============================================================
+     SECTION 2c — AI TRENDS 2022→2026
+     ============================================================ */
+  /* v7.6 — Five-rung spine mapped to the public AI trend line.
+     Card grid: 5 columns on wide, stacks to 1 col under 980px.
+     Each card carries a year chip + Then/Now/Lesson triplet
+     so the takeaway survives contact with the next year. */
+  .ai-trend-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: var(--sp-3);
+    list-style: none;
+    padding: 0;
+    margin: var(--sp-6) 0 var(--sp-5);
+  }
+  .ai-trend {
+    display: flex;
+    flex-direction: column;
+    background: var(--c-bg-2);
+    border: 1px solid var(--c-rule);
+    border-left: 3px solid var(--c-amber);
+    border-radius: var(--radius-sm);
+    padding: var(--sp-4) var(--sp-4) var(--sp-3);
+    gap: var(--sp-2);
+    transition:
+      border-color 0.18s ease,
+      transform 0.18s ease;
+  }
+  .ai-trend:hover {
+    border-color: var(--c-amber);
+    transform: translateY(-1px);
+  }
+  .ai-trend__year {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--c-amber);
+    font-weight: 600;
+    margin: 0;
+  }
+  .ai-trend__name {
+    font: 600 1.02rem / 1.25 var(--serif-display);
+    color: var(--c-ink);
+    margin: 0 0 var(--sp-1);
+    letter-spacing: -0.01em;
+  }
+  .ai-trend__body {
+    font-size: 0.84rem;
+    line-height: 1.5;
+    color: var(--c-ink-2);
+    margin: 0;
+  }
+  .ai-trend__body b {
+    color: var(--c-ink);
+    font-weight: 600;
+  }
+  .ai-trend__link {
+    color: var(--c-amber);
+    font: 500 0.78rem / 1.1 var(--ff-mono);
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    margin-top: auto;
+    padding-top: var(--sp-2);
+    border-top: 1px dashed var(--c-rule);
+    transition: opacity 0.2s ease;
+  }
+  .ai-trend__link:hover {
+    opacity: 0.7;
+  }
+  /* Responsive collapse: 5 → 3 → 2 → 1 cols as the viewport narrows.
+     The 5-rung spine needs to read at every breakpoint without
+     horizontal scroll. */
+  @media (max-width: 1280px) {
+    .ai-trend-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  @media (max-width: 880px) {
+    .ai-trend-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 560px) {
+    .ai-trend-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  /* Narrow-sub variant for the closing paragraph (matches section__sub) */
+  .section__sub--narrow {
+    max-width: 64ch;
+    margin-top: var(--sp-5);
+  }
+  .section__sub--narrow a {
+    color: var(--c-amber);
+    text-decoration: underline;
+    text-decoration-color: var(--c-amber-decor);
+    text-underline-offset: 3px;
   }
 </style>
