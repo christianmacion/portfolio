@@ -221,6 +221,60 @@ const platformInputs = [
     </div>
   </section>
 
+  {/* === Section 2b — STELLA + graph engineering === v7.6
+       Surfaces the next layer: STELLA Office (53-agent, 6-sub-team)
+       + the graph rung. Link out to /workbooks/. NDA-safe: counts
+       and taxonomy only, no officer names. */}
+  <section class="section section--alt" id="stella" data-toc-id="stella" data-toc-label="STELLA · Graph engineering">
+    <div class="container">
+      <header class="section__head">
+        <p class="section__eyebrow">Beyond the loop · STELLA Office</p>
+        <h2 class="section__title">The next rung: graphs as shared memory.</h2>
+        <p class="section__sub">
+          The 5-rung spine — <b>prompt → skills → agents → loops → graphs</b> — is what
+          STELLA's {profile.stats.aiAgentCount}-agent office runs on. The graph layer is the
+          productivity unlock: typed entities + relations + provenance, queryable, shared
+          across every agent so the corpus isn't re-derived on every dispatch.
+        </p>
+      </header>
+
+      <div class="stella-grid">
+        <div class="stella-cell stella-cell--arch">
+          <p class="stella-cell__num mono">A</p>
+          <h3 class="stella-cell__name">Multi-agent office</h3>
+          <p class="stella-cell__sub">
+            {profile.stats.aiAgentCount} agents in 6 sub-teams. 4 doctrinal corpora. 5-must-have
+            compliance on every loop primitive. NDA-safe by construction — counts and taxonomy
+            only, never officer names.
+          </p>
+          <a href={path('/methodology')} class="stella-cell__link">Methodology →</a>
+        </div>
+
+        <div class="stella-cell stella-cell--graph">
+          <p class="stella-cell__num mono">B</p>
+          <h3 class="stella-cell__name">Knowledge graph layer</h3>
+          <p class="stella-cell__sub">
+            9 entity types. 9 predicates. Four-stage pipeline — Extract · Resolve ·
+            Assemble · Query. The AAR → graph contract: every mission writes its
+            findings, every AAR mutates the graph.
+          </p>
+          <a href={path('/workbooks')} class="stella-cell__link">Workbook trilogy →</a>
+        </div>
+
+        <div class="stella-cell stella-cell--rung">
+          <p class="stella-cell__num mono">C</p>
+          <h3 class="stella-cell__name">5-rung spine</h3>
+          <p class="stella-cell__sub">
+            Most teams plateau at the loop. STELLA runs at the graph rung — and ships
+            the public-facing narrative via two workbooks
+            (<em>AI Engineering from the Ground Up</em>, <em>Graph Engineering for Everyone</em>).
+          </p>
+          <a href={path('/workbooks/ai-engineering/')} class="stella-cell__link">Read W1 →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   {/* === Section 3 — 6 AI projects === */}
   <section
     class="section section--alt"
@@ -446,7 +500,7 @@ const platformInputs = [
     color: inherit;
   }
   .ai-card__title a:hover {
-    color: var(--c-primary-2-light);
+    color: var(--c-amber-light);
   }
   .ai-card__sum {
     margin: 0;
@@ -513,7 +567,7 @@ const platformInputs = [
     line-height: 1.55;
   }
   .ai-disclosure .hl {
-    color: var(--c-primary-2);
+    color: var(--c-amber);
     font-weight: 600;
     background: var(--c-amberl-mist);
     padding: 0 6px;
@@ -526,5 +580,98 @@ const platformInputs = [
     .ai-projects {
       page-break-inside: avoid;
     }
+  }
+
+  /* ============================================================
+     v7.6 — STELLA + Graph Engineering grid (Section 2b)
+     ============================================================ */
+  .stella-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--sp-4);
+    margin-top: var(--sp-5);
+  }
+  @media (max-width: 880px) {
+    .stella-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .stella-cell {
+    padding: var(--sp-5);
+    border: 1px solid var(--c-rule);
+    border-radius: 6px;
+    background: var(--c-bg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-2);
+    transition: border-color 0.2s ease, transform 0.2s ease;
+    position: relative;
+  }
+  .stella-cell::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--c-amber);
+    border-radius: 4px 0 0 4px;
+  }
+  .stella-cell--graph::before {
+    background: var(--c-teal, #5ba8a3);
+  }
+  .stella-cell--rung::before {
+    background: var(--c-violet, #a07baf);
+  }
+  .stella-cell:hover {
+    transform: translateY(-2px);
+    border-color: var(--c-amber);
+  }
+  .stella-cell--graph:hover {
+    border-color: var(--c-teal, #5ba8a3);
+  }
+  .stella-cell--rung:hover {
+    border-color: var(--c-violet, #a07baf);
+  }
+  .stella-cell__num {
+    font-size: 0.7rem;
+    color: var(--c-amber);
+    letter-spacing: 0.18em;
+    margin: 0;
+  }
+  .stella-cell--graph .stella-cell__num {
+    color: var(--c-teal, #5ba8a3);
+  }
+  .stella-cell--rung .stella-cell__num {
+    color: var(--c-violet, #a07baf);
+  }
+  .stella-cell__name {
+    font: 600 1.25rem / 1.2 var(--serif-display);
+    color: var(--c-ink);
+    margin: 4px 0 6px;
+    letter-spacing: -0.01em;
+  }
+  .stella-cell__sub {
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: var(--c-ink-2);
+    margin: 0 0 var(--sp-3);
+    flex: 1;
+  }
+  .stella-cell__sub b {
+    color: var(--c-amber);
+    font-weight: 600;
+  }
+  .stella-cell__link {
+    color: var(--c-amber);
+    font: 500 0.85rem / 1 var(--ff-mono);
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    padding-top: var(--sp-2);
+    border-top: 1px dashed var(--c-rule);
+    transition: opacity 0.2s ease;
+  }
+  .stella-cell__link:hover {
+    opacity: 0.7;
   }
 </style>
