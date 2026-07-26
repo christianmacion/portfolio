@@ -25,6 +25,8 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 import { path } from '@utils/url';
 import { projectListJsonLd } from '@utils/seo';
 import VoiceLine from '@components/VoiceLine.astro';
+import NewsRibbon from '@components/NewsRibbon.astro';
+import Marquee from '@components/Marquee.astro';
 
 type ProjectEntry = CollectionEntry<'project'>;
 const allProjects: ProjectEntry[] = await getCollection('project');
@@ -57,7 +59,7 @@ const itemListJsonLd = projectListJsonLd(
   <header class="page-head">
     <div class="container">
       <p class="section__eyebrow">Portfolio</p>
-      <h1 class="page-head__title">{projects.length} projects, two lanes.</h1>
+      <h1 class="page-head__title" data-words>{projects.length} projects, two lanes.</h1>
       <VoiceLine class="page-head__voice">
         Every metric below is real, every method is documented, every line of code is on disk.
       </VoiceLine>
@@ -111,11 +113,76 @@ const itemListJsonLd = projectListJsonLd(
     </div>
   </header>
 
+  {/* v7.4-WIDE — project news strip + lane marquee at the top of the index. */}
+  <NewsRibbon
+    news={[
+      {
+        t: '10:32',
+        tag: 'AVAIL',
+        text: 'Q3 2026 · OPEN TO REMOTE QR / AI ROLES · <24H REPLY',
+        accent: 'warn',
+      },
+      {
+        t: '10:31',
+        tag: 'SHIP',
+        text: 'v7.4 MOTION LAYER · SITE-WIDE · 8 PRIMITIVES',
+        accent: 'sage',
+      },
+      { t: '10:28', tag: 'PROJ', text: '15 PROJECTS · 9 QUANT · 6 AI · 2 LANES', accent: 'cobalt' },
+      { t: '10:25', tag: 'PAPER', text: 'TSM-VT · +0.42% · σ 1.1 · WEEK 27', accent: 'sage' },
+      {
+        t: '10:22',
+        tag: 'READ',
+        text: 'STOCHASTIC CALCULUS · SHREVE CH.4 · ITÔ LEMMA',
+        soft: true,
+      },
+      {
+        t: '10:18',
+        tag: 'BUILD',
+        text: '76.5K LOC PYTHON · 31 GATES · ZERO ROLLBACKS',
+        accent: 'cobalt',
+      },
+      {
+        t: '10:14',
+        tag: 'GATE',
+        text: 'G31 · LOOKAHEAD AUDIT · 88% CATCH ON PHANTOM LEAK',
+        accent: 'warn',
+      },
+      {
+        t: '10:09',
+        tag: 'ALPHA',
+        text: 'COINTEGRATION PAIRS · 5Y HALF-LIFE · BLOCK-BOOTSTRAP',
+        accent: 'cobalt',
+      },
+      { t: '10:05', tag: 'STATUS', text: 'DUTY · ONLINE · 24H REPLY · NDA-CLEAN', accent: 'sage' },
+    ]}
+    speedNewsSec={56}
+    speedMethodSec={72}
+    trailing="project updates · seeded from BUILD_DATE"
+  />
+
+  <Marquee
+    items={[
+      { head: 'EVAL-FIRST', tail: '31 GATES · ZERO ROLLBACKS', accent: 'warn' },
+      { head: 'NDA-CLEAN', tail: 'PUBLIC-DATA REPRODUCIBLE', accent: 'cobalt' },
+      { head: 'ALPHA-DRIVEN', tail: '14 SIGNALS · 9 STRATEGIES', accent: 'sage' },
+      { head: 'MULTI-AGENT', tail: '6 AI PROJECTS · 1 ORCHESTRATOR', accent: 'violet' },
+      { head: 'COINTEGRATION', tail: 'PAIRS · 5Y HALF-LIFE', accent: 'cobalt' },
+      { head: 'VARIANCE RISK', tail: 'PREMIUM HARVEST · DELTA-HEDGED', accent: 'warn' },
+      { head: 'REGIME OVERLAY', tail: 'VOL-TARGETED · DEFENSIVE', accent: 'terracotta' },
+      { head: 'CRYPTO NATIVE', tail: 'BTC · ETH · FUNDING-RATE CARRY', accent: 'warn' },
+      { head: 'LOOKAHEAD AUDIT', tail: '88% CATCH ON PHANTOM LEAK', accent: 'sage' },
+      { head: 'SHIP-READY', tail: 'GATES PASS · DEPLOY MIRROR', accent: 'violet' },
+    ]}
+    speedSec={68}
+    trailing="project discipline · 10 anchor frames"
+  />
+
   <section class="section" data-lane="ai" id="lane-ai">
     <div class="container">
       <header class="section__head">
         <p class="section__eyebrow">Lane 1 · AI Engineer</p>
-        <h2 class="section__title">Multi-agent LLM systems & eval</h2>
+        <h2 class="section__title" data-words>Multi-agent LLM systems & eval</h2>
         <p class="section__sub">
           {aiProjects.length} projects spanning RAG scorecards, ReAct tool-calling, MCP servers, LLM-as-judge
           validation, reflection loops, and AI-output quality gates.
@@ -361,12 +428,12 @@ const itemListJsonLd = projectListJsonLd(
       color var(--transition);
   }
   .lane-filter__chip:hover {
-    border-color: var(--c-primary-2);
+    border-color: var(--c-amber);
     color: var(--c-ink);
   }
   .lane-filter__chip[aria-pressed='true'] {
-    background: var(--c-primary-2);
-    border-color: var(--c-primary-2);
+    background: var(--c-amber);
+    border-color: var(--c-amber);
     color: var(--c-tape);
   }
   .lane-filter__count {
@@ -392,12 +459,12 @@ const itemListJsonLd = projectListJsonLd(
     transition: border-color 120ms ease;
   }
   .book-card:hover {
-    border-color: var(--c-primary-2-deep);
+    border-color: var(--c-amber-deep);
   }
   .book-card__layer {
     font-family: var(--ff-mono);
     font-size: var(--fs-xs);
-    color: var(--c-primary-2-deep);
+    color: var(--c-amber-deep);
     letter-spacing: 0.06em;
     text-transform: uppercase;
     font-weight: 600;
@@ -434,7 +501,7 @@ const itemListJsonLd = projectListJsonLd(
     max-width: 72ch;
     padding: var(--sp-4) var(--sp-5);
     background: var(--c-bg);
-    border-left: 3px solid var(--c-primary-2);
+    border-left: 3px solid var(--c-amber);
     border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
   }
 </style>

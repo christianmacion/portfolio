@@ -134,7 +134,7 @@ const lastVerified = buildStampUtc8();
     padding-inline: var(--sp-4);
     overflow-x: auto;
     border: 1px solid var(--c-rule);
-    border-radius: var(--radius);
+    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade */
     background: var(--c-tape-2);
   }
   .datasrc__table {
@@ -190,7 +190,7 @@ const lastVerified = buildStampUtc8();
   .datasrc__pill {
     display: inline-block;
     padding: 2px 8px;
-    border-radius: var(--radius-sm);
+    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade */
     font-size: var(--fs-xs);
     text-transform: uppercase;
     letter-spacing: 0.06em;

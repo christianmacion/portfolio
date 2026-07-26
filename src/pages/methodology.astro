@@ -90,7 +90,7 @@ const charter = [
   <header class="method-head">
     <div class="container">
       <p class="section__eyebrow"><span class="mono">methodology/</span> · eval-first discipline</p>
-      <h1 class="method-head__title">
+      <h1 class="method-head__title" data-words>
         Don’t ship what hasn’t passed a <span class="hl">measurable gate</span>.
       </h1>
       <VoiceLine class="method-head__voice"> If it isn't measured, it isn't built. </VoiceLine>
@@ -490,7 +490,7 @@ const charter = [
   }
   .gate:hover {
     border-color: var(--c-primary);
-    border-left-color: var(--c-primary-2-deep);
+    border-left-color: var(--c-amber-deep);
   }
   .gate__head {
     display: flex;
@@ -635,14 +635,14 @@ const charter = [
     padding: var(--sp-5);
     background: var(--c-bg);
     border: 1px solid var(--c-rule);
-    border-left: 3px solid var(--c-primary-2);
+    border-left: 3px solid var(--c-amber);
     border-radius: var(--radius);
     margin-bottom: var(--sp-3);
     counter-increment: plan;
   }
   .plan__week {
     font-size: var(--fs-sm);
-    color: var(--c-primary-2-deep);
+    color: var(--c-amber-deep);
     font-weight: 600;
     letter-spacing: 0.06em;
   }
@@ -662,7 +662,7 @@ const charter = [
     padding: 4px 10px;
     background: var(--c-bg-2);
     border: 1px solid var(--c-rule);
-    border-radius: 12px;
+    border-radius: 0;
     font-size: var(--fs-xs);
     color: var(--c-primary);
     font-weight: 600;
@@ -671,7 +671,7 @@ const charter = [
     margin-top: var(--sp-5);
     padding: var(--sp-4) var(--sp-5);
     background: var(--c-paper);
-    border-left: 3px solid var(--c-primary-2);
+    border-left: 3px solid var(--c-amber);
     border-radius: 0 var(--radius) var(--radius) 0;
     font-size: var(--fs-base);
     color: var(--c-ink-2);

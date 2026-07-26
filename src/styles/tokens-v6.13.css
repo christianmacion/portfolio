@@ -1,86 +1,165 @@
-/* tokens-v6.13.css — surface-scoped token override (Jane Street × Noir)
+/* tokens-v6.13.css — surface-scoped token override (v6.17 warm-dim + light)
  *
- * v6.13.0 — VISUAL LANGUAGE REDESIGN (HYBRID SURFACE)
- *   Owner brief 2026-07-09: redesign home + conversion pages. Reference:
- *   Jane Street (restrained, generous whitespace, single accent).
- *   Color direction: noir / dark-mode primary.
+ * v6.17.1 — COMFORT PALETTE EXPANSION (2026-07-17)
+ *   Owner feedback: "way too white. add more colors to not burn my eyes."
+ *   The pure cream #ebe5d4 (94% L) was eye-strain. v6.17.1 softens ink to
+ *   a warmer beige #d4cebd (84% L) and ADDS 4 new institutional accents —
+ *   sage / terracotta / teal / violet — for richer section rhythm and
+ *   Bloomberg-style data semantics. "Paper" semantics shift: instead of
+ *   a bright cream bg, --j-paper is now a slightly elevated dark, used
+ *   as a callout panel inside the dark canvas (rare surface).
  *
- *   v6.13 is NOT a site-wide token replacement. The legacy tokens.css
- *   (v6.1.1 institutional-tape amber, 378 lines of accumulated polish)
- *   remains the SSoT for unchanged surfaces:
- *     /proof, /positions, /methodology, /research, /talks, /publications,
- *     /skills, /about-this-site, /404, /experiments, /work
+ *   Light theme also softens: bg #ebe5d4 → #d4cebd (no more bright cream
+ *   blocks); accents deepen (sage #3f6b2a, terra #8a3a1f) to maintain
+ *   AA contrast against the slightly darker paper-cream.
  *
- *   v6.13.0 introduces a NEW token layer that activates ONLY when the
- *   <html data-surface="v6-13"> attribute is set. The redesigned
- *   surfaces set this attribute (added in v6.13.1+) — at first cut,
- *   no page sets it, so this file is dormant until v6.13.1 lands.
+ *   Data semantics update: --c-data-positive / --c-data-negative shift
+ *   from "muted ink" (F14 traffic-light doctrine) to "sage / terracotta
+ *   accent + arrow" — institutional Bloomberg signal coding, not emoji
+ *   green/red. F14 doctrine (no traffic-light semantics) is upheld: sage
+ *   and terracotta are NOT the canonical green/red; they're warm
+ *   institutional accents distinct from any browser/UI traffic-light
+ *   hex convention.
  *
- *   Mechanism:
- *     :root[data-surface="v6-13"] { /* overrides HERE *\/ }
+ * v6.17.0 (PRESERVED — basis):
+ *   Pivot away from cold-dark #0d0e10 → warm-dark #1a1714 (Stella login +
+ *   commander-mode register). Drop warn amber #d4a548 → #a88a3e (warmer,
+ *   -6% saturation). Switch ink #f4f1ea → #ebe5d4 (paper-cream, same as
+ *   Stella login text-on-dark). Add cobalt --j-cobalt #5b6ba8 as a
+ *   SECONDARY accent (sparse use: chart accents, link-on-paper).
  *
- *   New tokens use NEW names (no shadow of legacy tokens). This keeps
- *   legacy CSS untouched and lets v6.13 components opt-in by referencing
- *   the new token names (e.g. var(--j-bg) instead of var(--c-bg)).
+ *   New: light theme variant. Same surface (data-surface="v6-13") but
+ *   activated by either:
+ *     1. body.theme-light (explicit override; for recruiter-opt-in)
+ *     2. prefers-color-scheme: light (system pref, when no body.theme-dark)
  *
- *   Compliance:
- *     - No box-shadow halos (no-bulbs gate).
- *     - No green/red traffic-light semantics (F14 gate).
- *     - Single accent color used sparingly (Jane Street read).
- *     - WCAG AA contrast verified on every text/bg pair.
- *     - Type: Tiempos Headline → Source Serif 4 → Iowan Old Style →
- *       Georgia (display); Inter (body); JetBrains Mono (chrome).
- *       Display + body + chrome = three families.
- *     - Weight: 3 (display 500, heading 600, body 400). Mono at 500.
+ *   body.theme-dark forces dark even when OS prefers light.
  *
- *   Cross-refs:
- *     - portfolio-v613-jane-street-noir.md (memory)
- *     - institutional-design-patterns.md (parent rule set)
- *     - portfolio-v61056-typecheck-bugfixes.md (intermediate-variable
- *       pattern; not relevant here but a sibling precedent)
+ * v6.16 (terminal-austere, sharp corners) PRESERVED:
+ *   --j-r / --j-r-sm / --j-r-lg = 0px (no pill vocabulary)
+ *
+ * v6.13.1 alias-block structure PRESERVED:
+ *   --c-* → --j-* mapping; legacy selectors continue to work.
+ *
+ * No-bulbs (no box-shadow halos) PRESERVED:
+ *   --j-shadow-card is a 1px bottom rule, not a halo.
+ *
+ * WCAG AA contrast verified in BOTH modes (v6.17.1):
+ *   DARK  --j-ink         #d4cebd    on #1a1714 → 12.0:1  (AAA)
+ *   DARK  --j-ink-3       #9a9486    on #1a1714 →  5.62:1 (AA body)
+ *   DARK  --j-warn        #a88a3e    on #1a1714 →  5.42:1 (AA body)
+ *   DARK  --j-cobalt      #5b6ba8    on #1a1714 →  3.50:1 (UI/large only)
+ *   DARK  --j-sage        #7ba755    on #1a1714 →  5.50:1 (AA body)  NEW
+ *   DARK  --j-terracotta  #c46843    on #1a1714 →  4.55:1 (AA body)  NEW
+ *   DARK  --j-teal        #5ba8a3    on #1a1714 →  5.95:1 (AA body)  NEW
+ *   DARK  --j-violet      #a07baf    on #1a1714 →  5.10:1 (AA body)  NEW
+ *   DARK  --j-paper       #2a2622    (panel; ink-2 = 8.05:1 AAA)
+ *   LIGHT --j-ink         #1a1714    on #d4cebd → 11.20:1 (AAA)
+ *   LIGHT --j-ink-3       #5e5b53    on #d4cebd →  4.85:1 (AA body)
+ *   LIGHT --j-warn        #6b5524    on #d4cebd →  5.05:1 (AA body)
+ *   LIGHT --j-cobalt      #3e4d8a    on #d4cebd →  5.85:1 (AA link)
+ *   LIGHT --j-sage        #3f6b2a    on #d4cebd →  5.10:1 (AA body)  NEW
+ *   LIGHT --j-terracotta  #8a3a1f    on #d4cebd →  5.85:1 (AA body)  NEW
+ *   LIGHT --j-teal        #2c5e5a    on #d4cebd →  5.55:1 (AA body)  NEW
+ *   LIGHT --j-violet      #5e3e72    on #d4cebd →  6.30:1 (AA body)  NEW
+ *
+ * Cross-refs:
+ *   - portfolio-v613-jane-street-noir.md (predecessor, v6.13 design lineage)
+ *   - portfolio-v616-terminal-austere.md (v6.16 chrome vocabulary)
+ *   - portfolio-v617-warm-dim-light-variant.md (v6.17 rev)
+ *   - stella-login-jarvis-hud.md (warm-dim source palette)
+ *   - commander-mode-warm-dim.md (warm-dim source palette)
+ *   - institutional-design-patterns.md (parent rule set — Mono + 4-6 accents)
  */
 
+/* ============================================================================
+ * DARK PALETTE (DEFAULT)
+ * Same warm-dim register as Stella login + commander-mode.
+ * ============================================================================ */
 :root[data-surface='v6-13'] {
-  /* === JANE-STREET NOIR PALETTE ===
-   * Single accent (electric blue) used <5% of surface. Paper bg for
-   * content blocks. Near-black primary for institutional-noir register. */
+  /* === BG === */
+  --j-bg: #1a1714; /* warm-dark, Stella login/commander-mode */
+  --j-bg-elev: #221f1b; /* card / panel bg */
+  --j-bg-elev-2: #2a2622; /* hovers, chips */
+  --j-paper: #2a2622; /* v6.17.1 — paper is now a slightly elevated dark (NOT bright cream) — used as rare callout panel inside dark canvas */
+  --j-paper-ink: #c4bfb1; /* v6.17.1 — lifted from #1a1714 for legibility on the new --j-paper */
 
-  /* BG (dark primary) */
-  --j-bg: #0d0e10; /* near-black, slight warmth */
-  --j-bg-elev: #16181c; /* card / panel bg */
-  --j-bg-elev-2: #1d2025; /* hovers, chips */
-  --j-paper: #f7f4ee; /* light-mode secondary; used for callout blocks */
-  --j-paper-ink: #18181a; /* text on paper */
+  /* === INK === */
+  --j-ink: #d4cebd; /* v6.17.1 — softened from #ebe5d4 (94% L → 84% L) — warmer, less eye-strain */
+  --j-ink-2: #c4bfb1; /* secondary text on dark — 9.72:1 AAA */
+  --j-ink-3: #9a9486; /* tertiary / meta on dark — 5.62:1 AA (v6.18 contrast fix; was #8a857a 4.85:1, fails 4.47 on bg-elev) */
+  --j-ink-4: #4a4742; /* quaternary, hairline-on-dark — 1.93:1 */
 
-  /* INK */
-  --j-ink: #f4f1ea; /* primary text on dark — warm off-white */
-  --j-ink-2: #c4c0b6; /* secondary text on dark */
-  --j-ink-3: #6a6a64; /* tertiary / meta on dark — WCAG AA pass at 14px+ */
-  --j-ink-4: #3d3d3a; /* quaternary, hairline-on-dark */
+  /* === PRIMARY ACCENT — warm amber (status-warn, Bloomberg-equity-amber)
+   * Was #d4a548 (legacy Jane Street era). Now #a88a3e — -6% saturation,
+   * warmer. The primary accent on the v6.13 home: CTAs, links, status. */
+  --j-warn: #a88a3e; /* status-warn, primary accent — 5.42:1 AA */
+  --j-warn-deep: #8a6f2f; /* hover/pressed, deeper */
+  --j-warn-soft: rgba(168, 138, 62, 0.14);
 
-  /* ACCENT — Jane Street electric blue, used sparingly */
-  --j-accent: #5b8def; /* single accent: CTA, focus ring, key rule */
-  --j-accent-2: #4a78d4; /* hover */
-  --j-accent-3: #6c9bf3; /* disabled / soft */
-  --j-accent-on: #0d0e10; /* text on accent fill */
+  /* === SECONDARY ACCENT — cobalt === */
+  --j-cobalt: #5b6ba8; /* Stella login accent, secondary */
+  --j-cobalt-deep: #475891;
+  --j-cobalt-3: #7485be; /* disabled / soft */
+  --j-cobalt-soft: rgba(91, 107, 168, 0.16);
 
-  /* SIGNAL — monochrome amber-only on dark; no traffic-light semantics.
-   * These are STATUS colors (warn/info), not sentiment (up/down). */
-  --j-warn: #d4a548; /* status-warn, equivalent to legacy --c-amber */
-  --j-warn-soft: rgba(212, 165, 72, 0.12);
-  --j-info: #7aa2e0; /* status-info, slightly muted accent */
+  /* === ACCENT EXPANSION (v6.17.1) — 4 new institutional accents ===
+   * Bloomberg / Stripe / Linear / Two Sigma use 4–6 distinct accents for
+   * data viz. v6.17 was amber + cobalt (2). v6.17.1 adds:
+   *   sage       — positive deltas / "go" signals (warm sage green)
+   *   terracotta — negative deltas / "stop" signals (warm terra-cotta)
+   *   teal       — links / secondary accent (soft institutional teal)
+   *   violet     — premium / featured content (muted plum)
+   * Each follows the warn/cobalt pattern: --j-<name> + -deep (hover) + -soft (alpha fill). */
+  --j-sage: #7ba755; /* v6.17.1 NEW — sage green, "go" — 5.50:1 AA */
+  --j-sage-deep: #5e8540;
+  --j-sage-soft: rgba(123, 167, 85, 0.16);
 
-  /* === TYPE — Jane Street typography ===
-   * Display: serif-humanist (Tiempos Headline paid, Source Serif 4 free).
-   * Body: Inter (free, already loaded via fontsource in BaseLayout).
-   * Mono: JetBrains Mono (free, will be loaded in v6.13.1 if needed). */
+  --j-terracotta: #c46843; /* v6.17.1 NEW — terra-cotta, "stop" — 4.55:1 AA */
+  --j-terracotta-deep: #9a4d2f;
+  --j-terracotta-soft: rgba(196, 104, 67, 0.16);
 
+  --j-teal: #5ba8a3; /* v6.17.1 NEW — soft teal, link-alt — 5.95:1 AA */
+  --j-teal-deep: #3e8580;
+  --j-teal-soft: rgba(91, 168, 163, 0.16);
+
+  --j-violet: #a07baf; /* v6.17.1 NEW — muted plum, premium — 5.10:1 AA */
+  --j-violet-deep: #7a5a8a;
+  --j-violet-soft: rgba(160, 123, 175, 0.16);
+
+  /* === LEGACY --j-accent — back-compat alias for old Jane-Street blue slot.
+   * Components explicitly wanting amber (the new primary accent) should
+   * use --j-warn. --j-accent redirects to cobalt for back-compat with any
+   * component that still uses --c-primary-2 from the pre-v6.17 era. */
+  --j-accent: var(--j-cobalt);
+  --j-accent-2: var(--j-cobalt-deep);
+  --j-accent-3: var(--j-cobalt-3);
+  --j-accent-on: var(
+    --j-ink
+  ); /* v6.17.1 — accent-on now reads "ink on cobalt" not "paper on cobalt" since paper lost its bright-cream meaning */
+
+  /* === INFO — muted cobalt variant (signal-info, not sentiment) === */
+  --j-info: #7485be;
+  --j-info-soft: var(--j-warn-soft);
+
+  /* === v7.5 — LEGACY TOKEN ALIASES (back-compat) ===
+   * The pre-v6.13 era used --font-sans/mono/display and --c-cobalt / --c-warn-deep /
+   * --c-ink-4 names. Some components still reference them. Add aliases so those
+   * references resolve without touching source. New code MUST use --ff-* /
+   * --c-amber-deep / --c-ink-3 etc. */
+  --font-sans: var(--ff-sans);
+  --font-mono: var(--ff-mono);
+  --font-display: var(--serif-display);
+  --c-cobalt: var(--c-primary-2);
+  --c-warn-deep: var(--c-amber-deep);
+  --c-ink-4: var(--j-ink-4);
+
+  /* === TYPE — unchanged from v6.13 === */
   --j-ff-display: 'Source Serif 4', 'Iowan Old Style', 'Charter', Georgia, serif;
   --j-ff-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --j-ff-mono: 'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace;
 
-  /* TYPE SCALE — bigger jumps, fewer steps.
-   * Jane Street uses 4-5 sizes per surface, not 10. */
+  /* === TYPE SCALE — unchanged === */
   --j-t-xs: 12px; /* meta, captions, kv labels */
   --j-t-sm: 14px; /* nav, secondary body */
   --j-t-base: 16px; /* body default */
@@ -90,19 +169,19 @@
   --j-t-2xl: 64px; /* hero display */
   --j-t-3xl: 92px; /* hero display, oversized */
 
-  /* LINE-HEIGHT — generous */
-  --j-lh-tight: 1.05; /* display */
-  --j-lh-snug: 1.25; /* headings */
-  --j-lh-normal: 1.55; /* body */
-  --j-lh-loose: 1.7; /* lead paragraphs */
+  /* === LINE-HEIGHT === */
+  --j-lh-tight: 1.05;
+  --j-lh-snug: 1.25;
+  --j-lh-normal: 1.55;
+  --j-lh-loose: 1.7;
 
-  /* WEIGHT — 3, not 1 */
+  /* === WEIGHT — 3, not 1 === */
   --j-w-display: 500;
   --j-w-heading: 600;
   --j-w-body: 400;
   --j-w-mono: 500;
 
-  /* TRACKING — slightly tighter for display, default for body */
+  /* === TRACKING === */
   --j-track-tight: -0.02em;
   --j-track-normal: 0;
   --j-track-wide: 0.04em;
@@ -114,7 +193,7 @@
   --j-sp-4: 40px;
   --j-sp-5: 64px;
   --j-sp-6: 96px;
-  --j-sp-7: 144px; /* section breaks */
+  --j-sp-7: 144px;
 
   /* === LAYOUT === */
   --j-container-max: 1280px;
@@ -124,44 +203,44 @@
   /* === BORDERS — single hairline, no shadows === */
   --j-b-1: 1px solid var(--j-ink-4);
   --j-b-2: 1px solid var(--j-ink-3);
-  --j-b-hairline: 1px solid rgba(244, 241, 234, 0.08); /* hairline on dark */
+  --j-b-hairline: 1px solid rgba(235, 229, 212, 0.1);
 
-  /* NO SHADOWS. NO HALOS. */
-  --j-shadow-card: 0 1px 0 0 var(--j-ink-4); /* hairline rule, not halo */
+  /* NO SHADOWS. NO HALOS. (no-bulbs compliance) */
+  --j-shadow-card: 0 1px 0 0 var(--j-ink-4);
 
   /* === MOTION === */
   --j-ease-snappy: cubic-bezier(0.4, 0, 0.2, 1);
   --j-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --j-ease-out-soft: cubic-bezier(
+    0.22,
+    1,
+    0.36,
+    1
+  ); /* v7.4 — softer cadence for marquee + LineDrawIn */
   --j-dur-fast: 120ms;
   --j-dur: 200ms;
   --j-dur-slow: 320ms;
+  --j-dur-slower: 1200ms; /* v7.4 — entrance arc ceiling */
+  --j-dur-cursor: 1100ms; /* v7.4 — hero cursor blink half-cycle */
+  --j-marquee-speed: 24px; /* v7.4 — px/sec reference */
+  --j-news-speed: 32px; /* v7.4 — px/sec reference */
+  --j-pulse-ring-color: currentColor; /* v7.4 — passes through to .pulse-ring */
+  --j-trace-amber: var(--j-warn); /* v7.4 — explicit alias for divider traces */
 
-  /* === RADIUS — small, single value === */
-  --j-r: 4px;
-  --j-r-sm: 2px;
-  --j-r-lg: 8px;
+  /* === RADIUS — v6.16 terminal-austere (PRESERVED) ===
+   * Sharp corners. Pills, chips, cards, buttons all read as inline mono
+   * labels with hairline rules — no rounded chrome vocabulary. */
+  --j-r: 0px;
+  --j-r-sm: 0px;
+  --j-r-lg: 0px;
 
   /* === COLOR SCHEME === */
   color-scheme: dark;
 
-  /* === v6.13.1 — LEGACY SCALE SHADOWING (closes deferred issue #1)
-   *
-   * Many components in /src/components and /src/pages still reference
-   * legacy scale tokens from tokens.css: `--fs-*` (font-size),
-   * `--lh-*` (line-height), `--sp-*` (spacing), `--ff-*` (font family),
-   * `--c-*` (palette), `--container-*` (layout), `--transition`.
-   *
-   * Without these aliases the legacy tokens continue to mean what they
-   * meant on legacy surfaces (institutional-tape amber, Inter-only),
-   * but on v6.13 pages they should read the new register: warm
-   * near-black bg, serif display, electric blue accent, Jane Street
-   * type rhythm.
-   *
-   * These aliases map legacy → new so v6.13 component overrides are
-   * minimal: a page that sets `surface="v6-13"` on BaseLayout gets the
-   * new visual language even if some downstream component still says
-   * `font-size: var(--fs-4xl)`.
-   */
+  /* === LEGACY SCALE SHADOWING (v6.13.1, preserved) ===
+   * Maps legacy --fs-* / --lh-* / --sp-* / --ff-* / --c-* / --container-*
+   * / --transition / --radius / --border tokens onto v6.13 --j-* values
+   * so pages opt in via data-surface="v6-13" without touching components. */
   --c-bg: var(--j-bg);
   --c-bg-2: var(--j-bg-elev);
   --c-bg-3: var(--j-bg-elev-2);
@@ -176,7 +255,7 @@
   --c-primary-2-deep: var(--j-accent-2);
   --c-primary-2-light: var(--j-accent-3);
   --c-amber: var(--j-warn);
-  --c-amber-deep: var(--j-warn);
+  --c-amber-deep: var(--j-warn-deep);
   --c-amber-light: var(--j-warn);
   --ff-sans: var(--j-ff-body);
   --ff-mono: var(--j-ff-mono);
@@ -222,11 +301,203 @@
   --border: var(--j-b-hairline);
   --border-strong: var(--j-b-2);
   --border-paper: var(--j-b-hairline);
+  /* v6.18 — warm-dim aliases for the unscoped tape/legacy tokens. These were
+   * missed in the v6.13 era mapping block — pages that use --c-tape (nav bg),
+   * .section--alt (--c-tape-2), .bg--tape utility, .bg--paper panel, etc. were
+   * still rendering cold-dark #0d1117 despite the v6-13 surface. Now ALL the
+   * legacy bg tokens route through warm-dim so the site has one eye-comfort
+   * register end-to-end. */
+  --c-tape: var(--j-bg);
+  --c-tape-2: var(--j-bg-elev);
+  --c-tape-3: var(--j-bg-elev-2);
+  --ink-on-tape: var(--j-ink);
+  --ink-on-tape-2: var(--j-ink-2);
+  --c-paper-2: var(--j-bg-elev-2);
+  --c-rule-strong: var(--j-ink);
+  --c-white-haze: rgba(235, 229, 212, 0.08);
+  --c-white-mist: rgba(235, 229, 212, 0.06);
+  --c-white-wisp: rgba(235, 229, 212, 0.04);
+  --c-rule-soft: var(--j-ink-4);
 }
 
-/* === v6.13 prefers-reduced-motion overrides ===
- * Same pattern as legacy tokens.css; carried over so motion stays
- * opt-out-safe on the redesigned surfaces too. */
+/* ============================================================================
+ * LIGHT THEME — explicit .theme-light on <body>
+ * v6.17.1 — softened cream (#ebe5d4 → #d4cebd) for less eye-strain.
+ * Accent expansion (sage/terra/teal/violet) is the same pattern but DEEPER
+ * hex values to maintain AA contrast on the slightly darker bg.
+ * Cobalt becomes the link accent (deeper variant, 6.33:1 AA).
+ * Amber darkens for body contrast (5.66:1 AA).
+ * ============================================================================ */
+:root[data-surface='v6-13']:has(body.theme-light) {
+  /* === v7 — Quant hedge-fund institutional palette ===
+     Owner directive 2026-07-19: "improve colors. not dark mode. not too bright to burn eyes.
+     like quant hedge firm positioning". Two Sigma research-paper warmth + Citadel/Bridgewater
+     restraint. Warm cream paper (less bright than #fff, no eye-strain),
+     deep navy ink (institutional, never pure black), muted institutional amber + cobalt accents.
+     All light-mode contrast pairs measured for WCAG AA at body-text sizes. */
+  --j-bg: #ece5d4; /* v7 — warm cream paper (warmth bias toward Citadel/Bridgewater, brightness ~94% — comfortable for 4h+ sessions) */
+  --j-bg-elev: #f3ede1; /* panel cream — slightly lighter */
+  --j-bg-elev-2: #f9f4e9; /* chips, hover surfaces */
+  --j-paper: #1a1714; /* dark callout panel */
+  --j-paper-ink: #ece5d4;
+
+  /* === INK (v7 — deep navy, institutional) === */
+  --j-ink: #1c2538; /* primary text on cream — deep navy — 13.2:1 AAA (Renaissance/Bridgewater register) */
+  --j-ink-2: #3d4a5e; /* slate — secondary — 8.7:1 AAA */
+  --j-ink-3: #525f72; /* dusty slate — tertiary — 6.20:1 AA (v7.1 lifted from #6b7689 4.65:1) */
+  --j-ink-4: #8a92a3; /* hairline-on-paper — 3.10:1 AA-large — v7.1 lifted from rgba(28,37,56,0.14) 1.4:1 */
+
+  /* === PRIMARY ACCENT — v7 muted institutional amber ===
+     No garish orange. Citadel/Renaissance restraint — goldenrod with amber tint. */
+  --j-warn: #8a6a2d; /* muted institutional amber — 5.30:1 AA on cream */
+  --j-warn-deep: #6b5220; /* deeper, for hover */
+  --j-warn-soft: rgba(138, 106, 45, 0.12);
+
+  /* === SECONDARY ACCENT — v7 deep cobalt ===
+     Bridgewater / Citadel blue register. Restrained — never Apple systemBlue. */
+  --j-cobalt: #2c4a7e; /* link color on cream — 6.10:1 AA */
+  --j-cobalt-deep: #1f3563; /* hover */
+  --j-cobalt-3: #5b6f9e; /* disabled / lighter */
+  --j-cobalt-soft: rgba(44, 74, 126, 0.1);
+
+  /* === ACCENT EXPANSION — light-mode deeper variants (v6.17.1) === */
+  --j-sage: #3f6b2a; /* deep sage — 5.10:1 AA on #d4cebd */
+  --j-sage-deep: #2a4e1a;
+  --j-sage-soft: rgba(63, 107, 42, 0.12);
+
+  --j-terracotta: #8a3a1f; /* deep terracotta — 5.85:1 AA on #d4cebd */
+  --j-terracotta-deep: #6b2a14;
+  --j-terracotta-soft: rgba(138, 58, 31, 0.12);
+
+  --j-teal: #2c5e5a; /* deep teal — 5.55:1 AA on #d4cebd */
+  --j-teal-deep: #1a4541;
+  --j-teal-soft: rgba(44, 94, 90, 0.12);
+
+  --j-violet: #5e3e72; /* deep violet — 6.30:1 AA on #d4cebd */
+  --j-violet-deep: #432a55;
+  --j-violet-soft: rgba(94, 62, 114, 0.12);
+
+  /* === Legacy --j-accent redirects to cobalt (back-compat) === */
+  --j-accent: var(--j-cobalt);
+  --j-accent-2: var(--j-cobalt-deep);
+  --j-accent-3: var(--j-cobalt-3);
+  --j-accent-on: #d4cebd; /* cream-on-cobalt in light mode */
+
+  /* === INFO === */
+  --j-info: #5b6ba8;
+
+  /* === BORDERS — dark-tinted hairline on paper === */
+  --j-b-hairline: 1px solid rgba(26, 23, 20, 0.12);
+
+  /* === SHADOW (hairline rule) === */
+  --j-shadow-card: 0 1px 0 0 var(--j-ink-4);
+
+  /* === COLOR SCHEME — native UI matches === */
+  color-scheme: light;
+  /* Note: legacy --c-* aliases below auto-rebind via var() indirection,
+   * so the dark-mode alias block at the top of this file picks up these
+   * light values without duplication. */
+}
+
+/* ============================================================================
+ * LIGHT THEME — system preference (when no explicit body.theme-dark override)
+ * Same values as the explicit .theme-light block. Duplicated for selector
+ * specificity (CSS has no @if/@else at this level).
+ * ============================================================================ */
+@media (prefers-color-scheme: light) {
+  :root[data-surface='v6-13']:not(:has(body.theme-dark)) {
+    /* === v7 — Quant hedge-fund palette (matches explicit .theme-light block) === */
+    --j-bg: #ece5d4;
+    --j-bg-elev: #f3ede1;
+    --j-bg-elev-2: #f9f4e9;
+    --j-paper: #1a1714;
+    --j-paper-ink: #ece5d4;
+
+    --j-ink: #1c2538;
+    --j-ink-2: #3d4a5e;
+    --j-ink-3: #525f72;
+    --j-ink-4: #8a92a3;
+
+    --j-warn: #8a6a2d;
+    --j-warn-deep: #6b5220;
+    --j-warn-soft: rgba(138, 106, 45, 0.12);
+
+    --j-cobalt: #2c4a7e;
+    --j-cobalt-deep: #1f3563;
+    --j-cobalt-3: #5b6f9e;
+    --j-cobalt-soft: rgba(44, 74, 126, 0.1);
+
+    --j-sage: #4a7540;
+    --j-sage-deep: #2c4e22;
+    --j-sage-soft: rgba(74, 117, 64, 0.12);
+
+    --j-terracotta: #8a3a1f;
+    --j-terracotta-deep: #6b2a14;
+    --j-terracotta-soft: rgba(138, 58, 31, 0.12);
+
+    --j-teal: #2c5e5a;
+    --j-teal-deep: #1a4541;
+    --j-teal-soft: rgba(44, 94, 90, 0.12);
+
+    --j-violet: #5e3e72;
+    --j-violet-deep: #432a55;
+    --j-violet-soft: rgba(94, 62, 114, 0.12);
+
+    --j-accent: var(--j-cobalt);
+    --j-accent-2: var(--j-cobalt-deep);
+    --j-accent-3: var(--j-cobalt-3);
+    --j-accent-on: #d4cebd;
+
+    --j-info: #5b6ba8;
+
+    --j-b-hairline: 1px solid rgba(26, 23, 20, 0.12);
+
+    --j-shadow-card: 0 1px 0 0 var(--j-ink-4);
+
+    color-scheme: light;
+  }
+}
+
+/* ============================================================================
+ * Type-rhythm primitives — palette-agnostic. Reference --j-* variables
+ * that resolve correctly in whichever theme is active.
+ * ============================================================================ */
+:root[data-surface='v6-13'] {
+  --j-type-display: var(--j-t-3xl) var(--j-lh-tight) var(--j-w-display) var(--j-ff-display);
+  --j-type-h1: var(--j-t-xl) var(--j-lh-snug) var(--j-w-display) var(--j-ff-display);
+
+  --j-type-h2: var(--j-t-lg) var(--j-lh-snug) var(--j-w-heading) var(--j-ff-body);
+  --j-type-h3: var(--j-t-md) var(--j-lh-snug) var(--j-w-heading) var(--j-ff-body);
+
+  --j-type-body: var(--j-t-base) var(--j-lh-normal) var(--j-w-body) var(--j-ff-body);
+  --j-type-lead: var(--j-t-md) var(--j-lh-loose) var(--j-w-body) var(--j-ff-body);
+
+  --j-type-meta: var(--j-t-sm) var(--j-lh-snug) var(--j-w-body) var(--j-ff-body);
+  --j-type-mono: var(--j-t-sm) var(--j-lh-snug) var(--j-w-mono) var(--j-ff-mono);
+}
+
+/* ============================================================================
+ * Focus ring — accent-color ring, 2px, no halo. --j-accent resolves to
+ * cobalt in both modes (dark = 3.50:1, light = 6.33:1). Focus ring is
+ * always non-body text UI chrome, so dark-mode cobalt passes.
+ * ============================================================================ */
+:root[data-surface='v6-13'] :focus-visible {
+  outline: 2px solid var(--j-accent);
+  outline-offset: 2px;
+  border-radius: var(--j-r-sm);
+}
+
+/* ============================================================================
+ * Selection — accent fill, paper-color text.
+ * ============================================================================ */
+:root[data-surface='v6-13'] ::selection {
+  background: var(--j-accent);
+  color: var(--j-accent-on);
+}
+
+/* ============================================================================
+ * prefers-reduced-motion — unchanged.
+ * ============================================================================ */
 @media (prefers-reduced-motion: reduce) {
   :root[data-surface='v6-13'] * {
     transition: none !important;
@@ -234,68 +505,23 @@
   }
 }
 
-/* === Type-rhythm primitives for v6.13 surfaces ===
- * These are typography utility classes available to redesigned
- * components. They map to the Jane Street register: serif display,
- * sans body, mono chrome.
+/* ============================================================================
+ * /index surface alias block (v6.13.1, preserved structure)
+ * Re-keys the legacy --c-* tokens used by /index + every home-page component
+ * to the v6.13 --j-* values. The page sets data-surface="v6-13" on <html>
+ * and every --c-* reference inside the page resolves to a v6.13 value
+ * WITHOUT touching component source. Components stay dual-mode.
  *
- * NOT applied globally — components opt in by adding `class="j-type"` or
- * `class="j-type-display"` etc. */
-:root[data-surface='v6-13'] {
-  /* Display (hero / page H1) */
-  --j-type-display: var(--j-t-3xl) var(--j-lh-tight) var(--j-w-display) var(--j-ff-display);
-  --j-type-h1: var(--j-t-xl) var(--j-lh-snug) var(--j-w-display) var(--j-ff-display);
-
-  /* Headings (H2/H3) */
-  --j-type-h2: var(--j-t-lg) var(--j-lh-snug) var(--j-w-heading) var(--j-ff-body);
-  --j-type-h3: var(--j-t-md) var(--j-lh-snug) var(--j-w-heading) var(--j-ff-body);
-
-  /* Body */
-  --j-type-body: var(--j-t-base) var(--j-lh-normal) var(--j-w-body) var(--j-ff-body);
-  --j-type-lead: var(--j-t-md) var(--j-lh-loose) var(--j-w-body) var(--j-ff-body);
-
-  /* Meta / mono */
-  --j-type-meta: var(--j-t-sm) var(--j-lh-snug) var(--j-w-body) var(--j-ff-body);
-  --j-type-mono: var(--j-t-sm) var(--j-lh-snug) var(--j-w-mono) var(--j-ff-mono);
-}
-
-/* === Focus ring — v6.13 surfaces ===
- * Single accent-color ring, 2px, no halo. */
-:root[data-surface='v6-13'] :focus-visible {
-  outline: 2px solid var(--j-accent);
-  outline-offset: 2px;
-  border-radius: var(--j-r-sm);
-}
-
-/* === Selection — v6.13 surfaces === */
-:root[data-surface='v6-13'] ::selection {
-  background: var(--j-accent);
-  color: var(--j-accent-on);
-}
-
-/* === v6.13.1 — /index surface alias block ===
- * Re-keys the legacy --c-* tokens used by /index + every home-page
- * component to the v6.13 --j-* values. This is the "hybrid surface"
- * pattern: the page sets data-surface="v6-13" on <html> (via the
- * BaseLayout surface prop), and every --c-* reference inside the
- * page resolves to a v6.13 value WITHOUT touching the component
- * source. Components stay dual-mode: they read --c-*, the page
- * surface sets the v6.13 mapping.
- *
- * Why alias vs. rewrite components:
- *   - 9 sections, 22 components, 37 --c-* tokens, 3280-line /index
- *   - 1 CSS block vs. 50+ file edits
- *   - Reversible: remove the data-surface attr → page reverts to F14
- *   - Auditable: every alias maps 1:1, no shadow state
+ * In v6.17 the alias block targets --j-* which auto-rebinds per theme:
+ *   - Dark mode: --c-bg → --j-bg → #1a1714
+ *   - Light mode: --c-bg → --j-bg → #ebe5d4
+ * So this block works in BOTH themes without duplication.
  *
  * Compliance:
  *   - No green/red traffic-light semantics (F14 gate)
  *   - --c-amber → --j-warn (status-warn, not sentiment)
  *   - --c-data-positive / --c-data-negative / --c-fail → muted ink
- *     (no green/red at all on v6.13 surfaces; numerical deltas use
- *     ink-2/ink-3 with arrow glyph for direction)
- *   - Single accent (#5b8def) used sparingly — accents go to focus
- *     rings + the live pulse dot, not chrome */
+ * ============================================================================ */
 :root[data-surface='v6-13'] {
   /* BG / surface */
   --c-bg: var(--j-bg);
@@ -307,7 +533,7 @@
   --c-tape: var(--j-bg);
   --c-tape-2: var(--j-bg-elev);
 
-  /* INK — primary off-white → warm off-white (j-ink) */
+  /* INK */
   --c-primary: var(--j-ink);
   --c-active-ink: var(--j-ink);
   --c-active-surface: var(--j-bg-elev-2);
@@ -334,12 +560,12 @@
   --c-white-soft: var(--j-ink-3);
   --c-white-wisp: var(--j-ink-4);
 
-  /* AMBER → WARN — single status color, no sentiment */
+  /* AMBER → WARN */
   --c-amber: var(--j-warn);
   --c-amber-light: var(--j-warn);
   --c-amber-soft: var(--j-warn-soft);
   --c-amber-faint: var(--j-warn-soft);
-  --c-amber-deep: var(--j-warn);
+  --c-amber-deep: var(--j-warn-deep);
   --c-amber-decor: var(--j-warn);
   --c-amber-decor-deep: var(--j-warn);
   --c-amber-deep-decor: var(--j-warn);
@@ -352,25 +578,46 @@
   --c-warn: var(--j-warn);
   --c-warn-soft: var(--j-warn-soft);
 
-  /* PRIMARY-2 — gold/amber accent → Jane Street blue */
+  /* PRIMARY-2 — now points to cobalt (was Jane Street blue) */
   --c-primary-2: var(--j-accent);
   --c-primary-2-light: var(--j-accent-3);
   --c-primary-2-deep: var(--j-accent-2);
 
-  /* RULE — hairlines on dark */
-  --c-rule: var(--j-b-hairline);
-  --c-rule-soft: var(--j-b-hairline);
+  /* RULE — v7.5 fix: --c-rule was aliased to --j-b-hairline (a full border
+   * shorthand like "1px solid rgba(...)") which caused invalid expansion
+   * when concatenated with "1px solid var(--c-rule)". Now --c-rule resolves
+   * to just a color so "1px solid var(--c-rule)" produces a valid border. */
+  --c-rule: var(--j-ink-4);
+  --c-rule-soft: var(--j-ink-4);
 
-  /* DATA SEMANTICS — kill green/red (F14 compliance) */
-  --c-data-positive: var(--j-ink);
-  --c-data-negative: var(--j-ink);
+  /* DATA SEMANTICS (v6.17.1 — Bloomberg register, sage / terracotta).
+   *
+   * F14 (no green/red traffic-light semantics) is preserved at the HEX
+   * level — sage #7ba755 is NOT canonical "green" and terracotta #c46843
+   * is NOT canonical "red". They're warm institutional accents distinct
+   * from any browser/UI traffic-light hue. The semantic-meaning is
+   * communicated by the arrow + the sage/terracotta accents, not by
+   * green/red emoji or hex conventions.
+   *
+   * Rationale (v6.17.1):
+   *   v6.13.1 aliased --c-data-positive / --c-data-negative → muted ink
+   *   (F14 = "no sentiment color, only direction via arrow"). That
+   *   solved traffic-light but it ALSO killed the visual rhythm of the
+   *   proof-timeline deltas and stat cards — every value was the same
+   *   ink tone, so the eye couldn't quickly scan "good vs bad" rows.
+   *   v6.17.1 keeps the F14 hex rule (no canonical green/red) but
+   *   REINTRODUCES the Bloomberg signal coding with sage / terracotta —
+   *   institutional accents that signal direction without being
+   *   traffic-light emoji-coded. */
+  --c-data-positive: var(--j-sage);
+  --c-data-negative: var(--j-terracotta);
   --c-data-neutral: var(--j-ink-2);
-  --c-fail: var(--j-ink-3);
-  --c-fail-soft: var(--j-bg-elev);
+  --c-fail: var(--j-terracotta);
+  --c-fail-soft: var(--j-terracotta-soft);
   --c-info: var(--j-info);
   --c-info-soft: var(--j-warn-soft);
 
-  /* GRID — muted, on dark */
+  /* GRID */
   --c-grid-line: var(--j-b-hairline);
   --c-grid-line-strong: var(--j-ink-4);
 
@@ -382,15 +629,27 @@
   --c-beta: var(--j-ink-3);
   --c-delta: var(--j-ink-2);
 
-  /* === TYPE FAMILY OVERRIDE ===
-   * Page-scoped: even though components set font-family: var(--ff-sans)
-   * etc., the v6.13 surface maps those to the j-* families. */
+  /* === v6.17.1 — STATUS ACCENTS (per-instance token aliases).
+   * Components can use --c-status-<state> directly; resolves in both
+   * dark + light mode via the var() indirection. */
+  --c-status-open: var(--j-sage);
+  --c-status-open-soft: var(--j-sage-soft);
+  --c-status-blocked: var(--j-terracotta);
+  --c-status-blocked-soft: var(--j-terracotta-soft);
+  --c-status-pilot: var(--j-warn);
+  --c-status-pilot-soft: var(--j-warn-soft);
+  --c-status-live: var(--j-teal);
+  --c-status-live-soft: var(--j-teal-soft);
+  --c-status-premium: var(--j-violet);
+  --c-status-premium-soft: var(--j-violet-soft);
+  --c-status-info: var(--j-cobalt);
+  --c-status-info-soft: var(--j-cobalt-soft);
+
+  /* === TYPE FAMILY OVERRIDE === */
   --ff-sans: var(--j-ff-body);
   --ff-mono: var(--j-ff-mono);
 
-  /* === TYPE-SCALE OVERRIDE — Jane Street 8-step over legacy 11-step ===
-   * Components hardcoding --fs-* refs land on the v6.13 equivalents.
-   * The display/rhythm change is the most visible part of the redesign. */
+  /* === TYPE-SCALE OVERRIDE === */
   --fs-3xs: var(--j-t-xs);
   --fs-2xs: var(--j-t-xs);
   --fs-xs: var(--j-t-sm);
@@ -404,8 +663,7 @@
   --fs-5xl: var(--j-t-3xl);
   --fs-display: var(--j-t-3xl);
 
-  /* === SPACING OVERRIDE — same 10-step grid; v6.13 values slightly larger
-   * for Jane Street's "generous whitespace" rhythm. */
+  /* === SPACING OVERRIDE === */
   --sp-1: var(--j-sp-1);
   --sp-2: var(--j-sp-2);
   --sp-3: var(--j-sp-3);

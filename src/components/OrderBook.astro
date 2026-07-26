@@ -201,7 +201,7 @@ const pxDecimals = midPxResolved >= 1000 ? 2 : midPxResolved >= 100 ? 2 : 4;
     flex-direction: column;
     background: var(--c-bg-2);
     border: 1px solid var(--c-rule);
-    border-radius: var(--radius);
+    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade */
     padding: var(--sp-3);
     font-size: 0.78rem;
     min-width: 0;

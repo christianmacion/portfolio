@@ -1,80 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  cm-mark.svg — CM monogram for Christian Macion.
-  Concept 6 (Hybrid): C = sigmoid/CDF curve, M = Σ peak + ticker baseline + 3 agent-graph nodes.
-
-  Grid: 64×64 viewBox, 8-unit padding (letters live in 8–56).
-  Primary strokes: 4 units (1px at 16px favicon).
-  Ticker ticks: 1-unit wide × 4-unit max height.
-  Node dots: 1-unit circles (intentional: disappear below 32px).
-
-  Motif encoding:
-    Math primitives (Φ Σ Δ ∫):  Σ apex at M center (structural, not decoration)
-    Probability / curve:        C is a left-half sigmoid (CDF lower-tail)
-    Neural / agent graph:       3 nodes inside M valley (orchestrator + 2 workers)
-    Terminal / Bloomberg tape:  8 ticks along baseline under M
+  cm-mark.svg — CM monogram for Christian Macion (favicon + Safari mask-icon).
+  Redesign 2026-07-24: monochrome via currentColor so it works as a favicon and
+  a mask-icon on any tab-bar color. Clean geometric open-arc C + full-height M.
+  Legible down to 16px. Replaces the prior sigmoid-C / Σ-M / agent-node /
+  ticker-baseline mark whose decoration collapsed into noise at favicon size.
 -->
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="CM — Christian Macion, Quant Researcher">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="CM — Christian Macion, Quantitative Researcher">
   <title>CM monogram</title>
-  <desc>Sigmoid C fused with Σ-peaked M, agent-graph nodes, ticker baseline.</desc>
-
-  <!-- ============ C : sigmoid (left-half of a CDF, lower tail to midpoint) ============ -->
-  <!--
-    Path from (20, 48) curving up-right to (20, 16):
-      start at left-mid-bottom (20, 48), sigmoid rise to left-mid-top (20, 16).
-    Cubic Bezier with control points pulling the curve into a S-shape (lower-tail CDF).
-    Stroke 4 units, round caps so it survives 1-bit quantization at favicon size.
-  -->
-  <path d="M 22 48 C 10 46, 10 18, 22 16"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="4"
-        stroke-linecap="round"/>
-
-  <!-- ============ M : two outer legs + Σ apex + 3 node dots + ticker baseline ============ -->
-  <!--
-    M built from three line segments:
-      outer-left  : (28, 48) → (28, 18)
-      Σ apex left : (28, 18)  → (40, 34)   (sloping down-right into the valley)
-      Σ apex right: (40, 34) → (52, 18)   (sloping up-right out of the valley — this is the Σ peak's right flank)
-      outer-right : (52, 18) → (52, 48)
-    The two central diagonals meet at (40, 34) — the Σ peak. Stroke 4 units.
-  -->
-  <g fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">
-    <polyline points="28,48 28,18 40,34 52,18 52,48"/>
-  </g>
-
-  <!-- ============ Agent-graph nodes: 3 dots inside the right valley of M ============ -->
-  <!--
-    The right valley of M sits between (40, 34) and (52, 18) → (52, 48).
-    Place 3 nodes along a small arc:
-      orchestrator (largest, amber) at (46, 41)
-      worker-1    (small)          at (50, 30)
-      worker-2    (small)          at (50, 46)
-    In single-color mode, fill = currentColor. In two-color variant the orchestrator
-    pops amber via a CSS / SVG layer swap.
-  -->
-  <g fill="currentColor">
-    <circle cx="46" cy="41" r="1.6"/>
-    <circle cx="50" cy="30" r="1.0"/>
-    <circle cx="50" cy="46" r="1.0"/>
-  </g>
-
-  <!-- ============ Ticker baseline : 8 monospace ticks under the M ============ -->
-  <!--
-    Y baseline = 56 (8-unit bottom padding). Ticks rise from 56 upward.
-    Heights vary to read as a tiny equity-ribbon / tape progression.
-    Each tick: 1-unit wide, gaps of 1 unit. 8 ticks across x ∈ [28..52] = 24 units / 8 ticks ≈ 3-unit stride.
-    Strokes 1 unit wide.
-  -->
-  <g stroke="currentColor" stroke-width="1" stroke-linecap="butt">
-    <line x1="28" y1="56" x2="28" y2="52"/>
-    <line x1="31" y1="56" x2="31" y2="50"/>
-    <line x1="34" y1="56" x2="34" y2="54"/>
-    <line x1="37" y1="56" x2="37" y2="51"/>
-    <line x1="40" y1="56" x2="40" y2="53"/>
-    <line x1="43" y1="56" x2="43" y2="50"/>
-    <line x1="46" y1="56" x2="46" y2="52"/>
-    <line x1="49" y1="56" x2="49" y2="51"/>
+  <desc>The initials C and M in clean geometric strokes.</desc>
+  <g fill="none" stroke="currentColor" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 28 22 A 12 12 0 1 0 28 42"/>
+    <polyline points="36,44 36,20 47,40 58,20 58,44"/>
   </g>
 </svg>

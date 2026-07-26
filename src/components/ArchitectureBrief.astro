@@ -1,0 +1,220 @@
+---
+/**
+ * ArchitectureBrief.astro — v7.5 STELLA-PUBLIC-SAFE architecture card stack.
+ *
+ * Renders a 3-column grid of cells carrying the public-safe slice of the
+ * multi-agent office architecture. All numbers + taxonomy come from
+ * `profile.archSafe` (see src/utils/profile.ts) — single source of truth.
+ *
+ * Three cells:
+ *   1. SUB-TEAMS (2fr wide) — name + tag pairs for the 6 sub-teams
+ *   2. MATH DOCTRINE LIBRARY (1fr) — 4 inline pills
+ *   3. 5-MUST-HAVE COMPLIANCE (2fr) — name + text pairs
+ *
+ * NDA-positive by construction: counts and taxonomy only. No brand,
+ * officer names, or chrome leaks. The chrome register is the same
+ * "institutional / billion-dollar" vocabulary as the rest of the home
+ * page — hairline rules, mono labels, sharp corners.
+ *
+ * Usage:
+ *   <ArchitectureBrief />
+ *   <ArchitectureBrief class="my-class" />
+ */
+import { archSafe } from '@utils/profile';
+
+interface Props {
+  /** Optional CSS class on the outer wrapper. */
+  class?: string;
+}
+const { class: className } = Astro.props;
+---
+
+<section
+  class:list={['arch-brief', className]}
+  id="arch-brief"
+  aria-label={`Multi-agent architecture brief — ${archSafe.agentCount}-agent office, ${archSafe.subTeamCount} sub-teams, ${archSafe.mustHaveCount}-must-have compliance`}
+>
+  <div class="arch-brief__inner">
+    <p class="arch-brief__eyebrow mono">
+      ARCHITECTURE BRIEF · {archSafe.agentCount}-AGENT MULTI-AGENT OFFICE
+    </p>
+    <h2 class="arch-brief__title" data-words>
+      A research system that <span class="hl">proves its own work</span>.
+    </h2>
+
+    <div class="arch-brief__grid">
+      <article class="arch-cell arch-cell--wide" data-reveal>
+        <p class="arch-cell__head mono">{archSafe.subTeamCount} SUB-TEAMS</p>
+        <ul class="arch-cell__list">
+          {
+            archSafe.subTeams.map((t) => (
+              <li>
+                <b>{t.name}</b>
+                <span class="arch-cell__tag mono">{t.tag}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </article>
+
+      <article class="arch-cell" data-reveal data-reveal-delay="120">
+        <p class="arch-cell__head mono">MATH DOCTRINE LIBRARY</p>
+        <ul class="arch-cell__pills">
+          {archSafe.mathDoctrine.map((m) => <li class="arch-cell__pill mono">{m}</li>)}
+        </ul>
+      </article>
+
+      <article class="arch-cell arch-cell--wide" data-reveal data-reveal-delay="240">
+        <p class="arch-cell__head mono">{archSafe.mustHaveCount}-MUST-HAVE COMPLIANCE</p>
+        <ul class="arch-cell__list">
+          {
+            archSafe.mustHave.map((m) => (
+              <li>
+                <b class="arch-cell__tag arch-cell__tag--label mono">{m.tag}</b>
+                <span>{m.text}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </article>
+    </div>
+
+    <p class="arch-brief__cta">
+      <a href="/desk">OPEN THE DESK →</a>
+      <span class="arch-brief__cta-sep mono">·</span>
+      <a href="/ai">READ THE LOOP →</a>
+    </p>
+  </div>
+</section>
+
+<style>
+  .arch-brief {
+    padding: 56px 0;
+    border-bottom: 1px solid var(--c-rule);
+  }
+  .arch-brief__inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  .arch-brief__eyebrow {
+    font: 500 11px / 1.4 var(--ff-mono);
+    color: var(--c-warn);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+  .arch-brief__title {
+    font: 600 36px / 1.1 var(--serif-display);
+    color: var(--c-ink);
+    letter-spacing: -0.022em;
+    margin: 0 0 32px;
+    max-width: 22ch;
+  }
+  .arch-brief__title .hl {
+    font-style: italic;
+    color: var(--c-primary-2);
+  }
+  .arch-brief__grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 2fr;
+    gap: 32px;
+    margin: 0 0 32px;
+  }
+  .arch-cell {
+    border-top: 1px solid var(--c-rule);
+    padding-top: 16px;
+    min-width: 0;
+  }
+  .arch-cell__head {
+    font: 500 10px / 1.4 var(--ff-mono);
+    color: var(--c-warn);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+  .arch-cell__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .arch-cell__list li {
+    padding: 8px 0;
+    border-bottom: 1px dashed var(--c-rule);
+    font: 400 13px / 1.5 var(--ff-sans);
+    color: var(--c-ink);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .arch-cell__list li:last-child {
+    border-bottom: 0;
+  }
+  .arch-cell__list b {
+    font: 600 13px / 1.4 var(--ff-sans);
+    color: var(--c-ink);
+  }
+  .arch-cell__tag {
+    font: 500 10px / 1.4 var(--ff-mono);
+    color: var(--c-ink-2);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .arch-cell__tag--label {
+    color: var(--c-ink);
+    font-weight: 600;
+  }
+  .arch-cell__pills {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .arch-cell__pill {
+    font: 500 11px / 1.4 var(--ff-mono);
+    color: var(--c-ink);
+    padding: 6px 10px;
+    border: 1px solid var(--c-rule);
+    letter-spacing: 0.04em;
+    display: inline-block;
+  }
+  .arch-brief__cta {
+    margin: 0;
+    font: 500 12px / 1.6 var(--ff-mono);
+    color: var(--c-ink-2);
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: baseline;
+  }
+  .arch-brief__cta a {
+    color: var(--c-ink);
+    text-decoration: none;
+    padding-bottom: 2px;
+    border-bottom: 1px solid var(--c-rule);
+    transition:
+      color 200ms ease,
+      border-color 200ms ease;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .arch-brief__cta a:hover {
+    color: var(--c-warn);
+    border-bottom-color: var(--c-warn);
+  }
+  .arch-brief__cta-sep {
+    color: var(--c-ink-4);
+  }
+
+  @media (max-width: 900px) {
+    .arch-brief__grid {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+    .arch-brief__title {
+      font-size: 28px;
+    }
+  }
+</style>

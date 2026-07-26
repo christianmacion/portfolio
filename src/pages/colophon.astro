@@ -39,22 +39,14 @@ const typeFaces = [
   { name: 'KaTeX_Main', ff: 'var(--ff-math)', role: 'Math serifs (rendered by KaTeX)' },
 ];
 
-// === (b) Color palette — 4 swatches ========================================
+// === (b) Color palette — v6.17 warm-dim register ===========================
 const palette = [
-  { name: '--c-primary', hex: '#e6edf3', role: 'off-white · primary text on dark' },
-  { name: '--c-amber', hex: '#c98a16', role: 'institutional amber · accent + lift' },
-  { name: '--c-tape', hex: '#0d1117', role: 'institutional-tape · page background' },
-  // v6.11.10 — F14 amber-only. The `--c-pass` / `--c-fail` tokens
-  // are kept for backward compatibility (some MDX callers) but the
-  // site-wide chrome no longer uses them; primary "positive" data
-  // signal uses `--c-amber` instead.
-  {
-    name: '--c-amber',
-    hex: '#c98a16',
-    role: 'institutional amber · accent + lift + data-positive signal',
-  },
-  { name: '--c-pass', hex: '#3fb950', role: 'legacy green · reserved token' },
-  { name: '--c-ink-2', hex: '#adbac7', role: 'muted ink · data-negative signal (F14)' },
+  { name: '--j-bg', hex: '#1a1714', role: 'warm-dark · page background (v6.17)' },
+  { name: '--j-ink', hex: '#ebe5d4', role: 'paper-cream · primary text (v6.17)' },
+  { name: '--j-warn', hex: '#a88a3e', role: 'warm amber · primary accent (v6.17)' },
+  { name: '--j-cobalt', hex: '#5b6ba8', role: 'cobalt · secondary accent (v6.17, sparse)' },
+  { name: '--j-ink-3', hex: '#8a857a', role: 'muted ink · meta + data-neutral signal (F14)' },
+  { name: '--j-paper', hex: '#ebe5d4', role: 'paper-cream · light-variant bg (v6.17)' },
 ];
 
 // === (c) Spacing scale — 6 cells ===========================================
@@ -131,7 +123,7 @@ const motionCount = motion.length;
       <p class="section__eyebrow">
         <span class="mono">colophon/</span> · the design system
       </p>
-      <h1 class="col-head__title">Colophon.</h1>
+      <h1 class="col-head__title" data-words>Colophon.</h1>
       <VoiceLine class="col-head__voice">
         Every design decision on this site, in one page. Tokens are the source of truth.
       </VoiceLine>
@@ -216,7 +208,7 @@ const motionCount = motion.length;
         {
           palette.map((p) => (
             <article class="swatch">
-              <div class={`swatch__chip swatch__chip--${p.name.replace('--c-', '')}`} />
+              <div class="swatch__chip" style={`background: ${p.hex};`} aria-hidden="true" />
               <div class="swatch__name mono">{p.name}</div>
               <div class="swatch__hex mono">{p.hex}</div>
               <div class="swatch__role">{p.role}</div>
@@ -412,12 +404,12 @@ const motionCount = motion.length;
     padding: 1px 6px;
     border-radius: 3px;
     font-size: 0.92em;
-    color: var(--c-primary-2-deep);
+    color: var(--c-amber-deep);
   }
 
   .sub-h3 {
     margin: var(--sp-6) 0 var(--sp-3);
-    color: var(--c-primary-2-deep);
+    color: var(--c-amber-deep);
     text-transform: uppercase;
     letter-spacing: 0.08em;
     font-size: var(--fs-xs);
@@ -465,7 +457,7 @@ const motionCount = motion.length;
   }
   .type-scale__label {
     font-size: var(--fs-xs);
-    color: var(--c-primary-2-deep);
+    color: var(--c-amber-deep);
     text-transform: uppercase;
     letter-spacing: 0.08em;
   }
@@ -513,7 +505,7 @@ const motionCount = motion.length;
   .swatch__name {
     padding: var(--sp-3) var(--sp-4) 0;
     font-size: var(--fs-sm);
-    color: var(--c-primary-2-deep);
+    color: var(--c-amber-deep);
     font-weight: 600;
   }
   .swatch__hex {
@@ -549,7 +541,7 @@ const motionCount = motion.length;
   }
   .spacing-cell__token {
     font-size: var(--fs-xs);
-    color: var(--c-primary-2-deep);
+    color: var(--c-amber-deep);
     text-transform: uppercase;
     letter-spacing: 0.08em;
   }
@@ -585,7 +577,7 @@ const motionCount = motion.length;
     font-weight: 600;
   }
   .motion tbody th {
-    color: var(--c-primary-2-deep);
+    color: var(--c-amber-deep);
     font-weight: 600;
     text-transform: none;
     letter-spacing: 0;
@@ -609,7 +601,7 @@ const motionCount = motion.length;
     padding: 1px 6px;
     border-radius: 3px;
     font-size: 0.9em;
-    color: var(--c-primary-2-deep);
+    color: var(--c-amber-deep);
   }
 
   @media (max-width: 720px) {

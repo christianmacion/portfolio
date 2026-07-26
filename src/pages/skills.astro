@@ -62,7 +62,9 @@ const levelLabel: Record<1 | 2 | 3 | 4 | 5, string> = {
       <p class="section__eyebrow">
         <span class="mono">skills/</span> · {groups.length} domains, one stack
       </p>
-      <h1 class="page-head__title">{groups.length} domains. <span class="hl">One stack</span>.</h1>
+      <h1 class="page-head__title" data-words>
+        {groups.length} domains. <span class="hl">One stack</span>.
+      </h1>
       <p class="page-head__sub">
         Skills grouped the way a hiring manager reads them: what I build, how I validate it, and
         what I ship it with. Each skill is paired with a self-rated proficiency ladder (<span
@@ -249,7 +251,7 @@ const levelLabel: Record<1 | 2 | 3 | 4 | 5, string> = {
     padding: var(--sp-4) var(--sp-5);
     background: var(--c-amberl-faint);
     border: 1px solid var(--c-amberl-strong);
-    border-left: 3px solid var(--c-primary-2);
+    border-left: 3px solid var(--c-amber);
     border-radius: var(--radius);
     font-size: var(--fs-sm);
     color: var(--c-ink);
@@ -261,7 +263,7 @@ const levelLabel: Record<1 | 2 | 3 | 4 | 5, string> = {
   }
   .nda-callout .mono {
     font-size: 0.92em;
-    color: var(--c-primary-2-deep);
+    color: var(--c-amber-deep);
   }
 
   /* === Legend strip === */
@@ -401,10 +403,10 @@ const levelLabel: Record<1 | 2 | 3 | 4 | 5, string> = {
   .skill__chip--lvl-4 {
     background: var(--c-amberl-faint);
     border: 1px solid var(--c-amberl-decor);
-    color: var(--c-primary-2);
+    color: var(--c-amber);
   }
   .skill__chip--lvl-4 .mono {
-    color: var(--c-primary-2);
+    color: var(--c-amber);
   }
   .skill__chip--lvl-3 {
     /* v6.10.36 — token alias for F13 amber family. */

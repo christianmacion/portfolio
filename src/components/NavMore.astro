@@ -115,7 +115,7 @@ const groupActive = items.some((it) => isActive(it.href));
     font-weight: 500;
     color: var(--c-ink-2);
     padding: 0.5rem 0.6rem;
-    border-radius: var(--radius-sm);
+    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade */
     transition:
       color var(--transition),
       background var(--transition);
@@ -150,7 +150,7 @@ const groupActive = items.some((it) => isActive(it.href));
     list-style: none;
     background: var(--c-bg);
     border: var(--border);
-    border-radius: var(--radius);
+    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade */
     box-shadow: var(--shadow-lg);
     z-index: var(--z-nav-more);
     display: flex;
@@ -166,7 +166,7 @@ const groupActive = items.some((it) => isActive(it.href));
     font-size: var(--fs-sm);
     color: var(--c-ink-2);
     text-decoration: none;
-    border-radius: var(--radius-sm);
+    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade */
     transition:
       color var(--transition),
       background var(--transition);

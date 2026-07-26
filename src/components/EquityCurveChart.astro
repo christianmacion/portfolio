@@ -343,7 +343,7 @@ const regimeFill: Record<'calm' | 'normal' | 'stress', string> = {
     display: block;
     background: var(--c-bg-2);
     border: 1px solid var(--c-rule);
-    border-radius: var(--radius-sm);
+    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade */
   }
   .eq-chart__grid {
     stroke: var(--c-rule-soft);
@@ -403,7 +403,7 @@ const regimeFill: Record<'calm' | 'normal' | 'stress', string> = {
     display: inline-block;
     width: 14px;
     height: 10px;
-    border-radius: 2px;
+    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade (was 2px) */
     border: 1px solid var(--c-rule-soft);
   }
   /* v6.11.18 — F14 amber-only migration. Was rgba(63,185,80,0.18) green

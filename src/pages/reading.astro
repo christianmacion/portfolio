@@ -145,7 +145,7 @@ function statusPill(s: ShelfItem['status']): string {
   <section class="section">
     <div class="container container-narrow">
       <p class="section__eyebrow mono">reading · shelf · v6.0</p>
-      <h1>Reading. Re-reading. Reference shelf.</h1>
+      <h1 data-words>Reading. Re-reading. Reference shelf.</h1>
       <VoiceLine class="hero__voice"> The re-reads matter more than the first reads. </VoiceLine>
       <p class="lede">
         A dated, opinionated list of what I'm reading and re-reading. Public-data only — no
@@ -286,7 +286,7 @@ function statusPill(s: ShelfItem['status']): string {
       transform var(--transition);
   }
   .shelf__row:hover {
-    border-color: var(--c-primary-2-deep);
+    border-color: var(--c-amber-deep);
   }
   @media (max-width: 640px) {
     .shelf__row {
@@ -315,7 +315,7 @@ function statusPill(s: ShelfItem['status']): string {
   }
   .shelf__status--re-read {
     background: var(--c-amberl-soft);
-    color: var(--c-primary-2);
+    color: var(--c-amber);
   }
   .shelf__status--reference {
     background: var(--c-amberl-faint);
@@ -336,7 +336,7 @@ function statusPill(s: ShelfItem['status']): string {
     border-bottom: 1px solid var(--c-rule);
   }
   .shelf__title a:hover {
-    border-bottom-color: var(--c-primary-2-deep);
+    border-bottom-color: var(--c-amber-deep);
   }
   .shelf__author {
     margin: 0 0 var(--sp-2);

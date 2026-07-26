@@ -35,7 +35,7 @@ const updatedHuman = new Date(updated).toLocaleDateString('en-GB', {
   <header class="now-head">
     <div class="container container-narrow">
       <p class="section__eyebrow"><span class="mono">now/</span> · last updated {updated}</p>
-      <h1 class="now-head__title">
+      <h1 class="now-head__title" data-words>
         What I'm doing <span class="hl">right now</span>.
       </h1>
       <VoiceLine class="now-head__voice">
@@ -73,6 +73,16 @@ const updatedHuman = new Date(updated).toLocaleDateString('en-GB', {
 
       <h2 class="now-h2">What I'm shipping this month</h2>
       <ul class="now-list">
+        <li>
+          <strong
+            >New workbook published — <a href={path('/workbooks/kaufman-efficiency-ratio.pdf')}
+              >Kaufman Efficiency Ratio (4 pp · 287 KB · PDF)</a
+            >:</strong
+          >
+          {' '}adaptive efficiency measurement for trading strategies. Source: <code
+            >macion2026kaufman</code
+          >. Anchors the KAMA adaptive-MA discussion across the quant book.
+        </li>
         <li>
           <strong>Live paper-trade on <a href={path('/positions')}>/positions</a>:</strong>
           running project 03 (vol-target time-series momentum, BTC/USDT, 30% annualized vol target) into
@@ -213,7 +223,7 @@ const updatedHuman = new Date(updated).toLocaleDateString('en-GB', {
   .now-head__sub a {
     color: var(--c-primary);
     text-decoration: underline;
-    text-decoration-color: var(--c-primary-2-deep);
+    text-decoration-color: var(--c-amber-deep);
     text-underline-offset: 3px;
   }
   .now-head__stamp {
@@ -223,7 +233,7 @@ const updatedHuman = new Date(updated).toLocaleDateString('en-GB', {
     padding: var(--sp-2) var(--sp-4);
     background: var(--c-bg-2);
     border: 1px solid var(--c-rule);
-    border-radius: 14px;
+    border-radius: 0;
     font-size: var(--fs-sm);
     color: var(--c-ink-2);
   }
@@ -261,7 +271,7 @@ const updatedHuman = new Date(updated).toLocaleDateString('en-GB', {
     content: '–';
     position: absolute;
     left: 0;
-    color: var(--c-primary-2-deep);
+    color: var(--c-amber-deep);
     font-weight: 500;
   }
   .now-list strong {
@@ -275,7 +285,7 @@ const updatedHuman = new Date(updated).toLocaleDateString('en-GB', {
     text-underline-offset: 2px;
   }
   .now-list a:hover {
-    text-decoration-color: var(--c-primary-2-deep);
+    text-decoration-color: var(--c-amber-deep);
   }
   .now-list--not li::before {
     content: '';
@@ -298,7 +308,7 @@ const updatedHuman = new Date(updated).toLocaleDateString('en-GB', {
     color: var(--c-ink-3);
   }
   .now-foot a {
-    color: var(--c-primary-2-deep);
+    color: var(--c-amber-deep);
     text-decoration: underline;
   }
 </style>

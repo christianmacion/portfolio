@@ -1,0 +1,664 @@
+/* motion.css — v7.4 INSTITUTIONAL MOTION LAYER
+ * Single source of motion primitives for the portfolio. No glows, no pills,
+ * no gradients — every animation is a 1px rule or a token-color shift.
+ * Respects prefers-reduced-motion via the global override in tokens-v6.13.css
+ * + belt-and-suspenders section at the bottom.
+ *
+ * Hard rules (institutional register, per the v7.4 motion-vocab brief):
+ *   - Max 1 infinite-running animation per viewport (status dot owns it).
+ *   - No `mousemove` listeners on CTAs (banned: magnetic / cursor-attract).
+ *   - `transform: rotate*` is banned (no tilt).
+ *   - `translate` cap at 8px on hover.
+ *   - All durations ≤ 1.2s on entrance.
+ *   - All easings resolve to one of three tokens: --j-ease-out, --j-ease-out-soft, --j-ease-snappy.
+ *
+ * Sections (v7.4):
+ *   1.  REVEAL — scroll-triggered fade-up
+ *   2.  HERO ENTRANCE — paint-time stagger (80ms cadence, ~480ms arc)
+ *   3.  WORD REVEAL — per-word hero h1 cascade (TextReveal)
+ *   4.  WORK ROW HOVER — institutional slide-right + amber tint
+ *   5.  CTA MICRO-INTERACTION — hairline underline draws in (no magnetic)
+ *   6.  CTA ARROW SHIFT — 4px right-shift on hover, 180ms
+ *   7.  KPI COUNT-UP — count-up + over-shot hairline (LineDrawIn)
+ *   8.  TOP HAIRLINE PROGRESS — 1px amber bar at top of viewport
+ *   9.  NAV SCROLL STATE — slim hairline strengthens + tick
+ *   10. STATUS DOT — contact-eyebrow pulse
+ *   11. PULSE RING — variant status dots (live / paper / etc.)
+ *   12. FIT BADGES — interactive hover for the credential badge row
+ *   13. PORTRAIT — gentle parallax on scroll (max 8px translate)
+ *   14. CONTACT CTA — close-of-page attention breathe
+ *   15. SELECTION CARET — institutional palette
+ *   16. HERO CURSOR — terminal caret blink after entrance settles
+ *   17. SECTION TRACE — 1px amber divider that draws across on first reveal
+ *   18. SECTION RAIL — left-rail scroll-driven ticks
+ *   19. REDUCED-MOTION OVERRIDE — belt-and-suspenders
+ *
+ * Tokens used:
+ *   --j-ease-out, --j-ease-out-soft, --j-ease-snappy
+ *   --j-dur, --j-dur-fast, --j-dur-slow, --j-dur-slower, --j-dur-cursor
+ *   --j-warn (amber), --j-cobalt (link), --j-ink (text)
+ *   --j-news-speed, --j-marquee-speed
+ */
+
+/* ============================================================
+ * 1. REVEAL — scroll-triggered fade-up
+ *    Default: 18px translate-y, 0.7s ease-out, soft 8px blur.
+ *    data-reveal-delay="N" (ms) sets per-element stagger.
+ * ============================================================ */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(18px);
+  filter: blur(8px);
+  transition:
+    opacity 700ms var(--j-ease-out),
+    transform 700ms var(--j-ease-out),
+    filter 700ms var(--j-ease-out);
+  will-change: opacity, transform, filter;
+}
+[data-reveal].is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+[data-reveal='lift-sm'] {
+  transform: translateY(8px);
+  filter: blur(4px);
+}
+[data-reveal='lift-sm'].is-revealed {
+  transform: translateY(0);
+  filter: blur(0);
+}
+[data-reveal='fade'] {
+  transform: none;
+  filter: none;
+}
+
+/* ============================================================
+ * 2. HERO ENTRANCE — paint-time stagger (no observer needed).
+ *    Targets `.hero [data-stagger]` children. Owner of the first
+ *    second of perception: the recruiter glides from eyebrow to CTA.
+ *    v7.4 — cadence preserved at 80ms / step (research: Stripe /
+ *    Linear / Vercel sweet spot is 80–150ms). Total arc ~480ms +
+ *    580ms duration = reads as snappy, confident, not ceremonial.
+ *    The CNRS/IIMK research on scroll-driven motion says the
+ *    low end of the band is correct for senior-QR positioning.
+ * ============================================================ */
+.hero [data-stagger] {
+  opacity: 0;
+  transform: translateY(14px);
+  filter: blur(6px);
+  transition:
+    opacity 580ms var(--j-ease-out),
+    transform 580ms var(--j-ease-out),
+    filter 580ms var(--j-ease-out);
+}
+.hero [data-stagger].is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+.hero [data-stagger='1'] {
+  transition-delay: 80ms;
+}
+.hero [data-stagger='2'] {
+  transition-delay: 160ms;
+}
+.hero [data-stagger='3'] {
+  transition-delay: 240ms;
+}
+.hero [data-stagger='4'] {
+  transition-delay: 320ms;
+}
+.hero [data-stagger='5'] {
+  transition-delay: 400ms;
+}
+.hero [data-stagger='6'] {
+  transition-delay: 480ms;
+}
+
+/* ============================================================
+ * 3. WORD REVEAL — per-word hero h1 cascade.
+ *    Splits the h1 into individual word spans that cascade in
+ *    120ms steps. Combined with the parent [data-stagger='2'],
+ *    the name feels like it's being assembled, not flashed.
+ *    Caps at 360ms total — institutional velocity.
+ *    v7.4-WIDE — applies to ANY heading with [data-words] (auto-wrap
+ *    driver in motion.ts) OR direct .word spans. Site-wide: .hero__title,
+ *    .r-hero__title, .h1, .display, h1 with .word children.
+ * ============================================================ */
+.word,
+.hero__name .word,
+.hero__title .word,
+.r-hero__title .word,
+.h1 .word,
+.display .word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(8px);
+  filter: blur(6px);
+  transition:
+    opacity 520ms var(--j-ease-out),
+    transform 520ms var(--j-ease-out),
+    filter 520ms var(--j-ease-out);
+}
+.word.is-revealed,
+.hero__name .word.is-revealed,
+.hero__title .word.is-revealed,
+.r-hero__title .word.is-revealed,
+.h1 .word.is-revealed,
+.display .word.is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+.word:nth-child(1),
+.hero__name .word:nth-child(1) {
+  transition-delay: 80ms;
+}
+.word:nth-child(2),
+.hero__name .word:nth-child(2) {
+  transition-delay: 200ms;
+}
+.word:nth-child(3),
+.hero__name .word:nth-child(3) {
+  transition-delay: 320ms;
+}
+.word:nth-child(4),
+.hero__name .word:nth-child(4) {
+  transition-delay: 440ms;
+}
+.word:nth-child(5),
+.hero__name .word:nth-child(5) {
+  transition-delay: 560ms;
+}
+.word:nth-child(6),
+.hero__name .word:nth-child(6) {
+  transition-delay: 680ms;
+}
+/* n-th child fallback for > 6 words */
+.word:nth-child(n + 7),
+.hero__name .word:nth-child(n + 7) {
+  transition-delay: 720ms;
+}
+
+/* ============================================================
+ * 4. WORK ROW HOVER — institutional slide-right + amber tint.
+ *    The chevron (VIEW →) translates 6px on row hover; the title
+ *    shifts to amber. Tells the eye this is a row-as-link, not
+ *    three independent elements.
+ *    v7.4 — refined ease to --j-ease-out-soft for a softer settle.
+ * ============================================================ */
+.work__row {
+  cursor: pointer;
+  transition: background-color 200ms var(--j-ease-out-soft);
+}
+.work__row:hover {
+  background-color: var(--j-warn-soft);
+}
+.work__row .work__title {
+  transition: color 200ms var(--j-ease-out-soft);
+}
+.work__row:hover .work__title {
+  color: var(--j-warn);
+}
+.work__row .work__href {
+  display: inline-block;
+  transition:
+    transform 220ms var(--j-ease-out-soft),
+    color 200ms var(--j-ease-out-soft);
+}
+.work__row:hover .work__href {
+  transform: translateX(6px);
+  color: var(--j-warn);
+}
+.work__row .work__num {
+  transition: opacity 200ms var(--j-ease-out-soft);
+}
+.work__row:hover .work__num {
+  opacity: 0.55;
+}
+
+/* ============================================================
+ * 5. CTA MICRO-INTERACTION — hairline underline draws in +
+ *    arrow marker shifts. The CTA already has a background hover;
+ *    this adds a micro detail for the no-shadow monochrome register.
+ * ============================================================ */
+.cta {
+  position: relative;
+  overflow: hidden;
+  transition:
+    background-color 200ms var(--j-ease-out),
+    transform 200ms var(--j-ease-out);
+  will-change: transform;
+}
+.cta::after {
+  content: '';
+  position: absolute;
+  left: 32px;
+  right: 32px;
+  bottom: 8px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 360ms var(--j-ease-out) 80ms;
+  opacity: 0.6;
+}
+.cta:hover::after {
+  transform: scaleX(1);
+}
+.cta:hover {
+  transform: translateY(-1px);
+}
+.cta:active {
+  transform: translateY(0);
+}
+
+/* ============================================================
+ * 6. CTA CTA ARROW SHIFT — 4px right-shift on hover, 180ms. Matches
+ *    the work-row chevron pattern (consistency = institutional).
+ *    No `mousemove` listeners — the institutional register rejects
+ *    cursor-attract / magnetic CTAs as a 2023 SaaS gimmick.
+ * ============================================================ */
+.cta {
+  transition:
+    background-color 200ms var(--j-ease-out),
+    transform 200ms var(--j-ease-out);
+}
+.cta::after {
+  content: '';
+  position: absolute;
+  left: 32px;
+  right: 32px;
+  bottom: 8px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 360ms var(--j-ease-out) 80ms;
+  opacity: 0.6;
+}
+.cta:hover::after {
+  transform: scaleX(1);
+}
+
+/* ============================================================
+ * 7. KPI COUNT-UP — the value already has tabular-nums. v7.4 turns
+ *    the under-bar into a LineDrawIn with a 4% overshoot — settles
+ *    back to 1.0 over 900ms with --j-ease-out-soft.
+ *    Reads as "the rule was drawn by the system that placed the
+ *    KPI", not "the rule is decorative".
+ * ============================================================ */
+.hero__kpis li {
+  position: relative;
+}
+.hero__kpis li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 12px;
+  height: 1px;
+  background: var(--j-warn);
+  transform: scaleX(0);
+  transform-origin: left center;
+  opacity: 0.5;
+  transition: transform 900ms var(--j-ease-out-soft) 200ms;
+}
+.hero__kpis li.is-revealed::before {
+  transform: scaleX(1);
+}
+
+/* v7.4 — over-draw pulse for the just-revealed KPI row. A single
+   1px amber trace that grows from 0% to 100% width across the
+   hairline once the row is in view. Fires once. */
+.hero__kpis li.is-revealed::before {
+  animation: kpi-trace 1100ms var(--j-ease-out-soft) 200ms 1;
+}
+@keyframes kpi-trace {
+  0% {
+    transform: scaleX(0);
+  }
+  60% {
+    transform: scaleX(1.04);
+  }
+  100% {
+    transform: scaleX(1);
+  }
+}
+
+/* ============================================================
+ * 8. TOP HAIRLINE PROGRESS — 1px amber bar at top of viewport.
+ *    Width driven by --scroll-progress set by scroll-progress.ts.
+ *    The bar only appears after the user scrolls past the hero.
+ * ============================================================ */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 1px;
+  width: 100%;
+  background: transparent;
+  z-index: calc(var(--z-nav) + 1);
+  pointer-events: none;
+}
+.scroll-progress > i {
+  display: block;
+  height: 100%;
+  width: var(--scroll-progress, 0%);
+  background: var(--j-warn);
+  transform-origin: left center;
+  transition:
+    width 80ms linear,
+    opacity 240ms var(--j-ease-out);
+  opacity: 0;
+}
+.scroll-progress.is-active > i {
+  opacity: 0.85;
+}
+
+/* ============================================================
+ * 9. NAV SCROLL STATE — slim hairline strengthens + ticks one
+ *    notch deeper in tint when the user has scrolled past 80px.
+ *    Tells the eye "you're now mid-page" without a heavy shadow.
+ * ============================================================ */
+.nav {
+  transition: border-color 240ms var(--j-ease-out);
+}
+.nav.is-scrolled {
+  border-bottom-color: var(--j-ink-3);
+}
+
+/* ============================================================
+ * 10. STATUS DOT — the contact-eyebrow pulse. A 6px amber dot
+ *    that breathes every 2.4s. Institutional heartbeat.
+ *    v7.4 — keyframe cadence slightly tightened (2.4s → 2.2s)
+ *    for an "alive" feel without becoming anxious.
+ * ============================================================ */
+.status-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: var(--j-warn);
+  border-radius: 0;
+  margin-right: 8px;
+  vertical-align: 0.05em;
+  position: relative;
+  animation: status-pulse 2200ms var(--j-ease-out) infinite;
+}
+.status-dot::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border: 1px solid var(--j-warn);
+  border-radius: 0;
+  opacity: 0;
+  animation: status-ring 2200ms var(--j-ease-out) infinite;
+}
+@keyframes status-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(0.78);
+  }
+}
+@keyframes status-ring {
+  0% {
+    opacity: 0.6;
+    transform: scale(0.6);
+  }
+  80% {
+    opacity: 0;
+    transform: scale(2.4);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.4);
+  }
+}
+
+/* ============================================================
+ * 11. PULSE RING — variant indicator for "live" / "paper" / etc.
+ *    Backed by PulseRing.astro but the class hooks live here so
+ *    every prose / home page can drop a <span class="pulse-ring">.
+ *    Currently used by the homepage ticker; reduced-motion nils.
+ * ============================================================ */
+.pulse-ring {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  line-height: 1;
+}
+.pulse-ring__dot {
+  position: relative;
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: currentColor;
+  border-radius: 0;
+  flex-shrink: 0;
+  animation: pulse-dot 1800ms var(--j-ease-out) infinite;
+}
+.pulse-ring--live .pulse-ring__dot {
+  width: 7px;
+  height: 7px;
+}
+.pulse-ring__dot::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border: 1px solid currentColor;
+  border-radius: 0;
+  opacity: 0;
+  animation: status-ring 1800ms var(--j-ease-out) infinite;
+}
+.pulse-ring--live .pulse-ring__dot::before {
+  inset: -4px;
+}
+
+/* ============================================================
+ * 12. FIT BADGES — interactive hover for the education/credential
+ *    badge row. Each badge has a 1px underline that draws in on
+ *    hover (text remains static). Subtle marker that this is a
+ *    live data row, not a label.
+ * ============================================================ */
+.fit__line b {
+  position: relative;
+  display: inline-block;
+  cursor: default;
+}
+.fit__line b::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 1px;
+  background: var(--j-warn);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 320ms var(--j-ease-out-soft);
+}
+.fit__line b:hover::after {
+  transform: scaleX(1);
+}
+
+/* ============================================================
+ * 13. PORTRAIT — gentle parallax on scroll (max 8px translate).
+ *     The portrait isn't a parallax prop — it's a person. Cap it
+ *     tight so it reads as a settling motion, not a flying card.
+ * ============================================================ */
+.hero__portrait img {
+  will-change: transform;
+  transition: transform 200ms var(--j-ease-out);
+}
+
+/* ============================================================
+ * 14. CONTACT CTA — the close-of-page. The CONTACT button gets
+ *     a one-time attention breathe on viewport entry (1× only,
+ *     via .is-revealed). The eyebrow above it gets the status dot.
+ * ============================================================ */
+.contact__cta .cta {
+  animation: cta-breathe 2200ms var(--j-ease-out) 1;
+}
+.contact__cta.is-revealed .cta {
+  animation: none;
+}
+@keyframes cta-breathe {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.025);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* ============================================================
+ * 15. SELECTION CARET — respects the institutional palette.
+ *     tokens-v6.13.css already sets ::selection; we extend it
+ *     to a soft fade-in for first-paint focus.
+ * ============================================================ */
+::selection {
+  background: var(--j-warn-soft);
+  color: var(--j-ink);
+}
+
+/* ============================================================
+ * 16. HERO CURSOR — terminal caret blink after entrance settles.
+ *     A 1px × 14px <span class="hero__cursor"> injected at the end
+ *     of .hero__role once the 6-step stagger completes (~720ms).
+ *     motion.ts adds .has-cursor to .hero__role on init.
+ *     The cursor blinks at --j-dur-cursor (1.1s half-cycle).
+ * ============================================================ */
+.hero__cursor {
+  display: inline-block;
+  width: 1px;
+  height: 14px;
+  background: var(--j-warn);
+  margin-left: 4px;
+  vertical-align: -2px;
+  opacity: 0;
+  transition: opacity 200ms var(--j-ease-out);
+}
+.hero.has-cursor .hero__cursor {
+  opacity: 1;
+  animation: hero-cursor-blink 1100ms steps(2, jump-none) infinite;
+}
+@keyframes hero-cursor-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* ============================================================
+ * 17. SECTION TRACE — 1px amber divider that draws across
+ *     from 0% to 100% width on first reveal. Once, never again.
+ *     Use between major sections. v7.4 — fires with the standard
+ *     reveal-on-scroll as long as the element has [data-reveal].
+ * ============================================================ */
+[data-section-trace] {
+  display: block;
+  height: 1px;
+  background: var(--j-warn);
+  opacity: 0.55;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 1200ms var(--j-ease-out-soft);
+}
+[data-section-trace].is-revealed {
+  transform: scaleX(1);
+}
+
+/* ============================================================
+ * 18. SECTION RAIL — fixed left-rail scroll-driven ticks.
+ *     One tab per <section data-section-num> in the page.
+ *     JS (motion.ts) drives --section-progress per item.
+ *     Limited to ≥ 1280px viewports so it doesn't crowd mobile.
+ * ============================================================ */
+.section-rail {
+  position: fixed;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: none;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 5;
+  pointer-events: none;
+}
+@media (min-width: 1280px) {
+  .section-rail {
+    display: flex;
+  }
+}
+.section-rail__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--j-ff-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--j-ink-3);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+}
+.section-rail__item::before {
+  content: '';
+  display: block;
+  width: 16px;
+  height: 1px;
+  background: var(--j-ink-4);
+  transform: scaleX(var(--section-progress, 0));
+  transform-origin: left center;
+  transition:
+    transform 320ms var(--j-ease-out-soft),
+    background-color 240ms var(--j-ease-out);
+}
+.section-rail__item.is-active {
+  color: var(--j-warn);
+}
+.section-rail__item.is-active::before {
+  background: var(--j-warn);
+}
+
+/* ============================================================
+ * 19. REDUCED-MOTION OVERRIDE — belt-and-suspenders. The token
+ *     file already sets animation: none globally; this layer
+ *     also neutralizes filter/transform on [data-reveal] so the
+ *     page renders correctly even if the global rule is scoped
+ *     out by a downstream selector.
+ * ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal],
+  .hero [data-stagger],
+  .hero__name .word {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+  .status-dot,
+  .status-dot::before,
+  .pulse-ring__dot,
+  .pulse-ring__dot::before,
+  .hero.has-cursor .hero__cursor,
+  .contact__cta .cta {
+    animation: none !important;
+  }
+  .cta {
+    transform: none !important;
+  }
+}

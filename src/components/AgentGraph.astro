@@ -20,12 +20,19 @@ import { profile } from '@utils/profile';
 interface Props {
   /** Optional CSS class on the outer wrapper (e.g. for grid sizing). */
   class?: string;
+  /**
+   * Compact mode drops the 4 input columns — used in the home two-pillar
+   * pane where the orchestrator + middles + outputs tell the same story in
+   * less width. 11 nodes → 7 nodes (orchestrator + 3 middles + 3 outputs).
+   */
+  compact?: boolean;
 }
-const { class: className } = Astro.props;
+const { class: className, compact = false } = Astro.props;
 
 // === DETERMINISTIC LAYOUT CONSTANTS ===
-// viewBox: 800 x 440. Boxes are 110 x 60 (orchestrator 130 x 70).
-const W = 800;
+// viewBox: 800 x 440 (full), or 560 x 440 (compact).
+// Boxes are 110 x 60 (orchestrator 130 x 70).
+const W = compact ? 560 : 800;
 const H = 440;
 const BOX_W = 110;
 const BOX_H = 60;
@@ -46,10 +53,10 @@ type Node = {
   family: Family;
 };
 
-const COL_X_INPUT = 110;
-const COL_X_MID = 305;
-const COL_X_ORCH = 455;
-const COL_X_OUT = 665;
+const COL_X_INPUT = compact ? 0 : 110; // unused in compact mode
+const COL_X_MID = compact ? 110 : 305;
+const COL_X_ORCH = compact ? 270 : 455;
+const COL_X_OUT = compact ? 440 : 665;
 
 const nodes: Node[] = [
   // Inputs (4)
@@ -171,20 +178,28 @@ const nodes: Node[] = [
 // v6.10.39 — derive agent-count descriptors from the actual `nodes`
 // array, not hardcoded "11". If a 5th input or 4th output is added to
 // the DAG, the aria-label + legend caption auto-update.
-const inputCount = nodes.filter((n) => n.family === 'input').length;
-const middleCount = nodes.filter((n) => n.family === 'middle').length;
-const outputCount = nodes.filter((n) => n.family === 'output').length;
-const totalAgents = nodes.length;
-
+// v7.5 — in compact mode we render 7 nodes (orchestrator + middles +
+// outputs) instead of 11 (which includes the 4 input feeders).
+const visibleNodes = compact ? nodes.filter((n) => n.family !== 'input') : nodes;
 const nodeById = Object.fromEntries(nodes.map((n) => [n.id, n]));
+const inputCount = visibleNodes.filter((n) => n.family === 'input').length;
+const middleCount = visibleNodes.filter((n) => n.family === 'middle').length;
+const outputCount = visibleNodes.filter((n) => n.family === 'output').length;
+const totalAgents = visibleNodes.length;
 
-type Edge = { from: string; to: string; active?: boolean; kind?: 'fwd' | 'fb' };
+type Edge = {
+  from: string;
+  to: string;
+  active?: boolean;
+  kind?: 'fwd' | 'fb';
+  skipCompact?: boolean;
+};
 const edges: Edge[] = [
-  // Inputs → Orchestrator
-  { from: 'in1', to: 'orch' },
-  { from: 'in2', to: 'orch', active: true }, // active start (input feeds the loop)
-  { from: 'in3', to: 'orch' },
-  { from: 'in4', to: 'orch' },
+  // Inputs → Orchestrator (skipped in compact mode — input column dropped)
+  { from: 'in1', to: 'orch', skipCompact: true },
+  { from: 'in2', to: 'orch', active: true, skipCompact: true }, // active start (input feeds the loop)
+  { from: 'in3', to: 'orch', skipCompact: true },
+  { from: 'in4', to: 'orch', skipCompact: true },
   // Orchestrator → Middles
   { from: 'orch', to: 'mid1' },
   { from: 'orch', to: 'mid2', active: true },
@@ -235,13 +250,15 @@ interface ResolvedEdge extends Edge {
   sideB: 'right' | 'left' | 'top' | 'bottom';
 }
 
-const resolved: ResolvedEdge[] = edges.map((e) => {
-  const sideA = sideFor(e.from, e.to);
-  const sideB = sideFor(e.to, e.from);
-  const a = anchor(e.from, sideA);
-  const b = anchor(e.to, sideB);
-  return { ...e, x1: a.x, y1: a.y, x2: b.x, y2: b.y, sideA, sideB };
-});
+const resolved: ResolvedEdge[] = edges
+  .filter((e) => !(compact && e.skipCompact))
+  .map((e) => {
+    const sideA = sideFor(e.from, e.to);
+    const sideB = sideFor(e.to, e.from);
+    const a = anchor(e.from, sideA);
+    const b = anchor(e.to, sideB);
+    return { ...e, x1: a.x, y1: a.y, x2: b.x, y2: b.y, sideA, sideB };
+  });
 
 // Compute the active-loop polyline as a single combined SVG path. Used
 // twice — once for the static amber "track" and once with a smaller
@@ -281,7 +298,7 @@ const activeLength = activeEdges.reduce((acc, e) => acc + dist(e.x1, e.y1, e.x2,
     viewBox={`0 0 ${W} ${H}`}
     preserveAspectRatio="xMidYMid meet"
     role="img"
-    aria-label={`Agent platform: ${totalAgents} agents arranged in a DAG. Inputs feed the Orchestrator, which dispatches to RAG-Recall, Eval-Gate, and Router, producing Artifact, Metric, and Feedback. Feedback loops back to the Orchestrator.`}
+    aria-label={`Agent platform: ${totalAgents} agents arranged in a DAG${compact ? ' (compact view: inputs omitted)' : '. Inputs feed the Orchestrator, which dispatches to RAG-Recall, Eval-Gate, and Router, producing Artifact, Metric, and Feedback. Feedback loops back to the Orchestrator'}.`}
     xmlns="http://www.w3.org/2000/svg"
   >
     <defs>
@@ -372,7 +389,7 @@ const activeLength = activeEdges.reduce((acc, e) => acc + dist(e.x1, e.y1, e.x2,
 
     {/* === Nodes === */}
     {
-      nodes.map((n) => (
+      visibleNodes.map((n) => (
         <g
           class:list={['ag-node', `ag-node--${n.family}`, n.id === 'orch' && 'ag-node--highlight']}
           transform={`translate(${n.cx - n.w / 2} ${n.cy - n.h / 2})`}
@@ -401,9 +418,11 @@ const activeLength = activeEdges.reduce((acc, e) => acc + dist(e.x1, e.y1, e.x2,
     {/* === Caption / legend === */}
     <g class="ag-legend" aria-hidden="true">
       <text class="ag-legend-text" x="20" y={H - 12}>
-        {totalAgents} agents · {inputCount} inputs → orchestrator → {middleCount} middles → {
-          outputCount
-        } outputs · feedback loops to orchestrator
+        {
+          compact
+            ? `${totalAgents} agents · orchestrator → ${middleCount} middles → ${outputCount} outputs · feedback loops`
+            : `${totalAgents} agents · ${inputCount} inputs → orchestrator → ${middleCount} middles → ${outputCount} outputs · feedback loops to orchestrator`
+        }
       </text>
     </g>
   </svg>

@@ -26,10 +26,65 @@ const stats = {
   positionsStartDate: '2026-04-21', // /positions paper-trading series start (BTC/USDT 1d klines)
   // v6.11.33 — resume variants count. Drives /resume, /for-recruiters, /contact chrome.
   resumeCount: '3', // unified / AI-only / Quant one-pager (resumes[] in resume.astro)
+  // v7.5 — multi-agent office stats (STELLA-public-safe slice).
+  // These surface on /desk + ArchitectureBrief. Distinct from
+  // aiAgentCount = '11' (the DAG node count on /ai) which is a different
+  // abstraction level (orchestrator + 10 workers, not the full office).
+  agentOfficeCount: '53', // full multi-agent office count (12 officers + 41 specialists)
+  subTeamCount: '6', // active sub-teams (OSINT cell · posture bench · consultant bench · commander org · math doctrine owners · workspace IA)
+  mathDoctrineCount: '4', // stochastic · dynamical · numerical PDE · stat-learn
+  mustHaveCount: '5', // eval-first · NDA-clean · alpha-driven · ship-ready · tier-aware
+} as const;
+
+// v7.5 — architecture chrome used by ArchitectureBrief.astro + /desk.
+// NDA-safe: numbers + taxonomy only, no brand/officer names.
+export const archSafe = {
+  agentCount: stats.agentOfficeCount,
+  subTeamCount: stats.subTeamCount,
+  mathDoctrineCount: stats.mathDoctrineCount,
+  mustHaveCount: stats.mustHaveCount,
+  evalGateCount: stats.evalGates,
+  // Public-safe taxonomy for the multi-agent office. Names only, no
+  // officer/role positions, no brand.
+  subTeams: [
+    { name: 'OSINT cell', tag: '14 specialists · open-source intelligence' },
+    {
+      name: 'Strategic-Posture Bench',
+      tag: '12 doctrine-corpus owners · Sun Tzu / Machiavelli / Greene',
+    },
+    {
+      name: 'Consultant Bench',
+      tag: '11 senior advisors · Drucker / Porter / Taleb / Damodaran / Christensen',
+    },
+    { name: 'Commander Org', tag: '12 officers · dispatch · AAR loop · 5-must-have compliance' },
+    {
+      name: 'Math Doctrine-Owners',
+      tag: '4 v3.1-grade · stochastic / dynamical / numerical PDE / stat-learn',
+    },
+    { name: 'Workspace IA', tag: '6 mental spokes · 15 routes · 1 psychological hub' },
+  ] as const,
+  // Public-safe math doctrine roster.
+  mathDoctrine: [
+    'stochastic analysis',
+    'dynamical systems',
+    'numerical PDE',
+    'statistical learning theory',
+  ] as const,
+  // 5-must-have compliance rubric. From the standing-order 5-must-have
+  // contract (terminal state · idempotent write · dedupe key · coverage
+  // filter · AAR) — rephrased for external audiences.
+  mustHave: [
+    { tag: 'eval-first', text: 'every primitive ships behind a 31-gate statistical eval harness' },
+    { tag: 'NDA-clean', text: 'NDA scope audited on every artifact before publish' },
+    { tag: 'alpha-driven', text: 'risk-graded AAR with idempotent re-run path' },
+    { tag: 'ship-ready', text: 'terminal state · dedupe key · coverage filter · one-page AAR' },
+    { tag: 'tier-aware', text: 'cost + quality gates tracked per loop primitive' },
+  ] as const,
 } as const;
 
 export const profile = {
-  fullName: 'Christian T. Macion, CTA®',
+  fullName:
+    'Christian T. Macion' /* v6.18 — dropped "CTA®" suffix from masthead. The registered CTA® mark is held by UK STA / IFTA chartered designation; the PH STA Tier-1 program does not grant it. Recruiter-verifiable credential — drop the ®, keep the cert detail in the bio block. */,
   shortName: 'Christian Macion',
   initials: 'CM',
   titles: {
@@ -40,7 +95,7 @@ export const profile = {
     // from `primary` so the visual hierarchy at H1 size still reads
     // 'Quantitative Researcher' in full.
     short: 'Quant Researcher · AI Engineer',
-    secondary: `Christian T. Macion, CTA® — Quant Researcher and AI Engineer. ${stats.aiAgentCount}-agent research platform, ${stats.evalGates}-gate statistical eval harness, ${stats.locPython} LOC Python, ${stats.certCount} professional certifications. NDA-safe by construction.`,
+    secondary: `Christian T. Macion — Quant Researcher and AI Engineer. ${stats.aiAgentCount}-agent research platform, ${stats.evalGates}-gate statistical eval harness, ${stats.locPython} LOC Python, ${stats.certCount} professional certifications. NDA-safe by construction.`,
     tagline: 'I do solutions. Eval-first. NDA-clean.',
   },
   headshot: {
@@ -100,7 +155,7 @@ export const profile = {
     // reconcile. See chrome-honesty memory: portfolio-chrome-unification
     // for the rest of the v6.11.x chrome-derivation pattern.
     `${stats.certCount} certificates (2024-12 → 2026-05)`,
-    'CTA® (Certified Technical Analyst, Society of Technical Analysts · cert #260197 · Jan 2026)',
+    'STA Tier-1 Certified Technical Analyst · cert #260197 · Jan 2026' /* v6.18 — dropped ® and "Society of Technical Analysts" claim; renamed to PH STA Tier-1 (the actual program). UK STA / IFTA CTA® chartered designation is a separate credential not held. */,
     'Galactic Problem Solver · NASA Space Apps Challenge 2024 (Zurich cohort)',
     'AI for the Modern Workforce · Ateneo de Davao + US Embassy · Nov 8 2025',
     'AIccelerate 2025 · BIDA × Bayan Academy × Meta · Nov 12–21 2025',

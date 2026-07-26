@@ -34,6 +34,12 @@ export default [
       'src/components/CTABanner.astro',
       'src/components/NavMore.astro',
       'src/components/StatementCarousel.astro',
+      // v7.5 — same parser FP as above, but on a <script> block (not
+      // <style>). frontier-models.astro's copy-to-clipboard script
+      // triggers the spurious "Declaration or statement expected"
+      // diagnostic on the first comment inside the <script> tag. The
+      // file builds and runs cleanly; silencing the parser-only FP.
+      'src/pages/research/frontier-models.astro',
     ],
   },
   js.configs.recommended,

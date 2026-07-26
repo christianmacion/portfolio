@@ -62,7 +62,7 @@ const deltaStr =
     padding: var(--sp-3) var(--sp-4);
     background: var(--c-bg-2);
     border: 1px solid var(--c-rule);
-    border-radius: var(--radius-sm);
+    /* border-radius: var(--radius-sm); v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade */
     min-width: 0;
   }
   .stat-cell__head {

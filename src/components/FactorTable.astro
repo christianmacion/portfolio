@@ -237,7 +237,7 @@ function shortTitle(t: string): string {
     padding-inline: var(--sp-4);
     overflow-x: auto;
     border: 1px solid var(--c-rule);
-    border-radius: var(--radius);
+    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade */
     background: var(--c-tape-2);
   }
   .factor__table {
@@ -347,7 +347,7 @@ function shortTitle(t: string): string {
     padding: 2px 8px;
     background: var(--c-bg-3);
     border: 1px solid var(--c-rule);
-    border-radius: var(--radius-sm);
+    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade */
     color: var(--c-primary-2);
     font-weight: 600;
   }
@@ -374,7 +374,7 @@ function shortTitle(t: string): string {
     padding: var(--sp-2) var(--sp-3);
     background: var(--c-tape);
     border: 1px solid var(--c-rule);
-    border-radius: var(--radius-sm);
+    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade */
     width: fit-content;
   }
 

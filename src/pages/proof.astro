@@ -24,7 +24,6 @@ import ReadMeta from '@components/ReadMeta.astro';
 import TrustStrip from '@components/TrustStrip.astro';
 import SectionTOC from '@components/SectionTOC.astro';
 import VoiceLine from '@components/VoiceLine.astro';
-import StatementCarousel from '@components/StatementCarousel.astro';
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { path } from '@utils/url';
 import { profile } from '@utils/profile';
@@ -285,7 +284,7 @@ const paginate = (items: any[]) => {
   >
     <div class="container container-narrow">
       <p class="section__eyebrow"><span class="mono">proof/</span> · show your work</p>
-      <h1 class="proof-head__title">
+      <h1 class="proof-head__title" data-words>
         Proof. <span class="hl">Public or self-owned only</span>.
       </h1>
       <VoiceLine class="proof-head__voice">
@@ -334,21 +333,33 @@ const paginate = (items: any[]) => {
         </li>
       </ul>
 
-      {/* === Proof discipline carousel — six core rules, rotating === */}
-      <div class="proof-head__carousel">
-        <StatementCarousel
-          statements={[
-            'Every cert links to its issuer. No exceptions.',
-            'Every claim links to a public artifact or a self-owned file.',
-            'Every project ships with the runnable code, not a slide deck.',
-            'Every metric is real. Headline numbers come from disk.',
-            'Every testimonial is an attestable paper trail, not a quote.',
-            'Every NDA-protected engagement is closed past contract.',
-          ]}
-          label="Proof discipline — six rules, rotating"
-          intervalMs={3000}
-        />
-      </div>
+      {/* === Proof discipline rules — static list (no carousel) === */}
+      <ol class="proof-head__discipline mono" aria-label="Proof discipline — six rules">
+        <li>
+          <span class="proof-head__discipline-n">01</span>Every cert links to its issuer. No
+          exceptions.
+        </li>
+        <li>
+          <span class="proof-head__discipline-n">02</span>Every claim links to a public artifact or
+          a self-owned file.
+        </li>
+        <li>
+          <span class="proof-head__discipline-n">03</span>Every project ships with the runnable
+          code, not a slide deck.
+        </li>
+        <li>
+          <span class="proof-head__discipline-n">04</span>Every metric is real. Headline numbers
+          come from disk.
+        </li>
+        <li>
+          <span class="proof-head__discipline-n">05</span>Every testimonial is an attestable paper
+          trail, not a quote.
+        </li>
+        <li>
+          <span class="proof-head__discipline-n">06</span>Every NDA-protected engagement is closed
+          past contract.
+        </li>
+      </ol>
 
       <div class="proof-head__motif">
         <BrandMotif
@@ -994,6 +1005,37 @@ const paginate = (items: any[]) => {
     justify-content: flex-start;
     margin: 0 0 var(--sp-5);
   }
+  /* v6.18 — discipline rules as static inline-mono list, replaces
+     carousel+dots. Two columns on desktop, single column on mobile. */
+  .proof-head__discipline {
+    list-style: none;
+    padding: var(--sp-4) var(--sp-5);
+    margin: 0 0 var(--sp-5);
+    background: var(--c-bg-2);
+    border: 1px solid var(--c-rule-soft);
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--sp-2) var(--sp-5);
+    font-size: var(--fs-xs);
+    color: var(--c-ink-2);
+  }
+  .proof-head__discipline li {
+    display: flex;
+    align-items: baseline;
+    gap: var(--sp-3);
+    padding-block: var(--sp-1);
+  }
+  .proof-head__discipline-n {
+    flex-shrink: 0;
+    font-weight: 600;
+    color: var(--c-amber-deep);
+    min-width: 1.7em;
+  }
+  @media (max-width: 720px) {
+    .proof-head__discipline {
+      grid-template-columns: 1fr;
+    }
+  }
   .proof-head__sub {
     font-size: var(--fs-lg);
     color: var(--c-ink-2);
@@ -1062,8 +1104,8 @@ const paginate = (items: any[]) => {
     padding-inline: 0.25rem;
   }
   .proof-head__sub a:hover {
-    text-decoration-color: var(--c-primary-2-deep);
-    color: var(--c-primary-2-deep);
+    text-decoration-color: var(--c-amber-deep);
+    color: var(--c-amber-deep);
   }
   .proof-head__ver {
     margin-top: var(--sp-4);
@@ -1100,7 +1142,7 @@ const paginate = (items: any[]) => {
     font-size: var(--fs-sm);
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: var(--c-primary-2-deep);
+    color: var(--c-amber-deep);
     margin-block: var(--sp-6) var(--sp-3);
     font-weight: 600;
   }
@@ -1125,12 +1167,12 @@ const paginate = (items: any[]) => {
   }
   .proof-list__kind {
     font-size: var(--fs-xs);
-    color: var(--c-primary-2-deep);
+    color: var(--c-amber-deep);
     font-weight: 600;
     letter-spacing: 0.04em;
   }
   .proof-list__kind--ai {
-    color: var(--c-primary-2);
+    color: var(--c-amber);
   }
   .proof-list__kind--sol {
     color: var(--c-ink-2);
@@ -1168,7 +1210,7 @@ const paginate = (items: any[]) => {
     text-align: right;
   }
   .proof-list__arrow {
-    color: var(--c-primary-2-deep);
+    color: var(--c-amber-deep);
     text-align: right;
     font-weight: 600;
   }
@@ -1226,7 +1268,7 @@ const paginate = (items: any[]) => {
     line-height: var(--lh-loose);
     padding: var(--sp-5);
     background: var(--c-bg-2);
-    border-left: 3px solid var(--c-primary-2);
+    border-left: 3px solid var(--c-amber);
     border-radius: 0 var(--radius) var(--radius) 0;
   }
   .proof-neg strong {
@@ -1296,8 +1338,8 @@ const paginate = (items: any[]) => {
     border-color: var(--c-ink-3);
   }
   .filter-chip.is-active {
-    color: var(--c-primary-2-deep);
-    border-color: var(--c-primary-2-deep);
+    color: var(--c-amber-deep);
+    border-color: var(--c-amber-deep);
     background: var(--c-warn-soft);
   }
   @media (prefers-color-scheme: dark) {
@@ -1391,8 +1433,8 @@ const paginate = (items: any[]) => {
     border-color: var(--c-ink-3);
   }
   .proof-pager__chip.is-active {
-    color: var(--c-primary-2-deep);
-    border-color: var(--c-primary-2-deep);
+    color: var(--c-amber-deep);
+    border-color: var(--c-amber-deep);
     background: var(--c-warn-soft);
     font-weight: 600;
   }
@@ -1437,7 +1479,7 @@ const paginate = (items: any[]) => {
   }
   .ptr__cell--handle {
     font-size: var(--fs-sm);
-    color: var(--c-primary-2-deep);
+    color: var(--c-amber-deep);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -1465,8 +1507,8 @@ const paginate = (items: any[]) => {
     text-underline-offset: 3px;
   }
   .ptr__link:hover {
-    color: var(--c-primary-2-deep);
-    text-decoration-color: var(--c-primary-2-deep);
+    color: var(--c-amber-deep);
+    text-decoration-color: var(--c-amber-deep);
   }
 
   /* === Responsive overrides === */

@@ -1,0 +1,212 @@
+---
+/**
+ * Marquee.astro — v7.4 INSTITUTIONAL MARQUEE
+ *
+ * Reusable infinite ribbon primitive. Sister to NewsRibbon — same edge
+ * fade + seam-free loop, but designed for sparse "frame" content
+ * (methodology / conviction frames / section markers), not streams.
+ *
+ * Use:
+ *   <Marquee items={[{head, tail, accent}]} />
+ *   <Marquee items={['text one', 'text two', ...]} speedSec={36} />
+ *
+ * Server-rendered. Zero runtime JS. Duplicate the content twice so the
+ * translateX(0 → -50%) loop is seamless. Pause on hover via the same
+ * market-tape pattern.
+ */
+
+interface FrameItem {
+  head: string;
+  tail: string;
+  accent?: 'warn' | 'cobalt' | 'sage' | 'terracotta' | 'teal' | 'violet';
+}
+
+interface Props {
+  items: FrameItem[] | string[];
+  /** Lane speed. Default 48s for full track traversal. */
+  speedSec?: number;
+  /** Reverse direction. */
+  reverse?: boolean;
+  /** Trailing label. */
+  trailing?: string;
+}
+
+const { items, speedSec = 48, reverse = false, trailing = 'frame loop' } = Astro.props;
+const isFrameSet = items.length > 0 && typeof items[0] === 'object';
+const frames = isFrameSet ? (items as FrameItem[]) : null;
+const strings = isFrameSet ? null : (items as string[]);
+---
+
+<div class="marquee" aria-label="Marquee loop (paused on hover)">
+  <div class="marquee__viewport" data-reverse={reverse ? 'true' : undefined}>
+    <div class="marquee__track" style={`--marquee-dur: ${speedSec}s`}>
+      {
+        (frames ?? []).map((f) => (
+          <span class:list={['marquee__frame', `is-${f.accent ?? 'ink'}`]}>
+            <span class="marquee__frame-head">{f.head}</span>
+            <span class="marquee__frame-sep" aria-hidden="true">
+              ·
+            </span>
+            <span class="marquee__frame-tail mono">{f.tail}</span>
+          </span>
+        ))
+      }
+      {(strings ?? []).map((s) => <span class="marquee__str">{s}</span>)}
+    </div>
+    {/* Duplicate for seamless loop */}
+    <div class="marquee__track" style={`--marquee-dur: ${speedSec}s`} aria-hidden="true">
+      {
+        (frames ?? []).map((f) => (
+          <span class:list={['marquee__frame', `is-${f.accent ?? 'ink'}`]}>
+            <span class="marquee__frame-head">{f.head}</span>
+            <span class="marquee__frame-sep" aria-hidden="true">
+              ·
+            </span>
+            <span class="marquee__frame-tail mono">{f.tail}</span>
+          </span>
+        ))
+      }
+      {(strings ?? []).map((s) => <span class="marquee__str">{s}</span>)}
+    </div>
+  </div>
+  <div class="marquee__stop mono" aria-hidden="true">{trailing}</div>
+</div>
+
+<style>
+  .marquee {
+    position: relative;
+    background: var(--c-bg);
+    border-block: 1px solid var(--c-rule);
+    color: var(--c-ink);
+    overflow: hidden;
+    user-select: none;
+  }
+
+  .marquee__viewport {
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      #000 24px,
+      #000 calc(100% - 24px),
+      transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      #000 24px,
+      #000 calc(100% - 24px),
+      transparent 100%
+    );
+  }
+
+  .marquee__track {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-5);
+    white-space: nowrap;
+    padding-inline: var(--sp-3);
+    animation: marquee-scroll var(--marquee-dur, 48s) linear infinite;
+    will-change: transform;
+    flex-shrink: 0;
+  }
+  .marquee__viewport[data-reverse='true'] .marquee__track {
+    animation-direction: reverse;
+  }
+
+  .marquee:hover .marquee__track {
+    animation-play-state: paused;
+  }
+
+  .marquee__frame {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-2);
+    padding-block: 14px;
+    font-size: 13px;
+    line-height: 1;
+  }
+  .marquee__frame-head {
+    font-family: var(--serif-display);
+    font-style: italic;
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: -0.005em;
+    color: var(--c-ink);
+  }
+  .marquee__frame-tail {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--c-ink-2);
+  }
+  .marquee__frame-sep {
+    color: var(--c-ink-4);
+    font-weight: 600;
+  }
+  .marquee__frame.is-warn .marquee__frame-head {
+    color: var(--c-warn);
+  }
+  .marquee__frame.is-cobalt .marquee__frame-head {
+    color: var(--c-primary-2);
+  }
+  .marquee__frame.is-sage .marquee__frame-head {
+    color: var(--j-sage);
+  }
+  .marquee__frame.is-terracotta .marquee__frame-head {
+    color: var(--j-terracotta);
+  }
+  .marquee__frame.is-teal .marquee__frame-head {
+    color: var(--j-teal);
+  }
+  .marquee__frame.is-violet .marquee__frame-head {
+    color: var(--j-violet);
+  }
+
+  .marquee__str {
+    padding-block: 14px;
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--c-ink-2);
+  }
+
+  .marquee__stop {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    padding-inline: var(--sp-3);
+    color: var(--c-ink-3);
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, transparent, var(--c-bg) 30%);
+    pointer-events: none;
+  }
+
+  @keyframes marquee-scroll {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-100%);
+    }
+  }
+
+  /* Reduced-motion: flatten the loop. */
+  @media (prefers-reduced-motion: reduce) {
+    .marquee__track {
+      animation: none !important;
+    }
+    .marquee__viewport {
+      mask-image: none;
+      -webkit-mask-image: none;
+    }
+  }
+</style>

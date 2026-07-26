@@ -79,7 +79,7 @@ const {
     background: var(--c-bg);
     border: 1px solid var(--c-rule);
     border-left: 3px solid var(--c-primary-2-deep);
-    border-radius: var(--radius);
+    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade */
     transition:
       border-color var(--transition),
       box-shadow var(--transition);
@@ -120,7 +120,7 @@ const {
     gap: var(--sp-2);
     padding: var(--sp-2) var(--sp-3);
     background: var(--c-bg-2);
-    border-radius: var(--radius-sm);
+    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade */
     font-size: var(--fs-sm);
     color: var(--c-ink);
     font-weight: 500;
@@ -139,7 +139,7 @@ const {
     padding: var(--sp-3) var(--sp-4);
     background: var(--c-tape);
     color: var(--ink-on-tape);
-    border-radius: var(--radius-sm);
+    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade */
     overflow-x: auto;
     font-family: var(--ff-mono);
     font-size: var(--fs-xs);
@@ -151,7 +151,7 @@ const {
     background: var(--c-paper);
     color: var(--c-ink);
     border: 1px solid var(--c-rule);
-    border-radius: var(--radius-sm);
+    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade */
     overflow-x: auto;
     font-family: var(--ff-mono);
     font-size: var(--fs-xs);

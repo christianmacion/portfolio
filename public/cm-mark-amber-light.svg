@@ -1,41 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  cm-mark-amber-light.svg — light-mode variant.
-  Same geometry as cm-mark-amber.svg, with body strokes in near-black (#0a0e14).
-  Use this when the background is light (paper, cream, white).
+  cm-mark-amber-light.svg — CM monogram, light-background variant.
+  Redesign 2026-07-24: fixes owner-reported "CM logo looks weird / unreadable".
+  Prior mark jammed a left-opening sigmoid C against a shallow floating M
+  chevron and layered decorative agent-graph nodes + an 8-tick "ticker"
+  baseline on top — the clutter collapsed into an illegible blob at nav size.
+  This mark drops all decoration: a clean geometric open-arc C and a full-height
+  M, with a single deliberate amber chevron accent as the sole quant nod.
+  Body ink = warm near-black (#1a1714) for light backgrounds; amber = site
+  accent (#a88a3e, WCAG AA). NOTE: the live nav now inlines this geometry with
+  currentColor so contrast always follows the theme; this file is a fallback.
 -->
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="CM — Christian Macion, Quant Researcher">
-  <title>CM monogram (amber accent, light-mode body)</title>
-  <desc>Sigmoid C + Σ-peaked M in near-black with amber accents on Σ apex and orchestrator node. Body uses near-black for light backgrounds.</desc>
-
-  <!-- C : sigmoid, body near-black -->
-  <path d="M 22 48 C 10 46, 10 18, 22 16"
-        fill="none"
-        stroke="#0a0e14"
-        stroke-width="4"
-        stroke-linecap="round"/>
-
-  <!-- M : outer legs in near-black; Σ apex diagonals in amber -->
-  <g fill="none" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">
-    <polyline points="28,48 28,18" stroke="#0a0e14"/>
-    <polyline points="28,18 40,34 52,18" stroke="#d4a017"/>
-    <polyline points="52,18 52,48" stroke="#0a0e14"/>
-  </g>
-
-  <!-- Agent-graph nodes: orchestrator (amber, larger) + 2 workers (near-black, small) -->
-  <circle cx="46" cy="41" r="1.8" fill="#d4a017"/>
-  <circle cx="50" cy="30" r="1.0" fill="#0a0e14"/>
-  <circle cx="50" cy="46" r="1.0" fill="#0a0e14"/>
-
-  <!-- Ticker baseline : 8 ticks, near-black -->
-  <g stroke="#0a0e14" stroke-width="1" stroke-linecap="butt">
-    <line x1="28" y1="56" x2="28" y2="52"/>
-    <line x1="31" y1="56" x2="31" y2="50"/>
-    <line x1="34" y1="56" x2="34" y2="54"/>
-    <line x1="37" y1="56" x2="37" y2="51"/>
-    <line x1="40" y1="56" x2="40" y2="53"/>
-    <line x1="43" y1="56" x2="43" y2="50"/>
-    <line x1="46" y1="56" x2="46" y2="52"/>
-    <line x1="49" y1="56" x2="49" y2="51"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="CM — Christian Macion, Quantitative Researcher">
+  <title>CM monogram</title>
+  <desc>The initials C and M. Clean geometric forms in near-black with a single amber chevron accent on the M.</desc>
+  <g fill="none" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 28 22 A 12 12 0 1 0 28 42" stroke="#1a1714"/>
+    <polyline points="36,44 36,20" stroke="#1a1714"/>
+    <polyline points="36,20 47,40 58,20" stroke="#a88a3e"/>
+    <polyline points="58,20 58,44" stroke="#1a1714"/>
   </g>
 </svg>

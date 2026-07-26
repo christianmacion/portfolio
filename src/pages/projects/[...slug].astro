@@ -5,6 +5,7 @@
 import BaseLayout from '@layouts/BaseLayout.astro';
 import MetricPill from '@components/MetricPill.astro';
 import CTABanner from '@components/CTABanner.astro';
+import Marquee from '@components/Marquee.astro';
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import { path } from '@utils/url';
 import VoiceLine from '@components/VoiceLine.astro';
@@ -51,7 +52,7 @@ const laneClass = role === 'ai' ? 'pill--brand' : 'pill--accent';
           )
         }
 
-        <h1 class="proj__title">{title}</h1>
+        <h1 class="proj__title" data-words>{title}</h1>
         {summary_long && <VoiceLine class="proj__voice">{summary_long}</VoiceLine>}
 
         {
@@ -93,6 +94,19 @@ const laneClass = role === 'ai' ? 'pill--brand' : 'pill--accent';
         </div>
       </div>
     </header>
+
+    {/* v7.4-WIDE — discipline mini-marquee (5 frames) between header and body. */}
+    <Marquee
+      items={[
+        { head: 'EVAL-FIRST', tail: '31 GATES', accent: 'warn' },
+        { head: 'NDA-CLEAN', tail: 'PUBLIC DATA', accent: 'cobalt' },
+        { head: 'ALPHA', tail: 'SIGNAL > NOISE', accent: 'sage' },
+        { head: 'REPRODUCIBLE', tail: 'NOTEBOOK-COMMITTED', accent: 'sage' },
+        { head: 'OPEN-SOURCE', tail: 'ON GITHUB', accent: 'cobalt' },
+      ]}
+      speedSec={48}
+      trailing={`project · ${title}`}
+    />
 
     <div class="proj__body container container-narrow">
       <div class="proj__prose">

@@ -117,7 +117,7 @@ const mistakes = [
   <header class="mistakes-head">
     <div class="container">
       <p class="section__eyebrow"><span class="mono">mistakes/</span> · public postmortems</p>
-      <h1 class="mistakes-head__title">
+      <h1 class="mistakes-head__title" data-words>
         What I <span class="hl">got wrong</span>.
       </h1>
       <VoiceLine class="mistakes-head__voice">
@@ -263,7 +263,7 @@ const mistakes = [
     border: 1px solid var(--c-rule);
     border-radius: var(--radius);
     overflow-x: auto;
-    border-left: 3px solid var(--c-primary-2);
+    border-left: 3px solid var(--c-amber);
   }
   .mistakes-head__eq-caption {
     font-size: var(--fs-sm);
@@ -286,7 +286,7 @@ const mistakes = [
     border: 1px solid var(--c-rule);
     border-radius: var(--radius);
     padding: var(--sp-6);
-    border-left: 3px solid var(--c-primary-2);
+    border-left: 3px solid var(--c-amber);
     transition: border-color var(--transition);
   }
   .mistake:hover {
@@ -300,7 +300,7 @@ const mistakes = [
     border-left-color: #c98a16;
   }
   .severity--medium {
-    border-left-color: var(--c-primary-2-deep);
+    border-left-color: var(--c-amber-deep);
   }
   .severity--low {
     border-left-color: var(--c-primary);
@@ -335,24 +335,24 @@ const mistakes = [
   .mistake__severity {
     font-size: var(--fs-xs);
     padding: 4px 10px;
-    border-radius: 12px;
+    border-radius: 0;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     font-weight: 600;
   }
   .severity-tag--critical {
     background: color-mix(in oklab, var(--c-amber) 0.18%, transparent);
-    color: var(--c-primary-2);
-    border: 1px solid var(--c-primary-2);
+    color: var(--c-amber);
+    border: 1px solid var(--c-amber);
   }
   .severity-tag--high {
     background: var(--c-amberl-mist);
-    color: var(--c-primary-2);
+    color: var(--c-amber);
     border: 1px solid var(--c-amberl-mid);
   }
   .severity-tag--medium {
     background: var(--c-amberl-faint);
-    color: var(--c-primary-2-deep);
+    color: var(--c-amber-deep);
     border: 1px solid var(--c-amberl-decor);
   }
   .severity-tag--low {
@@ -412,7 +412,7 @@ const mistakes = [
     padding: 4px 12px;
     background: var(--c-bg-2);
     border: 1px solid var(--c-rule);
-    border-radius: 14px;
+    border-radius: 0;
     font-family: var(--ff-mono);
     font-size: var(--fs-xs);
     color: var(--c-primary);
@@ -422,7 +422,7 @@ const mistakes = [
     font-style: italic;
     color: var(--c-ink-2);
     padding-left: var(--sp-3);
-    border-left: 3px solid var(--c-primary-2);
+    border-left: 3px solid var(--c-amber);
   }
 
   .neg {

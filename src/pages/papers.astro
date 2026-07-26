@@ -134,7 +134,7 @@ const shelf: Book[] = [
       <p class="section__eyebrow">
         <span class="mono">papers/</span> · memos + bookshelf
       </p>
-      <h1 class="papers-head__title">Papers, memos, and long-form notes.</h1>
+      <h1 class="papers-head__title" data-words>Papers, memos, and long-form notes.</h1>
       <VoiceLine class="papers-head__voice">
         The {shelf.length} references /methodology is downstream of — and the working memos in flight.
       </VoiceLine>
@@ -145,6 +145,28 @@ const shelf: Book[] = [
       </p>
     </div>
   </header>
+
+  {
+    /* =========================================================
+      Published brief — surfaced companion to the in-flight memos.
+      Single hairline card linking to the r3 frontier-models brief.
+      ========================================================= */
+  }
+  <section class="section" aria-label="Published brief">
+    <div class="container">
+      <a class="brief-card" href={path('/research/frontier-models')}>
+        <span class="brief-card__eyebrow mono">PUBLISHED · NOT A WORKING MEMO</span>
+        <h2 class="brief-card__title">
+          Frontier Models for Quant Research &amp; AI Engineering (r3, 2026-07-18)
+        </h2>
+        <p class="brief-card__body">
+          18-page public-shareable consulting brief comparing M3, Kimi K3, and Claude Opus 4.8 (with
+          Fable 5, GPT-5.6 Sol, Gemini 3 Pro). Footnoted sources, declared gaps, citable. Open PDF →
+        </p>
+        <span class="brief-card__cta mono">OPEN BRIEF →</span>
+      </a>
+    </div>
+  </section>
 
   {
     /* =========================================================
@@ -267,10 +289,59 @@ const shelf: Book[] = [
     max-width: 60ch;
   }
   .papers-head__sub a {
-    color: var(--c-primary-2-deep);
+    color: var(--c-amber-deep);
     text-decoration: underline;
     text-decoration-color: var(--c-amber-decor);
     text-underline-offset: 3px;
+  }
+
+  /* === Published brief card === */
+  .brief-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-2);
+    padding: var(--sp-5);
+    background: var(--c-paper);
+    border: 1px solid var(--c-rule);
+    border-left: 3px solid var(--c-amber);
+    text-decoration: none;
+    color: var(--c-ink);
+    transition: border-color var(--transition);
+  }
+  .brief-card:hover {
+    border-color: var(--c-amber);
+  }
+  .brief-card__eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: var(--c-amber-deep);
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  .brief-card__title {
+    font-size: var(--fs-lg);
+    font-weight: 600;
+    margin: 0;
+    color: var(--c-ink);
+    line-height: 1.3;
+  }
+  .brief-card__body {
+    font-size: var(--fs-sm);
+    color: var(--c-ink-2);
+    line-height: 1.6;
+    margin: 0;
+    max-width: 72ch;
+  }
+  .brief-card__cta {
+    font-size: var(--fs-xs);
+    letter-spacing: 0.08em;
+    color: var(--c-amber-deep);
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-top: var(--sp-2);
+  }
+  .brief-card:hover .brief-card__cta {
+    color: var(--c-amber);
   }
 
   /* === Working memos === */
@@ -298,7 +369,7 @@ const shelf: Book[] = [
   }
   .memo__date {
     font-size: var(--fs-xs);
-    color: var(--c-primary-2-deep);
+    color: var(--c-amber-deep);
     text-transform: uppercase;
     letter-spacing: 0.08em;
     font-weight: 600;
@@ -353,7 +424,7 @@ const shelf: Book[] = [
   }
   .shelf__year {
     font-size: var(--fs-lg);
-    color: var(--c-primary-2-deep);
+    color: var(--c-amber-deep);
     font-weight: 600;
     letter-spacing: 0.04em;
     padding-top: 2px;

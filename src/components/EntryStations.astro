@@ -123,7 +123,9 @@ function miniSpark(sIdx: string): number[] {
 }
 
 // === 5-tick event tape colors (institutional: ink + amber, ~12% amber density) ==========
-const TAPE_COLORS = ['neutral', 'amber'] as const;
+// Returns 0/1 indices into the neutral/amber palette. The renderer
+// (formerly tapeRect) is gone; the raw 0/1 stream is consumed by the
+// per-station `tape` field for downstream consumers.
 function tapeColors(sIdx: string): number[] {
   const r = tapeRngFn(sIdx);
   return Array.from({ length: 5 }, () => (Math.floor(r() * 8) === 0 ? 1 : 0));
@@ -197,60 +199,6 @@ function spark60(values: number[]): string {
       );
     })
     .join('');
-}
-
-// === 5-tick event-tape SVG (NEW, 24x96) ==========================
-// 5 ticks of 6×6 stacked vertically with even gaps. Tick color comes
-// from the `entry-station__tape-tick--{amber|pass|cyan|fail}` class.
-function tapeRect(colors: number[]): string {
-  const h = 96;
-  const tickSize = 6;
-  const n = colors.length;
-  const totalGap = h - n * tickSize;
-  const gap = totalGap / (n + 1); // 6 gaps (top + 4 between + bottom)
-  return colors
-    .map((colorIdx, i) => {
-      const y = gap + i * (tickSize + gap);
-      const cls = 'entry-station__tape-tick entry-station__tape-tick--' + TAPE_COLORS[colorIdx];
-      return (
-        '<rect class="' +
-        cls +
-        '"' +
-        ' x="9" y="' +
-        y.toFixed(2) +
-        '"' +
-        ' width="' +
-        tickSize +
-        '" height="' +
-        tickSize +
-        '" />'
-      );
-    })
-    .join('');
-}
-
-// === Flow arrow (NEW, replacing 3-pill status row) =================
-// [ INPUT ] ->->-> [ OUTPUT ]. Three chevron <path>s in inline SVG.
-function flowArrow(input: string, output: string): string {
-  const chev =
-    '<svg class="entry-station__chevron" width="5" height="8" viewBox="0 0 5 8" fill="none" aria-hidden="true">' +
-    '<path d="M1 1 L 4 4 L 1 7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />' +
-    '</svg>';
-  return (
-    '<span class="entry-station__flow-node entry-station__flow-node--in">' +
-    '[ ' +
-    input +
-    ' ]</span>' +
-    '<span class="entry-station__flow-arrow">' +
-    chev +
-    chev +
-    chev +
-    '</span>' +
-    '<span class="entry-station__flow-node entry-station__flow-node--out">' +
-    '[ ' +
-    output +
-    ' ]</span>'
-  );
 }
 
 // === Build per-station feature bags ===============================
@@ -401,16 +349,6 @@ const stations = [
                   set:html={spark60(s.mini)}
                 />
               </div>
-              <svg
-                class="entry-station__tape"
-                width="24"
-                height="96"
-                viewBox="0 0 24 96"
-                aria-hidden="true"
-                set:html={tapeRect(s.tape)}
-              />
-              <div class="entry-station__flow mono" set:html={flowArrow(s.flowIn, s.flowOut)} />
-              <span class="entry-station__rail" aria-hidden="true" />
             </a>
           </li>
         ))
@@ -421,12 +359,14 @@ const stations = [
 
 <style>
   /* ============================================================
-     ENTRY STATIONS — v6.6 denser GRAPHIC VISUAL DYNAMIC polish.
-     Federal Reserve H.4.1 / BIS Quarterly Review / NASA Worldview
-     stat-stations grid + Bloomberg-ticker wallop. Off-white text on
-     bg-2 panel, hairline --c-rule borders, --c-amber only on the ID
-     bar and the output node. No drop shadows, no gradients, no
-     rounded corners > 4px.
+     ENTRY STATIONS — v7 sparser Apple HIG redesign.
+     Owner directive 2026-07-19: "looks fucked" — v6.6 had 11 visual
+     elements per station (id, title, big number, caption, 3 stats,
+     status row, trend, mini-trend, tape, flow, rail). Cut to 4 elements
+     per station: amber ID · italic title · big number with caption ·
+     supporting stat row. Institutional Apple-style 4-column grid, 1px
+     hairlines, soft shadow on hover, 0px radius (no pill chrome).
+     Same data, much sparser visual.
      ============================================================ */
   .entry-stations {
     background: var(--c-bg-2);
@@ -444,7 +384,7 @@ const stations = [
     display: flex;
     align-items: baseline;
     gap: var(--sp-5);
-    margin-bottom: var(--sp-5);
+    margin-bottom: var(--sp-6);
     padding-bottom: var(--sp-3);
     border-bottom: 1px solid var(--c-rule);
   }
@@ -457,11 +397,13 @@ const stations = [
     margin: 0;
   }
   .entry-stations__title {
-    font-size: var(--fs-lg);
+    font-size: var(--fs-xl);
     color: var(--c-ink);
     font-weight: 500;
-    letter-spacing: -0.012em;
+    letter-spacing: -0.015em;
     margin: 0;
+    font-family: var(--ff-math);
+    font-style: italic;
   }
 
   /* === 4-col grid (2x2 tablet, 1x4 mobile) === */
@@ -481,16 +423,17 @@ const stations = [
     border-left: 1px solid var(--c-rule);
   }
 
-  /* === Each station — a single clickable anchor ===
-     Right padding reserves a 24px-wide vertical strip on the right
-     edge for the absolute-positioned tape (NEW v6.6). */
+  /* === Each station — minimal clickable anchor ===
+     v7: cut from 11 visual elements to 4. No tape, no flow arrow, no
+     status row, no dual trends, no supporting stats panel.
+     Structure: ID bar · italic title · big number · mini-trend. */
   .entry-station {
     position: relative;
     display: flex;
     flex-direction: column;
-    gap: var(--sp-2);
-    padding: var(--sp-4) calc(var(--sp-4) + 28px) var(--sp-3);
-    min-height: 44px;
+    gap: var(--sp-3);
+    padding: var(--sp-5) var(--sp-4) var(--sp-4);
+    min-height: 200px;
     color: var(--c-ink);
     text-decoration: none;
     background: transparent;
@@ -501,8 +444,8 @@ const stations = [
     background: var(--c-amberl-faint);
   }
   .entry-station:focus-visible {
-    outline: 2px solid var(--c-amber);
-    outline-offset: -2px;
+    outline: 1px solid var(--c-amber);
+    outline-offset: -1px;
   }
 
   /* === ID bar — 1px amber line + tracked mono label === */
@@ -510,12 +453,12 @@ const stations = [
     display: flex;
     align-items: center;
     gap: var(--sp-2);
-    font-size: 0.65rem;
+    font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 0.14em;
     color: var(--c-ink-2);
     font-weight: 600;
-    margin-bottom: var(--sp-1);
+    margin: 0;
   }
   .entry-station__id-bar {
     display: inline-block;
@@ -530,13 +473,14 @@ const stations = [
   .entry-station__title {
     font-family: var(--ff-math);
     font-style: italic;
-    font-size: 1.0625rem;
-    line-height: 1.25;
+    font-size: 1.25rem;
+    line-height: 1.3;
     color: var(--c-ink);
     font-weight: 500;
-    letter-spacing: -0.005em;
-    margin: 0 0 var(--sp-2);
-    min-height: 2.7em;
+    letter-spacing: -0.01em;
+    margin: 0;
+    min-height: 0;
+    flex: 1;
   }
 
   /* === Big number — tabular-nums + 14px amber icon === */
@@ -546,6 +490,7 @@ const stations = [
     gap: var(--sp-2);
     color: var(--c-ink);
     line-height: 1;
+    margin-top: auto;
   }
   .entry-station__icon {
     display: inline-flex;
@@ -558,13 +503,14 @@ const stations = [
     transform: translateY(2px);
   }
   .entry-station__num {
-    font-size: 1.95rem;
+    font-size: 2.25rem;
     font-weight: 500;
-    letter-spacing: -0.022em;
+    letter-spacing: -0.025em;
     color: var(--c-ink);
+    font-variant-numeric: tabular-nums;
   }
   .entry-station__unit {
-    font-size: 0.5em;
+    font-size: 0.45em;
     color: var(--c-ink-2);
     font-weight: 400;
     letter-spacing: 0;
@@ -574,89 +520,21 @@ const stations = [
   /* === Caption — mono subtitle under the big number === */
   .entry-station__caption {
     font-size: 0.7rem;
-    color: var(--c-ink-3);
-    letter-spacing: 0.04em;
-    margin: 0 0 var(--sp-2);
-  }
-
-  /* === 3 supporting stats — key/value pairs (existing) === */
-  .entry-station__stats {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 var(--sp-1);
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0 var(--sp-3);
-    font-size: 0.7rem;
-    letter-spacing: 0.02em;
-    line-height: 1.6;
-  }
-  .entry-station__stats li {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 0.3em;
-  }
-  .entry-station__stat-k {
-    color: var(--c-ink-3);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-size: 0.65rem;
-  }
-  .entry-station__stat-v {
-    color: var(--c-ink);
-    font-weight: 600;
-  }
-
-  /* === 4th row — STATUS · DELTA · NEXT (NEW v6.6) ===
-     1px pipe-separated inline metric triplet. Sits directly below
-     the 3 dl stats, before the existing 48x24 trend. */
-  .entry-station__row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: var(--sp-2);
-    font-size: 0.65rem;
-    letter-spacing: 0.06em;
-    line-height: 1.4;
     color: var(--c-ink-2);
-    margin: 0 0 var(--sp-2);
-  }
-  .entry-station__row-cell {
-    display: inline-block;
-    white-space: nowrap;
-  }
-  .entry-station__row-cell + .entry-station__row-cell {
-    padding-left: var(--sp-2);
-    border-left: 1px solid var(--c-rule);
-  }
-  .entry-station__row-cell:nth-child(2) {
-    color: var(--c-ink);
-    font-weight: 600;
+    letter-spacing: 0.04em;
+    margin: 0;
   }
 
-  /* === Trend strip (existing) — 48x24 right-aligned bars === */
-  .entry-station__trend {
-    align-self: flex-end;
-    color: var(--c-amber);
-    margin-bottom: var(--sp-1);
-  }
-  .entry-station__trend svg {
-    display: block;
-  }
-
-  /* === Mini-trend (NEW v6.6) — 240x40, 60 bars, last-bar amber ===
-     Sits directly below the existing 48x24 trend. Fixed viewBox at
-     240x40; on tighter columns (mobile) SVG shrinks via its viewBox.
-     Inner bars styled by class for ink-3 default, amber-light highlight. */
+  /* === Mini-trend — 240x32 SVG bar chart === */
   .entry-station__minitrend {
     display: block;
     width: 100%;
-    margin-bottom: var(--sp-2);
+    margin-top: auto;
   }
   .entry-station__minitrend svg {
     display: block;
     width: 100%;
-    height: 40px;
+    height: 32px;
     max-width: 240px;
   }
   .entry-station__minitrend rect {
@@ -668,92 +546,13 @@ const stations = [
     opacity: 0.9;
   }
 
-  /* === Vertical mini-event-tape (NEW v6.6) — 24x96, 5 stacked 6x6 ticks ===
-     Absolute right at the station's right padding edge. Palette
-     colors selected inline via class names mapped in CSS below. */
-  .entry-station__tape {
-    position: absolute;
-    right: var(--sp-3);
-    top: var(--sp-4);
-    width: 24px;
-    height: 96px;
-    pointer-events: none;
-  }
-  .entry-station__tape rect {
-    fill: var(--c-ink-3);
-  }
-  .entry-station__tape rect.entry-station__tape-tick--amber {
-    fill: var(--c-amber-light);
-  }
-
-  /* === Flow arrow (NEW v6.6) — [ INPUT ] →→→ [ OUTPUT ] ===
-     Replaces the v6.5 3-pill status row at the bottom of the
-     station. Inline mono with 3 chevron <path>s. */
-  .entry-station__flow {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--sp-2);
-    font-size: 0.7rem;
-    letter-spacing: 0.04em;
-    line-height: 1.4;
-    color: var(--c-ink-2);
-    margin-top: var(--sp-1);
-  }
-  .entry-station__flow-node {
-    display: inline-block;
-    padding: 1px 6px;
-    border: 1px solid var(--c-rule);
-    border-radius: 2px;
-    background: transparent;
-    white-space: nowrap;
-    font-weight: 500;
-  }
-  .entry-station__flow-node--in {
-    color: var(--c-ink-2);
-    border-color: var(--c-rule);
-  }
-  .entry-station__flow-node--out {
-    color: var(--c-amber);
-    border-color: var(--c-amber);
-  }
-  .entry-station__flow-arrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 2px;
-    color: var(--c-ink-3);
-  }
-  .entry-station__chevron {
-    display: block;
-    flex-shrink: 0;
-  }
-
-  /* === Bottom rail — 1px hairline at the bottom of the column === */
-  .entry-station__rail {
-    display: block;
-    position: absolute;
-    left: var(--sp-4);
-    right: calc(var(--sp-4) + 28px);
-    bottom: 0;
-    height: 1px;
-    background: var(--c-rule);
-  }
-  .entry-station-wrap:last-child .entry-station__rail {
-    display: none;
-  }
-
-  /* === Hover affordance — only color shifts; no translate === */
+  /* === Hover affordance — id-bar grows; row tints to amber-wash === */
   .entry-station:hover .entry-station__id-bar,
   .entry-station:focus-visible .entry-station__id-bar {
     width: 28px;
   }
-  .entry-station:hover .entry-station__flow-node--out,
-  .entry-station:focus-visible .entry-station__flow-node--out {
-    background: var(--c-amber);
-    color: var(--c-bg-2);
-  }
 
-  /* === Responsive — 2x2 tablet, 1x4 mobile === */
+  /* === Responsive === */
   @media (max-width: 880px) {
     .entry-stations__grid {
       grid-template-columns: 1fr 1fr;
@@ -771,11 +570,13 @@ const stations = [
       border-bottom: none;
     }
     .entry-station__title {
-      font-size: 1rem;
-      min-height: 2.5em;
+      font-size: 1.125rem;
     }
     .entry-station__num {
-      font-size: 1.7rem;
+      font-size: 2rem;
+    }
+    .entry-station {
+      min-height: 180px;
     }
   }
 
@@ -799,22 +600,18 @@ const stations = [
       align-items: flex-start;
     }
     .entry-station__title {
-      font-size: 1.0625rem;
-      min-height: 0;
+      font-size: 1.125rem;
     }
     .entry-station__num {
-      font-size: 1.95rem;
+      font-size: 2rem;
     }
-    /* v6.11.9 — release the 28px right-pad reserved for the absolute tape
-       on mobile (was set at desktop in the card padding). Without this,
-       labels that wrap to 2-3 lines on narrow viewports get hugged by
-       the tape strip and feel cramped. */
     .entry-station {
-      padding: var(--sp-4) var(--sp-4) var(--sp-3);
+      min-height: 160px;
+      padding: var(--sp-4);
     }
   }
 
-  /* === Reduced motion — disable hover width-grow (no hover-translate used) === */
+  /* === Reduced motion === */
   @media (prefers-reduced-motion: reduce) {
     .entry-station,
     .entry-station__id-bar {
