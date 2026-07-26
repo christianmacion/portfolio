@@ -268,6 +268,22 @@
      italicized callout text. */
   --c-terracotta: var(--j-terracotta);
   --c-terracotta-deep: var(--j-terracotta-deep);
+  /* v7.6.8 — alias the 2nd-tier accent family onto the --j-* scale so
+     components using legacy --c-sage / --c-teal / --c-violet survive
+     the v6-13 surface switch. Without these, the legacy components
+     (LiveActivity, LiveStats, SwarmScene, etc.) would render with
+     the broken `var(--c-sage)` fallback to invalid (and disappear). */
+  --c-sage: var(--j-sage);
+  --c-sage-deep: var(--j-sage-deep);
+  --c-sage-3: var(--j-sage-3);
+  --c-sage-soft: var(--j-sage-soft);
+  --c-teal: var(--j-teal);
+  --c-teal-deep: var(--j-teal-deep);
+  --c-teal-soft: var(--j-teal-soft);
+  --c-violet: var(--j-violet);
+  --c-violet-deep: var(--j-violet-deep);
+  --c-violet-soft: var(--j-violet-soft);
+  --c-ink-1: var(--j-ink);
   --ff-sans: var(--j-ff-body);
   --ff-mono: var(--j-ff-mono);
   --serif-display: var(--j-ff-display);

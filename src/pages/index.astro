@@ -187,9 +187,16 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
             />
           </div>
           <ul class="pillar__stats mono">
-            <li><b class="tnum">0.39</b><span>SHARPE · ANN.</span></li>
-            <li><b class="tnum">−3.6%</b><span>MAX DRAWDOWN</span></li>
-            <li><b class="tnum">+12%</b><span>NET RETURN</span></li>
+            <li>
+              <b class="tnum"><span class="pillar__count" data-count="0.39" data-decimals="2">0.00</span></b><span>SHARPE
+                · ANN.</span>
+            </li>
+            <li>
+              <b class="tnum"><span class="pillar__count" data-count="-3.6" data-decimals="1" data-suffix="%" data-prefix="−">−0.0%</span></b><span>MAX DRAWDOWN</span>
+            </li>
+            <li>
+              <b class="tnum"><span class="pillar__count" data-count="12" data-decimals="0" data-suffix="%" data-prefix="+">+0%</span></b><span>NET RETURN</span>
+            </li>
           </ul>
           <p class="pillar__cta">
             <a href={`${path('/projects')}?tag=quant`}>READ QUANT PILLAR →</a>
@@ -204,9 +211,15 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
             <AgentGraph compact />
           </div>
           <ul class="pillar__stats mono">
-            <li><b class="tnum">{profile.stats.aiAgentCount}</b><span>DAG AGENTS</span></li>
-            <li><b class="tnum">{archSafe.subTeamCount}</b><span>SUB-TEAMS</span></li>
-            <li><b class="tnum">{archSafe.mustHaveCount}</b><span>MUST-HAVES</span></li>
+            <li>
+              <b class="tnum"><span class="pillar__count" data-count={profile.stats.aiAgentCount} data-decimals="0">0</span></b><span>DAG AGENTS</span>
+            </li>
+            <li>
+              <b class="tnum"><span class="pillar__count" data-count={archSafe.subTeamCount} data-decimals="0">0</span></b><span>SUB-TEAMS</span>
+            </li>
+            <li>
+              <b class="tnum"><span class="pillar__count" data-count={archSafe.mustHaveCount} data-decimals="0">0</span></b><span>MUST-HAVES</span>
+            </li>
           </ul>
           <p class="pillar__cta">
             <a href={path('/ai')}>READ AI PILLAR →</a>
@@ -361,6 +374,86 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     </div>
   </section>
 </BaseLayout>
+
+<script>
+  /* v7.6.8 — pillar count-up. Reads target value + format from data-*
+     attributes on `.pillar__count` so the markup stays readable.
+     Fires once on first scroll-in via IntersectionObserver. No
+     Math.random / Date.now — deterministic easing curve. */
+  (() => {
+    const counters = document.querySelectorAll<HTMLElement>('.pillar__count');
+    if (!counters.length) return;
+
+    const prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduce) {
+      // Just write the final value; skip animation.
+      counters.forEach((el) => {
+        const target = parseFloat(el.dataset.count ?? '0');
+        const decimals = parseInt(el.dataset.decimals ?? '0', 10);
+        const suffix = el.dataset.suffix ?? '';
+        const prefix = el.dataset.prefix ?? '';
+        el.textContent = `${prefix}${target.toFixed(decimals)}${suffix}`;
+      });
+      return;
+    }
+
+    const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+
+    function format(value: number, decimals: number, prefix: string, suffix: string) {
+      return `${prefix}${value.toFixed(decimals)}${suffix}`;
+    }
+
+    function animate(el: HTMLElement) {
+      const target = parseFloat(el.dataset.count ?? '0');
+      const decimals = parseInt(el.dataset.decimals ?? '0', 10);
+      const suffix = el.dataset.suffix ?? '';
+      const prefix = el.dataset.prefix ?? '';
+
+      const duration = 1400;
+      const start = performance.now();
+      const initial = 0;
+      function step(now: number) {
+        const elapsed = now - start;
+        const t = Math.min(1, elapsed / duration);
+        const v = initial + (target - initial) * easeOutCubic(t);
+        el.textContent = format(v, decimals, prefix, suffix);
+        if (t < 1) requestAnimationFrame(step);
+        else el.textContent = format(target, decimals, prefix, suffix);
+      }
+      requestAnimationFrame(step);
+    }
+
+    const grid = document.querySelector('.pillars__grid');
+    const seen = new WeakSet<HTMLElement>();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (!e.isIntersecting) continue;
+          const el = e.target as HTMLElement;
+          if (seen.has(el)) continue;
+          seen.add(el);
+          animate(el);
+        }
+      },
+      { threshold: 0.4, rootMargin: '0px 0px -10% 0px' },
+    );
+    counters.forEach((el) => observer.observe(el));
+    // mark grid once any counter has fired (for the amber glow)
+    const gridObserver = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            (e.target as HTMLElement).classList.add('is-counted');
+            gridObserver.disconnect();
+            break;
+          }
+        }
+      },
+      { threshold: 0.4 },
+    );
+    if (grid) gridObserver.observe(grid);
+  })();
+</script>
 
 <style>
   /* ============================================================
@@ -554,6 +647,22 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     border-bottom: 1px solid var(--c-rule);
     background: var(--c-bg-2);
   }
+  /* v7.6.8 — count-up. Tabular-num already on .tnum; we add a
+     subtle flip on the <b> wrapper so the digit locks into place. */
+  .pillar__count {
+    display: inline-block;
+    min-width: 1ch;
+    transition: filter 0.4s ease;
+  }
+  .pillars__grid.is-counted .pillar__count {
+    filter: drop-shadow(0 0 6px color-mix(in oklab, var(--c-amber) 40%, transparent));
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pillar__count {
+      transition: none;
+      filter: none !important;
+    }
+  }
   .pillars__eyebrow {
     font: 500 11px / 1.4 var(--ff-mono);
     color: var(--c-warn);
@@ -715,13 +824,6 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     .pillars__grid {
       grid-template-columns: 1fr;
       gap: 24px;
-    }
-    .arch-brief__grid {
-      grid-template-columns: 1fr;
-      gap: 24px;
-    }
-    .arch-brief__title {
-      font-size: 28px;
     }
   }
 

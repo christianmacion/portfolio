@@ -11,7 +11,7 @@ import Equation from '@components/Equation.astro';
 import Stat from '@components/Stat.astro';
 import ProofCard from '@components/ProofCard.astro';
 import { getCollection, type CollectionEntry } from 'astro:content';
-import { path } from '@utils/url';
+import { path, hrefOrPath } from '@utils/url';
 import { profile } from '@utils/profile';
 import VoiceLine from '@components/VoiceLine.astro';
 
@@ -116,7 +116,7 @@ const certSpanMonths =
                 src={path(group.data.featuredImg)}
                 alt={group.data.featuredAlt ?? ''}
                 caption={group.data.featuredCaption ?? ''}
-                href={group.data.featuredHref ? path(group.data.featuredHref) : undefined}
+                href={group.data.featuredHref ? hrefOrPath(group.data.featuredHref) : undefined}
                 aspect="3/2"
               />
             </div>

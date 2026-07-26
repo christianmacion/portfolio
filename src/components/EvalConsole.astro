@@ -171,19 +171,19 @@ const passRateStr = passRate.toFixed(3);
     </div>
     <div class="eval-console__head-summary">
       <span class="eval-console__summary-item">
-        <span class="eval-console__num mono">{counts.pass}</span>
+        <span class="eval-console__num mono" data-counter={counts.pass} data-duration="1200">{counts.pass}</span>
         <span class="eval-console__lbl mono">pass</span>
       </span>
       <span class="eval-console__summary-item eval-console__summary-item--check">
-        <span class="eval-console__num mono">{counts.check}</span>
+        <span class="eval-console__num mono" data-counter={counts.check} data-duration="1200">{counts.check}</span>
         <span class="eval-console__lbl mono">check</span>
       </span>
       <span class="eval-console__summary-item eval-console__summary-item--fail">
-        <span class="eval-console__num mono">{counts.fail}</span>
+        <span class="eval-console__num mono" data-counter={counts.fail} data-duration="1200">{counts.fail}</span>
         <span class="eval-console__lbl mono">fail</span>
       </span>
       <span class="eval-console__summary-item eval-console__summary-item--rate">
-        <span class="eval-console__num mono">{passRateStr}</span>
+        <span class="eval-console__num mono" data-counter={passRate} data-duration="1400">{passRateStr}</span>
         <span class="eval-console__lbl mono">pass-rate</span>
       </span>
     </div>
@@ -428,6 +428,55 @@ const passRateStr = passRate.toFixed(3);
     }
     .eval-row__label {
       font-size: 13px;
+    }
+  }
+
+  /* === v7.6.8 — entrance + ambient pulse ===
+     Pass/Check/Fail summary numbers count up via the existing odometer
+     driver (data-counter attribute set on the .eval-console__num
+     elements). Each row fades in sequentially. Reduced motion safe. */
+  .eval-console__num[data-counter] {
+    display: inline-block;
+    transition: filter 0.4s ease;
+  }
+  .eval-family {
+    animation: ev-row-rise 0.5s cubic-bezier(.4,.7,.3,1) backwards;
+  }
+  .eval-family:nth-of-type(1) { animation-delay: 80ms; }
+  .eval-family:nth-of-type(2) { animation-delay: 200ms; }
+  .eval-family:nth-of-type(3) { animation-delay: 320ms; }
+  .eval-family:nth-of-type(4) { animation-delay: 440ms; }
+  .eval-family:nth-of-type(5) { animation-delay: 560ms; }
+  .eval-family:nth-of-type(6) { animation-delay: 680ms; }
+  @keyframes ev-row-rise {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: none; }
+  }
+  .eval-row {
+    animation: ev-fade 0.4s ease-out backwards;
+  }
+  .eval-row:nth-child(odd)  { animation-delay: 0.2s; }
+  .eval-row:nth-child(even) { animation-delay: 0.35s; }
+  @keyframes ev-fade {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  /* FAIL row gets a subtle attention pulse */
+  .eval-row--fail {
+    animation:
+      ev-fade 0.4s ease-out backwards 0.2s,
+      ev-fail-attn 6s ease-in-out infinite 2.6s;
+  }
+  @keyframes ev-fail-attn {
+    0%, 100% { background: color-mix(in oklab, var(--c-ink-2) 6%, transparent); }
+    50%      { background: color-mix(in oklab, var(--c-ink-2) 14%, transparent); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .eval-family,
+    .eval-row,
+    .eval-row--fail,
+    .eval-console__num {
+      animation: none;
     }
   }
 </style>

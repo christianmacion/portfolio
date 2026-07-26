@@ -769,7 +769,7 @@ const paginate = (items: any[]) => {
                   )}
                   {dateIso && <span class="pill pill--mute mono">{dateIso}</span>}
                 </div>
-                <a class="proof-list__title" href={path(`/solutions#${s.data.slug}`)}>
+                <a class="proof-list__title" href={path(`/solutions#${s.data.lane ?? 'ai'}`)}>
                   <span class="proof-list__kind proof-list__kind--sol mono">
                     {s.data.lane.toUpperCase()}
                   </span>

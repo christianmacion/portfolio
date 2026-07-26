@@ -1198,4 +1198,95 @@ const platformInputs = [
       grid-template-columns: 1fr;
     }
   }
+
+  /* === v7.6.8 — entrance animations + ambient pulse for the AI lane ===
+     Pure CSS. Sequential fade-up on ai-loop + stella-grid + ai-trend-grid
+     + kg-card. Stella numerals breathe. ai-trend years get a fast amber
+     pulse. Honors prefers-reduced-motion below. */
+
+  .ai-loop__step,
+  .stella-cell,
+  .ai-trend,
+  .kg-card {
+    animation: ai-rise 0.7s cubic-bezier(.4,.7,.3,1) backwards;
+  }
+  .ai-loop__step:nth-child(1)  { animation-delay: 80ms; }
+  .ai-loop__step:nth-child(2)  { animation-delay: 180ms; }
+  .ai-loop__step:nth-child(3)  { animation-delay: 280ms; }
+  .ai-loop__step:nth-child(4)  { animation-delay: 380ms; }
+  .ai-loop__step:nth-child(5)  { animation-delay: 480ms; }
+  .stella-cell--arch           { animation-delay: 120ms; }
+  .stella-cell--graph          { animation-delay: 240ms; }
+  .stella-cell--rung           { animation-delay: 360ms; }
+  .ai-trend:nth-child(1)       { animation-delay: 100ms; }
+  .ai-trend:nth-child(2)       { animation-delay: 220ms; }
+  .ai-trend:nth-child(3)       { animation-delay: 340ms; }
+  .ai-trend:nth-child(4)       { animation-delay: 460ms; }
+  .ai-trend:nth-child(5)       { animation-delay: 580ms; }
+  .kg-card:nth-child(1)        { animation-delay: 100ms; }
+  .kg-card:nth-child(2)        { animation-delay: 240ms; }
+  .kg-card:nth-child(3)        { animation-delay: 380ms; }
+  @keyframes ai-rise {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  /* AI-trend year gets a fast amber pulse to draw the eye through the
+     timeline without being loud. */
+  .ai-trend__year {
+    animation: ai-year-pulse 4.8s ease-in-out infinite 1.4s;
+  }
+  @keyframes ai-year-pulse {
+    0%, 100% { color: var(--c-amber); }
+    50%      { color: var(--c-amber-deep); }
+  }
+
+  /* Loop steps get a fading accent ring on the number */
+  .ai-loop__num {
+    animation: ai-num-pulse 5.4s ease-in-out infinite;
+  }
+  .ai-loop__step:nth-child(1) .ai-loop__num { animation-delay: 1.0s; }
+  .ai-loop__step:nth-child(2) .ai-loop__num { animation-delay: 2.0s; }
+  .ai-loop__step:nth-child(3) .ai-loop__num { animation-delay: 3.0s; }
+  .ai-loop__step:nth-child(4) .ai-loop__num { animation-delay: 4.0s; }
+  .ai-loop__step:nth-child(5) .ai-loop__num { animation-delay: 5.0s; }
+  @keyframes ai-num-pulse {
+    0%, 80%, 100% { color: var(--c-amber-deep); }
+    15%, 30% { color: var(--c-amber); }
+  }
+
+  /* Stella cells: rail under the numeral glows slowly */
+  .stella-cell::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--c-amber), transparent);
+    opacity: 0.55;
+    animation: stella-rail 5.6s ease-in-out infinite;
+  }
+  .stella-cell--graph::after { animation-delay: 1.6s; }
+  .stella-cell--rung::after  { animation-delay: 3.2s; }
+  @keyframes stella-rail {
+    0%, 100% { transform: translateX(-30%); opacity: 0.55; }
+    50%      { transform: translateX(30%);  opacity: 0.9; }
+  }
+
+  /* === Reduced motion === */
+  @media (prefers-reduced-motion: reduce) {
+    .ai-loop__step,
+    .stella-cell,
+    .ai-trend,
+    .kg-card {
+      animation: none;
+      opacity: 1;
+    }
+    .ai-trend__year,
+    .ai-loop__num,
+    .stella-cell::after {
+      animation: none;
+    }
+  }
 </style>

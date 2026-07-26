@@ -16,7 +16,7 @@
  *     6 flying packets, 3 STELLA pulse rings, 2 orbit rings, dash flow
  *   - Reduced-motion safe: every animation has a fallback
  */
-import { profile, archSafe } from '@utils/profile';
+import { archSafe } from '@utils/profile';
 import { countries, MAP_WIDTH, MAP_HEIGHT } from '../data/world-map-paths';
 
 // === Equirectangular projection helpers (re-derived from build script) ===
@@ -43,7 +43,6 @@ const signals = [
   { code: 'REGIME', sub: 'risk-on/off', value: '0.74', meta: 'Risk-on' },
 ];
 
-const grades = ['A', 'B', 'C'] as const;
 const feed = [
   { time: '14:23:17', grade: 'A', source: 'FED', msg: 'FOMC statement released — 25bp cut signaled', route: 'TSM-VT' },
   { time: '14:23:04', grade: 'C', source: 'NYSE', msg: 'NVDA earnings beat by 4.2%', route: 'COIN-PAIRS' },
@@ -264,7 +263,7 @@ const sourcesXY = sources.map((s) => ({ ...s, ...lonLat(s.lon, s.lat) }));
             <span class="bloomberg__feed-pulse" aria-hidden="true"></span>
           </div>
           <ol class="bloomberg__feed-list">
-            {feed.map((f, i) => (
+            {feed.map((f) => (
               <li class={`bloomberg__feed-row bloomberg__feed-row--${f.grade}`}>
                 <span class="bloomberg__feed-time mono">{f.time}</span>
                 <span class={`bloomberg__feed-grade mono`}>G{f.grade}</span>
@@ -296,7 +295,7 @@ const sourcesXY = sources.map((s) => ({ ...s, ...lonLat(s.lon, s.lat) }));
             </tr>
           </thead>
           <tbody>
-            {sources.map((s, i) => (
+            {sources.map((s) => (
               <tr class="bloomberg__tr">
                 <td class="bloomberg__td mono bloomberg__td--strong">{s.code}</td>
                 <td class="bloomberg__td mono">{s.city}</td>
@@ -327,7 +326,7 @@ const sourcesXY = sources.map((s) => ({ ...s, ...lonLat(s.lon, s.lat) }));
             </tr>
           </thead>
           <tbody>
-            {signals.map((s, i) => (
+            {signals.map((s) => (
               <tr class="bloomberg__tr">
                 <td class="bloomberg__td mono bloomberg__td--strong">{s.code}</td>
                 <td class="bloomberg__td mono">{s.sub}</td>

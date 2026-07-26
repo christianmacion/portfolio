@@ -1,25 +1,34 @@
 ---
 /**
- * desk.astro — v7.5 THE DESK · 24h multi-asset coverage view.
+ * desk.astro — v7.6.8 THE DESK · 24h multi-asset coverage view.
  *
- * NDA-positive by construction. No employer or platform names; this
- * page is the public-facing "iron desk" view of the multi-agent office:
- *   - where coverage sits (venue cities)
- *   - what's scheduled to move (10 curated world events)
- *   - what's moving right now (50 GDELT signals, last 24h)
+ * v7.6.8 polish — owner ask 2026-07-27: "improve the UI/UX of hub. make
+ * stella work on it and make it same quality as the login and main page.
+ * world class. perfection in motion graphics and designs. do full audit
+ * and fix all bugs."
  *
  * Layout (top → bottom):
  *   1. MarketTape — scrolling equity tape
- *   2. Head — eyebrow + headline + lede + dual-path CTA
- *   3. EarthMap — 3-layer equirectangular world map
- *   4. World events table — 10 curated events with category / severity
- *   5. Coverage stats — venue count, event count, GDELT count, latency
- *   6. CTABanner — back to home / open /desk link
+ *   2. Head — eyebrow + headline + voice + sub + dual-path CTA
+ *   3. KPI strip — 4 count-up stats (venues / events / signals / tz)
+ *   4. Marquee — methodology frame loop
+ *   5. EarthMap — 3-layer equirectangular world map
+ *   6. LiveStats — instrument panel (4 cards, perp sparkline animation)
+ *   7. World events table — 10 curated events with row stagger
+ *   8. LiveActivity — tail-of-the-loop event log
+ *   9. CTABanner — back to home / open /desk link
+ *
+ * NDA-positive by construction. No employer or platform names; this
+ * page is the public-facing "iron desk" view of the multi-agent office.
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
 import VoiceLine from '@components/VoiceLine.astro';
 import MarketTape from '@components/MarketTape.astro';
+import NewsRibbon from '@components/NewsRibbon.astro';
 import EarthMap from '@components/EarthMap.astro';
+import Marquee from '@components/Marquee.astro';
+import LiveStats from '@components/LiveStats.astro';
+import LiveActivity from '@components/LiveActivity.astro';
 import CTABanner from '@components/CTABanner.astro';
 import { getCollection } from 'astro:content';
 import { profile, archSafe } from '@utils/profile';
@@ -70,7 +79,7 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
   <MarketTape />
 
   {/* === 2. Head === */}
-  <header class="desk-head">
+  <header class="desk-head" data-reveal>
     <div class="container">
       <p class="desk-head__eyebrow mono">
         <span class="status-dot" aria-hidden="true"></span>
@@ -99,25 +108,85 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     </div>
   </header>
 
-  {/* === 3. EarthMap — 3-layer world viz === */}
-  <section class="desk-map" aria-label="Three-layer world map">
+  {/* === 3. KPI strip — 4 count-up cells === */}
+  <section class="desk-stats" aria-label="Coverage statistics" data-reveal>
+    <div class="container">
+      <p class="desk-stats__eyebrow mono">24H COVERAGE · DETERMINISTIC SNAPSHOT</p>
+      <ul class="desk-stats__grid">
+        <li class="desk-stats__cell" style="--i: 0">
+          <p class="desk-stats__num mono">
+            <span data-counter="6" data-duration="1200">06</span>
+          </p>
+          <p class="desk-stats__lbl mono">RESEARCH VENUES</p>
+        </li>
+        <li class="desk-stats__cell" style="--i: 1">
+          <p class="desk-stats__num mono">
+            <span data-counter={events.length} data-duration="1200">{events.length}</span>
+          </p>
+          <p class="desk-stats__lbl mono">WORLD EVENTS</p>
+        </li>
+        <li class="desk-stats__cell" style="--i: 2">
+          <p class="desk-stats__num mono">
+            <span data-counter="50" data-duration="1400">50+</span>
+          </p>
+          <p class="desk-stats__lbl mono">GDELT SIGNALS</p>
+        </li>
+        <li class="desk-stats__cell" style="--i: 3">
+          <p class="desk-stats__num mono">UTC+8</p>
+          <p class="desk-stats__lbl mono">DESK TIMEZONE</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  {/* === 3b. NewsRibbon — desk-specific updates + methodology frames === */}
+  <NewsRibbon />
+
+  {/* === 4. Marquee — methodology frames === */}
+  <Marquee
+    items={[
+      { head: 'PUBLIC-DATA', tail: 'GDPR-CLEAN · REPRODUCIBLE', accent: 'sage' },
+      { head: 'EVAL-FIRST', tail: `${profile.stats.evalGates} GATES · EXIT-0 CONTRACT`, accent: 'warn' },
+      { head: '24H SCAN', tail: '6 VENUES · 10 EVENTS · 50+ SIGNALS', accent: 'sage' },
+      { head: 'TIMEZONE-AWARE', tail: 'UTC+8 DESK · 3/24 OVERLAP', accent: 'violet' },
+      { head: 'REGIME-TAGGED', tail: 'CALM · NORMAL · STRESS', accent: 'terracotta' },
+      { head: 'PIT STRICT', tail: 'NO LOOKAHEAD · NO SURVIVORSHIP', accent: 'sage' },
+      { head: 'CHAIN-OF-CUSTODY', tail: 'SEED → SIGNAL → CITATION', accent: 'warn' },
+      { head: 'NDA-POSITIVE', tail: 'COUNTS + TAXONOMY ONLY', accent: 'sage' },
+    ]}
+    speedSec={48}
+    trailing="24h coverage · methodology"
+  />
+
+  {/* === 5. EarthMap — 3-layer world viz === */}
+  <section class="desk-map" aria-label="Three-layer world map" data-reveal>
     <div class="container">
       <p class="desk-map__eyebrow mono">EARTH · VENUES · EVENTS · SIGNALS · 24H</p>
-      {/* v7.6.3 — wrapped in .desk-map__frame so the SVG scales to the
-          container via aspect-ratio instead of overflowing at 360px. */}
       <div class="desk-map__frame">
+        <div class="desk-map__corner desk-map__corner--tl" aria-hidden="true"></div>
+        <div class="desk-map__corner desk-map__corner--tr" aria-hidden="true"></div>
+        <div class="desk-map__corner desk-map__corner--bl" aria-hidden="true"></div>
+        <div class="desk-map__corner desk-map__corner--br" aria-hidden="true"></div>
         <EarthMap width={1080} height={540} />
       </div>
     </div>
   </section>
 
-  {/* === 4. World events table === */}
+  {/* === 6. LiveStats — instrument panel (4 cards) === */}
+  <LiveStats />
+
+  {/* === 7. World events table — row stagger === */}
   <section class="desk-events" aria-label="Curated world events">
     <div class="container">
       <p class="desk-events__eyebrow mono">{events.length} CURATED WORLD EVENTS</p>
       <h2 class="desk-events__title">The calendar that drives every position-book.</h2>
 
       <table class="desk-events__table">
+        <caption class="sr-only">
+          Curated world events that the desk tracks on a 24-hour rolling basis —
+          central-bank policy meetings, scheduled data releases, geopolitical
+          windows, and earnings that move the position-book.
+        </caption>
         <colgroup>
           <col class="desk-events__col-num" />
           <col class="desk-events__col-cat" />
@@ -136,8 +205,8 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
         </thead>
         <tbody>
           {
-            events.map((e) => (
-              <tr>
+            events.map((e, i) => (
+              <tr class="desk-events__row" style={`--i: ${i}`}>
                 <td class="desk-events__num mono">{String(e.order).padStart(2, '0')}</td>
                 <td class="desk-events__cat mono">{e.category}</td>
                 <td class="desk-events__sev mono">
@@ -155,32 +224,10 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     </div>
   </section>
 
-  {/* === 5. Coverage stats === */}
-  <section class="desk-stats" aria-label="Coverage statistics">
-    <div class="container">
-      <p class="desk-stats__eyebrow mono">24H COVERAGE · DETERMINISTIC SNAPSHOT</p>
-      <ul class="desk-stats__grid">
-        <li class="desk-stats__cell">
-          <p class="desk-stats__num mono">06</p>
-          <p class="desk-stats__lbl mono">RESEARCH VENUES</p>
-        </li>
-        <li class="desk-stats__cell">
-          <p class="desk-stats__num mono">{events.length}</p>
-          <p class="desk-stats__lbl mono">WORLD EVENTS</p>
-        </li>
-        <li class="desk-stats__cell">
-          <p class="desk-stats__num mono">50+</p>
-          <p class="desk-stats__lbl mono">GDELT SIGNALS</p>
-        </li>
-        <li class="desk-stats__cell">
-          <p class="desk-stats__num mono">UTC+8</p>
-          <p class="desk-stats__lbl mono">DESK TIMEZONE</p>
-        </li>
-      </ul>
-    </div>
-  </section>
+  {/* === 8. LiveActivity — tail of the loop === */}
+  <LiveActivity />
 
-  {/* === 6. CTA banner === */}
+  {/* === 9. CTA banner === */}
   <CTABanner
     title="Hire the operator, not the dashboard."
     sub={`${archSafe.agentCount}-agent multi-agent office · ${profile.stats.evalGates}-gate eval harness · ${profile.stats.locPython} LOC Python · NDA-clean by construction. Email below — reply within 24h.`}
@@ -210,6 +257,9 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     letter-spacing: 0.14em;
     text-transform: uppercase;
     margin: 0 0 24px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
   }
   .desk-head__title {
     font: 600 48px / 1 var(--serif-display);
@@ -283,11 +333,65 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     border-color: var(--c-warn);
   }
 
+  /* === Stats grid === */
+  .desk-stats {
+    padding: 48px 0 56px;
+    background: var(--c-bg-2);
+    border-bottom: 1px solid var(--c-rule);
+  }
+  .desk-stats__eyebrow {
+    font: 500 11px / 1.4 var(--ff-mono);
+    color: var(--c-warn);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin: 0 0 24px;
+  }
+  .desk-stats__grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+  .desk-stats__cell {
+    border-top: 1px solid var(--c-rule);
+    padding-top: 16px;
+    position: relative;
+    transition: border-color 0.2s ease;
+    animation: desk-stat-in 0.6s cubic-bezier(.4,.7,.3,1) backwards;
+    animation-delay: calc(var(--i, 0) * 100ms);
+  }
+  .desk-stats__cell:hover {
+    border-top-color: var(--c-amber);
+  }
+  @keyframes desk-stat-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: none; }
+  }
+  .desk-stats__num {
+    font: 600 32px / 1 var(--serif-display);
+    color: var(--c-ink);
+    letter-spacing: -0.022em;
+    margin: 0 0 6px;
+    font-variant-numeric: tabular-nums;
+  }
+  .desk-stats__num span[data-counter] {
+    color: var(--c-phi);
+  }
+  .desk-stats__lbl {
+    font: 500 10px / 1.2 var(--ff-mono);
+    color: var(--c-ink-2);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
   /* === Map === */
   .desk-map {
     padding: 48px 0 56px;
     border-bottom: 1px solid var(--c-rule);
-    background: var(--c-bg-2);
+    background: var(--c-bg);
   }
   .desk-map__eyebrow {
     font: 500 11px / 1.4 var(--ff-mono);
@@ -297,13 +401,36 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     margin: 0 0 16px;
   }
   .desk-map__frame {
-    /* v7.6.3 — wrap the 1080×540 SVG so it scales to the container.
-       EarthMap intrinsic is 1080×540 (2:1); aspect-ratio + 100% width
-       keeps the projection correct on every viewport. */
     overflow: hidden;
     border-radius: var(--radius-md, 6px);
     border: 1px solid var(--c-rule);
     aspect-ratio: 2 / 1;
+    position: relative;
+  }
+  .desk-map__corner {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border: 1px solid var(--c-ink);
+    z-index: 2;
+  }
+  .desk-map__corner--tl { top: 4px;    left: 4px;   border-right: none; border-bottom: none; }
+  .desk-map__corner--tr { top: 4px;    right: 4px;  border-left: none;  border-bottom: none; }
+  .desk-map__corner--bl { bottom: 4px; left: 4px;   border-right: none; border-top: none; }
+  .desk-map__corner--br { bottom: 4px; right: 4px;  border-left: none;  border-top: none; }
+  .desk-map__frame::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    pointer-events: none;
+    border: 1px solid color-mix(in oklab, var(--c-amber) 0%, transparent);
+    border-radius: var(--radius-md, 6px);
+    animation: desk-map-glow 6s ease-in-out infinite;
+    z-index: 2;
+  }
+  @keyframes desk-map-glow {
+    0%, 100% { border-color: color-mix(in oklab, var(--c-amber) 0%, transparent); }
+    50%      { border-color: color-mix(in oklab, var(--c-amber) 24%, transparent); }
   }
   .desk-map__frame :global(svg) {
     width: 100%;
@@ -351,6 +478,18 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     color: var(--c-ink);
     vertical-align: top;
   }
+  .desk-events__row {
+    animation: desk-row-in 0.5s cubic-bezier(.4,.7,.3,1) backwards;
+    animation-delay: calc(var(--i, 0) * 90ms + 200ms);
+    transition: background 0.2s ease;
+  }
+  .desk-events__row:hover {
+    background: color-mix(in oklab, var(--c-amber) 4%, transparent);
+  }
+  @keyframes desk-row-in {
+    from { opacity: 0; transform: translateX(-12px); }
+    to   { opacity: 1; transform: none; }
+  }
   .desk-events__col-num {
     width: 36px;
   }
@@ -381,19 +520,18 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     letter-spacing: 0.1em;
   }
   .desk-events__pill--critical {
-    /* v7.6.3 — was amber-deep. Critical events deserve the warm alarming
-       accent. Terracotta is the second accent reserved for featured
-       callouts — severity-critical is the natural fit. */
     color: var(--c-terracotta);
+    animation: desk-pill-pulse 2.4s ease-in-out infinite;
   }
   .desk-events__pill--moderate {
-    /* v7.6.3 — amber kept. Moderate is the single-accent warning register. */
     color: var(--c-amber);
   }
   .desk-events__pill--mild {
-    /* v7.6.3 — sage replaces ink-2. Mild signals read as institutional
-       not muted — sage puts them in the matcha accent family. */
     color: var(--c-sage);
+  }
+  @keyframes desk-pill-pulse {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.6; }
   }
   .desk-events__title-cell {
     font: 500 14px / 1.4 var(--ff-sans);
@@ -404,46 +542,7 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     color: var(--c-ink-2);
   }
 
-  /* === Stats grid === */
-  .desk-stats {
-    padding: 48px 0 56px;
-    background: var(--c-bg-2);
-    border-bottom: 1px solid var(--c-rule);
-  }
-  .desk-stats__eyebrow {
-    font: 500 11px / 1.4 var(--ff-mono);
-    color: var(--c-warn);
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    margin: 0 0 24px;
-  }
-  .desk-stats__grid {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 24px;
-  }
-  .desk-stats__cell {
-    border-top: 1px solid var(--c-rule);
-    padding-top: 16px;
-  }
-  .desk-stats__num {
-    font: 600 32px / 1 var(--serif-display);
-    color: var(--c-ink);
-    letter-spacing: -0.022em;
-    margin: 0 0 6px;
-    font-variant-numeric: tabular-nums;
-  }
-  .desk-stats__lbl {
-    font: 500 10px / 1.2 var(--ff-mono);
-    color: var(--c-ink-2);
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    margin: 0;
-  }
-
+  /* === Responsive === */
   @media (max-width: 900px) {
     .desk-head__title {
       font-size: 36px;
@@ -464,4 +563,19 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
       display: none;
     }
   }
+
+  /* === v7.6.8 — reduced motion guard === */
+  @media (prefers-reduced-motion: reduce) {
+    .desk-stats__cell,
+    .desk-events__row,
+    .desk-events__pill--critical,
+    .desk-map__frame::before {
+      animation: none;
+      opacity: 1;
+    }
+    .desk-events__row:hover {
+      background: transparent;
+    }
+  }
 </style>
+

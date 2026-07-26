@@ -279,11 +279,13 @@ const stop = trailing;
     }
   }
 
-  /* v6.18.1 — narrow viewports: hide the trailing "series seeded…"
+  /* v7.6.8 — narrow viewports: hide the trailing "series seeded…"
      label that wraps off the right edge. The label re-appears on
-     viewports ≥ 1280px where the tape row has room. */
+     viewports ≥ 1280px where the tape row has room. Fix: selector
+     previously targeted `.tape__trailing` (dead) — actual class is
+     `.tape__stop` (see markup ~line 140). */
   @media (max-width: 1279px) {
-    .tape__trailing {
+    .tape__stop {
       display: none;
     }
   }

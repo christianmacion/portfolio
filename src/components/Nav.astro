@@ -99,7 +99,7 @@ const secondary = [
             rule (font-size 0.65em + amber tint) renders it as a proper
             typographic superscript instead of inline text. */
         }
-        <span class="nav__brand-name" set:html={profile.fullName.replace('®', '<sup>®</sup>')} />
+        <span class="nav__brand-name">{profile.fullName}</span>
         <span class="nav__brand-sub">{profile.titles.short}</span>
       </span>
     </a>

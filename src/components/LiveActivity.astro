@@ -41,11 +41,27 @@ const events = [
 
     <div class="live-activity__panel">
       <div class="live-activity__scroll">
-        <ol class="live-activity__list">
+        <ol class="live-activity__list" aria-hidden="false">
           {events.map((e, i) => (
             <li
               class={`live-activity__row live-activity__row--${e.severity}`}
               style={`--i: ${i}`}
+            >
+              <span class="live-activity__time mono">{e.time}</span>
+              <span class={`live-activity__severity live-activity__severity--${e.severity}`} aria-hidden="true"></span>
+              <span class="live-activity__source mono">{e.source}</span>
+              <span class="live-activity__text">{e.text}</span>
+              <span class="live-activity__signal mono">→ {e.signal}</span>
+            </li>
+          ))}
+          {/* v7.6.8 — duplicate the list inside the track so the
+             translateY(-50%) loop stays seamless. Without this, the
+             second half of every cycle was blank. */}
+          {events.map((e, i) => (
+            <li
+              class={`live-activity__row live-activity__row--${e.severity}`}
+              style={`--i: ${i + events.length}`}
+              aria-hidden="true"
             >
               <span class="live-activity__time mono">{e.time}</span>
               <span class={`live-activity__severity live-activity__severity--${e.severity}`} aria-hidden="true"></span>
