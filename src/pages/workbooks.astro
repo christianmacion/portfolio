@@ -1,0 +1,404 @@
+---
+/**
+ * workbooks.astro — /workbooks page (v7.6 — Graph Engineering Trilogy).
+ *
+ * Hosts the two shareable workbook editions. Surfaces the
+ * "prompt → skills → agents → loops → graphs" arc with the same
+ * terminal-austere chrome as /methodology and /research.
+ *
+ * IA: hero (5-rung spine) → 2-card grid (W1 · W2) → CTA banner.
+ *
+ * W3 (STELLA Internal) is NOT surfaced here — per CLAUDE.md §6 the
+ * internal-only playbook stays off the public portfolio. Reference
+ * link in the closing footer points to the Macion Library symlink.
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Stat from '@components/Stat.astro';
+import VoiceLine from '@components/VoiceLine.astro';
+import CTABanner from '@components/CTABanner.astro';
+import { profile } from '@utils/profile';
+import { path } from '@utils/url';
+
+const NGATE = `${profile.stats.evalGates}-gate`;
+
+// The five-rung spine — the "AI engineering journey" thesis.
+const spine = [
+  {
+    rung: 1,
+    name: 'Prompt',
+    sub: 'A single instruction to a model. Stateless, ~5 layers.',
+    level: 'everyone',
+  },
+  {
+    rung: 2,
+    name: 'Skill',
+    sub: 'A structured folder of instructions + scripts + refs. Loaded progressively.',
+    level: 'Claude Code',
+  },
+  {
+    rung: 3,
+    name: 'Agent',
+    sub: 'A long-running delegated task. Owns its context, tools, dispatch.',
+    level: 'researcher',
+  },
+  {
+    rung: 4,
+    name: 'Loop',
+    sub: 'An iterative cycle with eval-gate enforcement. The 5-must-have contract.',
+    level: 'engineer',
+  },
+  {
+    rung: 5,
+    name: 'Graph',
+    sub: 'Typed entities + relations + provenance. Shared memory across agents.',
+    level: 'architect',
+  },
+];
+
+// Two shareable workbooks — W1 (beginner), W2 (technical).
+const workbooks = [
+  {
+    id: 'w1',
+    title: 'AI Engineering from the Ground Up',
+    audience: 'Beginner → practitioner',
+    pages: '~30 pp',
+    href: '/workbooks/ai-engineering/',
+    pdfHref: '/workbooks/ai-engineering/index.pdf',
+    summary:
+      'The 5-rung spine as a beginner-friendly walkthrough. Prompt → skills → agents → loop → graph, with Karpathy autoresearch as the concrete case.',
+    accent: 'amber',
+  },
+  {
+    id: 'w2',
+    title: 'Graph Engineering for Everyone',
+    audience: 'Technical reader',
+    pages: '~32 pp',
+    href: '/workbooks/graph-engineering/',
+    pdfHref: '/workbooks/graph-engineering/index.pdf',
+    summary:
+      'The Königsberg-to-multi-agent arc. Why context windows fail, how to build a four-stage Extract · Resolve · Assemble · Query pipeline, where it fits in your stack.',
+    accent: 'teal',
+  },
+];
+---
+
+<BaseLayout
+  title="Workbooks"
+  description="Two shareable workbooks on AI engineering, from the 5-rung spine (prompt → skills → agents → loops → graphs) to a working knowledge graph for multi-agent systems."
+  breadcrumbs={[
+    { name: 'Home', href: '/' },
+    { name: 'Workbooks', href: '/workbooks' },
+  ]}
+>
+  <header class="page-head">
+    <div class="container container-narrow">
+      <p class="section__eyebrow"><span class="mono">workbooks/</span> · the 5-rung spine</p>
+      <h1 class="page-head__title" data-words>
+        Prompt <span class="hl">→</span> skills <span class="hl">→</span> agents <span class="hl">→</span> loops <span class="hl">→</span> graphs.
+      </h1>
+      <VoiceLine class="page-head__voice">
+        Modern AI systems are built in five compounding layers. Most teams plateau at the loop rung.
+        The graph rung is the productivity unlock.
+      </VoiceLine>
+
+      <div class="head-stats">
+        <Stat value="5" label="layers" sub="the spine" />
+        <Stat value="2" label="workbooks" sub="shareable" />
+        <Stat value={profile.stats.aiAgentCount} label="agents" sub="in STELLA" />
+        <Stat value="~62" label="pages" sub="PDF total" />
+      </div>
+    </div>
+  </header>
+
+  {
+    /*
+    SPINE — the 5-rung progression. Same look as the proof page's
+    "process" rail. Read top to bottom.
+  */
+  }
+  <section class="section section--alt">
+    <div class="container">
+      <header class="section__head">
+        <p class="section__eyebrow">The spine</p>
+        <h2 class="section__title">
+          Five compounding layers<span class="muted"> — pick your rung.</span>
+        </h2>
+        <p class="section__lede">
+          Every layer is a force multiplier on the one below it. Most teams stop at the loop.
+          The graph is where the agents start to share memory instead of re-deriving context.
+        </p>
+      </header>
+
+      <ol class="spine">
+        {
+          spine.map((s) => (
+            <li class="spine__item">
+              <span class="spine__num mono">0{s.rung}</span>
+              <div class="spine__body">
+                <h3 class="spine__name">{s.name}</h3>
+                <p class="spine__sub">{s.sub}</p>
+                <span class="spine__level mono">/ {s.level}</span>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  {
+    /*
+    TWO WORKBOOKS — the shareable W1 + W2. Both ship as HTML + PDF.
+    Each opens in a self-contained viewer (no external deps, all CSS
+    inline) so the shareable HTML works on any host.
+  */
+  }
+  <section class="section" id="trilogy">
+    <div class="container">
+      <header class="section__head">
+        <p class="section__eyebrow">Shareable</p>
+        <h2 class="section__title">
+          Two workbooks, one claim.
+        </h2>
+        <p class="section__lede">
+          One big claim — the 5-rung spine. Two levels of audience — beginner, technical.
+          Each one is a self-contained PDF + shareable HTML.
+        </p>
+      </header>
+
+      <div class="workbook-grid">
+        {
+          workbooks.map((w) => (
+            <article class:list={['workbook-card', `workbook-card--${w.accent}`]}>
+              <header class="workbook-card__head">
+                <span class="workbook-card__badge">SHARABLE</span>
+                <span class="workbook-card__id mono">{w.id.toUpperCase()}</span>
+              </header>
+
+              <h3 class="workbook-card__title">{w.title}</h3>
+
+              <ul class="workbook-card__meta mono">
+                <li>{w.audience}</li>
+                <li>{w.pages}</li>
+              </ul>
+
+              <p class="workbook-card__sum">{w.summary}</p>
+
+              <footer class="workbook-card__foot">
+                <a href={path(w.href)} class="btn btn--primary btn--sm">Open HTML →</a>
+                <a href={w.pdfHref} class="btn btn--ghost btn--sm" download>PDF ↓</a>
+              </footer>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <CTABanner
+    title="The 53-agent office runs on the same 5-rung spine."
+    sub="If you want to see how the spine is wired into a working multi-agent platform, the AI lane page is the live tour."
+    primaryHref={path('/ai')}
+    primaryLabel="Tour the AI lane →"
+    secondaryHref={path('/methodology')}
+    secondaryLabel="Read the methodology"
+  />
+</BaseLayout>
+
+<style>
+  /* ============================================================
+     SPINE — 5-rung progression rail. 5 horizontal cards.
+     ============================================================ */
+  .spine {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: var(--sp-3);
+    counter-reset: rung;
+  }
+  @media (max-width: 980px) {
+    .spine {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 600px) {
+    .spine {
+      grid-template-columns: 1fr;
+    }
+  }
+  .spine__item {
+    position: relative;
+    padding: var(--sp-4) var(--sp-3);
+    border: 1px solid var(--c-rule);
+    border-radius: 6px;
+    background: var(--c-paper);
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-2);
+  }
+  .spine__item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--c-amber);
+    border-radius: 3px 0 0 3px;
+    opacity: 0.85;
+  }
+  .spine__item:nth-child(2)::before {
+    background: var(--c-teal);
+  }
+  .spine__item:nth-child(3)::before {
+    background: var(--c-purple, #7e57c2);
+  }
+  .spine__item:nth-child(4)::before {
+    background: var(--c-green, #2e7d32);
+  }
+  .spine__item:nth-child(5)::before {
+    background: var(--c-ink-1);
+  }
+  .spine__num {
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    color: var(--c-ink-2);
+    opacity: 0.7;
+  }
+  .spine__name {
+    font-family: var(--font-display, serif);
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+  .spine__sub {
+    font-size: 0.875rem;
+    color: var(--c-ink-2);
+    margin: 0;
+    line-height: 1.5;
+    flex: 1;
+  }
+  .spine__level {
+    font-size: 0.7rem;
+    color: var(--c-ink-2);
+    opacity: 0.6;
+    letter-spacing: 0.05em;
+  }
+
+  /* ============================================================
+     WORKBOOK GRID — 2-card layout for the shareable editions.
+     ============================================================ */
+  .workbook-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--sp-5);
+  }
+  @media (max-width: 880px) {
+    .workbook-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .workbook-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+    padding: var(--sp-5);
+    border: 1px solid var(--c-rule);
+    border-radius: 8px;
+    background: var(--c-paper);
+    transition:
+      transform 0.2s ease,
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .workbook-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--c-amber);
+  }
+  .workbook-card--teal::before {
+    background: var(--c-teal);
+  }
+  .workbook-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--c-amber);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
+  }
+  .workbook-card--teal:hover {
+    border-color: var(--c-teal);
+  }
+  .workbook-card__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-2);
+  }
+  .workbook-card__badge {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    padding: 4px 8px;
+    border-radius: 3px;
+    background: rgba(46, 125, 50, 0.1);
+    color: var(--c-green, #2e7d32);
+    border: 1px solid rgba(46, 125, 50, 0.25);
+  }
+  .workbook-card__id {
+    font-size: 0.7rem;
+    color: var(--c-ink-2);
+    opacity: 0.6;
+    letter-spacing: 0.08em;
+  }
+  .workbook-card__title {
+    font-family: var(--font-display, serif);
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+  }
+  .workbook-card__meta {
+    display: flex;
+    gap: var(--sp-3);
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    font-size: 0.75rem;
+    color: var(--c-ink-2);
+    opacity: 0.85;
+  }
+  .workbook-card__meta li {
+    padding-right: var(--sp-3);
+    border-right: 1px solid var(--c-rule);
+  }
+  .workbook-card__meta li:last-child {
+    border-right: none;
+  }
+  .workbook-card__sum {
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: var(--c-ink-1);
+    margin: 0;
+    flex: 1;
+  }
+  .workbook-card__foot {
+    display: flex;
+    gap: var(--sp-2);
+    padding-top: var(--sp-3);
+    border-top: 1px dashed var(--c-rule);
+  }
+  .workbook-card__foot .btn {
+    flex: 1;
+    text-align: center;
+    justify-content: center;
+  }
+</style>
