@@ -243,6 +243,66 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
   <ArchitectureBrief />
 
   <!-- ============================================================
+       5b. AI HISTORY — 2022 → 2026 prompt-to-graph timeline.
+       v7.6 — surfaces the 5-rung spine as a public-facing story.
+       Each rung is a year, a layer, a one-line summary, and a
+       BOTTOM LINE. Closes with the STELLA callout + workbooks
+       CTA. NDA-clean — describes the public arc, not the org.
+       ============================================================ -->
+  <section class="ai-history" id="ai-history" aria-label="AI history 2022 to 2026">
+    <div class="container">
+      <p class="ai-history__eyebrow mono" data-reveal="lift-sm">
+        AI ENGINEERING · 2022 → 2026 · THE FIVE-RUNG SPINE
+      </p>
+      <h2 class="ai-history__title" data-words data-reveal>
+        Prompt <span class="hl">→</span> skills <span class="hl">→</span> agents <span class="hl">→</span> loops <span class="hl">→</span> graphs.
+      </h2>
+      <p class="ai-history__lede" data-reveal>
+        Five compounding layers. Most teams plateau at the loop rung.
+        The graph rung is the productivity unlock — and it's where I live.
+      </p>
+
+      <ol class="ai-history__rail" data-reveal>
+        <li class="ai-rung ai-rung--prompt">
+          <span class="ai-rung__year mono">2022</span>
+          <h3 class="ai-rung__name">Prompt engineering</h3>
+          <p class="ai-rung__sub">GPT-3 + instruction tuning. One prompt, one output. ~5 layers (system · context · instruction · output schema · evidence).</p>
+          <p class="ai-rung__line mono">/ everyone</p>
+        </li>
+        <li class="ai-rung ai-rung--chatgpt">
+          <span class="ai-rung__year mono">2023</span>
+          <h3 class="ai-rung__name">ChatGPT + RAG</h3>
+          <p class="ai-rung__sub">ChatGPT public (Nov 2022). Retrieval-Augmented Generation goes mainstream. Vector databases, LangChain. Knowledge cutoff is the wall.</p>
+          <p class="ai-rung__line mono">/ builder</p>
+        </li>
+        <li class="ai-rung ai-rung--agent">
+          <span class="ai-rung__year mono">2024</span>
+          <h3 class="ai-rung__name">Agents + tools</h3>
+          <p class="ai-rung__sub">Function calling. Auto-GPT. LangGraph. The agent loop becomes a thing. Context windows are still the wall — agents die mid-task.</p>
+          <p class="ai-rung__line mono">/ researcher</p>
+        </li>
+        <li class="ai-rung ai-rung--skill">
+          <span class="ai-rung__year mono">2025</span>
+          <h3 class="ai-rung__name">Skills + loops</h3>
+          <p class="ai-rung__sub">Anthropic's Agent Skills (progressive disclosure). Karpathy's autoresearch loop (700 experiments). The 5-must-have contract. Eval-gate enforcement.</p>
+          <p class="ai-rung__line mono">/ engineer</p>
+        </li>
+        <li class="ai-rung ai-rung--graph">
+          <span class="ai-rung__year mono">2026</span>
+          <h3 class="ai-rung__name">Graphs · STELLA</h3>
+          <p class="ai-rung__sub">Typed entities + relations + provenance. Shared memory across agents. Routing files. Karpathy's LLM Wiki. The graph rung — where 53-agent offices live.</p>
+          <p class="ai-rung__line mono">/ architect · STELLA</p>
+        </li>
+      </ol>
+
+      <p class="ai-history__closer" data-reveal>
+        <b>You are here.</b> The spine is what I build on — and what I publish in the
+        <a href={path('/workbooks')}>workbook trilogy</a>.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================================================
        6. FIT — education + credentials (compact, no change)
        ============================================================ -->
   <section class="fit" id="fit" aria-label="Education and credentials">
@@ -339,7 +399,7 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
   .hero__name .word:nth-child(2),
   .hero__name .word:nth-child(3) {
     font-style: italic;
-    color: var(--c-primary-2);
+    color: var(--c-amber);
     font-weight: 500;
   }
 
@@ -387,7 +447,7 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
   /* Inherit Odometer's tabular-num + accent color from the component;
      only override the label to match the home's chrome (uppercase, mono). */
   .hero__kpi :global(.odometer__value) {
-    color: var(--c-primary-2);
+    color: var(--c-amber);
     font: 600 28px / 1 var(--serif-display);
     letter-spacing: -0.022em;
   }
@@ -498,7 +558,7 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     border-bottom: 1px solid var(--c-rule);
   }
   .pillar--ai .pillar__lane {
-    color: var(--c-primary-2);
+    color: var(--c-amber);
   }
   .pillar__viz {
     margin: 0 0 20px;
@@ -683,5 +743,135 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     .contact__eyebrow {
       font-size: 18px;
     }
+  }
+
+  /* ============================================================
+     v7.6 — AI HISTORY TIMELINE (2022 → 2026)
+     5-rung spine as a public-facing story. Surfaces STELLA +
+     graph engineering alongside the prompt→graph journey.
+     ============================================================ */
+  .ai-history {
+    padding-block: var(--sp-9);
+    background: var(--c-bg);
+    border-top: var(--border-paper);
+    border-bottom: var(--border-paper);
+  }
+  .ai-history > .container {
+    max-width: 1180px;
+  }
+  .ai-history__eyebrow {
+    font: 500 11px / 1.4 var(--ff-mono);
+    color: var(--c-amber);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+  .ai-history__title {
+    font: 600 clamp(28px, 3.6vw, 44px) / 1.15 var(--serif-display);
+    color: var(--c-ink);
+    margin: 0 0 16px;
+    letter-spacing: -0.022em;
+    max-width: 880px;
+  }
+  .ai-history__title .hl {
+    color: var(--c-amber);
+  }
+  .ai-history__lede {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: var(--c-ink-2);
+    max-width: 720px;
+    margin: 0 0 48px;
+  }
+  .ai-history__rail {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 32px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--c-rule);
+    border-bottom: 1px solid var(--c-rule);
+    position: relative;
+  }
+  @media (max-width: 980px) {
+    .ai-history__rail {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 580px) {
+    .ai-history__rail {
+      grid-template-columns: 1fr;
+    }
+  }
+  .ai-rung {
+    padding: 24px 20px;
+    border-right: 1px solid var(--c-rule);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+    background: var(--c-bg);
+    transition: background 0.2s ease;
+  }
+  .ai-rung:last-child {
+    border-right: none;
+  }
+  @media (max-width: 980px) {
+    .ai-rung:nth-child(2n) {
+      border-right: none;
+    }
+  }
+  .ai-rung:hover {
+    background: var(--c-bg-elev, rgba(255, 255, 255, 0.02));
+  }
+  .ai-rung__year {
+    font: 600 13px / 1 var(--ff-mono);
+    color: var(--c-amber);
+    letter-spacing: 0.16em;
+  }
+  .ai-rung__name {
+    font: 600 18px / 1.25 var(--serif-display);
+    color: var(--c-ink);
+    margin: 4px 0 6px;
+    letter-spacing: -0.01em;
+  }
+  .ai-rung--graph .ai-rung__name {
+    color: var(--c-amber);
+  }
+  .ai-rung__sub {
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: var(--c-ink-2);
+    margin: 0 0 12px;
+    flex: 1;
+  }
+  .ai-rung__line {
+    font-size: 0.68rem;
+    color: var(--c-ink-3);
+    letter-spacing: 0.1em;
+    margin: 0;
+    text-transform: uppercase;
+    padding-top: 8px;
+    border-top: 1px dashed var(--c-rule);
+  }
+  .ai-history__closer {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--c-ink-2);
+    margin: 0;
+    padding: 20px 24px;
+    background: var(--c-bg-elev, rgba(255, 255, 255, 0.02));
+    border-left: 3px solid var(--c-amber);
+    border-radius: 0 4px 4px 0;
+  }
+  .ai-history__closer b {
+    color: var(--c-amber);
+    font-weight: 600;
+  }
+  .ai-history__closer a {
+    color: var(--c-amber);
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
 </style>
