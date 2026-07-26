@@ -1343,14 +1343,17 @@ const paginate = (items: any[]) => {
     background: var(--c-warn-soft);
   }
   @media (prefers-color-scheme: dark) {
-    :root:not([data-theme='light']) .filter-chip.is-active {
+    /* v7.6.3 — was :root:not([data-theme='light']). BaseLayout now writes
+       body.theme-light / body.theme-dark; the root-attribute selector
+       never matched and the dark chip styling silently dropped. */
+    :root body:not(.theme-light) .filter-chip.is-active {
       color: var(--c-amber);
       border-color: var(--c-amber);
       /* v6.10.36 — token alias for F13 amber family. */
       background: var(--c-amber-soft);
     }
   }
-  :root[data-theme='dark'] .filter-chip.is-active {
+  :root body.theme-dark .filter-chip.is-active {
     color: var(--c-amber);
     border-color: var(--c-amber);
     background: var(--c-amber-soft);
@@ -1439,14 +1442,15 @@ const paginate = (items: any[]) => {
     font-weight: 600;
   }
   @media (prefers-color-scheme: dark) {
-    :root:not([data-theme='light']) .proof-pager__chip.is-active {
+    /* v7.6.3 — was :root:not([data-theme='light']). See filter-chip note. */
+    :root body:not(.theme-light) .proof-pager__chip.is-active {
       color: var(--c-amber);
       border-color: var(--c-amber);
       /* v6.10.36 — token alias for F13 amber family. */
       background: var(--c-amber-soft);
     }
   }
-  :root[data-theme='dark'] .proof-pager__chip.is-active {
+  :root body.theme-dark .proof-pager__chip.is-active {
     color: var(--c-amber);
     border-color: var(--c-amber);
     background: var(--c-amber-soft);

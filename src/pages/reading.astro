@@ -167,7 +167,7 @@ function statusPill(s: ShelfItem['status']): string {
           now.map((b) => (
             <li class="shelf__row">
               <div class="shelf__meta">
-                <span class="shelf__status shelf__status--{b.status}">{statusPill(b.status)}</span>
+                <span class:list={['shelf__status', `shelf__status--${b.status}`]}>{statusPill(b.status)}</span>
                 <span class="shelf__year mono">{b.year}</span>
               </div>
               <div class="shelf__body">
@@ -199,7 +199,7 @@ function statusPill(s: ShelfItem['status']): string {
           queue.map((b) => (
             <li class="shelf__row">
               <div class="shelf__meta">
-                <span class="shelf__status shelf__status--{b.status}">{statusPill(b.status)}</span>
+                <span class:list={['shelf__status', `shelf__status--${b.status}`]}>{statusPill(b.status)}</span>
                 <span class="shelf__year mono">{b.year}</span>
               </div>
               <div class="shelf__body">
@@ -223,7 +223,7 @@ function statusPill(s: ShelfItem['status']): string {
           reference.map((b) => (
             <li class="shelf__row">
               <div class="shelf__meta">
-                <span class="shelf__status shelf__status--{b.status}">{statusPill(b.status)}</span>
+                <span class:list={['shelf__status', `shelf__status--${b.status}`]}>{statusPill(b.status)}</span>
                 <span class="shelf__year mono">{b.year}</span>
               </div>
               <div class="shelf__body">
@@ -310,7 +310,7 @@ function statusPill(s: ShelfItem['status']): string {
     width: fit-content;
   }
   .shelf__status--reading {
-    background: color-mix(in oklab, var(--c-amber) 0.18%, transparent);
+    background: color-mix(in oklab, var(--c-amber) 18%, transparent);
     color: var(--c-amber-deep);
   }
   .shelf__status--re-read {

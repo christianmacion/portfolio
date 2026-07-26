@@ -39,14 +39,22 @@ const typeFaces = [
   { name: 'KaTeX_Main', ff: 'var(--ff-math)', role: 'Math serifs (rendered by KaTeX)' },
 ];
 
-// === (b) Color palette — v6.17 warm-dim register ===========================
+// === (b) Color palette — v7.6.3 matcha + terracotta ========================
+// v7.6.3 — owner feedback 2026-07-26: "matcha and complement". The palette
+// pivoted from "warm-dim + amber + cobalt" (v6.17) to "matcha (sage) +
+// terracotta + amber" (v7.6.2). Cobalt is retained on the token sheet for
+// legacy `--c-cobalt` consumers (deep nav links, Stella login) but is no
+// longer a brand accent.
 const palette = [
-  { name: '--j-bg', hex: '#1a1714', role: 'warm-dark · page background (v6.17)' },
+  { name: '--j-bg', hex: '#1a1714', role: 'warm-dark · page background (v6.17, retained)' },
   { name: '--j-ink', hex: '#ebe5d4', role: 'paper-cream · primary text (v6.17)' },
-  { name: '--j-warn', hex: '#a88a3e', role: 'warm amber · primary accent (v6.17)' },
-  { name: '--j-cobalt', hex: '#5b6ba8', role: 'cobalt · secondary accent (v6.17, sparse)' },
+  { name: '--j-paper', hex: '#f4eee0', role: 'matcha cream · light-variant bg (v7.6.2)' },
+  { name: '--j-sage', hex: '#7ba755', role: 'matcha · primary accent (v7.6.2, dark)' },
+  { name: '--j-sage-3', hex: '#9bc26e', role: 'matcha · hover / highlight (v7.6.2)' },
+  { name: '--j-warn', hex: '#a88a3e', role: 'warm amber · single-accent callout (v6.17)' },
+  { name: '--j-terracotta', hex: '#b15c3a', role: 'terracotta · 2nd accent / featured (v7.6.2)' },
   { name: '--j-ink-3', hex: '#8a857a', role: 'muted ink · meta + data-neutral signal (F14)' },
-  { name: '--j-paper', hex: '#ebe5d4', role: 'paper-cream · light-variant bg (v6.17)' },
+  { name: '--j-cobalt', hex: '#5b6ba8', role: 'cobalt · legacy accent (kept for nav links + login)' },
 ];
 
 // === (c) Spacing scale — 6 cells ===========================================

@@ -1,0 +1,132 @@
+/* ============================================================
+   AI-TREND-GRID — 5-rung AI timeline / model-release timeline primitive.
+   Shared between /ai (Section 2c) and /research/frontier-models.
+
+   v7.6 — extracted from ai.astro to make the pattern reusable across
+   pages that surface a 5-cell "year × rung" or "year × release"
+   timeline. All class names are unscoped (no [data-astro-cid-...]).
+
+   Usage:
+     <ol class="ai-trend-grid" aria-label="...">
+       <li class="ai-trend">
+         <p class="ai-trend__year mono">YEAR</p>
+         <h3 class="ai-trend__name">Name</h3>
+         <p class="ai-trend__body">Then / Now / Lesson copy here.</p>
+         <a href="..." class="ai-trend__link">W1: ... →</a>
+       </li>
+       ... 5 cells
+     </ol>
+
+   Variants:
+   - .ai-trend-grid--3col : force 3-col layout at all widths
+   - .ai-trend-grid--2col : force 2-col layout at all widths
+   ============================================================ */
+
+.ai-trend-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--sp-3);
+  list-style: none;
+  padding: 0;
+  margin: var(--sp-6) 0 var(--sp-5);
+}
+
+.ai-trend {
+  display: flex;
+  flex-direction: column;
+  background: var(--c-bg-2);
+  border: 1px solid var(--c-rule);
+  border-left: 3px solid var(--c-amber);
+  border-radius: var(--radius-sm);
+  padding: var(--sp-4) var(--sp-4) var(--sp-3);
+  gap: var(--sp-2);
+  transition:
+    border-color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.ai-trend:hover {
+  border-color: var(--c-amber);
+  transform: translateY(-1px);
+}
+
+.ai-trend__year {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--c-amber);
+  font-weight: 600;
+  margin: 0;
+}
+
+.ai-trend__name {
+  font: 600 1.02rem / 1.25 var(--serif-display);
+  color: var(--c-ink);
+  margin: 0 0 var(--sp-1);
+  letter-spacing: -0.01em;
+}
+
+.ai-trend__body {
+  font-size: 0.84rem;
+  line-height: 1.5;
+  color: var(--c-ink-2);
+  margin: 0;
+}
+
+.ai-trend__body b {
+  color: var(--c-ink);
+  font-weight: 600;
+}
+
+.ai-trend__link {
+  color: var(--c-amber);
+  font: 500 0.78rem / 1.1 var(--ff-mono);
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  margin-top: auto;
+  padding-top: var(--sp-2);
+  border-top: 1px dashed var(--c-rule);
+  transition: opacity 0.2s ease;
+}
+
+.ai-trend__link:hover {
+  opacity: 0.7;
+}
+
+/* Responsive collapse: 5 → 3 → 2 → 1 cols as the viewport narrows.
+   The 5-rung spine / model timeline needs to read at every breakpoint
+   without horizontal scroll. */
+@media (max-width: 1280px) {
+  .ai-trend-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 880px) {
+  .ai-trend-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 560px) {
+  .ai-trend-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Optional explicit overrides for surfaces that need fewer columns. */
+.ai-trend-grid--3col {
+  grid-template-columns: repeat(3, 1fr);
+}
+.ai-trend-grid--2col {
+  grid-template-columns: repeat(2, 1fr);
+}
+@media (max-width: 880px) {
+  .ai-trend-grid--3col {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 560px) {
+  .ai-trend-grid--3col,
+  .ai-trend-grid--2col {
+    grid-template-columns: 1fr;
+  }
+}

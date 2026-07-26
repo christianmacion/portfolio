@@ -113,7 +113,12 @@ const { class: className } = Astro.props;
   }
   .arch-brief__title .hl {
     font-style: italic;
-    color: var(--c-phi);
+    /* v7.6.2 — was --c-phi (gold). Owner feedback 2026-07-26: "improve the
+       colors to matcha and complement to the main page." The italicized
+       highlight is now terracotta — the warm complement to the new sage
+       2nd accent (was cobalt). Sage body / terracotta callout reads as
+       a deliberate two-accent palette, not a single-color site. */
+    color: var(--c-terracotta);
   }
   .arch-brief__grid {
     display: grid;

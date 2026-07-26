@@ -813,94 +813,11 @@ const platformInputs = [
     opacity: 0.7;
   }
 
-  /* ============================================================
-     SECTION 2c — AI TRENDS 2022→2026
-     ============================================================ */
-  /* v7.6 — Five-rung spine mapped to the public AI trend line.
-     Card grid: 5 columns on wide, stacks to 1 col under 980px.
-     Each card carries a year chip + Then/Now/Lesson triplet
-     so the takeaway survives contact with the next year. */
-  .ai-trend-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: var(--sp-3);
-    list-style: none;
-    padding: 0;
-    margin: var(--sp-6) 0 var(--sp-5);
-  }
-  .ai-trend {
-    display: flex;
-    flex-direction: column;
-    background: var(--c-bg-2);
-    border: 1px solid var(--c-rule);
-    border-left: 3px solid var(--c-amber);
-    border-radius: var(--radius-sm);
-    padding: var(--sp-4) var(--sp-4) var(--sp-3);
-    gap: var(--sp-2);
-    transition:
-      border-color 0.18s ease,
-      transform 0.18s ease;
-  }
-  .ai-trend:hover {
-    border-color: var(--c-amber);
-    transform: translateY(-1px);
-  }
-  .ai-trend__year {
-    font-size: 0.72rem;
-    text-transform: uppercase;
-    letter-spacing: 0.18em;
-    color: var(--c-amber);
-    font-weight: 600;
-    margin: 0;
-  }
-  .ai-trend__name {
-    font: 600 1.02rem / 1.25 var(--serif-display);
-    color: var(--c-ink);
-    margin: 0 0 var(--sp-1);
-    letter-spacing: -0.01em;
-  }
-  .ai-trend__body {
-    font-size: 0.84rem;
-    line-height: 1.5;
-    color: var(--c-ink-2);
-    margin: 0;
-  }
-  .ai-trend__body b {
-    color: var(--c-ink);
-    font-weight: 600;
-  }
-  .ai-trend__link {
-    color: var(--c-amber);
-    font: 500 0.78rem / 1.1 var(--ff-mono);
-    letter-spacing: 0.04em;
-    text-decoration: none;
-    margin-top: auto;
-    padding-top: var(--sp-2);
-    border-top: 1px dashed var(--c-rule);
-    transition: opacity 0.2s ease;
-  }
-  .ai-trend__link:hover {
-    opacity: 0.7;
-  }
-  /* Responsive collapse: 5 → 3 → 2 → 1 cols as the viewport narrows.
-     The 5-rung spine needs to read at every breakpoint without
-     horizontal scroll. */
-  @media (max-width: 1280px) {
-    .ai-trend-grid {
-      grid-template-columns: repeat(3, 1fr);
-    }
-  }
-  @media (max-width: 880px) {
-    .ai-trend-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-  @media (max-width: 560px) {
-    .ai-trend-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-  /* Narrow-sub variant for the closing paragraph (matches section__sub) */
+  /* Section 2c — AI TRENDS 2022→2026
+     Note: the .ai-trend-grid + .ai-trend card styles live in
+     src/styles/trend-grid.css (loaded by BaseLayout) so the
+     pattern is reusable across /ai, /research/frontier-models, etc.
+     Only the page-specific helpers (section__sub--narrow) live here. */
   .section__sub--narrow {
     max-width: 64ch;
     margin-top: var(--sp-5);

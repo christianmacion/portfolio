@@ -132,15 +132,15 @@ const companions = [
   <Marquee
     items={[
       { head: 'M3', tail: '$0.30 / $1.20 · MARKET FLOOR', accent: 'warn' },
-      { head: 'K3', tail: '1M CTX · TERMINAL-BENCH 88.3', accent: 'cobalt' },
+      { head: 'K3', tail: '1M CTX · TERMINAL-BENCH 88.3', accent: 'sage' },
       { head: 'OPUS 4.8', tail: '1M CTX · DEFAULT · CACHE-7.5%', accent: 'sage' },
       { head: 'FABLE 5', tail: '$10 / $50 · ENTERPRISE', accent: 'violet' },
-      { head: 'GPT-5.6 SOL', tail: 'OPENAI · REFERENCE', accent: 'cobalt' },
+      { head: 'GPT-5.6 SOL', tail: 'OPENAI · REFERENCE', accent: 'sage' },
       { head: 'GEMINI 3 PRO', tail: 'GOOGLE · REFERENCE', accent: 'sage' },
       { head: 'SWE-BENCH', tail: 'K3 76.8% · M3 59.0% · OPUS 71.4', accent: 'terracotta' },
       { head: 'HLE', tail: 'HUMANITY-LAST-EXAM · DECISION-MOVING', accent: 'warn' },
       { head: 'CLAW-EVAL', tail: 'M3 74.5 #1 · AGENTIC', accent: 'sage' },
-      { head: 'CACHE BREAK', tail: 'f≈0.44 · OPUS UNDERCUTS K3', accent: 'cobalt' },
+      { head: 'CACHE BREAK', tail: 'f≈0.44 · OPUS UNDERCUTS K3', accent: 'sage' },
     ]}
     speedSec={64}
     trailing="r3 frontier-models ledger · 6 reference models"
@@ -211,6 +211,126 @@ const companions = [
     </div>
   </section>
 
+  {/* === Model-release timeline — shared .ai-trend-grid primitive
+       Pattern reused from /ai#ai-trends (Section 2c, v7.6).
+       Each card: year chip + model release + the benchmark/feature
+       that mattered for a quant-research workflow + lesson.
+       CSS lives in src/styles/trend-grid.css (loaded by BaseLayout). */}
+  <section class="section" id="model-timeline" data-toc-id="model-timeline" data-toc-label="Model-release timeline">
+    <div class="container">
+      <header class="section__head">
+        <p class="section__eyebrow">Frontier-model release timeline</p>
+        <h2 class="section__title" data-words>Five releases that re-priced the field.</h2>
+        <p class="section__sub">
+          The brief compares six models in 2026; the timeline below shows the five releases between
+          2023 and 2026 that made that comparison necessary. Each card carries the benchmark or
+          feature that mattered for a quant-research workflow and the lesson that survived contact
+          with the next year.
+        </p>
+      </header>
+
+      <ol class="ai-trend-grid" aria-label="Frontier model releases 2023 to 2026">
+        <li class="ai-trend">
+          <p class="ai-trend__year mono">2023</p>
+          <h3 class="ai-trend__name">GPT-4 · function calling</h3>
+          <p class="ai-trend__body">
+            <b>Release.</b> 2023-03 GPT-4. 2023-06 function calling + JSON-mode. The model becomes
+            a tool user, not a search replacement.
+          </p>
+          <p class="ai-trend__body">
+            <b>Then.</b> Single-shot prompting; no eval harness; ground truth = the model's claim.
+          </p>
+          <p class="ai-trend__body">
+            <b>Lesson.</b> Grounding beats fluency. A tool-using model with a real corpus beats a
+            fluent model hallucinating.
+          </p>
+        </li>
+
+        <li class="ai-trend">
+          <p class="ai-trend__year mono">2024</p>
+          <h3 class="ai-trend__name">Sonnet 3.5 · Computer Use</h3>
+          <p class="ai-trend__body">
+            <b>Release.</b> 2024-06 Claude Sonnet 3.5. 2024-10 Anthropic Computer Use beta.
+            SWE-bench Verified 60% — agents that read repos, run tests, ship patches.
+          </p>
+          <p class="ai-trend__body">
+            <b>Then.</b> Solo agent with planner + tool belt. Eval harness measures plan quality,
+            not just answer quality.
+          </p>
+          <p class="ai-trend__body">
+            <b>Lesson.</b> The harness is the product. A long-context prompt is not an agent.
+          </p>
+        </li>
+
+        <li class="ai-trend">
+          <p class="ai-trend__year mono">2025</p>
+          <h3 class="ai-trend__name">MCP · DeepSeek-R1</h3>
+          <p class="ai-trend__body">
+            <b>Release.</b> 2025-02 Anthropic MCP. 2025-Q1 DeepSeek-R1 ships reasoning on par with
+            closed models at 1/30 the inference cost.
+          </p>
+          <p class="ai-trend__body">
+            <b>Then.</b> Eval-driven rollout replaces vibe-driven rollout. The 5-must-have loop
+            contract (terminal state, idempotent write, dedupe key, coverage filter, AAR) lands
+            in production.
+          </p>
+          <p class="ai-trend__body">
+            <b>Lesson.</b> A loop without a coverage filter is a leak. Pricing power moves to the
+            team with the cheapest unit of verified work.
+          </p>
+        </li>
+
+        <li class="ai-trend">
+          <p class="ai-trend__year mono">2026</p>
+          <h3 class="ai-trend__name">Opus 4.5 · Claw-Eval 74.5 #1</h3>
+          <p class="ai-trend__body">
+            <b>Release.</b> 2026-03 Claude Opus 4.5. Agentic eval Claw-Eval 74.5 — agentic
+            leadership. MCP ecosystem maturity catches up.
+          </p>
+          <p class="ai-trend__body">
+            <b>Then.</b> Multi-agent offices stop being demos and start compounding. Cache
+            break-even (f ≈ 0.44) is where Opus undercuts K3 on input price for cache-heavy loops.
+          </p>
+          <p class="ai-trend__body">
+            <b>Lesson.</b> The graph rung is where the office starts compounding. Without shared
+            memory, every agent re-derives the corpus and shipping velocity collapses.
+          </p>
+          <a href={path('/research/frontier-models.pdf')} class="ai-trend__link">
+            Brief § 4, 6 — agent economics →
+          </a>
+        </li>
+
+        <li class="ai-trend">
+          <p class="ai-trend__year mono">2026</p>
+          <h3 class="ai-trend__name">Kimi K3 · Terminal-Bench 88.3</h3>
+          <p class="ai-trend__body">
+            <b>Release.</b> 2026-07-16 Kimi K3. 2.8T-param sparse MoE at $3/$15. Terminal-Bench 2.1
+            88.3 (above Opus 4.8's 84.6).
+          </p>
+          <p class="ai-trend__body">
+            <b>Then.</b> A three-tier routing policy becomes the default: M3 for bulk, K3 for
+            long-horizon synthesis and terminal-agentic tasks, Opus 4.8 for cache-friendly
+            agent loops and precision-critical writing.
+          </p>
+          <p class="ai-trend__body">
+            <b>Lesson.</b> "Which model is best" is the wrong question. The right question is which
+            tier each workload deserves.
+          </p>
+          <a href={path('/research/frontier-models.pdf')} class="ai-trend__link">
+            Brief § 8 — decision matrix →
+          </a>
+        </li>
+      </ol>
+
+      <p class="section__sub" style="margin-top: var(--sp-5); max-width: 64ch;">
+        Same primitive as <a href={path('/ai#ai-trends')}>Section 2c on /ai</a> — the 5-rung spine mapped to
+        the public AI trend line. Here it surfaces the specific model releases that re-priced the
+        field between 2023 and 2026. The workbook W1 covers the spine; W2 covers the graph rung
+        that makes multi-agent offices viable.
+      </p>
+    </div>
+  </section>
+
   <section class="section" id="read">
     <div class="container container-narrow">
       <header class="section__head">
@@ -232,7 +352,7 @@ const companions = [
             <li>letter PDF</li>
           </ul>
         </div>
-        <a class="cta-card__btn mono" href="/research/frontier-models.pdf" rel="noopener">
+        <a class="cta-card__btn mono" href={path('/research/frontier-models.pdf')} rel="noopener">
           {PDF_LABEL}
         </a>
         <p class="cta-card__note">

@@ -103,7 +103,11 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
   <section class="desk-map" aria-label="Three-layer world map">
     <div class="container">
       <p class="desk-map__eyebrow mono">EARTH · VENUES · EVENTS · SIGNALS · 24H</p>
-      <EarthMap width={1080} height={540} />
+      {/* v7.6.3 — wrapped in .desk-map__frame so the SVG scales to the
+          container via aspect-ratio instead of overflowing at 360px. */}
+      <div class="desk-map__frame">
+        <EarthMap width={1080} height={540} />
+      </div>
     </div>
   </section>
 
@@ -292,6 +296,20 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     text-transform: uppercase;
     margin: 0 0 16px;
   }
+  .desk-map__frame {
+    /* v7.6.3 — wrap the 1080×540 SVG so it scales to the container.
+       EarthMap intrinsic is 1080×540 (2:1); aspect-ratio + 100% width
+       keeps the projection correct on every viewport. */
+    overflow: hidden;
+    border-radius: var(--radius-md, 6px);
+    border: 1px solid var(--c-rule);
+    aspect-ratio: 2 / 1;
+  }
+  .desk-map__frame :global(svg) {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
 
   /* === Events table === */
   .desk-events {
@@ -363,13 +381,19 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     letter-spacing: 0.1em;
   }
   .desk-events__pill--critical {
-    color: var(--c-amber-deep);
+    /* v7.6.3 — was amber-deep. Critical events deserve the warm alarming
+       accent. Terracotta is the second accent reserved for featured
+       callouts — severity-critical is the natural fit. */
+    color: var(--c-terracotta);
   }
   .desk-events__pill--moderate {
+    /* v7.6.3 — amber kept. Moderate is the single-accent warning register. */
     color: var(--c-amber);
   }
   .desk-events__pill--mild {
-    color: var(--c-ink-2);
+    /* v7.6.3 — sage replaces ink-2. Mild signals read as institutional
+       not muted — sage puts them in the matcha accent family. */
+    color: var(--c-sage);
   }
   .desk-events__title-cell {
     font: 500 14px / 1.4 var(--ff-sans);

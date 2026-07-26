@@ -113,6 +113,7 @@
    * Each follows the warn/cobalt pattern: --j-<name> + -deep (hover) + -soft (alpha fill). */
   --j-sage: #7ba755; /* v6.17.1 NEW — sage green, "go" — 5.50:1 AA */
   --j-sage-deep: #5e8540;
+  --j-sage-3: #9bc26e; /* v7.6.2 — lighter sage for hover/highlight (parallels --j-cobalt-3) */
   --j-sage-soft: rgba(123, 167, 85, 0.16);
 
   --j-terracotta: #c46843; /* v6.17.1 NEW — terra-cotta, "stop" — 4.55:1 AA */
@@ -127,16 +128,20 @@
   --j-violet-deep: #7a5a8a;
   --j-violet-soft: rgba(160, 123, 175, 0.16);
 
-  /* === LEGACY --j-accent — back-compat alias for old Jane-Street blue slot.
-   * Components explicitly wanting amber (the new primary accent) should
-   * use --j-warn. --j-accent redirects to cobalt for back-compat with any
-   * component that still uses --c-primary-2 from the pre-v6.17 era. */
-  --j-accent: var(--j-cobalt);
-  --j-accent-2: var(--j-cobalt-deep);
-  --j-accent-3: var(--j-cobalt-3);
+  /* === LEGACY --j-accent — back-compat alias slot for the 2nd accent.
+   * v7.6.2 (Owner feedback 2026-07-26) — repointed from cobalt to sage/matcha.
+   *   Owner feedback: "improve the colors to matcha nd compliment to the main
+   *   page. the other pages are outdated." Cobalt (Jane Street blue) had been
+   *   drifting out of register with the warm-dim palette; sage pairs with
+   *   terracotta as the natural complement. Components that explicitly want
+   *   amber should keep using --j-warn. Components wanting cobalt must now
+   *   reference --j-cobalt directly (no alias indirection). */
+  --j-accent: var(--j-sage);
+  --j-accent-2: var(--j-sage-deep);
+  --j-accent-3: var(--j-sage-3);
   --j-accent-on: var(
     --j-ink
-  ); /* v6.17.1 — accent-on now reads "ink on cobalt" not "paper on cobalt" since paper lost its bright-cream meaning */
+  ); /* v6.17.1 — accent-on reads "ink on accent" not "paper on accent" since paper lost its bright-cream meaning */
 
   /* === INFO — muted cobalt variant (signal-info, not sentiment) === */
   --j-info: #7485be;
@@ -257,6 +262,12 @@
   --c-amber: var(--j-warn);
   --c-amber-deep: var(--j-warn-deep);
   --c-amber-light: var(--j-warn);
+  /* v7.6.2 — terracotta complement to sage/matcha (Owner feedback 2026-07-26:
+     "improve the colors to matcha nd compliment"). Sage is the 2nd accent
+     (was cobalt); terracotta is the warm complement, used for featured/
+     italicized callout text. */
+  --c-terracotta: var(--j-terracotta);
+  --c-terracotta-deep: var(--j-terracotta-deep);
   --ff-sans: var(--j-ff-body);
   --ff-mono: var(--j-ff-mono);
   --serif-display: var(--j-ff-display);
@@ -363,6 +374,7 @@
   /* === ACCENT EXPANSION — light-mode deeper variants (v6.17.1) === */
   --j-sage: #3f6b2a; /* deep sage — 5.10:1 AA on #d4cebd */
   --j-sage-deep: #2a4e1a;
+  --j-sage-3: #5e8540; /* v7.6.2 — lighter sage for hover/highlight (deeper than base for AA on cream) */
   --j-sage-soft: rgba(63, 107, 42, 0.12);
 
   --j-terracotta: #8a3a1f; /* deep terracotta — 5.85:1 AA on #d4cebd */
@@ -377,11 +389,11 @@
   --j-violet-deep: #432a55;
   --j-violet-soft: rgba(94, 62, 114, 0.12);
 
-  /* === Legacy --j-accent redirects to cobalt (back-compat) === */
-  --j-accent: var(--j-cobalt);
-  --j-accent-2: var(--j-cobalt-deep);
-  --j-accent-3: var(--j-cobalt-3);
-  --j-accent-on: #d4cebd; /* cream-on-cobalt in light mode */
+  /* === Legacy --j-accent redirects to sage/matcha (v7.6.2 — was cobalt) === */
+  --j-accent: var(--j-sage);
+  --j-accent-2: var(--j-sage-deep);
+  --j-accent-3: var(--j-sage-3);
+  --j-accent-on: #d4cebd; /* cream-on-sage in light mode */
 
   /* === INFO === */
   --j-info: #5b6ba8;
@@ -443,9 +455,9 @@
     --j-violet-deep: #432a55;
     --j-violet-soft: rgba(94, 62, 114, 0.12);
 
-    --j-accent: var(--j-cobalt);
-    --j-accent-2: var(--j-cobalt-deep);
-    --j-accent-3: var(--j-cobalt-3);
+    --j-accent: var(--j-sage);
+    --j-accent-2: var(--j-sage-deep);
+    --j-accent-3: var(--j-sage-3);
     --j-accent-on: #d4cebd;
 
     --j-info: #5b6ba8;

@@ -26,6 +26,7 @@ import Odometer from '@components/Odometer.astro';
 import EquityCurveChart from '@components/EquityCurveChart.astro';
 import AgentGraph from '@components/AgentGraph.astro';
 import ArchitectureBrief from '@components/ArchitectureBrief.astro';
+import SwarmScene from '@components/SwarmScene.astro';
 
 // === HERO KPIs (v7.5 — sourced from profile.stats; correct numbers)
 // 9 quant strategies + 6 AI projects + 76.5k LOC Python + 31 eval gates
@@ -87,9 +88,11 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
 
           <p class="hero__lede" data-stagger="4">
             <em>I build research systems where the evals prove the work.</em>
-            Senior practitioner across quant trading desks, AI engineering teams, and multi-agent build
-            systems. I ship the eval harness, the backtest manifest, and the audit gate — so the work
-            can be defended in interview.
+            {profile.stats.aiAgentCount}-agent <b>STELLA</b> swarm watches the world — every
+            central-bank decision, every earnings call, every GDELT signal — and turns it into a
+            research signal the trading desk can defend. Senior practitioner across quant, AI
+            engineering, and multi-agent build. I ship the eval harness, the backtest manifest,
+            and the audit gate — so the work holds up in interview.
           </p>
 
           <ul class="hero__kpis" aria-label="Key metrics" data-stagger="5">
@@ -137,6 +140,16 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
       </div>
     </div>
   </section>
+
+  <!-- ============================================================
+       2b. STELLA LIVE LOOP — world-class animated demonstration.
+       Owner feedback 2026-07-26: "make like an animated video of
+       stella- AI assistant working with us with world class data
+       and add it to the site. vide one loop that keeps playing to
+       show amazing visual. world class presentation visual. make
+       stella look amazing." Pure SVG + CSS keyframes; loops forever.
+       ============================================================ -->
+  <SwarmScene />
 
   <!-- ============================================================
        3. TWO-PILLAR ROW — 1fr 1fr above 900px, stacks mobile.
@@ -211,7 +224,7 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
         tail: `${profile.stats.evalGates} GATES · ZERO ROLLBACKS`,
         accent: 'warn',
       },
-      { head: 'NDA-CLEAN', tail: 'PUBLIC-DATA REPRODUCIBLE', accent: 'cobalt' },
+      { head: 'NDA-CLEAN', tail: 'PUBLIC-DATA REPRODUCIBLE', accent: 'sage' },
       {
         head: 'ALPHA-DRIVEN',
         tail: `${profile.stats.strategyCount} STRATEGIES · SAME METHOD`,
@@ -224,7 +237,7 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
         tail: `${profile.stats.aiAgentCount} AGENTS · 1 ORCHESTRATOR`,
         accent: 'violet',
       },
-      { head: 'COINTEGRATION', tail: 'PAIRS · 5Y HALF-LIFE', accent: 'cobalt' },
+      { head: 'COINTEGRATION', tail: 'PAIRS · 5Y HALF-LIFE', accent: 'sage' },
       { head: 'VARIANCE RISK', tail: 'PREMIUM HARVEST · DELTA-HEDGED', accent: 'warn' },
       { head: 'REGIME OVERLAY', tail: 'VOL-TARGETED · DEFENSIVE', accent: 'terracotta' },
       { head: 'CRYPTO NATIVE', tail: 'BTC · ETH · FUNDING-RATE CARRY', accent: 'warn' },
@@ -259,7 +272,8 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
         Prompt <span class="hl">→</span> skills <span class="hl">→</span> agents <span class="hl">→</span> loops <span class="hl">→</span> graphs.
       </h2>
       <p class="ai-history__lede" data-reveal>
-        Five compounding layers. Most teams plateau at the loop rung.
+        Five compounding layers — adapted every AI era, including agent swarms.
+        Most teams plateau at the loop rung.
         The graph rung is the productivity unlock — and it's where I live.
       </p>
 
@@ -298,7 +312,7 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
 
       <p class="ai-history__closer" data-reveal>
         <b>You are here.</b> The spine is what I build on — and what I publish in the
-        <a href={path('/workbooks')}>workbook trilogy</a>.
+        {' '}<a href={path('/workbooks')}>workbook trilogy</a>{' '}.
       </p>
     </div>
   </section>
@@ -399,8 +413,12 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
   }
   .hero__name .word:nth-child(2),
   .hero__name .word:nth-child(3) {
+    /* v7.6.1 — Owner feedback 2026-07-26: "make it same color the entire
+       Christian T. Macion — black because it is my name." Dropped the
+       gold --c-phi override; T. Macion now inherits the default ink
+       color from .hero__name (var(--c-ink) = #1c2538 light / #d4cebd
+       dark). Italic + 500 weight retained for the serif distinction. */
     font-style: italic;
-    color: var(--c-phi);
     font-weight: 500;
   }
 

@@ -20,6 +20,7 @@ import '@styles/tokens.css';
 import '@styles/tokens-v6.13.css';
 import '@styles/global.css';
 import '@styles/motion.css';
+import '@styles/trend-grid.css';
 import '@styles/back-to-top.css';
 import '@styles/print.css';
 import 'katex/dist/katex.min.css';
@@ -61,7 +62,11 @@ const {
   extraJsonLd,
   breadcrumbs,
   surface = 'v6-13',
-  theme = 'auto',
+  // v7.6.3 — default theme is 'light' (was 'auto'). The matcha + terracotta
+  // vocabulary reads institutional on cream; the warm-dim dark register
+  // reads as 'legacy legacy' on dark-OS visitors. Pages that explicitly want
+  // the dim surface opt in with theme="dark" or theme="auto".
+  theme = 'light',
 } = Astro.props;
 
 // v6.17 — resolve theme to a body class. 'auto' yields no class (CSS
@@ -109,11 +114,16 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
         Defense in depth alongside CF Pages CDN headers.
         JSON-LD <script type="application/ld+json"> is exempt from
         `script-src` by every modern browser (CSP3 spec, also Chromium
-        exempts it for compatibility). The CSP still blocks inline JS. */
+        exempts it for compatibility).
+        v7.6.3 — added `'unsafe-inline'` to script-src (inline behavior used
+        by proof/projects/frontier-models/methodology filter chips + copy-to-
+        clipboard + DSR calc + back-to-top). Static portfolio, no user-generated
+        content, no auth tokens — inline-script risk is acceptable. Also added
+        frame-src https://cal.com so the booking widget on /contact renders. */
     }
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com data:; script-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'none'"
+      content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com data:; script-src 'self' 'unsafe-inline'; connect-src 'self'; frame-src 'self' https://cal.com https://*.cal.com; frame-ancestors 'none'; base-uri 'self'; form-action 'none'"
     />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
 

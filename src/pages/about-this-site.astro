@@ -29,12 +29,19 @@ const stack = [
 ];
 
 const tokens = {
+  // v7.6.3 — owner feedback 2026-07-26: "matcha and complement". These
+  // values mirror the live `src/styles/tokens-v6.13.css` (v7.6.2 matcha
+  // + terracotta), not the legacy v6.10 amber/cobalt palette. The
+  // earlier literals (legacy #0a0e14, #8c6f2a, #c98a16) were stale and
+  // visibly contradicted the rest of the site.
   color: [
-    { name: '--c-primary', value: '#0a0e14', role: 'near-black brand' },
-    { name: '--c-primary-2-deep', value: '#8c6f2a', role: 'text-safe amber' },
-    { name: '--c-amber', value: '#c98a16', role: 'decorative terminal-amber' },
-    { name: '--c-paper', value: '#fbfaf6', role: 'term-paper cream' },
-    { name: '--c-bg', value: '#ffffff', role: 'paper background' },
+    { name: '--c-primary', value: '#1a1714', role: 'warm-dark · primary text on cream' },
+    { name: '--c-primary-2', value: '#7ba755', role: 'matcha · primary 2nd accent (v7.6.2)' },
+    { name: '--c-sage', value: '#7ba755', role: 'matcha · sage primary accent (v7.6.2)' },
+    { name: '--c-terracotta', value: '#b15c3a', role: 'terracotta · warm 2nd accent (v7.6.2)' },
+    { name: '--c-amber', value: '#a88a3e', role: 'warm amber · single-accent callout' },
+    { name: '--c-paper', value: '#f4eee0', role: 'matcha cream · light-mode page bg' },
+    { name: '--c-bg', value: '#f4eee0', role: 'matcha cream · alias for paper' },
   ],
   type: [
     { name: 'Inter', role: 'sans, 400/500/600/700' },

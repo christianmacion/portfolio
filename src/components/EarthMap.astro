@@ -189,7 +189,12 @@ const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circ
     aria-label={`Three-layer world map: ${venues.length} research venues, ${worldEvents.length} curated world events, ${dedupGdelt.length} GDELT signals (24h). Equirectangular projection.`}
     preserveAspectRatio="xMidYMid meet"
   >
-    <title>Three-layer world map — venues · world events · GDELT 24h</title>
+    {/* v7.6.1 — Owner feedback 2026-07-26: removed the top-level <title>
+       element. WebKit/Safari rendered it as a persistent dark tooltip
+       overlapping the center of the map. The aria-label on the same <svg>
+       (above) carries the accessible name. Per-venue/per-event <title>
+       elements below are KEPT — they correctly show on hover of each
+       individual marker, which is the intended behavior. */}
 
     {/* === Background grid lines (equator + prime meridian) === */}
     <line x1="0" y1={equatorY} x2={width} y2={equatorY} class="earth-map__eq"></line>

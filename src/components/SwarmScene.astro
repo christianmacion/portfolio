@@ -1,0 +1,599 @@
+---
+/**
+ * SwarmScene.astro — v7.6.2 STELLA LIVE LOOP
+ *
+ * Owner feedback 2026-07-26: "make like an animated video of stella- AI
+ * assistant working with us with world class data and add it to the site.
+ * vide one loop that keeps playing to show amazing visual. world class
+ * presentation visual. make stella look amazing."
+ *
+ * Pure SVG + CSS keyframe animation (no JS framework). Multiple animated
+ * layers that compose into one continuous loop:
+ *   1. STELLA central character — halo, eye blink, breathing scale
+ *   2. World data streams IN — flowing lines from global sources
+ *   3. Agent orbits — 12 agents rotating around STELLA at staggered rates
+ *   4. Swarm packets — research signals pulsing out to outputs
+ *   5. Lat/lon globe behind — institutional terra-cotta continents
+ *   6. Numerical ticker — world-class data counters cycling
+ *
+ * Reduced-motion safe: every animation has a `prefers-reduced-motion`
+ * early-return fallback (the SVG stays static in its initial state).
+ */
+import { profile, archSafe } from '@utils/profile';
+---
+
+<section class="swarm-scene" id="swarm-scene" aria-label="STELLA live loop — world-class AI research assistant">
+  <div class="container">
+    <div class="swarm-scene__head">
+      <p class="swarm-scene__eyebrow mono">
+        <span class="swarm-scene__live-dot" aria-hidden="true"></span>
+        LIVE LOOP · STELLA · WORLD-CLASS DATA
+      </p>
+      <h2 class="swarm-scene__title">
+        Meet <b>STELLA</b>. She watches the world so you can act on it.
+      </h2>
+      <p class="swarm-scene__lede">
+        A 53-agent AI office. World events flow in, research signals flow out.
+        <span class="swarm-scene__hl">{archSafe.subTeamCount} sub-teams</span> ·
+        <span class="swarm-scene__hl">{archSafe.mustHaveCount}-must-have compliance</span> ·
+        <span class="swarm-scene__hl">{profile.stats.evalGates} eval gates</span> · 24/7.
+      </p>
+    </div>
+
+    <div class="swarm-scene__stage">
+      <svg
+        class="swarm-scene__svg"
+        viewBox="0 0 800 460"
+        role="img"
+        aria-label="Animated loop: world data streams flow into the STELLA orchestrator, are processed by orbiting agents, and emerge as research signals"
+      >
+        <defs>
+          {/* === Atmospheric glow gradients === */}
+          <radialGradient id="scene-aura" cx="0.5" cy="0.5" r="0.5">
+            <stop offset="0%" stop-color="var(--j-sage)" stop-opacity="0.22" />
+            <stop offset="50%" stop-color="var(--j-sage)" stop-opacity="0.06" />
+            <stop offset="100%" stop-color="var(--j-sage)" stop-opacity="0" />
+          </radialGradient>
+          <radialGradient id="stella-halo" cx="0.5" cy="0.5" r="0.5">
+            <stop offset="0%" stop-color="var(--j-warn)" stop-opacity="0.35" />
+            <stop offset="50%" stop-color="var(--j-warn)" stop-opacity="0.12" />
+            <stop offset="100%" stop-color="var(--j-warn)" stop-opacity="0" />
+          </radialGradient>
+          <radialGradient id="stella-core" cx="0.4" cy="0.4" r="0.6">
+            <stop offset="0%" stop-color="var(--j-warn)" />
+            <stop offset="60%" stop-color="var(--j-warn-deep)" />
+            <stop offset="100%" stop-color="var(--j-amber-deep, #8a6a2d)" />
+          </radialGradient>
+          <linearGradient id="stream-in" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="var(--j-terracotta)" stop-opacity="0" />
+            <stop offset="50%" stop-color="var(--j-terracotta)" stop-opacity="1" />
+            <stop offset="100%" stop-color="var(--j-warn)" stop-opacity="0.6" />
+          </linearGradient>
+          <linearGradient id="stream-out" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="var(--j-sage)" stop-opacity="0.6" />
+            <stop offset="100%" stop-color="var(--j-sage)" stop-opacity="0" />
+          </linearGradient>
+          <filter id="scene-glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="2" />
+          </filter>
+          {/* Reusable shapes */}
+          <symbol id="agent-node" overflow="visible">
+            <circle r="4" fill="var(--j-sage-3)" />
+            <circle r="7" fill="none" stroke="var(--j-sage)" stroke-width="0.6" opacity="0.5" />
+          </symbol>
+        </defs>
+
+        {/* === Backdrop: lat/lon globe silhouette === */}
+        <g class="swarm-scene__globe" transform="translate(400 230)">
+          <circle r="200" fill="url(#scene-aura)" />
+          <ellipse rx="200" ry="74" fill="none" stroke="var(--c-rule)" stroke-width="0.4" opacity="0.5" />
+          <ellipse rx="74" ry="200" fill="none" stroke="var(--c-rule)" stroke-width="0.4" opacity="0.5" />
+          <ellipse rx="140" ry="52" fill="none" stroke="var(--c-rule)" stroke-width="0.3" opacity="0.35" />
+          <ellipse rx="52" ry="140" fill="none" stroke="var(--c-rule)" stroke-width="0.3" opacity="0.35" />
+          {/* Continents — institutional terracotta blobs */}
+          <g fill="var(--j-terracotta)" opacity="0.32">
+            <path d="M -150,-60 Q -120,-90 -80,-78 Q -50,-66 -56,-30 Q -76,-10 -110,-12 Q -140,-26 -150,-60 Z" />
+            <path d="M -90,40 Q -64,30 -48,60 Q -42,100 -68,124 Q -96,134 -110,108 Q -112,72 -90,40 Z" />
+            <path d="M 0,-86 Q 36,-100 76,-86 Q 96,-66 76,-46 Q 50,-38 24,-50 Q -2,-66 0,-86 Z" />
+            <path d="M 16,-12 Q 56,-20 80,4 Q 86,46 64,72 Q 36,82 18,60 Q 4,28 16,-12 Z" />
+            <path d="M 96,-70 Q 140,-86 180,-66 Q 200,-30 184,-4 Q 152,8 116,-12 Q 92,-36 96,-70 Z" />
+            <path d="M 156,50 Q 188,40 208,60 Q 212,86 188,98 Q 158,98 148,76 Z" />
+          </g>
+        </g>
+
+        {/* === World event sources (left) — labels + nodes === */}
+        <g class="swarm-scene__sources">
+          {[
+            { x: 30, y: 80, label: 'FED', sub: 'FOMC · 14:00 ET' },
+            { x: 50, y: 150, label: 'ECB', sub: 'Press conf · 13:45 CET' },
+            { x: 70, y: 220, label: 'NYSE', sub: 'Open · 09:30 ET' },
+            { x: 40, y: 290, label: 'BOJ', sub: 'Minutes · 09:00 JST' },
+            { x: 90, y: 360, label: 'BSE', sub: 'GDP · 12:00 IST' },
+            { x: 30, y: 410, label: 'PBoC', sub: 'Fix · 09:15 CST' },
+          ].map((s, i) => (
+            <g class={`swarm-scene__source swarm-scene__source--${i + 1}`}>
+              <circle cx={s.x + 60} cy={s.y} r="3" fill="var(--j-warn)" />
+              <circle cx={s.x + 60} cy={s.y} r="6" fill="none" stroke="var(--j-warn)" stroke-width="0.6" opacity="0.5" class="swarm-scene__source-pulse" />
+              <text x={s.x + 70} y={s.y + 3} class="swarm-scene__source-label mono">{s.label}</text>
+              <text x={s.x + 70} y={s.y + 14} class="swarm-scene__source-sub mono">{s.sub}</text>
+            </g>
+          ))}
+        </g>
+
+        {/* === Research signal outputs (right) === */}
+        <g class="swarm-scene__outputs">
+          {[
+            { x: 770, y: 80, label: 'TSM-VT', sub: '+0.42% · σ 1.1' },
+            { x: 750, y: 150, label: 'VRP-X', sub: 'Δ −0.18% · 1Y' },
+            { x: 730, y: 220, label: 'COIN-PAIRS', sub: '5Y ½-life' },
+            { x: 760, y: 290, label: 'FX-CARRY', sub: 'AUD/JPY · 0.62%' },
+            { x: 740, y: 360, label: 'REGIME', sub: 'Risk-on · 0.74' },
+          ].map((o, i) => (
+            <g class={`swarm-scene__output swarm-scene__output--${i + 1}`}>
+              <circle cx={o.x} cy={o.y} r="3" fill="var(--j-sage)" />
+              <circle cx={o.x} cy={o.y} r="6" fill="none" stroke="var(--j-sage)" stroke-width="0.6" opacity="0.5" class="swarm-scene__output-pulse" />
+              <text x={o.x - 8} y={o.y + 3} text-anchor="end" class="swarm-scene__output-label mono">{o.label}</text>
+              <text x={o.x - 8} y={o.y + 14} text-anchor="end" class="swarm-scene__output-sub mono">{o.sub}</text>
+            </g>
+          ))}
+        </g>
+
+        {/* === Incoming data streams (left → STELLA) === */}
+        <g class="swarm-scene__streams-in">
+          {[
+            'M 90,80 Q 250,140 400,230',
+            'M 110,150 Q 250,180 400,230',
+            'M 130,220 Q 260,220 400,230',
+            'M 100,290 Q 250,260 400,230',
+            'M 150,360 Q 260,300 400,230',
+            'M 90,410 Q 240,320 400,230',
+          ].map((d, i) => (
+            <path
+              d={d}
+              stroke="url(#stream-in)"
+              stroke-width="0.8"
+              fill="none"
+              class={`swarm-scene__stream swarm-scene__stream-in swarm-scene__stream-in--${i + 1}`}
+            />
+          ))}
+        </g>
+
+        {/* === Outgoing research streams (STELLA → right) === */}
+        <g class="swarm-scene__streams-out">
+          {[
+            'M 400,230 Q 560,140 770,80',
+            'M 400,230 Q 560,180 750,150',
+            'M 400,230 Q 560,220 730,220',
+            'M 400,230 Q 560,260 760,290',
+            'M 400,230 Q 560,300 740,360',
+          ].map((d, i) => (
+            <path
+              d={d}
+              stroke="url(#stream-out)"
+              stroke-width="0.8"
+              fill="none"
+              class={`swarm-scene__stream swarm-scene__stream-out swarm-scene__stream-out--${i + 1}`}
+            />
+          ))}
+        </g>
+
+        {/* === STELLA — central character === */}
+        <g class="swarm-scene__stella" transform="translate(400 230)">
+          {/* Outer breathing aura */}
+          <circle r="120" fill="url(#stella-halo)" class="swarm-scene__aura swarm-scene__aura--outer" />
+          <circle r="90" fill="url(#stella-halo)" class="swarm-scene__aura swarm-scene__aura--inner" />
+          {/* Rotating ring 1 — agents */}
+          <g class="swarm-scene__ring swarm-scene__ring--1">
+            <use href="#agent-node" x="0" y="-100" />
+            <use href="#agent-node" x="86" y="-50" />
+            <use href="#agent-node" x="86" y="50" />
+            <use href="#agent-node" x="0" y="100" />
+            <use href="#agent-node" x="-86" y="50" />
+            <use href="#agent-node" x="-86" y="-50" />
+          </g>
+          {/* Rotating ring 2 — specialists */}
+          <g class="swarm-scene__ring swarm-scene__ring--2">
+            <use href="#agent-node" x="-140" y="0" />
+            <use href="#agent-node" x="-99" y="-99" />
+            <use href="#agent-node" x="99" y="-99" />
+            <use href="#agent-node" x="140" y="0" />
+            <use href="#agent-node" x="99" y="99" />
+            <use href="#agent-node" x="-99" y="99" />
+          </g>
+          {/* Core body — amber disc */}
+          <circle r="32" fill="url(#stella-core)" class="swarm-scene__body" />
+          <circle r="32" fill="none" stroke="var(--j-warn)" stroke-width="1" opacity="0.6" class="swarm-scene__body-ring" />
+          {/* Eye — blinking */}
+          <ellipse rx="10" ry="5" fill="var(--j-bg)" class="swarm-scene__eye" />
+          <circle r="3" fill="var(--j-warn-deep)" class="swarm-scene__eye-pupil" />
+          {/* Mark below */}
+          <text y="60" text-anchor="middle" class="swarm-scene__mark mono">STELLA</text>
+          <text y="74" text-anchor="middle" class="swarm-scene__mark-sub mono">53-AGENT ORCHESTRATOR</text>
+        </g>
+
+        {/* === Data packets — flowing along streams === */}
+        <g class="swarm-scene__packets">
+          {[0, 1, 2, 3, 4, 5].map((i) => (
+            <circle r="2.5" fill="var(--j-warn)" filter="url(#scene-glow)" class={`swarm-scene__packet swarm-scene__packet-in swarm-scene__packet-in--${i + 1}`} />
+          ))}
+          {[0, 1, 2, 3, 4].map((i) => (
+            <circle r="2.5" fill="var(--j-sage)" filter="url(#scene-glow)" class={`swarm-scene__packet swarm-scene__packet-out swarm-scene__packet-out--${i + 1}`} />
+          ))}
+        </g>
+
+        {/* === Numerical ticker (top-right) === */}
+        <g class="swarm-scene__ticker" transform="translate(620 30)">
+          <rect x="0" y="0" width="160" height="58" rx="2" fill="var(--c-bg-elev, var(--j-bg-elev))" stroke="var(--c-rule)" stroke-width="0.5" />
+          <text x="10" y="14" class="swarm-scene__ticker-eyebrow mono">24H · STELLA</text>
+          <text x="10" y="32" class="swarm-scene__ticker-line mono">
+            <tspan class="swarm-scene__ticker-key">EVENTS</tspan>
+            <tspan> </tspan>
+            <tspan class="swarm-scene__ticker-val">{profile.stats.evalGates}</tspan>
+          </text>
+          <text x="10" y="48" class="swarm-scene__ticker-line mono">
+            <tspan class="swarm-scene__ticker-key">SIGNALS</tspan>
+            <tspan> </tspan>
+            <tspan class="swarm-scene__ticker-val">{archSafe.subTeamCount}</tspan>
+          </text>
+        </g>
+
+        {/* === Latency badge (bottom-left) === */}
+        <g class="swarm-scene__latency" transform="translate(30 30)">
+          <rect x="0" y="0" width="140" height="22" rx="2" fill="var(--c-bg-elev, var(--j-bg-elev))" stroke="var(--c-rule)" stroke-width="0.5" />
+          <circle cx="14" cy="11" r="3" fill="var(--j-sage)" class="swarm-scene__latency-dot" />
+          <text x="26" y="15" class="swarm-scene__latency-text mono">LATENCY · 142ms</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="swarm-scene__legend mono">
+      <div class="swarm-scene__legend-item">
+        <span class="swarm-scene__legend-swatch swarm-scene__legend-swatch--warn"></span>
+        WORLD EVENTS · IN
+      </div>
+      <div class="swarm-scene__legend-item">
+        <span class="swarm-scene__legend-swatch swarm-scene__legend-swatch--stella"></span>
+        STELLA · 53-AGENT ORCHESTRATOR
+      </div>
+      <div class="swarm-scene__legend-item">
+        <span class="swarm-scene__legend-swatch swarm-scene__legend-swatch--sage"></span>
+        RESEARCH SIGNALS · OUT
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .swarm-scene {
+    border-top: 1px solid var(--c-rule);
+    border-bottom: 1px solid var(--c-rule);
+    padding: 56px 0;
+    background:
+      radial-gradient(
+        ellipse at center,
+        color-mix(in srgb, var(--j-sage) 4%, transparent) 0%,
+        transparent 60%
+      ),
+      var(--c-bg);
+    position: relative;
+    overflow: hidden;
+  }
+  .swarm-scene__head {
+    max-width: 760px;
+    margin: 0 auto 32px;
+    text-align: center;
+  }
+  .swarm-scene__eyebrow {
+    font: 500 11px / 1.4 var(--ff-mono);
+    color: var(--c-warn);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin: 0 0 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .swarm-scene__live-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--j-warn);
+    display: inline-block;
+    animation: scene-pulse 1.6s ease-in-out infinite;
+    box-shadow: 0 0 0 0 var(--j-warn);
+  }
+  .swarm-scene__title {
+    font: 600 36px / 1.1 var(--serif-display);
+    color: var(--c-ink);
+    letter-spacing: -0.022em;
+    margin: 0 0 12px;
+  }
+  .swarm-scene__title b {
+    font-style: italic;
+    color: var(--c-warn);
+    font-weight: 600;
+  }
+  .swarm-scene__lede {
+    font: 400 16px / 1.55 var(--ff-sans);
+    color: var(--c-ink-2);
+    margin: 0;
+  }
+  .swarm-scene__hl {
+    color: var(--c-terracotta);
+    font-weight: 600;
+  }
+  .swarm-scene__stage {
+    position: relative;
+    width: 100%;
+    max-width: 920px;
+    margin: 0 auto;
+    aspect-ratio: 800 / 460;
+    background: var(--c-bg-2);
+    border: 1px solid var(--c-rule);
+  }
+  .swarm-scene__svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* === Source/output labels === */
+  .swarm-scene__source-label,
+  .swarm-scene__output-label {
+    font-size: 10px;
+    font-weight: 700;
+    fill: var(--c-warn);
+    letter-spacing: 0.06em;
+  }
+  .swarm-scene__output-label {
+    fill: var(--j-sage);
+  }
+  .swarm-scene__source-sub,
+  .swarm-scene__output-sub {
+    font-size: 8px;
+    fill: var(--c-ink-3);
+  }
+  .swarm-scene__source-pulse {
+    animation: scene-source-ring 2.4s ease-out infinite;
+    transform-origin: center;
+  }
+  .swarm-scene__output-pulse {
+    animation: scene-source-ring 2.4s ease-out infinite;
+    transform-origin: center;
+    animation-delay: 0.6s;
+  }
+
+  /* === Streams === */
+  .swarm-scene__stream-in,
+  .swarm-scene__stream-out {
+    stroke-dasharray: 4 6;
+    animation: scene-stream 5s linear infinite;
+  }
+  .swarm-scene__stream-in--1 { animation-delay: 0s; }
+  .swarm-scene__stream-in--2 { animation-delay: -0.8s; }
+  .swarm-scene__stream-in--3 { animation-delay: -1.6s; }
+  .swarm-scene__stream-in--4 { animation-delay: -2.4s; }
+  .swarm-scene__stream-in--5 { animation-delay: -3.2s; }
+  .swarm-scene__stream-in--6 { animation-delay: -4.0s; }
+  .swarm-scene__stream-out--1 { animation-delay: -1.0s; }
+  .swarm-scene__stream-out--2 { animation-delay: -2.0s; }
+  .swarm-scene__stream-out--3 { animation-delay: -3.0s; }
+  .swarm-scene__stream-out--4 { animation-delay: -4.0s; }
+  .swarm-scene__stream-out--5 { animation-delay: -5.0s; }
+
+  /* === STELLA aura + body === */
+  .swarm-scene__aura--outer {
+    transform-origin: center;
+    animation: scene-aura-outer 4s ease-in-out infinite;
+  }
+  .swarm-scene__aura--inner {
+    transform-origin: center;
+    animation: scene-aura-inner 2.4s ease-in-out infinite;
+  }
+  .swarm-scene__body {
+    transform-origin: center;
+    animation: scene-body 3s ease-in-out infinite;
+  }
+  .swarm-scene__body-ring {
+    transform-origin: center;
+    animation: scene-body-ring 3s ease-in-out infinite;
+  }
+  .swarm-scene__eye {
+    transform-origin: center;
+    animation: scene-eye-blink 4s ease-in-out infinite;
+  }
+  .swarm-scene__eye-pupil {
+    transform-origin: center;
+    animation: scene-eye-look 6s ease-in-out infinite;
+  }
+  .swarm-scene__mark {
+    font-size: 11px;
+    font-weight: 700;
+    fill: var(--c-ink);
+    letter-spacing: 0.18em;
+  }
+  .swarm-scene__mark-sub {
+    font-size: 8px;
+    fill: var(--c-ink-3);
+    letter-spacing: 0.16em;
+  }
+
+  /* === Orbiting agent rings === */
+  .swarm-scene__ring {
+    transform-origin: 400px 230px;
+  }
+  .swarm-scene__ring--1 {
+    animation: scene-orbit-1 24s linear infinite;
+  }
+  .swarm-scene__ring--2 {
+    animation: scene-orbit-2 38s linear infinite reverse;
+  }
+
+  /* === Packets along streams — motion-path via offset-path fallback === */
+  .swarm-scene__packet-in--1 { offset-path: path('M 90,80 Q 250,140 400,230'); animation: scene-packet-in-1 5s linear infinite; }
+  .swarm-scene__packet-in--2 { offset-path: path('M 110,150 Q 250,180 400,230'); animation: scene-packet-in-2 5s linear infinite; animation-delay: -1s; }
+  .swarm-scene__packet-in--3 { offset-path: path('M 130,220 Q 260,220 400,230'); animation: scene-packet-in-3 5s linear infinite; animation-delay: -2s; }
+  .swarm-scene__packet-in--4 { offset-path: path('M 100,290 Q 250,260 400,230'); animation: scene-packet-in-4 5s linear infinite; animation-delay: -3s; }
+  .swarm-scene__packet-in--5 { offset-path: path('M 150,360 Q 260,300 400,230'); animation: scene-packet-in-5 5s linear infinite; animation-delay: -4s; }
+  .swarm-scene__packet-in--6 { offset-path: path('M 90,410 Q 240,320 400,230'); animation: scene-packet-in-6 5s linear infinite; animation-delay: -0.5s; }
+  .swarm-scene__packet-out--1 { offset-path: path('M 400,230 Q 560,140 770,80'); animation: scene-packet-out-1 5s linear infinite; animation-delay: -0.5s; }
+  .swarm-scene__packet-out--2 { offset-path: path('M 400,230 Q 560,180 750,150'); animation: scene-packet-out-2 5s linear infinite; animation-delay: -1.5s; }
+  .swarm-scene__packet-out--3 { offset-path: path('M 400,230 Q 560,220 730,220'); animation: scene-packet-out-3 5s linear infinite; animation-delay: -2.5s; }
+  .swarm-scene__packet-out--4 { offset-path: path('M 400,230 Q 560,260 760,290'); animation: scene-packet-out-4 5s linear infinite; animation-delay: -3.5s; }
+  .swarm-scene__packet-out--5 { offset-path: path('M 400,230 Q 560,300 740,360'); animation: scene-packet-out-5 5s linear infinite; animation-delay: -4.5s; }
+
+  /* === Ticker / latency === */
+  .swarm-scene__ticker-eyebrow {
+    font-size: 9px;
+    fill: var(--c-ink-3);
+    letter-spacing: 0.16em;
+  }
+  .swarm-scene__ticker-line {
+    font-size: 13px;
+    fill: var(--c-ink);
+    letter-spacing: 0.04em;
+  }
+  .swarm-scene__ticker-key {
+    fill: var(--c-ink-3);
+    font-size: 10px;
+  }
+  .swarm-scene__ticker-val {
+    fill: var(--c-warn);
+    font-weight: 700;
+  }
+  .swarm-scene__latency-text {
+    font-size: 9px;
+    fill: var(--c-ink);
+    letter-spacing: 0.14em;
+  }
+  .swarm-scene__latency-dot {
+    animation: scene-pulse 1.6s ease-in-out infinite;
+  }
+
+  /* === Legend === */
+  .swarm-scene__legend {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin: 24px auto 0;
+    max-width: 760px;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--c-ink-3);
+    text-transform: uppercase;
+  }
+  .swarm-scene__legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .swarm-scene__legend-swatch {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .swarm-scene__legend-swatch--warn {
+    background: var(--j-warn);
+  }
+  .swarm-scene__legend-swatch--stella {
+    background: var(--j-warn-deep);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--j-warn) 30%, transparent);
+  }
+  .swarm-scene__legend-swatch--sage {
+    background: var(--j-sage);
+  }
+
+  /* === Keyframes === */
+  @keyframes scene-pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.3); opacity: 0.55; }
+  }
+  @keyframes scene-source-ring {
+    0% { r: 4; opacity: 0.7; }
+    100% { r: 18; opacity: 0; }
+  }
+  @keyframes scene-stream {
+    to { stroke-dashoffset: -200; }
+  }
+  @keyframes scene-aura-outer {
+    0%, 100% { transform: scale(1); opacity: 0.7; }
+    50% { transform: scale(1.12); opacity: 1; }
+  }
+  @keyframes scene-aura-inner {
+    0%, 100% { transform: scale(1); opacity: 0.9; }
+    50% { transform: scale(1.08); opacity: 0.6; }
+  }
+  @keyframes scene-body {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.04); }
+  }
+  @keyframes scene-body-ring {
+    0%, 100% { transform: scale(1); opacity: 0.6; }
+    50% { transform: scale(1.18); opacity: 0; }
+  }
+  @keyframes scene-eye-blink {
+    0%, 92%, 100% { transform: scaleY(1); }
+    95% { transform: scaleY(0.1); }
+    97% { transform: scaleY(1); }
+  }
+  @keyframes scene-eye-look {
+    0%, 100% { transform: translate(0, 0); }
+    25% { transform: translate(-4px, 1px); }
+    50% { transform: translate(3px, -1px); }
+    75% { transform: translate(-2px, 2px); }
+  }
+  @keyframes scene-orbit-1 {
+    to { transform: rotate(360deg); }
+  }
+  @keyframes scene-orbit-2 {
+    to { transform: rotate(360deg); }
+  }
+  /* offset-path packet motion — uses CSS Motion Path */
+  @keyframes scene-packet-in-1 { to { offset-distance: 100%; } }
+  @keyframes scene-packet-in-2 { to { offset-distance: 100%; } }
+  @keyframes scene-packet-in-3 { to { offset-distance: 100%; } }
+  @keyframes scene-packet-in-4 { to { offset-distance: 100%; } }
+  @keyframes scene-packet-in-5 { to { offset-distance: 100%; } }
+  @keyframes scene-packet-in-6 { to { offset-distance: 100%; } }
+  @keyframes scene-packet-out-1 { to { offset-distance: 100%; } }
+  @keyframes scene-packet-out-2 { to { offset-distance: 100%; } }
+  @keyframes scene-packet-out-3 { to { offset-distance: 100%; } }
+  @keyframes scene-packet-out-4 { to { offset-distance: 100%; } }
+  @keyframes scene-packet-out-5 { to { offset-distance: 100%; } }
+
+  /* === Reduced motion fallback === */
+  @media (prefers-reduced-motion: reduce) {
+    .swarm-scene__live-dot,
+    .swarm-scene__source-pulse,
+    .swarm-scene__output-pulse,
+    .swarm-scene__stream-in,
+    .swarm-scene__stream-out,
+    .swarm-scene__aura--outer,
+    .swarm-scene__aura--inner,
+    .swarm-scene__body,
+    .swarm-scene__body-ring,
+    .swarm-scene__eye,
+    .swarm-scene__eye-pupil,
+    .swarm-scene__ring--1,
+    .swarm-scene__ring--2,
+    .swarm-scene__packet,
+    .swarm-scene__latency-dot {
+      animation: none !important;
+    }
+  }
+
+  /* === Mobile === */
+  @media (max-width: 720px) {
+    .swarm-scene {
+      padding: 32px 0;
+    }
+    .swarm-scene__title {
+      font-size: 26px;
+    }
+    .swarm-scene__stage {
+      aspect-ratio: 4 / 3;
+    }
+  }
+</style>

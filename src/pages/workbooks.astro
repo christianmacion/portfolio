@@ -153,7 +153,7 @@ const workbooks = [
     inline) so the shareable HTML works on any host.
   */
   }
-  <section class="section" id="trilogy">
+  <section class="section" id="workbooks">
     <div class="container">
       <header class="section__head">
         <p class="section__eyebrow">Shareable</p>
@@ -186,7 +186,7 @@ const workbooks = [
 
               <footer class="workbook-card__foot">
                 <a href={path(w.href)} class="btn btn--primary btn--sm">Open HTML →</a>
-                <a href={w.pdfHref} class="btn btn--ghost btn--sm" download>PDF ↓</a>
+                <a href={path(w.pdfHref)} class="btn btn--ghost btn--sm" download>PDF ↓</a>
               </footer>
             </article>
           ))
@@ -253,13 +253,21 @@ const workbooks = [
     background: var(--c-teal);
   }
   .spine__item:nth-child(3)::before {
-    background: var(--c-purple, #7e57c2);
+    /* v7.6.3 — was var(--c-purple, #7e57c2). --c-purple is not a canonical
+       token; rail 3 fell back to a stale hex. Use --c-violet (the named
+       accent in the v6.17.1 palette) to match the rest of the spoke. */
+    background: var(--c-violet);
   }
   .spine__item:nth-child(4)::before {
-    background: var(--c-green, #2e7d32);
+    /* v7.6.3 — was var(--c-green, #2e7d32). --c-green is not canonical;
+       rail 4 fell back to a stale hex. Use --c-sage to match the page's
+       new matcha/sage/terracotta accent spine. */
+    background: var(--c-sage);
   }
   .spine__item:nth-child(5)::before {
-    background: var(--c-ink-1);
+    /* v7.6.3 — was var(--c-ink-1) (muted neutral, effectively invisible).
+       Use --c-ink-2 for the floor rail so the 5-rung spine actually reads. */
+    background: var(--c-ink-2);
   }
   .spine__num {
     font-size: 0.75rem;
