@@ -1,0 +1,700 @@
+---
+/**
+ * research/frontier-models.astro — static route for the r3 frontier-models
+ * consulting brief (PDF hosted at /research/frontier-models.pdf).
+ *
+ * Unlike /research/[...slug], this brief is NOT in the `project` collection —
+ * it's a public research artifact (PDF only). This page exists so a
+ * recruiter visiting /research/ can find, open, and read the brief from
+ * the portfolio surface.
+ *
+ * v6.10.x institutional chrome — warm-dark, amber accent, sharp corners,
+ * mono + 1 accent. Mirrors /research/[...slug].astro's discipline:
+ *   - eyebrow / H1 / sub / italic abstract
+ *   - executive summary (~200 words distilled from §1 of the PDF)
+ *   - why this brief matters (4 bullets)
+ *   - read the brief (CTA + size + page count)
+ *   - cite this brief (BibTeX + copy-to-clipboard, matching existing pattern)
+ *   - companion artifacts (PDF mirror, source MD, internal r1/r2 dossiers)
+ *   - methodology note
+ *   - last-updated stamp
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import CTABanner from '@components/CTABanner.astro';
+import Marquee from '@components/Marquee.astro';
+import PulseRing from '@components/PulseRing.astro';
+import { path } from '@utils/url';
+
+const TITLE = 'Frontier Models for Quant Research & AI Engineering';
+const PUBLISHED = '2026-07-18';
+const PDF_SIZE_BYTES = 845924;
+const PDF_PAGES = 18;
+const PDF_SIZE_MB = (PDF_SIZE_BYTES / 1024 / 1024).toFixed(2);
+const PDF_SIZE_KB = Math.round(PDF_SIZE_BYTES / 1024);
+const CITATION_KEY = 'macion2026frontiermodels';
+const CANONICAL_URL = 'https://christianmacion-portfolio.pages.dev/research/frontier-models/';
+const YEAR = '2026';
+const ISO_DATE = PUBLISHED;
+
+// Label-only PDF size for the CTA — show KB on the link text.
+const PDF_LABEL = `Open the ${PDF_PAGES}-page PDF · ${PDF_SIZE_KB} KB`;
+
+const bibtex = `@techreport{${CITATION_KEY},
+  author       = {Macion, Christian T.},
+  title        = {${TITLE}: M3, Kimi K3, Claude Opus 4.8 (with Fable 5, GPT-5.6 Sol, Gemini 3 Pro as references)},
+  institution  = {Independent research},
+  year         = {${YEAR}},
+  date         = {${ISO_DATE}},
+  note         = {Public-shareable consulting brief. Sourced throughout; gaps declared.},
+  url          = {${CANONICAL_URL}}
+}`;
+
+// Why this brief matters — 4 bullets mapping the brief to decision work.
+const whyMatters = [
+  {
+    k: 'QUANT-RESEARCH WORKLOAD DECISION-MAKING',
+    v: 'Routes six frontier models to the four workload classes a quant practice actually runs (bulk codegen, long-horizon synthesis, terminal-agentic execution, precision-critical writing). Distinguishes hygiene-check benchmarks (GPQA, saturated) from decision-moving ones (HLE, Terminal-Bench, cost-per-task).',
+  },
+  {
+    k: 'AI-ENGINEERING AGENT / SYSTEM DESIGN',
+    v: "Quantifies the cache break-even (f≈0.44) where Opus 4.8 undercuts K3 on input price; documents M3's vendor agentic numbers (Claw-Eval 74.5 #1; SWE-bench Pro 59.0); flags MCP/hooks/ecosystem maturity as a non-benchmarkable but decisive metric.",
+  },
+  {
+    k: 'COST-PER-TASK ANALYSIS',
+    v: 'Per-task arithmetic on four workload shapes (backtest codegen, research synthesis, agentic refactor, routine edits) at verified prices. M3 is structurally 10–20× cheaper than the middle tier on raw cost; the macro frame explains why open-weight-lineage prices have room to fall further.',
+  },
+  {
+    k: 'MACRO US / CHINA CONTEXT',
+    v: "Frames the price table against Stanford HAI's $285.9B US vs $12.4B China 2025 private-AI investment (23× ratio); explains the four-layer training-cost framework and why open-weight Chinese flagships are a strategic wedge against US-lab monetization.",
+  },
+];
+
+// Companion artifacts the reader can open alongside the brief.
+const companions = [
+  {
+    label: 'Frontier-models brief PDF (public mirror)',
+    href: '/research/frontier-models.pdf',
+    note: `${PDF_PAGES} pp · ${PDF_SIZE_KB} KB · letter format`,
+    kind: 'pdf',
+  },
+  {
+    label: 'Frontier-models brief — source markdown',
+    href: '/research/frontier-models-source.md',
+    note: 'public-shareable MD with figures and footnotes',
+    kind: 'md',
+  },
+];
+---
+
+<BaseLayout
+  title={`${TITLE} · Research brief`}
+  description={`Public-shareable consulting brief comparing M3, Kimi K3, and Claude Opus 4.8 (with Fable 5, GPT-5.6 Sol, Gemini 3 Pro) for quant research + AI engineering. ${PDF_PAGES} pages.`}
+  type="article"
+  breadcrumbs={[
+    { name: 'Home', href: '/' },
+    { name: 'Research', href: '/research' },
+    { name: 'Frontier Models', href: '/research/frontier-models' },
+  ]}
+>
+  <section class="hero" data-reveal id="hero">
+    <div class="container container-narrow">
+      <p class="eyebrow mono">
+        <PulseRing label="r3 live" variant="live" color="warn" />
+        <span>Model Intelligence Brief</span>
+        <span aria-hidden="true">·</span>
+        <span>{YEAR}</span>
+        <span aria-hidden="true">·</span>
+        <span class="mono">independent research</span>
+      </p>
+      <h1 class="hero__title" data-words>{TITLE}</h1>
+      <p class="hero__sub">
+        M3 · Kimi K3 · Claude Opus 4.8 — with Fable 5, GPT-5.6 Sol, and Gemini 3 Pro as reference
+        points.
+      </p>
+      <p class="hero__abstract">
+        <em
+          >Six frontier-class models, one question: which earns the default seat in a quant-research
+          and AI-engineering workflow — and what should route where. A metrics-first comparison,
+          with every number sourced and every gap declared.</em
+        >
+      </p>
+      <p class="hero__meta">
+        <span class="meta__date mono">Published {PUBLISHED}</span>
+        <span aria-hidden="true" class="meta__sep">·</span>
+        <span class="mono">{PDF_PAGES} pp · {PDF_SIZE_MB} MB · letter PDF</span>
+        <span aria-hidden="true" class="meta__sep">·</span>
+        <span class="mono">Independent research</span>
+      </p>
+    </div>
+  </section>
+
+  {/* v7.4-WIDE — model ledger marquee between hero and exec summary. */}
+  <Marquee
+    items={[
+      { head: 'M3', tail: '$0.30 / $1.20 · MARKET FLOOR', accent: 'warn' },
+      { head: 'K3', tail: '1M CTX · TERMINAL-BENCH 88.3', accent: 'cobalt' },
+      { head: 'OPUS 4.8', tail: '1M CTX · DEFAULT · CACHE-7.5%', accent: 'sage' },
+      { head: 'FABLE 5', tail: '$10 / $50 · ENTERPRISE', accent: 'violet' },
+      { head: 'GPT-5.6 SOL', tail: 'OPENAI · REFERENCE', accent: 'cobalt' },
+      { head: 'GEMINI 3 PRO', tail: 'GOOGLE · REFERENCE', accent: 'sage' },
+      { head: 'SWE-BENCH', tail: 'K3 76.8% · M3 59.0% · OPUS 71.4', accent: 'terracotta' },
+      { head: 'HLE', tail: 'HUMANITY-LAST-EXAM · DECISION-MOVING', accent: 'warn' },
+      { head: 'CLAW-EVAL', tail: 'M3 74.5 #1 · AGENTIC', accent: 'sage' },
+      { head: 'CACHE BREAK', tail: 'f≈0.44 · OPUS UNDERCUTS K3', accent: 'cobalt' },
+    ]}
+    speedSec={64}
+    trailing="r3 frontier-models ledger · 6 reference models"
+  />
+
+  <section class="section" id="summary">
+    <div class="container container-narrow">
+      <header class="section__head">
+        <h2 class="section__title" data-words>Executive summary</h2>
+        <p class="section__sub">
+          Distilled from §1 of the brief. The full 18-page PDF walks through each claim with primary
+          sources, an honest-nulls register, and a dated watch list.
+        </p>
+      </header>
+      <div class="prose">
+        <p>
+          The landscape rearranged itself in 48 hours. On 16 July 2026 Moonshot shipped Kimi K3 — a
+          2.8-trillion-parameter sparse MoE model at $3/$15 per million tokens — and within a day
+          published agentic benchmarks that place it in the frontier cluster: Terminal-Bench 2.1
+          88.3 (above Opus 4.8's 84.6, just under GPT-5.6 Sol's 88.8), MCP Atlas 84.2, and
+          BrowseComp 91.2.
+        </p>
+        <p>
+          The quieter finding is that M3 — the incumbent in this evaluation — is the market floor.
+          M3's public pricing of $0.30/$1.20 per million tokens with a 1M-token context window is
+          10–12.5× cheaper than K3 and roughly 17–21× cheaper than Opus 4.8 standard. M3 is not a
+          weak model: vendor SWE-bench Verified is 80.5, and independently measured throughput of
+          ~120–145 tokens/second is the fastest in this comparison by 2.3–5×.
+        </p>
+        <p>
+          Capability per dollar now has three distinct tiers. Fable 5 ($10/$50) leads general
+          reasoning and commands the highest price. The middle tier (K3, Opus 4.8, GPT-5.6 Sol,
+          Gemini 3 Pro) trades blows within a few points on most benchmarks at $2–$30. M3 delivers
+          90–95% of the middle tier's measured capability at one-tenth the price. The correct
+          question is not "which model is best" but which tier each workload deserves.
+        </p>
+        <p>
+          The recommendation: a three-tier routing policy — M3 for bulk and high-frequency work, K3
+          for long-horizon synthesis and terminal-agentic tasks where its numbers genuinely lead,
+          Opus 4.8 for cache-friendly agent loops and precision-critical writing — with Fable 5
+          reserved for the small set of problems where being right is worth 2–4× the price. Section
+          8 of the brief gives the full decision matrix and dated watch items.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt" id="why">
+    <div class="container container-narrow">
+      <header class="section__head">
+        <h2 class="section__title" data-words>Why this brief matters</h2>
+        <p class="section__sub">
+          Four threads — quant-research workload decisions, AI-engineering agent design, cost
+          economics, and the US/China macro frame — that make this a load-bearing reference rather
+          than a leaderboard recap.
+        </p>
+      </header>
+      <ol class="why">
+        {
+          whyMatters.map((w) => (
+            <li class="why__row">
+              <span class="why__k mono">{w.k}</span>
+              <p class="why__v">{w.v}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" id="read">
+    <div class="container container-narrow">
+      <header class="section__head">
+        <h2 class="section__title" data-words>Read the brief</h2>
+        <p class="section__sub">
+          Eighteen pages, letter format, public-shareable. Footnoted sources throughout; seven
+          declared gaps; one do-not-use register (claims in circulation that fail verification).
+        </p>
+      </header>
+      <div class="cta-card">
+        <div class="cta-card__head">
+          <span class="cta-card__eyebrow mono">Model Intelligence Brief</span>
+          <h3 class="cta-card__title">{TITLE}</h3>
+          <ul class="cta-card__meta mono">
+            <li>{PDF_PAGES} pages</li>
+            <li aria-hidden="true">·</li>
+            <li>{PDF_SIZE_MB} MB</li>
+            <li aria-hidden="true">·</li>
+            <li>letter PDF</li>
+          </ul>
+        </div>
+        <a class="cta-card__btn mono" href="/research/frontier-models.pdf" rel="noopener">
+          {PDF_LABEL}
+        </a>
+        <p class="cta-card__note">
+          Sourced figures, two independent verification gates, declared gaps. May be shared with
+          attribution.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt" id="cite">
+    <div class="container container-narrow">
+      <header class="section__head">
+        <h2 class="section__title" data-words>Cite this brief</h2>
+        <p class="section__sub">
+          A copy-pasteable BibTeX entry. The canonical landing is the URL in the entry — please link
+          there when citing in a paper, a thread, or a hiring review.
+        </p>
+      </header>
+
+      <div class="cite-card">
+        <pre class="cite-bib mono"><code>{bibtex}</code></pre>
+        <button
+          type="button"
+          class="cite-copy"
+          data-copy-target={CITATION_KEY}
+          aria-label="Copy BibTeX entry"
+        >
+          <span class="cite-copy__label">Copy BibTeX</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container container-narrow">
+      <header class="section__head">
+        <h2 class="section__title">Companion artifacts</h2>
+        <p class="section__sub">The public PDF and source MD are open for download.</p>
+      </header>
+      <ul class="comp">
+        {
+          companions.map((c) => (
+            <li class="comp__row">
+              <span class:list={['comp__kind', 'mono', `comp__kind--${c.kind}`]}>
+                {c.kind === 'pdf'
+                  ? 'PDF · PUBLIC'
+                  : c.kind === 'md'
+                    ? 'MD · PUBLIC'
+                    : 'PDF · INTERNAL'}
+              </span>
+              <a class="comp__link" href={c.href}>
+                {c.label}
+              </a>
+              <span class="comp__note mono">{c.note}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="container container-narrow">
+      <header class="section__head">
+        <h2 class="section__title">Methodology</h2>
+        <p class="section__sub">How the brief was produced.</p>
+      </header>
+      <div class="prose">
+        <p>
+          Produced by a multi-agent research pipeline: a research agent gathered and cross-checked
+          primary sources (every headline number required two independent citations or an explicit
+          single-source label); a cost-modeling agent computed task economics from verified prices;
+          two independent verification gates then audited the draft — one for arithmetic,
+          consistency, and claim-labeling; one for disclosure hygiene. Sources are footnoted
+          throughout; figures were generated from the same verified tables. Every gap is declared in
+          §9 of the brief (seven honest nulls and a nine-item do-not-use register) rather than
+          filled.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container container-narrow">
+      <p class="updated mono">Last updated {PUBLISHED} · Independent research</p>
+    </div>
+  </section>
+
+  <CTABanner
+    title="Want the full corpus?"
+    sub="The /research index lists every public-data systematic project. The /projects/quant and /projects/ai collections hold the long-form notes with code, gates, and reproducibility manifests."
+    primaryLabel="Browse research"
+    primaryHref={path('/research')}
+    secondaryLabel="See methodology"
+    secondaryHref={path('/methodology')}
+  />
+</BaseLayout>
+
+<script>
+  // Wire the copy-to-clipboard on the BibTeX card — mirrors the
+  // /research/[...slug].astro pattern. Uses navigator.clipboard;
+  // falls back to a hidden textarea for non-secure contexts.
+  document.querySelectorAll<HTMLButtonElement>('.cite-copy').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const card = btn.closest('.cite-card') as HTMLElement | null;
+      const pre = card?.querySelector('pre.cite-bib code') as HTMLElement | null;
+      const text = pre?.textContent ?? '';
+      const labelEl = btn.querySelector('.cite-copy__label');
+      const setLabel = (label: string) => {
+        if (labelEl) labelEl.textContent = label;
+      };
+      try {
+        await navigator.clipboard.writeText(text);
+        setLabel('Copied');
+      } catch {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        try {
+          // execCommand('copy') is deprecated but is the only path that
+          // works in non-secure contexts. Cast via unknown to silence TS.
+          (document as unknown as { execCommand: (cmd: string) => boolean }).execCommand('copy');
+          setLabel('Copied');
+        } catch {
+          setLabel('Press ⌘C');
+        }
+        ta.remove();
+      }
+      setTimeout(() => setLabel('Copy BibTeX'), 1800);
+    });
+  });
+</script>
+
+<style>
+  .hero {
+    padding-block: var(--sp-9) var(--sp-7);
+    background: var(--c-paper);
+    border-bottom: var(--border);
+  }
+  .eyebrow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--c-primary-2-deep);
+    font-weight: 600;
+    margin-bottom: var(--sp-5);
+  }
+  .eyebrow > span:nth-child(even) {
+    color: var(--c-ink-3);
+  }
+  .hero__title {
+    font-size: clamp(1.75rem, 4.5vw, var(--fs-3xl));
+    line-height: 1.18;
+    margin-bottom: var(--sp-4);
+    color: var(--c-ink);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    max-width: 28ch;
+  }
+  .hero__sub {
+    font-size: var(--fs-lg);
+    color: var(--c-ink-2);
+    line-height: var(--lh-loose);
+    max-width: 60ch;
+    margin-bottom: var(--sp-4);
+  }
+  .hero__abstract {
+    font-size: var(--fs-base);
+    color: var(--c-ink-2);
+    line-height: 1.7;
+    max-width: 64ch;
+    margin-bottom: var(--sp-5);
+    padding-left: var(--sp-4);
+    border-left: 2px solid var(--c-amber);
+  }
+  .hero__abstract em {
+    color: var(--c-ink);
+  }
+  .hero__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-2);
+    font-size: var(--fs-xs);
+    color: var(--c-ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .meta__date {
+    color: var(--c-primary-2-deep);
+    font-weight: 600;
+  }
+  .meta__sep {
+    color: var(--c-ink-3);
+  }
+
+  .section {
+    padding-block: var(--sp-9);
+  }
+  .section--alt {
+    background: var(--c-bg-2);
+  }
+  .section__head {
+    margin-bottom: var(--sp-6);
+  }
+  .section__title {
+    font-size: clamp(1.5rem, 3.5vw, var(--fs-2xl));
+    margin-bottom: var(--sp-3);
+    color: var(--c-ink);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .section__sub {
+    color: var(--c-ink-2);
+    font-size: var(--fs-base);
+    line-height: var(--lh-loose);
+    max-width: 60ch;
+  }
+
+  .prose {
+    max-width: 64ch;
+  }
+  .prose p {
+    color: var(--c-ink-2);
+    font-size: var(--fs-base);
+    line-height: var(--lh-loose);
+    margin: 0 0 var(--sp-4);
+  }
+  .prose p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Why this brief matters */
+  .why {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .why__row {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: var(--sp-5);
+    padding-block: var(--sp-4);
+    border-top: 1px solid var(--c-rule);
+    align-items: start;
+  }
+  .why__row:last-child {
+    border-bottom: 1px solid var(--c-rule);
+  }
+  .why__k {
+    color: var(--c-primary-2-deep);
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    padding-top: 3px;
+  }
+  .why__v {
+    color: var(--c-ink-2);
+    font-size: var(--fs-base);
+    line-height: var(--lh-loose);
+    margin: 0;
+  }
+  @media (max-width: 720px) {
+    .why__row {
+      grid-template-columns: 1fr;
+      gap: var(--sp-2);
+    }
+  }
+
+  /* Read the brief CTA card */
+  .cta-card {
+    border: 1px solid var(--c-rule);
+    border-left: 3px solid var(--c-amber);
+    background: var(--c-bg);
+    padding: var(--sp-5) var(--sp-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-4);
+  }
+  .cta-card__eyebrow {
+    font-size: var(--fs-xs);
+    color: var(--c-amber-deep);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 600;
+  }
+  .cta-card__title {
+    font-size: clamp(1.25rem, 3vw, var(--fs-xl));
+    color: var(--c-ink);
+    font-weight: 600;
+    line-height: 1.25;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+  .cta-card__meta {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+    margin: 0;
+    padding: 0;
+    font-size: var(--fs-xs);
+    color: var(--c-ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .cta-card__btn {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    gap: var(--sp-2);
+    padding: var(--sp-3) var(--sp-5);
+    background: var(--c-amber);
+    color: var(--c-primary-deep);
+    border: 1px solid var(--c-amber);
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: background var(--transition);
+  }
+  .cta-card__btn:hover {
+    background: var(--c-amber-light);
+    border-color: var(--c-amber-light);
+  }
+  .cta-card__note {
+    margin: 0;
+    color: var(--c-ink-3);
+    font-size: var(--fs-sm);
+    line-height: 1.6;
+  }
+
+  /* Cite this brief */
+  .cite-card {
+    position: relative;
+    background: var(--c-primary-deep);
+    border-radius: var(--radius);
+    border: 1px solid var(--c-rule);
+    overflow: hidden;
+  }
+  .cite-bib {
+    margin: 0;
+    padding: var(--sp-5);
+    color: #e0e6ed;
+    font-size: var(--fs-sm);
+    line-height: 1.55;
+    overflow-x: auto;
+    font-family: var(--ff-mono);
+    scrollbar-width: thin;
+  }
+  .cite-copy {
+    position: absolute;
+    top: var(--sp-3);
+    right: var(--sp-3);
+    background: var(--c-amber-deep);
+    color: var(--c-primary);
+    border: 1px solid var(--c-amber);
+    padding: 0.4rem 0.75rem;
+    border-radius: var(--radius-sm);
+    font-size: var(--fs-xs);
+    font-family: var(--ff-mono);
+    cursor: pointer;
+    transition: background var(--transition);
+  }
+  .cite-copy:hover {
+    background: var(--c-amber);
+    color: var(--c-primary-deep);
+  }
+  .cite-copy__label {
+    color: inherit;
+    font-weight: 600;
+  }
+  @media (max-width: 640px) {
+    .cite-copy {
+      position: static;
+      margin: 0 var(--sp-3) var(--sp-3);
+      width: calc(100% - 2 * var(--sp-3));
+    }
+  }
+
+  /* Companion artifacts */
+  .comp {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .comp__row {
+    display: grid;
+    grid-template-columns: 140px 1fr 220px;
+    gap: var(--sp-4);
+    padding-block: var(--sp-4);
+    border-top: 1px solid var(--c-rule);
+    align-items: center;
+  }
+  .comp__row:last-child {
+    border-bottom: 1px solid var(--c-rule);
+  }
+  .comp__kind {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    padding: 2px 8px;
+    border: 1px solid var(--c-rule);
+    background: var(--c-bg);
+    border-radius: var(--radius-sm);
+    text-align: center;
+    width: fit-content;
+  }
+  .comp__kind--pdf,
+  .comp__kind--md {
+    color: var(--c-primary-2-deep);
+    border-color: var(--c-primary-2-deep);
+  }
+  .comp__kind--pdf-internal {
+    color: var(--c-warn);
+    border-color: var(--c-warn);
+    background: var(--c-warn-soft);
+  }
+  .comp__link {
+    color: var(--c-ink);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--c-rule);
+    transition: border-color var(--transition);
+    font-size: var(--fs-base);
+  }
+  .comp__link:hover {
+    border-bottom-color: var(--c-amber);
+    color: var(--c-primary-2-deep);
+  }
+  .comp__note {
+    color: var(--c-ink-3);
+    font-size: var(--fs-xs);
+    letter-spacing: 0.04em;
+    text-align: right;
+  }
+  @media (max-width: 720px) {
+    .comp__row {
+      grid-template-columns: 1fr;
+      gap: var(--sp-1);
+    }
+    .comp__note {
+      text-align: left;
+    }
+  }
+
+  .updated {
+    color: var(--c-ink-3);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    text-align: center;
+  }
+</style>

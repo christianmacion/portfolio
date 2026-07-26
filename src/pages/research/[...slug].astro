@@ -15,6 +15,7 @@
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
 import CTABanner from '@components/CTABanner.astro';
+import Marquee from '@components/Marquee.astro';
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { path } from '@utils/url';
 
@@ -72,7 +73,7 @@ const laneClass = data.role === 'ai' ? 'pill--brand' : 'pill--accent';
     { name: data.title, href: `/research/${project.id}` },
   ]}
 >
-  <section class="hero">
+  <section class="hero" data-reveal id="hero">
     <div class="container container-narrow">
       <p class="eyebrow mono">
         <span>{topicLabel}</span>
@@ -81,7 +82,7 @@ const laneClass = data.role === 'ai' ? 'pill--brand' : 'pill--accent';
         <span aria-hidden="true">·</span>
         <a href={path(`/projects/${project.id}`)}>Canonical long-form →</a>
       </p>
-      <h1 class="hero__title">{data.title}</h1>
+      <h1 class="hero__title" data-words>{data.title}</h1>
       <p class="hero__sub">{data.summary}</p>
       <p class="hero__meta">
         <span class:list={['pill', laneClass]}
@@ -92,10 +93,23 @@ const laneClass = data.role === 'ai' ? 'pill--brand' : 'pill--accent';
     </div>
   </section>
 
-  <section class="section">
+  {/* v7.4-WIDE — discipline mini-marquee (5 frames) between hero and cite. */}
+  <Marquee
+    items={[
+      { head: 'EVAL-FIRST', tail: '31 GATES', accent: 'warn' },
+      { head: 'NDA-CLEAN', tail: 'PUBLIC DATA', accent: 'cobalt' },
+      { head: 'ALPHA', tail: 'SIGNAL > NOISE', accent: 'sage' },
+      { head: 'REPRODUCIBLE', tail: 'NOTEBOOK-COMMITTED', accent: 'sage' },
+      { head: 'CITABLE', tail: 'BIBTEX + DOI', accent: 'warn' },
+    ]}
+    speedSec={48}
+    trailing={`research note · ${data.title}`}
+  />
+
+  <section class="section" data-reveal id="cite">
     <div class="container container-narrow">
       <header class="section__head">
-        <h2 class="section__title">Cite this research note</h2>
+        <h2 class="section__title" data-words>Cite this research note</h2>
         <p class="section__sub">
           A copy-pasteable BibTeX entry. The canonical long-form with figures, code, and full
           methodology lives at the URL in the entry — please link there, not here, when citing in a
@@ -117,10 +131,10 @@ const laneClass = data.role === 'ai' ? 'pill--brand' : 'pill--accent';
     </div>
   </section>
 
-  <section class="section section--alt">
+  <section class="section section--alt" data-reveal id="canonical">
     <div class="container container-narrow">
       <header class="section__head">
-        <h2 class="section__title">Canonical surface</h2>
+        <h2 class="section__title" data-words>Canonical surface</h2>
         <p class="section__sub">
           The full research note — methodology, code, gates run, and reproduced metrics — lives on
           the projects index.

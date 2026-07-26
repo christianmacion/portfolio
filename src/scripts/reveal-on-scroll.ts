@@ -2,10 +2,15 @@
  * reveal-on-scroll.ts — Phase D-7.
  *
  * One-shot fade-in for any element with [data-reveal].
- * Triggers when the element crosses 15% into the viewport.
+ * Triggers when any pixel of the element enters the viewport.
  * Honors prefers-reduced-motion (CSS side) and unobserves after firing.
  *
- * Total bundle: ~600 bytes minified.
+ * v6.18 — also drives [data-spark] paths (MiniSpark draw-in via
+ * stroke-dashoffset). And honors [data-reveal-delay] (ms) on any
+ * data-reveal element so hero staggers (0/80/160/240/320ms) work
+ * without per-target JS.
+ *
+ * Total bundle: ~700 bytes minified.
  */
 
 // Mark JS-enabled BEFORE attaching the observer so CSS can layer the
@@ -16,13 +21,25 @@ document.documentElement.classList.add('js');
 
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+function fire(el: HTMLElement): void {
+  const delay = Number.parseFloat(el.dataset.revealDelay ?? '');
+  const ms = Number.isFinite(delay) && delay > 0 ? delay : 0;
+  if (ms > 0) {
+    window.setTimeout(() => el.classList.add('is-revealed'), ms);
+  } else {
+    el.classList.add('is-revealed');
+  }
+}
+
 function init(): void {
-  const targets = document.querySelectorAll<HTMLElement>('[data-reveal]');
-  if (targets.length === 0) return;
+  const revealTargets = document.querySelectorAll<HTMLElement>('[data-reveal]');
+  const sparkTargets = document.querySelectorAll<SVGPathElement>('[data-spark]');
+  if (revealTargets.length === 0 && sparkTargets.length === 0) return;
 
   if (reduced || !('IntersectionObserver' in window)) {
     // Reduced-motion or no IO support — show everything immediately.
-    targets.forEach((el) => el.classList.add('is-revealed'));
+    revealTargets.forEach((el) => el.classList.add('is-revealed'));
+    sparkTargets.forEach((el) => el.classList.add('is-revealed'));
     return;
   }
 
@@ -30,11 +47,8 @@ function init(): void {
     (entries) => {
       entries.forEach((entry) => {
         // Reveal as soon as ANY pixel of the target enters the viewport.
-        // The previous threshold:0.15 with -40px rootMargin was too strict
-        // for tall sections on mobile viewports — the user could scroll past
-        // a section before it crossed 15% visible, leaving it invisible.
         if (entry.isIntersecting) {
-          entry.target.classList.add('is-revealed');
+          fire(entry.target as HTMLElement);
           io.unobserve(entry.target);
         }
       });
@@ -42,13 +56,15 @@ function init(): void {
     { threshold: 0, rootMargin: '0px' },
   );
 
-  targets.forEach((el) => io.observe(el));
+  revealTargets.forEach((el) => io.observe(el));
+  sparkTargets.forEach((el) => io.observe(el));
 
   // Safety net: after 1.2s, reveal anything still hidden (slow loaders,
   // headless browsers with virtual time, JS-disabled users that gained
   // a `js` class late, etc.). Better to show late than never.
   window.setTimeout(() => {
-    targets.forEach((el) => el.classList.add('is-revealed'));
+    revealTargets.forEach((el) => el.classList.add('is-revealed'));
+    sparkTargets.forEach((el) => el.classList.add('is-revealed'));
   }, 1200);
 }
 

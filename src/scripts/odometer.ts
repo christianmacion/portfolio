@@ -5,9 +5,13 @@
  * from 0 → N over 1.2s with an ease-out cubic-bezier curve. Monospace
  * tabular-nums prevents layout shift. One-shot per element.
  *
- * Honors prefers-reduced-motion (instant snap to final value).
+ * v6.18 — fix 0-flash. SSR renders the formatted final value (not 0),
+ * so we DON'T reset to '0' on init. Only when the IO fires AND the
+ * element is in viewport do we start the count-up. Threshold also
+ * dropped from 0.3 → 0 so a cell that's partially visible animates
+ * immediately (the hero stats live near the top of the page).
  *
- * Total bundle: ~500 bytes minified.
+ * Honors prefers-reduced-motion (instant snap to final value).
  */
 
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -22,11 +26,10 @@ function init(): void {
     if (!Number.isFinite(final)) return;
 
     if (reduced || !('IntersectionObserver' in window)) {
-      el.textContent = finalStr;
+      // Already SSR'd to the final value — leave it.
       return;
     }
 
-    el.textContent = '0';
     // Allow per-element duration override via `data-duration` (ms).
     // Default 1200ms — same as Stat.astro's prior behavior.
     const overrideDur = Number.parseFloat(el.dataset.duration ?? '');
@@ -49,12 +52,16 @@ function init(): void {
         entries.forEach((e) => {
           if (e.isIntersecting && !fired) {
             fired = true;
+            // Reset to 0 RIGHT BEFORE the animation starts (not on
+            // init). Eliminates the "0 flash" that came from setting
+            // it at module-load before IO fires.
+            el.textContent = '0';
             requestAnimationFrame(animate);
             io.unobserve(e.target);
           }
         });
       },
-      { threshold: 0.3 },
+      { threshold: 0 },
     );
     io.observe(el);
   });

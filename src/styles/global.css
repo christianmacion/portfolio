@@ -26,7 +26,7 @@
  * digits above the fold) inherit tabular-nums. The audit's
  * data-cell-selector matches every element with "hero" in its
  * class name; without this branch the home reports 0/10 above-fold
- * tabular-nums because the eyebrow "CTA®" + "UTC+8" sits inside
+ * tabular-nums because the eyebrow + "UTC+8" sits inside
  * `.hero__inner` / `.hero__eyebrow` / `.hero` (none of which the
  * v6.1.1 list covered). Lifting the rule into a parent-inherited
  * property closes the gap in one selector.
@@ -47,9 +47,6 @@
 .tape__delta,
 .r-card__metric,
 .ai-hero__stat,
-.ticker__item,
-.ticker__val,
-.ticker__track,
 .stat__value-row,
 .stat__value-row *,
 .stat:not(.stat__value):not(.stat__value-row),
@@ -103,6 +100,22 @@ body {
   font-size: var(--fs-base);
   background: var(--c-bg);
   overflow-x: clip;
+  /* v6.18 — hairline-grid background. Bloomberg-terminal grain:
+     24px radial dot at 1px opacity 2.5%. No decoration, no halo,
+     just paper-noise. Renders as a fixed background-attachment so it
+     doesn't scroll-shimmer. Suppressed on paper sections to keep
+     the cream band clean. */
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    rgba(235, 229, 212, 0.025) 1px,
+    transparent 0
+  );
+  background-size: 24px 24px;
+  background-attachment: fixed;
+}
+@media (prefers-color-scheme: dark) {
+  /* token already controls ink; the grid ink stays paper-cream at
+     2.5% so dark and paper themes render the same grain. */
 }
 
 /* Allow content panels to scroll horizontally on narrow viewports
@@ -691,11 +704,6 @@ li {
   /* Nav stack: keep brand visible, hide text sub on mobile */
   .nav__brand-sub {
     display: none;
-  }
-
-  /* Ticker animation is desktop flair; on mobile, freeze it (still readable, no jitter) */
-  .ticker__track {
-    animation: none;
   }
 
   /* Long tables: scroll instead of overflowing the page */

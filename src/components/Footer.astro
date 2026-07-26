@@ -1,14 +1,15 @@
 ---
 /**
  * Footer.astro — v2: full contact directory + 4 columns.
+ * v6.18 — drop `v6.16.0` dev-debug chrome from the base strip; replace
+ * with the deploy date only (build SHA + year are already implicitly
+ * carried by the deploy timestamp).
  */
 import { profile } from '@utils/profile';
 import { path } from '@utils/url';
 import { buildYear, buildStampUtc8 } from '@utils/build-stamp';
 import BrandMotif from '@components/BrandMotif.astro';
 import Avatar from '@components/Avatar.astro';
-import pkg from '../../package.json';
-const portfolioVersion = `v${pkg.version}`;
 
 const year = buildYear();
 const deployedStamp = buildStampUtc8();
@@ -127,7 +128,7 @@ const deployedStamp = buildStampUtc8();
           <a href={path('/humans.md')}>humans.md</a> · AI-agent identity document
         </small>
         <small class="mono">
-          portfolio.os · {portfolioVersion} · last deployed {deployedStamp} · built with Astro
+          portfolio.os · last deployed {deployedStamp} · built with Astro
         </small>
       </div>
     </div>

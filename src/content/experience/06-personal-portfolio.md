@@ -20,7 +20,7 @@ contributions:
     evidence: 'Full taxonomy on /methodology'
     proof: 'See /methodology'
   - label: 'AI Architecture research journal'
-    evidence: 'Workbooks on context engineering, loop engineering, quant engineering with MiniMax-M3'
+    evidence: 'Workbooks on context engineering, loop engineering, quant engineering with the M-series'
     proof: 'See /publications (in progress)'
   - label: '20+ research paper summaries'
     evidence: 'Momentum, mean-reversion, volatility carry, statistical arbitrage, multi-agent AI architectures'

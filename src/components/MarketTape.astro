@@ -186,6 +186,19 @@ const stop = trailing;
        +σ. */
     min-height: 44px;
     padding-inline: 0.5rem;
+    /* v6.18 — explicit word-separator after each tape item so
+       adjacent ticker symbols (e.g. "04·VRP" → "05·PAIRS") never
+       visually collide on narrow viewports or dense browser zoom.
+       The bullet renders between items only (rendered via
+       ::after on .tape__item, hidden on hover-fade-out). */
+    position: relative;
+  }
+  .tape__item::after {
+    content: '·';
+    margin-left: var(--sp-3);
+    color: var(--c-ink-3);
+    opacity: 0.6;
+    pointer-events: none;
   }
   .tape__sym {
     color: var(--c-ink-2);
@@ -263,6 +276,15 @@ const stop = trailing;
   @media (prefers-reduced-motion: reduce) {
     .tape__track {
       animation: none !important;
+    }
+  }
+
+  /* v6.18.1 — narrow viewports: hide the trailing "series seeded…"
+     label that wraps off the right edge. The label re-appears on
+     viewports ≥ 1280px where the tape row has room. */
+  @media (max-width: 1279px) {
+    .tape__trailing {
+      display: none;
     }
   }
 </style>

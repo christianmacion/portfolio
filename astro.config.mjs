@@ -12,8 +12,9 @@ const SITE = process.env.PUBLIC_SITE_URL ?? 'https://christianmacion26.github.io
 export default defineConfig({
   site: SITE,
   // Same env var controls the base path: mirror wants `/`, GH Pages wants `/portfolio`.
-  // Build scripts pass --base via CLI for clarity.
-  base: '/portfolio',
+  // Build scripts must set BASE_PATH=/ for the mirror deploy — the CLI
+  // --base flag does NOT override a config-file value in current Astro.
+  base: process.env.BASE_PATH ?? '/portfolio',
   trailingSlash: 'always',
   build: {
     format: 'directory',

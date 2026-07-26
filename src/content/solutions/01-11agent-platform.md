@@ -17,11 +17,11 @@ approach: |
   both. Tiered model-routing (Opus = judgment, Sonnet = assembly, Haiku = mechanical) kept the
   ~15× token multiplier economical.
 evidence:
-  - '**~27,500 words** of role-scoped agent charters'
-  - '**31-gate** statistical evaluation harness (G1–G31)'
-  - '**~76,500 LOC** light-dependency Python'
-  - '**5 asset classes** researched (equity-index, crypto, energy, metals, agriculture)'
-  - '**~15×** token cost vs single-agent, offset by tiered routing'
+  - '~27,500 words of role-scoped agent charters'
+  - '31-gate statistical evaluation harness (G1–G31)'
+  - '~76,500 LOC light-dependency Python'
+  - '5 asset classes researched (equity-index, crypto, energy, metals, agriculture)'
+  - '~15× token cost vs single-agent, offset by tiered routing'
 outcome: |
   Caught and documented false positives as enforced methodology (each banked into the desk's research-integrity
   playbook). Shipped an automated monthly forward-OOS monitoring fleet — scheduled data pull → S3 sync →

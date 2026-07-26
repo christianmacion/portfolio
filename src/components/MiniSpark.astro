@@ -7,24 +7,54 @@
  * is visual rhythm (a tiny line that suggests a series) and not a
  * readable data chart.
  *
+ * v6.17.1 — added `trend` prop (Bloomberg register). Auto-derives stroke
+ * color from --j-sage / --j-terracotta / --j-ink-2. Custom `stroke` still
+ * overrides (escape hatch for chart-specific palette calls).
+ *
  * Usage:
  *   <MiniSpark points={[1, 2, 3, 4, 5, 6, 4, 3, 5, 7]} />
  *   <MiniSpark points={...} stroke="var(--c-pass)" />
+ *   <MiniSpark points={...} trend="pos" /> // sage
+ *   <MiniSpark points={...} trend="neg" /> // terracotta
+ *   <MiniSpark points={...} trend="flat" /> // ink-2
  */
 interface Props {
   points: number[];
   width?: number;
   height?: number;
   stroke?: string;
+  trend?: 'pos' | 'neg' | 'flat' | 'auto';
   ariaLabel?: string;
 }
 const {
   points,
   width = 60,
   height = 14,
-  stroke = 'var(--c-amber)',
+  stroke,
+  trend = 'auto',
   ariaLabel = 'mini sparkline',
 } = Astro.props;
+
+/** Auto-derive trend from endpoints: rising → pos, falling → neg, flat → flat. */
+const derivedTrend = (() => {
+  if (trend !== 'auto') return trend;
+  const head = points[0] ?? 0;
+  const tail = points[points.length - 1] ?? 0;
+  const spread = Math.max(...points) - Math.min(...points) || 1;
+  const diff = tail - head;
+  if (diff > spread * 0.05) return 'pos';
+  if (diff < -spread * 0.05) return 'neg';
+  return 'flat';
+})();
+
+/** Resolve stroke: explicit `stroke` always wins; else trend→token. */
+const resolvedStroke =
+  stroke ??
+  (derivedTrend === 'pos'
+    ? 'var(--j-sage)'
+    : derivedTrend === 'neg'
+      ? 'var(--j-terracotta)'
+      : 'var(--j-ink-2)');
 
 const minY = Math.min(...points);
 const maxY = Math.max(...points);
@@ -41,7 +71,7 @@ const path = points
 ---
 
 <svg
-  class="mini-spark"
+  class={`mini-spark mini-spark--${derivedTrend}`}
   width={width}
   height={height}
   viewBox={`0 0 ${width} ${height}`}
@@ -49,10 +79,17 @@ const path = points
   aria-label={ariaLabel}
   preserveAspectRatio="none"
 >
+  {
+    /* v6.18 — data-spark hooks into reveal-on-scroll.ts to trigger a
+      left-to-right draw-in (stroke-dashoffset transition). Cap path
+      length at 200 so short and long strokes share the same timing. */
+  }
   <path
+    class="mini-spark__path"
+    data-spark="200"
     d={path}
     fill="none"
-    stroke={stroke}
+    stroke={resolvedStroke}
     stroke-width="1.2"
     stroke-linecap="round"
     stroke-linejoin="round"></path>
@@ -63,5 +100,23 @@ const path = points
     display: inline-block;
     vertical-align: middle;
     opacity: 0.85;
+  }
+  /* v6.18 — draw-in animation. JS adds `.is-revealed` to the path
+     when it scrolls into view; CSS transitions stroke-dashoffset from
+     full length to 0. Universal reduced-motion guard below. */
+  :root.js .mini-spark__path {
+    stroke-dasharray: var(--spark-len, 200);
+    stroke-dashoffset: var(--spark-len, 200);
+    transition: stroke-dashoffset 900ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  :root.js .mini-spark__path.is-revealed {
+    stroke-dashoffset: 0;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mini-spark__path {
+      stroke-dasharray: none;
+      stroke-dashoffset: 0;
+      transition: none;
+    }
   }
 </style>

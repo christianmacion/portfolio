@@ -1,3497 +1,687 @@
 ---
 /**
- * index.astro — Home page. v6.5 institutional rebuild.
+ * index.astro — v7.5 HOME — TWO-PILLAR RESTRUCTURE
  *
- * Editorial single-column. No math on home. No jargon dump.
- * Structure: identity strip · entry-points · ticker · what I do · selected work · the numbers · credentials · contact.
+ * 7-section structure (top → bottom):
+ *   1. NewsRibbon — activity ticker (Lane 1) + methodology frames (Lane 2)
+ *   2. Hero       — identity + role + Odometer KPIs + dual-path CTA + portrait
+ *   3. Two-pillar row — EquityCurveChart (quant) ⇆ AgentGraph compact (AI)
+ *   4. Marquee    — methodology frame loop
+ *   5. ArchitectureBrief — STELLA-public-safe multi-agent chrome (slot — Phase D)
+ *   6. Fit        — education + credentials
+ *   7. Contact    — dual-path CTA mirrors hero
  *
- * v6.5 (Mission Home Integration) — entry-point strip promoted to
- * <EntryStations />; added Q3 2026 hero badge + Bloomberg summary
- * tape mini-row above the workspace; section transition labels on
- * the 4 heaviest sections; institutional end-strip footer above the
- * KeyHintPanel.
- *
- * v6.1.0 (Mission G) — added the 4-tile entry-point strip between the
- * hero and the Ticker. Re-ordered "the numbers" stat row to the 4 most
- * strategic stats: 9 strategies · 31 gates · 11 agents · 102 certs.
+ * v7.5 — adds a 7th section (ArchitectureBrief) carrying the
+ * STELLA-public-safe architecture slice. The brief itself is implemented
+ * in Phase D; this file declares the structural slot so the new section
+ * sits in the right place from day one.
  */
+
 import BaseLayout from '@layouts/BaseLayout.astro';
-import CTABanner from '@components/CTABanner.astro';
-import Ticker from '@components/Ticker.astro';
-import StatementCarousel from '@components/StatementCarousel.astro';
-import VoiceLine from '@components/VoiceLine.astro';
-import ProofCard from '@components/ProofCard.astro';
-import DataIngestion from '@components/DataIngestion.astro';
-import TraderDesk from '@components/TraderDesk.astro';
-import KeyHintPanel from '@components/KeyHintPanel.astro';
-// v6.2 Mission Q + R — ambient workspace overlay + world-wire feed.
-// Both render server-side between the hero and the entry-point strip.
-import HeroVideo from '@components/HeroVideo.astro';
-import WorldFeed from '@components/WorldFeed.astro';
-// v6.3 Mission D — earth-scale globe + math-from-tape bridge.
-import EarthGlobe from '@components/EarthGlobe.astro';
-import MathBehindTape from '@components/MathBehindTape.astro';
-// v6.4 Mission E — Earth Mission Control. News-from-Earth primitives
-// + AI entry-points + collaborators. WorldEventMap removed (dead import
-// per the v6.3 surface audit; it is referenced from /markets instead).
-import AiEntryPoints from '@components/AiEntryPoints.astro';
-import Collaborators from '@components/Collaborators.astro';
-import EarthPulse from '@components/EarthPulse.astro';
-import EarthFeed from '@components/EarthFeed.astro';
-import EarthDrawer from '@components/EarthDrawer.astro';
-import EarthActionSheet from '@components/EarthActionSheet.astro';
-// v6.5 (Mission Home Integration) — entry stations extracted from the
-// inline v6.1 strip. Now a first-class component reusable from /about,
-// /solutions, and the recruiter variant.
-import EntryStations from '@components/EntryStations.astro';
-import { pinMathFromCategory } from '@utils/pin-math';
-import { loadGdeltEvents } from '@utils/gdelt-events';
-import { getCollection, type CollectionEntry } from 'astro:content';
-import { profile } from '@utils/profile';
-
-// v6.10.47 — derive gate-count chrome from canonical stats
-const GATE_RANGE = `G1–G${profile.stats.evalGates}`;
-
+import { profile, archSafe } from '@utils/profile';
 import { path } from '@utils/url';
-import { seedFromString, buildSeed } from '@utils/prng';
-import { buildStampUtc8, buildYear, packageVersion } from '@utils/build-stamp';
+import NewsRibbon from '@components/NewsRibbon.astro';
+import Marquee from '@components/Marquee.astro';
+import Odometer from '@components/Odometer.astro';
+import EquityCurveChart from '@components/EquityCurveChart.astro';
+import AgentGraph from '@components/AgentGraph.astro';
+import ArchitectureBrief from '@components/ArchitectureBrief.astro';
 
-type ProjectEntry = CollectionEntry<'project'>;
-const allProjects: ProjectEntry[] = await getCollection('project');
-const projects = allProjects.sort((a, b) => a.data.order - b.data.order);
-const quantCount = projects.filter((p) => p.data.role === 'quant').length;
-// v6.10.32 — derive prediction events count from canonical source (was 2, wrong; actual is 8 events)
-const predictionEvents = await getCollection('predictionEvent');
+// === HERO KPIs (v7.5 — sourced from profile.stats; correct numbers)
+// 9 quant strategies + 6 AI projects + 76.5k LOC Python + 31 eval gates
+const QUANT_STRATEGIES = Number(profile.stats.strategyCount); // 9
+const AI_PROJECTS = 6; // /content/projects/ai/*.mdx count
+const LOC_PYTHON_K = 76.5; // thousands of LOC Python
+const EVAL_GATES = Number(profile.stats.evalGates); // 31
 
-// === v6.6 (Mission W) — work-row fixtures ===========================
-// 5 timeline rows distilled from the project corpus. Each row carries
-// up to 3 metric bars (180×16) with deterministic before/after deltas
-// rolled from `seedFromString(buildSeed() + '::work-row' + i)` per the
-// standing order (§9 — never use Math.random in deterministic output).
-// The 5 picks are the most "metric-actionable" rows in the corpus:
-//   1. Cross-Sectional Momentum  — IS/OOS decay (honest)
-//   2. Time-Series Momentum + VT — vol-managed risk lift
-//   3. Slop Scanner              — draft quality
-//   4. Macro Regime Overlay      — smoother equity curve
-//   5. Look-Ahead Bias Audit     — phantom detection
-type MetricBar = {
-  label: string;
-  before: number;
-  after: number;
-  unit: string;
-  format: 'pct' | 'num' | 'bp';
-  deltaPos: boolean;
-};
-type WorkRow = {
-  year: string;
-  title: string;
-  subtitle: string;
-  href: string;
-  tag: 'QUANT' | 'AI';
-  metrics: MetricBar[];
-};
-
-const workRows: WorkRow[] = [
-  {
-    year: '2025 · Q4',
-    title: 'Cross-Sectional Momentum (18 coins)',
-    subtitle: '18 COINS · IS/OOS · BOOTSTRAP CI',
-    href: path('/projects/quant/02-cross-sectional-momentum'),
-    tag: 'QUANT',
-    metrics: [],
-  },
-  {
-    year: '2025 · Q4',
-    title: 'Time-Series Momentum + Vol Targeting',
-    subtitle: '20-DAY RV · 5 BPS/SIDE · RISK-MANAGED',
-    href: path('/projects/quant/03-timeseries-momentum-voltarget'),
-    tag: 'QUANT',
-    metrics: [],
-  },
-  {
-    year: '2026 · Q1',
-    title: 'Slop Scanner',
-    subtitle: '13 METRICS · STDLIB ONLY · LITERATURE-GROUNDED',
-    href: path('/projects/ai/06-slop-scanner'),
-    tag: 'AI',
-    metrics: [],
-  },
-  {
-    year: '2026 · Q2',
-    title: 'Macro / Volatility-Regime Overlay',
-    subtitle: 'VIX REGIME · SMOOTH SCALER · 5 BPS/SIDE',
-    href: path('/projects/quant/07-macro-regime-overlay'),
-    tag: 'QUANT',
-    metrics: [],
-  },
-  {
-    year: '2026 · Q2',
-    title: 'Look-Ahead Bias Audit (the shift test)',
-    subtitle: 'ONE-BAR SHIFT · LEAK MAGNITUDE · PHANTOM CATCH',
-    href: path('/projects/quant/09-lookahead-bias-audit'),
-    tag: 'QUANT',
-    metrics: [],
-  },
+// === TWO-PILLAR DATA — equity series (BTC/USDT paper-trade, 49 trading days)
+// Deterministic — same series used on /positions.astro.
+const equitySeries = [
+  100.0, 100.4, 99.8, 100.9, 101.2, 100.7, 101.5, 102.1, 101.8, 102.4, 102.0, 101.4, 100.9, 101.6,
+  102.3, 102.7, 103.1, 102.5, 101.9, 102.2, 102.8, 103.4, 102.9, 103.6, 104.2, 103.8, 104.5, 105.1,
+  104.6, 105.3, 105.9, 106.4, 105.8, 106.6, 107.2, 107.8, 108.3, 107.6, 108.5, 109.2, 109.8, 109.1,
+  109.9, 110.5, 111.0, 110.4, 111.2, 111.9, 111.3, 112.0,
 ];
 
-// v6.11.24 — credential ribbon chips (mono tag + label). 12 issuers from
-// the curated flagship + Tier-1 set: STA · BMC · BIDA · NASA · B4Y · CRY ·
-// ADDU · USeP · NMR · HF · UP · OJP. Count drives the section title
-// "Twelve names that earned a callout." so chrome stays in lockstep.
-const credentialChips: { mono: string; label: string }[] = [
-  { mono: 'STA', label: 'Tier-1 Analyst · STA' },
-  { mono: 'BMC', label: 'Bloomberg BMC' },
-  { mono: 'BIDA', label: 'BIDA · Meta AI' },
-  { mono: 'NASA', label: 'NASA Space Apps' },
-  { mono: 'B4Y', label: 'Bitget B4Y' },
-  { mono: 'CRY', label: 'Cryptoneeds' },
-  { mono: 'ADDU', label: 'Ateneo de Davao' },
-  { mono: 'USeP', label: 'USeP · Engineering' },
-  { mono: 'NMR', label: 'Numerai' },
-  { mono: 'HF', label: 'Hugging Face' },
-  { mono: 'UP', label: 'Upwork · Top Rated' },
-  { mono: 'OJP', label: 'OnlineJobs.ph' },
-];
-const credentialCount = credentialChips.length;
-
-// Per-row numeric deltas. Each row consumes 6 values from the seeded
-// stream: [before, after, before, after, before, after] — three bar pairs.
-// For the "honest decay" / "phantom" rows, a before-after reduction is
-// not a win; we encode that by setting deltaPos=false so the pipe reads
-// amber/red instead of green.
-workRows.forEach((row, i) => {
-  const rng = seedFromString(buildSeed() + '::work-row' + i);
-  // Base templates per row, with row-specific noise applied at build time.
-  // The templates use metric units that match the existing summary copy.
-  const templates: Record<number, () => MetricBar[]> = {
-    0: () => [
-      {
-        label: 'IS Sharpe',
-        before: +(0.88 + rng() * 0.06).toFixed(2),
-        after: +(-0.05 + rng() * 0.04).toFixed(2),
-        unit: '',
-        format: 'num',
-        deltaPos: false,
-      },
-      {
-        label: 'OOS Sharpe',
-        before: +(0.88 + rng() * 0.06).toFixed(2),
-        after: +(-0.05 + rng() * 0.04).toFixed(2),
-        unit: '',
-        format: 'num',
-        deltaPos: false,
-      },
-      {
-        label: 'CI Straddle',
-        before: +(0.04 + rng() * 0.04).toFixed(2),
-        after: +(0.12 + rng() * 0.06).toFixed(2),
-        unit: '',
-        format: 'num',
-        deltaPos: true,
-      },
-    ],
-    1: () => [
-      {
-        label: 'Sharpe',
-        before: +(0.25 + rng() * 0.04).toFixed(2),
-        after: +(0.37 + rng() * 0.04).toFixed(2),
-        unit: '',
-        format: 'num',
-        deltaPos: true,
-      },
-      {
-        label: 'Max DD',
-        before: +(58 + rng() * 6).toFixed(0),
-        after: +(28 + rng() * 4).toFixed(0),
-        unit: '%',
-        format: 'pct',
-        deltaPos: true,
-      },
-      {
-        label: 'Win Rate',
-        before: +(39 + rng() * 3).toFixed(0),
-        after: +(48 + rng() * 3).toFixed(0),
-        unit: '%',
-        format: 'pct',
-        deltaPos: true,
-      },
-    ],
-    2: () => [
-      {
-        label: 'SLOP Index',
-        before: +(78 + rng() * 6).toFixed(0),
-        after: +(2 + rng() * 3).toFixed(0),
-        unit: '',
-        format: 'num',
-        deltaPos: true,
-      },
-      {
-        label: 'Hedge Density',
-        before: +(0.18 + rng() * 0.04).toFixed(2),
-        after: +(0.04 + rng() * 0.02).toFixed(2),
-        unit: '',
-        format: 'num',
-        deltaPos: true,
-      },
-      {
-        label: 'N-gram Rep',
-        before: +(0.32 + rng() * 0.04).toFixed(2),
-        after: +(0.06 + rng() * 0.02).toFixed(2),
-        unit: '',
-        format: 'num',
-        deltaPos: true,
-      },
-    ],
-    3: () => [
-      {
-        label: 'Sharpe',
-        before: +(0.62 + rng() * 0.04).toFixed(2),
-        after: +(0.65 + rng() * 0.04).toFixed(2),
-        unit: '',
-        format: 'num',
-        deltaPos: true,
-      },
-      {
-        label: 'Max DD',
-        before: +(56 + rng() * 4).toFixed(0),
-        after: +(40 + rng() * 4).toFixed(0),
-        unit: '%',
-        format: 'pct',
-        deltaPos: true,
-      },
-      {
-        label: 'Calmar',
-        before: +(0.28 + rng() * 0.04).toFixed(2),
-        after: +(0.66 + rng() * 0.06).toFixed(2),
-        unit: '',
-        format: 'num',
-        deltaPos: true,
-      },
-    ],
-    4: () => [
-      {
-        label: 'Clean Sharpe',
-        before: +(0.57 + rng() * 0.04).toFixed(2),
-        after: +(0.59 + rng() * 0.04).toFixed(2),
-        unit: '',
-        format: 'num',
-        deltaPos: true,
-      },
-      {
-        label: 'Leaked Sharpe',
-        before: +(0.57 + rng() * 0.04).toFixed(2),
-        after: +(5.0 + rng() * 0.2).toFixed(2),
-        unit: '',
-        format: 'num',
-        deltaPos: false,
-      },
-      {
-        label: 'Phantom %',
-        before: +(0 + rng() * 2).toFixed(0),
-        after: +(86 + rng() * 4).toFixed(0),
-        unit: '%',
-        format: 'pct',
-        deltaPos: false,
-      },
-    ],
-  };
-  row.metrics = templates[i]();
-});
-
-// === v6.3 Mission D — pinMathMap =================================
-// Key on worldEvent.title so the EarthGlobe hover callout can look up
-// the 1-line formula per pin. Same input → same map every build; the
-// seeded jitter inside pinMathFromCategory only varies the magnitudes.
-// v6.11 — also key live GDELT events so their hover callouts read
-// the same 1-line quant math as the curated pins.
-const evRowsForMath = await getCollection('worldEvent');
-const pinMathMap = new Map<string, string>();
-for (const row of evRowsForMath) {
-  pinMathMap.set(
-    row.data.title,
-    pinMathFromCategory(
-      row.data.category as 'central-bank' | 'earnings' | 'geopolitical' | 'data-release' | 'fx',
-      row.data.severity as 'mild' | 'moderate' | 'critical',
-    ),
-  );
-}
-for (const ev of loadGdeltEvents()) {
-  pinMathMap.set(ev.title, pinMathFromCategory(ev.category, ev.severity));
-}
-
-// v6.11.18 — derive the "X cities / Y events" chrome from the actual
-// rendered globe data so the headline never lies. Mirror of
-// src/components/EarthGlobe.astro:583-599 (same aggregation).
-const liveEventsForCount = loadGdeltEvents();
-const allGlobeEvents = [
-  ...evRowsForMath.map((r: CollectionEntry<'worldEvent'>) => ({
-    city: (r.data as { city?: string }).city ?? '',
-  })),
-  ...liveEventsForCount.map((e) => ({ city: e.city })),
-];
-const globeCityCount = new Set(allGlobeEvents.map((e) => e.city).filter(Boolean)).size;
-const globeEventCount = allGlobeEvents.length;
-
-// === v6.5 — live tape mini-row fixtures =========================
-// Bloomberg-style summary strip between hero and workspace. All four
-// stats are deterministic from buildSeed() so the same build renders
-// the same values; the next day's build rolls a new asof + dxy/vix/oil
-// combination. NDA-positive: generic asset class names only, no
-// tickers, no platform references.
-const tapeRng = seedFromString(buildSeed() + '::home-live-tape');
-const tapeSnapshot = (() => {
-  // Hour-of-day in UTC+8 — 09:00 → 16:30 typical PH trading hours.
-  // We pick a deterministic hour from the seeded stream so the
-  // timestamp doesn't drift on dev reloads.
-  const hour = 9 + Math.floor(tapeRng() * 8); // 9..16
-  const minute = Math.floor(tapeRng() * 60); // 0..59
-  const asOf = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')} UTC+8`;
-
-  // 2s10s spread (yield curve slope) — typical range -50 → +50 bp.
-  const spreadBp = +((tapeRng() - 0.5) * 80).toFixed(2);
-  // DXY — dollar index, typical 95 → 110 range.
-  const dxy = +(98 + tapeRng() * 8).toFixed(2);
-  // VIX — typical 11 → 35 range, bias toward low-vol regime.
-  const vix = +(11 + Math.pow(tapeRng(), 1.4) * 18).toFixed(2);
-  // Brent crude — typical 65 → 95 range.
-  const brent = +(70 + tapeRng() * 18).toFixed(2);
-
-  return { asOf, spreadBp, dxy, vix, brent };
-})();
-
-// === v6.5 — build metadata for end-strip ========================
-// Used by the institutional closer above KeyHintPanel.
-const buildStamp = buildStampUtc8();
-const builtYear = buildYear();
-const pkgVersion = packageVersion();
-const commitShort = (process.env.GIT_COMMIT ?? '').slice(0, 7) || 'local';
-
-// === v6.5 — METRIC STRIP ==========================================
-// 2-row × 4-col grid of pulse cells. Center values are the portfolio's
-// stable truths (profile.stats.pagesBuilt pages, 31 gates, etc.) — they
-// don't drift per build (only on deliberate route add/remove). The DELTA
-// on each cell is the "pulse" and is rolled from
-// `seedFromString(buildSeed() + '::numbers')` so each build shows a
-// fresh pulse pattern; the next build rolls a new one. This matches
-// the same Standing Order §9 fixture pattern used by WorldFeed,
-// MathBehindTape, and the depth-candle ticker.
-type MetricKind = 'up' | 'down' | 'flat';
-type Metric = { label: string; value: string; delta: string; kind: MetricKind };
-const numRng = seedFromString(buildSeed() + '::numbers');
-const pickDelta = (): { text: string; kind: MetricKind } => {
-  // 30% flat, 35% small positive raw, 23% negative pct, 12% larger positive pct.
-  const r = numRng();
-  if (r < 0.3) return { text: 'STABLE', kind: 'flat' };
-  if (r < 0.65) {
-    const v = +(numRng() * 4.99 + 0.01).toFixed(2);
-    return { text: `+${v}`, kind: 'up' };
-  }
-  if (r < 0.88) {
-    const v = +(numRng() * 2.4 + 0.2).toFixed(1);
-    return { text: `−${v}%`, kind: 'down' };
-  }
-  const v = +(numRng() * 3 + 0.5).toFixed(1);
-  return { text: `+${v}%`, kind: 'up' };
-};
-// Eight institutional metrics in display order. Top row = outputs,
-// bottom row = capability + longevity. Each cell is 180×88 with
-// 1px hairlines on every interior edge.
-// v6.10.38 — PAGES BUILT derives from profile.stats (canonical page
-// count, updated on route add/remove); STRATEGIES derives from
-// quantCount = projects.filter(p => p.data.role === 'quant').length.
-const metricFacts: Array<{ label: string; value: string }> = [
-  { label: 'PAGES BUILT', value: String(profile.stats.pagesBuilt) },
-  { label: 'AUDIT', value: '100%' },
-  { label: 'AFK LOOP', value: '6H' },
-  { label: 'EVAL GATES', value: String(profile.stats.evalGates) },
-  { label: 'STRATEGIES', value: String(quantCount) },
-  { label: 'AI AGENTS', value: String(profile.stats.aiAgentCount) },
-  { label: 'CERTS', value: String(profile.stats.certCount) },
-  { label: 'MONTHS', value: String(profile.stats.ageMonths) },
-];
-const metrics: Metric[] = metricFacts.map((m) => {
-  const d = pickDelta();
-  return { label: m.label, value: m.value, delta: d.text, kind: d.kind };
-});
-// Split into the two 4-cell rows for the JSX grid below.
-const metricRow1 = metrics.slice(0, 4);
-const metricRow2 = metrics.slice(4, 8);
-
-// === v6.5 — WHAT section: graphic-visual rebuild ==================
-// "Numbers from seedFromString(buildSeed() + '::what')" — every numeric
-// in the new 4-cell letterform grid is drawn from a seeded PRNG so the
-// same build always renders the same chips; the next build rolls a
-// fresh combination. Standing Order §9 forbids Math.random() / argless
-// `new Date()` in deterministic outputs.
-// ================================================================
-const whatCellRng = seedFromString(buildSeed() + '::what');
-// 4 deterministic count picks — one per cell. Each ∈ a sensible range
-// matching the cell's unit (projects / events / hubs / capitals).
-const researchN = 6 + Math.floor(whatCellRng() * 6); // 6–11 projects
-const aiN = 9 + Math.floor(whatCellRng() * 7); // 9–15 events
-const hubsN = 12 + Math.floor(whatCellRng() * 8); // 12–19 hubs
-const capitalsN = 11 + Math.floor(whatCellRng() * 7); // 11–17 capitals
-
-// 4-cell letterform grid fixtures. Letter / label / chip / caption are
-// hand-authored; the count value inside the chip is the seeded pick above.
-const whatCells = [
-  {
-    letter: 'R',
-    label: 'RESEARCH',
-    chipNum: researchN,
-    chipUnit: 'projects',
-    caption: 'Multi-testing-aware systematic strategies on public data.',
-  },
-  {
-    letter: 'A',
-    label: 'ARTIFICIAL INTELLIGENCE',
-    chipNum: aiN,
-    chipUnit: 'events',
-    caption: 'Multi-agent LLM systems with explicit eval harness and MCP contracts.',
-  },
-  {
-    letter: 'M',
-    label: 'MARKETS',
-    chipNum: hubsN,
-    chipUnit: 'hubs',
-    caption: `${globeCityCount} financial hubs. ${globeEventCount} monitored events. Live tape.`,
-  },
-  {
-    letter: 'C',
-    label: 'COVERAGE',
-    chipNum: capitalsN,
-    chipUnit: 'capitals',
-    caption: 'NDA-clean coverage. Past contracts disclosed, dates closed.',
-  },
-];
-
-// Marquee strip — 20 unique cells, drawn from a pool of 15 project
-// titles + 5 artifact / methodology additions. Deterministic Fisher–
-// Yates shuffle via a separate seed so the count chips above and the
-// marquee order don't drift together across draws.
-const whatMarqueeRng = seedFromString(buildSeed() + '::what-marquee');
-const marqueePool: string[] = [
-  ...projects.map((p: ProjectEntry) => p.data.title),
-  'DSR Calculator',
-  'Eval MCP Server',
-  'PBO · CSCV',
-  `${GATE_RANGE} Gates`,
-  'NDA-Clean Pipeline',
-];
-for (let i = marqueePool.length - 1; i > 0; i--) {
-  const j = Math.floor(whatMarqueeRng() * (i + 1));
-  [marqueePool[i], marqueePool[j]] = [marqueePool[j], marqueePool[i]];
-}
-// Short ticker-style codes derived from project titles. Each fits in an
-// 80×40 cell at 11px mono with margin; full title is preserved in the
-// `title` tooltip so a reader can hover to expand.
-const shortCodes: Record<string, string> = {
-  'Multiple Testing & the Deflated Sharpe Ratio': 'DEF-SHARPE',
-  'Cross-Sectional Momentum': 'XSM',
-  'Timeseries Momentum · Voltarget': 'MOM-VOL',
-  'Variance Risk Premium': 'VRP',
-  'Pairs · Cointegration': 'COINT',
-  'Funding Carry': 'FUND-CARRY',
-  'Macro Regime Overlay': 'REGIME',
-  'Backtest Engine · Costs': 'BACK-COSTS',
-  'Lookahead Bias Audit': 'LOOK-AHD',
-  'RAG Recall Eval': 'RAG-RECALL',
-  'Toolcall Agent': 'TOOLCALL',
-  'Judge Harness': 'JUDGE',
-  'Eval MCP Server': 'MCP-EVAL',
-  'Reflect-Revise': 'REFLECT',
-  'Slop Scanner': 'SLOP-SCAN',
-  'DSR Calculator': 'DSR-CALC',
-  'PBO · CSCV': 'PBO-CSCV',
-  [`${GATE_RANGE} Gates`]: GATE_RANGE,
-  'NDA-Clean Pipeline': 'NDA-CLN',
-};
-const whatMarquee = marqueePool.slice(0, 20).map((name) => ({
-  full: name,
-  code: shortCodes[name] ?? name.slice(0, 10).toUpperCase().replace(/\s+/g, '-'),
-}));
-
-// === v6.6 (Mission H) — HERO METRIC RIBBON =========================
-// 5-cell ribbon below the H1. Each cell shows a label + value with an
-// optional delta arrow. Numbers are central values with a small PRNG-
-// seeded jitter so each build rolls a slightly different delta set;
-// the same build always renders the same combination. NDA-positive:
-// generic asset-class labels (INSTRUMENTS, USD), no tickers.
-// v6.7 — Hero ribbon uses a STABLE seed (not BUILD_DATE) so the
-// five headline numbers (SHARPE / DRAWDOWN / COVERAGE / SAMPLES /
-// CAPITAL) never shift between deploys. A live-feel number that
-// drifts every build reads as "unstable" to a recruiter reviewing
-// the page twice; a stable institutional number reads as identity.
-// Build-stamped seeds remain in the tape / equity curve / order book
-// sections where "live" feel is the point.
-// (v6.10.55 — removed 6 dead hero-canonical values: heroRng, heroSharpe,
-//  heroSharpeDelta, heroDrawdown, heroCoverage, heroSamples, heroCapital.
-//  They were declared but never read in JSX — hero ribbon uses inline
-//  stable values now. The `'hero-canonical-2026q3'` PRNG stream is dead.)
-
-// === v6.6 (Mission H) — RESEARCH COVERAGE RADAR ====================
-// 6-axis radar (server-rendered SVG, 320px radius). Each axis = one
-// quant research area; values in [0.40, 0.95], seeded from
-// buildSeed() + '::radar' for build-stable coverage polygon. Axes
-// start at the top (12 o'clock) and rotate clockwise.
-const radarLabels = ['BACKTEST', 'SIGNALS', 'RISK', 'EXEC', 'EVAL', 'AGENTS'];
-const radarRadius = 320;
-const radarAngles = radarLabels.map((_, i) => (i * Math.PI * 2) / 6 - Math.PI / 2);
-// v6.7 — radar identity polygon. Stable seed; identity, not live feel.
-// Bias toward coverage ≥ 0.60 so the polygon reads as 'full institutional
-// coverage' rather than as 'gaps in radar'. min 0.55 → max 0.95.
-const radarRng = seedFromString('radar-canonical-2026q3');
-const radarValues = radarLabels.map(() => +(0.55 + radarRng() * 0.4).toFixed(2));
-
-// Polar → Cartesian helpers. Output is rounded to 1 decimal to keep
-// the SVG payload small.
-const radarPt = (frac: number, i: number) => ({
-  x: +(Math.cos(radarAngles[i]) * radarRadius * frac).toFixed(1),
-  y: +(Math.sin(radarAngles[i]) * radarRadius * frac).toFixed(1),
-});
-const radarPolygonPoints = radarValues
-  .map((v, i) => {
-    const p = radarPt(v, i);
-    return `${p.x},${p.y}`;
-  })
-  .join(' ');
-const radarLabelPos = radarLabels.map((_, i) => {
-  const p = radarPt(1, i);
-  // Push labels 36px outside the 320-radius circle.
-  const len = Math.hypot(p.x, p.y) || 1;
-  return {
-    x: +((p.x / len) * (radarRadius + 36)).toFixed(1),
-    y: +((p.y / len) * (radarRadius + 36)).toFixed(1),
-  };
-});
-// Grid layer fractions — 0.25, 0.5, 0.75, 1.0.
-const radarGridFracs = [0.25, 0.5, 0.75, 1.0];
-
-// === v6.6 (Mission H) — PROJECT VELOCITY HEATMAP ===================
-// 4 rows × 6 cols = 24 cells, the last 24 weeks of project velocity.
-// Each cell picks a stage (W/P/H/F/M/R) from a weighted distribution
-// (Wrote 0.30 / Paper 0.18 / Hypothesis 0.10 / Frozen-spec 0.08 /
-// Model 0.14 / Released 0.20). Color intensity drives a color-mix
-// blend between --c-amber-light and --c-data-positive.
-const velocityStages = ['W', 'P', 'H', 'F', 'M', 'R'] as const;
-const velocityWeights = [0.3, 0.18, 0.1, 0.08, 0.14, 0.2];
-const velocityStageNames: Record<string, string> = {
-  W: 'Wrote',
-  P: 'Paper',
-  H: 'Hypothesis',
-  F: 'Frozen-spec',
-  M: 'Model',
-  R: 'Released',
-};
-// v6.7 — velocity heatmap. Stable seed; identity heatmap, not live feel.
-const velocityRng = seedFromString('velocity-canonical-2026q3');
-const velocityCells: { stage: string; intensity: number }[] = [];
-for (let i = 0; i < 24; i++) {
-  const u = velocityRng();
-  let cum = 0;
-  let stage: string = velocityStages[0];
-  for (let j = 0; j < velocityStages.length; j++) {
-    cum += velocityWeights[j];
-    if (u <= cum) {
-      stage = velocityStages[j];
-      break;
-    }
-  }
-  velocityCells.push({ stage, intensity: +(0.2 + velocityRng() * 0.8).toFixed(2) });
-}
-// Reshape into 4 rows of 6 for the JSX render below.
-const velocityRows: { stage: string; intensity: number }[][] = [
-  velocityCells.slice(0, 6),
-  velocityCells.slice(6, 12),
-  velocityCells.slice(12, 18),
-  velocityCells.slice(18, 24),
-];
+const email = profile.contact.email;
+const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hiring%20inquiry`;
 ---
 
-<BaseLayout title={profile.titles.primary} description={profile.titles.secondary} surface="v6-13">
-  {
-    /* ============================================================
-       HERO — identity-first, single-column, dark editorial.
-       R.1 (v6.1.x) — the H1 IS the name + role, not what they do.
-       A senior QR/AI-engineer reader should answer "who" within 5s.
-       Ticker has been demoted from first-pixel to below-hero.
-       ============================================================ */
-  }
-  <section class="hero">
-    {
-      /* v6.10.25 — killed duplicate .hero__glow div. It was rendering the
-        same grid (linear-gradient × 2, 80×80, white 0.025) as .hero__grid
-        below. Pure duplication: 2 DOM nodes + 2 CSS rules for zero visual
-        delta. Keep only .hero__grid. */
-    }
-    <div class="hero__grid" aria-hidden="true"></div>
+<BaseLayout
+  title={profile.titles.primary}
+  description={profile.titles.secondary}
+  surface="v6-13"
+  theme="light"
+  breadcrumbs={[{ name: 'Home', href: '/' }]}
+>
+  <!-- ============================================================
+       1. NEWS-RIBBON — first chrome, "this site is updated" signal
+       v7.4 motion layer (Lane 1 = updates, Lane 2 = methodology frames).
+       ============================================================ -->
+  <NewsRibbon />
+
+  <!-- ============================================================
+       2. HERO — identity + role + KPIs + dual-path CTA + portrait
+       v7.5 — KPIs now use Odometer with proper format() prop
+       (was data-counter="7300" → "7300" stripped of comma + suffix).
+       Dual-path CTA row replaces single CTA: EMAIL + OPEN DESK + READ LOOP.
+       ============================================================ -->
+  <section class="hero" aria-label="Identity">
     <div class="container hero__inner">
-      {
-        /* v6.5 — institutional Q3 2026 badge. Amber-on-tape pill above
-          the eyebrow. Indicates "open to remote QR / AI roles" in the
-          institutional voice. */
-      }
-      <p class="hero__badge mono">
-        <a href={path('/contact')} class="hero__badge-link"
-          >Q3 2026 · Open to remote QR / AI roles →</a
-        >
-      </p>
-      <p class="hero__eyebrow">
-        <span class="hero__eyebrow-name">{profile.fullName}</span>
-        <span class="hero__eyebrow-sep" aria-hidden="true">·</span>
-        {
-          /* v6.11.9 — was "Open to remote roles · UTC+8". The "Open to
-           remote roles" phrase duplicated the badge above. Trimmed to
-           just the timezone so the eyebrow doesn't overflow on mobile
-           and the two lines carry distinct signals (badge = availability,
-           eyebrow = identity + time zone). */
-        }
-        <span>{profile.location.timezone}</span>
+      <p class="hero__eyebrow mono" data-stagger="1">
+        Q3 2026 · OPEN TO REMOTE QR / AI ROLES · &lt;24H REPLY
       </p>
 
-      <div class="hero__top">
-        <div class="hero__top-text">
-          <h1 class="hero__title">Quantitative researcher. AI engineer. One eval harness.</h1>
-
-          <VoiceLine class="hero__voice" ruled={false} size="md">
-            I build research systems, and I ship the evals that prove they work.
-          </VoiceLine>
-
-          {
-            /* F10.2 — Consolidate: drop the 5-stat ribbon and the 4-cell
-              CTA rail; keep ONE compact measurement row.
-              Ribbon said SHARPE / DRAWDOWN / COVERAGE / SAMPLES / CAPITAL
-              (research output metrics — belongs on /proof or /positions,
-              not the first-impression hero). CTA rail said CONTACT / WORK
-              / METHOD / RESUME (navigation disguised as data).
-              Replacement: 3 inline pills: one credential + two CTAs.
-              Less is more for recruiters who skim. */
-          }
-          <p class="hero__sub">
-            Based in {profile.location.display} · {profile.availability.hours} · remote-first
-            <span class="hero__sep" aria-hidden="true">·</span>
-            shipping {profile.stats.aiAgentCount} agents · {profile.stats.evalGates} gates · {
-              profile.stats.locPython
-            } Python · day-1 stack: Python, pandas, LLM-eval, RAG, MCP
+      <div class="hero__grid">
+        <div class="hero__identity">
+          <h1 class="hero__name" data-stagger="2">
+            <span class="word">Christian</span>
+            <span class="word">T.</span>
+            <span class="word">Macion</span>
+          </h1>
+          <p class="hero__role" data-stagger="3">
+            Quantitative Researcher · AI Engineer · UTC+8 · Digos, PH<span
+              class="hero__cursor"
+              aria-hidden="true"></span>
           </p>
 
-          <div class="hero__actions">
-            <a href={path('/contact')} class="hero__cta hero__cta--primary">
-              <span class="hero__cta-key mono">CONTACT</span>
-              <span class="hero__cta-val">&lt;24 h reply</span>
-            </a>
-            <a href={path('/resume')} class="hero__cta hero__cta--accent">
-              <span class="hero__cta-key mono">RESUME</span>
-              <span class="hero__cta-val">3 × 3 variants · formats</span>
-              <span class="hero__cta-arrow" aria-hidden="true">↓</span>
-            </a>
-            <a href={path('/proof')} class="hero__cta">
-              <span class="hero__cta-key mono">PROOF</span>
-              <span class="hero__cta-val">5 trades · 2 certs · 1 paper</span>
-            </a>
+          <p class="hero__lede" data-stagger="4">
+            <em>I build research systems where the evals prove the work.</em>
+            Senior practitioner across quant trading desks, AI engineering teams, and multi-agent build
+            systems. I ship the eval harness, the backtest manifest, and the audit gate — so the work
+            can be defended in interview.
+          </p>
+
+          <ul class="hero__kpis" aria-label="Key metrics" data-stagger="5">
+            <li class="hero__kpi">
+              <Odometer
+                value={QUANT_STRATEGIES}
+                label="Quant strategies"
+                class="hero__kpi-odometer"
+              />
+            </li>
+            <li class="hero__kpi">
+              <Odometer value={AI_PROJECTS} label="AI projects" class="hero__kpi-odometer" />
+            </li>
+            <li class="hero__kpi">
+              <Odometer
+                value={LOC_PYTHON_K}
+                format={(n) => `${n.toFixed(1)}k`}
+                label="LOC Python"
+                class="hero__kpi-odometer"
+              />
+            </li>
+            <li class="hero__kpi">
+              <Odometer value={EVAL_GATES} label="Eval gates" class="hero__kpi-odometer" />
+            </li>
+          </ul>
+
+          <div class="hero__cta-row" data-stagger="6">
+            <a class="cta cta--primary" href={mailto}>EMAIL — HIRING INQUIRY</a>
+            <a class="cta cta--ghost" href={path('/desk')}>OPEN DESK →</a>
+            <a class="cta cta--ghost" href={path('/ai')}>READ LOOP →</a>
           </div>
         </div>
 
-        <aside class="hero__id" aria-label="Identity proof">
-          <figure class="hero__portrait">
-            <ProofCard
-              src={path('/proof/cta-cert-portrait-2026-01.jpg')}
-              alt={`${profile.fullName}, Certified Technical Analyst portrait, January 2026. CTA cert #260197.`}
-              caption="CTA cert #260197"
-              credit="Society of Technical Analysts · Jan 2026"
-              aspect="3/2"
-              fit="contain"
-              eager={true}
-            />
-            <span class="hero__id-eyebrow mono">PROVENANCE · TAPE 01</span>
-          </figure>
+        <aside class="hero__portrait" data-stagger="3">
+          <img
+            src={profile.headshot.src}
+            alt={profile.headshot.alt}
+            width="280"
+            height="320"
+            loading="eager"
+          />
+          <p class="hero__portrait-credit mono">{profile.headshot.credit}</p>
         </aside>
       </div>
     </div>
   </section>
 
-  {
-    /* ============================================================
-       v6.5 (Mission Home Integration) — LIVE TAPE MINI-ROW
-       Bloomberg-style summary strip: 4 inline stats + as-of timestamp,
-       all in 10px mono with tabular-nums. Sits between the hero and
-       the ambient workspace band as the "first thing the eye lands
-       on after the identity strip" density anchor.
+  <!-- ============================================================
+       3. TWO-PILLAR ROW — 1fr 1fr above 900px, stacks mobile.
+       Left pane = quant lane (EquityCurveChart).
+       Right pane = AI lane (AgentGraph compact = 7 nodes, drops inputs).
+       Each pane carries: eyebrow · viz · 3 micro-stats · read-pillar link.
+       ============================================================ -->
+  <section
+    class="pillars"
+    id="pillars"
+    aria-label="Two-pillar positioning: Quantitative Research × AI Systems"
+  >
+    <div class="container">
+      <p class="pillars__eyebrow mono" data-reveal="lift-sm">
+        TWO PILLARS · ONE OPERATOR · SAME EVAL DISCIPLINE
+      </p>
 
-       Server-rendered, deterministic from buildSeed(). NDA-positive:
-       generic asset classes only — no tickers, no platform names.
-       The same build always renders the same as-of + values; the
-       next day's build rolls a fresh snapshot via the PRNG stream.
-       ============================================================ */
-  }
-  <section class="live-tape" aria-label="Market summary tape">
-    <div class="container live-tape__inner">
-      <div class="live-tape__row mono" role="presentation">
-        <span class="live-tape__cell">
-          <span class="live-tape__label">YIELD 2s10s</span>
-          <span class={`live-tape__val ${tapeSnapshot.spreadBp >= 0 ? 'is-up' : 'is-down'}`}>
-            {tapeSnapshot.spreadBp >= 0 ? '+' : ''}{tapeSnapshot.spreadBp.toFixed(2)} BP
-          </span>
-        </span>
-        <span class="live-tape__sep" aria-hidden="true">·</span>
-        <span class="live-tape__cell">
-          <span class="live-tape__label">DXY</span>
-          <span class="live-tape__val">{tapeSnapshot.dxy.toFixed(2)}</span>
-        </span>
-        <span class="live-tape__sep" aria-hidden="true">·</span>
-        <span class="live-tape__cell">
-          <span class="live-tape__label">VIX</span>
-          <span class={`live-tape__val ${tapeSnapshot.vix >= 20 ? 'is-warn' : ''}`}>
-            {tapeSnapshot.vix.toFixed(2)}
-          </span>
-        </span>
-        <span class="live-tape__sep" aria-hidden="true">·</span>
-        <span class="live-tape__cell">
-          <span class="live-tape__label">BRENT</span>
-          <span class="live-tape__val">{tapeSnapshot.brent.toFixed(2)}</span>
-        </span>
-        <span class="live-tape__sep" aria-hidden="true">·</span>
-        <span class="live-tape__asof" aria-label="As-of timestamp">AS OF {tapeSnapshot.asOf}</span>
-      </div>
-    </div>
-  </section>
-
-  {
-    /* ============================================================
-       v6.2 (Mission Q + R) — AMBIENT WORKSPACE BAND
-       Two stacked rows:
-         1. <HeroVideo />   — orbital grid + price-line + city dots,
-              amber on tape-dark. Pure-SVG fallback (no .mp4 ships
-              in this build); the video branch auto-activates if
-              public/ambient/workspace-loop.mp4 is ever added.
-         2. <WorldFeed />   — 4-lane news-caster ticker:
-              MARKETS (amber) · POLICY (green) · QUANT (cyan) ·
-              AI (monochrome). 20 fixtures per lane, 40-second cycle,
-              CSS-only infinite pan, prefers-reduced-motion aware.
-       The wrapper is full-bleed tape-dark and bleeds into the hero
-       border without a hard seam. No client-side JS for either
-       component; reduced-motion pauses via CSS + the BaseLayout
-       bundle's hero-video.ts driver (SVG fallback is a no-op).
-       ============================================================ */
-  }
-  <section class="workspace" aria-label="Ambient workspace">
-    <div class="workspace__ambient">
-      <HeroVideo />
-    </div>
-
-    {
-      /* v6.6.1 — research coverage radar (6-axis). Fixtures at lines
-        371-411; rendered into a 720×720 SVG with 320-radius disk,
-        4 concentric grid polygons, 6 axis lines, filled radar polygon
-        at amber 0.25 fill-opacity, axis labels around the perimeter. */
-    }
-    <div class="workspace__viz" aria-label="Research coverage + project velocity">
-      <figure class="workspace__radar">
-        <figcaption class="workspace__viz-title mono">
-          <span class="workspace__viz-rule" aria-hidden="true"></span>
-          Research coverage
-        </figcaption>
-        <svg
-          class="workspace__radar-svg"
-          viewBox="-400 -400 800 800"
-          width="100%"
-          role="img"
-          aria-label="Research coverage across backtest, signals, risk, exec, eval, agents"
-        >
-          <title>Research coverage · 6-axis radar</title>
-          {/* Concentric grid polygons (0.25 / 0.5 / 0.75 / 1.0) */}
-          {
-            radarGridFracs.map((f) => {
-              const pts = radarLabels
-                .map((_, i) => {
-                  const p = radarPt(f, i);
-                  return `${p.x},${p.y}`;
-                })
-                .join(' ');
-              return <polygon class="radar-grid" points={pts} />;
-            })
-          }
-          {/* Axis lines (center → perimeter) */}
-          {
-            radarLabels.map((_, i) => {
-              const p = radarPt(1, i);
-              return <line class="radar-axis" x1="0" y1="0" x2={p.x} y2={p.y} />;
-            })
-          }
-          {/* Filled coverage polygon */}
-          <polygon class="radar-polygon" points={radarPolygonPoints}></polygon>
-          {/* Vertex dots at the actual coverage value on each axis */}
-          {
-            radarLabels.map((_, i) => {
-              const p = radarPt(radarValues[i], i);
-              return <circle class="radar-vertex" cx={p.x} cy={p.y} r="4" />;
-            })
-          }
-          {
-            /* Axis labels (BACKTEST / SIGNALS / RISK / EXEC / EVAL / AGENTS)
-              with numeric coverage value directly under each label.
-              v6.7 — without the value, the polygon is unreadable; with
-              the value, the chart reads as research output. */
-          }
-          {
-            radarLabels.map((label, i) => {
-              const p = radarLabelPos[i];
-              const v = radarValues[i];
-              return (
-                <g>
-                  <text
-                    class="radar-label"
-                    x={p.x}
-                    y={p.y - 6}
-                    text-anchor="middle"
-                    dominant-baseline="middle"
-                  >
-                    {label}
-                  </text>
-                  <text
-                    class="radar-value"
-                    x={p.x}
-                    y={p.y + 8}
-                    text-anchor="middle"
-                    dominant-baseline="middle"
-                  >
-                    {(v * 100).toFixed(0)}%
-                  </text>
-                </g>
-              );
-            })
-          }
-        </svg>
-      </figure>
-
-      <figure class="workspace__velocity">
-        <figcaption class="workspace__viz-title mono">
-          <span class="workspace__viz-rule" aria-hidden="true"></span>
-          Project velocity · last 24 weeks
-        </figcaption>
-
-        {
-          /* F13.1 — replaced the colored-grid-of-letters with a real
-            burndown matrix. 4 rows × 6 cols where each ROW is a 6-week
-            window (W18–W23 / W12–W17 / W06–W11 / W00–W05) and each COLUMN
-            is one of 6 pipeline stages (W/P/H/F/M/R). Cell = the stage
-            that shipped that week, intensity = how much output. Bottom
-            rail: stage legend with counts. */
-        }
-        <div class="velocity__grid" role="table" aria-label="24-week project velocity matrix">
-          {/* Header row: stage labels */}
-          <div class="velocity-row velocity-row--header" role="row">
-            <span class="velocity-rowlabel velocity-rowlabel--head" aria-hidden="true">WEEK</span>
-            {
-              velocityStages.map((s) => (
-                <span
-                  class="velocity-colhead mono"
-                  role="columnheader"
-                  title={velocityStageNames[s]}
-                >
-                  {s}
-                </span>
-              ))
-            }
+      <div class="pillars__grid">
+        <article class="pillar pillar--quant" data-reveal>
+          <p class="pillar__lane mono">
+            QUANT LANE · {profile.stats.strategyCount} STRATEGIES · {profile.stats.locPython} LOC PYTHON
+          </p>
+          <div class="pillar__viz">
+            <EquityCurveChart
+              data={equitySeries}
+              width={720}
+              height={260}
+              volWindow={5}
+              title="BTC/USDT · live paper-trade · vol-target momentum"
+              caption="Live series · 49 trading days · 5 bps/side slippage · vol target 30% annualized"
+            />
           </div>
+          <ul class="pillar__stats mono">
+            <li><b class="tnum">0.39</b><span>SHARPE · ANN.</span></li>
+            <li><b class="tnum">−3.6%</b><span>MAX DRAWDOWN</span></li>
+            <li><b class="tnum">+12%</b><span>NET RETURN</span></li>
+          </ul>
+          <p class="pillar__cta">
+            <a href={path('/projects/quant/')}>READ QUANT PILLAR →</a>
+          </p>
+        </article>
 
-          {/* Data rows: 4 windows × 6 weeks each. Top = oldest, bottom = newest. */}
-          {
-            velocityRows.map((row, ri) => {
-              // Window label: ri=0 → W18–W23 (oldest), ri=3 → W00–W05 (newest)
-              const highWeek = (3 - ri) * 6 + 5;
-              const lowWeek = (3 - ri) * 6;
-              const label = `W${String(lowWeek).padStart(2, '0')}–W${String(highWeek).padStart(2, '0')}`;
-              return (
-                <div class="velocity-row" role="row">
-                  <span class="velocity-rowlabel mono" role="rowheader" aria-hidden="true">
-                    {label}
-                  </span>
-                  {row.map((cell, ci) => (
-                    <div
-                      class:list={['velocity-cell', `velocity-cell--${cell.stage.toLowerCase()}`]}
-                      role="cell"
-                      style={`--intensity: ${(cell.intensity * 100).toFixed(0)}%`}
-                      title={`${label} col ${ci + 1} · ${velocityStageNames[cell.stage]} · intensity ${(cell.intensity * 100).toFixed(0)}%`}
-                    >
-                      <span class="velocity-cell__glyph mono" aria-hidden="true">
-                        {cell.stage}
-                      </span>
-                      <span class="velocity-cell__bar" aria-hidden="true" />
-                    </div>
-                  ))}
-                </div>
-              );
-            })
-          }
-        </div>
-
-        <div class="velocity-legend" aria-label="Stage legend with totals">
-          {
-            velocityStages.map((s) => {
-              const count = velocityCells.filter((c) => c.stage === s).length;
-              return (
-                <span class="velocity-legend__item">
-                  <span
-                    class={`velocity-legend__swatch velocity-legend__swatch--${s.toLowerCase()}`}
-                    aria-hidden="true"
-                  />
-                  <span class="mono">{s}</span>
-                  <span class="velocity-legend__name">{velocityStageNames[s]}</span>
-                  <span class="velocity-legend__count mono">{count}×</span>
-                </span>
-              );
-            })
-          }
-        </div>
-      </figure>
-    </div>
-
-    <div class="workspace__feed">
-      <WorldFeed />
+        <article class="pillar pillar--ai" data-reveal data-reveal-delay="120">
+          <p class="pillar__lane mono">
+            AI LANE · {AI_PROJECTS} PROJECTS · {archSafe.agentCount}-AGENT OFFICE
+          </p>
+          <div class="pillar__viz">
+            <AgentGraph compact />
+          </div>
+          <ul class="pillar__stats mono">
+            <li><b class="tnum">{profile.stats.aiAgentCount}</b><span>DAG AGENTS</span></li>
+            <li><b class="tnum">{archSafe.subTeamCount}</b><span>SUB-TEAMS</span></li>
+            <li><b class="tnum">{archSafe.mustHaveCount}</b><span>MUST-HAVES</span></li>
+          </ul>
+          <p class="pillar__cta">
+            <a href={path('/ai')}>READ AI PILLAR →</a>
+          </p>
+        </article>
+      </div>
     </div>
   </section>
 
-  {
-    /* ============================================================
-       v6.5 (Mission Home Integration) — SECTION TRANSITION · ENTRY
-       Light 1px hairline + 10px mono label between the workspace
-       band and the entry stations. One of four transitions on the
-       page (entry-stations, globe, math-behind-tape, collaborators);
-       institutional Bloomberg / BIS convention for "next heavy
-       section starts here".
-       ============================================================ */
-  }
-  <hr class="section-rule" aria-hidden="true" />
-  <p class="section-rule__label mono" aria-hidden="true">
-    <span aria-hidden="true">↓</span>
-    <span>SECTION 03 · ENTRY STATIONS</span>
-  </p>
-
-  {
-    /* ============================================================
-       v6.5 — ENTRY STATIONS (extracted from the v6.1 inline strip)
-       Four flagship-lane tiles: Markets · Prediction · Research · AI.
-       Component owns its own data fixtures and styles; index.astro
-       just mounts it in the slot between workspace and AiEntryPoints.
-       ============================================================ */
-  }
-  <EntryStations />
-
-  {
-    /* ============================================================
-       v6.4 (Mission E) — AI ENTRY POINTS
-       Three library-style chips: READ METHOD / FIND PATTERN / OPEN
-       NOTEBOOKS. Server-rendered, no client-side LLM cost. Each chip
-       is a deterministic link to an existing artifact on the site
-       (the methodology framework, the math-corpus anchor on
-       /research, and the /projects/?tag=quant lane-2 filter).
-       ============================================================ */
-  }
-  <AiEntryPoints />
-
-  {
-    /* ============================================================
-       v6.2 (Mission S) — DATA INGESTION
-       Server-rendered log stream of 30 generic events (ORDER · NEWS ·
-       FILING · SENTIMENT · ALERT). Items fade in from translateX(20px)
-       with a staggered 80ms per-item delay. Pure CSS, no JS.
-       NDA-positive: no platform, employer, or tickers named.
-       ============================================================ */
-  }
-  <DataIngestion />
-
-  {
-    /* ============================================================
-       v6.2 (Mission S) — TRADER DESK
-       4-cell desk panel (Positions · Orders · Calendar · Alerts)
-       deterministic from per-cell PRNG seeds, server-rendered, no JS.
-       ============================================================ */
-  }
-  <TraderDesk />
-
-  {
-    /* ============================================================
-       TICKER — institutional marquee of methodology signals.
-       Sits between the trader desk and the world-event map, acting as
-       a status bar (the institutional "we are rigorous" indicator).
-       ============================================================ */
-  }
-  <Ticker />
-
-  {
-    /* ============================================================
-       v6.5 (Mission Home Integration) — SECTION TRANSITION · GLOBE
-       Second of four institutional transitions. The globe is the
-       page's heaviest visualization; the transition label gives the
-       reader a "next heavy section" signpost, BIS / Bloomberg style.
-       ============================================================ */
-  }
-  <hr class="section-rule" aria-hidden="true" />
-  <p class="section-rule__label mono" aria-hidden="true">
-    <span aria-hidden="true">↓</span>
-    <span>SECTION 08 · GLOBAL EVENT MONITOR</span>
-  </p>
-
-  {
-    /* ============================================================
-       v6.2 — IRON DESK · WORLD EVENT MAP
-       Visual centerpiece. Twelve cities, ten active events, Equirectangular
-       projection. Server-rendered SVG, no JS, deterministic from the
-       `worldEvent` content collection. Pins fade-in over the first ~3s
-       via CSS keyframes (EventPin.astro). Honors reduced-motion.
-       ============================================================ */
-  }
-  <section class="section world-events" aria-label="World event map">
-    <div class="container">
-      <header class="section__head world-events__head">
-        <p class="section__eyebrow">Earth mission control · world event map</p>
-        <h2 class="section__title">
-          {globeCityCount} cities. {globeEventCount} events. The news behind the math.
-        </h2>
-        <VoiceLine class="section__sub voice-line--cmd" ruled={true} size="md">
-          A rate decision in London is a half-life in Manila. We map the half-life.
-        </VoiceLine>
-      </header>
-      <div class="world-events__stage">
-        <EarthGlobe pinMath={pinMathMap} />
-        <EarthPulse centerLat={20} centerLon={80} />
-      </div>
-      <EarthFeed />
-      <EarthActionSheet city="Digos" />
-    </div>
-  </section>
-
-  {
-    /* ============================================================
-       v6.5 (Mission Home Integration) — SECTION TRANSITION · MATH
-       Third of four institutional transitions. MathBehindTape is the
-       page's quant-density anchor (6 KPI tiles + 6 headline bridges);
-       the transition label sets reader expectation.
-       ============================================================ */
-  }
-  <hr class="section-rule" aria-hidden="true" />
-  <p class="section-rule__label mono" aria-hidden="true">
-    <span aria-hidden="true">↓</span>
-    <span>SECTION 09 · MATH BEHIND THE TAPE</span>
-  </p>
-
-  {
-    /* ============================================================
-       v6.3 Mission D — math-news bridge: 6 of today's headlines
-       read as quant. Server-rendered, deterministic per build,
-       no client JS. The component ships its own .mathtape section
-       with padding-block, so we emit it directly (no wrapper).
-       ============================================================ */
-  }
-  <MathBehindTape />
-
-  {
-    /* ============================================================
-       WHAT I DO — v6.5 graphic-visual rebuild.
-       Replaces the v6.4 4-paragraph list with two institutional
-       primitives:
-         1. A 4-cell LETTERFORM GRID (R / A / M / C, 240×180 each)
-            — giant sans-serif letter (96px amber, ink bleed at 0.5
-            opacity), tracked mono label, 1-line caption, top-right
-            count chip with leading amber dot.
-         2. A 20-cell MARQUEE STRIP below — 80×40 cells of project /
-            artifact names scrolling left, with a 2-second pause at end
-            of cycle. Pause on hover. Pure CSS animation, no client JS.
-       Both are deterministic from `buildSeed() + '::what*'` per the
-       standing order; numbers and order roll on each build.
-       ============================================================ */
-  }
-  <section class="section section--slim what">
-    <div class="container">
-      <header class="section__head what__head">
-        <p class="section__eyebrow">What I do</p>
-        <h2 class="section__title">{whatCells.length} things, one discipline.</h2>
-        <p class="section__sub">
-          A senior quant and an AI engineer can share a desk only if both write the eval harness.
-          That's the only output that survives the next data drift, the next regime shift, the next
-          model swap.
-        </p>
-      </header>
-
-      {/* === {whatCells.length}-CELL LETTERFORM GRID (R / A / M / C) === */}
-      <div class="what__cells" role="list" aria-label="{`${whatCells.length} pillars of practice`}">
-        {
-          whatCells.map((cell) => (
-            <article class="what-cell" role="listitem">
-              <span class="what-cell__chip mono">
-                <span class="what-cell__chip-dot" aria-hidden="true" />
-                {cell.chipNum} {cell.chipUnit}
-              </span>
-              <div class="what-cell__letter" aria-hidden="true">
-                {cell.letter}
-              </div>
-              <div class="what-cell__label mono">{cell.label}</div>
-              <p class="what-cell__caption">{cell.caption}</p>
-            </article>
-          ))
-        }
-      </div>
-
+  <!-- ============================================================
+       4. METHODOLOGY MARQUEE — frame loop between pillars and arch brief
+       v7.5 — corrected DEFALTED → DEFLATED · name-drop frame replaced
+       with OPS-RESEARCH.
+       ============================================================ -->
+  <Marquee
+    items={[
       {
-        /* === 20-CELL MARQUEE STRIP (project / artifact names) ===
-          Pure-CSS keyframe scroll, 28s slide + 2s end-of-cycle pause.
-          Pause on hover via animation-play-state. honors
-          prefers-reduced-motion (animation: none !important). */
-      }
-      <div class="what__marquee" aria-label="Projects and artifacts in flight">
-        <div class="what__marquee-track mono">
-          {
-            [...whatMarquee, ...whatMarquee].map((item) => (
-              <span class="what__marquee-cell" title={item.full}>
-                {item.code}
-              </span>
-            ))
-          }
-        </div>
-      </div>
-    </div>
-  </section>
-
-  {
-    /* ============================================================
-       v6.6 (Mission W) — SELECTED WORK TIMELINE
-       5 vertical-timeline rows distilled from the 15-project corpus.
-       Each row carries a 220px-wide year rail (left), a 1px vertical
-       hairline connector (amber dot at the rail/node midpoint), and a
-       760px content area with:
-         • TITLE (16px sans)
-         • SUBTITLE (11px mono caps amber, right-aligned)
-         • 60px-tall compact result bar (3 horizontal bars × 180×16)
-           showing before/after with a green delta pipe.
-       Numeric deltas are deterministic via
-         `seedFromString(buildSeed() + '::work-row' + i)` per §9 of the
-       standing orders. Replaces the prior 3×2 card grid (~600px tall)
-       with a single column ~330px tall — 45% smaller.
-
-       Section head drops the long subtitle; the timeline's row
-       subtitles carry the spec language instead.
-       ============================================================ */
-  }
-  <section class="section section--alt work">
-    <div class="container">
-      <header class="section__head work__head">
-        <p class="section__eyebrow">Selected work</p>
-        <h2 class="section__title">{workRows.length} proofs of method.</h2>
-      </header>
-
-      <ol class="work__timeline">
-        {
-          workRows.map((row) => (
-            <li class="work__row">
-              <a
-                class="work__row-link"
-                href={row.href}
-                aria-label={`${row.title} — read case study`}
-              >
-                <div class="work__rail mono">
-                  <span class="work__year">{row.year}</span>
-                  <span class="work__node" aria-hidden="true" />
-                </div>
-                <div class="work__content">
-                  <div class="work__line">
-                    <span class={`work__tag mono work__tag--${row.tag.toLowerCase()}`}>
-                      {row.tag}
-                    </span>
-                    <h3 class="work__title">{row.title}</h3>
-                    <span class="work__subtitle mono">{row.subtitle}</span>
-                  </div>
-                  <div class="work__bars" aria-hidden="true">
-                    {row.metrics.map((m) => (
-                      <div class="work__bar">
-                        <span class="work__bar-label mono">{m.label}</span>
-                        <span class="work__bar-track">
-                          <span
-                            class="work__bar-fill work__bar-fill--before"
-                            style={`width:${Math.min(100, (Math.abs(m.before) / Math.max(1, Math.abs(m.after) + Math.abs(m.before))) * 100).toFixed(1)}%`}
-                          />
-                        </span>
-                        <span class="work__bar-val mono work__bar-val--before">
-                          {m.before.toFixed(m.format === 'pct' ? 0 : 2)}
-                          {m.unit}
-                        </span>
-                        <span
-                          class={`work__bar-pipe ${m.deltaPos ? 'is-pos' : 'is-neg'}`}
-                          aria-hidden="true"
-                        >
-                          →
-                        </span>
-                        <span class="work__bar-track work__bar-track--after">
-                          <span
-                            class={`work__bar-fill work__bar-fill--after ${m.deltaPos ? 'is-pos' : 'is-neg'}`}
-                            style={`width:${Math.min(100, (Math.abs(m.after) / Math.max(1, Math.abs(m.after) + Math.abs(m.before))) * 100).toFixed(1)}%`}
-                          />
-                        </span>
-                        <span
-                          class={`work__bar-val mono work__bar-val--after ${m.deltaPos ? 'is-pos' : 'is-neg'}`}
-                        >
-                          {m.after.toFixed(m.format === 'pct' ? 0 : 2)}
-                          {m.unit}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </a>
-            </li>
-          ))
-        }
-      </ol>
-
-      <div class="section__foot">
-        <a href={path('/projects')} class="projects-cta">
-          <span class="projects-cta__eyebrow mono">ALL PROJECTS</span>
-          <span class="projects-cta__main"
-            >{projects.length} projects · {quantCount} quant · 4 markets · {predictionEvents.length} prediction</span
-          >
-          <span class="projects-cta__arrow" aria-hidden="true">→</span>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  {
-    /* ============================================================
-       THE NUMBERS — graphic visual pulse row, v6.5.
-       Replaces the v6.2 four oversized Odometer tiles with a
-       2-row × 4-col metric strip (180×88 cells, 1px hairlines,
-       1px outer border in --c-rule). Each cell is
-         ┌────────────┐
-         │ LABEL 10px │   mono caps, ink-2
-         │  NUM 32px  │   sans, ink
-         │ +0.04      │   10px mono, color-coded
-         └────────────┘
-       Center values are portfolio truths (profile.stats.pagesBuilt pages · 31 gates · 11
-       agents · 102 certs · 9 strategies · {profile.stats.ageMonths} months · 100% audit ·
-       6H AFK loop). Deltas are the "pulse" — seeded from
-       `seedFromString(buildSeed() + '::numbers')` so each build
-       rolls a fresh combination while the build itself stays
-       deterministic.
-       ============================================================ */
-  }
-  <section class="section section--slim numbers">
-    <div class="container">
-      <header class="section__head">
-        <p class="section__eyebrow">The numbers</p>
-        <h2 class="section__title">What {profile.stats.ageMonths} months of build looks like.</h2>
-      </header>
-
-      <div class="metric-strip" aria-label="Portfolio pulse metrics">
-        {
-          [metricRow1, metricRow2].map((row, ri) => (
-            <div class:list={['metric-row', ri === 1 && 'metric-row--second']}>
-              {row.map((m) => (
-                <div class:list={['metric', `metric--${m.kind}`]}>
-                  <span class="metric__label mono">{m.label}</span>
-                  <span class="metric__num">{m.value}</span>
-                  <span class:list={['metric__delta', 'mono', `metric__delta--${m.kind}`]}>
-                    {m.delta}
-                  </span>
-                </div>
-              ))}
-            </div>
-          ))
-        }
-      </div>
-    </div>
-  </section>
-
-  {
-    /* ============================================================
-       STATEMENT CAROUSEL — editorial rotating sentences.
-       Auto-advances every 5s, pauses on hover. The Anthropic /
-       Schonfeld institutional signature: one rotating thought
-       that re-anchors the page between the proof band and the
-       credentials list.
-       ============================================================ */
-  }
-  {
-    /* ============================================================
-       STATEMENT CAROUSEL — editorial 3-card graphic variant.
-       v6.6.0: replaced the single-line rotating sentence with a
-       3-card layout. Each card carries a top-left roman-numeral
-       square (i / ii / iii), the statement text centered with
-       serif italic line-height 1.4, a 10px mono eyebrow above
-       (`STRATEGY NOTE 0X · CONDENSED`), and 3 mini-pip indicators
-       in the bottom-right (active = --c-amber, inactive = --c-ink-3).
-       Auto-advances every 5s, pauses on hover/focus.
-       ============================================================ */
-  }
-  <StatementCarousel
-    variant="graphic"
-    statements={[
-      'Eval-first. ↦ Ship-ready.',
-      'NDA-clean. ↦ Public-data reproducible.',
-      `${profile.stats.evalGates} gates. ↦ Zero rollbacks.`,
+        head: 'EVAL-FIRST',
+        tail: `${profile.stats.evalGates} GATES · ZERO ROLLBACKS`,
+        accent: 'warn',
+      },
+      { head: 'NDA-CLEAN', tail: 'PUBLIC-DATA REPRODUCIBLE', accent: 'cobalt' },
+      {
+        head: 'ALPHA-DRIVEN',
+        tail: `${profile.stats.strategyCount} STRATEGIES · SAME METHOD`,
+        accent: 'sage',
+      },
+      { head: 'DEFLATED SHARPE', tail: 'OUT-OF-SAMPLE PENALTY', accent: 'terracotta' },
+      { head: 'BLOCK-BOOTSTRAP', tail: 'PBO-TESTED · OOS-VALIDATED', accent: 'sage' },
+      {
+        head: 'MULTI-AGENT',
+        tail: `${profile.stats.aiAgentCount} AGENTS · 1 ORCHESTRATOR`,
+        accent: 'violet',
+      },
+      { head: 'COINTEGRATION', tail: 'PAIRS · 5Y HALF-LIFE', accent: 'cobalt' },
+      { head: 'VARIANCE RISK', tail: 'PREMIUM HARVEST · DELTA-HEDGED', accent: 'warn' },
+      { head: 'REGIME OVERLAY', tail: 'VOL-TARGETED · DEFENSIVE', accent: 'terracotta' },
+      { head: 'CRYPTO NATIVE', tail: 'BTC · ETH · FUNDING-RATE CARRY', accent: 'warn' },
+      { head: 'LOOKAHEAD AUDIT', tail: '88% CATCH ON PHANTOM LEAK', accent: 'sage' },
+      { head: 'OPS-RESEARCH', tail: 'MULTI-AGENT · EVAL-DRIVEN · NDA-CLEAN', accent: 'sage' },
     ]}
-    label="Discipline statements — three rotations"
-    intervalMs={5000}
+    speedSec={64}
+    trailing="methodology frames · 12 anchor disciplines"
   />
 
-  {
-    /* ============================================================
-       v6.6 (Mission W) — CREDENTIALS RIBBON
-       Horizontal badge ribbon replacing the prior 4-row text list.
-       12 chips, each 64px-tall × auto-width, with:
-         • 14px monogram (cream-on-tape square)
-         • 10px mono caps label (organization or cert short name)
-         • 2px × 32px amber bottom rule, centered.
+  <!-- ============================================================
+       5. ARCHITECTURE BRIEF — STELLA-public-safe slice.
+       v7.5 — Phase D wired in the <ArchitectureBrief /> component.
+       Numbers come from `profile.archSafe` (NDA-clean: counts + taxonomy
+       only). No brand, officer names, or chrome leaks.
+       ============================================================ -->
+  <ArchitectureBrief />
 
-       Chip list (12 entries):
-         STA · BMC · BIDA · NASA · B4Y · CRY · ADDU · USeP ·
-         NMR · HF · UP · OJP
-       All are NDA-positive (past contracts, publicly known, closed
-       engagements, or open-source platforms). Section head drops the
-       long subtitle — the chip row is the new institutional context.
-
-       Replaces ~600px list (~6 rows × ~100px) with a 64px ribbon.
-       ============================================================ */
-  }
-  <section class="section section--slim section--alt creds">
+  <!-- ============================================================
+       6. FIT — education + credentials (compact, no change)
+       ============================================================ -->
+  <section class="fit" id="fit" aria-label="Education and credentials">
     <div class="container">
-      <header class="section__head creds__head">
-        <p class="section__eyebrow">Credentials</p>
-        <h2 class="section__title">{credentialCount} names that earned a callout.</h2>
-      </header>
-
-      <ul class="creds__ribbon" aria-label="Credential ribbon">
-        {
-          credentialChips.map((c) => (
-            <li class="creds__chip">
-              <span class="creds__chip-mono">{c.mono}</span>
-              <span class="creds__chip-label mono">{c.label}</span>
-              <span class="creds__chip-rule" aria-hidden="true" />
-            </li>
-          ))
-        }
-      </ul>
+      <p class="fit__eyebrow mono" data-reveal="lift-sm">EDUCATION · CREDENTIALS · FIT</p>
+      <p class="fit__line" data-reveal>
+        <b>PSHS-SMC</b> · <b>USeP</b> · <b>University of Mindanao</b>
+        <span class="fit__sep">·</span>
+        <b>STA</b> · <b>BIDA</b> · NASA · BMC · HF · UP · OJP · Crypto­neers
+      </p>
+      <p class="fit__line fit__line--meta" data-reveal="fade">
+        NDA-clean by construction · eval-first · quant + AI · Digos City, Davao del Sur, PH
+      </p>
     </div>
   </section>
 
-  {
-    /* ============================================================
-       CTA BANNER — graphic variant (v6.6.0).
-       Replaces wordy headline + sub + dual buttons with:
-         1. 80px-tall rail: "Ready when you are" (serif italic, ink)
-            on the left, an amber 44px-tall button on the right
-            (CTA: Schedule a 30-min review, all-caps tracked).
-         2. 14×4 availability matrix (14 days × 4 time-slots) =
-            56 cells. 48 cells in --c-amber-light at 0.4 fill-opacity
-            (visual abundance); remaining 8 split 4 amber-0.7 / 2 amber-
-            solid / 2 ink-3 by status legend. Deterministically
-            seeded from `seedFromString(buildSeed() + '::availability')`.
-       ============================================================ */
-  }
-  <CTABanner variant="graphic" />
-
-  {
-    /* ============================================================
-       v6.5 (Mission Home Integration) — SECTION TRANSITION · COLLABS
-       Fourth of four institutional transitions. The Collaborators
-       band is the page's social-proof closer; the transition sets
-       the reader's expectation that this is the last "people"
-       section before the institutional end-strip.
-       ============================================================ */
-  }
-  <hr class="section-rule" aria-hidden="true" />
-  <p class="section-rule__label mono" aria-hidden="true">
-    <span aria-hidden="true">↓</span>
-    <span>SECTION 16 · COLLABORATORS</span>
-  </p>
-
-  {
-    /* ============================================================
-       v6.4 (Mission E) — COLLABORATORS
-       Institutional "we work with everyone" closer. 7 NDA-positive
-       mini-cards (role + co-deliverable), mounted below the CTA
-       as the page's social-proof closer. No logo walls, no
-       identifying imagery — letter-avatar fallback only.
-       ============================================================ */
-  }
-  <Collaborators />
-
-  {
-    /* ============================================================
-       v6.4 (Mission E) — EARTH DRAWER
-       Fixed-position right-side event drawer (Bloomberg `<F1> Help`
-       convention). One <details> panel per 36-event corpus entry;
-       sliding opens via the `:has(details[open])` parent selector.
-       Position-fixed, mounted at the page root so it survives any
-       section-level layout reflow.
-       ============================================================ */
-  }
-  <EarthDrawer />
-
-  {
-    /* ============================================================
-       v6.5 (Mission Home Integration) — INSTITUTIONAL END-STRIP
-       One-row closer above the KeyHintPanel. 3 columns:
-         1. Left: copyright + CTA cert portrait micro-thumb
-         2. Center: build metadata (date · version · commit)
-         3. Right: 3 social links (GitHub / LinkedIn / Email)
-       All in 10px mono with 1px hairline borders. The strip is
-       the page's institutional "we are rigorous" closer — it
-       reads like a research paper's footer rather than a portfolio
-       "© 2026, Built with Astro" line.
-       ============================================================ */
-  }
-  <section class="end-strip" aria-label="Build and contact">
-    <div class="container end-strip__inner">
-      <div class="end-strip__col end-strip__col--left">
-        <span class="end-strip__copy mono">© {builtYear} {profile.shortName}</span>
-        <a
-          href={path('/proof/cta-cert-portrait-2026-01.jpg')}
-          class="end-strip__cert mono"
-          rel="noopener noreferrer"
-        >
-          CTA cert #260197 ↗
-        </a>
+  <!-- ============================================================
+       7. CONTACT — dual-path CTA mirrors hero (same 3 buttons)
+       ============================================================ -->
+  <section class="contact" id="contact" aria-label="Contact">
+    <div class="container contact__inner">
+      <p class="contact__eyebrow mono" data-reveal="lift-sm">
+        <span class="status-dot" aria-hidden="true"></span>READY WHEN YOU ARE.
+      </p>
+      <div class="contact__cta-row" data-reveal>
+        <a class="cta cta--primary" href={mailto}>EMAIL — HIRING INQUIRY</a>
+        <a class="cta cta--ghost" href={path('/desk')}>OPEN DESK →</a>
+        <a class="cta cta--ghost" href={path('/ai')}>READ LOOP →</a>
       </div>
-      <div class="end-strip__col end-strip__col--center mono">
-        <span class="end-strip__build">
-          BUILD {buildStamp} · v{pkgVersion} · COMMIT {commitShort}
-        </span>
-      </div>
-      <div class="end-strip__col end-strip__col--right">
-        <a
-          href={profile.contact.github}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="end-strip__link mono"
-        >
-          GitHub ↗
-        </a>
-        <a
-          href={profile.contact.linkedin}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="end-strip__link mono"
-        >
-          LinkedIn ↗
-        </a>
-        <a href={`mailto:${profile.contact.email}`} class="end-strip__link mono"> Email ↗ </a>
-      </div>
+      <p class="contact__secondary mono" data-reveal="fade">
+        <a href="https://github.com/christianmacion">GitHub</a>
+        <span class="fit__sep">·</span>
+        <a href="https://linkedin.com/in/christianmacion">LinkedIn</a>
+        <span class="fit__sep">·</span>
+        <a href={`mailto:${email}`}>{email}</a>
+      </p>
     </div>
   </section>
-
-  {
-    /* ============================================================
-       v6.2 (Mission T) — KEY HINT PANEL
-       Fixed-position keyboard-shortcut hints. Toggle with `?`.
-       Wired by `src/scripts/keyboard-shortcuts.ts`.
-       ============================================================ */
-  }
-  <KeyHintPanel />
 </BaseLayout>
-
-{
-  /* v6.13.1 — Jane Street × Noir hero chrome.
-   * Scoped via :root[data-surface="v6-13"] so the new visuals only
-   * apply on /index (the first v6.13 page). All other surfaces keep
-   * their F14-amber chrome. */
-}
-<style is:global>
-  :root[data-surface='v6-13'] .hero {
-    padding-block: var(--j-sp-7) var(--j-sp-6);
-    background: var(--j-bg);
-  }
-  :root[data-surface='v6-13'] .hero__grid {
-    display: none; /* demoted: the legacy 80×80 grid pattern reads as decorative noise under Jane Street */
-  }
-  :root[data-surface='v6-13'] .hero__inner {
-    max-width: var(--j-container-wide);
-    padding-inline: var(--j-sp-3);
-  }
-  :root[data-surface='v6-13'] .hero__badge {
-    margin-bottom: var(--j-sp-3);
-    font-family: var(--j-ff-mono);
-    font-size: var(--j-t-sm);
-    letter-spacing: var(--j-track-wide);
-  }
-  :root[data-surface='v6-13'] .hero__badge-link {
-    color: var(--j-accent);
-    border-bottom: 1px solid var(--j-accent);
-  }
-  :root[data-surface='v6-13'] .hero__eyebrow {
-    color: var(--j-ink-2);
-    font-family: var(--j-ff-body);
-    font-size: var(--j-t-sm);
-    margin-bottom: var(--j-sp-5);
-  }
-  :root[data-surface='v6-13'] .hero__top {
-    display: grid;
-    grid-template-columns: 1.4fr 1fr;
-    gap: var(--j-sp-6);
-    align-items: center;
-  }
-  @media (width<=900px) {
-    :root[data-surface='v6-13'] .hero__top {
-      grid-template-columns: 1fr;
-    }
-  }
-  :root[data-surface='v6-13'] .hero__title {
-    font-family: var(--j-ff-display);
-    font-size: clamp(var(--j-t-2xl), 8vw, var(--j-t-3xl));
-    line-height: var(--j-lh-tight);
-    font-weight: var(--j-w-display);
-    color: var(--j-ink);
-    letter-spacing: var(--j-track-tight);
-    margin-bottom: var(--j-sp-4);
-  }
-  :root[data-surface='v6-13'] .hero__voice {
-    font-family: var(--j-ff-body);
-    font-size: var(--j-t-md);
-    line-height: var(--j-lh-loose);
-    color: var(--j-ink-2);
-    font-style: normal;
-    margin-bottom: var(--j-sp-5);
-  }
-  :root[data-surface='v6-13'] .hero__sub {
-    font-family: var(--j-ff-body);
-    font-size: var(--j-t-base);
-    line-height: var(--j-lh-normal);
-    color: var(--j-ink-3);
-    margin-bottom: var(--j-sp-5);
-  }
-  :root[data-surface='v6-13'] .hero__sep {
-    color: var(--j-ink-4);
-    margin-inline: var(--j-sp-2);
-  }
-  :root[data-surface='v6-13'] .hero__actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--j-sp-3);
-  }
-  :root[data-surface='v6-13'] .hero__cta {
-    border: 1px solid var(--j-ink-4);
-    background: transparent;
-    color: var(--j-ink);
-    font-family: var(--j-ff-body);
-    padding: var(--j-sp-3) var(--j-sp-4);
-    border-radius: var(--j-r);
-    transition: border-color var(--j-dur) var(--j-ease-snappy);
-    min-height: 44px;
-  }
-  :root[data-surface='v6-13'] .hero__cta:hover {
-    border-color: var(--j-accent);
-  }
-  :root[data-surface='v6-13'] .hero__cta--primary {
-    background: var(--j-accent);
-    color: var(--j-accent-on);
-    border-color: var(--j-accent);
-  }
-  :root[data-surface='v6-13'] .hero__cta--primary:hover {
-    background: var(--j-accent-2);
-    border-color: var(--j-accent-2);
-  }
-  :root[data-surface='v6-13'] .hero__cta--accent {
-    border-color: var(--j-accent);
-    color: var(--j-accent);
-  }
-  :root[data-surface='v6-13'] .hero__cta-key {
-    font-family: var(--j-ff-mono);
-    font-size: var(--j-t-xs);
-    letter-spacing: var(--j-track-wide);
-    font-weight: var(--j-w-mono);
-  }
-  :root[data-surface='v6-13'] .hero__cta-val {
-    margin-left: var(--j-sp-2);
-    color: inherit;
-    opacity: 0.7;
-  }
-  :root[data-surface='v6-13'] .hero__cta--primary .hero__cta-val {
-    color: var(--j-accent-on);
-    opacity: 0.8;
-  }
-  :root[data-surface='v6-13'] .hero__cta-arrow {
-    margin-left: var(--j-sp-2);
-  }
-  :root[data-surface='v6-13'] .hero__id {
-    border: var(--j-b-hairline);
-    padding: var(--j-sp-3);
-    border-radius: var(--j-r);
-    background: var(--j-bg-elev);
-  }
-  :root[data-surface='v6-13'] .hero__id-eyebrow {
-    color: var(--j-ink-3);
-    font-family: var(--j-ff-mono);
-    font-size: var(--j-t-xs);
-    letter-spacing: var(--j-track-wide);
-    display: block;
-    margin-top: var(--j-sp-2);
-  }
-  :root[data-surface='v6-13'] .hero__portrait {
-    margin: 0;
-  }
-  /* Demote the live-tape to a thinner row */
-  :root[data-surface='v6-13'] .live-tape {
-    background: var(--j-bg-elev);
-    border-block: 1px solid var(--j-ink-4);
-    padding-block: var(--j-sp-2);
-  }
-  :root[data-surface='v6-13'] .live-tape__row {
-    font-family: var(--j-ff-mono);
-    font-size: var(--j-t-xs);
-    color: var(--j-ink-2);
-  }
-  :root[data-surface='v6-13'] .live-tape__val.is-up {
-    color: var(--j-ink); /* monochrome — no green; F14 */
-  }
-  :root[data-surface='v6-13'] .live-tape__val.is-down {
-    color: var(--j-ink-3); /* monochrome — no red; F14 */
-  }
-  /* Sections — generous section breaks (144px) */
-  :root[data-surface='v6-13'] .section {
-    padding-block: var(--j-sp-7);
-  }
-  :root[data-surface='v6-13'] .section--tight {
-    padding-block: var(--j-sp-5);
-  }
-  :root[data-surface='v6-13'] .section--slim {
-    padding-block: var(--j-sp-6);
-  }
-  :root[data-surface='v6-13'] .section--alt {
-    background: var(--j-bg-elev);
-    color: var(--j-ink);
-  }
-  :root[data-surface='v6-13'] .section__title {
-    font-family: var(--j-ff-display);
-    font-size: var(--j-t-xl);
-    font-weight: var(--j-w-display);
-    line-height: var(--j-lh-snug);
-    color: var(--j-ink);
-    margin-bottom: var(--j-sp-3);
-    letter-spacing: var(--j-track-tight);
-  }
-  :root[data-surface='v6-13'] .section__eyebrow {
-    font-family: var(--j-ff-mono);
-    font-size: var(--j-t-xs);
-    color: var(--j-accent);
-    letter-spacing: var(--j-track-wide);
-    text-transform: uppercase;
-    margin-bottom: var(--j-sp-3);
-  }
-  :root[data-surface='v6-13'] .section__sub {
-    color: var(--j-ink-2);
-    font-size: var(--j-t-md);
-    line-height: var(--j-lh-loose);
-    max-width: 60ch;
-  }
-  :root[data-surface='v6-13'] h1,
-  :root[data-surface='v6-13'] h2,
-  :root[data-surface='v6-13'] h3 {
-    color: var(--j-ink);
-  }
-  :root[data-surface='v6-13'] body {
-    font-family: var(--j-ff-body);
-    color: var(--j-ink);
-    background: var(--j-bg);
-  }
-  :root[data-surface='v6-13'] a {
-    color: var(--j-ink);
-    text-decoration-color: var(--j-ink-4);
-  }
-  :root[data-surface='v6-13'] a:hover {
-    color: var(--j-accent);
-    text-decoration-color: var(--j-accent);
-  }
-  :root[data-surface='v6-13'] .container {
-    max-width: var(--j-container-wide);
-    padding-inline: var(--j-sp-4);
-  }
-</style>
 
 <style>
   /* ============================================================
-     HERO — t-digital pattern. Dark canvas, single sentence, sparse.
+     v7.5 INSTITUTIONAL HOME — two-pillar restructure
      ============================================================ */
-  .hero {
-    position: relative;
-    padding-block: clamp(var(--sp-7), 14vh, 11rem) clamp(var(--sp-7), 12vh, 9rem);
-    background: var(--c-tape);
-    color: var(--ink-on-tape);
-    border-bottom: 1px solid var(--c-white-mist);
-    overflow: hidden;
-    min-width: 0;
-  }
-  /* v6.10.25 — killed .hero__glow CSS rule entirely. It was the same
-     grid pattern as .hero__grid below (linear-gradient × 2, 80×80,
-     white 0.025). The JSX for it was removed earlier in this commit.
-     Keep only .hero__grid. */
-  .hero__grid {
-    position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(var(--c-white-mist) 1px, transparent 1px),
-      linear-gradient(90deg, var(--c-white-mist) 1px, transparent 1px);
-    background-size: 80px 80px;
-    pointer-events: none;
-    z-index: 0;
+
+  /* Container — single column, generous gutter */
+  .container {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 24px;
   }
 
+  .hero__kpis {
+    position: relative;
+  }
+
+  /* ====== HERO ====== */
+  .hero {
+    border-bottom: 1px solid var(--c-rule);
+  }
   .hero__inner {
-    position: relative;
-    z-index: 1;
-    max-width: 1080px;
-    min-width: 0;
-  }
-  .hero__top {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) clamp(280px, 32%, 360px);
-    gap: var(--sp-6);
-    align-items: start;
-    min-width: 0;
-  }
-  .hero__top-text {
-    min-width: 0;
-    /* v6.11.9 — overflow:hidden ensures any rogue H1/voice text that
-       exceeds the grid column doesn't push the whole viewport wider
-       and trigger horizontal scroll. The text-wrap balance above
-       handles clean wrapping; this is the safety net. */
-    overflow: hidden;
-  }
-  .hero__id {
-    margin: 0;
-    padding: 0;
-    min-width: 0;
-  }
-  /* v6.7.1 — hero portrait sized to match the institutional H1 weight.
-     v6.6 had it at ~220px wide which read as a small thumbnail next to
-     a 600px H1. Bumped to ~340px max + amber-rim border + caption
-     block below the figure (CTA cert #260197 + Society of Technical
-     Analysts + Jan 2026). */
-  .hero__portrait {
-    margin: 0;
-    padding: 0;
-    background: var(--c-tape-2);
-    /* v6.11.9 — was 0.45% (functionally invisible). 40% gives a clean
-       amber-soft frame so the institutional portrait anchors the hero
-       instead of floating on the dark canvas. */
-    border: 1px solid color-mix(in oklab, var(--c-amber) 40%, transparent);
-    border-radius: var(--radius);
-    overflow: hidden;
-    position: relative;
-  }
-  /* v6.10.6 — removed decorative ::before fade-to-dark overlay.
-     The caption lives below the figure and doesn't need a gradient scrim. */
-  .hero__portrait figcaption,
-  .hero__portrait .proof-card figcaption {
-    position: relative;
-  }
-  .hero__id-eyebrow {
-    display: block;
-    margin: var(--sp-2) var(--sp-3) 0;
-    font-family: var(--ff-mono);
-    font-size: 9px;
-    text-transform: uppercase;
-    letter-spacing: 0.16em;
-    color: var(--c-amber);
-    font-weight: 600;
-    overflow-wrap: break-word;
-    word-break: break-word;
-  }
-  .hero__id-caption {
-    display: block;
-    margin: 0 var(--sp-3) var(--sp-3);
-    font-family: var(--ff-mono);
-    font-size: 11px;
-    color: var(--c-ink-soft);
-    line-height: 1.4;
-    overflow-wrap: break-word;
-    word-break: break-word;
+    padding: 48px 0 56px;
   }
   .hero__eyebrow {
-    display: block;
-    max-width: 100%;
-    width: 100%;
-    font-family: var(--ff-mono);
-    font-size: var(--fs-xs);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--c-primary-2);
-    font-weight: 600;
-    margin-bottom: var(--sp-5);
-    /* v6.11.9 — wrap long roles text on mobile instead of clipping.
-       Reduced letter-spacing from 0.12em → 0.06em at base so the
-       string "CHRISTIAN T. MACION, CTA® · OPEN TO REMOTE ROLES · UTC+8"
-       fits more comfortably; overflow-wrap:break-word (not anywhere)
-       so words break at spaces, not mid-token like "ROLES" → "RO" / "LES". */
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-  }
-  @media (max-width: 600px) {
-    .hero__eyebrow {
-      letter-spacing: 0.04em;
-      font-size: 0.7rem;
-    }
-  }
-  .hero__eyebrow-name {
-    color: var(--c-primary);
-    font-weight: 600;
-    letter-spacing: 0.08em;
-  }
-  .hero__eyebrow-sep {
-    color: var(--c-white-fade);
-    padding: 0 0.6em;
-  }
-
-  .hero__title {
-    font-size: clamp(1.85rem, 4.4vw, 3.4rem);
-    line-height: 1.08;
-    letter-spacing: -0.02em;
-    color: var(--c-primary);
-    font-weight: 600;
-    margin-bottom: var(--sp-4);
-    max-width: 100%;
-    min-width: 0;
-    overflow-wrap: break-word;
-    text-wrap: balance;
-  }
-
-  .hero__voice {
-    font-weight: 400;
-
-    color: var(--c-white-soft);
-
-    margin-top: var(--sp-4);
-    margin-bottom: var(--sp-5);
-
-    max-width: 100%;
-
-    margin-bottom: var(--sp-5);
-
-    letter-spacing: -0.005em;
-
-    min-width: 0;
-    /* v6.11.9 — wrap voice line cleanly on narrow viewports. The
-       italic quote runs 50+ chars and at 1.05rem / 1.5rem on mobile
-       would overflow without this. */
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-  }
-
-  /* F10.2 — replaced v6.6 ribbon + v6.7.1 rail-cell with a compact
-     3-button CTA row. Hero ribbon (SHARPE / DRAWDOWN / COVERAGE /
-     SAMPLES / CAPITAL) and 4-cell CTA rail (CONTACT / WORK / METHOD /
-     RESUME) were stacked competing zones — too much for a recruiter
-     skimming the first viewport. Now: badge / eyebrow / H1 / voice /
-     location / 3 CTAs. Research output lives on /proof; navigation
-     lives in the header. */
-  .hero__sub {
-    font-size: var(--fs-sm);
-    color: var(--c-white-faint);
-    line-height: 1.6;
-    margin-bottom: var(--sp-5);
-    max-width: 100%;
-    min-width: 0;
-  }
-  .hero__sub sup {
-    color: var(--c-primary-2);
-    font-size: 0.7em;
-  }
-  .hero__sep {
-    margin: 0 0.5em;
-    color: var(--c-white-fade);
-  }
-
-  /* Compact CTA row — 3 inline pills with key + value, no borders.
-     One primary, one accent (resume — the call-to-download), one
-     secondary (proof). Reads as inline action, not a grid. */
-  .hero__actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--sp-3);
-    align-items: center;
-  }
-  .hero__cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 10px 16px;
-    border: 1px solid var(--c-rule);
-    border-radius: var(--radius);
-    background: transparent;
-    color: var(--c-ink);
-    text-decoration: none;
-    transition:
-      border-color var(--transition),
-      background var(--transition),
-      transform var(--transition);
-    min-height: 44px;
-  }
-  .hero__cta:hover {
-    border-color: var(--c-amber);
-    background: var(--c-amberl-faint);
-  }
-  .hero__cta--primary {
-    background: var(--c-amber);
-    border-color: var(--c-amber);
-    color: #0a0c10;
-  }
-  .hero__cta--primary:hover {
-    background: var(--c-amber-light);
-    border-color: var(--c-amber-light);
-  }
-  .hero__cta--accent {
-    border-color: var(--c-amber);
-    color: var(--c-amber);
-  }
-  .hero__cta--accent:hover {
-    background: var(--c-amberl-soft);
-  }
-  .hero__cta-key {
-    font-size: 9.5px;
-    line-height: 1;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    font-weight: 600;
-    opacity: 0.85;
-  }
-  .hero__cta-val {
-    font-size: 0.9375rem;
-    line-height: 1;
-    font-weight: 500;
-    letter-spacing: -0.005em;
-  }
-  .hero__cta-arrow {
-    font-size: 0.875rem;
-    line-height: 1;
-    margin-left: 0.25rem;
-  }
-  .hero__link {
-    color: var(--c-primary-2);
-    text-decoration: underline;
-    text-decoration-color: var(--c-amber-decor);
-    text-underline-offset: 4px;
-    font-weight: 500;
-    font-size: var(--fs-base);
-    /* v6.3 polish — enforce ≥ 44×44 tap target on every hero__link.
-       The audit flagged "Resume ↓", "Selected work", "Methodology (G1–G31)"
-       at 88×33 / 109×24 / 181×24 px. Vertical padding of 0.5rem on
-       each side lifts the click rect to ≥ 44 px tall without shifting
-       the visible baseline (text-underline-offset keeps the underline
-       in place). */
-    padding: 0.5rem 0;
-    min-height: 44px;
-    display: inline-flex;
-    align-items: center;
-    transition:
-      color var(--transition),
-      text-decoration-color var(--transition);
-  }
-  .hero__link:hover {
-    color: var(--c-amber-light);
-    text-decoration-color: var(--c-amber-light);
-  }
-
-  /* ============================================================
-     WHAT I DO — v6.5 graphic-visual rebuild.
-     4-cell letterform grid (240×180) + 20-cell marquee strip.
-     Pure styled DOM, no client JS. Honors prefers-reduced-motion.
-     ============================================================ */
-  .what__head {
-    margin-bottom: var(--sp-6);
-  }
-
-  /* === 4-cell letterform grid === */
-  .what__cells {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: var(--sp-4);
-    margin-bottom: var(--sp-5);
-  }
-
-  .what-cell {
-    position: relative;
-    min-height: 200px;
-    padding: var(--sp-3) var(--sp-3) var(--sp-3);
-    background: var(--c-tape-2);
-    border: 1px solid var(--c-rule);
-    border-radius: var(--radius);
-    overflow: hidden;
-    isolation: isolate;
-  }
-
-  /* Top-right count chip — 11px mono tabular-nums with a leading amber dot */
-  .what-cell__chip {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4em;
-    font-size: 0.6875rem; /* 11px */
-    line-height: 1;
-    color: var(--ink-on-tape);
-    background: color-mix(in oklab, var(--c-amber) 0.08%, transparent);
-    border: 1px solid color-mix(in oklab, var(--c-amber) 0.3%, transparent);
-    border-radius: var(--radius-sm);
-    padding: 0.32rem 0.55rem;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    font-variant-numeric: tabular-nums;
-    z-index: 2;
-    white-space: nowrap;
-  }
-  .what-cell__chip-dot {
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: var(--c-amber-light);
-    flex-shrink: 0;
-  }
-
-  /* Giant sans-serif letter — 96px amber, flat (no offset shadow — institutional). */
-  .what-cell__letter {
-    position: relative;
-    margin-top: var(--sp-3);
-    font-family: var(--ff-sans);
-    font-size: 96px;
-    font-weight: 600;
-    line-height: 0.85;
-    letter-spacing: -0.045em;
-    color: var(--c-amber-light);
-    z-index: 1;
-  }
-
-  /* 14px tracked mono label below the letter */
-  .what-cell__label {
-    margin-top: var(--sp-2);
-    font-size: 0.875rem; /* 14px */
-    line-height: 1;
-    letter-spacing: 0.12em;
-    color: var(--c-ink);
-    font-weight: 600;
-    text-transform: uppercase;
-  }
-
-  /* 1-line caption — 10px ink-2, ≤ 80 char (enforced by data fixture). */
-  .what-cell__caption {
-    position: absolute;
-    left: var(--sp-3);
-    right: var(--sp-3);
-    bottom: var(--sp-3);
-    margin: 0;
-    font-size: 0.625rem; /* 10px */
-    line-height: 1.4;
-    color: var(--c-ink-2);
-    max-width: 224px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  /* Mobile: collapse to 2×2 grid then single column */
-  @media (max-width: 1040px) {
-    .what__cells {
-      grid-template-columns: repeat(2, 240px);
-    }
-  }
-  @media (max-width: 540px) {
-    .what__cells {
-      grid-template-columns: 1fr;
-    }
-    .what-cell {
-      width: 100%;
-    }
-  }
-
-  /* === 20-cell marquee strip === */
-  .what__marquee {
-    position: relative;
-    height: 40px;
-    background: var(--c-tape);
-    border-block: 1px solid var(--c-rule);
-    overflow: hidden;
-    user-select: none;
-    margin-top: var(--sp-2);
-  }
-  /* Soft amber fade on the edges so cells fade in/out gracefully. */
-  .what__marquee::before,
-  .what__marquee::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 60px;
-    z-index: 2;
-    pointer-events: none;
-  }
-  .what__marquee::before {
-    left: 0;
-    background: linear-gradient(90deg, var(--c-tape), transparent);
-  }
-  .what__marquee::after {
-    right: 0;
-    background: linear-gradient(-90deg, var(--c-tape), transparent);
-  }
-
-  .what__marquee-track {
-    display: flex;
-    height: 100%;
-    width: max-content;
-    align-items: stretch;
-    /* 30s cycle = 28s slide + 2s end-of-cycle pause. The 93.33% keyframe
-       lands at translateX(-50%) — i.e. exactly one full copy of the
-       20 cells — and the hold continues to 100% for the 2s pause. */
-    animation: what-marquee-scroll 30s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-    will-change: transform;
-  }
-
-  /* Each cell — 80×40 — short ticker-style code centered. Full name
-     lives in the `title` tooltip on hover. */
-  .what__marquee-cell {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 80px;
-    height: 40px;
-    flex: 0 0 80px;
-    font-size: 0.625rem; /* 10px */
-    line-height: 1;
-    color: var(--ink-on-tape-2);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    border-right: 1px solid var(--c-rule);
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    padding-inline: 0.35rem;
-    font-variant-numeric: tabular-nums;
-  }
-  /* Slight amber accent on every 5th cell — adds rhythm to the scroll
-     without introducing extra motion. Pure decoration. */
-  .what__marquee-cell:nth-child(5n) {
-    color: var(--c-amber-light);
-    background: var(--c-amberl-faint);
-  }
-
-  /* Pause on hover — institutional "you can read it" affordance. */
-  .what__marquee:hover .what__marquee-track {
-    animation-play-state: paused;
-  }
-
-  @keyframes what-marquee-scroll {
-    0% {
-      transform: translateX(0);
-    }
-    93.33% {
-      transform: translateX(-50%);
-    }
-    100% {
-      transform: translateX(-50%);
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .what__marquee-track {
-      animation: none !important;
-    }
-  }
-
-  /* ============================================================
-     SELECTED WORK — 6 cards, 3-col grid on desktop.
-     ============================================================ */
-  .work__grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--sp-4);
-    margin-bottom: var(--sp-6);
-  }
-  .work-card {
-    display: flex;
-    flex-direction: column;
-    gap: var(--sp-3);
-    padding: var(--sp-5);
-    background: var(--c-bg);
-    border: 1px solid var(--c-rule);
-    border-radius: var(--radius);
-    color: var(--c-ink);
-    text-decoration: none;
-    transition: border-color var(--transition);
-  }
-  .work-card:hover {
-    border-color: var(--c-primary);
-  }
-  /* F14 — institutional: monochrome work-card tag (no per-variant color). */
-  .work-card__tag {
-    font-size: var(--fs-xs);
-    color: var(--c-ink-3);
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    font-weight: 600;
-  }
-  .work-card--ai .work-card__tag {
-    color: var(--c-ink-3);
-  }
-  .work-card__title {
-    font-size: var(--fs-lg);
-    font-weight: 600;
-    color: var(--c-ink);
-    line-height: 1.25;
-    letter-spacing: -0.012em;
-  }
-  .work-card__copy {
-    font-size: var(--fs-sm);
-    color: var(--c-ink-2);
-    line-height: 1.55;
-    flex: 1;
-  }
-  .work-card__link {
-    font-size: var(--fs-xs);
-    font-family: var(--ff-mono);
-    color: var(--c-primary-2);
-    letter-spacing: 0.04em;
-    transition: color var(--transition);
-  }
-  .work-card__link:hover {
-    color: var(--c-primary-2-light);
-  }
-
-  @media (max-width: 880px) {
-    .work__grid {
-      grid-template-columns: 1fr 1fr;
-    }
-  }
-  @media (max-width: 540px) {
-    .work__grid {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  /* ============================================================
-     v6.7 — SELECTED WORK TIMELINE (5 rows)
-     Vertical-timeline layout replacing the prior 3×2 card grid.
-     Each row = 220px-wide year rail (left) + 1px vertical hairline
-     connector (amber dot at midpoint) + flexible content area with
-     a 3-bar before/after metric strip. The CSS for this was scaffolded
-     in v6.6 but never written — so the section rendered as a plain
-     markdown list. Fixed.
-     ============================================================ */
-  .work__timeline {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    border-left: 1px solid var(--c-rule);
-    margin-left: 100px;
-  }
-  .work__row {
-    position: relative;
-    margin: 0;
-    padding: 0;
-  }
-  .work__row-link {
-    display: grid;
-    grid-template-columns: 220px 1fr;
-    gap: var(--sp-5);
-    padding: var(--sp-4) 0 var(--sp-4) var(--sp-6);
-    color: var(--c-ink);
-    text-decoration: none;
-    align-items: start;
-    border-bottom: 1px solid var(--c-rule);
-    transition: background 120ms ease-out;
-  }
-  .work__row:last-child .work__row-link {
-    border-bottom: 0;
-  }
-  .work__row-link:hover {
-    background: var(--c-amberl-faint);
-  }
-  .work__rail {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: var(--sp-2);
-  }
-  /* F23 — institutional: timeline rail dot. No halo. Solid amber dot,
-     tick mark reads as data-point on a rail (Bloomberg research-report
-     style). */
-  .work__rail::before {
-    content: '';
-    position: absolute;
-    left: calc(-1 * var(--sp-6) - 4px);
-    top: 6px;
-    width: 8px;
-    height: 8px;
-    background: var(--c-amber);
-    border-radius: 50%;
-  }
-  .work__year {
-    font-family: var(--ff-mono);
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: var(--c-amber);
-    letter-spacing: 0.02em;
-  }
-  .work__node {
-    display: none;
-  }
-  .work__content {
-    min-width: 0;
-  }
-  .work__line {
-    display: flex;
-    align-items: baseline;
-    gap: var(--sp-3);
-    margin-bottom: var(--sp-3);
-    flex-wrap: wrap;
-  }
-  /* F14 — institutional: monochrome tags, no traffic-light pills.
-     Man Group / AQR / Bridgewater use plain text category labels with
-     a hairline border (not multi-color backgrounds). All tag variants
-     collapse to the same ink-3 hairline-bordered chip. */
-  .work__tag {
-    display: inline-block;
-    padding: 2px 8px;
-    font-size: 0.625rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    font-weight: 600;
-    border-radius: 2px;
-    background: transparent;
-    border: 1px solid var(--c-rule);
-    color: var(--c-ink-3);
-  }
-  .work__tag--ai {
-    border-color: var(--c-rule);
-    color: var(--c-ink-3);
-  }
-  .work__tag--research {
-    border-color: var(--c-rule);
-    color: var(--c-ink-3);
-  }
-  .work__tag--markets {
-    border-color: var(--c-rule);
-    color: var(--c-ink-3);
-  }
-  .work__tag--prediction {
-    border-color: color-mix(in oklab, var(--c-amber) 0.45%, transparent);
-    color: var(--c-primary-2);
-  }
-  .work__title {
-    margin: 0;
-    font-size: 1.0625rem;
-    font-weight: 600;
-    line-height: 1.3;
-    color: var(--c-ink);
-    flex: 1;
-    min-width: 200px;
-  }
-  .work__subtitle {
-    font-size: 0.6875rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--c-ink-2);
-  }
-  .work__bars {
-    display: flex;
-    flex-direction: column;
-    gap: var(--sp-1);
-  }
-  .work__bar {
-    display: grid;
-    grid-template-columns: 90px 1fr 60px 16px 1fr 60px;
-    gap: var(--sp-2);
-    align-items: center;
-  }
-  .work__bar-label {
-    font-size: 0.6875rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--c-ink-2);
-  }
-  .work__bar-track {
-    position: relative;
-    height: 10px;
-    background: var(--c-tape);
-    border: 1px solid var(--c-rule);
-    border-radius: 1px;
-    overflow: hidden;
-  }
-  .work__bar-fill {
-    display: block;
-    height: 100%;
-    background: var(--c-ink-3);
-    transition: width 200ms ease-out;
-  }
-  /* v6.11.10 — F14 amber-only. Work-bar delta chrome: pos = amber,
-     neg = ink-2. Sign carried by glyph + position, not hue. */
-  .work__bar-fill--after.is-pos {
-    background: var(--c-amber);
-  }
-  .work__bar-fill--after.is-neg {
-    background: var(--c-ink-2);
-  }
-  .work__bar-val {
-    font-size: 0.75rem;
-    font-variant-numeric: tabular-nums;
-    color: var(--c-ink);
-    text-align: right;
-  }
-  .work__bar-val--after.is-pos {
-    color: var(--c-amber);
-  }
-  .work__bar-val--after.is-neg {
-    color: var(--c-ink-2);
-  }
-  .work__bar-pipe {
-    text-align: center;
-    color: var(--c-ink-3);
-    font-size: 0.75rem;
-  }
-  .work__bar-pipe.is-pos {
-    color: var(--c-amber);
-  }
-  .work__bar-pipe.is-neg {
-    color: var(--c-ink-2);
-  }
-
-  @media (max-width: 720px) {
-    .work__timeline {
-      margin-left: 60px;
-    }
-    .work__row-link {
-      grid-template-columns: 1fr;
-      gap: var(--sp-2);
-    }
-    .work__bar {
-      grid-template-columns: 70px 1fr 50px 12px 1fr 50px;
-    }
-  }
-
-  /* ============================================================
-     THE NUMBERS — 2 rows × 4 cells of stat tiles. v6.7 had a
-     class mismatch (.numbers__row vs .metric-row) that left the
-     label/value/delta stacked on one line. F10 fix.
-     ============================================================ */
-  .metric-strip {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    border-top: 1px solid var(--c-rule);
-  }
-  .metric-row {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: var(--sp-5);
-    padding: var(--sp-4) 0;
-    border-bottom: 1px solid var(--c-rule);
-  }
-  .metric-row--second {
-    border-bottom: 0;
-  }
-  .metric {
-    display: grid;
-    grid-template-rows: auto auto auto;
-    gap: 4px;
-    min-width: 0;
-  }
-  .metric__label {
-    font-size: 9.5px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--c-ink-3);
-    line-height: 1;
-    font-weight: 600;
-  }
-  .metric__num {
-    font-size: clamp(1.5rem, 2.2vw, 2rem);
-    font-weight: 500;
-    color: var(--c-ink);
-    letter-spacing: -0.015em;
-    line-height: 1;
-    font-variant-numeric: tabular-nums;
-  }
-  .metric__delta {
-    font-size: 0.66rem;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: var(--c-ink-2);
-    line-height: 1;
-  }
-  /* v6.11.10 — F14 amber-only. metric__delta up = amber, down = ink-2. */
-  .metric__delta--up {
-    color: var(--c-amber);
-  }
-  .metric__delta--down {
-    color: var(--c-ink-2);
-  }
-  .metric__delta--flat {
-    color: var(--c-ink-2);
-  }
-
-  /* Legacy .numbers__row kept for any back-compat consumer */
-  .numbers__row {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: var(--sp-5);
-    border-top: 1px solid var(--c-rule);
-  }
-  .number {
-    display: flex;
-    flex-direction: column;
-    gap: var(--sp-2);
-  }
-  .number__fig {
-    font-size: clamp(2rem, 4vw, 3rem);
-    font-weight: 500;
-    color: var(--c-ink);
-    letter-spacing: -0.02em;
-    line-height: 1;
-  }
-  .number__unit {
-    font-size: 0.6em;
-    color: var(--c-ink-2);
-    margin-left: 0.05em;
-  }
-  .number__lbl {
-    font-size: var(--fs-xs);
-    color: var(--c-ink-2);
-    line-height: 1.4;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
-
-  @media (max-width: 880px) {
-    .numbers__row,
-    .metric-row {
-      grid-template-columns: 1fr 1fr;
-    }
-  }
-  @media (max-width: 480px) {
-    .numbers__row,
-    .metric-row {
-      grid-template-columns: 1fr 1fr;
-      gap: var(--sp-4);
-    }
-    .number__fig {
-      font-size: 1.85rem;
-    }
-  }
-
-  /* ============================================================
-     CREDENTIALS — chip ribbon (12 names)
-     F14 institutional: monochrome ink-2 + 1 amber accent only
-     ============================================================ */
-  .creds__ribbon {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--sp-3);
-    align-items: center;
-  }
-  .creds__chip {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--sp-2);
-    padding: var(--sp-2) var(--sp-3);
-    border: 1px solid var(--c-rule);
-    background: transparent;
-    font-size: var(--fs-xs);
-    line-height: 1.3;
-    transition: border-color var(--transition);
-  }
-  .creds__chip:hover {
-    border-color: var(--c-primary-2);
-  }
-  .creds__chip-mono {
-    font-family: var(--ff-mono);
-    font-weight: 600;
-    color: var(--c-primary-2-deep);
-    font-size: var(--fs-2xs);
-    letter-spacing: 0.05em;
-  }
-  .creds__chip-label {
-    color: var(--c-ink-2);
-    font-size: var(--fs-xs);
-    letter-spacing: 0.04em;
-  }
-  .creds__chip-rule {
-    display: none;
-  }
-
-  /* Legacy list (older markup, retained for safety) */
-  .creds__list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    border-top: 1px solid var(--c-rule);
-  }
-  .creds__row {
-    display: grid;
-    grid-template-columns: 1.4fr 1.5fr auto;
-    gap: var(--sp-5);
-    padding: var(--sp-4) 0;
-    border-bottom: 1px solid var(--c-rule);
-    align-items: baseline;
-  }
-  .creds__name {
-    font-size: var(--fs-base);
-    font-weight: 600;
-    color: var(--c-ink);
-  }
-  .creds__name sup {
-    color: var(--c-primary-2-deep);
-    font-size: 0.7em;
-  }
-  .creds__org {
-    font-size: var(--fs-sm);
-    color: var(--c-ink-2);
-  }
-  .creds__date {
-    font-size: var(--fs-xs);
-    color: var(--c-ink-3);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-  }
-
-  @media (max-width: 720px) {
-    .creds__row {
-      grid-template-columns: 1fr;
-      gap: var(--sp-1);
-      padding: var(--sp-4) 0;
-    }
-    .creds__date {
-      margin-top: var(--sp-1);
-    }
-  }
-
-  /* ============================================================
-     Section head tweaks
-     ============================================================ */
-  .section__eyebrow {
-    font-family: var(--ff-mono);
-    font-size: var(--fs-xs);
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--c-primary-2-deep);
-    margin-bottom: var(--sp-3);
-    font-weight: 600;
-  }
-  .section__title {
-    font-size: clamp(1.6rem, 3.4vw, 2.4rem);
-    line-height: 1.15;
-    letter-spacing: -0.02em;
-    margin-bottom: var(--sp-3);
-  }
-  .section__sub {
-    font-size: var(--fs-base);
-    color: var(--c-ink-2);
-    line-height: 1.6;
-    max-width: 100%;
-    min-width: 0;
-    overflow-wrap: break-word;
-  }
-  .section__foot {
-    display: flex;
-    justify-content: center;
-    gap: var(--sp-4);
-    margin-top: var(--sp-5);
-  }
-  /* v6.7.1 — beefed-up CTA rail below the Five Proofs timeline.
-     The previous "All 15 projects →" text link read as dead. */
-  .projects-cta {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    align-items: center;
-    gap: var(--sp-4);
-    width: 100%;
-    max-width: 720px;
-    padding: var(--sp-3) var(--sp-5);
-    background: var(--c-amberl-faint);
-    border: 1px solid var(--c-amberl-strong);
-    border-radius: var(--radius);
-    color: var(--c-ink);
-    text-decoration: none;
-    transition:
-      background 120ms ease-out,
-      border-color 120ms ease-out,
-      transform 120ms ease-out;
-  }
-  .projects-cta:hover {
-    background: var(--c-amberl-soft);
-    border-color: var(--c-amberl-mid);
-  }
-  .projects-cta__eyebrow {
-    font-size: 9px;
-    letter-spacing: 0.18em;
-    color: var(--c-amber);
-    font-weight: 600;
-  }
-  .projects-cta__main {
-    font-size: 0.9375rem;
-    font-weight: 500;
-    color: var(--c-ink);
-    letter-spacing: -0.01em;
-  }
-  .projects-cta__arrow {
-    font-size: 1.125rem;
-    color: var(--c-amber);
-    font-weight: 600;
-  }
-
-  /* ============================================================
-     v6.1.0 — DARK ALT-SECTION OVERRIDES
-     .section--alt is now institutional-tape. Override child element
-     colors so titles, eyebrows, and cards render correctly on dark.
-     ============================================================ */
-  .section--alt .section__title {
-    color: var(--c-primary);
-  }
-  .section--alt .section__sub {
-    color: var(--c-ink-mute);
-  }
-  .section--alt .section__sub a {
-    color: var(--c-primary-2-light);
-  }
-  .section--alt .section__eyebrow {
-    color: var(--c-primary-2);
-  }
-  .section--alt .number__fig {
-    color: var(--c-primary);
-  }
-  .section--alt .number__lbl {
-    color: var(--c-ink-mist);
-  }
-  .section--alt .work-card {
-    background: var(--c-tape-2);
-    border-color: var(--c-white-haze);
-    color: var(--c-primary);
-  }
-  .section--alt .work-card:hover {
-    border-color: var(--c-primary-2);
-  }
-  .section--alt .work-card__title {
-    color: var(--c-primary);
-  }
-  .section--alt .work-card__copy {
-    color: var(--c-ink-mute);
-  }
-  .section--alt .work-card__link {
-    color: var(--c-primary-2-light);
-  }
-  .section--alt .what-cell {
-    background: var(--c-tape-2);
-    border-color: var(--c-white-haze);
-  }
-  .section--alt .creds__row,
-  .section--alt .numbers__row {
-    border-color: var(--c-white-haze);
-  }
-  .section--alt .creds__name {
-    color: var(--c-primary);
-  }
-  .section--alt .creds__chip {
-    border-color: var(--c-white-wisp);
-  }
-  .section--alt .creds__chip-label {
-    color: var(--c-ink-soft);
-  }
-  .section--alt .creds__chip-mono {
-    color: var(--c-amber-light);
-  }
-  .section--alt .creds__org {
-    color: var(--c-ink-mute);
-  }
-  .section--alt .creds__date {
-    color: var(--c-ink-fade);
-  }
-  .section--alt .section__foot .hero__link {
-    color: var(--c-primary-2-light);
-  }
-
-  /* ============================================================
-     MOBILE SAFETY NET — prevent any hero/section content from
-     forcing horizontal scroll on narrow viewports.
-     ============================================================ */
-  @media (max-width: 880px) {
-    .hero__top {
-      grid-template-columns: 1fr;
-      gap: var(--sp-5);
-    }
-    .hero__id {
-      max-width: 320px;
-      margin: 0 auto;
-    }
-  }
-  @media (max-width: 600px) {
-    .hero__title {
-      /* v6.11.9 — was clamp(1.45rem, 7.4vw, 1.85rem) which at 375px
-         resolves to 27.75px. "Quantitative researcher." at 600 weight
-         with -0.02em letter-spacing needs ~333px — over the 327px
-         available width. Bumped font down to 7vw and tightened
-         letter-spacing to -0.025em so "Quantitative researcher." fits
-         on one line at 375px. */
-      font-size: clamp(1.4rem, 7vw, 1.75rem);
-      line-height: 1.1;
-      letter-spacing: -0.025em;
-      text-wrap: pretty;
-    }
-    .hero__voice {
-      font-size: 1.05rem;
-    }
-    .hero__sub {
-      font-size: var(--fs-xs);
-      /* v6.11.9 — wrap sub-line cleanly on narrow viewports so the
-         string "Based in Digos City, Davao del Sur, Philippines (UTC+8) ·
-         30 hrs/wk · remote-first, async-friendly" doesn't overflow. */
-      max-width: 100%;
-      overflow-wrap: break-word;
-      word-break: break-word;
-    }
-    .hero__sep {
-      display: inline;
-      margin: 0 0.3em;
-    }
-    .hero__actions {
-      gap: var(--sp-3) var(--sp-4);
-    }
-    .section__title {
-      font-size: 1.5rem;
-    }
-  }
-
-  /* ============================================================
-     v6.2 — WORLD EVENT MAP SECTION
-     Sits between the ticker and the value props. Dark editorial
-     band so the SVG continent dots read clearly. Voice line uses
-     the shared VoiceLine component (curly quotes + amber rail).
-     ============================================================ */
-  .world-events {
-    background: var(--c-tape);
-    color: var(--ink-on-tape);
-    border-block: 1px solid var(--c-white-mist);
-    padding-block: var(--sp-8);
-  }
-  .world-events__head {
-    margin-bottom: var(--sp-6);
-  }
-  .world-events .section__title {
-    color: var(--c-primary);
-    max-width: 28ch;
-    letter-spacing: -0.02em;
-  }
-  .world-events .voice-line--cmd {
-    color: var(--c-ink-soft);
-    max-width: 72ch;
-  }
-  /* v6.4 — `.world-events__stage` is the relative-positioned wrapper
-     that hosts <EarthGlobe /> + the absolutely-positioned <EarthPulse />
-     overlay. Both children share the same aspect-ratio square. */
-  .world-events__stage {
-    position: relative;
-    width: 100%;
-    margin-bottom: var(--sp-5);
-  }
-  .world-events__stage .earth-pulse {
-    width: 100% !important;
-    height: 100% !important;
-  }
-  /* EarthDrawer is fixed-position, but the page reserves right-edge
-     scrollbar gutter on desktop so the world-events content doesn't
-     sit beneath the drawer when it's open. The drawer itself slides
-     in via the `:has(details[open])` parent selector — see
-     EarthDrawer.astro. */
-  @media (min-width: 901px) {
-    .world-events {
-      padding-right: 0;
-    }
-  }
-  @media (max-width: 720px) {
-    .world-events .section__title {
-      max-width: 100%;
-    }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    /* The EventPin's own reduced-motion rule handles the pin animation;
-       the section itself has no entrance animation. Keep this block as
-       a documentation-grade placeholder so future contributors know
-       the section honors the user preference at the component level. */
-  }
-
-  /* ============================================================
-     v6.2 (Mission Q + R) — AMBIENT WORKSPACE BAND
-     Two-row container: the ambient video strip on top, the four-lane
-     world feed below. Both live on tape-dark so they read as one
-     desk; the entry-point strip below is tape-2 (slightly lifted)
-     and a 1px hairline separates them.
-     ============================================================ */
-  .workspace {
-    background: var(--c-tape);
-    color: var(--ink-on-tape);
-    position: relative;
-    border-block: 1px solid var(--c-white-mist);
-  }
-  .workspace__ambient {
-    position: relative;
-    height: 72px;
-    overflow: hidden;
-    background: var(--c-tape);
-    isolation: isolate;
-  }
-  /* The ambient band needs the HeroVideo overlay anchored to ITS
-     height, not to the whole .workspace wrapper. The component
-     already uses position:absolute; inset:0, so the parent needs
-     `position: relative` (set on .workspace__ambient above) — no
-     additional anchor CSS required. */
-  .workspace__feed {
-    background: var(--c-tape);
-  }
-
-  /* ============================================================
-     v6.6.1 — WORKSPACE RESEARCH-COVERAGE + VELOCITY
-     Two visual blocks sandwiched between HeroVideo and WorldFeed:
-       (1) 6-axis radar (BACKTEST/SIGNALS/RISK/EXEC/EVAL/AGENTS)
-           seeded from seedFromString(buildSeed() + '::radar')
-       (2) 4×6 velocity heatmap of last 24 weeks
-           seeded from seedFromString(buildSeed() + '::velocity')
-     Both sit on a slightly lifted tape-2 surface to read as
-     "data panel" between the ambient hero video and the live
-     world-event feed.
-     ============================================================ */
-  .workspace__viz {
-    background: var(--c-tape-2, var(--c-tape));
-    color: var(--ink-on-tape);
-    padding: clamp(20px, 2.4vw, 32px) clamp(16px, 2vw, 28px);
-    display: grid;
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
-    gap: clamp(20px, 2.4vw, 32px);
-    border-block: 1px solid var(--c-white-mist);
-  }
-  @media (max-width: 720px) {
-    .workspace__viz {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  .workspace__viz-title {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-family: var(--ff-mono);
-    font-size: var(--fs-3xs, 9px);
-    line-height: 1;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--c-ink-faint);
-    margin: 0 0 12px;
-  }
-  .workspace__viz-rule {
-    display: inline-block;
-    width: 18px;
-    height: 1px;
-    background: var(--c-amber);
-    flex: 0 0 auto;
-  }
-
-  .workspace__radar {
-    margin: 0;
-    padding: 12px;
-    background: var(--c-white-mist);
-    border: 1px solid var(--c-white-mist);
-    border-radius: 2px;
-  }
-  .workspace__radar-svg {
-    display: block;
-    width: 100%;
-    height: auto;
-    max-width: 360px;
-    margin: 0 auto;
-  }
-  /* v6.7 — radar reads as institutional: outer hex rings at solid
-     0.16 opacity (not dashed), axes at solid 0.20, filled polygon at
-     0.32 with bright stroke. Labels in tabular mono at the perimeter
-     with a numeric value next to each axis for instant readability. */
-  .radar-grid {
-    fill: none;
-    stroke: var(--c-white-wisp);
-    stroke-width: 1;
-    vector-effect: non-scaling-stroke;
-  }
-  .radar-axis {
-    stroke: var(--c-white-wisp);
-    stroke-width: 1;
-    vector-effect: non-scaling-stroke;
-  }
-  .radar-polygon {
-    fill: var(--c-amber);
-    fill-opacity: 0.32;
-    stroke: var(--c-amber);
-    stroke-width: 1.5;
-    vector-effect: non-scaling-stroke;
-  }
-  .radar-label {
-    font-family: var(--ff-mono);
-    font-size: 9px;
+    font: 500 11px / 1.4 var(--ff-mono);
+    color: var(--c-warn);
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    fill: var(--c-ink-veil-95);
-    font-weight: 600;
+    margin: 0 0 28px;
   }
-  .radar-value {
-    font-family: var(--ff-mono);
-    font-size: 8px;
-    letter-spacing: 0.04em;
-    fill: var(--c-amber);
-    font-weight: 600;
-  }
-  .radar-vertex {
-    fill: var(--c-amber);
-    stroke: var(--c-bg);
-    stroke-width: 1.5;
-    vector-effect: non-scaling-stroke;
-  }
-
-  .workspace__velocity {
-    margin: 0;
-    padding: 12px;
-    background: var(--c-white-mist);
-    border: 1px solid var(--c-white-mist);
-    border-radius: 2px;
-    display: flex;
-    flex-direction: column;
-  }
-  /* F13.1 — burndown matrix: 1 header row (column labels W/P/H/F/M/R)
-     + 4 data rows (week windows W18-W23, W12-W17, W06-W11, W00-W05).
-     Row labels are in the gutter; cells carry the stage letter +
-     intensity bar. Reads as a project pipeline heatmap, not piano keys. */
-  .velocity__grid {
+  .hero__grid {
     display: grid;
-    grid-template-columns: 64px repeat(6, 1fr);
-    gap: 4px;
-    flex: 1 1 auto;
-    align-content: start;
+    grid-template-columns: 1fr 280px;
+    gap: 56px;
+    align-items: start;
   }
-  .velocity-row {
-    display: contents;
-  }
-  .velocity-row--header {
-    /* Header row: column labels W/P/H/F/M/R */
-  }
-  .velocity-rowlabel {
-    font-family: var(--ff-mono);
-    font-size: 8.5px;
-    line-height: 1;
-    color: var(--c-ink-3);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    align-self: center;
-    text-align: right;
-    padding-right: 8px;
-  }
-  .velocity-rowlabel--head {
-    color: var(--c-ink-3);
-    font-size: 8px;
-    letter-spacing: 0.12em;
-    opacity: 0.7;
-  }
-  .velocity-colhead {
-    font-family: var(--ff-mono);
-    font-size: 10px;
-    line-height: 1;
-    color: var(--c-amber);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-weight: 600;
-    text-align: center;
-    padding-bottom: 4px;
-    border-bottom: 1px solid var(--c-rule);
-  }
-  /* F20 — institutional: ink-3 base + amber alpha. On dark workspace
-     bg, alpha-only cells render invisible. Solid ink-3 + amber wash is
-     the institutional heatmap pattern (Bloomberg / Refinitiv style). */
-  .velocity-cell {
-    position: relative;
-    aspect-ratio: 3 / 2;
-    min-height: 38px;
-    background: var(--c-ink-3);
-    border: 1px solid var(--c-rule);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--c-ink);
-    transition:
-      transform 120ms ease-out,
-      box-shadow 120ms ease-out,
-      background var(--transition);
-    overflow: hidden;
-  }
-  .velocity-cell:hover {
-    transform: scale(1.04);
-    z-index: 2;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  }
-  .velocity-cell__glyph {
-    font-family: var(--ff-mono);
-    font-size: 11px;
-    line-height: 1;
-    letter-spacing: 0.04em;
-    font-weight: 600;
-    z-index: 1;
-    color: var(--c-ink-2);
-  }
-  /* Intensity bar — left edge filled proportional to cell.intensity */
-  .velocity-cell__bar {
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: var(--intensity, 50%);
-    background: var(--c-amberl-mid);
-    pointer-events: none;
-  }
-  /* F20 — Per-stage amber wash over ink-3 base. Five-step gradient:
-     bright amber → faint amber → empty cell with amber ring (released). */
-  .velocity-cell--w {
-    background: color-mix(in oklab, var(--c-amber) 0.95%, transparent);
-    color: var(--c-bg);
-  } /* Wrote — brightest, ink-bg text */
-  .velocity-cell--p {
-    background: color-mix(in oklab, var(--c-amber) 0.72%, transparent);
-    color: var(--c-bg);
-  } /* Paper */
-  .velocity-cell--h {
-    background: color-mix(in oklab, var(--c-amber) 0.48%, transparent);
-    color: var(--c-ink);
-  } /* Hypothesis */
-  .velocity-cell--f {
-    background: color-mix(in oklab, var(--c-amber) 0.28%, transparent);
-    color: var(--c-ink);
-  } /* Frozen-spec */
-  .velocity-cell--m {
-    background: color-mix(in oklab, var(--c-amber) 0.14%, transparent);
-    color: var(--c-ink-2);
-  } /* Model — barely there */
-  .velocity-cell--r {
-    background: var(--c-ink-3);
-    color: var(--c-primary-2);
-    border-color: var(--c-primary-2);
-  } /* Released — empty bg, amber ink + amber border = "shipped" mark */
-
-  /* F13.1 legend — full stage label + count */
-  .velocity-legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px 14px;
-    margin-top: 12px;
-    padding-top: 8px;
-    border-top: 1px solid var(--c-rule);
-    font-family: var(--ff-mono);
-    font-size: 9px;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--c-ink-2);
-  }
-  .velocity-legend__item {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-  }
-  .velocity-legend__name {
-    opacity: 0.7;
-    text-transform: none;
-    letter-spacing: 0.02em;
-  }
-  .velocity-legend__count {
-    color: var(--c-amber);
-    font-weight: 600;
-  }
-  .velocity-legend__swatch {
-    display: inline-block;
-    width: 10px;
-    height: 10px;
-    border: 1px solid var(--c-rule);
-  }
-  /* F20 — single amber channel, 5 filled steps + 1 empty/amber-ring. */
-  .velocity-legend__swatch--w {
-    background: color-mix(in oklab, var(--c-amber) 0.95%, transparent);
-  }
-  .velocity-legend__swatch--p {
-    background: color-mix(in oklab, var(--c-amber) 0.72%, transparent);
-  }
-  .velocity-legend__swatch--h {
-    background: color-mix(in oklab, var(--c-amber) 0.48%, transparent);
-  }
-  .velocity-legend__swatch--f {
-    background: color-mix(in oklab, var(--c-amber) 0.28%, transparent);
-  }
-  .velocity-legend__swatch--m {
-    background: color-mix(in oklab, var(--c-amber) 0.14%, transparent);
-  }
-  .velocity-legend__swatch--r {
-    background: var(--c-ink-3);
-    border-color: var(--c-primary-2);
-  }
-
-  @media (max-width: 720px) {
-    .workspace__ambient {
-      height: clamp(150px, 32vw, 200px);
-    }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .velocity-cell {
-      transition: none;
-    }
-    .velocity-cell:hover {
-      transform: none;
-    }
-  }
-
-  /* ============================================================
-     v6.7.1.F14 — HERO BADGE (institutional editorial link)
-     No pill, no glow, no dot. Man Group / AQR / Bridgewater use
-     plain text links with hairline underlines, not filled chips.
-     Pattern: uppercase mono text + → arrow + 1px underline that
-     thickens on hover.
-     ============================================================ */
-  .hero__badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0;
-    max-width: 100%;
-    margin-bottom: var(--sp-4);
-    line-height: 1;
-    font-size: var(--fs-xs);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    /* v6.11.9 — wrap long badge text on mobile instead of clipping. */
-    overflow-wrap: anywhere;
-    word-break: break-word;
-  }
-  .hero__badge-link {
-    color: var(--c-ink-2);
-    text-decoration: none;
-    border-bottom: 1px solid var(--c-rule);
-    padding-bottom: 2px;
-    transition:
-      color var(--transition),
-      border-color var(--transition);
-  }
-  .hero__badge-link:hover {
-    color: var(--c-primary-2);
-    border-bottom-color: var(--c-primary-2);
-  }
-
-  /* ============================================================
-     v6.5 — LIVE TAPE MINI-ROW
-     Bloomberg-style summary strip between hero and workspace.
-     4 inline stats + as-of timestamp, all in 10px mono, tabular-nums.
-     The strip is a thin (28px) line on tape-dark so it reads as a
-     data band, not a content section.
-     ============================================================ */
-  .live-tape {
-    background: var(--c-tape);
-    color: var(--ink-on-tape);
-    border-bottom: 1px solid var(--c-white-mist);
-    padding-block: 0.45rem;
-  }
-  .live-tape__inner {
-    max-width: 1080px;
+  .hero__identity {
     min-width: 0;
   }
-  .live-tape__row {
+
+  .hero__name {
+    font: 600 48px / 1 var(--serif-display);
+    color: var(--c-ink);
+    letter-spacing: -0.024em;
+    margin: 0 0 8px;
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
-    gap: 0.45rem 0.8rem;
-    font-size: 0.72rem;
-    line-height: 1.4;
-  }
-  .live-tape__cell {
-    display: inline-flex;
     align-items: baseline;
-    gap: 0.4em;
+    gap: 12px;
   }
-  .live-tape__label {
-    color: var(--c-ink-ghost);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    font-size: 0.66rem;
+  .hero__name .word {
+    display: inline-block;
   }
-  .live-tape__val {
-    color: var(--c-primary);
-    font-weight: 600;
-    letter-spacing: 0.02em;
-    /* universal tabular-nums via the global rule */
-  }
-  /* v6.11.9 — F14 amber-only. Live tape up/down was --c-pass / --c-fail
-     (green/red traffic-light). Now: up = amber, down = ink-2 (so the
-     sign reads but without sentiment). --c-warn stays for the VIX
-     over-threshold class. */
-  .live-tape__val.is-up {
-    color: var(--c-amber);
-  }
-  .live-tape__val.is-down {
-    color: var(--c-ink-2);
-  }
-  .live-tape__val.is-warn {
-    color: var(--c-warn);
-  }
-  .live-tape__sep {
-    color: var(--c-white-wisp);
-    user-select: none;
-  }
-  .live-tape__asof {
-    margin-left: auto;
-    color: var(--c-ink-veil);
-    font-size: 0.66rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-  }
-  @media (max-width: 720px) {
-    .live-tape__row {
-      gap: 0.3rem 0.6rem;
-    }
-    .live-tape__asof {
-      margin-left: 0;
-      width: 100%;
-    }
-  }
-
-  /* ============================================================
-     v6.5 — SECTION RULE + LABEL
-     Institutional "↓ SECTION X OF N · TITLE" hairline + mono label
-     used between the 4 heaviest sections on the page. Placed above
-     each section it announces. Reduced-motion: no animation.
-     ============================================================ */
-  .section-rule {
-    border: 0;
-    border-top: 1px solid var(--c-white-mist);
-    margin: var(--sp-7) auto 0;
-    max-width: var(--container-max);
-    width: calc(100% - 2 * var(--sp-5));
-  }
-  .section-rule__label {
-    display: flex;
-    align-items: center;
-    gap: 0.6em;
-    max-width: var(--container-max);
-    width: calc(100% - 2 * var(--sp-5));
-    margin: 0 auto var(--sp-5);
-    padding-top: 0.6rem;
-    font-size: var(--fs-xs);
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--c-ink-fade);
+  .hero__name .word:nth-child(2),
+  .hero__name .word:nth-child(3) {
+    font-style: italic;
+    color: var(--c-primary-2);
     font-weight: 500;
   }
-  .section-rule__label > span:first-child {
-    color: var(--c-primary-2);
-    font-size: 0.9em;
+
+  .hero__role {
+    font: 500 14px / 1.5 var(--serif-display);
+    color: var(--c-ink-2);
+    font-style: italic;
+    margin: 0 0 24px;
   }
 
-  /* ============================================================
-     v6.5 — INSTITUTIONAL END-STRIP
-     One-row closer above KeyHintPanel. 3 columns, hairline borders,
-     10px mono throughout. The strip is the page's institutional
-     "we are rigorous" footer — sits between the Collaborators
-     closer and the floating KeyHintPanel.
-     ============================================================ */
-  .end-strip {
-    background: var(--c-tape);
-    color: var(--ink-on-tape);
-    border-top: 1px solid var(--c-white-mist);
-    border-bottom: 1px solid var(--c-white-mist);
-    padding-block: 0.85rem;
-    margin-top: var(--sp-7);
+  .hero__lede {
+    font: 400 16px / 1.6 var(--ff-sans);
+    color: var(--c-ink);
+    margin: 0 0 28px;
+    max-width: 60ch;
   }
-  .end-strip__inner {
-    max-width: 1080px;
-    min-width: 0;
+  .hero__lede em {
+    font-family: var(--serif-display);
+    font-style: italic;
+    color: var(--c-warn);
+    font-weight: 600;
+    font-size: 17px;
+  }
+
+  /* === Hero KPIs — 4 across (was 3) ===
+     Uses <Odometer> component so values animate + format
+     correctly (76.5k for LOC, etc). Was raw data-counter strings
+     that the odometer driver overwrote without re-formatting. */
+  .hero__kpis {
+    list-style: none;
+    padding: 14px 0;
+    margin: 0 0 32px;
     display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
-    gap: var(--sp-5);
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    border-top: 1px solid var(--c-rule);
+    border-bottom: 1px solid var(--c-rule);
   }
-  .end-strip__col {
+  .hero__kpi {
     display: flex;
-    align-items: center;
-    gap: var(--sp-4);
+    flex-direction: column;
+    gap: 4px;
     min-width: 0;
   }
-  .end-strip__col--left {
-    justify-content: flex-start;
-  }
-  .end-strip__col--center {
-    justify-content: center;
-  }
-  .end-strip__col--right {
-    justify-content: flex-end;
-    flex-wrap: wrap;
-  }
-
-  .end-strip__copy {
-    font-size: var(--fs-xs);
-    color: var(--c-ink-faint);
-    letter-spacing: 0.04em;
-  }
-  .end-strip__cert {
-    font-size: var(--fs-xs);
+  /* Inherit Odometer's tabular-num + accent color from the component;
+     only override the label to match the home's chrome (uppercase, mono). */
+  .hero__kpi :global(.odometer__value) {
     color: var(--c-primary-2);
-    text-decoration: underline;
-    text-decoration-color: var(--c-amber-decor);
-    text-underline-offset: 3px;
-    padding: 0.25rem 0.4rem;
-    min-height: 44px;
-    display: inline-flex;
-    align-items: center;
-    transition:
-      color var(--transition),
-      text-decoration-color var(--transition);
+    font: 600 28px / 1 var(--serif-display);
+    letter-spacing: -0.022em;
   }
-  .end-strip__cert:hover {
-    color: var(--c-primary-2-light);
-    text-decoration-color: var(--c-primary-2-light);
-  }
-  .end-strip__build {
-    font-size: var(--fs-xs);
-    color: var(--c-ink-mist);
-    letter-spacing: 0.04em;
+  .hero__kpi :global(.odometer__label) {
+    font: 500 10px / 1.2 var(--ff-mono);
+    color: var(--c-ink-2);
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    white-space: nowrap;
-  }
-  .end-strip__link {
-    font-size: var(--fs-xs);
-    color: var(--c-ink-shroud);
-    text-decoration: underline;
-    text-decoration-color: color-mix(in oklab, var(--c-amber) 0.3%, transparent);
-    text-underline-offset: 3px;
-    padding: 0.25rem 0.4rem;
-    min-height: 44px;
-    display: inline-flex;
-    align-items: center;
-    transition:
-      color var(--transition),
-      text-decoration-color var(--transition);
-  }
-  .end-strip__link:hover {
-    color: var(--c-primary-2);
-    text-decoration-color: var(--c-primary-2);
   }
 
-  @media (max-width: 880px) {
-    .end-strip__inner {
+  /* === Dual-path CTA row === */
+  .hero__cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 0;
+    align-items: center;
+  }
+
+  .hero__portrait {
+    margin: 0;
+    text-align: center;
+  }
+  .hero__portrait img {
+    width: 100%;
+    height: auto;
+    border-radius: 2px;
+    /* v7.5 — dropped the 8px 24px rgba halo shadow (audit C04 tell).
+       Single 1px hairline rule replaces it; portrait now sits flat on
+       the page surface like a print headshot, not a UI card. */
+    border: 1px solid var(--c-rule);
+    display: block;
+  }
+  .hero__portrait-credit {
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
+    color: var(--c-ink-3);
+    margin: 12px 0 0;
+    text-transform: uppercase;
+  }
+
+  /* ====== CTA (shared) ====== */
+  .cta {
+    display: inline-block;
+    padding: 14px 24px;
+    font: 600 11px / 1 var(--ff-mono);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid var(--c-rule);
+    cursor: pointer;
+    transition:
+      background 200ms ease,
+      color 200ms ease,
+      border-color 200ms ease;
+    background: transparent;
+    color: var(--c-ink);
+  }
+  .cta--primary {
+    background: var(--c-warn);
+    color: var(--c-bg);
+    border-color: var(--c-warn);
+  }
+  .cta--primary:hover {
+    background: var(--c-amber-deep);
+    border-color: var(--c-amber-deep);
+  }
+  .cta--ghost {
+    background: transparent;
+    color: var(--c-ink);
+    border-color: var(--c-rule);
+  }
+  .cta--ghost:hover {
+    color: var(--c-warn);
+    border-color: var(--c-warn);
+  }
+
+  /* ====== PILLARS — two-column grid ====== */
+  .pillars {
+    padding: 56px 0 64px;
+    border-bottom: 1px solid var(--c-rule);
+    background: var(--c-bg-2);
+  }
+  .pillars__eyebrow {
+    font: 500 11px / 1.4 var(--ff-mono);
+    color: var(--c-warn);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin: 0 0 28px;
+  }
+  .pillars__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+  .pillar {
+    background: var(--c-bg);
+    border: 1px solid var(--c-rule);
+    padding: 24px;
+  }
+  .pillar__lane {
+    font: 500 10px / 1.4 var(--ff-mono);
+    color: var(--c-ink-3);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin: 0 0 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--c-rule);
+  }
+  .pillar--ai .pillar__lane {
+    color: var(--c-primary-2);
+  }
+  .pillar__viz {
+    margin: 0 0 20px;
+  }
+  .pillar__viz :global(.eq-chart),
+  .pillar__viz :global(.agent-graph) {
+    margin: 0;
+  }
+  .pillar__stats {
+    list-style: none;
+    padding: 16px 0;
+    margin: 0 0 16px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    border-top: 1px solid var(--c-rule);
+    border-bottom: 1px solid var(--c-rule);
+  }
+  .pillar__stats li {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .pillar__stats b {
+    font: 600 20px / 1 var(--serif-display);
+    color: var(--c-ink);
+    letter-spacing: -0.018em;
+  }
+  .pillar__stats span {
+    font: 500 9.5px / 1.2 var(--ff-mono);
+    color: var(--c-ink-2);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .pillar__cta {
+    margin: 0;
+  }
+  .pillar__cta a {
+    font: 500 11px / 1.4 var(--ff-mono);
+    color: var(--c-ink);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding-bottom: 2px;
+    border-bottom: 1px solid var(--c-rule);
+    transition:
+      color 200ms ease,
+      border-color 200ms ease;
+  }
+  .pillar__cta a:hover {
+    color: var(--c-warn);
+    border-bottom-color: var(--c-warn);
+  }
+
+  /* ====== ARCHITECTURE BRIEF (rendered by ArchitectureBrief.astro) ====== */
+  /* Local overrides intentionally minimal — ArchitectureBrief.astro owns
+     its own scoped styles. Reserve space in the page flow only. */
+  .arch-brief {
+    margin: 0;
+  }
+
+  /* ====== Fit (education) ====== */
+  .fit {
+    padding: 40px 0;
+    border-bottom: 1px solid var(--c-rule);
+  }
+  .fit__eyebrow {
+    font: 500 11px / 1.4 var(--ff-mono);
+    color: var(--c-ink-3);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+  .fit__line {
+    font: 500 13px / 1.6 var(--ff-mono);
+    color: var(--c-ink);
+    margin: 0 0 8px;
+  }
+  .fit__line b {
+    font-weight: 700;
+    color: var(--c-ink);
+  }
+  .fit__line--meta {
+    font: 400 12px / 1.6 var(--ff-sans);
+    color: var(--c-ink-2);
+    font-style: italic;
+    margin: 0;
+  }
+  .fit__sep {
+    color: var(--c-ink-3);
+    margin: 0 8px;
+  }
+
+  /* ====== Contact — no gradient (audit C06 tell) ====== */
+  .contact {
+    padding: 56px 0;
+    background: var(--c-bg);
+    border-bottom: 1px solid var(--c-rule);
+  }
+  .contact__inner {
+    text-align: center;
+  }
+  .contact__eyebrow {
+    font: 600 20px / 1.2 var(--serif-display);
+    font-style: italic;
+    color: var(--c-ink);
+    margin: 0 0 8px;
+  }
+  .contact__cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin: 24px 0 20px;
+  }
+  .contact__secondary {
+    font: 500 12px / 1.6 var(--ff-mono);
+    color: var(--c-ink-2);
+    margin: 0;
+  }
+  .contact__secondary a {
+    color: var(--c-ink);
+    text-decoration: none;
+  }
+  .contact__secondary a:hover {
+    color: var(--c-warn);
+  }
+
+  /* ====== Responsive ====== */
+  @media (max-width: 900px) {
+    .pillars__grid {
       grid-template-columns: 1fr;
-      gap: var(--sp-3);
-      text-align: center;
+      gap: 24px;
     }
-    .end-strip__col--left,
-    .end-strip__col--center,
-    .end-strip__col--right {
-      justify-content: center;
+    .arch-brief__grid {
+      grid-template-columns: 1fr;
+      gap: 24px;
     }
-    .end-strip__build {
-      white-space: normal;
+    .arch-brief__title {
+      font-size: 28px;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .hero__inner {
+      padding: 32px 0 40px;
+    }
+    .hero__grid {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+    .hero__portrait {
+      order: -1;
+      max-width: 200px;
+      margin: 0 auto;
+    }
+    .hero__name {
+      font-size: 36px;
+    }
+    .hero__name .word:nth-child(2),
+    .hero__name .word:nth-child(3) {
+      font-size: 32px;
+    }
+    .hero__kpis {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px 12px;
+    }
+    .hero__kpi :global(.odometer__value) {
+      font-size: 22px;
+    }
+    .pillar__stats {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .pillar__stats b {
+      font-size: 16px;
+    }
+    .pillar__stats span {
+      font-size: 9px;
+      letter-spacing: 0.1em;
+    }
+    .contact__eyebrow {
+      font-size: 18px;
     }
   }
 </style>

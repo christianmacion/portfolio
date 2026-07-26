@@ -56,7 +56,7 @@ const laneClass = lane === 'ai' ? 'pill--brand' : 'pill--accent';
     padding: var(--sp-5);
     background: var(--c-bg);
     border: var(--border);
-    border-radius: var(--radius);
+    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade */
     transition:
       border-color var(--transition),
       box-shadow var(--transition),

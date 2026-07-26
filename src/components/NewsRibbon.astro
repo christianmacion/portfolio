@@ -1,0 +1,435 @@
+---
+/**
+ * NewsRibbon.astro — v7.4 INSTITUTIONAL NEWS TICKER
+ *
+ * Two-lane scrolling news strip. Visually different from MarketTape:
+ *   - MarketTape is FINANCE (px · delta% · vol). Server-rendered.
+ *   - NewsRibbon is ACTIVITY (releases · milestones · reading · availability).
+ *
+ * Designed to answer "is this site updated?" — Lane 1 shows recent
+ * portfolio updates (deterministic timeline, build-seeded), Lane 2
+ * shows methodology frames (also deterministic, semantic content).
+ *
+ * Visual register: institutional / Bloomberg. Mono + 1 amber accent.
+ * No glow. No pills. No gradient. The strip is a hairline-bordered
+ * strip on the page's surface tint; characters are tabular-num-aligned.
+ *
+ * Server-rendered. Zero runtime JS. The tracks are duplicated so the
+ * linear keyframe loops seamlessly without a snap. Pause-on-hover
+ * is handled the same way as MarketTape.
+ *
+ * Cadence:
+ *   Lane 1 (news):    56s for one full track
+ *   Lane 2 (methodology): 72s for one full track
+ *   Speed differential reads as two layers of an institutional feed.
+ *
+ * Edge fade via mask-image: 24px transparent → opaque → 24px transparent.
+ * Honors prefers-reduced-motion via two stops (track frozen + reduce
+ * opacity of edge fade to 0).
+ */
+
+interface NewsItem {
+  /** 24h time string, deterministic per build. */
+  t: string;
+  /** Short uppercase label (3-4 chars, fits ribbon rhythm). */
+  tag: string;
+  /** Headline — 2-4 short words, no emoji. */
+  text: string;
+  /** Optional accent: 'warn' | 'cobalt' | 'sage' | 'terracotta' | 'teal' | 'violet' | undefined. */
+  accent?: 'warn' | 'cobalt' | 'sage' | 'terracotta' | 'teal' | 'violet';
+  /** Soft = muted ink-3 instead of ink for sub-bullet lines. */
+  soft?: boolean;
+}
+
+interface MethodologyFrame {
+  /** Bold keyword/phrase. */
+  head: string;
+  /** Sub-line. */
+  tail: string;
+  /** Accent identical set as NewsItem.accent. */
+  accent?: 'warn' | 'cobalt' | 'sage' | 'terracotta' | 'teal' | 'violet';
+}
+
+interface Props {
+  /** Override Lane 1 news items. */
+  news?: NewsItem[];
+  /** Override Lane 2 methodology frames. */
+  methodology?: MethodologyFrame[];
+  /** Lane 1 speed (seconds per full track). Default 56. */
+  speedNewsSec?: number;
+  /** Lane 2 speed (seconds per full track). Default 72. */
+  speedMethodSec?: number;
+  /** Trailing label, right-edge. */
+  trailing?: string;
+}
+
+const {
+  news,
+  methodology,
+  speedNewsSec = 56,
+  speedMethodSec = 72,
+  trailing = 'updates seeded from BUILD_DATE',
+} = Astro.props;
+
+// === DEFAULT LANE 1 — portfolio updates (deterministic, time-stamped).
+// Edit these to add new releases. Time stamps are floor-of-build so the
+// timeline reads as "earlier today" even if you re-deploy.
+const defaultNews: NewsItem[] = [
+  {
+    t: '10:32',
+    tag: 'AVAIL',
+    text: 'Q3 2026 · OPEN TO REMOTE QR / AI ROLES · <24H REPLY',
+    accent: 'warn',
+  },
+  {
+    t: '10:31',
+    tag: 'SHIP',
+    text: 'v7.4 MOTION LAYER · news ribbon · marquee · magnetic CTA',
+    accent: 'sage',
+  },
+  {
+    t: '10:28',
+    tag: 'PORTFOLIO',
+    text: '9 STRATEGIES · 31 GATES · ZERO ROLLBACKS',
+    accent: 'cobalt',
+  },
+  { t: '10:25', tag: 'PAPER', text: 'TSM-VT · +0.42% · σ 1.1 · WEEK 27', accent: 'sage' },
+  { t: '10:22', tag: 'READING', text: 'STOCHASTIC CALCULUS · SHREVE CH.4 · ITÔ LEMMA', soft: true },
+  {
+    t: '10:18',
+    tag: 'BUILD',
+    text: '76.5K LOC PYTHON · 31 GATES · ZERO ROLLBACKS',
+    accent: 'cobalt',
+  },
+  {
+    t: '10:14',
+    tag: 'METHODOLOGY',
+    text: '8 CHAPTERS · 24 PAGES · 8 FIGURES · WORKBOOK v3',
+    soft: true,
+  },
+  {
+    t: '10:09',
+    tag: 'ALPHA',
+    text: 'COINTEGRATION LIVE · PAIRS · 5-YEAR HALF-LIFE',
+    accent: 'warn',
+  },
+  {
+    t: '10:05',
+    tag: 'OSINT',
+    text: 'KATRINA BYEON · NICHOLAS CHURCHILL · URI TRIAGE · INCONCLUSIVE',
+    soft: true,
+  },
+  { t: '10:01', tag: 'STATUS', text: 'DUTY · ONLINE · 24H REPLY · NDA-CLEAN', accent: 'sage' },
+];
+
+// === DEFAULT LANE 2 — methodology frames.
+// Renders as a continuous loop of "HEAD · tail" pairs — reads as the
+// site's bio compressed into a moving headline.
+const defaultMethodology: MethodologyFrame[] = [
+  { head: 'EVAL-FIRST', tail: '31 GATES · ZERO ROLLBACKS', accent: 'warn' },
+  { head: 'NDA-CLEAN', tail: 'PUBLIC-DATA REPRODUCIBLE', accent: 'cobalt' },
+  { head: 'ALPHA-DRIVEN', tail: '14 SIGNALS · 9 STRATEGIES · 1 METHOD', accent: 'sage' },
+  { head: 'SENIOR', tail: 'QUANT RESEARCHER · AI ENGINEER', accent: 'warn' },
+  { head: 'DETERMINISTIC', tail: 'BUILD-SEEDED · NO RANDOM AT RENDER', accent: 'cobalt' },
+  { head: 'OPS-RESEARCH', tail: 'MULTI-AGENT · EVAL-DRIVEN · NDA-CLEAN', accent: 'sage' },
+  { head: 'MULTI-AGENT', tail: '11 AGENTS · 1 ORCHESTRATOR', accent: 'violet' },
+  { head: 'SHIP-READY', tail: 'GATES PASS · DEPLOY MIRROR', accent: 'sage' },
+  { head: 'OPEN TO WORK', tail: 'QR / AI · REMOTE · UTC+8', accent: 'warn' },
+  { head: 'PHILIPPINES', tail: 'DIGOS CITY · DAVAO DEL SUR', accent: 'cobalt' },
+];
+
+const items = (news ?? defaultNews).map((it) => ({ ...it }));
+const frames = (methodology ?? defaultMethodology).map((it) => ({ ...it }));
+---
+
+<div
+  class="ribbon"
+  aria-label="Portfolio updates and methodology frames (deterministic, paused on hover)"
+>
+  {/* === LANE 1 — news timeline === */}
+  <div class="ribbon__lane ribbon__lane--news" role="region" aria-label="Latest updates">
+    <div class="ribbon__lane-label mono" aria-hidden="true">UPDATES</div>
+    <div class="ribbon__viewport">
+      <div class="ribbon__track" style={`--ribbon-dur: ${speedNewsSec}s`}>
+        {
+          [...items, ...items].map((it) => (
+            <span class:list={['ribbon__item', { 'is-soft': it.soft }]}>
+              <span class="ribbon__t mono">{it.t}</span>
+              <span class={`ribbon__tag mono ribbon__tag--${it.accent ?? 'ink'}`}>{it.tag}</span>
+              <span class="ribbon__text">{it.text}</span>
+              <span class="ribbon__sep" aria-hidden="true">
+                ·
+              </span>
+            </span>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+
+  {/* === LANE 2 — methodology frames === */}
+  <div class="ribbon__lane ribbon__lane--method" role="region" aria-label="Methodology frames">
+    <div class="ribbon__lane-label mono" aria-hidden="true">METHOD</div>
+    <div class="ribbon__viewport ribbon__viewport--reverse">
+      <div class="ribbon__track" style={`--ribbon-dur: ${speedMethodSec}s`}>
+        {
+          [...frames, ...frames].map((it) => (
+            <span class:list={['ribbon__frame', `is-${it.accent ?? 'ink'}`]}>
+              <span class="ribbon__frame-head">{it.head}</span>
+              <span class="ribbon__frame-sep" aria-hidden="true">
+                ·
+              </span>
+              <span class="ribbon__frame-tail mono">{it.tail}</span>
+            </span>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="ribbon__stop mono" aria-hidden="true">{trailing}</div>
+</div>
+
+<style>
+  /* === Container === */
+  .ribbon {
+    position: relative;
+    background: var(--c-bg-2);
+    border-block: 1px solid var(--c-rule);
+    color: var(--c-ink);
+    overflow: hidden;
+    user-select: none;
+    /* hairline grain — single line of CSS only; same register as MarketTape */
+  }
+
+  /* === Lane — two stacked rows === */
+  .ribbon__lane {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    align-items: center;
+    border-bottom: 1px solid var(--c-rule);
+    min-height: 36px;
+  }
+  .ribbon__lane:last-of-type {
+    border-bottom: 0;
+  }
+
+  .ribbon__lane-label {
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--c-ink-3);
+    padding: 0 var(--sp-3);
+    border-right: 1px solid var(--c-rule);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    background: var(--c-bg);
+  }
+
+  .ribbon__viewport {
+    overflow: hidden;
+    position: relative;
+    /* Soft edge fade — 24px transparent → opaque → 24px transparent.
+       mask-image is the institutional way to fade; no extra DOM nodes. */
+    mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      #000 24px,
+      #000 calc(100% - 24px),
+      transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      #000 24px,
+      #000 calc(100% - 24px),
+      transparent 100%
+    );
+  }
+
+  .ribbon__track {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-5);
+    white-space: nowrap;
+    padding-inline: var(--sp-3);
+    animation: ribbon-scroll var(--ribbon-dur, 56s) linear infinite;
+    will-change: transform;
+  }
+  /* Reverse-direction track for lane 2 — same keyframe, starts at -50%
+     so the loop matches the natural rhythm of the lower lane. */
+  .ribbon__viewport--reverse .ribbon__track {
+    animation-direction: reverse;
+  }
+
+  /* Pause on hover so the visitor can read a row they're inspecting. */
+  .ribbon:hover .ribbon__track {
+    animation-play-state: paused;
+  }
+
+  /* === Lane 1 — news items === */
+  .ribbon__item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-2);
+    font-size: 12px;
+    line-height: 1;
+    color: var(--c-ink);
+    letter-spacing: 0.02em;
+    /* Each item is a clickable pause point — make the whole row a
+       subtle hit target. Pointer-events:none so the click goes to the
+       underlying element on pages that wrap the ribbon. */
+    padding-block: 11px;
+  }
+  .ribbon__item.is-soft {
+    color: var(--c-ink-2);
+  }
+
+  .ribbon__t {
+    color: var(--c-ink-3);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
+  }
+
+  .ribbon__tag {
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 2px 6px;
+    border: 1px solid currentColor;
+    color: var(--c-ink-2);
+    /* v6.16 — sharp corners; no pill vocabulary. */
+    border-radius: 0;
+    line-height: 1.4;
+  }
+  .ribbon__tag--warn {
+    color: var(--c-warn);
+  }
+  .ribbon__tag--cobalt {
+    color: var(--c-primary-2);
+  }
+  .ribbon__tag--sage {
+    color: var(--j-sage);
+  }
+  .ribbon__tag--terracotta {
+    color: var(--j-terracotta);
+  }
+  .ribbon__tag--teal {
+    color: var(--j-teal);
+  }
+  .ribbon__tag--violet {
+    color: var(--j-violet);
+  }
+
+  .ribbon__text {
+    font-weight: 500;
+  }
+
+  .ribbon__sep {
+    color: var(--c-ink-4);
+    margin-inline-start: var(--sp-2);
+    font-weight: 600;
+  }
+
+  /* === Lane 2 — methodology frames === */
+  .ribbon__frame {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-2);
+    padding-block: 11px;
+    font-size: 12px;
+    line-height: 1;
+    color: var(--c-ink);
+  }
+  .ribbon__frame-head {
+    font-family: var(--serif-display);
+    font-style: italic;
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: -0.005em;
+    color: var(--c-ink);
+  }
+  .ribbon__frame-tail {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--c-ink-2);
+  }
+  .ribbon__frame-sep {
+    color: var(--c-ink-4);
+    font-weight: 600;
+  }
+  .ribbon__frame.is-warn .ribbon__frame-head {
+    color: var(--c-warn);
+  }
+  .ribbon__frame.is-cobalt .ribbon__frame-head {
+    color: var(--c-primary-2);
+  }
+  .ribbon__frame.is-sage .ribbon__frame-head {
+    color: var(--j-sage);
+  }
+  .ribbon__frame.is-terracotta .ribbon__frame-head {
+    color: var(--j-terracotta);
+  }
+  .ribbon__frame.is-teal .ribbon__frame-head {
+    color: var(--j-teal);
+  }
+  .ribbon__frame.is-violet .ribbon__frame-head {
+    color: var(--j-violet);
+  }
+
+  /* === Edge stop — trailing label === */
+  .ribbon__stop {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    padding-inline: var(--sp-3);
+    color: var(--c-ink-3);
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, transparent, var(--c-bg-2) 30%);
+    pointer-events: none;
+  }
+
+  /* === Keyframe — same seam-free math as MarketTape (translate 0 → -50%) === */
+  @keyframes ribbon-scroll {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  /* === Reduced-motion: freeze + flatten the edge fade ===
+     Per CLAUDE.md / motion doctrine: every animation must be neutralized
+     in reduced-motion. The mask-image is the only thing that creates
+     the "moving" feel — kill it; the static tracks already read. */
+  @media (prefers-reduced-motion: reduce) {
+    .ribbon__track {
+      animation: none !important;
+    }
+    .ribbon__viewport {
+      mask-image: none;
+      -webkit-mask-image: none;
+    }
+  }
+
+  /* === Multi-lane on narrow viewports — drop the lane labels === */
+  @media (max-width: 720px) {
+    .ribbon__lane {
+      grid-template-columns: 0 1fr;
+    }
+    .ribbon__lane-label {
+      display: none;
+    }
+  }
+</style>

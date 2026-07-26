@@ -19,6 +19,8 @@ import '@fontsource/inter/latin-700.css';
 import '@styles/tokens.css';
 import '@styles/tokens-v6.13.css';
 import '@styles/global.css';
+import '@styles/motion.css';
+import '@styles/back-to-top.css';
 import '@styles/print.css';
 import 'katex/dist/katex.min.css';
 
@@ -38,8 +40,18 @@ interface Props {
   extraJsonLd?: unknown; // optional page-specific JSON-LD (e.g. ItemList, CreativeWork)
   breadcrumbs?: Array<{ name: string; href: string }>; // optional BreadcrumbList JSON-LD
   surface?: 'v6-13'; // v6.13.0 — opt-in redesign surface (Jane Street × Noir). Default = legacy.
+  // v6.17 — theme mode. 'auto' (default) respects prefers-color-scheme.
+  // 'light' / 'dark' forces the theme via body.theme-light / body.theme-dark.
+  // Note: tokens-v6.13.css uses :has() to detect these body classes.
+  theme?: 'auto' | 'light' | 'dark';
 }
 
+// v6.18 — `surface` now defaults to `'v6-13'` (warm-dim #1a1714) so EVERY
+// page on the site renders on the same paper-cream-on-warm-dark register
+// (no more cold-dark #0d1117 sections). Pass surface={undefined} explicitly
+// to opt a single page out to legacy cold-dark. The flagship home, /contact,
+// /for-recruiters, and /screening-call already opted in; pages that hadn't
+// were inheriting legacy cold-dark — this default fixes them site-wide.
 const {
   title,
   description,
@@ -48,8 +60,16 @@ const {
   className,
   extraJsonLd,
   breadcrumbs,
-  surface,
+  surface = 'v6-13',
+  theme = 'auto',
 } = Astro.props;
+
+// v6.17 — resolve theme to a body class. 'auto' yields no class (CSS
+// media query handles prefers-color-scheme). Explicit 'light' / 'dark'
+// forces the mode via body.theme-light / body.theme-dark.
+const themeClass = theme === 'light' ? 'theme-light' : theme === 'dark' ? 'theme-dark' : '';
+const bodyClass = [themeClass, className].filter(Boolean).join(' ');
+
 const meta = buildMeta({
   title,
   description: description ?? profile.titles.secondary,
@@ -122,7 +142,7 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
        per WebKit spec). Point to the 180×180 PNG Apple actually renders. */
     }
     <link rel="apple-touch-icon" sizes="180x180" href={path('/apple-touch-icon-180x180.png')} />
-    <link rel="mask-icon" href={path('/cm-mark.svg')} color="#0a0e14" />
+    <link rel="mask-icon" href={path('/cm-mark.svg')} color="#1a1714" />
     <link rel="sitemap" href={path('/sitemap-index.xml')} />
     <link
       rel="alternate"
@@ -148,11 +168,19 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
       title={`${profile.fullName} — llms-full.txt (full content)`}
       href={path('/llms-full.txt')}
     />
-    <meta name="theme-color" content="#0a0e14" />
+    {
+      /* v6.17 — warm-dim theme-color (mobile browser chrome). Two tags
+        with `media` so the browser picks the matching color per OS
+        preference (Chrome 100+, Safari 15.4+). */
+    }
+    <meta name="theme-color" content="#1a1714" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#ece5d4" media="(prefers-color-scheme: light)" />
 
     {
-      /* === v6.1.0 — theme toggle REMOVED. The site is always cream
-         paper with institutional-tape sections. No light/dark flip. === */
+      /* === v6.1.0 — theme toggle REMOVED (legacy F14 amber surfaces).
+         v6.17 — light/dark variant RE-INTRODUCED for the v6-13 surface
+         via the `theme` prop on BaseLayout + tokens-v6.13.css :has()
+         selectors. Default is 'auto' (respects prefers-color-scheme). */
     }
 
     <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -175,8 +203,10 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
     }
     <slot name="head" />
   </head>
-  <body class={className}>
+  <body class={bodyClass}>
     <a href="#main" class="skip-link">Skip to content</a>
+    {/* v7.3 — top hairline scroll progress (1px amber, driven by scroll-progress.ts). */}
+    <div class="scroll-progress" aria-hidden="true"><i></i></div>
     {surface === 'v6-13' && <V613Fonts />}
     <Nav />
     <main id="main">
@@ -184,14 +214,39 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
     </main>
     <Footer />
 
+    <button id="back-to-top" type="button" aria-label="Back to top" hidden>
+      <svg
+        width="14"
+        height="14"
+        viewBox="0 0 14 14"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"><polyline points="12,9 7,4 2,9"></polyline></svg
+      >
+    </button>
+
+    <script is:inline>
+      (() => {
+        const btn = document.getElementById('back-to-top');
+        if (!btn) return;
+        const onScroll = () => {
+          if (window.scrollY > window.innerHeight * 1.2) btn.removeAttribute('hidden');
+          else btn.setAttribute('hidden', '');
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+        btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+      })();
+    </script>
+
     {
       /* === v6.1.0 · institutional motion bundle ===
         All scripts are pure-defer; total minified+gzipped < 4KB.
         They respect prefers-reduced-motion on their own.
-        theme-toggle removed; everything else preserved.
-        v6.2 Mission Q — hero-video driver added: pauses the
-        <video> child of HeroVideo.astro when prefers-reduced-motion
-        is on. No-op on the SVG fallback path. */
+        theme-toggle removed; everything else preserved. */
     }
     <script>
       import '@scripts/reveal-on-scroll.ts';
@@ -199,10 +254,10 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
       import '@scripts/active-nav.ts';
       import '@scripts/copy-button.ts';
       import '@scripts/scroll-progress.ts';
+      import '@scripts/motion.ts';
       import '@scripts/carousel.ts';
-      import '@scripts/hero-video.ts';
       import '@scripts/keyboard-shortcuts.ts';
-      import '@scripts/globe.ts';
+      import '@scripts/odometer.ts';
     </script>
   </body>
 </html>

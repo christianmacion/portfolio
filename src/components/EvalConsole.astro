@@ -23,6 +23,14 @@
 
 import { profile } from '@utils/profile';
 
+interface Props {
+  /** Show only the top N gates (from the first families). Default: show all. */
+  topGates?: number;
+  /** Show only the bottom N gates (from the last families). Default: show all. */
+  bottomGates?: number;
+}
+const { topGates, bottomGates } = Astro.props;
+
 type Result = 'PASS' | 'CHECK' | 'FAIL';
 
 interface Gate {
@@ -127,6 +135,24 @@ const counts = {
   total: allGates.length,
 };
 
+// v7.5 — narrow the gate list when topGates / bottomGates are passed.
+// Useful for embedded chrome (e.g. ArchitectureBrief) where a 31-row
+// table is too dense. topGates = first N from the first family +
+// remainder of that family if N exceeds the first family length, etc.
+// Implementation: take the first `topGates` gates and the last
+// `bottomGates` gates from the concatenated list, then re-group by
+// family so the original 6-family header layout is preserved.
+const visibleGates: Set<string> = (() => {
+  if (!topGates && !bottomGates) return new Set(allGates.map((g) => g.id));
+  const out = new Set<string>();
+  if (topGates) for (const g of allGates.slice(0, topGates)) out.add(g.id);
+  if (bottomGates) for (const g of allGates.slice(-bottomGates)) out.add(g.id);
+  return out;
+})();
+const visibleFamilies = families
+  .map((f) => ({ ...f, gates: f.gates.filter((g) => visibleGates.has(g.id)) }))
+  .filter((f) => f.gates.length > 0);
+
 // Big mirror the methodology headline: 31 statistical gates / 6 families.
 // Keep a one-line pass-rate headline so the reader scans the console.
 const passRate = counts.pass / counts.total;
@@ -164,7 +190,7 @@ const passRateStr = passRate.toFixed(3);
   </header>
 
   {
-    families.map((f) => (
+    visibleFamilies.map((f) => (
       <article class="eval-family">
         <header class="eval-family__head">
           <span class="eval-family__range mono">{f.range}</span>

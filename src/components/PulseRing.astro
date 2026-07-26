@@ -1,0 +1,151 @@
+---
+/**
+ * PulseRing.astro — v7.4 INSTITUTIONAL PULSE RING
+ *
+ * Variant of the v7.3 status-dot. Two variants:
+ *   - "status" — the v7.3 contact eyebrow pulse (amber, 2.4s cadence).
+ *   - "live"   — a faster, square indicator for "LIVE TRADE" / "PAPER" badges.
+ *
+ * Both rings are bordered (no `box-shadow` halo) — passes the no-bulbs
+ * CI guard. The ring color is `currentColor` so the parent can tint it
+ * via `color: var(--c-*)`.
+ *
+ * No JS. Pure CSS keyframes.
+ */
+
+interface Props {
+  variant?: 'status' | 'live';
+  /** Color override. Auto-defaults to amber for status / teal for live. */
+  color?: 'warn' | 'cobalt' | 'sage' | 'terracotta' | 'teal' | 'violet' | 'ink';
+  /** Accessible label. */
+  label?: string;
+  /** Hide the label text, render just the dot. */
+  silent?: boolean;
+  /** Optional a11y label for the inner dot. */
+  ariaLabel?: string;
+}
+
+const { variant = 'status', color, label, silent = false, ariaLabel } = Astro.props;
+
+const colorClass = color ? `is-${color}` : variant === 'live' ? 'is-teal' : 'is-warn';
+---
+
+<span
+  class:list={['pulse-ring', `pulse-ring--${variant}`, colorClass]}
+  role={ariaLabel ? 'img' : undefined}
+  aria-label={ariaLabel}
+>
+  <span class="pulse-ring__dot" aria-hidden="true"></span>
+  {label && !silent && <span class="pulse-ring__label mono">{label}</span>}
+</span>
+
+<style>
+  .pulse-ring {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-1);
+    line-height: 1;
+  }
+
+  .pulse-ring__dot {
+    position: relative;
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: currentColor;
+    border-radius: 0;
+    flex-shrink: 0;
+    animation: pulse-dot var(--j-dur-cursor, 1100ms) var(--j-ease-out) infinite;
+  }
+  .pulse-ring--live .pulse-ring__dot {
+    width: 7px;
+    height: 7px;
+  }
+
+  .pulse-ring__dot::before {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border: 1px solid currentColor;
+    border-radius: 0;
+    opacity: 0;
+    animation: pulse-ring-key var(--j-dur-cursor, 1100ms) var(--j-ease-out) infinite;
+  }
+  .pulse-ring--live .pulse-ring__dot::before {
+    inset: -4px;
+  }
+
+  /* === Color tints — pass through to the dot via currentColor. === */
+  .pulse-ring.is-warn {
+    color: var(--c-warn);
+  }
+  .pulse-ring.is-cobalt {
+    color: var(--c-primary-2);
+  }
+  .pulse-ring.is-sage {
+    color: var(--j-sage);
+  }
+  .pulse-ring.is-terracotta {
+    color: var(--j-terracotta);
+  }
+  .pulse-ring.is-teal {
+    color: var(--j-teal);
+  }
+  .pulse-ring.is-violet {
+    color: var(--j-violet);
+  }
+  .pulse-ring.is-ink {
+    color: var(--c-ink);
+  }
+
+  .pulse-ring__label {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: currentColor;
+    font-weight: 600;
+  }
+
+  /* Cadence — status is slower (2.4s), live is faster (1.8s) */
+  @keyframes pulse-dot {
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.55;
+      transform: scale(0.78);
+    }
+  }
+  @keyframes pulse-ring-key {
+    0% {
+      opacity: 0.6;
+      transform: scale(0.6);
+    }
+    80% {
+      opacity: 0;
+      transform: scale(2.4);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(2.4);
+    }
+  }
+  .pulse-ring--live .pulse-ring__dot {
+    animation-duration: 1800ms;
+  }
+  .pulse-ring--live .pulse-ring__dot::before {
+    animation-duration: 1800ms;
+  }
+
+  /* Reduced-motion: solid dot, no ring. */
+  @media (prefers-reduced-motion: reduce) {
+    .pulse-ring__dot,
+    .pulse-ring__dot::before {
+      animation: none !important;
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>

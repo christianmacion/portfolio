@@ -37,6 +37,7 @@ const markets = [
   { href: path('/markets'), label: 'Markets' },
   { href: path('/prediction-markets'), label: 'Prediction' },
   { href: path('/research'), label: 'Research' },
+  { href: path('/research/frontier-models'), label: 'Frontier Brief' },
 ];
 
 // Secondary links - behind a "Resources" details disclosure on desktop,
@@ -63,10 +64,33 @@ const secondary = [
 <header class="nav">
   <div class="container nav__inner">
     <a href={path('/')} class="nav__brand" aria-label="Christian Macion - home">
-      <picture class="nav__brand-mark" aria-hidden="true">
-        <source media="(prefers-color-scheme: dark)" srcset={path('/cm-mark-amber-dark.svg')} />
-        <img src={path('/cm-mark-amber-light.svg')} alt="" width="36" height="36" />
-      </picture>
+      {
+        /* v7.2 2026-07-24 — logo legibility fix. The prior <picture> chose the
+           mark asset by OS `prefers-color-scheme`, but the nav background follows
+           the *body theme* (--c-tape → --j-bg): cream on theme-light, warm-dark on
+           the base surface. So a dark-OS visitor on the light home got the
+           near-white mark on a cream bar → the C/M vanished, leaving only the
+           chevron (owner's "can't be read" report). Inlining the SVG lets the C/M
+           strokes use currentColor (= --ink-on-tape = the theme's correct ink),
+           so contrast is correct in every theme × OS combination. The chevron
+           uses the AA amber token in both themes. */
+      }
+      <svg
+        class="nav__brand-mark"
+        viewBox="0 0 64 64"
+        width="36"
+        height="36"
+        role="img"
+        aria-label="Christian Macion monogram"
+        focusable="false"
+      >
+        <g fill="none" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M 28 22 A 12 12 0 1 0 28 42" stroke="currentColor"></path>
+          <polyline points="36,44 36,20" stroke="currentColor"></polyline>
+          <polyline points="36,20 47,40 58,20" stroke="var(--c-amber)"></polyline>
+          <polyline points="58,20 58,44" stroke="currentColor"></polyline>
+        </g>
+      </svg>
       <span class="nav__brand-text">
         {
           /* v6.10.47 — derive the brand name from profile.fullName. The ®
@@ -175,7 +199,7 @@ const secondary = [
     color: var(--c-primary); /* v6.1.0 — always tape nav, light text */
     flex-shrink: 0;
     /* v6.3 polish — enforce ≥ 44 px tap target on the brand link.
-       The audit flagged "Christian T. Macion, CTA®" at 184×36 px.
+       The audit flagged the brand chrome at 184×36 px.
        min-height:44 lifts the rect without shifting visible content
        because the brand is centered in a 56 px nav row. */
     min-height: 44px;
@@ -202,7 +226,10 @@ const secondary = [
   }
   .nav__brand-sub {
     font-size: var(--fs-xs);
-    color: var(--c-white-faint);
+    /* v7.2 — was --c-white-faint (--j-ink-4): 3.10:1 light / 1.93:1 dark, fails
+       WCAG AA at this 12px size. --c-ink-3 passes AA in both themes (6.20:1
+       light / 5.62:1 dark) while staying secondary in the hierarchy. */
+    color: var(--c-ink-3);
   }
 
   .nav__links {
@@ -284,12 +311,20 @@ const secondary = [
      dark mode → invisible against the dark navbar. Always amber. */
   .nav__cta {
     background: var(--c-amber-deep);
-    color: var(--c-primary);
+    /* v7.2 — was --c-primary (--j-ink), which is dark navy on theme-light →
+       dark-on-dark against the amber-deep chip (fails WCAG AA). Warm near-white
+       text is legible on --c-amber-deep in both themes. */
+    color: #f7f2e7;
     border: 1px solid var(--c-amber);
+    /* v6.18 polish — prevent "Resume ↓" wrapping to "Res..." on narrower
+       desktops. The audit found the CTA clipped at 1024-1280px when
+       the primary link row + dropdowns ate the available width. */
+    white-space: nowrap;
+    flex-shrink: 0;
   }
   .nav__cta:hover {
     background: var(--c-amber);
-    color: var(--c-primary-deep);
+    color: #f7f2e7;
   }
 
   /* === v6.1.0 — theme toggle CSS removed (the button is gone) === */

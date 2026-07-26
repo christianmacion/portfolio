@@ -81,25 +81,25 @@ const figureStyle = aspect === 'auto' ? '' : `--proof-aspect: ${aspect}; --proof
   .proof-card--paper {
     background: var(--c-paper);
     border: 1px solid var(--c-rule);
-    border-radius: var(--radius);
+    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade */
     padding: var(--sp-3);
   }
   .proof-card--tape {
     background: var(--c-tape);
     border: 1px solid var(--c-tape-2);
-    border-radius: var(--radius);
+    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade */
     padding: var(--sp-3);
   }
   .proof-card__link {
     display: block;
     overflow: hidden;
-    border-radius: var(--radius-sm);
+    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade */
   }
   .proof-card__img {
     width: 100%;
     height: auto;
     display: block;
-    border-radius: var(--radius-sm);
+    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade */
   }
   /* Aspect-ratio guard for CLS prevention — when set via inline --proof-aspect */
   .proof-card[style*='--proof-aspect'] .proof-card__img {

@@ -1,0 +1,443 @@
+---
+/**
+ * desk.astro — v7.5 THE DESK · 24h multi-asset coverage view.
+ *
+ * NDA-positive by construction. No employer or platform names; this
+ * page is the public-facing "iron desk" view of the multi-agent office:
+ *   - where coverage sits (venue cities)
+ *   - what's scheduled to move (10 curated world events)
+ *   - what's moving right now (50 GDELT signals, last 24h)
+ *
+ * Layout (top → bottom):
+ *   1. MarketTape — scrolling equity tape
+ *   2. Head — eyebrow + headline + lede + dual-path CTA
+ *   3. EarthMap — 3-layer equirectangular world map
+ *   4. World events table — 10 curated events with category / severity
+ *   5. Coverage stats — venue count, event count, GDELT count, latency
+ *   6. CTABanner — back to home / open /desk link
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import VoiceLine from '@components/VoiceLine.astro';
+import MarketTape from '@components/MarketTape.astro';
+import EarthMap from '@components/EarthMap.astro';
+import CTABanner from '@components/CTABanner.astro';
+import { getCollection } from 'astro:content';
+import { profile, archSafe } from '@utils/profile';
+import { path } from '@utils/url';
+
+// === Pull world events once, server-side, sort by order ===
+interface WorldEventEntry {
+  id: string;
+  title: string;
+  category: 'central-bank' | 'earnings' | 'geopolitical' | 'data-release' | 'fx';
+  severity: 'mild' | 'moderate' | 'critical';
+  lat: number;
+  lon: number;
+  city: string;
+  source: string;
+  order: number;
+}
+const eventEntries = await getCollection('worldEvent');
+const events: WorldEventEntry[] = eventEntries
+  .map((e: { id: string; data: WorldEventEntry }): WorldEventEntry => ({
+    id: e.id,
+    title: e.data.title,
+    category: e.data.category,
+    severity: e.data.severity,
+    lat: e.data.lat,
+    lon: e.data.lon,
+    city: e.data.city,
+    source: e.data.source,
+    order: e.data.order,
+  }))
+  .sort((a: WorldEventEntry, b: WorldEventEntry) => a.order - b.order);
+
+const email = profile.contact.email;
+const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hiring%20inquiry`;
+---
+
+<BaseLayout
+  title="The Desk"
+  description={`24h multi-asset coverage — ${events.length} curated world events, ${archSafe.agentCount}-agent office, ${profile.stats.evalGates}-gate eval harness. NDA-positive by construction.`}
+  surface="v6-13"
+  theme="light"
+  breadcrumbs={[
+    { name: 'Home', href: '/' },
+    { name: 'The Desk', href: '/desk' },
+  ]}
+>
+  {/* === 1. MarketTape === */}
+  <MarketTape />
+
+  {/* === 2. Head === */}
+  <header class="desk-head">
+    <div class="container">
+      <p class="desk-head__eyebrow mono">
+        <span class="status-dot" aria-hidden="true"></span>
+        THE DESK · {archSafe.agentCount}-AGENT OFFICE · {events.length} WORLD EVENTS · OPEN
+      </p>
+      <h1 class="desk-head__title" data-words>
+        The world, in <span class="hl">24 hours</span>.
+      </h1>
+      <VoiceLine class="desk-head__voice">
+        Coverage that proves it can be defended in interview — venue dots, scheduled events, and a
+        24-hour signal overlay on the same equirectangular map.
+      </VoiceLine>
+      <p class="desk-head__sub">
+        A backtest is what a strategy <em>would have done</em>. A paper-trade is what it <em
+          >actually does</em
+        >. The desk is what the multi-agent office
+        <em>actually watches</em> — six research venues spanning APAC and the western exchanges, ten curated
+        world events pinned to the calendar, and a rolling 24-hour signal overlay so the office sees what
+        is moving before the position-book reacts.
+      </p>
+
+      <div class="desk-head__cta">
+        <a class="cta cta--primary" href={mailto}>EMAIL — HIRING INQUIRY</a>
+        <a class="cta cta--ghost" href={path('/ai')}>READ THE LOOP →</a>
+      </div>
+    </div>
+  </header>
+
+  {/* === 3. EarthMap — 3-layer world viz === */}
+  <section class="desk-map" aria-label="Three-layer world map">
+    <div class="container">
+      <p class="desk-map__eyebrow mono">EARTH · VENUES · EVENTS · SIGNALS · 24H</p>
+      <EarthMap width={1080} height={540} />
+    </div>
+  </section>
+
+  {/* === 4. World events table === */}
+  <section class="desk-events" aria-label="Curated world events">
+    <div class="container">
+      <p class="desk-events__eyebrow mono">{events.length} CURATED WORLD EVENTS</p>
+      <h2 class="desk-events__title">The calendar that drives every position-book.</h2>
+
+      <table class="desk-events__table">
+        <colgroup>
+          <col class="desk-events__col-num" />
+          <col class="desk-events__col-cat" />
+          <col class="desk-events__col-sev" />
+          <col class="desk-events__col-title" />
+          <col class="desk-events__col-city" />
+        </colgroup>
+        <thead>
+          <tr>
+            <th class="mono">#</th>
+            <th class="mono">CAT</th>
+            <th class="mono">SEV</th>
+            <th>TITLE</th>
+            <th class="mono">CITY</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            events.map((e) => (
+              <tr>
+                <td class="desk-events__num mono">{String(e.order).padStart(2, '0')}</td>
+                <td class="desk-events__cat mono">{e.category}</td>
+                <td class="desk-events__sev mono">
+                  <span class={`desk-events__pill desk-events__pill--${e.severity}`}>
+                    {e.severity.toUpperCase()}
+                  </span>
+                </td>
+                <td class="desk-events__title-cell">{e.title}</td>
+                <td class="desk-events__city mono">{e.city}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  {/* === 5. Coverage stats === */}
+  <section class="desk-stats" aria-label="Coverage statistics">
+    <div class="container">
+      <p class="desk-stats__eyebrow mono">24H COVERAGE · DETERMINISTIC SNAPSHOT</p>
+      <ul class="desk-stats__grid">
+        <li class="desk-stats__cell">
+          <p class="desk-stats__num mono">06</p>
+          <p class="desk-stats__lbl mono">RESEARCH VENUES</p>
+        </li>
+        <li class="desk-stats__cell">
+          <p class="desk-stats__num mono">{events.length}</p>
+          <p class="desk-stats__lbl mono">WORLD EVENTS</p>
+        </li>
+        <li class="desk-stats__cell">
+          <p class="desk-stats__num mono">50+</p>
+          <p class="desk-stats__lbl mono">GDELT SIGNALS</p>
+        </li>
+        <li class="desk-stats__cell">
+          <p class="desk-stats__num mono">UTC+8</p>
+          <p class="desk-stats__lbl mono">DESK TIMEZONE</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  {/* === 6. CTA banner === */}
+  <CTABanner
+    title="Hire the operator, not the dashboard."
+    sub={`${archSafe.agentCount}-agent multi-agent office · ${profile.stats.evalGates}-gate eval harness · ${profile.stats.locPython} LOC Python · NDA-clean by construction. Email below — reply within 24h.`}
+    primaryHref={mailto}
+    primaryLabel="EMAIL — HIRING INQUIRY"
+    secondaryHref={path('/ai')}
+    secondaryLabel="READ THE LOOP →"
+  />
+</BaseLayout>
+
+<style>
+  /* === Container === */
+  .container {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* === Head === */
+  .desk-head {
+    padding: 56px 0 48px;
+    border-bottom: 1px solid var(--c-rule);
+  }
+  .desk-head__eyebrow {
+    font: 500 11px / 1.4 var(--ff-mono);
+    color: var(--c-warn);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin: 0 0 24px;
+  }
+  .desk-head__title {
+    font: 600 48px / 1 var(--serif-display);
+    color: var(--c-ink);
+    letter-spacing: -0.024em;
+    margin: 0 0 24px;
+    max-width: 18ch;
+  }
+  .desk-head__title .hl {
+    font-style: italic;
+    color: var(--c-primary-2);
+  }
+  .desk-head__voice {
+    font: 500 16px / 1.5 var(--serif-display);
+    color: var(--c-ink-2);
+    font-style: italic;
+    margin: 0 0 24px;
+    max-width: 56ch;
+  }
+  .desk-head__sub {
+    font: 400 15px / 1.6 var(--ff-sans);
+    color: var(--c-ink);
+    margin: 0 0 28px;
+    max-width: 64ch;
+  }
+  .desk-head__sub em {
+    font-family: var(--serif-display);
+    font-style: italic;
+    color: var(--c-warn);
+    font-weight: 600;
+  }
+  .desk-head__cta {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  /* CTA (shared with home) */
+  .cta {
+    display: inline-block;
+    padding: 14px 24px;
+    font: 600 11px / 1 var(--ff-mono);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid var(--c-rule);
+    cursor: pointer;
+    transition:
+      background 200ms ease,
+      color 200ms ease,
+      border-color 200ms ease;
+    background: transparent;
+    color: var(--c-ink);
+  }
+  .cta--primary {
+    background: var(--c-warn);
+    color: var(--c-bg);
+    border-color: var(--c-warn);
+  }
+  .cta--primary:hover {
+    background: var(--c-amber-deep);
+    border-color: var(--c-amber-deep);
+  }
+  .cta--ghost {
+    background: transparent;
+    color: var(--c-ink);
+    border-color: var(--c-rule);
+  }
+  .cta--ghost:hover {
+    color: var(--c-warn);
+    border-color: var(--c-warn);
+  }
+
+  /* === Map === */
+  .desk-map {
+    padding: 48px 0 56px;
+    border-bottom: 1px solid var(--c-rule);
+    background: var(--c-bg-2);
+  }
+  .desk-map__eyebrow {
+    font: 500 11px / 1.4 var(--ff-mono);
+    color: var(--c-warn);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  /* === Events table === */
+  .desk-events {
+    padding: 56px 0;
+    border-bottom: 1px solid var(--c-rule);
+  }
+  .desk-events__eyebrow {
+    font: 500 11px / 1.4 var(--ff-mono);
+    color: var(--c-warn);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+  .desk-events__title {
+    font: 600 28px / 1.2 var(--serif-display);
+    color: var(--c-ink);
+    letter-spacing: -0.018em;
+    margin: 0 0 32px;
+    max-width: 36ch;
+  }
+  .desk-events__table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    font-size: 13px;
+  }
+  .desk-events__table th {
+    font: 500 10px / 1.4 var(--ff-mono);
+    color: var(--c-ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    text-align: left;
+    padding: 12px 8px;
+    border-bottom: 1px solid var(--c-rule);
+  }
+  .desk-events__table td {
+    padding: 14px 8px;
+    border-bottom: 1px dashed var(--c-rule);
+    color: var(--c-ink);
+    vertical-align: top;
+  }
+  .desk-events__col-num {
+    width: 36px;
+  }
+  .desk-events__col-cat {
+    width: 110px;
+  }
+  .desk-events__col-sev {
+    width: 90px;
+  }
+  .desk-events__col-city {
+    width: 140px;
+  }
+  .desk-events__num {
+    color: var(--c-ink-3);
+    font-size: 11px;
+    font-weight: 500;
+  }
+  .desk-events__cat {
+    font-size: 11px;
+    color: var(--c-ink-2);
+    letter-spacing: 0.04em;
+  }
+  .desk-events__pill {
+    display: inline-block;
+    padding: 2px 8px;
+    border: 1px solid currentColor;
+    font: 500 9.5px / 1.4 var(--ff-mono);
+    letter-spacing: 0.1em;
+  }
+  .desk-events__pill--critical {
+    color: var(--c-amber-deep);
+  }
+  .desk-events__pill--moderate {
+    color: var(--c-amber);
+  }
+  .desk-events__pill--mild {
+    color: var(--c-ink-2);
+  }
+  .desk-events__title-cell {
+    font: 500 14px / 1.4 var(--ff-sans);
+    color: var(--c-ink);
+  }
+  .desk-events__city {
+    font-size: 11px;
+    color: var(--c-ink-2);
+  }
+
+  /* === Stats grid === */
+  .desk-stats {
+    padding: 48px 0 56px;
+    background: var(--c-bg-2);
+    border-bottom: 1px solid var(--c-rule);
+  }
+  .desk-stats__eyebrow {
+    font: 500 11px / 1.4 var(--ff-mono);
+    color: var(--c-warn);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin: 0 0 24px;
+  }
+  .desk-stats__grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+  .desk-stats__cell {
+    border-top: 1px solid var(--c-rule);
+    padding-top: 16px;
+  }
+  .desk-stats__num {
+    font: 600 32px / 1 var(--serif-display);
+    color: var(--c-ink);
+    letter-spacing: -0.022em;
+    margin: 0 0 6px;
+    font-variant-numeric: tabular-nums;
+  }
+  .desk-stats__lbl {
+    font: 500 10px / 1.2 var(--ff-mono);
+    color: var(--c-ink-2);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  @media (max-width: 900px) {
+    .desk-head__title {
+      font-size: 36px;
+    }
+    .desk-events__title {
+      font-size: 22px;
+    }
+    .desk-stats__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+  }
+  @media (max-width: 720px) {
+    .desk-head {
+      padding: 40px 0 32px;
+    }
+    .desk-events__col-cat {
+      display: none;
+    }
+  }
+</style>

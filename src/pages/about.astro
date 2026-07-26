@@ -6,15 +6,14 @@
  *   → methodology teaser → quant teaser → bio (4 prose paragraphs) →
  *   education (1 prose paragraph) → disclosure (1 prose paragraph) → CTA banner.
  *
- * Why proof-first: 20+ quant firm references (Jane Street blog, Two Sigma
- * /insights, D.E. Shaw, Vatic Labs) all lead the bio artefact: proof
+ * Why proof-first: the methodology page leads with the 31-gate harness
+ * and the proof timeline. The bio artifact is downstream.
  * strips sit above the human paragraph; bio is the closer, not the opener.
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
 import Stat from '@components/Stat.astro';
 import Equation from '@components/Equation.astro';
 import CTABanner from '@components/CTABanner.astro';
-import Avatar from '@components/Avatar.astro';
 import { profile } from '@utils/profile';
 import { path } from '@utils/url';
 import { getCollection, type CollectionEntry } from 'astro:content';
@@ -50,9 +49,8 @@ const NGATE = `${profile.stats.evalGates}-gate`;
 >
   <header class="page-head">
     <div class="container container-narrow">
-      <Avatar alt={profile.headshot.alt} size={200} />
       <p class="section__eyebrow"><span class="mono">about/</span> · operator + researcher</p>
-      <h1 class="page-head__title">
+      <h1 class="page-head__title" data-words>
         One method. <span class="hl">Two hats</span>.
       </h1>
       <VoiceLine class="page-head__voice">
@@ -299,7 +297,7 @@ const NGATE = `${profile.stats.evalGates}-gate`;
     /*
     DISCLOSURE POSTURE — flowing prose, not an X-list.
     Genre rule: quants don't disclose NDA posture with red X marks;
-    they declare it as a prose paragraph (D.E. Shaw / RenTec / Jane Street style).
+    they declare it as a prose paragraph with provenance footnotes.
   */
   }
   <section class="section">
@@ -345,13 +343,6 @@ const NGATE = `${profile.stats.evalGates}-gate`;
   .page-head__voice {
     margin: 0 0 var(--sp-5);
     max-width: 60ch;
-  }
-  @media (max-width: 480px) {
-    .avatar-img,
-    .avatar {
-      width: 140px !important;
-      height: 140px !important;
-    }
   }
   .head-eq {
     padding: var(--sp-4) var(--sp-5);

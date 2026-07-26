@@ -1,0 +1,433 @@
+---
+/**
+ * EarthMap.astro — v7.5 THREE-LAYER INSTITUTIONAL EARTH PRIMITIVE.
+ *
+ * Server-rendered SVG (no JS). Three stacked layers on one equirectangular
+ * world map:
+ *
+ *   Layer A — VENUES     (CoverageGlobe cities, weighted amber dots)
+ *   Layer B — WORLD-EVENTS (10 curated events from src/content/world-events)
+ *   Layer C — GDELT OVERLAY (50+ events from src/data/gdelt-cache.json,
+ *                            polarity-tinted at low alpha)
+ *
+ * Visual register: institutional / Bloomberg. Mono + 1 amber accent.
+ * No glow. No pills. No gradient. The landmass dot grid is the same
+ * continent-aware sparse grid as CoverageGlobe — visually consistent.
+ *
+ * Same Equirectangular projection: x = (lon + 180) / 360 * width,
+ * y = (90 - lat) / 180 * height. viewBox 720×360.
+ *
+ * Usage:
+ *   <EarthMap />
+ *   <EarthMap width={1080} height={540} />
+ */
+import { getCollection } from 'astro:content';
+import gdeltCache from '../data/gdelt-cache.json';
+
+interface Props {
+  /** ViewBox width (default 720). */
+  width?: number;
+  /** ViewBox height (default 360 — Equirectangular 2:1). */
+  height?: number;
+  /** Spacing in degrees between background landmass dots (default 18). */
+  bgStep?: number;
+  /** Optional CSS class on the outer wrapper. */
+  class?: string;
+}
+const { width = 720, height = 360, bgStep = 18, class: className } = Astro.props;
+
+// === Equirectangular projection ===
+function project(lat: number, lon: number): { x: number; y: number } {
+  return {
+    x: ((lon + 180) / 360) * width,
+    y: ((90 - lat) / 180) * height,
+  };
+}
+
+// === Layer A — venue cities (same default 6 as CoverageGlobe) ===
+interface Venue {
+  city: string;
+  lat: number;
+  lon: number;
+  weight: number;
+  caption: string;
+}
+interface VenuePosition extends Venue {
+  x: number;
+  y: number;
+  r: number;
+}
+const venues: Venue[] = [
+  { city: 'Digos City', lat: 6.74, lon: 125.36, weight: 1.0, caption: 'home base' },
+  { city: 'Singapore', lat: 1.35, lon: 103.82, weight: 0.8, caption: 'APAC ops' },
+  { city: 'Tokyo', lat: 35.68, lon: 139.69, weight: 0.7, caption: 'JPX' },
+  { city: 'Zurich', lat: 47.38, lon: 8.54, weight: 0.85, caption: 'CTA' },
+  { city: 'London', lat: 51.51, lon: -0.13, weight: 0.95, caption: 'LSE' },
+  { city: 'New York', lat: 40.71, lon: -74.01, weight: 0.9, caption: 'NYSE / Nasdaq' },
+];
+const venuePositions: VenuePosition[] = venues.map((c: Venue): VenuePosition => {
+  const { x, y } = project(c.lat, c.lon);
+  const r = 3 + c.weight * 4;
+  return { ...c, x, y, r };
+});
+
+// === Layer B — world events (Zod-validated collection) ===
+interface WorldEventRow {
+  id: string;
+  title: string;
+  category: 'central-bank' | 'earnings' | 'geopolitical' | 'data-release' | 'fx';
+  severity: 'mild' | 'moderate' | 'critical';
+  lat: number;
+  lon: number;
+  city: string;
+  source: string;
+  order: number;
+}
+const worldEventEntries = await getCollection('worldEvent');
+const worldEvents: WorldEventRow[] = worldEventEntries
+  .map((e: { id: string; data: WorldEventRow }): WorldEventRow => ({
+    id: e.id,
+    title: e.data.title,
+    category: e.data.category,
+    severity: e.data.severity,
+    lat: e.data.lat,
+    lon: e.data.lon,
+    city: e.data.city,
+    source: e.data.source,
+    order: e.data.order,
+  }))
+  .sort((a: WorldEventRow, b: WorldEventRow) => a.order - b.order);
+const eventPositions = worldEvents.map((e) => {
+  const { x, y } = project(e.lat, e.lon);
+  return { ...e, x, y };
+});
+
+// === Layer C — GDELT cache (polarity-tinted overlay) ===
+// Read src/data/gdelt-cache.json — type-narrowed here to keep SSR safe.
+interface GdeltEvent {
+  id: string;
+  title: string;
+  category: string;
+  severity: string;
+  lat: number;
+  lon: number;
+  city: string;
+  source: string;
+  timestamp?: string;
+  goldstein?: number;
+}
+interface GdeltCache {
+  fetchedAt: string;
+  buildDate: string;
+  source: string;
+  url: string;
+  events: GdeltEvent[];
+}
+const cache = gdeltCache as GdeltCache;
+const gdeltEvents: GdeltEvent[] = cache.events;
+// Dedupe by id, cap at 50 for the overlay.
+const dedupGdelt: GdeltEvent[] = (() => {
+  const seen = new Set<string>();
+  const out: GdeltEvent[] = [];
+  for (const e of gdeltEvents) {
+    if (seen.has(e.id)) continue;
+    seen.add(e.id);
+    out.push(e);
+    if (out.length >= 50) break;
+  }
+  return out;
+})();
+const gdeltPositions = dedupGdelt.map((e) => {
+  const { x, y } = project(e.lat, e.lon);
+  // Polarity: positive Goldstein = amber-soft, negative = ink-2 alpha
+  const goldstein = e.goldstein ?? 0;
+  const polarity: 'pos' | 'neg' | 'neutral' =
+    goldstein > 2 ? 'pos' : goldstein < -2 ? 'neg' : 'neutral';
+  return { ...e, x, y, polarity };
+});
+
+// === Background landmass dot grid (continent-aware mask) ===
+interface BgDot {
+  x: number;
+  y: number;
+  visible: boolean;
+}
+const bgDots: BgDot[] = [];
+for (let lat = -60; lat <= 75; lat += bgStep) {
+  for (let lon = -180; lon <= 180; lon += bgStep) {
+    const { x, y } = project(lat, lon);
+    const nhContinent =
+      lat > 5 &&
+      lat < 75 &&
+      ((lon > -130 && lon < -55) || (lon > -10 && lon < 60) || (lon > 60 && lon < 145));
+    const shContinent =
+      lat > -55 && lat < 35 && ((lon > -85 && lon < -30) || (lon > -15 && lon < 50));
+    const au = lat > -40 && lat < -10 && lon > 110 && lon < 155;
+    bgDots.push({ x, y, visible: !!(nhContinent || shContinent || au) });
+  }
+}
+
+const equatorY = project(0, 0).y;
+const primeX = project(0, 0).x;
+
+// === Category → shape mapping for world-events ===
+// Triangles for monetary (central-bank, fx), squares for data releases,
+// diamonds for earnings, circles for geopolitical. All 5×5 viewBox units.
+const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circle' => {
+  if (category === 'central-bank' || category === 'fx') return 'triangle';
+  if (category === 'data-release') return 'square';
+  if (category === 'earnings') return 'diamond';
+  return 'circle';
+};
+---
+
+<figure class:list={['earth-map', className]}>
+  <svg
+    class="earth-map__svg"
+    viewBox={`0 0 ${width} ${height}`}
+    role="img"
+    aria-label={`Three-layer world map: ${venues.length} research venues, ${worldEvents.length} curated world events, ${dedupGdelt.length} GDELT signals (24h). Equirectangular projection.`}
+    preserveAspectRatio="xMidYMid meet"
+  >
+    <title>Three-layer world map — venues · world events · GDELT 24h</title>
+
+    {/* === Background grid lines (equator + prime meridian) === */}
+    <line x1="0" y1={equatorY} x2={width} y2={equatorY} class="earth-map__eq"></line>
+    <line x1={primeX} y1="0" x2={primeX} y2={height} class="earth-map__eq"></line>
+
+    {/* === Background landmass dots === */}
+    {
+      bgDots.map((d) =>
+        d.visible ? <circle cx={d.x} cy={d.y} r="0.9" class="earth-map__bg" /> : null,
+      )
+    }
+
+    {/* === Layer A — venue cities (amber, weighted) === */}
+    {
+      venuePositions.map((c) => (
+        <g class="earth-map__venue">
+          {c.weight >= 0.7 && <circle cx={c.x} cy={c.y} r={c.r + 4} class="earth-map__pulse" />}
+          <circle cx={c.x} cy={c.y} r={c.r} class="earth-map__dot">
+            <title>
+              {c.city} ({c.lat.toFixed(2)}°, {c.lon.toFixed(2)}°) — {c.caption}
+            </title>
+          </circle>
+          <text x={c.x} y={c.y - c.r - 4} text-anchor="middle" class="earth-map__label">
+            {c.city}
+          </text>
+        </g>
+      ))
+    }
+
+    {/* === Layer B — world events (shape-coded by category) === */}
+    {
+      eventPositions.map((e) => {
+        const shape = eventShape(e.category);
+        return (
+          <g
+            class={`earth-map__event earth-map__event--${e.category} earth-map__event--${e.severity}`}
+          >
+            {shape === 'triangle' && (
+              <polygon
+                points={`${e.x},${e.y - 4} ${e.x + 4},${e.y + 3} ${e.x - 4},${e.y + 3}`}
+                class="earth-map__event-shape"
+              >
+                <title>
+                  {e.title} — {e.city}
+                </title>
+              </polygon>
+            )}
+            {shape === 'square' && (
+              <rect x={e.x - 3.5} y={e.y - 3.5} width="7" height="7" class="earth-map__event-shape">
+                <title>
+                  {e.title} — {e.city}
+                </title>
+              </rect>
+            )}
+            {shape === 'diamond' && (
+              <polygon
+                points={`${e.x},${e.y - 4} ${e.x + 4},${e.y} ${e.x},${e.y + 4} ${e.x - 4},${e.y}`}
+                class="earth-map__event-shape"
+              >
+                <title>
+                  {e.title} — {e.city}
+                </title>
+              </polygon>
+            )}
+            {shape === 'circle' && (
+              <circle cx={e.x} cy={e.y} r="3.5" class="earth-map__event-shape">
+                <title>
+                  {e.title} — {e.city}
+                </title>
+              </circle>
+            )}
+          </g>
+        );
+      })
+    }
+
+    {/* === Layer C — GDELT overlay (polarity-tinted, low alpha) === */}
+    {
+      gdeltPositions.map((e) => (
+        <circle cx={e.x} cy={e.y} r="2" class={`earth-map__gdelt earth-map__gdelt--${e.polarity}`}>
+          <title>
+            {e.title} — {e.city}
+          </title>
+        </circle>
+      ))
+    }
+  </svg>
+
+  <figcaption class="earth-map__caption mono">
+    <span class="earth-map__cap-section">
+      <span class="earth-map__cap-swatch earth-map__cap-swatch--venue" aria-hidden="true"></span>
+      {venues.length} venues
+    </span>
+    <span class="earth-map__cap-sep">·</span>
+    <span class="earth-map__cap-section">
+      <span class="earth-map__cap-swatch earth-map__cap-swatch--event" aria-hidden="true"></span>
+      {worldEvents.length} world events
+    </span>
+    <span class="earth-map__cap-sep">·</span>
+    <span class="earth-map__cap-section">
+      <span class="earth-map__cap-swatch earth-map__cap-swatch--gdelt-pos" aria-hidden="true"
+      ></span>
+      {dedupGdelt.length} GDELT 24h
+    </span>
+    <span class="earth-map__cap-note">equirectangular · 24h desk coverage</span>
+  </figcaption>
+</figure>
+
+<style>
+  .earth-map {
+    margin: 0;
+    padding: 0;
+    background: var(--c-bg-2);
+    border: 1px solid var(--c-rule);
+    display: flex;
+    flex-direction: column;
+  }
+  .earth-map__svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    background: var(--c-tape);
+  }
+  .earth-map__eq {
+    stroke: var(--c-rule);
+    stroke-width: 0.5;
+    stroke-dasharray: 2, 4;
+    opacity: 0.6;
+  }
+  .earth-map__bg {
+    fill: var(--c-ink-3);
+    opacity: 0.18;
+  }
+
+  /* === Layer A — venues (amber, weighted) === */
+  .earth-map__pulse {
+    fill: none;
+    stroke: var(--c-primary-2);
+    stroke-width: 1;
+    opacity: 0.4;
+  }
+  .earth-map__dot {
+    fill: var(--c-primary-2);
+    stroke: var(--c-primary-2-light);
+    stroke-width: 1;
+  }
+  .earth-map__label {
+    font-size: 10px;
+    fill: var(--c-ink);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  /* === Layer B — world events (shape-coded by category) === */
+  .earth-map__event-shape {
+    fill: var(--c-amber-deep);
+    stroke: var(--c-bg);
+    stroke-width: 1;
+    opacity: 0.85;
+  }
+  .earth-map__event--critical .earth-map__event-shape {
+    fill: var(--c-amber-deep);
+    opacity: 1;
+  }
+  .earth-map__event--moderate .earth-map__event-shape {
+    fill: var(--c-amber);
+    opacity: 0.78;
+  }
+  .earth-map__event--mild .earth-map__event-shape {
+    fill: var(--c-ink-2);
+    opacity: 0.6;
+  }
+
+  /* === Layer C — GDELT (polarity-tinted, low alpha) === */
+  .earth-map__gdelt {
+    stroke: none;
+    opacity: 0.45;
+  }
+  .earth-map__gdelt--pos {
+    fill: var(--c-amber);
+  }
+  .earth-map__gdelt--neg {
+    fill: var(--c-ink-2);
+  }
+  .earth-map__gdelt--neutral {
+    fill: var(--c-ink-3);
+  }
+
+  /* === Caption / legend === */
+  .earth-map__caption {
+    font-size: 10px;
+    color: var(--c-ink-2);
+    padding: 12px 16px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    border-top: 1px solid var(--c-rule);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .earth-map__cap-section {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .earth-map__cap-swatch {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+  }
+  .earth-map__cap-swatch--venue {
+    background: var(--c-primary-2);
+  }
+  .earth-map__cap-swatch--event {
+    background: var(--c-amber-deep);
+    transform: rotate(45deg);
+  }
+  .earth-map__cap-swatch--gdelt-pos {
+    background: var(--c-amber);
+    opacity: 0.6;
+    border-radius: 50%;
+  }
+  .earth-map__cap-sep {
+    color: var(--c-ink-4);
+  }
+  .earth-map__cap-note {
+    margin-left: auto;
+    color: var(--c-ink-3);
+    font-style: italic;
+    text-transform: none;
+    letter-spacing: 0.02em;
+  }
+
+  @media (max-width: 720px) {
+    .earth-map__cap-note {
+      margin-left: 0;
+      flex-basis: 100%;
+    }
+  }
+</style>

@@ -55,7 +55,23 @@ function groupByYear(items: ProjectEntry[]): [string, ProjectEntry[]][] {
 const quantByYear = groupByYear(quantPubs);
 const aiByYear = groupByYear(aiPubs);
 
+// Published workbooks render with a download link + status="Published".
+// In-progress entries omit `url` + `date` and render with the legacy
+// "In progress" footer (see .wb__foot below).
 const workbooks = [
+  {
+    title: 'Kaufman Efficiency Ratio — Trading Research Note',
+    scope:
+      'Adaptive efficiency measurement for trading strategies; reproducible Python + backtest manifest.',
+    pages: '4 pp',
+    audience: 'trading researchers, strategy developers',
+    status: 'Published',
+    date: '2026-07-18',
+    author: 'Christian T. Macion',
+    url: path('/workbooks/kaufman-efficiency-ratio.pdf'),
+    fileSize: '287 KB',
+    citationKey: 'macion2026kaufman',
+  },
   {
     title: 'AI Architecture & Multi-Agent Systems Workbook',
     scope: `${profile.stats.aiAgentCount}-agent orchestrator, eval harness, MCP server, model routing`,
@@ -76,7 +92,19 @@ const workbooks = [
   },
 ];
 
+const publishedCount = workbooks.filter((w) => w.status === 'Published').length;
+
 const pressUnsorted = [
+  {
+    date: '2026-07-18',
+    year: 2026,
+    title:
+      'Frontier Models for Quant Research & AI Engineering — r3 consulting brief released (18 pp, citable)',
+    venue: 'portfolio.os · /research/frontier-models',
+    detail:
+      'Public-shareable brief comparing M3, Kimi K3, and Claude Opus 4.8 (with Fable 5, GPT-5.6 Sol, Gemini 3 Pro as reference points) for quant research + AI engineering. 18-page letter PDF, footnoted sources, two verification gates, declared gaps.',
+    url: '/research/frontier-models',
+  },
   {
     date: '2026-07-10',
     year: 2026,
@@ -201,7 +229,7 @@ const totalCount = quantPubs.length + aiPubs.length + workbooks.length + press.l
       <p class="section__eyebrow">
         <span class="mono">publications/</span> · {totalCount} artifacts
       </p>
-      <h1 class="pub-head__title">
+      <h1 class="pub-head__title" data-words>
         Things I have <span class="hl">written, built, and said</span> in public.
       </h1>
       <VoiceLine class="pub-head__voice">
@@ -355,26 +383,58 @@ const totalCount = quantPubs.length + aiPubs.length + workbooks.length + press.l
     <div class="container">
       <header class="section__head">
         <p class="section__eyebrow">Workbooks · long-form</p>
-        <h2 class="section__title">{workbooks.length} deep-dive workbooks (in progress).</h2>
+        <h2 class="section__title">
+          {publishedCount} published · {workbooks.length - publishedCount} in progress.
+        </h2>
         <p class="section__sub">
-          Long-form workbooks that consolidate method, code, and exercises. Not yet published —
-          drafts available on request.
+          Long-form workbooks that consolidate method, code, and exercises. Published entries ship
+          as public PDFs; in-progress drafts are available on request.
         </p>
       </header>
       <div class="workbooks">
         {
           workbooks.map((w) => (
             <article class="wb">
-              <h3 class="wb__title">{w.title}</h3>
+              <h3 class="wb__title">{w.url ? <a href={w.url}>{w.title}</a> : w.title}</h3>
               <div class="wb__scope">{w.scope}</div>
               <div class="wb__meta mono">
                 <span>{w.pages}</span>
                 <span aria-hidden="true">·</span>
                 <span>{w.audience}</span>
+                {w.author && (
+                  <>
+                    <span aria-hidden="true">·</span>
+                    <span>{w.author}</span>
+                  </>
+                )}
               </div>
               <div class="wb__foot mono">
-                <span class="wb__status">In progress</span> — early-reader draft; full PDF available
-                on request (non-public, gated by topic)
+                <span
+                  class:list={[
+                    'wb__status',
+                    w.status === 'Published' ? 'wb__status--pub' : 'wb__status--wip',
+                  ]}
+                >
+                  {w.status ?? 'In progress'}
+                </span>
+                {w.url ? (
+                  <>
+                    {' '}
+                    —{' '}
+                    <a href={w.url}>
+                      {w.fileSize ?? 'PDF'} · {w.pages}
+                    </a>
+                    {w.date && (
+                      <>
+                        {' · '}
+                        <time datetime={w.date}>{w.date}</time>
+                      </>
+                    )}
+                    {w.citationKey && <span class="wb__cite mono"> · cite:{w.citationKey}</span>}
+                  </>
+                ) : (
+                  ' — early-reader draft; full PDF available on request (non-public, gated by topic)'
+                )}
               </div>
             </article>
           ))
@@ -711,6 +771,17 @@ const totalCount = quantPubs.length + aiPubs.length + workbooks.length + press.l
     border-radius: 3px;
     font-weight: 600;
     letter-spacing: 0.04em;
+  }
+  /* Published variant — single accent (electric blue) hairline border
+     so it reads as a status badge, not a CTA. No glow, no fill flip. */
+  .wb__status--pub {
+    background: transparent;
+    color: var(--c-primary);
+    border: 1px solid var(--c-primary);
+  }
+  .wb__cite {
+    color: var(--c-ink-3);
+    font-size: 0.92em;
   }
 
   .press {

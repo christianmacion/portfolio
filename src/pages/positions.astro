@@ -52,7 +52,7 @@ const tradingDays = equitySeries.length;
         Status: open to conversations · last refreshed {lastRefreshed}
       </p>
       <p class="section__eyebrow"><span class="mono">positions/</span> · live paper-trading</p>
-      <h1 class="positions-head__title">
+      <h1 class="positions-head__title" data-words>
         What I'm <span class="hl">currently running</span>.
       </h1>
       <VoiceLine class="positions-head__voice">
@@ -366,7 +366,9 @@ const tradingDays = equitySeries.length;
         </p>
       </header>
       <ul class="neg">
-        <li>HFT colocation-dependent seats (Digos is +8 from NYSE; latency kills the edge)</li>
+        <li>
+          HFT colocation-dependent seats (Digos is 8 hours ahead of NYSE; latency kills the edge)
+        </li>
         <li>Sell-side black-box vendor roles (I prefer open-data / open-source provenance)</li>
         <li>Crypto market-making seats that require &lt; 100ms latency (same reason)</li>
       </ul>
@@ -474,7 +476,7 @@ const tradingDays = equitySeries.length;
     padding: var(--sp-2) var(--sp-3);
     background: var(--c-bg-2);
     border: 1px solid var(--c-rule);
-    border-radius: 14px;
+    border-radius: 0;
     font-size: var(--fs-xs);
     color: var(--c-ink-2);
   }

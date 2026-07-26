@@ -67,7 +67,7 @@ const {
     background: var(--c-bg);
     border: 1px solid var(--c-rule);
     border-left: 3px solid var(--c-primary-2-deep);
-    border-radius: var(--radius);
+    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade */
     transition:
       border-color var(--transition),
       box-shadow var(--transition);
@@ -100,7 +100,7 @@ const {
     background: var(--c-amberl-mist);
     border: 1px solid var(--c-amberl-decor);
     padding: 0.125rem var(--sp-2);
-    border-radius: var(--radius-sm);
+    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade */
     font-weight: 600;
     letter-spacing: 0.04em;
   }
