@@ -133,6 +133,62 @@ const secondarySymbol = 'BTC-USD';
 
   {
     /* ============================================================
+       GRAPH-ENGINEERING CALLOUT — v7.6.7
+       Owner ask 2026-07-27: "we can adapt [graph engineering] to our
+       quant research and trading." This strip surfaces the 4 trading-axis
+       graphs the same 4-stage pipeline feeds (markets / signal lineage /
+       trade lifecycle / risk propagation) and links back to /ai#graph-engineering
+       for the full source-adoption-adaptation block.
+       ============================================================ */
+  }
+  <section
+    class="kg-callout"
+    id="graph-engineering-trading"
+    data-toc-id="graph-engineering-trading"
+    data-toc-label="Graph engineering · 4 trading-axis graphs"
+  >
+    <div class="container">
+      <div class="kg-callout__inner">
+        <div class="kg-callout__head">
+          <p class="kg-callout__eyebrow mono">
+            <span class="kg-callout__chip">PIPELINE</span>
+            <span>GRAPH ENGINEERING · ADAPTED</span>
+          </p>
+          <p class="kg-callout__title">
+            Same 4-stage pipeline, four trading-axis graphs. <span class="mono">AI.MK.04</span>
+          </p>
+        </div>
+        <ol class="kg-callout__list">
+          <li>
+            <span class="kg-callout__num mono">01</span>
+            <span class="kg-callout__k">Markets</span>
+            <span class="kg-callout__v">instruments · venues · events · regimes · factors</span>
+          </li>
+          <li>
+            <span class="kg-callout__num mono">02</span>
+            <span class="kg-callout__k">Signal lineage</span>
+            <span class="kg-callout__v">alpha factor → backtest → forward test → production → P&amp;L</span>
+          </li>
+          <li>
+            <span class="kg-callout__num mono">03</span>
+            <span class="kg-callout__k">Trade lifecycle</span>
+            <span class="kg-callout__v">order → fill → TCA → P&amp;L → compliance audit</span>
+          </li>
+          <li>
+            <span class="kg-callout__num mono">04</span>
+            <span class="kg-callout__k">Risk propagation</span>
+            <span class="kg-callout__v">factor exposure → stress scenario → VaR / CVaR</span>
+          </li>
+        </ol>
+        <a class="kg-callout__cta" href={`${path('/ai')}#graph-engineering`}>
+          See the full source · adoption · adaptation block →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  {
+    /* ============================================================
        STATS ROW — 4 StatCells, indices + inline MiniSpark per cell.
        ============================================================ */
   }
@@ -505,5 +561,123 @@ const secondarySymbol = 'BTC-USD';
   }
   .mk-band__indices-delta--flat {
     color: var(--c-ink-3);
+  }
+
+  /* ============================================================
+     v7.6.7 — Graph engineering callout strip
+     ============================================================ */
+  .kg-callout {
+    background: var(--c-bg-2, var(--c-bg));
+    border-top: 1px solid var(--c-rule);
+    border-bottom: 1px solid var(--c-rule);
+    padding: var(--sp-5) 0;
+  }
+  .kg-callout__inner {
+    border: 1px solid var(--c-rule);
+    border-left: 4px solid var(--c-violet, #a07baf);
+    border-radius: 6px;
+    padding: var(--sp-5);
+    background: var(--c-bg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-4);
+  }
+  .kg-callout__head {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .kg-callout__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    color: var(--c-ink-3);
+    margin: 0;
+  }
+  .kg-callout__chip {
+    display: inline-block;
+    padding: 2px 6px;
+    background: var(--c-violet, #a07baf);
+    color: var(--c-bg);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    border-radius: 2px;
+  }
+  .kg-callout__title {
+    margin: 0;
+    font: 600 1.25rem / 1.3 var(--serif-display);
+    color: var(--c-ink);
+    letter-spacing: -0.01em;
+  }
+  .kg-callout__title .mono {
+    font-size: 0.85rem;
+    color: var(--c-violet, #a07baf);
+    margin-left: 6px;
+    letter-spacing: 0.06em;
+    font-weight: 500;
+  }
+  .kg-callout__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--sp-3);
+  }
+  @media (max-width: 980px) {
+    .kg-callout__list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 540px) {
+    .kg-callout__list {
+      grid-template-columns: 1fr;
+    }
+  }
+  .kg-callout__list li {
+    display: grid;
+    grid-template-columns: 28px auto;
+    grid-template-rows: auto auto;
+    gap: 2px var(--sp-2);
+    align-items: baseline;
+    padding: var(--sp-3);
+    background: var(--c-tape);
+    border: 1px solid var(--c-rule-soft);
+    border-radius: 4px;
+  }
+  .kg-callout__num {
+    grid-row: 1 / 3;
+    color: var(--c-violet, #a07baf);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+  .kg-callout__k {
+    color: var(--c-ink);
+    font: 600 0.85rem / 1.1 var(--ff-sans);
+  }
+  .kg-callout__v {
+    color: var(--c-ink-2);
+    font: 400 0.78rem / 1.35 var(--ff-mono);
+    letter-spacing: 0.02em;
+  }
+  .kg-callout__cta {
+    display: inline-block;
+    align-self: flex-start;
+    padding: 8px 14px;
+    background: var(--c-bg);
+    border: 1px solid var(--c-violet, #a07baf);
+    border-radius: 4px;
+    color: var(--c-violet, #a07baf);
+    font: 500 0.82rem / 1 var(--ff-mono);
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .kg-callout__cta:hover {
+    background: var(--c-violet, #a07baf);
+    color: var(--c-bg);
   }
 </style>

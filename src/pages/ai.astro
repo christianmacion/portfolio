@@ -413,6 +413,156 @@ const platformInputs = [
     </div>
   </section>
 
+  {/* === Section 2e — Graph engineering · source, adoption, adaptation ===
+       v7.6.7 — owner ask 2026-07-27: "highlight that we can do and have adopted
+       to graph engineering. the file in downloads. show that we can do those.
+       and we can adapt it to our quant research and trading." Two source PDFs
+       were synthesized into the portfolio's workbook trilogy; this section
+       publishes (a) the source papers, (b) the concrete adoption inside the
+       STELLA office, and (c) the 1:1 mapping from the 4-stage graph pipeline
+       onto quant research + trading. */}
+  <section
+    class="section section--alt"
+    id="graph-engineering"
+    data-toc-id="graph-engineering"
+    data-toc-label="Graph engineering · adapted"
+  >
+    <div class="container">
+      <header class="section__head">
+        <p class="section__eyebrow">Method · source, adoption, adaptation</p>
+        <h2 class="section__title">Graph engineering — read, run, adapt.</h2>
+        <p class="section__sub">
+          The graph rung isn't a posture. It's three deliverables you can verify: a source you can read,
+          a production system you can run, and an adaptation you can audit against a different domain.
+          Below: the two source papers we synthesized, the STELLA office's running adoption, and the
+          1-to-1 mapping that ports the same pipeline onto quant research + trading.
+        </p>
+      </header>
+
+      <div class="kg-strip">
+        {/* Source card */}
+        <article class="kg-card kg-card--source">
+          <p class="kg-card__num mono">01 · SOURCE</p>
+          <h3 class="kg-card__name">Two working papers</h3>
+          <p class="kg-card__sub">
+            We read both. We synthesized them into the workbook trilogy. Both PDFs ship with the
+            site — open the working notes, follow the references, verify every claim against the
+            upstream material.
+          </p>
+          <ul class="kg-card__list">
+            <li>
+              <a
+                href={path('/workbooks/sources/graph-engineering-anthropic-playbook.pdf')}
+                target="_blank"
+                rel="noopener"
+              >
+                Graph Engineering — The Anthropic Playbook
+              </a>
+              <span class="kg-card__meta mono">177 KB · 6 pp · 4-stage pipeline</span>
+            </li>
+            <li>
+              <a
+                href={path('/workbooks/sources/graph-engineering-anthropic-karpathy-loop.pdf')}
+                target="_blank"
+                rel="noopener"
+              >
+                Graph Engineering — Karpathy Loop × Anthropic Playbook
+              </a>
+              <span class="kg-card__meta mono">1.4 MB · loop → AgentHub → DAG → graph</span>
+            </li>
+          </ul>
+          <a href={path('/workbooks/graph-engineering/')} class="kg-card__link">
+            Public-deep synthesis (W3) →
+          </a>
+        </article>
+
+        {/* Adoption card */}
+        <article class="kg-card kg-card--adopt">
+          <p class="kg-card__num mono">02 · ADOPTION</p>
+          <h3 class="kg-card__name">STELLA runs the 4-stage pipeline</h3>
+          <p class="kg-card__sub">
+            Not as a demo. As production. The same pipeline the playbook documents — extract →
+            resolve → assemble → query — runs on every dispatch the {profile.stats.aiAgentCount}-agent
+            office issues. The graph is the office's shared memory, not a sidecar.
+          </p>
+          <dl class="kg-stat-grid">
+            <div class="kg-stat">
+              <dt class="kg-stat__k mono">pipeline</dt>
+              <dd class="kg-stat__v">4 stages</dd>
+              <dd class="kg-stat__u mono">extract · resolve · assemble · query</dd>
+            </div>
+            <div class="kg-stat">
+              <dt class="kg-stat__k mono">schema</dt>
+              <dd class="kg-stat__v">9 · 9</dd>
+              <dd class="kg-stat__u mono">9 entity types · 9 predicates</dd>
+            </div>
+            <div class="kg-stat">
+              <dt class="kg-stat__k mono">contract</dt>
+              <dd class="kg-stat__v">3 lines</dd>
+              <dd class="kg-stat__u mono">AAR → graph (findings, agents, OK)</dd>
+            </div>
+            <div class="kg-stat">
+              <dt class="kg-stat__k mono">storage</dt>
+              <dd class="kg-stat__v">JSONL</dd>
+              <dd class="kg-stat__u mono">append-only · dedupe-keyed</dd>
+            </div>
+          </dl>
+          <a href={path('/workbooks/ai-engineering/')} class="kg-card__link">
+            Public-facing narrative (W1) →
+          </a>
+        </article>
+
+        {/* Adaptation card */}
+        <article class="kg-card kg-card--adapt">
+          <p class="kg-card__num mono">03 · ADAPTATION</p>
+          <h3 class="kg-card__name">Same pipeline → quant + trading</h3>
+          <p class="kg-card__sub">
+            The four stages port 1-to-1 onto the trading lane. The entity types change (instruments,
+            venues, signals instead of persons, projects, articles). The pattern doesn't.
+          </p>
+          <table class="kg-pipeline-map" aria-label="4-stage graph pipeline · AI lane vs trading lane">
+            <thead>
+              <tr>
+                <th class="mono">stage</th>
+                <th class="mono">AI lane</th>
+                <th class="mono">trading lane</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="kg-pipeline-map__stage mono"><b>1 · Extract</b></td>
+                <td>doc corpus → typed entities (PERSON / ORG / LOC / EVENT)</td>
+                <td>filings + events + ticker relationships → typed entities</td>
+              </tr>
+              <tr>
+                <td class="kg-pipeline-map__stage mono"><b>2 · Resolve</b></td>
+                <td>"Neil Aldrin" → "Neil Armstrong" (semantic merge by Sonnet)</td>
+                <td>"AAPL.O" → "Apple Inc" → "NASDAQ:AAPL" (canonical ID)</td>
+              </tr>
+              <tr>
+                <td class="kg-pipeline-map__stage mono"><b>3 · Assemble</b></td>
+                <td>Apollo corpus → 22 nodes · 34 edges · 1 component</td>
+                <td>
+                  4 trading-axis graphs: markets, signal lineage, trade lifecycle, risk propagation
+                </td>
+              </tr>
+              <tr>
+                <td class="kg-pipeline-map__stage mono"><b>4 · Query</b></td>
+                <td>k-hop subgraph → grounded answer (Sonnet reasons over triples)</td>
+                <td>
+                  "what generated this P&L?" → lineage trace · "where is my risk?" → factor graph
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <a href="/markets#graph-engineering-trading" class="kg-card__link">
+            See it on /markets →
+          </a>
+        </article>
+      </div>
+    </div>
+  </section>
+
   {/* === Section 3 — 6 AI projects === */}
   <section
     class="section section--alt"
@@ -827,5 +977,225 @@ const platformInputs = [
     text-decoration: underline;
     text-decoration-color: var(--c-amber-decor);
     text-underline-offset: 3px;
+  }
+
+  /* ============================================================
+     v7.6.7 — Section 2e: Graph engineering · source / adopt / adapt
+     ============================================================ */
+  .kg-strip {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--sp-4);
+    margin-top: var(--sp-5);
+  }
+  @media (max-width: 980px) {
+    .kg-strip {
+      grid-template-columns: 1fr;
+    }
+  }
+  .kg-card {
+    background: var(--c-bg);
+    border: 1px solid var(--c-rule);
+    border-radius: 6px;
+    padding: var(--sp-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+    position: relative;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+  .kg-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    border-radius: 4px 0 0 4px;
+  }
+  .kg-card--source::before {
+    background: var(--c-amber);
+  }
+  .kg-card--adopt::before {
+    background: var(--c-teal, #5ba8a3);
+  }
+  .kg-card--adapt::before {
+    background: var(--c-violet, #a07baf);
+  }
+  .kg-card:hover {
+    transform: translateY(-2px);
+  }
+  .kg-card--source:hover {
+    border-color: var(--c-amber);
+  }
+  .kg-card--adopt:hover {
+    border-color: var(--c-teal, #5ba8a3);
+  }
+  .kg-card--adapt:hover {
+    border-color: var(--c-violet, #a07baf);
+  }
+  .kg-card__num {
+    font: 500 0.7rem / 1 var(--ff-mono);
+    letter-spacing: 0.18em;
+    color: var(--c-amber);
+    margin: 0;
+  }
+  .kg-card--adopt .kg-card__num {
+    color: var(--c-teal, #5ba8a3);
+  }
+  .kg-card--adapt .kg-card__num {
+    color: var(--c-violet, #a07baf);
+  }
+  .kg-card__name {
+    font: 600 1.2rem / 1.25 var(--serif-display);
+    color: var(--c-ink);
+    margin: 4px 0 0;
+    letter-spacing: -0.01em;
+  }
+  .kg-card__sub {
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: var(--c-ink-2);
+    margin: 0;
+    flex: 1;
+  }
+  .kg-card__sub b {
+    color: var(--c-amber);
+    font-weight: 600;
+  }
+  .kg-card__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-2);
+  }
+  .kg-card__list li {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: var(--sp-2) 0;
+    border-top: 1px dashed var(--c-rule);
+  }
+  .kg-card__list a {
+    color: var(--c-ink);
+    font: 500 0.85rem / 1.3 var(--ff-sans);
+    text-decoration: none;
+    border-bottom: 1px solid var(--c-amber-decor);
+    transition: color 0.2s ease;
+  }
+  .kg-card__list a:hover {
+    color: var(--c-amber);
+  }
+  .kg-card__meta {
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    color: var(--c-ink-3);
+  }
+  .kg-card__link {
+    color: var(--c-amber);
+    font: 500 0.85rem / 1 var(--ff-mono);
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    padding-top: var(--sp-2);
+    border-top: 1px dashed var(--c-rule);
+    transition: opacity 0.2s ease;
+  }
+  .kg-card--adopt .kg-card__link {
+    color: var(--c-teal, #5ba8a3);
+  }
+  .kg-card--adapt .kg-card__link {
+    color: var(--c-violet, #a07baf);
+  }
+  .kg-card__link:hover {
+    opacity: 0.7;
+  }
+
+  /* Adoption stat grid */
+  .kg-stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--sp-3);
+    margin: 0;
+    padding: var(--sp-3) 0;
+    border-top: 1px dashed var(--c-rule);
+    border-bottom: 1px dashed var(--c-rule);
+  }
+  .kg-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .kg-stat__k {
+    font: 500 0.65rem / 1 var(--ff-mono);
+    color: var(--c-ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 0;
+  }
+  .kg-stat__v {
+    font: 600 1.1rem / 1.1 var(--ff-mono);
+    color: var(--c-ink);
+    font-variant-numeric: tabular-nums;
+    margin: 0;
+  }
+  .kg-stat__u {
+    font: 400 0.7rem / 1.2 var(--ff-mono);
+    color: var(--c-ink-3);
+    letter-spacing: 0.04em;
+    margin: 0;
+  }
+
+  /* Pipeline map table */
+  .kg-pipeline-map {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.78rem;
+    line-height: 1.45;
+  }
+  .kg-pipeline-map th {
+    text-align: left;
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--c-rule);
+    color: var(--c-ink-3);
+    font: 500 0.65rem / 1 var(--ff-mono);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .kg-pipeline-map th:nth-child(3),
+  .kg-pipeline-map td:nth-child(3) {
+    color: var(--c-violet, #a07baf);
+  }
+  .kg-pipeline-map th:nth-child(1),
+  .kg-pipeline-map td:nth-child(1) {
+    color: var(--c-ink);
+  }
+  .kg-pipeline-map td {
+    padding: 8px;
+    border-bottom: 1px dashed var(--c-rule);
+    color: var(--c-ink-2);
+    vertical-align: top;
+  }
+  .kg-pipeline-map__stage {
+    width: 64px;
+    color: var(--c-ink);
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+  }
+  .kg-pipeline-map__stage b {
+    color: var(--c-amber);
+    font-weight: 600;
+  }
+  .kg-pipeline-map tr:last-child td {
+    border-bottom: none;
+  }
+  @media (max-width: 540px) {
+    .kg-pipeline-map {
+      font-size: 0.72rem;
+    }
+    .kg-stat-grid {
+      grid-template-columns: 1fr;
+    }
   }
 </style>
