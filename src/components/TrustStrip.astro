@@ -44,7 +44,7 @@ const shortSha = buildSha ? buildSha.replace(/^.*?([0-9a-f]{7,})$/, '$1').slice(
 
     <a
       class="trust-pill"
-      href={`${path('/proof')}/#code-artifacts`}
+      href={`${path('/proof')}#code`}
       title="All metrics evaluated by a separate harness"
     >
       <svg
@@ -89,7 +89,7 @@ const shortSha = buildSha ? buildSha.replace(/^.*?([0-9a-f]{7,})$/, '$1').slice(
 
     <a
       class="trust-pill"
-      href={`${path('/experience')}/#nda-safe`}
+      href={path('/experience')}
       title="Past engagement disclosed at /experience; PM-verified, NDA-clean by construction"
     >
       <svg
