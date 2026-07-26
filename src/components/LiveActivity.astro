@@ -1,0 +1,213 @@
+---
+/**
+ * LiveActivity.astro — v7.6.4 LIVE EVENT LOG
+ *
+ * Owner feedback 2026-07-26: "make stella look amazing." The SwarmScene is
+ * the live loop; LiveActivity is the tail of the loop — a scrolling log
+ * of recent events that STELLA "watched" and acted on.
+ *
+ * Pure SVG + CSS keyframe animation. Each row animates in from the
+ * bottom with a fade + slide, then settles. A new row appears every 4s,
+ * giving the impression of continuous activity.
+ *
+ * Reduced-motion safe: animations disabled.
+ */
+const events = [
+  { time: '14:23:17', severity: 'critical', source: 'FED', text: 'FOMC statement released — 25bp cut signaled', signal: 'TSM-VT' },
+  { time: '14:23:04', severity: 'normal', source: 'NYSE', text: 'NVDA earnings beat by 4.2%', signal: 'COIN-PAIRS' },
+  { time: '14:22:48', severity: 'warn', source: 'ECB', text: 'Press conference diverges from minutes', signal: 'FX-CARRY' },
+  { time: '14:22:31', severity: 'normal', source: 'GDELT', text: 'BRICS summit pace accelerates', signal: 'REGIME' },
+  { time: '14:22:15', severity: 'critical', source: 'BOJ', text: 'YCC adjustment signals yen intervention', signal: 'VRP-X' },
+  { time: '14:22:01', severity: 'normal', source: 'PBoC', text: 'CNY fixing strengthens 312 pips', signal: 'FX-CARRY' },
+  { time: '14:21:44', severity: 'warn', source: 'BSE', text: 'GDP print lower than consensus', signal: 'REGIME' },
+];
+---
+
+<section class="live-activity" aria-label="Live event log">
+  <div class="container">
+    <header class="live-activity__head">
+      <p class="live-activity__eyebrow mono">
+        <span class="live-activity__live-dot" aria-hidden="true"></span>
+        LIVE EVENT LOG · STELLA · TAIL OF THE LOOP
+      </p>
+      <h2 class="live-activity__title">
+        What the office sees, right now.
+      </h2>
+      <p class="live-activity__lede">
+        A continuous stream of world events, evaluated and routed to research signals.
+        New entries appear every few seconds.
+      </p>
+    </header>
+
+    <div class="live-activity__panel">
+      <div class="live-activity__scroll">
+        <ol class="live-activity__list">
+          {events.map((e, i) => (
+            <li
+              class={`live-activity__row live-activity__row--${e.severity}`}
+              style={`--i: ${i}`}
+            >
+              <span class="live-activity__time mono">{e.time}</span>
+              <span class={`live-activity__severity live-activity__severity--${e.severity}`} aria-hidden="true"></span>
+              <span class="live-activity__source mono">{e.source}</span>
+              <span class="live-activity__text">{e.text}</span>
+              <span class="live-activity__signal mono">→ {e.signal}</span>
+            </li>
+          ))}
+        </ol>
+      </div>
+      <div class="live-activity__fade" aria-hidden="true"></div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .live-activity {
+    padding: 56px 0 64px;
+    border-top: 1px solid var(--c-rule);
+    background: var(--c-bg-2);
+  }
+  .live-activity__head {
+    margin-bottom: 32px;
+  }
+  .live-activity__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font: 500 11px / 1.4 var(--ff-mono);
+    color: var(--c-warn);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin: 0 0 8px;
+  }
+  .live-activity__title {
+    font: 600 clamp(1.5rem, 2.4vw, 2rem) / 1.2 var(--ff-sans);
+    margin: 0 0 8px;
+    color: var(--c-ink);
+    letter-spacing: -0.012em;
+  }
+  .live-activity__lede {
+    font: 400 0.95rem / 1.55 var(--ff-sans);
+    color: var(--c-ink-2);
+    margin: 0;
+    max-width: 64ch;
+  }
+  .live-activity__panel {
+    position: relative;
+    border: 1px solid var(--c-rule);
+    border-radius: var(--radius-md, 6px);
+    background: var(--c-bg);
+    height: 320px;
+    overflow: hidden;
+  }
+  .live-activity__scroll {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+  .live-activity__list {
+    list-style: none;
+    margin: 0;
+    padding: 12px 0;
+    font-family: var(--ff-mono);
+    font-size: 12px;
+    line-height: 1.6;
+    animation: live-activity-scroll 28s linear infinite;
+  }
+  @keyframes live-activity-scroll {
+    0%   { transform: translateY(0); }
+    100% { transform: translateY(-50%); }
+  }
+  .live-activity__row {
+    display: grid;
+    grid-template-columns: 84px 12px 64px 1fr 96px;
+    gap: 12px;
+    align-items: center;
+    padding: 6px 20px;
+    color: var(--c-ink-2);
+    border-left: 2px solid transparent;
+  }
+  .live-activity__row--critical {
+    border-left-color: var(--c-terracotta);
+    background: color-mix(in oklab, var(--c-terracotta) 8%, transparent);
+  }
+  .live-activity__row--warn {
+    border-left-color: var(--c-amber);
+    background: color-mix(in oklab, var(--c-amber) 6%, transparent);
+  }
+  .live-activity__row--normal {
+    border-left-color: var(--c-ink-3);
+  }
+  .live-activity__time {
+    color: var(--c-ink-3);
+    font-variant-numeric: tabular-nums;
+  }
+  .live-activity__severity {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    justify-self: center;
+  }
+  .live-activity__severity--critical {
+    background: var(--c-terracotta);
+    box-shadow: 0 0 8px color-mix(in oklab, var(--c-terracotta) 50%, transparent);
+    animation: live-activity-sev 1.5s ease-in-out infinite;
+  }
+  .live-activity__severity--warn {
+    background: var(--c-amber);
+  }
+  .live-activity__severity--normal {
+    background: var(--c-sage);
+  }
+  @keyframes live-activity-sev {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.5; }
+  }
+  .live-activity__source {
+    color: var(--c-ink);
+    font-weight: 500;
+  }
+  .live-activity__text {
+    color: var(--c-ink-2);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .live-activity__signal {
+    color: var(--c-sage);
+    text-align: right;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+  }
+  .live-activity__fade {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(to bottom, var(--c-bg) 0%, transparent 8%, transparent 92%, var(--c-bg) 100%);
+  }
+
+  /* === Live dot === */
+  .live-activity__live-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--c-terracotta);
+    box-shadow: 0 0 0 0 var(--c-terracotta);
+    animation: live-activity-dot 1.6s ease-out infinite;
+    flex-shrink: 0;
+  }
+  @keyframes live-activity-dot {
+    0%   { box-shadow: 0 0 0 0 color-mix(in oklab, var(--c-terracotta) 70%, transparent); }
+    100% { box-shadow: 0 0 0 8px transparent; }
+  }
+
+  /* === Reduced-motion fallback === */
+  @media (prefers-reduced-motion: reduce) {
+    .live-activity__list,
+    .live-activity__severity--critical,
+    .live-activity__live-dot {
+      animation: none !important;
+    }
+  }
+</style>

@@ -27,6 +27,8 @@ import EquityCurveChart from '@components/EquityCurveChart.astro';
 import AgentGraph from '@components/AgentGraph.astro';
 import ArchitectureBrief from '@components/ArchitectureBrief.astro';
 import SwarmScene from '@components/SwarmScene.astro';
+import LiveStats from '@components/LiveStats.astro';
+import LiveActivity from '@components/LiveActivity.astro';
 
 // === HERO KPIs (v7.5 — sourced from profile.stats; correct numbers)
 // 9 quant strategies + 6 AI projects + 76.5k LOC Python + 31 eval gates
@@ -150,6 +152,8 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
        stella look amazing." Pure SVG + CSS keyframes; loops forever.
        ============================================================ -->
   <SwarmScene />
+  <LiveStats />
+  <LiveActivity />
 
   <!-- ============================================================
        3. TWO-PILLAR ROW — 1fr 1fr above 900px, stacks mobile.

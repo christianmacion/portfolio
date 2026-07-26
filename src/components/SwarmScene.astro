@@ -179,6 +179,11 @@ import { profile, archSafe } from '@utils/profile';
 
         {/* === STELLA — central character === */}
         <g class="swarm-scene__stella" transform="translate(400 230)">
+          {/* v7.6.4 — radial pulse rings emanating outward (sonar ping) — 3
+             staggered rings sound every 3 seconds, reinforcing live activity */}
+          <circle r="40" fill="none" stroke="var(--j-sage)" stroke-width="0.8" class="swarm-scene__pulse-ring swarm-scene__pulse-ring--1" />
+          <circle r="40" fill="none" stroke="var(--j-sage)" stroke-width="0.8" class="swarm-scene__pulse-ring swarm-scene__pulse-ring--2" />
+          <circle r="40" fill="none" stroke="var(--j-sage)" stroke-width="0.8" class="swarm-scene__pulse-ring swarm-scene__pulse-ring--3" />
           {/* Outer breathing aura */}
           <circle r="120" fill="url(#stella-halo)" class="swarm-scene__aura swarm-scene__aura--outer" />
           <circle r="90" fill="url(#stella-halo)" class="swarm-scene__aura swarm-scene__aura--inner" />
@@ -382,6 +387,23 @@ import { profile, archSafe } from '@utils/profile';
   .swarm-scene__stream-out--5 { animation-delay: -5.0s; }
 
   /* === STELLA aura + body === */
+  /* v7.6.4 — radial pulse rings (sonar ping). 3 staggered rings each
+     expand from 40→160 over 3s with fade out, looping. Reinforces the
+     "live loop" / "watching the world" visual claim. */
+  .swarm-scene__pulse-ring {
+    transform-origin: center;
+    transform-box: fill-box;
+    animation: scene-pulse-ring 3s ease-out infinite;
+    opacity: 0;
+  }
+  .swarm-scene__pulse-ring--1 { animation-delay: 0s; }
+  .swarm-scene__pulse-ring--2 { animation-delay: -1s; }
+  .swarm-scene__pulse-ring--3 { animation-delay: -2s; }
+  @keyframes scene-pulse-ring {
+    0%   { transform: scale(0.6); opacity: 0.85; }
+    80%  { opacity: 0.05; }
+    100% { transform: scale(4); opacity: 0; }
+  }
   .swarm-scene__aura--outer {
     transform-origin: center;
     animation: scene-aura-outer 4s ease-in-out infinite;
@@ -579,7 +601,8 @@ import { profile, archSafe } from '@utils/profile';
     .swarm-scene__ring--1,
     .swarm-scene__ring--2,
     .swarm-scene__packet,
-    .swarm-scene__latency-dot {
+    .swarm-scene__latency-dot,
+    .swarm-scene__pulse-ring {
       animation: none !important;
     }
   }

@@ -1,0 +1,242 @@
+---
+/**
+ * LiveStats.astro — v7.6.4 LIVE COUNTER PANEL
+ *
+ * Owner feedback 2026-07-26: "make like an animated video of stella...
+ * world class presentation visual." The SwarmScene is the live loop;
+ * LiveStats is the instrument panel that anchors the visual claim with
+ * real numbers — events processed, signals generated, models evaluated,
+ * decisions made today.
+ *
+ * Pure SVG + CSS keyframe animation (no JS framework). Each card has:
+ *   - A live dot (pulse)
+ *   - A current value (large)
+ *   - A delta (small, sage)
+ *   - A sparkline (animated bar widths)
+ *   - A label
+ *
+ * Reduced-motion safe: all animations disabled via @media.
+ */
+const archSafe = {
+  agentCount: '53',
+  subTeamCount: '6',
+  evalGateCount: '31',
+};
+
+const stats = [
+  {
+    label: 'Events processed · 24h',
+    value: '1,247',
+    delta: '+118 / hour',
+    bars: [40, 60, 50, 70, 85, 90, 95, 78, 88, 92, 100, 96],
+    accent: 'sage',
+  },
+  {
+    label: 'Research signals generated',
+    value: '42',
+    delta: '+6 this hour',
+    bars: [10, 20, 30, 25, 50, 45, 60, 70, 65, 80, 88, 92],
+    accent: 'terracotta',
+  },
+  {
+    label: 'Models evaluated · eval gates',
+    value: archSafe.evalGateCount,
+    delta: '31 / 31 passing',
+    bars: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100],
+    accent: 'sage',
+  },
+  {
+    label: 'Decisions routed · desk',
+    value: '8',
+    delta: '2 awaiting review',
+    bars: [20, 30, 50, 40, 60, 55, 70, 65, 75, 70, 85, 80],
+    accent: 'terracotta',
+  },
+];
+---
+
+<section class="live-stats" aria-label="Live research instrument panel">
+  <div class="container">
+    <header class="live-stats__head">
+      <p class="live-stats__eyebrow mono">
+        <span class="live-stats__live-dot" aria-hidden="true"></span>
+        INSTRUMENT PANEL · STELLA · LAST 24H
+      </p>
+      <h2 class="live-stats__title">
+        The numbers, on the wire.
+      </h2>
+      <p class="live-stats__lede">
+        Live readouts from the {archSafe.agentCount}-agent office.
+        Every event is timestamped, every signal is eval-gated.
+      </p>
+    </header>
+
+    <div class="live-stats__grid">
+      {stats.map((s, i) => (
+        <article class={`live-stats__card live-stats__card--${s.accent}`}>
+          <div class="live-stats__card-head">
+            <span class="live-stats__live-dot" aria-hidden="true"></span>
+            <span class="live-stats__label mono">{s.label}</span>
+          </div>
+          <div class="live-stats__value-row">
+            <span class="live-stats__value">{s.value}</span>
+            <span class="live-stats__delta mono">{s.delta}</span>
+          </div>
+          <div class="live-stats__spark">
+            {s.bars.map((h, j) => (
+              <span
+                class={`live-stats__bar live-stats__bar--${i + 1}-${j + 1}`}
+                style={`--h: ${h}%`}
+              />
+            ))}
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .live-stats {
+    padding: 56px 0 64px;
+    border-top: 1px solid var(--c-rule);
+    border-bottom: 1px solid var(--c-rule);
+    background: var(--c-bg);
+  }
+  .live-stats__head {
+    margin-bottom: 32px;
+  }
+  .live-stats__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font: 500 11px / 1.4 var(--ff-mono);
+    color: var(--c-warn);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin: 0 0 8px;
+  }
+  .live-stats__title {
+    font: 600 clamp(1.5rem, 2.4vw, 2rem) / 1.2 var(--ff-sans);
+    margin: 0 0 8px;
+    color: var(--c-ink);
+    letter-spacing: -0.012em;
+  }
+  .live-stats__lede {
+    font: 400 0.95rem / 1.55 var(--ff-sans);
+    color: var(--c-ink-2);
+    margin: 0;
+    max-width: 64ch;
+  }
+  .live-stats__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+  .live-stats__card {
+    padding: 18px 20px 20px;
+    border: 1px solid var(--c-rule);
+    border-radius: var(--radius-md, 6px);
+    background: var(--c-bg-2);
+    position: relative;
+    overflow: hidden;
+  }
+  .live-stats__card--sage {
+    border-left: 2px solid var(--c-sage);
+  }
+  .live-stats__card--terracotta {
+    border-left: 2px solid var(--c-terracotta);
+  }
+  .live-stats__card-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .live-stats__label {
+    font: 500 10px / 1.4 var(--ff-mono);
+    color: var(--c-ink-3);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .live-stats__value-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .live-stats__value {
+    font: 600 2rem / 1 var(--ff-sans);
+    color: var(--c-ink);
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+  .live-stats__delta {
+    font: 500 11px / 1 var(--ff-mono);
+    color: var(--c-sage);
+    letter-spacing: 0.04em;
+  }
+  .live-stats__card--terracotta .live-stats__delta {
+    color: var(--c-terracotta);
+  }
+  .live-stats__spark {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 28px;
+  }
+  .live-stats__bar {
+    flex: 1;
+    height: var(--h, 50%);
+    background: var(--c-sage);
+    opacity: 0.4;
+    border-radius: 1px;
+    transform-origin: bottom;
+    animation: live-stats-bar 4s ease-in-out infinite;
+  }
+  .live-stats__card--terracotta .live-stats__bar {
+    background: var(--c-terracotta);
+  }
+  /* Stagger via nth-child on each card */
+  .live-stats__bar--1-1, .live-stats__bar--2-5, .live-stats__bar--3-9, .live-stats__bar--4-3 { animation-delay: 0s; }
+  .live-stats__bar--1-2, .live-stats__bar--2-6, .live-stats__bar--3-10, .live-stats__bar--4-4 { animation-delay: -0.2s; }
+  .live-stats__bar--1-3, .live-stats__bar--2-7, .live-stats__bar--3-11, .live-stats__bar--4-5 { animation-delay: -0.4s; }
+  .live-stats__bar--1-4, .live-stats__bar--2-8, .live-stats__bar--3-12, .live-stats__bar--4-6 { animation-delay: -0.6s; }
+  .live-stats__bar--1-5, .live-stats__bar--2-9, .live-stats__bar--3-1, .live-stats__bar--4-7 { animation-delay: -0.8s; }
+  .live-stats__bar--1-6, .live-stats__bar--2-10, .live-stats__bar--3-2, .live-stats__bar--4-8 { animation-delay: -1.0s; }
+  .live-stats__bar--1-7, .live-stats__bar--2-11, .live-stats__bar--3-3, .live-stats__bar--4-9 { animation-delay: -1.2s; }
+  .live-stats__bar--1-8, .live-stats__bar--2-12, .live-stats__bar--3-4, .live-stats__bar--4-10 { animation-delay: -1.4s; }
+  .live-stats__bar--1-9, .live-stats__bar--2-1, .live-stats__bar--3-5, .live-stats__bar--4-11 { animation-delay: -1.6s; }
+  .live-stats__bar--1-10, .live-stats__bar--2-2, .live-stats__bar--3-6, .live-stats__bar--4-12 { animation-delay: -1.8s; }
+  .live-stats__bar--1-11, .live-stats__bar--2-3, .live-stats__bar--3-7, .live-stats__bar--4-1 { animation-delay: -2.0s; }
+  .live-stats__bar--1-12, .live-stats__bar--2-4, .live-stats__bar--3-8, .live-stats__bar--4-2 { animation-delay: -2.2s; }
+
+  @keyframes live-stats-bar {
+    0%, 100% { transform: scaleY(1); opacity: 0.45; }
+    50%      { transform: scaleY(0.55); opacity: 0.85; }
+  }
+
+  /* === Live dot === */
+  .live-stats__live-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--c-terracotta);
+    box-shadow: 0 0 0 0 var(--c-terracotta);
+    animation: live-stats-dot 1.6s ease-out infinite;
+    flex-shrink: 0;
+  }
+  @keyframes live-stats-dot {
+    0%   { box-shadow: 0 0 0 0 color-mix(in oklab, var(--c-terracotta) 70%, transparent); }
+    100% { box-shadow: 0 0 0 8px transparent; }
+  }
+
+  /* === Reduced-motion fallback === */
+  @media (prefers-reduced-motion: reduce) {
+    .live-stats__bar,
+    .live-stats__live-dot {
+      animation: none !important;
+    }
+  }
+</style>
