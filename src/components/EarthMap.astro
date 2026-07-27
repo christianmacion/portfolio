@@ -337,6 +337,7 @@ const isLive = cache.source === 'gdelt';
       arcs.map((a, i) => (
         <path
           d={a.d}
+          pathLength="1"
           class={`earth-map__arc earth-map__arc--${a.polarity}`}
           style={`--i: ${i}`}
           aria-label={`${a.city} signal → ${a.venue} venue`}
@@ -477,8 +478,10 @@ const isLive = cache.source === 'gdelt';
     fill: none;
     stroke: var(--c-warn-soft);
     stroke-width: 0.6;
-    stroke-dasharray: 320;
-    stroke-dashoffset: 320;
+    /* pathLength="1" on the SVG normalizes draw-in to a uniform
+       1.6s regardless of actual arc length (v7.7.1 polish). */
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
     opacity: 0.7;
     animation: arc-draw 1.6s var(--j-ease-out) forwards;
     animation-delay: calc(var(--i, 0) * 60ms + 800ms);

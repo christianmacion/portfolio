@@ -116,13 +116,13 @@ function formatHm(iso: string): string {
         <div class="livewire__lane livewire__lane--title" role="region" aria-label="Latest headlines">
           <div class="livewire__lane-label mono" aria-hidden="true">HEADLINES</div>
           <div class="livewire__viewport">
-            <div class="livewire__track" style={`--livewire-dur: ${speedSec}s`}>
+            <div class="livewire__track" style={`--livewire-dur: ${speedSec}s`} aria-live="off" aria-atomic="false">
               {[...tickerRows, ...tickerRows].map((r) => (
                 <span class="livewire__item">
                   <span class={`livewire__badge mono livewire__badge--${r.accent}`}>
                     {r.publisher}
                   </span>
-                  <a class="livewire__title" href={r.link} target="_blank" rel="noopener noreferrer">
+                  <a class="livewire__title" href={r.link} target="_blank" rel="noopener noreferrer" referrerpolicy="strict-origin-when-cross-origin">
                     {r.title}
                   </a>
                   <span class="livewire__hm mono">{formatHm(r.timestamp)}</span>
@@ -136,7 +136,7 @@ function formatHm(iso: string): string {
         <div class="livewire__lane livewire__lane--method" role="region" aria-label="Methodology frames">
           <div class="livewire__lane-label mono" aria-hidden="true">METHOD</div>
           <div class="livewire__viewport livewire__viewport--reverse">
-            <div class="livewire__track" style={`--livewire-dur: ${speedSec + 18}s`}>
+            <div class="livewire__track" style={`--livewire-dur: ${speedSec + 18}s`} aria-live="off" aria-atomic="false">
               {[...methodFrames, ...methodFrames].map((f) => (
                 <span class:list={['livewire__frame', `is-${f.accent}`]}>
                   <span class="livewire__frame-head">{f.head}</span>

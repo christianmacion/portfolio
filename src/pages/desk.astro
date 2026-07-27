@@ -42,6 +42,9 @@ import CTABanner from '@components/CTABanner.astro';
 import { getCollection } from 'astro:content';
 import { profile, archSafe } from '@utils/profile';
 import { path } from '@utils/url';
+import arxivCache from '../data/arxiv-cache.json';
+import macrowireCache from '../data/macrowire-cache.json';
+import gdeltCache from '../data/gdelt-cache.json';
 
 // === Pull world events once, server-side, sort by order ===
 interface WorldEventEntry {
@@ -70,13 +73,21 @@ const events: WorldEventEntry[] = eventEntries
   }))
   .sort((a: WorldEventEntry, b: WorldEventEntry) => a.order - b.order);
 
+// === v7.7.1 — derive global-signal count from cache JSONs ===
+// Sum across arxiv papers + macrowire headlines + gdelt events. The
+// chrome reads "N+ SIGNALS" — the actual count, never hardcoded.
+const arxivItems = (arxivCache as { items?: unknown[] }).items?.length ?? 0;
+const macrowireItems = (macrowireCache as { items?: unknown[] }).items?.length ?? 0;
+const gdeltItems = (gdeltCache as { events?: unknown[] }).events?.length ?? 0;
+const globalSignals = arxivItems + macrowireItems + gdeltItems;
+
 const email = profile.contact.email;
 const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hiring%20inquiry`;
 ---
 
 <BaseLayout
   title="The Desk"
-  description={`24h multi-asset coverage — ${events.length} curated world events, ${archSafe.agentCount}-agent office, ${profile.stats.evalGates}-gate eval harness. NDA-positive by construction.`}
+  description={`24h multi-asset coverage — ${events.length} curated world events, ${archSafe.agentCount}-agent office, ${globalSignals}+ live signals across arXiv + macro-wire + GDELT. NDA-positive by construction.`}
   surface="v6-13"
   theme="light"
   breadcrumbs={[
@@ -136,7 +147,7 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
         </li>
         <li class="desk-stats__cell" style="--i: 2">
           <p class="desk-stats__num mono">
-            <span data-counter="100" data-duration="1400">100+</span>
+            <span data-counter={globalSignals} data-duration="1400">{globalSignals}+</span>
           </p>
           <p class="desk-stats__lbl mono">GLOBAL SIGNALS</p>
         </li>
@@ -478,12 +489,15 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     pointer-events: none;
     border: 1px solid color-mix(in oklab, var(--c-amber) 0%, transparent);
     border-radius: var(--radius-md, 6px);
+    /* v7.7.1 polish — soften the border pulse from 24% → 8% peak.
+       Still keeps a hint of life on the institutional map chrome,
+       but no longer reads as a halo. Reduced-motion guard below. */
     animation: desk-map-glow 6s ease-in-out infinite;
     z-index: 2;
   }
   @keyframes desk-map-glow {
     0%, 100% { border-color: color-mix(in oklab, var(--c-amber) 0%, transparent); }
-    50%      { border-color: color-mix(in oklab, var(--c-amber) 24%, transparent); }
+    50%      { border-color: color-mix(in oklab, var(--c-amber) 8%, transparent); }
   }
   .desk-map__frame :global(svg) {
     width: 100%;

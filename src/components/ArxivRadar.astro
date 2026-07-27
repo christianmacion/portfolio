@@ -134,7 +134,7 @@ function formatDate(iso: string): string {
         <div class="arxiv-radar__lane arxiv-radar__lane--title" role="region" aria-label="Latest papers">
           <div class="arxiv-radar__lane-label mono" aria-hidden="true">ARXIV</div>
           <div class="arxiv-radar__viewport">
-            <div class="arxiv-radar__track" style={`--arxiv-dur: ${speedSec}s`}>
+            <div class="arxiv-radar__track" style={`--arxiv-dur: ${speedSec}s`} aria-live="off" aria-atomic="false">
               {[...ribbonRows, ...ribbonRows].map((r) => (
                 <span class="arxiv-radar__item">
                   <span class={`arxiv-radar__badge mono arxiv-radar__badge--${r.accent}`}>
@@ -145,6 +145,7 @@ function formatDate(iso: string): string {
                     href={r.link}
                     target="_blank"
                     rel="noopener noreferrer"
+                    referrerpolicy="strict-origin-when-cross-origin"
                   >
                     {r.title}
                   </a>
@@ -159,7 +160,7 @@ function formatDate(iso: string): string {
         <div class="arxiv-radar__lane arxiv-radar__lane--method" role="region" aria-label="Methodology frames">
           <div class="arxiv-radar__lane-label mono" aria-hidden="true">METHOD</div>
           <div class="arxiv-radar__viewport arxiv-radar__viewport--reverse">
-            <div class="arxiv-radar__track" style={`--arxiv-dur: ${speedSec + 24}s`}>
+            <div class="arxiv-radar__track" style={`--arxiv-dur: ${speedSec + 24}s`} aria-live="off" aria-atomic="false">
               {[...methodFrames, ...methodFrames].map((f) => (
                 <span class:list={['arxiv-radar__frame', `is-${f.accent}`]}>
                   <span class="arxiv-radar__frame-head">{f.head}</span>
@@ -191,6 +192,7 @@ function formatDate(iso: string): string {
               href={item.link}
               target="_blank"
               rel="noopener noreferrer"
+              referrerpolicy="strict-origin-when-cross-origin"
             >
               <span class={`arxiv-radar__badge mono arxiv-radar__badge--${accentFor(cat)}`}>
                 {cat}
