@@ -293,7 +293,7 @@ const livePoints: LivePoint[] = (liveCache.events || [])
       city: e.city ?? null,
       x,
       y,
-      r: isWire ? 1.8 : 2.2,
+      r: isWire ? 3.0 : 3.5,
     };
   });
 
@@ -324,7 +324,7 @@ const isLive = cache.source === 'gdelt';
     class="earth-map__svg"
     viewBox={`0 0 ${width} ${height}`}
     role="img"
-    aria-label={`Three-layer world map: ${venues.length} research venues, ${worldEvents.length} curated world events, ${dedupGdelt.length} GDELT signals (24h). Equirectangular projection. Synchronized ${fetchedAtStamp}.`}
+    aria-label={`Four-layer world map: ${venues.length} research venues, ${worldEvents.length} curated world events, ${dedupGdelt.length} GDELT signals (24h), ${livePoints.filter((p) => p.source === 'arxiv').length} arXiv + ${livePoints.filter((p) => p.source === 'macrowire').length} wire geo-overlay markers, day/night terminator overlay. Equirectangular projection. Synchronized ${fetchedAtStamp}.`}
     preserveAspectRatio="xMidYMid meet"
   >
     {/* v7.6.1 — Owner feedback 2026-07-26: removed the top-level <title>
@@ -355,13 +355,13 @@ const isLive = cache.source === 'gdelt';
             <circle
               cx={_sub.x}
               cy={_sub.y}
-              r="4"
+              r="5"
               class="earth-map__subsolar"
             />
             <circle
               cx={_sub.x}
               cy={_sub.y}
-              r="9"
+              r="11"
               class="earth-map__subsolar-pulse"
             />
           </g>
@@ -705,21 +705,21 @@ const isLive = cache.source === 'gdelt';
      amber stroke. Pure CSS, no JS animation — the geometry recomputes
      on every build, so the chrome naturally drifts as the day progresses. */
   .earth-map__terminator-fill {
-    fill: color-mix(in oklab, var(--c-warn) 6%, transparent);
+    fill: color-mix(in oklab, var(--c-warn) 14%, transparent);
     fill-rule: nonzero;
-    opacity: 0.42;
-    /* Use SVG `mix-blend-mode: lighten` to brighten the sunlit half
-       while leaving the night side untouched. */
+    opacity: 0.7;
+    /* Multiply so the wash darkens the sunlit half against the cream
+       institutional palette — `lighten` washed out too easily. */
   }
   .earth-map__terminator {
-    mix-blend-mode: lighten;
+    mix-blend-mode: multiply;
   }
   .earth-map__terminator-line {
     fill: none;
     stroke: var(--c-warn);
-    stroke-width: 1;
+    stroke-width: 1.25;
     stroke-dasharray: 4, 3;
-    opacity: 0.55;
+    opacity: 0.8;
   }
   .earth-map__subsolar {
     fill: var(--c-amber);
