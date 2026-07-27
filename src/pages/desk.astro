@@ -376,6 +376,10 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
         <p class="desk-events__count mono" data-desk-visible-count>
           {events.length} VISIBLE
         </p>
+        {/* v7.14 — COPY · LINK button (mirror /live v7.10) */}
+        <button type="button" class="desk-events__share-btn mono" data-desk-share title="Copy link with current filters">
+          COPY · LINK
+        </button>
       </div>
 
       <table class="desk-events__table">
@@ -1013,6 +1017,34 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
   }
   .desk-events__anchor:hover { color: var(--c-amber); }
   .desk-events__row[data-desk-filtered="1"] { display: none; }
+  .desk-events__share-btn {
+    appearance: none;
+    background: transparent;
+    border: 1px solid var(--c-ink-3);
+    color: var(--c-ink-2);
+    padding: 4px 10px;
+    font: 600 10px / 1.4 var(--ff-mono);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition:
+      background 120ms ease,
+      color 120ms ease,
+      border-color 120ms ease;
+  }
+  .desk-events__share-btn:hover {
+    border-color: var(--c-ink-1);
+    color: var(--c-ink);
+    background: var(--c-paper-2);
+  }
+  .desk-events__share-btn:focus-visible {
+    outline: 2px solid var(--c-amber);
+    outline-offset: 1px;
+  }
+  .desk-events__share-btn[data-copied="1"] {
+    border-color: var(--c-amber);
+    color: var(--c-amber);
+  }
 </style>
 
 <script>
@@ -1109,5 +1141,28 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
       writeFilters();
     });
   }
+
+  /* === v7.14 — share button: copy filtered URL to clipboard =============== */
+  const shareBtn = document.querySelector<HTMLButtonElement>('[data-desk-share]');
+  shareBtn?.addEventListener('click', () => {
+    const url = window.location.href;
+    const flash = (text: string): void => {
+      const orig = shareBtn.textContent ?? '';
+      shareBtn.textContent = text;
+      shareBtn.setAttribute('data-copied', '1');
+      window.setTimeout(() => {
+        shareBtn.textContent = orig;
+        shareBtn.removeAttribute('data-copied');
+      }, 1400);
+    };
+    if (navigator.clipboard?.writeText) {
+      navigator.clipboard
+        .writeText(url)
+        .then(() => flash('COPIED · LINK'))
+        .catch(() => flash('COPY · FAILED'));
+    } else {
+      flash('COPY · UNSUPPORTED');
+    }
+  });
 </script>
 
