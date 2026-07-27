@@ -117,7 +117,7 @@ const jsonLd = {
         60-second skim. NDA-clean. Built so a hiring manager can decide in one read.
       </VoiceLine>
       <p class="hero__sub">
-        Quantitative researcher and AI engineer. {loc.display}.<br />
+        Senior Quantitative Researcher &amp; AI Engineer. {loc.display}.<br />
         Open to remote QR, QR-rotational, or research-engineer seats with US-premarket or APAC overlap.
       </p>
 
@@ -314,6 +314,29 @@ const jsonLd = {
           ))
         }
       </ol>
+    </div>
+  </section>
+
+  {
+    /* v7.29 — signature line + "what I'm working on next" closer. Mirrors the
+      homepage v7.22 closer: italic serif name in amber, role + location meta
+      in ink-3, NEXT amber pill, hairline rule above the CTA row. */
+  }
+  <section class="closer" data-reveal="lift-sm">
+    <div class="container container--narrow">
+      <div class="contact__closer">
+        <p class="contact__signature">
+          <span class="contact__signature-name">— Christian T. Macion</span>
+          <span class="contact__signature-meta">
+            Senior Quantitative Researcher · AI Engineer · {loc.display}, PH
+          </span>
+        </p>
+        <p class="contact__next mono">
+          <span class="contact__next-tag">NEXT</span>
+          A recruiter-grade summary stack + graph engineering as the integrating layer across the 31-gate
+          eval harness. Reply lands within 24h on weekdays.
+        </p>
+      </div>
     </div>
   </section>
 
@@ -607,5 +630,58 @@ const jsonLd = {
     .persona-grid {
       grid-template-columns: 1fr;
     }
+  }
+
+  /* === v7.29 — signature + "what's next" closer (mirrors homepage v7.22) ===== */
+  .closer {
+    padding-block: var(--sp-6) var(--sp-7);
+    background: var(--c-bg);
+  }
+  .contact__closer {
+    margin: 0;
+    padding: var(--sp-4) 0 0;
+    border-top: 1px dashed var(--c-rule);
+  }
+  .contact__signature {
+    margin: 0 0 var(--sp-2);
+    font-family: var(--serif-display);
+    font-size: 1.05rem;
+    font-style: italic;
+    color: var(--c-ink);
+    line-height: 1.4;
+  }
+  .contact__signature-name {
+    color: var(--c-amber);
+    font-weight: 500;
+    margin-right: var(--sp-3);
+  }
+  .contact__signature-meta {
+    color: var(--c-ink-3);
+    font-size: 0.85rem;
+    font-style: normal;
+    letter-spacing: 0.02em;
+  }
+  .contact__next {
+    margin: 0;
+    font: 500 11px / 1.6 var(--ff-mono);
+    color: var(--c-ink-2);
+    letter-spacing: 0.06em;
+    text-transform: none;
+    display: flex;
+    align-items: flex-start;
+    gap: var(--sp-3);
+    flex-wrap: wrap;
+  }
+  .contact__next-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border: 1px solid var(--c-amber-deep);
+    border-radius: 999px;
+    color: var(--c-amber-deep);
+    font-weight: 600;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    flex-shrink: 0;
+    margin-top: 1px;
   }
 </style>
