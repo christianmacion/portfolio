@@ -21,6 +21,11 @@ const SRC = 'src/data';
 const OUT_DIR = 'src/data';
 const OUT_FILE = 'live-feed-cache.json';
 const CAP = 100;
+// Drop entries older than this — mirrors the live:integrity gate's
+// `MAX_AGE_DAYS=7` (scripts/check-live-feed-integrity.mjs). Fetching
+// fresh caches doesn't help if GDELT still returns the same old event;
+// the fix is to drop them at build time so the gate never trips.
+const MAX_AGE_DAYS = 7;
 
 const NDA_BLOCKLIST = new Set([
   '19v', 'macion-capital', 'macion_capital', 'quantivo',
@@ -47,6 +52,19 @@ function fingerprint(title) {
     .replace(/[^a-z0-9]+/g, ' ')
     .trim()
     .replace(/\s+/g, ' ');
+}
+
+// Drop entries whose timestamp is older than MAX_AGE_DAYS, or unparseable.
+// GDELT especially keeps returning the same events on every fetch, so the
+// upstream cache doesn't age out — the builder must.
+function freshish(items) {
+  const cutoff = Date.now() - MAX_AGE_DAYS * 86400 * 1000;
+  return items.filter((it) => {
+    const ts = it.timestamp || it.pubDate || it.date || '';
+    const t = new Date(ts).getTime();
+    if (Number.isNaN(t)) return true; // keep unparseable — let gate flag
+    return t >= cutoff;
+  });
 }
 
 function urlDomain(url) {
@@ -170,7 +188,7 @@ function wireCoordsFor(publisher) {
 
 function normalizeArxiv(cache) {
   if (!cache || !Array.isArray(cache.items)) return [];
-  return cache.items
+  return freshish(cache.items)
     .filter((it) => isNdaClean(it.title))
     .map((it) => {
       const focus = arxivFocus(it.category);
@@ -186,7 +204,7 @@ function normalizeArxiv(cache) {
 
 function normalizeMacrowire(cache) {
   if (!cache || !Array.isArray(cache.items)) return [];
-  return cache.items
+  return freshish(cache.items)
     .filter((it) => isNdaClean(it.title))
     .map((it) => {
       const wire = wireCoordsFor(it.publisher);
@@ -204,7 +222,7 @@ function normalizeMacrowire(cache) {
 
 function normalizeGdelt(cache) {
   if (!cache || !Array.isArray(cache.events)) return [];
-  return cache.events
+  return freshish(cache.events)
     .filter((ev) => isNdaClean(ev.title))
     .map((ev) => {
       const syntheticLink = ev.link || `https://gdelt.org/event/${ev.id}`;
