@@ -48,6 +48,7 @@ interface LiveEvent {
   publisher?: string | null;
   fingerprint: string;
   domain: string;
+  coords?: { lat: number; lon: number };
   related?: { source: string; id: string }[];
 }
 interface LiveFeedCache {

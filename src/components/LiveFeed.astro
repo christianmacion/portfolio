@@ -40,6 +40,7 @@ interface LiveEvent {
   publisher?: string | null;
   fingerprint: string;
   domain: string;
+  coords?: { lat: number; lon: number };
   related?: { source: string; id: string }[];
 }
 interface LiveFeedCache {
@@ -113,7 +114,11 @@ function timeAgo(iso: string, refIso: string): string {
   {hasItems && (
     <ol class="live-feed__list" aria-live="off" aria-atomic="false">
       {events.map((e) => (
-        <li class={`live-feed__row live-feed__row--${accentFor(e.source)}`}>
+        <li class={`live-feed__row live-feed__row--${accentFor(e.source)}`}
+            data-event-id={e.id}
+            data-event-source={e.source}
+            data-event-lat={e.coords?.lat ?? ''}
+            data-event-lon={e.coords?.lon ?? ''}>
           <span class={`live-feed__source mono live-feed__source--${accentFor(e.source)}`}>
             {sourceLabel[e.source]}
           </span>
@@ -318,3 +323,62 @@ function timeAgo(iso: string, refIso: string): string {
     }
   }
 </style>
+
+<script>
+  /**
+   * earth-hover-emit.ts (inlined for static-output safety)
+   * v7.7.3 ROW HOVER → earth:focus EMITTER.
+   *
+   * Each .live-feed__row carries data-event-id and data-event-{source,lat,lon}.
+   * On `mouseenter` (and `focusin` for keyboard users), this script
+   * dispatches CustomEvent('earth:focus', { detail: { id, lat, lon } }).
+   * The /desk earth listens via the script in EarthMap.astro and pulses
+   * the matching Layer C / Layer E marker for 1.2s.
+   *
+   * No deps. Same-page focus works; cross-tab works via the localStorage
+   * ping the EarthMap listener subscribes to. Reduced-motion users get a
+   * 600ms emit-and-forget pulse (still useful for screen-reader users).
+   */
+  const EMIT_COOLDOWN_MS = 80;
+
+  document.addEventListener('mouseover', (ev) => {
+    const target = ev.target as HTMLElement | null;
+    if (!target) return;
+    const row = target.closest<HTMLElement>('.live-feed__row');
+    if (!row) return;
+    const id = row.dataset.eventId;
+    if (!id) return;
+    const lastId = row.getAttribute('data-last-emit');
+    const lastTs = Number(row.getAttribute('data-last-ts') ?? '0');
+    const now = Date.now();
+    // Throttle: same row within cooldown is a no-op so jittering the
+    // mouse over a long row doesn't fire 30 events/sec.
+    if (lastId === id && now - lastTs < EMIT_COOLDOWN_MS) return;
+    row.setAttribute('data-last-emit', id);
+    row.setAttribute('data-last-ts', String(now));
+    window.dispatchEvent(new CustomEvent('earth:focus', {
+      detail: {
+        id,
+        lat: row.dataset.eventLat ? Number(row.dataset.eventLat) : null,
+        lon: row.dataset.eventLon ? Number(row.dataset.eventLon) : null,
+      },
+    }));
+  });
+
+  // Keyboard parity — Tab-focusing a row emits the same focus event.
+  document.addEventListener('focusin', (ev) => {
+    const target = ev.target as HTMLElement | null;
+    if (!target) return;
+    const row = target.closest<HTMLElement>('.live-feed__row');
+    if (!row) return;
+    const id = row.dataset.eventId;
+    if (!id) return;
+    window.dispatchEvent(new CustomEvent('earth:focus', {
+      detail: {
+        id,
+        lat: row.dataset.eventLat ? Number(row.dataset.eventLat) : null,
+        lon: row.dataset.eventLon ? Number(row.dataset.eventLon) : null,
+      },
+    }));
+  });
+</script>
