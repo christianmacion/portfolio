@@ -196,6 +196,10 @@ const cityCounts: Array<{ city: string; count: number }> = (() => {
       <span class="live-feed__refresh mono" data-refresh-countdown data-generated={cache.generated}>
         CACHE · REFRESH
       </span>
+      {/* v7.10 — copy-shareable-filter-URL button (institutional register) */}
+      <button type="button" class="live-feed__share-btn mono" data-share-link title="Copy link with current filters">
+        COPY · LINK
+      </button>
     </div>
   )}
 
@@ -376,6 +380,33 @@ const cityCounts: Array<{ city: string; count: number }> = (() => {
     font-size: 9px;
     letter-spacing: 0.14em;
     text-transform: uppercase;
+  }
+  .live-feed__share-btn {
+    appearance: none;
+    background: transparent;
+    border: 1px solid var(--c-ink-3);
+    color: var(--c-ink-2);
+    padding: 3px 8px;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    cursor: pointer;
+    transition:
+      background 120ms ease,
+      color 120ms ease,
+      border-color 120ms ease;
+  }
+  .live-feed__share-btn:hover {
+    border-color: var(--c-ink-1);
+    color: var(--c-ink);
+    background: var(--c-paper-2);
+  }
+  .live-feed__share-btn:focus-visible {
+    outline: 2px solid var(--c-amber);
+    outline-offset: 1px;
+  }
+  .live-feed__share-btn[data-copied="1"] {
+    border-color: var(--c-amber);
+    color: var(--c-amber);
   }
   .live-feed__chips {
     display: inline-flex;
@@ -705,6 +736,28 @@ const cityCounts: Array<{ city: string; count: number }> = (() => {
   let activeQuery = '';
   let activeCity = 'all';
 
+  /* === v7.10 — URL persistence (shareable filter URLs) ==================== */
+  type FilterParams = { source: string; query: string; city: string };
+  function readFiltersFromUrl(): FilterParams {
+    const sp = new URLSearchParams(window.location.search);
+    const source = sp.get('s');
+    const query = sp.get('q') ?? '';
+    const city = sp.get('c') ?? 'all';
+    return { source: source ?? 'all', query, city };
+  }
+  function writeFiltersToUrl(): void {
+    const sp = new URLSearchParams(window.location.search);
+    if (activeSource && activeSource !== 'all') sp.set('s', activeSource);
+    else sp.delete('s');
+    if (activeQuery) sp.set('q', activeQuery);
+    else sp.delete('q');
+    if (activeCity && activeCity !== 'all') sp.set('c', activeCity);
+    else sp.delete('c');
+    const qs = sp.toString();
+    const next = `${window.location.pathname}${qs ? '?' + qs : ''}${window.location.hash}`;
+    history.replaceState(null, '', next);
+  }
+
   function flashRow(row: HTMLElement): void {
     row.setAttribute('data-flash', '1');
     window.setTimeout(() => row.removeAttribute('data-flash'), FLASH_DURATION_MS);
@@ -732,6 +785,26 @@ const cityCounts: Array<{ city: string; count: number }> = (() => {
     if (counter) counter.textContent = `${visible} VISIBLE`;
   }
 
+  /* Initial sync from URL — apply active filters before listeners wire up. */
+  const initialFilters = readFiltersFromUrl();
+  activeSource = initialFilters.source;
+  activeQuery = initialFilters.query;
+  activeCity = initialFilters.city;
+  if (searchInput && activeQuery) searchInput.value = activeQuery;
+  for (const btn of chipButtons) {
+    if ((btn.dataset.sourceFilter ?? 'all') === activeSource) {
+      for (const other of chipButtons) other.classList.remove('live-feed__chip-btn--active');
+      btn.classList.add('live-feed__chip-btn--active');
+    }
+  }
+  for (const btn of cityButtons) {
+    if ((btn.dataset.cityFilter ?? 'all') === activeCity) {
+      for (const other of cityButtons) other.classList.remove('live-feed__city-btn--active');
+      btn.classList.add('live-feed__city-btn--active');
+    }
+  }
+  applyFilters();
+
   for (const btn of chipButtons) {
     btn.addEventListener('click', () => {
       for (const other of chipButtons) {
@@ -740,6 +813,7 @@ const cityCounts: Array<{ city: string; count: number }> = (() => {
       btn.classList.add('live-feed__chip-btn--active');
       activeSource = btn.dataset.sourceFilter ?? 'all';
       applyFilters();
+      writeFiltersToUrl();
     });
   }
 
@@ -751,12 +825,39 @@ const cityCounts: Array<{ city: string; count: number }> = (() => {
       btn.classList.add('live-feed__city-btn--active');
       activeCity = btn.dataset.cityFilter ?? 'all';
       applyFilters();
+      writeFiltersToUrl();
     });
   }
 
+  let searchDebounce: number | null = null;
   searchInput?.addEventListener('input', () => {
     activeQuery = (searchInput.value ?? '').trim().toLowerCase();
     applyFilters();
+    if (searchDebounce !== null) window.clearTimeout(searchDebounce);
+    searchDebounce = window.setTimeout(() => writeFiltersToUrl(), 250);
+  });
+
+  /* === v7.10 — share button: copy filtered URL to clipboard ============= */
+  const shareBtn = document.querySelector<HTMLButtonElement>('[data-share-link]');
+  shareBtn?.addEventListener('click', () => {
+    const url = window.location.href;
+    const flash = (text: string): void => {
+      const orig = shareBtn.textContent ?? '';
+      shareBtn.textContent = text;
+      shareBtn.setAttribute('data-copied', '1');
+      window.setTimeout(() => {
+        shareBtn.textContent = orig;
+        shareBtn.removeAttribute('data-copied');
+      }, 1400);
+    };
+    if (navigator.clipboard?.writeText) {
+      navigator.clipboard
+        .writeText(url)
+        .then(() => flash('COPIED · LINK'))
+        .catch(() => flash('COPY · FAILED'));
+    } else {
+      flash('COPY · UNSUPPORTED');
+    }
   });
 
   /* === v7.9.3 — keyboard nav (j/k = next/prev row) ======================== */
