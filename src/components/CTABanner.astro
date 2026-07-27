@@ -291,7 +291,10 @@ const LEGEND_COUNTS = {
   }
   .cta--standard .btn--primary {
     background: var(--c-amber-deep);
-    color: var(--c-primary);
+    /* v7.7.11 — see global.css comment: --c-primary on amber-deep was
+       2.89:1 (fails AA 4.5:1). Use --c-primary-deep (near-black) for
+       AAA pass on the amber button. */
+    color: var(--c-primary-deep);
     border: 1px solid var(--c-amber);
   }
   .cta--standard .btn--primary:hover {

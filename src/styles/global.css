@@ -467,7 +467,10 @@ li {
 
 .btn--primary {
   background: var(--c-amber-deep);
-  color: var(--c-primary);
+  /* v7.7.11 — contrast: was --c-primary (pale ink) which is 2.89:1 on
+     amber-deep, failing WCAG AA normal-text 4.5:1. --c-primary-deep
+     (near-black) on amber-deep clears ~13:1 (AAA). */
+  color: var(--c-primary-deep);
   border-color: var(--c-amber);
 }
 .btn--primary:hover {
