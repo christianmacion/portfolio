@@ -391,6 +391,20 @@ const _now = new Date();
 const _subLat = solarDeclination(_now); // +N = N hemisphere summer
 const _subLon = subsolarLongitude(_now);
 const _subP = orthographicProject(_subLat, _subLon, GLOBE_RADIUS, GLOBE_CX, GLOBE_CY, GLOBE_ROT);
+// v7.7.7 — anchor the night-mask radial gradient at the anti-subsolar
+// point (the antipode of where the Sun is overhead). The night side of
+// Earth is darkest at this point and brightest at the sub-solar point,
+// which gives a proper terminator that visibly tracks the Sun.
+const _antiSubLat = -_subLat;
+const _antiSubLon = ((_subLon + 180 + 540) % 360) - 180; // wrap to [-180, 180]
+const _antiSubP = orthographicProject(
+  _antiSubLat,
+  _antiSubLon,
+  GLOBE_RADIUS,
+  GLOBE_CX,
+  GLOBE_CY,
+  GLOBE_ROT,
+);
 const _termPathD = terminatorOrthographicArcPath(
   _now,
   GLOBE_RADIUS,
@@ -532,18 +546,22 @@ void venueByCity;
         <stop offset="92%" stop-color="var(--j-cobalt-3)" stop-opacity="0.55" />
         <stop offset="100%" stop-color="var(--j-cobalt)" stop-opacity="0" />
       </radialGradient>
-      {/* v7.7.6 — night-side dim: a near-opaque dark mask on the
-          back hemisphere so day/night reads at a glance. */}
+      {/* v7.7.7 — night-side dim anchored at the anti-subsolar point so
+          the dimming visibly tracks the Sun. userSpaceOnUse lets us
+          place the gradient center in absolute SVG coords (the
+          projected antipode), with r=GLOBE_RADIUS so it fades out by
+          the terminator. */}
       <radialGradient
         id="earth-map__night"
-        cx="50%"
-        cy="50%"
-        r="50%"
+        gradientUnits="userSpaceOnUse"
+        cx={_antiSubP.x}
+        cy={_antiSubP.y}
+        r={GLOBE_RADIUS}
       >
-        <stop offset="0%" stop-color="var(--c-primary-deep)" stop-opacity="0" />
-        <stop offset="55%" stop-color="var(--c-primary-deep)" stop-opacity="0" />
-        <stop offset="78%" stop-color="var(--c-primary-deep)" stop-opacity="0.45" />
-        <stop offset="100%" stop-color="var(--c-primary-deep)" stop-opacity="0.78" />
+        <stop offset="0%" stop-color="var(--c-primary-deep)" stop-opacity="0.85" />
+        <stop offset="45%" stop-color="var(--c-primary-deep)" stop-opacity="0.6" />
+        <stop offset="78%" stop-color="var(--c-primary-deep)" stop-opacity="0.18" />
+        <stop offset="100%" stop-color="var(--c-primary-deep)" stop-opacity="0" />
       </radialGradient>
       {/* v7.7.6 — clip the rotating globe so countries that swing into
           the back hemisphere are visually masked by the sphere edge. */}
