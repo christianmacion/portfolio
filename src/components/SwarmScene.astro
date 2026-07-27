@@ -17,7 +17,7 @@
  *   - Reduced-motion safe: every animation has a fallback
  */
 import { archSafe } from '@utils/profile';
-import { countries, MAP_WIDTH, MAP_HEIGHT } from '../data/world-map-paths';
+import { MAP_WIDTH, MAP_HEIGHT } from '../data/world-map-paths';
 
 // === Equirectangular projection helpers (re-derived from build script) ===
 const lonLat = (lon: number, lat: number) => {
@@ -120,13 +120,9 @@ const sourcesXY = sources.map((s) => ({ ...s, ...lonLat(s.lon, s.lat) }));
           <line x1={MAP_WIDTH / 2} y1="0" x2={MAP_WIDTH / 2} y2={MAP_HEIGHT} class="bloomberg__eq" />
 
           {/* === Real continents === */}
-          <g class="bloomberg__continents">
-            {countries.map((c) => (
-              <path d={c.d} class="bloomberg__country" data-id={c.id}>
-                <title>{c.name}</title>
-              </path>
-            ))}
-          </g>
+          {/* v7.9 split — paths are loaded client-side from /data/world-map-equirect.json.
+              SSR ships an empty container so the prerendered HTML stays small. */}
+          <g class="bloomberg__continents" data-continents-target></g>
 
           {/* === STELLA core — at lon 0, lat 0 (Atlantic) === */}
           {(() => {
@@ -850,3 +846,44 @@ const sourcesXY = sources.map((s) => ({ ...s, ...lonLat(s.lon, s.lat) }));
     }
   }
 </style>
+
+<script>
+  /**
+   * v7.9 split — load country paths at runtime.
+   * Fetches /data/world-map-equirect.json and populates the empty
+   * `.bloomberg__continents` container. Cheap (1.46 MB) and lazy
+   * (deferred until idle so it never competes with first paint).
+   */
+  const continentsTarget = document.querySelector<SVGGElement>('[data-continents-target]');
+  if (continentsTarget) {
+    const populate = (countries: Array<{ id: string; name: string; d: string }>): void => {
+      const ns = 'http://www.w3.org/2000/svg';
+      const frag = document.createDocumentFragment();
+      for (const c of countries) {
+        const path = document.createElementNS(ns, 'path');
+        path.setAttribute('d', c.d);
+        path.setAttribute('class', 'bloomberg__country');
+        path.setAttribute('data-id', c.id);
+        const title = document.createElementNS(ns, 'title');
+        title.textContent = c.name;
+        path.appendChild(title);
+        frag.appendChild(path);
+      }
+      continentsTarget.appendChild(frag);
+    };
+    const start = (): void => {
+      fetch('/data/world-map-equirect.json')
+        .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
+        .then(populate)
+        .catch((err) => {
+          console.warn('[swarm-scene] country paths failed to load', err);
+        });
+    };
+    const w = window as Window & { requestIdleCallback?: (cb: () => void) => void };
+    if (typeof w.requestIdleCallback === 'function') {
+      w.requestIdleCallback(start);
+    } else {
+      w.setTimeout(start, 0);
+    }
+  }
+</script>

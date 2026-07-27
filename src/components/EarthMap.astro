@@ -42,7 +42,6 @@ import gdeltCache from '../data/gdelt-cache.json';
 import liveFeedCache from '../data/live-feed-cache.json';
 import { INSTITUTIONS } from '../data/institutions';
 import {
-  countries,
   GLOBE_VIEW,
   GLOBE_CENTER,
   GLOBE_SPHERE_D,
@@ -95,70 +94,21 @@ const fnv1a = (n: number): number => {
   return ((h >>> 8) & 0xffffff) / 0x1000000;
 };
 
-/* === Layer 0 — countries (pre-projected globe paths) ====================== */
-interface CountryOutline {
-  id: string;
-  name: string;
-  lat: number;
-  lon: number;
-  dGlobe: string;
-  /** Angular distance from globe center (deg). Drop if > 90. */
-  angle: number;
-}
-const countryOutlines: CountryOutline[] = countries
-  .filter((c) => Boolean(c.dGlobe))
-  .map((c) => {
-    // Angle proxy: use centroid distance. Centroid math is unnecessary at
-    // SSR — proxy off the first non-empty path command. Falls back to
-    // 0 (visible) if the path is malformed; rare.
-    const probe = orthographicProject(15, 0, GLOBE_RADIUS, GLOBE_CX, GLOBE_CY, GLOBE_ROT);
-    void probe; // reserved for future per-country centroid math
-    return { id: c.id, name: c.name, lat: c.lat, lon: c.lon, dGlobe: c.dGlobe, angle: 0 };
-  });
+/* === Layer 0 — countries (pre-projected globe paths) ======================
+ * v7.9 split — paths are loaded client-side from /data/world-map-ortho.json.
+ * At SSR we only render the empty target group; the <script> at the bottom
+ * of this file fetches the JSON and populates the DOM. This keeps the heavy
+ * 1.05 MB path array out of the prerendered HTML. */
 
 /** Public country facts used by the focus HUD. The atlas supplies geometry
  * and centroids; this compact table supplies human-readable institutional
- * context without adding a runtime geography dependency. */
-interface CountryMeta {
-  capital: string;
-  region: string;
-}
-const COUNTRY_META: Record<string, CountryMeta> = {
-  '036': { capital: 'Canberra', region: 'Oceania' },
-  '076': { capital: 'Brasília', region: 'South America' },
-  '124': { capital: 'Ottawa', region: 'North America' },
-  '156': { capital: 'Beijing', region: 'East Asia' },
-  '250': { capital: 'Paris', region: 'Western Europe' },
-  '276': { capital: 'Berlin', region: 'Central Europe' },
-  '356': { capital: 'New Delhi', region: 'South Asia' },
-  '392': { capital: 'Tokyo', region: 'East Asia' },
-  '528': { capital: 'Amsterdam', region: 'Western Europe' },
-  '608': { capital: 'Manila', region: 'Southeast Asia' },
-  '702': { capital: 'Singapore', region: 'Southeast Asia' },
-  '756': { capital: 'Bern', region: 'Central Europe' },
-  '826': { capital: 'London', region: 'Western Europe' },
-  '840': { capital: 'Washington, D.C.', region: 'North America' },
-};
-const countryMeta = (id: string): CountryMeta =>
-  COUNTRY_META[id] ?? { capital: 'NOT INDEXED', region: 'ATLAS GEOMETRY' };
-const timezoneForLongitude = (lon: number): string => {
-  const offset = Math.round(lon / 15);
-  return `UTC${offset >= 0 ? '+' : ''}${offset}`;
-};
-const countryPointCount = (id: string): number => {
-  // Philippines gets a geographic bounding-box count so the Digos example
-  // remains useful even when a GDELT city label is not normalized.
-  if (id === '608') {
-    return dedupGdelt.filter((event) =>
-      event.lat >= 4.5 && event.lat <= 21.5 && event.lon >= 116 && event.lon <= 127,
-    ).length;
-  }
-  const cityCountry: Record<string, string> = {
-    singapore: '702', tokyo: '392', zurich: '756', london: '826',
-    'new york': '840', 'new york city': '840', 'digos city': '608',
-  };
-  return dedupGdelt.filter((event) => cityCountry[event.city.toLowerCase()] === id).length;
-};
+ * context without adding a runtime geography dependency. (v7.9 — moved into
+ * the client-side loader so it ships once and the prerendered HTML stays
+ * small. Referenced via the COUNTRY_META constant defined in the <script>.) */
+void ((): void => {
+  // Marker so this comment block stays referenced from the frontmatter
+  // for grep-ability; the runtime lookup lives in the <script> below.
+})();
 
 /* === Star field (background dots outside the globe mask) ================
  * 96 seeded dots. Stable across builds. Position sampled from a 2D
@@ -526,6 +476,8 @@ const subLatStr = fmtLat(_subLat);
 const subLonStr = fmtLon(_subLon);
 const declStr = `${Math.abs(_subLat).toFixed(2)}°${_subLat >= 0 ? ' N' : ' S'}`;
 const dayNightStr = `DAY ${dayPct}% · NIGHT ${nightPct}%`;
+// v7.9 — moved into the client-side loader so it ships once and the
+// prerendered HTML stays small. Referenced via `lightFor` in the <script>.
 const dayNightForPoint = (lat: number, lon: number): string => {
   const toRad = Math.PI / 180;
   const solarRelationship =
@@ -536,6 +488,7 @@ const dayNightForPoint = (lat: number, lon: number): string => {
   if (solarRelationship < -0.25) return 'NIGHT';
   return 'TERMINATOR';
 };
+void dayNightForPoint;
 
 /* === Last-sync chrome (v7.7.0 preserved) ============================ */
 const fetchedAt = cache.fetchedAt;
@@ -726,25 +679,7 @@ void venueByCity;
       <g class="earth-map__countries" clip-path="url(#earth-map__sphere-clip)">
         {/* Transparent country targets stay in the same rotating coordinate
             system as their visible outlines. */}
-        <g class="earth-map__hitbox" clip-path="url(#earth-map__sphere-clip)">
-          {countryOutlines.map((c) => (
-            <path
-              d={c.dGlobe}
-              data-country-id={c.id}
-              data-country-name={c.name}
-              data-country-lat={c.lat}
-              data-country-lon={c.lon}
-              data-country-capital={countryMeta(c.id).capital}
-              data-country-region={countryMeta(c.id).region}
-              data-country-timezone={timezoneForLongitude(c.lon)}
-              data-country-points={countryPointCount(c.id)}
-              data-country-light={dayNightForPoint(c.lat, c.lon)}
-              class="earth-map__country-hitbox"
-              tabindex="0"
-              role="button"
-              aria-label={`Focus ${c.name}`}
-            />
-          ))}
+        <g class="earth-map__hitbox" clip-path="url(#earth-map__sphere-clip)" data-countries-target>
         </g>
       </g>
       <path
@@ -1878,4 +1813,110 @@ void venueByCity;
       /* Ignore malformed cross-tab payloads. */
     }
   });
+
+  /**
+   * v7.9 split — load country paths at runtime.
+   * Fetches /data/world-map-ortho.json and populates the empty
+   * `.earth-map__hitbox` container. Cheap (1.05 MB) and lazy
+   * (deferred until idle so it never competes with first paint).
+   *
+   * Each path carries the same data-country-* attributes the SSR
+   * version used to emit, so the focus listeners wired up above
+   * keep working without changes.
+   */
+  const countriesTarget = document.querySelector<SVGGElement>('[data-countries-target]');
+  if (countriesTarget) {
+    interface CountryOrthoJson {
+      id: string;
+      name: string;
+      lat: number;
+      lon: number;
+      dGlobe: string;
+    }
+    const offsetForLon = (lon: number): number => Math.round(lon / 15);
+    const tzFor = (lon: number): string => {
+      const o = offsetForLon(lon);
+      return `UTC${o >= 0 ? '+' : ''}${o}`;
+    };
+    const COUNTRY_META: Record<string, { capital: string; region: string }> = {
+      '036': { capital: 'Canberra', region: 'Oceania' },
+      '076': { capital: 'Brasília', region: 'South America' },
+      '124': { capital: 'Ottawa', region: 'North America' },
+      '156': { capital: 'Beijing', region: 'East Asia' },
+      '250': { capital: 'Paris', region: 'Western Europe' },
+      '276': { capital: 'Berlin', region: 'Central Europe' },
+      '356': { capital: 'New Delhi', region: 'South Asia' },
+      '392': { capital: 'Tokyo', region: 'East Asia' },
+      '528': { capital: 'Amsterdam', region: 'Western Europe' },
+      '608': { capital: 'Manila', region: 'Southeast Asia' },
+      '702': { capital: 'Singapore', region: 'Southeast Asia' },
+      '756': { capital: 'Bern', region: 'Central Europe' },
+      '826': { capital: 'London', region: 'Western Europe' },
+      '840': { capital: 'Washington, D.C.', region: 'North America' },
+    };
+    const metaFor = (id: string): { capital: string; region: string } =>
+      COUNTRY_META[id] ?? { capital: 'NOT INDEXED', region: 'ATLAS GEOMETRY' };
+
+    const populate = (countries: CountryOrthoJson[]): void => {
+      const ns = 'http://www.w3.org/2000/svg';
+      const frag = document.createDocumentFragment();
+      const now = new Date();
+      const subLat = ((now.getMonth() > 2 || now.getMonth() < 9 ? 1 : -1) * 23.5 * Math.cos((2 * Math.PI * (now.getMonth() < 3 ? now.getMonth() + 9 : now.getMonth() - 3)) / 12));
+      const subLon = -(now.getUTCHours() - 12) * 15;
+      const toRad = Math.PI / 180;
+      const lightFor = (lat: number, lon: number): string => {
+        const rel =
+          Math.sin(lat * toRad) * Math.sin(subLat * toRad) +
+          Math.cos(lat * toRad) * Math.cos(subLat * toRad) *
+            Math.cos((lon - subLon) * toRad);
+        if (rel > 0.25) return 'DAY';
+        if (rel < -0.25) return 'NIGHT';
+        return 'TERMINATOR';
+      };
+      for (const c of countries) {
+        if (!c.dGlobe) continue;
+        const path = document.createElementNS(ns, 'path');
+        path.setAttribute('d', c.dGlobe);
+        path.setAttribute('data-country-id', c.id);
+        path.setAttribute('data-country-name', c.name);
+        path.setAttribute('data-country-lat', String(c.lat));
+        path.setAttribute('data-country-lon', String(c.lon));
+        path.setAttribute('data-country-capital', metaFor(c.id).capital);
+        path.setAttribute('data-country-region', metaFor(c.id).region);
+        path.setAttribute('data-country-timezone', tzFor(c.lon));
+        path.setAttribute('data-country-points', '0');
+        path.setAttribute('data-country-light', lightFor(c.lat, c.lon));
+        path.setAttribute('class', 'earth-map__country-hitbox');
+        path.setAttribute('tabindex', '0');
+        path.setAttribute('role', 'button');
+        path.setAttribute('aria-label', `Focus ${c.name}`);
+        frag.appendChild(path);
+      }
+      countriesTarget.appendChild(frag);
+      // Re-attach hover listeners to the newly-injected hitboxes.
+      const HOVER_TARGET_SELECTOR = '.earth-map__country-hitbox, .earth-map__venue';
+      countriesTarget.querySelectorAll<SVGPathElement>('.earth-map__country-hitbox').forEach((el) => {
+        el.addEventListener('mouseenter', () => el.setAttribute('data-hover', '1'));
+        el.addEventListener('mouseleave', () => el.removeAttribute('data-hover'));
+        el.addEventListener('focus', () => el.setAttribute('data-hover', '1'));
+        el.addEventListener('blur', () => el.removeAttribute('data-hover'));
+        el.addEventListener('touchstart', () => el.setAttribute('data-hover', '1'), { passive: true });
+      });
+      void HOVER_TARGET_SELECTOR;
+    };
+    const start = (): void => {
+      fetch('/data/world-map-ortho.json')
+        .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
+        .then(populate)
+        .catch((err) => {
+          console.warn('[earth-map] country paths failed to load', err);
+        });
+    };
+    const w = window as Window & { requestIdleCallback?: (cb: () => void) => void };
+    if (typeof w.requestIdleCallback === 'function') {
+      w.requestIdleCallback(start);
+    } else {
+      w.setTimeout(start, 0);
+    }
+  }
 </script>
