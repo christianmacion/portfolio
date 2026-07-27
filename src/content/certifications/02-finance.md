@@ -6,7 +6,7 @@ blurb: 'Tier-1 finance credentials: STA flagship + Goldman / JPMorganChase brand
 featuredImg: /proof/cta-cert-portrait-2026-01.jpg
 featuredAlt: 'Christian T. Macion holding the Society of Technical Analysts Certified Technical Analyst® certificate, certificate number 260197, awarded January 2026. Visual proof of the Tier-1 CTA designation.'
 featuredCaption: 'Tier-1 Certified Technical Analyst® (CTA) · Society of Technical Analysts · certificate #260197 · Jan 2026. Photographic proof of the designation.'
-featuredHref: https://www.sta-uk.com/
+featuredHref: https://staphilippines.org/
 items:
   - {
       name: 'Certified Technical Analyst Program',

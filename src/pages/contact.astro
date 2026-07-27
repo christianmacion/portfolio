@@ -166,22 +166,21 @@ const platforms = [
         </p>
       </header>
       <div class="book-shell">
-        <iframe
-          class="book-iframe"
-          src="https://cal.com/christianmacion/30min-review?embed=true&theme=dark"
-          title="Book a 30-minute review with Christian Macion on Cal.com"
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"
-          allow="payment; camera; microphone"></iframe>
-        <noscript>
-          <p class="book-fallback">
-            Calendar embed blocked. <a
-              href="https://cal.com/christianmacion/30min-review"
-              target="_blank"
-              rel="noopener noreferrer">Open Cal.com in a new tab →</a
-            >
+        <div class="book-card">
+          <p class="book-card__lead">No live calendar — pick a window by email.</p>
+          <p class="book-card__body">
+            Send 3 candidate windows (UTC+8 / PHT) in your first email and a one-line role
+            description; I'll reply within 24h with a confirmed slot. Pre-curated screening agenda
+            lives at
+            <a href={path('/screening-call')}>/screening-call</a> so the first call starts with context,
+            not discovery.
           </p>
-        </noscript>
+          <a
+            class="cta cta--primary book-card__cta"
+            href="mailto:hello@christianmacion.com?subject=Screening%20call%20%E2%80%94%20propose%203%20windows"
+            >EMAIL — PROPOSE 3 WINDOWS →</a
+          >
+        </div>
       </div>
     </div>
   </section>
@@ -313,19 +312,29 @@ const platforms = [
     border-radius: var(--radius-sm);
     overflow: hidden;
   }
-  .book-iframe {
-    display: block;
-    width: 100%;
-    height: 720px;
-    border: 0;
-    background: var(--c-bg);
-  }
-  .book-fallback {
-    font-family: var(--ff-mono);
-    font-size: var(--fs-sm);
-    color: var(--c-ink-2);
-    padding: var(--sp-5);
+  .book-card {
+    padding: var(--sp-7) var(--sp-6);
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-4);
+    align-items: center;
+  }
+  .book-card__lead {
+    font-family: var(--ff-display);
+    font-size: var(--fs-lg);
+    color: var(--c-ink);
+    margin: 0;
+  }
+  .book-card__body {
+    font-size: var(--fs-base);
+    color: var(--c-ink-2);
+    max-width: 52ch;
+    margin: 0 auto;
+    line-height: 1.55;
+  }
+  .book-card__cta {
+    margin-top: var(--sp-3);
   }
 
   @media (max-width: 640px) {
