@@ -89,26 +89,22 @@ const itemListJsonLd = projectListJsonLd(
       </div>
 
       {/* v6.4 — Lane filter chips (URL-param-driven, no client:*). */}
+      {
+        /* v7.27 — `aria-pressed` is only valid on toggle buttons (<button> or
+          role="button"), not on <a>. Switched to <button type="button"> with
+          `aria-current="page"` semantics; CSS keeps anchor-styled appearance.
+          The JS still toggles the URL query param via history.replaceState. */
+      }
       <div class="lane-filter" role="group" aria-label="Filter projects by lane">
-        <a class="lane-filter__chip" href={path('/projects')} data-filter="all" aria-pressed={true}>
+        <button type="button" class="lane-filter__chip" data-filter="all" aria-current="page">
           All <span class="lane-filter__count mono">{projects.length}</span>
-        </a>
-        <a
-          class="lane-filter__chip"
-          href={`${path('/projects')}?tag=ai`}
-          data-filter="ai"
-          aria-pressed={false}
-        >
+        </button>
+        <button type="button" class="lane-filter__chip" data-filter="ai">
           AI Engineer <span class="lane-filter__count mono">{aiProjects.length}</span>
-        </a>
-        <a
-          class="lane-filter__chip"
-          href={`${path('/projects')}?tag=quant`}
-          data-filter="quant"
-          aria-pressed={false}
-        >
+        </button>
+        <button type="button" class="lane-filter__chip" data-filter="quant">
           Quant Researcher <span class="lane-filter__count mono">{quantProjects.length}</span>
-        </a>
+        </button>
       </div>
     </div>
   </header>
@@ -306,7 +302,12 @@ const itemListJsonLd = projectListJsonLd(
     /* v6.4 — Lane filter script (no `client:*`). Reads `?tag=` from
       the URL and toggles `[hidden]` on the matching lane sections.
       Degrades to "all lanes visible" if JS is off. The same script
-      also activates the matching chip via `aria-pressed`. */
+      also activates the matching chip via `aria-current="page"`.
+
+      v7.27 — Chips are now <button type="button"> (not <a>) because
+      `aria-pressed` is only valid on toggle buttons. On click, the
+      script updates the URL via history.replaceState and re-applies
+      the filter — replacing the previous anchor-link navigation. */
   }
   <script is:inline>
     (function () {
@@ -316,21 +317,33 @@ const itemListJsonLd = projectListJsonLd(
         const validTags = { all: 1, ai: 1, quant: 1 };
         if (!validTags[tag]) tag = 'all';
 
-        document.querySelectorAll('[data-lane]').forEach(function (el) {
-          const lane = el.getAttribute('data-lane');
-          if (tag === 'all' || lane === tag) {
-            el.removeAttribute('hidden');
-          } else {
-            el.setAttribute('hidden', '');
-          }
-        });
+        function applyTag(next) {
+          document.querySelectorAll('[data-lane]').forEach(function (el) {
+            const lane = el.getAttribute('data-lane');
+            if (next === 'all' || lane === next) {
+              el.removeAttribute('hidden');
+            } else {
+              el.setAttribute('hidden', '');
+            }
+          });
+          document.querySelectorAll('[data-filter]').forEach(function (chip) {
+            if (chip.getAttribute('data-filter') === next) {
+              chip.setAttribute('aria-current', 'page');
+            } else {
+              chip.removeAttribute('aria-current');
+            }
+          });
+          const qs = next === 'all' ? '' : '?tag=' + next;
+          const url = window.location.pathname + qs + window.location.hash;
+          window.history.replaceState(null, '', url);
+        }
+
+        applyTag(tag);
 
         document.querySelectorAll('[data-filter]').forEach(function (chip) {
-          if (chip.getAttribute('data-filter') === tag) {
-            chip.setAttribute('aria-pressed', 'true');
-          } else {
-            chip.setAttribute('aria-pressed', 'false');
-          }
+          chip.addEventListener('click', function () {
+            applyTag(chip.getAttribute('data-filter') || 'all');
+          });
         });
       } catch {
         // Soft-fail: leave the default state (all visible).
@@ -431,7 +444,8 @@ const itemListJsonLd = projectListJsonLd(
     border-color: var(--c-amber);
     color: var(--c-ink);
   }
-  .lane-filter__chip[aria-pressed='true'] {
+  .lane-filter__chip[aria-pressed='true'],
+  .lane-filter__chip[aria-current='page'] {
     background: var(--c-amber);
     border-color: var(--c-amber);
     color: var(--c-tape);

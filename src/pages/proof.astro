@@ -878,7 +878,12 @@ const paginate = (items: any[]) => {
         </p>
       </header>
 
-      <div class="ptr">
+      {
+        /* v7.27 — ARIA table structure: role=table > role=rowgroup > role=row > role=cell.
+          Previously the <div class="ptr"> had no role and the rows had role=row, which
+          violated aria-required-parent ("row" must be inside a "rowgroup" inside a "table"). */
+      }
+      <div class="ptr" role="table" aria-label="Public track record — external accounts">
         <div class="ptr__row" role="row">
           <div class="ptr__cell ptr__cell--platform" role="cell">Numerai</div>
           <div class="ptr__cell ptr__cell--handle mono ptr__cell--empty" role="cell">

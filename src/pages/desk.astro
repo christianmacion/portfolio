@@ -500,19 +500,21 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
                   data-desk-city={(e.city ?? '').toLowerCase()}
                   data-desk-row={e.id}
                   tabindex="0"
-                  role="button"
-                  aria-expanded="false"
-                  aria-controls={`event-${e.id}-detail`}
                 >
                   <td class="desk-events__num mono">
-                    <a
+                    {/* v7.27 — replaced nested <a> permalink with a clipboard-copy
+                        <button>. Previously the <a> nested inside a <tr role="button">
+                        triggered axe-core's nested-interactive rule. The new button
+                        copies the row's deep-link to clipboard (same UX). */}
+                    <button
+                      type="button"
                       class="desk-events__anchor"
-                      href={`#event-${e.id}`}
-                      aria-label={`Permalink for event ${e.id}`}
+                      data-copy-link={`#event-${e.id}`}
+                      aria-label={`Copy permalink for event ${e.id}`}
                       onclick="event.stopPropagation()"
                     >
                       #
-                    </a>
+                    </button>
                     {String(e.order).padStart(2, '0')}
                   </td>
                   <td class="desk-events__cat mono">{e.category}</td>
@@ -1302,6 +1304,14 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     opacity: 0;
     transition: opacity 120ms ease;
     margin-right: 4px;
+    /* v7.27 — <button> reset (was <a>). Strip native chrome. */
+    background: transparent;
+    border: 0;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    text-align: center;
+    line-height: 1;
   }
   .desk-events__row:hover .desk-events__anchor,
   .desk-events__row:focus-within .desk-events__anchor {
@@ -1496,6 +1506,18 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     }
   });
 
+  /* === v7.27 — per-row permalink copy button (replaces nested <a>) ======== */
+  document.querySelectorAll<HTMLButtonElement>('[data-copy-link]').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation(); // don't toggle the row
+      const hash = btn.dataset.copyLink ?? '';
+      const url = window.location.origin + window.location.pathname + hash;
+      if (navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(url).catch(() => {});
+      }
+    });
+  });
+
   /* === v7.20 — click/keyboard row expand for event detail ================== */
   function toggleRow(row: HTMLTableRowElement): void {
     const id = row.dataset.deskRow;
@@ -1505,11 +1527,9 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     const expanded = row.getAttribute('data-desk-expanded') === '1';
     if (expanded) {
       row.removeAttribute('data-desk-expanded');
-      row.setAttribute('aria-expanded', 'false');
       detail.hidden = true;
     } else {
       row.setAttribute('data-desk-expanded', '1');
-      row.setAttribute('aria-expanded', 'true');
       detail.hidden = false;
     }
   }

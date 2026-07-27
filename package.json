@@ -1,7 +1,7 @@
 {
   "name": "christianmacion-portfolio",
   "type": "module",
-  "version": "7.7.3",
+  "version": "7.7.5",
   "private": true,
   "description": "Christian T. Macion — AI Engineer + Quantitative Researcher. Personal portfolio site.",
   "scripts": {
@@ -30,13 +30,14 @@
     "version:bump": "tsx scripts/bump-version.ts",
     "sitemap:check": "tsx scripts/validate-sitemap.ts",
     "typecheck": "astro check",
-    "ci": "npm run lint:md && npm run lint && npm run format:check && npm run knip && npm run no-bulbs && npm run build && npm run verify:anchors && npm run no-f14 && npm run no-halo && npm run bundle:budget && npm run perf:audit && npm run audit && npm run sitemap:check",
+    "ci": "npm run lint:md && npm run lint && npm run format:check && npm run knip && npm run no-bulbs && npm run build && npm run verify:anchors && npm run no-f14 && npm run no-halo && npm run bundle:budget && npm run perf:audit && npm run a11y:scan && npm run audit && npm run sitemap:check",
     "no-bulbs": "bash scripts/check-no-lightbulb-halos.sh",
     "no-f14": "bash scripts/check-no-f14-traffic-light.sh",
     "bundle:budget": "node scripts/check-bundle-budget.mjs",
     "no-halo": "grep -rn 'box-shadow:\\s*0\\s*0\\s*[1-9][0-9]' src/ 2>/dev/null && echo 'FAIL: halo/glow box-shadow detected' && exit 1 || echo 'PASS: no halo/glow box-shadows'",
     "verify:anchors": "node scripts/verify-anchors.mjs",
-    "perf:audit": "node scripts/perf-audit.mjs"
+    "perf:audit": "node scripts/perf-audit.mjs",
+    "a11y:scan": "node scripts/scan-a11y.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.9",
@@ -60,10 +61,12 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.0",
+    "axe-core": "^4.12.1",
     "eslint": "^9.39.0",
     "eslint-config-prettier": "^10.1.0",
     "eslint-plugin-astro": "^1.6.0",
     "globals": "^15.0.0",
+    "jsdom": "^29.1.1",
     "knip": "^6.25.0",
     "markdownlint-cli2": "^0.20.0",
     "pagefind": "^1.5.2",

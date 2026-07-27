@@ -490,8 +490,8 @@ void venueByCity;
   <svg
     class="earth-map__svg"
     viewBox={`0 0 ${width} ${height}`}
-    role="img"
     aria-label={`Orthographic globe view centered on ${GLOBE_CENTER[0]}°/${GLOBE_CENTER[1]}°. ${venues.length} research venues, ${worldEvents.length} curated world events, ${gdeltPositions.length} GDELT signals visible from this rotation, ${livePoints.filter((p) => p.source === 'arxiv').length} arXiv + ${livePoints.filter((p) => p.source === 'macrowire').length} wire geo-overlay markers, day/night terminator overlay. Synchronized ${fetchedAtStamp}.`}
+    focusable="false"
     preserveAspectRatio="xMidYMid meet"
   >
     {
@@ -773,13 +773,14 @@ void venueByCity;
       {/* === Layer E — connection arcs (event → venue city) === */}
       {
         arcs.map((a, i) => (
-          <path
-            d={a.d}
-            pathLength="1"
-            class={`earth-map__arc earth-map__arc--${a.polarity}`}
-            style={`--i: ${i}`}
-            aria-label={`${a.city} signal → ${a.venue} venue`}
-          />
+          <g role="img" aria-label={`${a.city} signal → ${a.venue} venue`}>
+            <path
+              d={a.d}
+              pathLength="1"
+              class={`earth-map__arc earth-map__arc--${a.polarity}`}
+              style={`--i: ${i}`}
+            />
+          </g>
         ))
       }
 
