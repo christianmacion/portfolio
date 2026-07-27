@@ -135,6 +135,21 @@ const cityCounts: Array<{ city: string; count: number }> = (() => {
     .slice(0, 6)
     .map(([city, count]) => ({ city, count }));
 })();
+
+// === v7.11 — time-bucket counts (for 1H/6H/24H/ALL filter chips) =========
+const generatedMs = new Date(cache.generated).getTime();
+const timeBucketCounts = (() => {
+  const buckets = { '1h': 0, '6h': 0, '24h': 0, all: 0 };
+  for (const e of events) {
+    buckets.all++;
+    const t = new Date(e.timestamp).getTime();
+    const ageH = (generatedMs - t) / (60 * 60 * 1000);
+    if (ageH <= 1) buckets['1h']++;
+    if (ageH <= 6) buckets['6h']++;
+    if (ageH <= 24) buckets['24h']++;
+  }
+  return buckets;
+})();
 ---
 
 <section class="live-feed" aria-label="Unified live feed — GDELT + arXiv + macro-wire" data-live-feed>
@@ -160,6 +175,14 @@ const cityCounts: Array<{ city: string; count: number }> = (() => {
         <button type="button" class="live-feed__chip-btn" data-source-filter="gdelt">GDELT</button>
         <button type="button" class="live-feed__chip-btn" data-source-filter="arxiv">arXiv</button>
         <button type="button" class="live-feed__chip-btn" data-source-filter="macrowire">WIRE</button>
+      </div>
+      {/* v7.11 — time-scope chip row (1H · 6H · 24H · ALL) */}
+      <div class="live-feed__chips" role="group" aria-label="Time-scope filter">
+        <span class="live-feed__chip-label mono">WINDOW ·</span>
+        <button type="button" class="live-feed__chip-btn live-feed__chip-btn--active" data-time-filter="all">ALL <span class="live-feed__chip-count">({timeBucketCounts.all})</span></button>
+        <button type="button" class="live-feed__chip-btn" data-time-filter="1h">1H <span class="live-feed__chip-count">({timeBucketCounts['1h']})</span></button>
+        <button type="button" class="live-feed__chip-btn" data-time-filter="6h">6H <span class="live-feed__chip-count">({timeBucketCounts['6h']})</span></button>
+        <button type="button" class="live-feed__chip-btn" data-time-filter="24h">24H <span class="live-feed__chip-count">({timeBucketCounts['24h']})</span></button>
       </div>
       <label class="live-feed__search">
         <span class="sr-only">Search live feed titles</span>
@@ -215,6 +238,7 @@ const cityCounts: Array<{ city: string; count: number }> = (() => {
             data-event-tz={tzOffset(e.coords?.lon)}
             data-event-city={(e.city ?? '').toLowerCase()}
             data-event-title={e.title.toLowerCase()}
+            data-event-ts={new Date(e.timestamp).getTime()}
             data-event-category={e.category.toLowerCase()}>
           <span class={`live-feed__source mono live-feed__source--${accentFor(e.source)}`}>
             {sourceLabel[e.source]}
@@ -440,6 +464,19 @@ const cityCounts: Array<{ city: string; count: number }> = (() => {
     background: var(--c-ink);
     color: var(--c-bg);
     border-color: var(--c-ink);
+  }
+  .live-feed__chip-label {
+    color: var(--c-ink-3);
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    align-self: center;
+    margin-right: 2px;
+  }
+  .live-feed__chip-count {
+    opacity: 0.6;
+    font-weight: 500;
+    margin-left: 2px;
   }
   .live-feed__search {
     flex: 1 1 220px;
@@ -730,20 +767,25 @@ const cityCounts: Array<{ city: string; count: number }> = (() => {
   const searchInput = document.querySelector<HTMLInputElement>('[data-search-input]');
   const chipButtons = document.querySelectorAll<HTMLButtonElement>('[data-source-filter]');
   const cityButtons = document.querySelectorAll<HTMLButtonElement>('[data-city-filter]');
+  const timeButtons = document.querySelectorAll<HTMLButtonElement>('[data-time-filter]');
   const refreshCountdown = document.querySelector<HTMLElement>('[data-refresh-countdown]');
 
   let activeSource = 'all';
   let activeQuery = '';
   let activeCity = 'all';
+  let activeWindow: 'all' | '1h' | '6h' | '24h' = 'all';
 
   /* === v7.10 — URL persistence (shareable filter URLs) ==================== */
-  type FilterParams = { source: string; query: string; city: string };
+  type FilterParams = { source: string; query: string; city: string; window: 'all' | '1h' | '6h' | '24h' };
   function readFiltersFromUrl(): FilterParams {
     const sp = new URLSearchParams(window.location.search);
     const source = sp.get('s');
     const query = sp.get('q') ?? '';
     const city = sp.get('c') ?? 'all';
-    return { source: source ?? 'all', query, city };
+    const win = sp.get('w') ?? 'all';
+    const allowedWin: Array<'all' | '1h' | '6h' | '24h'> = ['all', '1h', '6h', '24h'];
+    const windowVal = (allowedWin as string[]).includes(win) ? (win as 'all' | '1h' | '6h' | '24h') : 'all';
+    return { source: source ?? 'all', query, city, window: windowVal };
   }
   function writeFiltersToUrl(): void {
     const sp = new URLSearchParams(window.location.search);
@@ -753,6 +795,8 @@ const cityCounts: Array<{ city: string; count: number }> = (() => {
     else sp.delete('q');
     if (activeCity && activeCity !== 'all') sp.set('c', activeCity);
     else sp.delete('c');
+    if (activeWindow && activeWindow !== 'all') sp.set('w', activeWindow);
+    else sp.delete('w');
     const qs = sp.toString();
     const next = `${window.location.pathname}${qs ? '?' + qs : ''}${window.location.hash}`;
     history.replaceState(null, '', next);
@@ -766,15 +810,24 @@ const cityCounts: Array<{ city: string; count: number }> = (() => {
   function applyFilters(): void {
     if (!list) return;
     const rows = list.querySelectorAll<HTMLElement>('.live-feed__row');
+    const winMs = activeWindow === '1h' ? 60 * 60 * 1000
+      : activeWindow === '6h' ? 6 * 60 * 60 * 1000
+      : activeWindow === '24h' ? 24 * 60 * 60 * 1000
+      : Infinity;
     let visible = 0;
     for (const row of rows) {
       const source = row.dataset.eventSource ?? '';
       const title = row.dataset.eventTitle ?? '';
       const city = row.dataset.eventCity ?? '';
+      const tsRaw = row.dataset.eventTs ?? '';
+      const ts = Number(tsRaw);
       const sourceOk = activeSource === 'all' || source === activeSource;
       const queryOk = !activeQuery || title.includes(activeQuery) || city.includes(activeQuery);
       const cityOk = activeCity === 'all' || city === activeCity;
-      const show = sourceOk && queryOk && cityOk;
+      const winOk = activeWindow === 'all'
+        || !Number.isFinite(ts)
+        || (Date.now() - ts <= winMs);
+      const show = sourceOk && queryOk && cityOk && winOk;
       if (show) {
         row.removeAttribute('data-filtered');
         visible++;
@@ -790,6 +843,7 @@ const cityCounts: Array<{ city: string; count: number }> = (() => {
   activeSource = initialFilters.source;
   activeQuery = initialFilters.query;
   activeCity = initialFilters.city;
+  activeWindow = initialFilters.window;
   if (searchInput && activeQuery) searchInput.value = activeQuery;
   for (const btn of chipButtons) {
     if ((btn.dataset.sourceFilter ?? 'all') === activeSource) {
@@ -801,6 +855,12 @@ const cityCounts: Array<{ city: string; count: number }> = (() => {
     if ((btn.dataset.cityFilter ?? 'all') === activeCity) {
       for (const other of cityButtons) other.classList.remove('live-feed__city-btn--active');
       btn.classList.add('live-feed__city-btn--active');
+    }
+  }
+  for (const btn of timeButtons) {
+    if ((btn.dataset.timeFilter ?? 'all') === activeWindow) {
+      for (const other of timeButtons) other.classList.remove('live-feed__chip-btn--active');
+      btn.classList.add('live-feed__chip-btn--active');
     }
   }
   applyFilters();
@@ -824,6 +884,20 @@ const cityCounts: Array<{ city: string; count: number }> = (() => {
       }
       btn.classList.add('live-feed__city-btn--active');
       activeCity = btn.dataset.cityFilter ?? 'all';
+      applyFilters();
+      writeFiltersToUrl();
+    });
+  }
+
+  /* === v7.11 — time-scope filter buttons =================================== */
+  for (const btn of timeButtons) {
+    btn.addEventListener('click', () => {
+      for (const other of timeButtons) {
+        other.classList.remove('live-feed__chip-btn--active');
+      }
+      btn.classList.add('live-feed__chip-btn--active');
+      const win = btn.dataset.timeFilter ?? 'all';
+      activeWindow = (win === '1h' || win === '6h' || win === '24h') ? win : 'all';
       applyFilters();
       writeFiltersToUrl();
     });
