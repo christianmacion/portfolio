@@ -195,7 +195,7 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
         <div class="desk-map__corner desk-map__corner--tr" aria-hidden="true"></div>
         <div class="desk-map__corner desk-map__corner--bl" aria-hidden="true"></div>
         <div class="desk-map__corner desk-map__corner--br" aria-hidden="true"></div>
-        <EarthMap width={1080} height={540} />
+        <EarthMap width={600} height={600} />
       </div>
     </div>
   </section>
@@ -468,7 +468,13 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     overflow: hidden;
     border-radius: var(--radius-md, 6px);
     border: 1px solid var(--c-rule);
-    aspect-ratio: 2 / 1;
+    /* v7.7.4 — square frame to match the 600×600 orthographic globe.
+       Prior 2/1 aspect-ratio letterboxed the square globe with empty
+       space left + right; user feedback "the earth is not centered and
+       usable" → frame now hugs the globe. */
+    aspect-ratio: 1 / 1;
+    max-width: 720px;
+    margin: 0 auto;
     position: relative;
   }
   .desk-map__corner {
