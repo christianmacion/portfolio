@@ -415,27 +415,68 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
         <tbody>
           {
             events.map((e, i) => (
-              <tr
-                class="desk-events__row"
-                style={`--i: ${i}`}
-                id={`event-${e.id}`}
-                data-desk-cat={e.category}
-                data-desk-sev={e.severity}
-                data-desk-city={(e.city ?? '').toLowerCase()}
-              >
-                <td class="desk-events__num mono">
-                  <a class="desk-events__anchor" href={`#event-${e.id}`} aria-label={`Permalink for event ${e.id}`}>#</a>
-                  {String(e.order).padStart(2, '0')}
-                </td>
-                <td class="desk-events__cat mono">{e.category}</td>
-                <td class="desk-events__sev mono">
-                  <span class={`desk-events__pill desk-events__pill--${e.severity}`}>
-                    {e.severity.toUpperCase()}
-                  </span>
-                </td>
-                <td class="desk-events__title-cell">{e.title}</td>
-                <td class="desk-events__city mono">{e.city}</td>
-              </tr>
+              <>
+                <tr
+                  class="desk-events__row"
+                  style={`--i: ${i}`}
+                  id={`event-${e.id}`}
+                  data-desk-cat={e.category}
+                  data-desk-sev={e.severity}
+                  data-desk-city={(e.city ?? '').toLowerCase()}
+                  data-desk-row={e.id}
+                  tabindex="0"
+                  role="button"
+                  aria-expanded="false"
+                  aria-controls={`event-${e.id}-detail`}
+                >
+                  <td class="desk-events__num mono">
+                    <a class="desk-events__anchor" href={`#event-${e.id}`} aria-label={`Permalink for event ${e.id}`} onclick="event.stopPropagation()">#</a>
+                    {String(e.order).padStart(2, '0')}
+                  </td>
+                  <td class="desk-events__cat mono">{e.category}</td>
+                  <td class="desk-events__sev mono">
+                    <span class={`desk-events__pill desk-events__pill--${e.severity}`}>
+                      {e.severity.toUpperCase()}
+                    </span>
+                  </td>
+                  <td class="desk-events__title-cell">{e.title}</td>
+                  <td class="desk-events__city mono">
+                    {e.city}
+                    <span class="desk-events__expand-hint mono" aria-hidden="true">▾</span>
+                  </td>
+                </tr>
+                <tr
+                  class="desk-events__detail"
+                  id={`event-${e.id}-detail`}
+                  data-desk-detail={e.id}
+                  hidden
+                >
+                  <td colspan="5" class="desk-events__detail-cell">
+                    <dl class="desk-events__detail-meta mono">
+                      <div class="desk-events__detail-row">
+                        <dt>SOURCE</dt>
+                        <dd>{e.source}</dd>
+                      </div>
+                      <div class="desk-events__detail-row">
+                        <dt>LAT/LON</dt>
+                        <dd>{e.lat.toFixed(2)}°, {e.lon.toFixed(2)}°</dd>
+                      </div>
+                      <div class="desk-events__detail-row">
+                        <dt>CATEGORY</dt>
+                        <dd>{e.category.toUpperCase()}</dd>
+                      </div>
+                      <div class="desk-events__detail-row">
+                        <dt>SEVERITY</dt>
+                        <dd>{e.severity.toUpperCase()}</dd>
+                      </div>
+                      <div class="desk-events__detail-row">
+                        <dt>ID</dt>
+                        <dd><code>{e.id}</code></dd>
+                      </div>
+                    </dl>
+                  </td>
+                </tr>
+              </>
             ))
           }
         </tbody>
@@ -842,9 +883,68 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     animation: desk-row-in 0.5s cubic-bezier(.4,.7,.3,1) backwards;
     animation-delay: calc(var(--i, 0) * 90ms + 200ms);
     transition: background 0.2s ease;
+    cursor: pointer;
   }
   .desk-events__row:hover {
     background: color-mix(in oklab, var(--c-amber) 4%, transparent);
+  }
+  .desk-events__row:focus-visible {
+    outline: 2px solid var(--c-amber);
+    outline-offset: -2px;
+  }
+  .desk-events__row[data-desk-expanded="1"] {
+    background: color-mix(in oklab, var(--c-amber) 6%, transparent);
+  }
+  .desk-events__expand-hint {
+    display: inline-block;
+    margin-left: 8px;
+    font-size: 9px;
+    color: var(--c-ink-4);
+    transition: transform 0.2s ease, color 0.2s ease;
+  }
+  .desk-events__row[data-desk-expanded="1"] .desk-events__expand-hint {
+    transform: rotate(180deg);
+    color: var(--c-ink);
+  }
+  .desk-events__detail {
+    background: color-mix(in oklab, var(--c-amber) 3%, var(--c-bg));
+    animation: desk-detail-in 0.2s ease-out;
+  }
+  .desk-events__detail-cell {
+    padding: 12px 16px 14px;
+    border-bottom: 1px solid var(--c-rule);
+  }
+  .desk-events__detail-meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 8px 24px;
+    margin: 0;
+  }
+  .desk-events__detail-row {
+    display: flex;
+    gap: 8px;
+    margin: 0;
+  }
+  .desk-events__detail-row dt {
+    flex: 0 0 80px;
+    color: var(--c-ink-4);
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .desk-events__detail-row dd {
+    margin: 0;
+    color: var(--c-ink-2);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+  }
+  .desk-events__detail-row code {
+    font-family: var(--ff-mono);
+    color: var(--c-ink);
+  }
+  @keyframes desk-detail-in {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: none; }
   }
   @keyframes desk-row-in {
     from { opacity: 0; transform: translateX(-12px); }
@@ -1222,5 +1322,37 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
       flash('COPY · UNSUPPORTED');
     }
   });
+
+  /* === v7.20 — click/keyboard row expand for event detail ================== */
+  function toggleRow(row: HTMLTableRowElement): void {
+    const id = row.dataset.deskRow;
+    if (!id) return;
+    const detail = document.querySelector<HTMLTableRowElement>(`[data-desk-detail="${id}"]`);
+    if (!detail) return;
+    const expanded = row.getAttribute('data-desk-expanded') === '1';
+    if (expanded) {
+      row.removeAttribute('data-desk-expanded');
+      row.setAttribute('aria-expanded', 'false');
+      detail.hidden = true;
+    } else {
+      row.setAttribute('data-desk-expanded', '1');
+      row.setAttribute('aria-expanded', 'true');
+      detail.hidden = false;
+    }
+  }
+  for (const row of rows) {
+    row.addEventListener('click', (ev) => {
+      // Don't toggle when the click was on the anchor permalink.
+      const target = ev.target as HTMLElement | null;
+      if (target?.closest('a')) return;
+      toggleRow(row);
+    });
+    row.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Enter' || ev.key === ' ') {
+        ev.preventDefault();
+        toggleRow(row);
+      }
+    });
+  }
 </script>
 
