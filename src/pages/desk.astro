@@ -90,10 +90,17 @@ const categoryCounts: Record<WorldEventEntry['category'], number> = {
 const severityCounts: Record<WorldEventEntry['severity'], number> = {
   critical: 0, moderate: 0, mild: 0,
 };
+const cityCountsMap: Map<string, number> = new Map();
 for (const e of events) {
   categoryCounts[e.category]++;
   severityCounts[e.severity]++;
+  const c = (e.city ?? '').trim();
+  if (c) cityCountsMap.set(c, (cityCountsMap.get(c) ?? 0) + 1);
 }
+const topCities: Array<{ city: string; count: number }> = Array.from(cityCountsMap.entries())
+  .sort((a, b) => b[1] - a[1])
+  .slice(0, 8)
+  .map(([city, count]) => ({ city, count }));
 
 // === v7.7.1 — derive global-signal count from cache JSONs ===
 // Sum across arxiv papers + macrowire headlines + gdelt events. The
@@ -355,6 +362,17 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
             >{s.toUpperCase()} ({severityCounts[s]})</button>
           ))}
         </div>
+        <div class="desk-events__chips" role="group" aria-label="City filter">
+          <span class="desk-events__chip-label mono">CITY ·</span>
+          <button type="button" class="desk-events__chip-btn desk-events__chip-btn--active" data-desk-city="all">ALL ({events.length})</button>
+          {topCities.map(({ city, count }) => (
+            <button
+              type="button"
+              class="desk-events__chip-btn"
+              data-desk-city={city.toLowerCase()}
+            >{city.toUpperCase()} ({count})</button>
+          ))}
+        </div>
         <p class="desk-events__count mono" data-desk-visible-count>
           {events.length} VISIBLE
         </p>
@@ -391,6 +409,7 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
                 id={`event-${e.id}`}
                 data-desk-cat={e.category}
                 data-desk-sev={e.severity}
+                data-desk-city={(e.city ?? '').toLowerCase()}
               >
                 <td class="desk-events__num mono">
                   <a class="desk-events__anchor" href={`#event-${e.id}`} aria-label={`Permalink for event ${e.id}`}>#</a>
@@ -1003,25 +1022,30 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
 
   const catButtons = document.querySelectorAll<HTMLButtonElement>('[data-desk-cat]');
   const sevButtons = document.querySelectorAll<HTMLButtonElement>('[data-desk-sev]');
+  const cityButtons = document.querySelectorAll<HTMLButtonElement>('[data-desk-city]');
   const counter = document.querySelector<HTMLElement>('[data-desk-visible-count]');
   const rows = document.querySelectorAll<HTMLTableRowElement>('.desk-events__row');
 
   let activeCat: CatKey = 'all';
   let activeSev: SevKey = 'all';
+  let activeCity = 'all';
 
   function readFilters(): void {
     const sp = new URLSearchParams(window.location.search);
     const c = sp.get('cat') ?? 'all';
     const s = sp.get('sev') ?? 'all';
+    const city = sp.get('city') ?? 'all';
     const validCat: CatKey[] = ['all', 'central-bank', 'earnings', 'geopolitical', 'data-release', 'fx'];
     const validSev: SevKey[] = ['all', 'critical', 'moderate', 'mild'];
     activeCat = (validCat as string[]).includes(c) ? (c as CatKey) : 'all';
     activeSev = (validSev as string[]).includes(s) ? (s as SevKey) : 'all';
+    activeCity = city;
   }
   function writeFilters(): void {
     const sp = new URLSearchParams(window.location.search);
     if (activeCat !== 'all') sp.set('cat', activeCat); else sp.delete('cat');
     if (activeSev !== 'all') sp.set('sev', activeSev); else sp.delete('sev');
+    if (activeCity !== 'all') sp.set('city', activeCity); else sp.delete('city');
     const qs = sp.toString();
     const next = `${window.location.pathname}${qs ? '?' + qs : ''}${window.location.hash}`;
     history.replaceState(null, '', next);
@@ -1031,7 +1055,11 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     for (const row of rows) {
       const cat = row.dataset.deskCat ?? '';
       const sev = row.dataset.deskSev ?? '';
-      const ok = (activeCat === 'all' || cat === activeCat) && (activeSev === 'all' || sev === activeSev);
+      const city = row.dataset.deskCity ?? '';
+      const ok =
+        (activeCat === 'all' || cat === activeCat) &&
+        (activeSev === 'all' || sev === activeSev) &&
+        (activeCity === 'all' || city === activeCity);
       if (ok) {
         row.removeAttribute('data-desk-filtered');
         visible++;
@@ -1054,6 +1082,7 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
   readFilters();
   setActiveButton(catButtons, 'data-desk-cat', activeCat);
   setActiveButton(sevButtons, 'data-desk-sev', activeSev);
+  setActiveButton(cityButtons, 'data-desk-city', activeCity);
   applyFilters();
 
   for (const btn of catButtons) {
@@ -1068,6 +1097,14 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     btn.addEventListener('click', () => {
       activeSev = (btn.getAttribute('data-desk-sev') ?? 'all') as SevKey;
       setActiveButton(sevButtons, 'data-desk-sev', activeSev);
+      applyFilters();
+      writeFilters();
+    });
+  }
+  for (const btn of cityButtons) {
+    btn.addEventListener('click', () => {
+      activeCity = btn.getAttribute('data-desk-city') ?? 'all';
+      setActiveButton(cityButtons, 'data-desk-city', activeCity);
       applyFilters();
       writeFilters();
     });
