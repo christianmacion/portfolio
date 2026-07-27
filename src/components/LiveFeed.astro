@@ -1,0 +1,320 @@
+---
+/**
+ * LiveFeed.astro — v7.7.2 UNIFIED LIVE FEED.
+ *
+ * Cross-source chronological feed that interleaves:
+ *   - GDELT events   (geopolitical / market-moving 24h signals)
+ *   - arXiv papers  (q-fin / stat.AP / cs.LG / cs.AI / cs.CL preprints)
+ *   - macro-wire    (Reuters / CoinDesk / The Block / CoinTelegraph)
+ *
+ * Reads src/data/live-feed-cache.json (built by scripts/build-live-feed.mjs).
+ * Items are pre-sorted DESC by timestamp and cross-feed-deduplicated.
+ *
+ * Visual register: light institutional / Bloomberg. Mono + 3 distinct
+ * source accents (gdelt → cobalt, arxiv → amber, macrowire → sage).
+ * No glow. No pills. No rotation. Reduced-motion fallback.
+ *
+ * Usage:
+ *   <LiveFeed />
+ *   <LiveFeed cap={50} />
+ */
+import liveFeedCache from '../data/live-feed-cache.json';
+
+interface Props {
+  /** Cap rendered items (default: all). The fetcher already caps at 100. */
+  cap?: number;
+  /** Show only items newer than this many hours (default: 24). */
+  windowHours?: number;
+}
+const { cap, windowHours = 24 } = Astro.props;
+
+interface LiveEvent {
+  id: string;
+  source: 'gdelt' | 'arxiv' | 'macrowire';
+  title: string;
+  link: string;
+  timestamp: string;
+  category: string;
+  severity?: string | null;
+  city?: string | null;
+  publisher?: string | null;
+  fingerprint: string;
+  domain: string;
+  related?: { source: string; id: string }[];
+}
+interface LiveFeedCache {
+  generated: string;
+  fetchedAt: string | null;
+  cap: number;
+  counts: { arxiv: number; macrowire: number; gdelt: number };
+  total: number;
+  events: LiveEvent[];
+}
+const cache = liveFeedCache as LiveFeedCache;
+
+// === Filter by window ===
+const now = new Date(cache.generated).getTime();
+const cutoffMs = now - windowHours * 60 * 60 * 1000;
+const freshEvents = cache.events.filter(
+  (e) => new Date(e.timestamp).getTime() >= cutoffMs,
+);
+const events: LiveEvent[] = cap ? freshEvents.slice(0, cap) : freshEvents;
+const hasItems = events.length > 0;
+
+// === Source → accent mapping ===
+const sourceAccent: Record<string, string> = {
+  gdelt: 'cobalt',
+  arxiv: 'warn',
+  macrowire: 'sage',
+};
+const sourceLabel: Record<string, string> = {
+  gdelt: 'GDELT',
+  arxiv: 'arXiv',
+  macrowire: 'WIRE',
+};
+const accentFor = (src: string): string => sourceAccent[src] ?? 'ink';
+
+// === Helpers ===
+function formatHm(iso: string): string {
+  if (!iso) return '';
+  const m = iso.match(/T(\d{2}:\d{2})/);
+  return m ? m[1] : '';
+}
+function formatDate(iso: string): string {
+  if (!iso) return '';
+  return iso.slice(0, 10);
+}
+function timeAgo(iso: string, refIso: string): string {
+  const t = new Date(iso).getTime();
+  const ref = new Date(refIso).getTime();
+  const min = Math.max(0, Math.floor((ref - t) / 60_000));
+  if (min < 60) return `${min}M`;
+  const hr = Math.floor(min / 60);
+  if (hr < 24) return `${hr}H`;
+  return `${Math.floor(hr / 24)}D`;
+}
+---
+
+<section class="live-feed" aria-label="Unified live feed — GDELT + arXiv + macro-wire">
+  <header class="live-feed__head">
+    <p class="live-feed__eyebrow mono">
+      UNIFIED · {cache.counts.gdelt} GDELT · {cache.counts.arxiv} arXiv · {cache.counts.macrowire} WIRE
+    </p>
+    <p class="live-feed__legend mono">
+      <span class="live-feed__chip live-feed__chip--cobalt">GDELT</span>
+      <span class="live-feed__sep" aria-hidden="true">·</span>
+      <span class="live-feed__chip live-feed__chip--warn">arXiv</span>
+      <span class="live-feed__sep" aria-hidden="true">·</span>
+      <span class="live-feed__chip live-feed__chip--sage">WIRE</span>
+      <span class="live-feed__cap-stamp mono">GENERATED {formatDate(cache.generated)} {formatHm(cache.generated)}</span>
+    </p>
+  </header>
+
+  {hasItems && (
+    <ol class="live-feed__list" aria-live="off" aria-atomic="false">
+      {events.map((e) => (
+        <li class={`live-feed__row live-feed__row--${accentFor(e.source)}`}>
+          <span class={`live-feed__source mono live-feed__source--${accentFor(e.source)}`}>
+            {sourceLabel[e.source]}
+          </span>
+          <span class="live-feed__hm mono" title={e.timestamp}>{timeAgo(e.timestamp, cache.generated)}</span>
+          <a
+            class="live-feed__title"
+            href={e.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            referrerpolicy="strict-origin-when-cross-origin"
+          >
+            {e.title}
+          </a>
+          <span class="live-feed__cat mono">
+            {e.city ? `${e.city.toUpperCase()} · ` : ''}{e.category.toUpperCase()}
+          </span>
+          {e.related && e.related.length > 0 && (
+            <span class="live-feed__related mono" title={`Also in: ${e.related.map((r) => r.source).join(', ')}`}>
+              ↔ {e.related.length}
+            </span>
+          )}
+        </li>
+      ))}
+    </ol>
+  )}
+
+  {!hasItems && (
+    <p class="live-feed__empty">
+      <span class="live-feed__chip live-feed__chip--ink">EMPTY</span>
+      <span class="live-feed__empty-text">NO ITEMS IN {windowHours}H WINDOW · LAST GOOD {formatDate(cache.fetchedAt || cache.generated)} {formatHm(cache.fetchedAt || cache.generated)}</span>
+    </p>
+  )}
+</section>
+
+<style>
+  /* === Container === */
+  .live-feed {
+    padding: 32px 0 48px;
+    border-block: 1px solid var(--c-rule);
+    background: var(--c-bg);
+  }
+
+  /* === Head === */
+  .live-feed__head {
+    margin-bottom: 16px;
+  }
+  .live-feed__eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--c-warn);
+    margin: 0 0 8px;
+    font-weight: 600;
+  }
+  .live-feed__legend {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--c-ink-3);
+    margin: 0;
+  }
+  .live-feed__chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border: 1px solid currentColor;
+    border-radius: 0;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+  .live-feed__chip--cobalt { color: var(--c-primary-2); }
+  .live-feed__chip--warn { color: var(--c-warn); }
+  .live-feed__chip--sage { color: var(--j-sage); }
+  .live-feed__chip--ink { color: var(--c-ink-3); }
+  .live-feed__sep { color: var(--c-ink-4); font-weight: 600; }
+  .live-feed__cap-stamp {
+    margin-left: auto;
+    color: var(--c-ink-3);
+    font-size: 9px;
+    letter-spacing: 0.04em;
+  }
+
+  /* === List === */
+  .live-feed__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-top: 1px solid var(--c-rule);
+  }
+  .live-feed__row {
+    display: grid;
+    grid-template-columns: 64px 36px 1fr 200px 32px;
+    gap: 12px;
+    align-items: baseline;
+    padding: 12px 8px;
+    border-bottom: 1px solid var(--c-rule);
+    transition: background 0.2s ease;
+  }
+  .live-feed__row:hover {
+    background: color-mix(in oklab, var(--c-amber) 4%, transparent);
+  }
+  .live-feed__row--cobalt { border-left: 2px solid var(--c-primary-2); }
+  .live-feed__row--warn { border-left: 2px solid var(--c-warn); }
+  .live-feed__row--sage { border-left: 2px solid var(--j-sage); }
+
+  .live-feed__source {
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 2px 6px;
+    border: 1px solid currentColor;
+    line-height: 1.4;
+    text-align: center;
+  }
+  .live-feed__source--cobalt { color: var(--c-primary-2); }
+  .live-feed__source--warn { color: var(--c-warn); }
+  .live-feed__source--sage { color: var(--j-sage); }
+
+  .live-feed__hm {
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    color: var(--c-ink-3);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
+    text-align: right;
+  }
+
+  .live-feed__title {
+    font: 500 13px / 1.4 var(--ff-sans);
+    color: var(--c-ink);
+    text-decoration: none;
+    transition: color 200ms var(--j-ease-out);
+  }
+  .live-feed__title:hover {
+    color: var(--c-warn);
+  }
+
+  .live-feed__cat {
+    font-size: 9.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--c-ink-3);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .live-feed__related {
+    font-size: 10px;
+    color: var(--c-warn);
+    text-align: right;
+    font-weight: 600;
+    cursor: help;
+  }
+
+  /* === Empty === */
+  .live-feed__empty {
+    margin: 0;
+    padding: 24px 0;
+    color: var(--c-ink-2);
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .live-feed__empty-text {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* === Responsive === */
+  @media (max-width: 900px) {
+    .live-feed__row {
+      grid-template-columns: 56px 32px 1fr;
+      gap: 8px;
+    }
+    .live-feed__cat,
+    .live-feed__related {
+      grid-column: 3;
+      margin-top: 4px;
+    }
+  }
+  @media (max-width: 720px) {
+    .live-feed__cap-stamp {
+      margin-left: 0;
+      flex-basis: 100%;
+      margin-top: 4px;
+    }
+  }
+
+  /* === Reduced motion === */
+  @media (prefers-reduced-motion: reduce) {
+    .live-feed__row:hover {
+      background: transparent;
+    }
+    .live-feed__title {
+      transition: none;
+    }
+  }
+</style>
