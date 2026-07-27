@@ -2,12 +2,13 @@
 /**
  * colophon.astro — v1.0 · the design system, made visible.
  *
- * Five sections:
+ * Six sections:
  *   (a) Type              — Inter, JetBrains Mono, KaTeX_Main. 4-step scale.
  *   (b) Color palette     — 4 swatches across, with hex and role label.
  *   (c) Spacing scale     — 6 cells: --sp-2 → --sp-7 with their px values.
  *   (d) Motion vocabulary — table of 5 effects with durations.
  *   (e) Accessibility     — WCAG AA contrast pairs, skip-nav, focus-visible.
+ *   (f) Ship history      — v7.5 → v7.7.7 milestones, audit gates, deploy cadence.
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
 import CTABanner from '@components/CTABanner.astro';
@@ -120,6 +121,61 @@ const typeScaleCount = typeScale.length;
 const paletteCount = palette.length;
 const spacingCount = spacing.length;
 const motionCount = motion.length;
+
+// === (f) Ship history — v7.5 → v7.7.7 audit gates + deploy cadence ========
+// v7.30 — moved the version-history tail out of /for-recruiters and into the
+// colophon where the chrome (mono caps, table-row) matches a design-system
+// reference page. Each row carries version + summary + audit gate count so
+// the cadence is visible without leaving the colophon.
+const shipHistory = [
+  {
+    version: 'v7.7.7',
+    label: 'For-recruiters polish',
+    summary: 'Senior-QR register + signature/NEXT closer mirroring homepage v7.22.',
+    gates: 14,
+  },
+  {
+    version: 'v7.7.6',
+    label: 'Link-rot CI gate',
+    summary:
+      'scripts/check-link-rot.mjs — HEAD-check every outbound link; 11 real dead links fixed.',
+    gates: 14,
+  },
+  {
+    version: 'v7.7.5',
+    label: 'A11y CI gate (axe-core)',
+    summary:
+      'scripts/scan-a11y.mjs — 9 real a11y bugs fixed across /proof /projects /desk /workbooks/* EarthMap.',
+    gates: 13,
+  },
+  {
+    version: 'v7.7.4',
+    label: 'Globe earth + night-mask',
+    summary: 'EarthMap orthographic globe + cobalt glow rim + 96-star sky; terminator tracks Sun.',
+    gates: 12,
+  },
+  {
+    version: 'v7.7.0',
+    label: 'Live-world EarthMap',
+    summary:
+      'arXiv + macro-wire feeds + ArxivRadar + LiveWire + CoverageGlobe. 15 canonical data sources.',
+    gates: 12,
+  },
+  {
+    version: 'v7.6.x',
+    label: 'Matcha + terracotta palette',
+    summary:
+      'Owner feedback 2026-07-26: matcha primary + terracotta 2nd accent + amber single-accent callout.',
+    gates: 10,
+  },
+  {
+    version: 'v7.5',
+    label: 'STELLA-public-safe ship',
+    summary:
+      '7-section home two-pillar — NDA-clean, persona-agnostic, portfolio-positioning level.',
+    gates: 8,
+  },
+];
 ---
 
 <BaseLayout
@@ -378,6 +434,49 @@ const motionCount = motion.length;
     </div>
   </section>
 
+  <section class="section section--alt" data-reveal>
+    <div class="container">
+      <header class="section__head">
+        <p class="section__eyebrow">(f) · Ship history</p>
+        <h2 class="section__title">
+          v7.5 → v7.7.7. {shipHistory.length} milestones, {
+            shipHistory.reduce((n, s) => Math.max(n, s.gates), 0)
+          } audit gates.
+        </h2>
+        <p class="section__sub">
+          Every ship runs the full audit chain — lint, format, knip, no-bulbs, build, no-f14,
+          no-halo, bundle-budget, perf-audit, a11y-scan, link-rot, NDA-audit, sitemap-check. Gate
+          count grew with each new defense layer.
+        </p>
+      </header>
+
+      <div class="motion-wrap">
+        <table class="ship-history">
+          <thead>
+            <tr>
+              <th scope="col" class="mono">Version</th>
+              <th scope="col">Milestone</th>
+              <th scope="col">Summary</th>
+              <th scope="col" class="mono">Gates</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              shipHistory.map((s) => (
+                <tr>
+                  <td class="mono ship-history__version">{s.version}</td>
+                  <td class="ship-history__label">{s.label}</td>
+                  <td class="ship-history__summary">{s.summary}</td>
+                  <td class="mono ship-history__gates">{s.gates}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
   <CTABanner
     title="Design system source on disk."
     sub="src/styles/tokens.css is the canonical source. PRs that change a token are expected to update the colophon on the same commit."
@@ -631,6 +730,79 @@ const motionCount = motion.length;
       gap: var(--sp-1);
     }
     .type-scale__role {
+      text-align: left;
+    }
+  }
+
+  /* === v7.30 — (f) Ship history table ====================================== */
+  .ship-history {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--fs-sm);
+  }
+  .ship-history thead th {
+    text-align: left;
+    padding: var(--sp-3) var(--sp-3);
+    border-bottom: 2px solid var(--c-rule);
+    color: var(--c-ink-3);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: var(--fs-xs);
+    font-family: var(--ff-mono);
+  }
+  .ship-history tbody td {
+    padding: var(--sp-3);
+    border-bottom: 1px solid var(--c-rule-soft);
+    color: var(--c-ink-2);
+    line-height: 1.45;
+    vertical-align: top;
+  }
+  .ship-history tbody tr:last-child td {
+    border-bottom: none;
+  }
+  .ship-history__version {
+    color: var(--c-amber-deep);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .ship-history__label {
+    color: var(--c-ink);
+    font-weight: 600;
+  }
+  .ship-history__summary {
+    color: var(--c-ink-2);
+  }
+  .ship-history__gates {
+    color: var(--c-amber-deep);
+    font-weight: 600;
+    text-align: right;
+    white-space: nowrap;
+  }
+  @media (max-width: 720px) {
+    .ship-history thead {
+      display: none;
+    }
+    .ship-history,
+    .ship-history tbody,
+    .ship-history tr,
+    .ship-history td {
+      display: block;
+      width: 100%;
+    }
+    .ship-history tr {
+      padding: var(--sp-3) 0;
+      border-bottom: 1px solid var(--c-rule);
+    }
+    .ship-history td {
+      padding: var(--sp-1) 0;
+      border: none;
+    }
+    .ship-history__version {
+      display: inline-block;
+      margin-right: var(--sp-2);
+    }
+    .ship-history__gates {
       text-align: left;
     }
   }
