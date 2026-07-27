@@ -1,7 +1,7 @@
 {
   "name": "christianmacion-portfolio",
   "type": "module",
-  "version": "7.7.19",
+  "version": "7.7.20",
   "private": true,
   "description": "Christian T. Macion — AI Engineer + Quantitative Researcher. Personal portfolio site.",
   "scripts": {
@@ -30,7 +30,7 @@
     "version:bump": "tsx scripts/bump-version.ts",
     "sitemap:check": "tsx scripts/validate-sitemap.ts",
     "typecheck": "astro check",
-    "ci": "npm run lint:md && npm run lint && npm run format:check && npm run knip && npm run no-bulbs && npm run build && npm run verify:anchors && npm run no-f14 && npm run no-halo && npm run bundle:budget && npm run perf:audit && npm run a11y:scan && npm run contrast:check && npm run headings:check && npm run link:rot && npm run anchor:rot && npm run link:target:validity && npm run live:integrity && npm run meta:integrity && npm run feed:integrity && npm run sitemap:integrity && npm run jsonld:integrity && npm run og:integrity && npm run audit && npm run sitemap:check",
+    "ci": "npm run lint:md && npm run lint && npm run format:check && npm run knip && npm run no-bulbs && npm run build && npm run verify:anchors && npm run no-f14 && npm run no-halo && npm run bundle:budget && npm run perf:audit && npm run a11y:scan && npm run contrast:check && npm run headings:check && npm run link:rot && npm run anchor:rot && npm run link:target:validity && npm run live:integrity && npm run meta:integrity && npm run feed:integrity && npm run sitemap:integrity && npm run jsonld:integrity && npm run og:integrity && npm run canonical:url:integrity && npm run audit && npm run sitemap:check",
     "no-bulbs": "bash scripts/check-no-lightbulb-halos.sh",
     "no-f14": "bash scripts/check-no-f14-traffic-light.sh",
     "headings:check": "node scripts/check-heading-hierarchy.mjs",
@@ -43,6 +43,7 @@
     "sitemap:integrity": "node scripts/check-sitemap-integrity.mjs",
     "jsonld:integrity": "node scripts/check-jsonld-integrity.mjs",
     "og:integrity": "node scripts/check-og-integrity.mjs",
+    "canonical:url:integrity": "node scripts/check-canonical-url-integrity.mjs",
     "bundle:budget": "node scripts/check-bundle-budget.mjs",
     "no-halo": "grep -rn 'box-shadow:\\s*0\\s*0\\s*[1-9][0-9]' src/ 2>/dev/null && echo 'FAIL: halo/glow box-shadow detected' && exit 1 || echo 'PASS: no halo/glow box-shadows'",
     "verify:anchors": "node scripts/verify-anchors.mjs",
