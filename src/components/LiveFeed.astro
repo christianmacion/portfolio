@@ -1,6 +1,6 @@
 ---
 /**
- * LiveFeed.astro — v7.7.2 UNIFIED LIVE FEED.
+ * LiveFeed.astro — v7.9.1 UNIFIED LIVE FEED + POLISH.
  *
  * Cross-source chronological feed that interleaves:
  *   - GDELT events   (geopolitical / market-moving 24h signals)
@@ -10,13 +10,18 @@
  * Reads src/data/live-feed-cache.json (built by scripts/build-live-feed.mjs).
  * Items are pre-sorted DESC by timestamp and cross-feed-deduplicated.
  *
+ * v7.9.1 polish:
+ *   - Filter chips (ALL · GDELT · arXiv · WIRE) — toggle source visibility
+ *   - Search input — substring match against title (case-insensitive)
+ *   - Anchor links — `#event-<id>` permalinks on every row + auto-copy
+ *   - earth:venue-focus / earth:country-focus listeners — scroll into view
+ *     when the user clicks a city or country on /desk
+ *   - URL hash deep-link — if `#event-<id>` is in the URL on load, scroll
+ *     to that row + highlight it
+ *
  * Visual register: light institutional / Bloomberg. Mono + 3 distinct
  * source accents (gdelt → cobalt, arxiv → amber, macrowire → sage).
  * No glow. No pills. No rotation. Reduced-motion fallback.
- *
- * Usage:
- *   <LiveFeed />
- *   <LiveFeed cap={50} />
  */
 import liveFeedCache from '../data/live-feed-cache.json';
 
@@ -94,9 +99,31 @@ function timeAgo(iso: string, refIso: string): string {
   if (hr < 24) return `${hr}H`;
   return `${Math.floor(hr / 24)}D`;
 }
+
+/**
+ * Local-time clock string at the venue's longitude.
+ * v7.9.2 — arXiv papers don't carry a venue; use UTC. GDELT + WIRE
+ * use coords.lon → nearest 15° offset (UTC±12 max). Daylight-saving is
+ * NOT applied (offset-from-lon approximation), but that's fine for a
+ * 24h feed where the absolute clock face is the institutional reading.
+ */
+function localClock(iso: string, lon: number | undefined): string {
+  if (!iso) return '';
+  const offsetHours = lon === undefined ? 0 : Math.round(lon / 15);
+  const utcMs = new Date(iso).getTime();
+  const localMs = utcMs + offsetHours * 60 * 60 * 1000;
+  const d = new Date(localMs);
+  const hh = String(d.getUTCHours()).padStart(2, '0');
+  const mm = String(d.getUTCMinutes()).padStart(2, '0');
+  const sign = offsetHours >= 0 ? '+' : '';
+  return `${hh}:${mm} GMT${sign}${offsetHours}`;
+}
+function tzOffset(lon: number | undefined): number {
+  return lon === undefined ? 0 : Math.round(lon / 15);
+}
 ---
 
-<section class="live-feed" aria-label="Unified live feed — GDELT + arXiv + macro-wire">
+<section class="live-feed" aria-label="Unified live feed — GDELT + arXiv + macro-wire" data-live-feed>
   <header class="live-feed__head">
     <p class="live-feed__eyebrow mono">
       UNIFIED · {cache.counts.gdelt} GDELT · {cache.counts.arxiv} arXiv · {cache.counts.macrowire} WIRE
@@ -111,18 +138,54 @@ function timeAgo(iso: string, refIso: string): string {
     </p>
   </header>
 
+  {/* === v7.9.1 polish — filter chips + search input ========================= */}
   {hasItems && (
-    <ol class="live-feed__list" aria-live="off" aria-atomic="false">
+    <div class="live-feed__filters" role="toolbar" aria-label="Filter live feed">
+      <div class="live-feed__chips" role="group" aria-label="Source filter">
+        <button type="button" class="live-feed__chip-btn live-feed__chip-btn--active" data-source-filter="all">ALL</button>
+        <button type="button" class="live-feed__chip-btn" data-source-filter="gdelt">GDELT</button>
+        <button type="button" class="live-feed__chip-btn" data-source-filter="arxiv">arXiv</button>
+        <button type="button" class="live-feed__chip-btn" data-source-filter="macrowire">WIRE</button>
+      </div>
+      <label class="live-feed__search">
+        <span class="sr-only">Search live feed titles</span>
+        <input
+          type="search"
+          class="live-feed__search-input mono"
+          placeholder="SEARCH TITLE…"
+          aria-label="Search live feed by title"
+          autocomplete="off"
+          spellcheck="false"
+          data-search-input
+        />
+      </label>
+      <p class="live-feed__count mono" data-visible-count>
+        {events.length} VISIBLE
+      </p>
+    </div>
+  )}
+
+  {hasItems && (
+    <ol class="live-feed__list" aria-live="off" aria-atomic="false" data-live-list>
       {events.map((e) => (
         <li class={`live-feed__row live-feed__row--${accentFor(e.source)}`}
+            id={`event-${e.id}`}
             data-event-id={e.id}
             data-event-source={e.source}
             data-event-lat={e.coords?.lat ?? ''}
-            data-event-lon={e.coords?.lon ?? ''}>
+            data-event-lon={e.coords?.lon ?? ''}
+            data-event-tz={tzOffset(e.coords?.lon)}
+            data-event-city={(e.city ?? '').toLowerCase()}
+            data-event-title={e.title.toLowerCase()}
+            data-event-category={e.category.toLowerCase()}>
           <span class={`live-feed__source mono live-feed__source--${accentFor(e.source)}`}>
             {sourceLabel[e.source]}
           </span>
-          <span class="live-feed__hm mono" title={e.timestamp}>{timeAgo(e.timestamp, cache.generated)}</span>
+          <span class="live-feed__hm mono" title={e.timestamp}>
+            <span class="live-feed__hm-ago">{timeAgo(e.timestamp, cache.generated)}</span>
+            {/* v7.9.2 — venue-local clock (e.g. 15:15 GMT+8) shown on hover */}
+            <span class="live-feed__hm-local">{localClock(e.timestamp, e.coords?.lon)}</span>
+          </span>
           <a
             class="live-feed__title"
             href={e.link}
@@ -140,6 +203,16 @@ function timeAgo(iso: string, refIso: string): string {
               ↔ {e.related.length}
             </span>
           )}
+          {/* v7.9.1 — anchor link for permalinks */}
+          <a
+            class="live-feed__anchor mono"
+            href={`#event-${e.id}`}
+            aria-label={`Permalink to ${e.title}`}
+            data-anchor-link
+            onclick="navigator.clipboard?.writeText(this.href);return false;"
+          >
+            #
+          </a>
         </li>
       ))}
     </ol>
@@ -205,6 +278,83 @@ function timeAgo(iso: string, refIso: string): string {
     letter-spacing: 0.04em;
   }
 
+  /* === v7.9.1 — filter row ============================================= */
+  .live-feed__filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0 14px;
+    border-bottom: 1px solid var(--c-rule);
+    margin-bottom: 8px;
+  }
+  .live-feed__chips {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .live-feed__chip-btn {
+    appearance: none;
+    background: transparent;
+    border: 1px solid var(--c-rule);
+    color: var(--c-ink-2);
+    padding: 4px 10px;
+    font: 600 10px / 1.4 var(--ff-mono);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition:
+      background 120ms ease,
+      color 120ms ease,
+      border-color 120ms ease;
+  }
+  .live-feed__chip-btn:hover {
+    border-color: var(--c-ink-2);
+    color: var(--c-ink);
+  }
+  .live-feed__chip-btn:focus-visible {
+    outline: 2px solid var(--c-amber);
+    outline-offset: 1px;
+  }
+  .live-feed__chip-btn--active {
+    background: var(--c-ink);
+    color: var(--c-bg);
+    border-color: var(--c-ink);
+  }
+  .live-feed__search {
+    flex: 1 1 220px;
+    min-width: 180px;
+    max-width: 360px;
+    display: inline-block;
+  }
+  .live-feed__search-input {
+    width: 100%;
+    appearance: none;
+    background: transparent;
+    border: 1px solid var(--c-rule);
+    color: var(--c-ink);
+    padding: 5px 10px;
+    font: 500 11px / 1.4 var(--ff-mono);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .live-feed__search-input::placeholder {
+    color: var(--c-ink-4);
+    letter-spacing: 0.12em;
+  }
+  .live-feed__search-input:focus-visible {
+    outline: 2px solid var(--c-amber);
+    outline-offset: 1px;
+    border-color: var(--c-amber);
+  }
+  .live-feed__count {
+    margin: 0 0 0 auto;
+    color: var(--c-ink-3);
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
   /* === List === */
   .live-feed__list {
     list-style: none;
@@ -214,15 +364,30 @@ function timeAgo(iso: string, refIso: string): string {
   }
   .live-feed__row {
     display: grid;
-    grid-template-columns: 64px 36px 1fr 200px 32px;
+    grid-template-columns: 64px 36px 1fr 200px 32px 18px;
     gap: 12px;
     align-items: baseline;
     padding: 12px 8px;
     border-bottom: 1px solid var(--c-rule);
-    transition: background 0.2s ease;
+    transition:
+      background 0.2s ease,
+      box-shadow 0.2s ease;
+    scroll-margin-top: 80px;
   }
   .live-feed__row:hover {
     background: color-mix(in oklab, var(--c-amber) 4%, transparent);
+  }
+  /* v7.9.1 — dimmed state when filtered out */
+  .live-feed__row[data-filtered='1'] {
+    display: none;
+  }
+  /* v7.9.1 — highlight when scroll-to-focus or hash-deep-link targets it */
+  .live-feed__row[data-flash='1'] {
+    animation: live-row-flash 1.6s var(--j-ease-out) both;
+  }
+  @keyframes live-row-flash {
+    0%   { background: color-mix(in oklab, var(--c-amber) 26%, transparent); }
+    100% { background: transparent; }
   }
   .live-feed__row--cobalt { border-left: 2px solid var(--c-primary-2); }
   .live-feed__row--warn { border-left: 2px solid var(--c-warn); }
@@ -249,6 +414,23 @@ function timeAgo(iso: string, refIso: string): string {
     font-variant-numeric: tabular-nums;
     font-feature-settings: 'tnum' 1;
     text-align: right;
+    position: relative;
+  }
+  /* v7.9.2 — venue-local clock is hidden by default, fades in on row hover.
+     Stays inside the same grid cell so the layout doesn't reflow. */
+  .live-feed__hm-local {
+    display: block;
+    font-size: 9px;
+    color: var(--c-warn);
+    letter-spacing: 0.06em;
+    margin-top: 2px;
+    opacity: 0;
+    transition: opacity 160ms ease;
+    pointer-events: none;
+  }
+  .live-feed__row:hover .live-feed__hm-local,
+  .live-feed__row:focus-within .live-feed__hm-local {
+    opacity: 1;
   }
 
   .live-feed__title {
@@ -279,6 +461,23 @@ function timeAgo(iso: string, refIso: string): string {
     cursor: help;
   }
 
+  /* v7.9.1 — anchor link for permalinks */
+  .live-feed__anchor {
+    font-size: 11px;
+    color: var(--c-ink-4);
+    text-decoration: none;
+    text-align: center;
+    transition: color 120ms ease;
+    line-height: 1.4;
+  }
+  .live-feed__anchor:hover {
+    color: var(--c-warn);
+  }
+  .live-feed__anchor:focus-visible {
+    outline: 2px solid var(--c-amber);
+    outline-offset: 1px;
+  }
+
   /* === Empty === */
   .live-feed__empty {
     margin: 0;
@@ -293,10 +492,23 @@ function timeAgo(iso: string, refIso: string): string {
     font-variant-numeric: tabular-nums;
   }
 
+  /* === sr-only utility (a11y) === */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
   /* === Responsive === */
   @media (max-width: 900px) {
     .live-feed__row {
-      grid-template-columns: 56px 32px 1fr;
+      grid-template-columns: 56px 32px 1fr 18px;
       gap: 8px;
     }
     .live-feed__cat,
@@ -304,12 +516,23 @@ function timeAgo(iso: string, refIso: string): string {
       grid-column: 3;
       margin-top: 4px;
     }
+    .live-feed__anchor {
+      grid-column: 4;
+    }
+    .live-feed__count {
+      flex-basis: 100%;
+      margin-left: 0;
+    }
   }
   @media (max-width: 720px) {
     .live-feed__cap-stamp {
       margin-left: 0;
       flex-basis: 100%;
       margin-top: 4px;
+    }
+    .live-feed__search {
+      flex-basis: 100%;
+      max-width: none;
     }
   }
 
@@ -321,26 +544,27 @@ function timeAgo(iso: string, refIso: string): string {
     .live-feed__title {
       transition: none;
     }
+    .live-feed__row[data-flash='1'] {
+      animation: none;
+    }
   }
 </style>
 
 <script>
   /**
-   * earth-hover-emit.ts (inlined for static-output safety)
-   * v7.7.3 ROW HOVER → earth:focus EMITTER.
+   * v7.9.1 — earth-hover-emit + filter / search / focus-scroll.
    *
-   * Each .live-feed__row carries data-event-id and data-event-{source,lat,lon}.
-   * On `mouseenter` (and `focusin` for keyboard users), this script
-   * dispatches CustomEvent('earth:focus', { detail: { id, lat, lon } }).
-   * The /desk earth listens via the script in EarthMap.astro and pulses
-   * the matching Layer C / Layer E marker for 1.2s.
-   *
-   * No deps. Same-page focus works; cross-tab works via the localStorage
-   * ping the EarthMap listener subscribes to. Reduced-motion users get a
-   * 600ms emit-and-forget pulse (still useful for screen-reader users).
+   * 1. Filter chips (ALL · GDELT · arXiv · WIRE) toggle visibility.
+   * 2. Search input filters by title substring (case-insensitive).
+   * 3. earth:venue-focus / earth:country-focus → scroll first matching row
+   *    into view + flash highlight.
+   * 4. URL hash `#event-<id>` on load → scroll + flash.
+   * 5. Anchor link click copies the permalink to clipboard.
    */
   const EMIT_COOLDOWN_MS = 80;
+  const FLASH_DURATION_MS = 1600;
 
+  /* === earth:focus emit (preserved) ====================================== */
   document.addEventListener('mouseover', (ev) => {
     const target = ev.target as HTMLElement | null;
     if (!target) return;
@@ -351,8 +575,6 @@ function timeAgo(iso: string, refIso: string): string {
     const lastId = row.getAttribute('data-last-emit');
     const lastTs = Number(row.getAttribute('data-last-ts') ?? '0');
     const now = Date.now();
-    // Throttle: same row within cooldown is a no-op so jittering the
-    // mouse over a long row doesn't fire 30 events/sec.
     if (lastId === id && now - lastTs < EMIT_COOLDOWN_MS) return;
     row.setAttribute('data-last-emit', id);
     row.setAttribute('data-last-ts', String(now));
@@ -365,7 +587,6 @@ function timeAgo(iso: string, refIso: string): string {
     }));
   });
 
-  // Keyboard parity — Tab-focusing a row emits the same focus event.
   document.addEventListener('focusin', (ev) => {
     const target = ev.target as HTMLElement | null;
     if (!target) return;
@@ -381,4 +602,122 @@ function timeAgo(iso: string, refIso: string): string {
       },
     }));
   });
+
+  /* === v7.9.1 — filter chips + search ==================================== */
+  const root = document.querySelector<HTMLElement>('[data-live-feed]');
+  const list = document.querySelector<HTMLElement>('[data-live-list]');
+  const counter = document.querySelector<HTMLElement>('[data-visible-count]');
+  const searchInput = document.querySelector<HTMLInputElement>('[data-search-input]');
+  const chipButtons = document.querySelectorAll<HTMLButtonElement>('[data-source-filter]');
+
+  let activeSource = 'all';
+  let activeQuery = '';
+
+  function flashRow(row: HTMLElement): void {
+    row.setAttribute('data-flash', '1');
+    window.setTimeout(() => row.removeAttribute('data-flash'), FLASH_DURATION_MS);
+  }
+
+  function applyFilters(): void {
+    if (!list) return;
+    const rows = list.querySelectorAll<HTMLElement>('.live-feed__row');
+    let visible = 0;
+    for (const row of rows) {
+      const source = row.dataset.eventSource ?? '';
+      const title = row.dataset.eventTitle ?? '';
+      const city = row.dataset.eventCity ?? '';
+      const sourceOk = activeSource === 'all' || source === activeSource;
+      const queryOk = !activeQuery || title.includes(activeQuery) || city.includes(activeQuery);
+      const show = sourceOk && queryOk;
+      if (show) {
+        row.removeAttribute('data-filtered');
+        visible++;
+      } else {
+        row.setAttribute('data-filtered', '1');
+      }
+    }
+    if (counter) counter.textContent = `${visible} VISIBLE`;
+  }
+
+  for (const btn of chipButtons) {
+    btn.addEventListener('click', () => {
+      for (const other of chipButtons) {
+        other.classList.remove('live-feed__chip-btn--active');
+      }
+      btn.classList.add('live-feed__chip-btn--active');
+      activeSource = btn.dataset.sourceFilter ?? 'all';
+      applyFilters();
+    });
+  }
+
+  searchInput?.addEventListener('input', () => {
+    activeQuery = (searchInput.value ?? '').trim().toLowerCase();
+    applyFilters();
+  });
+
+  /* === v7.9.1 — earth:venue-focus / earth:country-focus scroll ============ */
+  function findFirstRowByCity(city: string): HTMLElement | null {
+    if (!list) return null;
+    const key = city.toLowerCase();
+    return list.querySelector<HTMLElement>(
+      `.live-feed__row[data-event-city="${CSS.escape(key)}"]`,
+    );
+  }
+  function findFirstRowByCountry(countryName: string): HTMLElement | null {
+    if (!list) return null;
+    // Country focus carries the country name. We match the title for any
+    // country-named substring; this is heuristic but cheap.
+    const key = countryName.toLowerCase();
+    return list.querySelector<HTMLElement>(
+      `.live-feed__row[data-event-title*="${CSS.escape(key)}"]`,
+    );
+  }
+
+  window.addEventListener('earth:venue-focus', (ev: Event) => {
+    const detail = (ev as CustomEvent<{ city?: string }>).detail;
+    if (!detail?.city) return;
+    const row = findFirstRowByCity(detail.city);
+    if (!row) return;
+    row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    flashRow(row);
+  });
+
+  window.addEventListener('earth:country-focus', (ev: Event) => {
+    const detail = (ev as CustomEvent<{ name?: string }>).detail;
+    if (!detail?.name) return;
+    const row = findFirstRowByCountry(detail.name);
+    if (!row) return;
+    row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    flashRow(row);
+  });
+
+  /* === v7.9.1 — URL hash deep-link on load ================================ */
+  function scrollToHashTarget(): void {
+    const hash = window.location.hash;
+    if (!hash || !hash.startsWith('#event-')) return;
+    const target = document.querySelector<HTMLElement>(hash);
+    if (!target) return;
+    // Wait for layout to settle (filters applied above).
+    requestAnimationFrame(() => {
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      flashRow(target);
+    });
+  }
+  scrollToHashTarget();
+  window.addEventListener('hashchange', scrollToHashTarget);
+
+  /* === v7.9.1 — prevent duplicate flash on anchor click ================== */
+  document.querySelectorAll<HTMLAnchorElement>('[data-anchor-link]').forEach((a) => {
+    a.addEventListener('click', () => {
+      const hash = a.getAttribute('href') ?? '';
+      if (hash) {
+        history.replaceState(null, '', hash);
+        const target = document.querySelector<HTMLElement>(hash);
+        if (target) flashRow(target);
+      }
+    });
+  });
+
+  /* === Refs to silence unused-var lints for the root node ================ */
+  void root;
 </script>
