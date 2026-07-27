@@ -1,14 +1,31 @@
 {
-  "generated": "2026-07-27T21:47:35.227Z",
-  "fetchedAt": "2026-07-27T21:47:34.364Z",
+  "generated": "2026-07-27T21:54:10.716Z",
+  "fetchedAt": "2026-07-27T21:54:09.739Z",
   "cap": 100,
   "counts": {
     "arxiv": 20,
     "macrowire": 30,
-    "gdelt": 43
+    "gdelt": 38
   },
-  "total": 93,
+  "total": 88,
   "events": [
+    {
+      "id": "macrowire-trump says us and tehran having good talks as dr",
+      "source": "macrowire",
+      "title": "Trump says US and Tehran having 'good talks' as drones hit Iran's neighbours - Reuters",
+      "link": "https://news.google.com/rss/articles/CBMizAFBVV95cUxQYTcyMDhXSXVNVFp4QlpqSGdQc3ZqaFN0c1hYSml1ZWhZS1FXbVN1Ql8zYUllVkpETjdMbXNRWUV3eHVqZWFnYnlBY1pvTzQ0WGNESmRyOGhCaFU4dEZwQXptVEV6Q19xb2FBVGxuLWFmUUZ0c0hjRFAzZXJMN2RYd0diYnJQM1M0Ylp6NWp1M0NBMFlFWi1scUNFRGtJblVFUEJzWF9iRTY3QXY4OFZuWmM4Rk01NFF6REllM0NpSEVXVmd3OFc5bnc0ZFM?oc=5",
+      "timestamp": "2026-07-27T21:32:50.000Z",
+      "category": "REUTERS",
+      "severity": null,
+      "city": "London, UK",
+      "publisher": "REUTERS",
+      "fingerprint": "trump says us and tehran having good talks as drones hit iran s neighbours reuters",
+      "domain": "news.google.com",
+      "coords": {
+        "lat": 51.5074,
+        "lon": -0.1278
+      }
+    },
     {
       "id": "macrowire-cross river to enable p2p payments banking servi",
       "source": "macrowire",
@@ -58,23 +75,6 @@
       "coords": {
         "lat": 40.7128,
         "lon": -74.006
-      }
-    },
-    {
-      "id": "macrowire-trump says us and tehran having good talks as dr",
-      "source": "macrowire",
-      "title": "Trump says US and Tehran having 'good talks' as drones hit Iran's neighbours - Reuters",
-      "link": "https://news.google.com/rss/articles/CBMizAFBVV95cUxQYTcyMDhXSXVNVFp4QlpqSGdQc3ZqaFN0c1hYSml1ZWhZS1FXbVN1Ql8zYUllVkpETjdMbXNRWUV3eHVqZWFnYnlBY1pvTzQ0WGNESmRyOGhCaFU4dEZwQXptVEV6Q19xb2FBVGxuLWFmUUZ0c0hjRFAzZXJMN2RYd0diYnJQM1M0Ylp6NWp1M0NBMFlFWi1scUNFRGtJblVFUEJzWF9iRTY3QXY4OFZuWmM4Rk01NFF6REllM0NpSEVXVmd3OFc5bnc0ZFM?oc=5",
-      "timestamp": "2026-07-27T19:59:20.000Z",
-      "category": "REUTERS",
-      "severity": null,
-      "city": "London, UK",
-      "publisher": "REUTERS",
-      "fingerprint": "trump says us and tehran having good talks as drones hit iran s neighbours reuters",
-      "domain": "news.google.com",
-      "coords": {
-        "lat": 51.5074,
-        "lon": -0.1278
       }
     },
     {
@@ -520,607 +520,546 @@
       }
     },
     {
-      "id": "gdelt-can yield vancouver",
+      "id": "gdelt-usa yield minnesota",
       "source": "gdelt",
-      "title": "CAN yield · Vancouver",
-      "link": "https://gdelt.org/event/1315582552",
+      "title": "USA yield · Minnesota",
+      "link": "https://gdelt.org/event/1315584331",
       "timestamp": "2026-07-27T12:00:00Z",
       "category": "central-bank",
       "severity": "critical",
-      "city": "Vancouver",
+      "city": "Minnesota",
       "publisher": null,
-      "fingerprint": "can yield vancouver",
+      "fingerprint": "usa yield minnesota",
       "domain": "gdelt.org",
       "coords": {
-        "lat": 49.25,
-        "lon": -123.133
+        "lat": 45.7326,
+        "lon": -93.9196
       }
     },
     {
-      "id": "gdelt-chl yield santiago",
+      "id": "gdelt-yield iran",
       "source": "gdelt",
-      "title": "CHL yield · Santiago",
-      "link": "https://gdelt.org/event/1315582729",
+      "title": "yield · Iran",
+      "link": "https://gdelt.org/event/1315584676",
       "timestamp": "2026-07-27T12:00:00Z",
       "category": "geopolitical",
       "severity": "critical",
-      "city": "Santiago",
+      "city": "Iran",
       "publisher": null,
-      "fingerprint": "chl yield santiago",
+      "fingerprint": "yield iran",
       "domain": "gdelt.org",
       "coords": {
-        "lat": -33.45,
-        "lon": -70.6667
+        "lat": 32,
+        "lon": 53
       }
     },
     {
-      "id": "gdelt-yield evans creek",
+      "id": "gdelt-usa yield iran",
       "source": "gdelt",
-      "title": "yield · Evans Creek",
-      "link": "https://gdelt.org/event/1315582905",
+      "title": "USA yield · Iran",
+      "link": "https://gdelt.org/event/1315584684",
+      "timestamp": "2026-07-27T12:00:00Z",
+      "category": "central-bank",
+      "severity": "critical",
+      "city": "Iran",
+      "publisher": null,
+      "fingerprint": "usa yield iran",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 32,
+        "lon": 53
+      },
+      "related": [
+        {
+          "source": "gdelt",
+          "id": "gdelt-usa yield iran"
+        }
+      ]
+    },
+    {
+      "id": "gdelt-usa yield riverwood",
+      "source": "gdelt",
+      "title": "USA yield · Riverwood",
+      "link": "https://gdelt.org/event/1315584823",
+      "timestamp": "2026-07-27T12:00:00Z",
+      "category": "central-bank",
+      "severity": "critical",
+      "city": "Riverwood",
+      "publisher": null,
+      "fingerprint": "usa yield riverwood",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 38.9054,
+        "lon": -77.1025
+      }
+    },
+    {
+      "id": "gdelt-aid alabama",
+      "source": "gdelt",
+      "title": "aid · Alabama",
+      "link": "https://gdelt.org/event/1315584256",
       "timestamp": "2026-07-27T12:00:00Z",
       "category": "geopolitical",
       "severity": "critical",
-      "city": "Evans Creek",
+      "city": "Alabama",
       "publisher": null,
-      "fingerprint": "yield evans creek",
+      "fingerprint": "aid alabama",
       "domain": "gdelt.org",
       "coords": {
-        "lat": 42.6821,
-        "lon": -121.039
+        "lat": 32.799,
+        "lon": -86.8073
       }
     },
     {
-      "id": "gdelt-yield deschutes",
+      "id": "gdelt-usa diplomacy delaware",
       "source": "gdelt",
-      "title": "yield · Deschutes",
-      "link": "https://gdelt.org/event/1315582906",
-      "timestamp": "2026-07-27T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "critical",
-      "city": "Deschutes",
-      "publisher": null,
-      "fingerprint": "yield deschutes",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 44.1565,
-        "lon": -121.256
-      }
-    },
-    {
-      "id": "gdelt-irn usa yield tehran",
-      "source": "gdelt",
-      "title": "IRN–USA yield · Tehran",
-      "link": "https://gdelt.org/event/1315583047",
-      "timestamp": "2026-07-27T12:00:00Z",
-      "category": "central-bank",
-      "severity": "critical",
-      "city": "Tehran",
-      "publisher": null,
-      "fingerprint": "irn usa yield tehran",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 35.75,
-        "lon": 51.5148
-      }
-    },
-    {
-      "id": "gdelt-irn usa yield jordan",
-      "source": "gdelt",
-      "title": "IRN–USA yield · Jordan",
-      "link": "https://gdelt.org/event/1315583048",
-      "timestamp": "2026-07-27T12:00:00Z",
-      "category": "central-bank",
-      "severity": "critical",
-      "city": "Jordan",
-      "publisher": null,
-      "fingerprint": "irn usa yield jordan",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 31,
-        "lon": 36
-      }
-    },
-    {
-      "id": "gdelt-usa yield evans creek",
-      "source": "gdelt",
-      "title": "USA yield · Evans Creek",
-      "link": "https://gdelt.org/event/1315583404",
-      "timestamp": "2026-07-27T12:00:00Z",
-      "category": "central-bank",
-      "severity": "critical",
-      "city": "Evans Creek",
-      "publisher": null,
-      "fingerprint": "usa yield evans creek",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 42.6821,
-        "lon": -121.039
-      }
-    },
-    {
-      "id": "gdelt-usa yield deschutes",
-      "source": "gdelt",
-      "title": "USA yield · Deschutes",
-      "link": "https://gdelt.org/event/1315583405",
-      "timestamp": "2026-07-27T12:00:00Z",
-      "category": "central-bank",
-      "severity": "critical",
-      "city": "Deschutes",
-      "publisher": null,
-      "fingerprint": "usa yield deschutes",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 44.1565,
-        "lon": -121.256
-      }
-    },
-    {
-      "id": "gdelt-usa yield oregon",
-      "source": "gdelt",
-      "title": "USA yield · Oregon",
-      "link": "https://gdelt.org/event/1315583406",
-      "timestamp": "2026-07-27T12:00:00Z",
-      "category": "central-bank",
-      "severity": "critical",
-      "city": "Oregon",
-      "publisher": null,
-      "fingerprint": "usa yield oregon",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 44.5672,
-        "lon": -122.127
-      }
-    },
-    {
-      "id": "gdelt-aid white house",
-      "source": "gdelt",
-      "title": "aid · White House",
-      "link": "https://gdelt.org/event/1315582964",
-      "timestamp": "2026-07-27T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "critical",
-      "city": "White House",
-      "publisher": null,
-      "fingerprint": "aid white house",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 38.8951,
-        "lon": -77.0364
-      }
-    },
-    {
-      "id": "gdelt-aid delaware",
-      "source": "gdelt",
-      "title": "aid · Delaware",
-      "link": "https://gdelt.org/event/1315582965",
-      "timestamp": "2026-07-27T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "critical",
-      "city": "Delaware",
-      "publisher": null,
-      "fingerprint": "aid delaware",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 39.3498,
-        "lon": -75.5148
-      }
-    },
-    {
-      "id": "gdelt-usa aid delaware",
-      "source": "gdelt",
-      "title": "USA aid · Delaware",
-      "link": "https://gdelt.org/event/1315582995",
+      "title": "USA diplomacy · Delaware",
+      "link": "https://gdelt.org/event/1315584618",
       "timestamp": "2026-07-27T12:00:00Z",
       "category": "central-bank",
       "severity": "critical",
       "city": "Delaware",
       "publisher": null,
-      "fingerprint": "usa aid delaware",
+      "fingerprint": "usa diplomacy delaware",
       "domain": "gdelt.org",
       "coords": {
         "lat": 39.3498,
         "lon": -75.5148
-      }
-    },
-    {
-      "id": "gdelt-rus irn aid moscow",
-      "source": "gdelt",
-      "title": "RUS–IRN aid · Moscow",
-      "link": "https://gdelt.org/event/1315583237",
-      "timestamp": "2026-07-27T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "critical",
-      "city": "Moscow",
-      "publisher": null,
-      "fingerprint": "rus irn aid moscow",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 55.7522,
-        "lon": 37.6156
-      }
-    },
-    {
-      "id": "gdelt-diplomacy rajasthan",
-      "source": "gdelt",
-      "title": "diplomacy · Rajasthan",
-      "link": "https://gdelt.org/event/1315582570",
-      "timestamp": "2026-07-27T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "critical",
-      "city": "Rajasthan",
-      "publisher": null,
-      "fingerprint": "diplomacy rajasthan",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 26.8167,
-        "lon": 69.4917
-      }
-    },
-    {
-      "id": "gdelt-usa diplomacy wuhan",
-      "source": "gdelt",
-      "title": "USA diplomacy · Wuhan",
-      "link": "https://gdelt.org/event/1315582609",
-      "timestamp": "2026-07-27T12:00:00Z",
-      "category": "central-bank",
-      "severity": "critical",
-      "city": "Wuhan",
-      "publisher": null,
-      "fingerprint": "usa diplomacy wuhan",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 30.5833,
-        "lon": 114.267
-      }
-    },
-    {
-      "id": "gdelt-usa diplomacy colorado",
-      "source": "gdelt",
-      "title": "USA diplomacy · Colorado",
-      "link": "https://gdelt.org/event/1315582610",
-      "timestamp": "2026-07-27T12:00:00Z",
-      "category": "central-bank",
-      "severity": "critical",
-      "city": "Colorado",
-      "publisher": null,
-      "fingerprint": "usa diplomacy colorado",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 39.0646,
-        "lon": -105.327
       },
       "related": [
         {
           "source": "gdelt",
-          "id": "gdelt-usa diplomacy colorado"
+          "id": "gdelt-usa diplomacy delaware"
         }
       ]
     },
     {
-      "id": "gdelt-usa ven diplomacy washington",
+      "id": "gdelt-engagement toronto",
       "source": "gdelt",
-      "title": "USA–VEN diplomacy · Washington",
-      "link": "https://gdelt.org/event/1315583473",
+      "title": "engagement · Toronto",
+      "link": "https://gdelt.org/event/1315584057",
       "timestamp": "2026-07-27T12:00:00Z",
-      "category": "central-bank",
+      "category": "geopolitical",
       "severity": "critical",
-      "city": "Washington",
+      "city": "Toronto",
       "publisher": null,
-      "fingerprint": "usa ven diplomacy washington",
+      "fingerprint": "engagement toronto",
       "domain": "gdelt.org",
       "coords": {
-        "lat": 38.8951,
-        "lon": -77.0364
+        "lat": 43.6667,
+        "lon": -79.4167
       },
       "related": [
         {
           "source": "gdelt",
-          "id": "gdelt-usa ven diplomacy washington"
+          "id": "gdelt-engagement toronto"
         }
       ]
     },
     {
-      "id": "gdelt-usa ven diplomacy caracas",
+      "id": "gdelt-engagement cleveland",
       "source": "gdelt",
-      "title": "USA–VEN diplomacy · Caracas",
-      "link": "https://gdelt.org/event/1315583474",
+      "title": "engagement · Cleveland",
+      "link": "https://gdelt.org/event/1315584058",
       "timestamp": "2026-07-27T12:00:00Z",
-      "category": "central-bank",
+      "category": "geopolitical",
       "severity": "critical",
-      "city": "Caracas",
+      "city": "Cleveland",
       "publisher": null,
-      "fingerprint": "usa ven diplomacy caracas",
+      "fingerprint": "engagement cleveland",
       "domain": "gdelt.org",
       "coords": {
-        "lat": 10.5,
-        "lon": -66.9167
-      }
-    },
-    {
-      "id": "gdelt-ven usa diplomacy washington",
-      "source": "gdelt",
-      "title": "VEN–USA diplomacy · Washington",
-      "link": "https://gdelt.org/event/1315583541",
-      "timestamp": "2026-07-27T12:00:00Z",
-      "category": "central-bank",
-      "severity": "critical",
-      "city": "Washington",
-      "publisher": null,
-      "fingerprint": "ven usa diplomacy washington",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 38.8951,
-        "lon": -77.0364
+        "lat": 41.4995,
+        "lon": -81.6954
       },
       "related": [
         {
           "source": "gdelt",
-          "id": "gdelt-ven usa diplomacy washington"
+          "id": "gdelt-engagement cleveland"
         }
       ]
     },
     {
-      "id": "gdelt-ven usa diplomacy caracas",
+      "id": "gdelt-engagement new york",
       "source": "gdelt",
-      "title": "VEN–USA diplomacy · Caracas",
-      "link": "https://gdelt.org/event/1315583542",
-      "timestamp": "2026-07-27T12:00:00Z",
-      "category": "central-bank",
-      "severity": "critical",
-      "city": "Caracas",
-      "publisher": null,
-      "fingerprint": "ven usa diplomacy caracas",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 10.5,
-        "lon": -66.9167
-      }
-    },
-    {
-      "id": "gdelt-aus aid port macdonnell",
-      "source": "gdelt",
-      "title": "AUS aid · Port Macdonnell",
-      "link": "https://gdelt.org/event/1315582646",
-      "timestamp": "2026-07-27T12:00:00Z",
-      "category": "central-bank",
-      "severity": "critical",
-      "city": "Port Macdonnell",
-      "publisher": null,
-      "fingerprint": "aus aid port macdonnell",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": -38.0521,
-        "lon": 140.702
-      }
-    },
-    {
-      "id": "gdelt-bol aid california",
-      "source": "gdelt",
-      "title": "BOL aid · California",
-      "link": "https://gdelt.org/event/1315582678",
+      "title": "engagement · New York",
+      "link": "https://gdelt.org/event/1315584059",
       "timestamp": "2026-07-27T12:00:00Z",
       "category": "geopolitical",
       "severity": "critical",
-      "city": "California",
+      "city": "New York",
       "publisher": null,
-      "fingerprint": "bol aid california",
+      "fingerprint": "engagement new york",
       "domain": "gdelt.org",
       "coords": {
-        "lat": 36.17,
-        "lon": -119.746
-      }
-    },
-    {
-      "id": "gdelt-aid coquitlam",
-      "source": "gdelt",
-      "title": "aid · Coquitlam",
-      "link": "https://gdelt.org/event/1315582810",
-      "timestamp": "2026-07-27T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "critical",
-      "city": "Coquitlam",
-      "publisher": null,
-      "fingerprint": "aid coquitlam",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 49.2667,
-        "lon": -122.783
-      }
-    },
-    {
-      "id": "gdelt-aid mumbai",
-      "source": "gdelt",
-      "title": "aid · Mumbai",
-      "link": "https://gdelt.org/event/1315582812",
-      "timestamp": "2026-07-27T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "critical",
-      "city": "Mumbai",
-      "publisher": null,
-      "fingerprint": "aid mumbai",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 18.975,
-        "lon": 72.8258
-      }
-    },
-    {
-      "id": "gdelt-usa aid maryland",
-      "source": "gdelt",
-      "title": "USA aid · Maryland",
-      "link": "https://gdelt.org/event/1315582828",
-      "timestamp": "2026-07-27T12:00:00Z",
-      "category": "central-bank",
-      "severity": "critical",
-      "city": "Maryland",
-      "publisher": null,
-      "fingerprint": "usa aid maryland",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 39.0724,
-        "lon": -76.7902
+        "lat": 42.1497,
+        "lon": -74.9384
       },
       "related": [
         {
           "source": "gdelt",
-          "id": "gdelt-usa aid maryland"
+          "id": "gdelt-engagement new york"
         }
       ]
     },
     {
-      "id": "gdelt-aid new zealand",
+      "id": "gdelt-aid lagos",
       "source": "gdelt",
-      "title": "aid · New Zealand",
-      "link": "https://gdelt.org/event/1315582904",
+      "title": "aid · Lagos",
+      "link": "https://gdelt.org/event/1315584090",
       "timestamp": "2026-07-27T12:00:00Z",
       "category": "geopolitical",
       "severity": "critical",
-      "city": "New Zealand",
+      "city": "Lagos",
       "publisher": null,
-      "fingerprint": "aid new zealand",
+      "fingerprint": "aid lagos",
       "domain": "gdelt.org",
       "coords": {
-        "lat": -42,
-        "lon": 174
+        "lat": 6.45306,
+        "lon": 3.39583
+      }
+    },
+    {
+      "id": "gdelt-afr aid rio de janeiro",
+      "source": "gdelt",
+      "title": "AFR aid · Rio De Janeiro",
+      "link": "https://gdelt.org/event/1315584132",
+      "timestamp": "2026-07-27T12:00:00Z",
+      "category": "geopolitical",
+      "severity": "critical",
+      "city": "Rio De Janeiro",
+      "publisher": null,
+      "fingerprint": "afr aid rio de janeiro",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": -22.9,
+        "lon": -43.2333
+      }
+    },
+    {
+      "id": "gdelt-afr aid benin",
+      "source": "gdelt",
+      "title": "AFR aid · Benin",
+      "link": "https://gdelt.org/event/1315584133",
+      "timestamp": "2026-07-27T12:00:00Z",
+      "category": "geopolitical",
+      "severity": "critical",
+      "city": "Benin",
+      "publisher": null,
+      "fingerprint": "afr aid benin",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 9.5,
+        "lon": 2.25
       },
       "related": [
         {
           "source": "gdelt",
-          "id": "gdelt-aid new zealand"
+          "id": "gdelt-afr aid benin"
         }
       ]
     },
     {
-      "id": "gdelt-aid florida",
+      "id": "gdelt-bhr engagement bahrain",
       "source": "gdelt",
-      "title": "aid · Florida",
-      "link": "https://gdelt.org/event/1315583141",
+      "title": "BHR engagement · Bahrain",
+      "link": "https://gdelt.org/event/1315584163",
       "timestamp": "2026-07-27T12:00:00Z",
       "category": "geopolitical",
       "severity": "critical",
-      "city": "Florida",
+      "city": "Bahrain",
       "publisher": null,
-      "fingerprint": "aid florida",
+      "fingerprint": "bhr engagement bahrain",
       "domain": "gdelt.org",
       "coords": {
-        "lat": 27.8333,
-        "lon": -81.717
-      }
-    },
-    {
-      "id": "gdelt-nzl aid new zealand",
-      "source": "gdelt",
-      "title": "NZL aid · New Zealand",
-      "link": "https://gdelt.org/event/1315583201",
-      "timestamp": "2026-07-27T12:00:00Z",
-      "category": "central-bank",
-      "severity": "critical",
-      "city": "New Zealand",
-      "publisher": null,
-      "fingerprint": "nzl aid new zealand",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": -42,
-        "lon": 174
+        "lat": 26,
+        "lon": 50.5
       },
       "related": [
         {
           "source": "gdelt",
-          "id": "gdelt-nzl aid new zealand"
+          "id": "gdelt-bhr engagement bahrain"
         }
       ]
     },
     {
-      "id": "gdelt-usa engagement colorado",
+      "id": "gdelt-aid winter park",
       "source": "gdelt",
-      "title": "USA engagement · Colorado",
-      "link": "https://gdelt.org/event/1315583325",
+      "title": "aid · Winter Park",
+      "link": "https://gdelt.org/event/1315584170",
       "timestamp": "2026-07-27T12:00:00Z",
-      "category": "central-bank",
+      "category": "geopolitical",
       "severity": "critical",
-      "city": "Colorado",
+      "city": "Winter Park",
       "publisher": null,
-      "fingerprint": "usa engagement colorado",
+      "fingerprint": "aid winter park",
       "domain": "gdelt.org",
       "coords": {
-        "lat": 39.0646,
-        "lon": -105.327
+        "lat": 28.6,
+        "lon": -81.3392
       }
     },
     {
-      "id": "gdelt-usa aid palmdale",
+      "id": "gdelt-aid finland",
       "source": "gdelt",
-      "title": "USA aid · Palmdale",
-      "link": "https://gdelt.org/event/1315583328",
+      "title": "aid · Finland",
+      "link": "https://gdelt.org/event/1315584171",
       "timestamp": "2026-07-27T12:00:00Z",
-      "category": "central-bank",
+      "category": "geopolitical",
       "severity": "critical",
-      "city": "Palmdale",
+      "city": "Finland",
       "publisher": null,
-      "fingerprint": "usa aid palmdale",
+      "fingerprint": "aid finland",
       "domain": "gdelt.org",
       "coords": {
-        "lat": 34.5794,
-        "lon": -118.116
+        "lat": 64,
+        "lon": 26
       }
     },
     {
-      "id": "gdelt-usa aid florida",
+      "id": "gdelt-aid kentucky",
       "source": "gdelt",
-      "title": "USA aid · Florida",
-      "link": "https://gdelt.org/event/1315583389",
+      "title": "aid · Kentucky",
+      "link": "https://gdelt.org/event/1315584390",
       "timestamp": "2026-07-27T12:00:00Z",
-      "category": "central-bank",
+      "category": "geopolitical",
       "severity": "critical",
-      "city": "Florida",
+      "city": "Kentucky",
       "publisher": null,
-      "fingerprint": "usa aid florida",
+      "fingerprint": "aid kentucky",
       "domain": "gdelt.org",
       "coords": {
-        "lat": 27.8333,
-        "lon": -81.717
+        "lat": 37.669,
+        "lon": -84.6514
       }
     },
     {
-      "id": "gdelt-usa aid rhode island",
+      "id": "gdelt-aid abuja",
       "source": "gdelt",
-      "title": "USA aid · Rhode Island",
-      "link": "https://gdelt.org/event/1315583390",
+      "title": "aid · Abuja",
+      "link": "https://gdelt.org/event/1315584406",
       "timestamp": "2026-07-27T12:00:00Z",
-      "category": "central-bank",
+      "category": "geopolitical",
       "severity": "critical",
-      "city": "Rhode Island",
+      "city": "Abuja",
       "publisher": null,
-      "fingerprint": "usa aid rhode island",
+      "fingerprint": "aid abuja",
       "domain": "gdelt.org",
       "coords": {
-        "lat": 41.6772,
-        "lon": -71.5101
+        "lat": 9.08333,
+        "lon": 7.53333
+      },
+      "related": [
+        {
+          "source": "gdelt",
+          "id": "gdelt-aid abuja"
+        }
+      ]
+    },
+    {
+      "id": "gdelt-irl aid donegal",
+      "source": "gdelt",
+      "title": "IRL aid · Donegal",
+      "link": "https://gdelt.org/event/1315584510",
+      "timestamp": "2026-07-27T12:00:00Z",
+      "category": "geopolitical",
+      "severity": "critical",
+      "city": "Donegal",
+      "publisher": null,
+      "fingerprint": "irl aid donegal",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 54.65,
+        "lon": -8.11667
       }
     },
     {
-      "id": "gdelt-usa aid colorado",
+      "id": "gdelt-aid johannesburg",
       "source": "gdelt",
-      "title": "USA aid · Colorado",
-      "link": "https://gdelt.org/event/1315583515",
+      "title": "aid · Johannesburg",
+      "link": "https://gdelt.org/event/1315584574",
+      "timestamp": "2026-07-27T12:00:00Z",
+      "category": "geopolitical",
+      "severity": "critical",
+      "city": "Johannesburg",
+      "publisher": null,
+      "fingerprint": "aid johannesburg",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": -26.2,
+        "lon": 28.0833
+      }
+    },
+    {
+      "id": "gdelt-usa aid kansas",
+      "source": "gdelt",
+      "title": "USA aid · Kansas",
+      "link": "https://gdelt.org/event/1315584818",
       "timestamp": "2026-07-27T12:00:00Z",
       "category": "central-bank",
       "severity": "critical",
-      "city": "Colorado",
+      "city": "Kansas",
       "publisher": null,
-      "fingerprint": "usa aid colorado",
+      "fingerprint": "usa aid kansas",
       "domain": "gdelt.org",
       "coords": {
-        "lat": 39.0646,
-        "lon": -105.327
+        "lat": 38.5111,
+        "lon": -96.8005
+      },
+      "related": [
+        {
+          "source": "gdelt",
+          "id": "gdelt-usa aid kansas"
+        }
+      ]
+    },
+    {
+      "id": "gdelt-usa aid kentucky",
+      "source": "gdelt",
+      "title": "USA aid · Kentucky",
+      "link": "https://gdelt.org/event/1315584888",
+      "timestamp": "2026-07-27T12:00:00Z",
+      "category": "central-bank",
+      "severity": "critical",
+      "city": "Kentucky",
+      "publisher": null,
+      "fingerprint": "usa aid kentucky",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 37.669,
+        "lon": -84.6514
+      }
+    },
+    {
+      "id": "gdelt-usa aid new jersey",
+      "source": "gdelt",
+      "title": "USA aid · New Jersey",
+      "link": "https://gdelt.org/event/1315584917",
+      "timestamp": "2026-07-27T12:00:00Z",
+      "category": "central-bank",
+      "severity": "critical",
+      "city": "New Jersey",
+      "publisher": null,
+      "fingerprint": "usa aid new jersey",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 40.314,
+        "lon": -74.5089
+      }
+    },
+    {
+      "id": "gdelt-usa aid multnomah county",
+      "source": "gdelt",
+      "title": "USA aid · Multnomah County",
+      "link": "https://gdelt.org/event/1315584938",
+      "timestamp": "2026-07-27T12:00:00Z",
+      "category": "central-bank",
+      "severity": "critical",
+      "city": "Multnomah County",
+      "publisher": null,
+      "fingerprint": "usa aid multnomah county",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 45.5001,
+        "lon": -122.418
+      }
+    },
+    {
+      "id": "gdelt-usa aid portland",
+      "source": "gdelt",
+      "title": "USA aid · Portland",
+      "link": "https://gdelt.org/event/1315584939",
+      "timestamp": "2026-07-27T12:00:00Z",
+      "category": "central-bank",
+      "severity": "critical",
+      "city": "Portland",
+      "publisher": null,
+      "fingerprint": "usa aid portland",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 45.5235,
+        "lon": -122.676
+      }
+    },
+    {
+      "id": "gdelt-usa aid department of education",
+      "source": "gdelt",
+      "title": "USA aid · Department Of Education",
+      "link": "https://gdelt.org/event/1315584941",
+      "timestamp": "2026-07-27T12:00:00Z",
+      "category": "central-bank",
+      "severity": "critical",
+      "city": "Department Of Education",
+      "publisher": null,
+      "fingerprint": "usa aid department of education",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 38.8862,
+        "lon": -77.0183
+      }
+    },
+    {
+      "id": "gdelt-usa aid chicago",
+      "source": "gdelt",
+      "title": "USA aid · Chicago",
+      "link": "https://gdelt.org/event/1315584966",
+      "timestamp": "2026-07-27T12:00:00Z",
+      "category": "central-bank",
+      "severity": "critical",
+      "city": "Chicago",
+      "publisher": null,
+      "fingerprint": "usa aid chicago",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 41.85,
+        "lon": -87.6501
+      }
+    },
+    {
+      "id": "gdelt-bhr consultation bahrain",
+      "source": "gdelt",
+      "title": "BHR consultation · Bahrain",
+      "link": "https://gdelt.org/event/1315584050",
+      "timestamp": "2026-07-27T12:00:00Z",
+      "category": "geopolitical",
+      "severity": "moderate",
+      "city": "Bahrain",
+      "publisher": null,
+      "fingerprint": "bhr consultation bahrain",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 26,
+        "lon": 50.5
+      },
+      "related": [
+        {
+          "source": "gdelt",
+          "id": "gdelt-bhr consultation bahrain"
+        }
+      ]
+    },
+    {
+      "id": "gdelt-consultation massachusetts",
+      "source": "gdelt",
+      "title": "consultation · Massachusetts",
+      "link": "https://gdelt.org/event/1315584081",
+      "timestamp": "2026-07-27T12:00:00Z",
+      "category": "geopolitical",
+      "severity": "moderate",
+      "city": "Massachusetts",
+      "publisher": null,
+      "fingerprint": "consultation massachusetts",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 42.2373,
+        "lon": -71.5314
       }
     },
     {
       "id": "gdelt-consultation united kingdom",
       "source": "gdelt",
       "title": "consultation · United Kingdom",
-      "link": "https://gdelt.org/event/1315582559",
+      "link": "https://gdelt.org/event/1315584082",
       "timestamp": "2026-07-27T12:00:00Z",
       "category": "geopolitical",
       "severity": "moderate",
@@ -1134,33 +1073,135 @@
       }
     },
     {
-      "id": "gdelt-yield dutton ranch",
+      "id": "gdelt-usa consultation alaska",
       "source": "gdelt",
-      "title": "yield · Dutton Ranch",
-      "link": "https://gdelt.org/event/1315582585",
+      "title": "USA consultation · Alaska",
+      "link": "https://gdelt.org/event/1315584116",
       "timestamp": "2026-07-27T12:00:00Z",
-      "category": "geopolitical",
+      "category": "central-bank",
       "severity": "moderate",
-      "city": "Dutton Ranch",
+      "city": "Alaska",
       "publisher": null,
-      "fingerprint": "yield dutton ranch",
+      "fingerprint": "usa consultation alaska",
       "domain": "gdelt.org",
       "coords": {
-        "lat": 46.9603,
-        "lon": -107.642
+        "lat": 61.385,
+        "lon": -152.268
       }
     },
     {
-      "id": "gdelt-yield new york",
+      "id": "gdelt-usa consultation atlanta",
       "source": "gdelt",
-      "title": "yield · New York",
-      "link": "https://gdelt.org/event/1315582586",
+      "title": "USA consultation · Atlanta",
+      "link": "https://gdelt.org/event/1315584117",
+      "timestamp": "2026-07-27T12:00:00Z",
+      "category": "central-bank",
+      "severity": "moderate",
+      "city": "Atlanta",
+      "publisher": null,
+      "fingerprint": "usa consultation atlanta",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 33.749,
+        "lon": -84.388
+      }
+    },
+    {
+      "id": "gdelt-usa consultation new mexico",
+      "source": "gdelt",
+      "title": "USA consultation · New Mexico",
+      "link": "https://gdelt.org/event/1315584118",
+      "timestamp": "2026-07-27T12:00:00Z",
+      "category": "central-bank",
+      "severity": "moderate",
+      "city": "New Mexico",
+      "publisher": null,
+      "fingerprint": "usa consultation new mexico",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 34.8375,
+        "lon": -106.237
+      }
+    },
+    {
+      "id": "gdelt-usa consultation arizona",
+      "source": "gdelt",
+      "title": "USA consultation · Arizona",
+      "link": "https://gdelt.org/event/1315584129",
+      "timestamp": "2026-07-27T12:00:00Z",
+      "category": "central-bank",
+      "severity": "moderate",
+      "city": "Arizona",
+      "publisher": null,
+      "fingerprint": "usa consultation arizona",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 33.7712,
+        "lon": -111.388
+      }
+    },
+    {
+      "id": "gdelt-afr chn consultation beijing",
+      "source": "gdelt",
+      "title": "AFR–CHN consultation · Beijing",
+      "link": "https://gdelt.org/event/1315584135",
+      "timestamp": "2026-07-27T12:00:00Z",
+      "category": "central-bank",
+      "severity": "moderate",
+      "city": "Beijing",
+      "publisher": null,
+      "fingerprint": "afr chn consultation beijing",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 39.9289,
+        "lon": 116.388
+      }
+    },
+    {
+      "id": "gdelt-can consultation berlin",
+      "source": "gdelt",
+      "title": "CAN consultation · Berlin",
+      "link": "https://gdelt.org/event/1315584229",
+      "timestamp": "2026-07-27T12:00:00Z",
+      "category": "central-bank",
+      "severity": "moderate",
+      "city": "Berlin",
+      "publisher": null,
+      "fingerprint": "can consultation berlin",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 52.5167,
+        "lon": 13.4
+      }
+    },
+    {
+      "id": "gdelt-chn afr consultation jiang feng",
+      "source": "gdelt",
+      "title": "CHN–AFR consultation · Jiang Feng",
+      "link": "https://gdelt.org/event/1315584239",
+      "timestamp": "2026-07-27T12:00:00Z",
+      "category": "central-bank",
+      "severity": "moderate",
+      "city": "Jiang Feng",
+      "publisher": null,
+      "fingerprint": "chn afr consultation jiang feng",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 30.0343,
+        "lon": 120.007
+      }
+    },
+    {
+      "id": "gdelt-threat new york",
+      "source": "gdelt",
+      "title": "threat · New York",
+      "link": "https://gdelt.org/event/1315584258",
       "timestamp": "2026-07-27T12:00:00Z",
       "category": "geopolitical",
       "severity": "moderate",
       "city": "New York",
       "publisher": null,
-      "fingerprint": "yield new york",
+      "fingerprint": "threat new york",
       "domain": "gdelt.org",
       "coords": {
         "lat": 42.1497,
@@ -1168,129 +1209,27 @@
       }
     },
     {
-      "id": "gdelt-consultation gaza strip",
+      "id": "gdelt-threat belmont county",
       "source": "gdelt",
-      "title": "consultation · Gaza Strip",
-      "link": "https://gdelt.org/event/1315582588",
+      "title": "threat · Belmont County",
+      "link": "https://gdelt.org/event/1315584259",
       "timestamp": "2026-07-27T12:00:00Z",
       "category": "geopolitical",
       "severity": "moderate",
-      "city": "Gaza Strip",
+      "city": "Belmont County",
       "publisher": null,
-      "fingerprint": "consultation gaza strip",
+      "fingerprint": "threat belmont county",
       "domain": "gdelt.org",
       "coords": {
-        "lat": 31.425074,
-        "lon": 34.373398
-      }
-    },
-    {
-      "id": "gdelt-aus aid mount gambier",
-      "source": "gdelt",
-      "title": "AUS aid · Mount Gambier",
-      "link": "https://gdelt.org/event/1315582645",
-      "timestamp": "2026-07-27T12:00:00Z",
-      "category": "central-bank",
-      "severity": "moderate",
-      "city": "Mount Gambier",
-      "publisher": null,
-      "fingerprint": "aus aid mount gambier",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": -37.8318,
-        "lon": 140.779
-      }
-    },
-    {
-      "id": "gdelt-aus threat australia",
-      "source": "gdelt",
-      "title": "AUS threat · Australia",
-      "link": "https://gdelt.org/event/1315582649",
-      "timestamp": "2026-07-27T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "moderate",
-      "city": "Australia",
-      "publisher": null,
-      "fingerprint": "aus threat australia",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": -25,
-        "lon": 135
-      }
-    },
-    {
-      "id": "gdelt-cooperation greece",
-      "source": "gdelt",
-      "title": "cooperation · Greece",
-      "link": "https://gdelt.org/event/1315582679",
-      "timestamp": "2026-07-27T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "moderate",
-      "city": "Greece",
-      "publisher": null,
-      "fingerprint": "cooperation greece",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 39,
-        "lon": 22
-      }
-    },
-    {
-      "id": "gdelt-consultation florida",
-      "source": "gdelt",
-      "title": "consultation · Florida",
-      "link": "https://gdelt.org/event/1315582681",
-      "timestamp": "2026-07-27T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "moderate",
-      "city": "Florida",
-      "publisher": null,
-      "fingerprint": "consultation florida",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 27.8333,
-        "lon": -81.717
-      }
-    },
-    {
-      "id": "gdelt-consultation japan",
-      "source": "gdelt",
-      "title": "consultation · Japan",
-      "link": "https://gdelt.org/event/1315582682",
-      "timestamp": "2026-07-27T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "moderate",
-      "city": "Japan",
-      "publisher": null,
-      "fingerprint": "consultation japan",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 36,
-        "lon": 138
+        "lat": 40.0004,
+        "lon": -80.9665
       },
       "related": [
         {
           "source": "gdelt",
-          "id": "gdelt-consultation japan"
+          "id": "gdelt-threat belmont county"
         }
       ]
-    },
-    {
-      "id": "gdelt-chn threat pakistan",
-      "source": "gdelt",
-      "title": "CHN threat · Pakistan",
-      "link": "https://gdelt.org/event/1315582736",
-      "timestamp": "2026-07-27T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "moderate",
-      "city": "Pakistan",
-      "publisher": null,
-      "fingerprint": "chn threat pakistan",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 30,
-        "lon": 70
-      }
     },
     {
       "id": "arxiv-optimal surplus management for insurers under st",
