@@ -1,7 +1,7 @@
 {
   "name": "christianmacion-portfolio",
   "type": "module",
-  "version": "7.7.18",
+  "version": "7.7.19",
   "private": true,
   "description": "Christian T. Macion — AI Engineer + Quantitative Researcher. Personal portfolio site.",
   "scripts": {
@@ -30,12 +30,13 @@
     "version:bump": "tsx scripts/bump-version.ts",
     "sitemap:check": "tsx scripts/validate-sitemap.ts",
     "typecheck": "astro check",
-    "ci": "npm run lint:md && npm run lint && npm run format:check && npm run knip && npm run no-bulbs && npm run build && npm run verify:anchors && npm run no-f14 && npm run no-halo && npm run bundle:budget && npm run perf:audit && npm run a11y:scan && npm run contrast:check && npm run headings:check && npm run link:rot && npm run anchor:rot && npm run live:integrity && npm run meta:integrity && npm run feed:integrity && npm run sitemap:integrity && npm run jsonld:integrity && npm run og:integrity && npm run audit && npm run sitemap:check",
+    "ci": "npm run lint:md && npm run lint && npm run format:check && npm run knip && npm run no-bulbs && npm run build && npm run verify:anchors && npm run no-f14 && npm run no-halo && npm run bundle:budget && npm run perf:audit && npm run a11y:scan && npm run contrast:check && npm run headings:check && npm run link:rot && npm run anchor:rot && npm run link:target:validity && npm run live:integrity && npm run meta:integrity && npm run feed:integrity && npm run sitemap:integrity && npm run jsonld:integrity && npm run og:integrity && npm run audit && npm run sitemap:check",
     "no-bulbs": "bash scripts/check-no-lightbulb-halos.sh",
     "no-f14": "bash scripts/check-no-f14-traffic-light.sh",
     "headings:check": "node scripts/check-heading-hierarchy.mjs",
     "contrast:check": "node scripts/check-color-contrast.mjs",
     "anchor:rot": "node scripts/check-anchor-rot.mjs",
+    "link:target:validity": "node scripts/check-link-target-validity.mjs",
     "live:integrity": "node scripts/check-live-feed-integrity.mjs",
     "meta:integrity": "node scripts/check-meta-integrity.mjs",
     "feed:integrity": "node scripts/check-feed-integrity.mjs",

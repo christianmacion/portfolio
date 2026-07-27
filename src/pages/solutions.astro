@@ -236,60 +236,56 @@ const eduSolutions: SolutionEntry[] = solutions.filter(
     </div>
   </section>
 
-  {
-    eduSolutions.length > 0 && (
-      <section class="section section--alt" data-toc-id="edu" data-toc-label="Education">
-        <div class="container">
-          <header class="section__head">
-            <p class="section__eyebrow">Lane · Education & Outreach</p>
-            <h2 class="section__title" id="edu">
-              Public-facing work.
-            </h2>
-          </header>
-          <div class="sol-grid">
-            {eduSolutions.map((s) => (
-              <article class="sol-card">
-                <header class="sol-card__head">
-                  <span class="sol-card__ord mono">#{String(s.data.order).padStart(2, '0')}</span>
-                  <span class="pill pill--gold">Public</span>
-                </header>
-                <h3 class="sol-card__title">{s.data.title}</h3>
-                <div class="sol-card__client mono">{s.data.client}</div>
-                <div class="sol-card__row">
-                  <div class="sol-card__row-label">Problem</div>
-                  <p class="sol-card__row-body">{s.data.problem}</p>
-                </div>
-                <div class="sol-card__row">
-                  <div class="sol-card__row-label">Approach</div>
-                  <p class="sol-card__row-body">{s.data.approach}</p>
-                </div>
-                <div class="sol-card__row">
-                  <div class="sol-card__row-label">Evidence</div>
-                  <ul class="sol-card__evidence mono">
-                    {s.data.evidence.map((e: string) => (
-                      <li>{e}</li>
-                    ))}
-                  </ul>
-                </div>
-                <div class="sol-card__row">
-                  <div class="sol-card__row-label">Outcome</div>
-                  <p class="sol-card__row-body">{s.data.outcome}</p>
-                </div>
-                <div class="sol-card__row">
-                  <div class="sol-card__row-label">Proof</div>
-                  <ul class="sol-card__proof">
-                    {s.data.proof.map((p: string) => (
-                      <li>{p}</li>
-                    ))}
-                  </ul>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-    )
-  }
+  <section class="section section--alt" data-toc-id="edu" data-toc-label="Education">
+    <div class="container">
+      <header class="section__head">
+        <p class="section__eyebrow">Lane · Education & Outreach</p>
+        <h2 class="section__title" id="edu">Public-facing work.</h2>
+      </header>
+      <div class="sol-grid">
+        {
+          eduSolutions.map((s) => (
+            <article class="sol-card">
+              <header class="sol-card__head">
+                <span class="sol-card__ord mono">#{String(s.data.order).padStart(2, '0')}</span>
+                <span class="pill pill--gold">Public</span>
+              </header>
+              <h3 class="sol-card__title">{s.data.title}</h3>
+              <div class="sol-card__client mono">{s.data.client}</div>
+              <div class="sol-card__row">
+                <div class="sol-card__row-label">Problem</div>
+                <p class="sol-card__row-body">{s.data.problem}</p>
+              </div>
+              <div class="sol-card__row">
+                <div class="sol-card__row-label">Approach</div>
+                <p class="sol-card__row-body">{s.data.approach}</p>
+              </div>
+              <div class="sol-card__row">
+                <div class="sol-card__row-label">Evidence</div>
+                <ul class="sol-card__evidence mono">
+                  {s.data.evidence.map((e: string) => (
+                    <li>{e}</li>
+                  ))}
+                </ul>
+              </div>
+              <div class="sol-card__row">
+                <div class="sol-card__row-label">Outcome</div>
+                <p class="sol-card__row-body">{s.data.outcome}</p>
+              </div>
+              <div class="sol-card__row">
+                <div class="sol-card__row-label">Proof</div>
+                <ul class="sol-card__proof">
+                  {s.data.proof.map((p: string) => (
+                    <li>{p}</li>
+                  ))}
+                </ul>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
 
   <CTABanner
     title="Want a deep-dive on any of these?"

@@ -59,14 +59,19 @@ export function buildYear(): number {
 }
 
 /**
- * Returns the full ISO 8601 timestamp of the build, shifted to UTC+8.
+ * Returns the full ISO 8601 timestamp of the build.
  * Used for Atom feed `<updated>` elements where a full timestamp is required
  * (not just YYYY-MM-DD). Stamped from BUILD_DATE; deterministic per build.
+ *
+ * v7.7.15 — was incorrectly shifted to UTC+8, producing timestamps 8h
+ * in the future (caught by scripts/check-feed-integrity.mjs, 20 future-
+ * entry failures). ISO 8601 represents an absolute point in time, so
+ * it MUST NOT be shifted. Only date-only or year-only values shift
+ * to UTC+8. The feed-integrity gate's "future-entry" rule is the
+ * canonical check that catches this regression class.
  */
 export function buildStampUtc8Iso(): string {
-  const d = readBuildDate();
-  const shifted = new Date(d.getTime() + TZ_OFFSET_HOURS * 3600 * 1000);
-  return shifted.toISOString();
+  return readBuildDate().toISOString();
 }
 
 // v6.10.28 — `buildStampUtc8Iso` removed (knip reported unused).
