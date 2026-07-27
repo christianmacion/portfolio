@@ -1,14 +1,25 @@
 ---
 /**
- * EarthMap.astro — v7.5 THREE-LAYER INSTITUTIONAL EARTH PRIMITIVE.
+ * EarthMap.astro — v7.7.0 LIVE-WORLD EARTH PRIMITIVE.
  *
- * Server-rendered SVG (no JS). Three stacked layers on one equirectangular
- * world map:
+ * Server-rendered SVG (no JS for the map itself; the odometer drives
+ * the "last sync" count-up via the existing data-counter driver).
+ * Three stacked layers on one equirectangular world map:
  *
- *   Layer A — VENUES     (CoverageGlobe cities, weighted amber dots)
+ *   Layer A — VENUES     (6 weighted amber dots, with animated pulse)
  *   Layer B — WORLD-EVENTS (10 curated events from src/content/world-events)
  *   Layer C — GDELT OVERLAY (50+ events from src/data/gdelt-cache.json,
- *                            polarity-tinted at low alpha)
+ *                            polarity-tinted, severity-weighted radius)
+ *   Layer D — ARCS       (hairline connections from Layer C events to
+ *                          matching venue cities; one-shot draw-in)
+ *
+ * v7.7.0 upgrades:
+ *   - bind `globe-pulse` to Layer A venues (was dead code)
+ *   - severity-weighted radius on Layer C (goldstein magnitude → r 1.5–3.5)
+ *   - polarity opacity lift: pos 0.65 / neg 0.55 / neutral 0.4
+ *   - Layer D arcs from event → venue city (one-shot stroke-dashoffset)
+ *   - "SYNCHRONIZED Xm AGO" count-up in caption, with source badge
+ *   - aria-label exposes the fetchedAt timestamp
  *
  * Visual register: institutional / Bloomberg. Mono + 1 amber accent.
  * No glow. No pills. No gradient. The landmass dot grid is the same
@@ -70,6 +81,8 @@ const venuePositions: VenuePosition[] = venues.map((c: Venue): VenuePosition => 
   const r = 3 + c.weight * 4;
   return { ...c, x, y, r };
 });
+// City-keyed lookup for arc endpoints
+const venueByCity = new Map(venues.map((v) => [v.city.toLowerCase(), v]));
 
 // === Layer B — world events (Zod-validated collection) ===
 interface WorldEventRow {
@@ -143,8 +156,44 @@ const gdeltPositions = dedupGdelt.map((e) => {
   const goldstein = e.goldstein ?? 0;
   const polarity: 'pos' | 'neg' | 'neutral' =
     goldstein > 2 ? 'pos' : goldstein < -2 ? 'neg' : 'neutral';
-  return { ...e, x, y, polarity };
+  // Severity-weighted radius: r = 1.5 + min(|goldstein|, 10) * 0.2 → 1.5..3.5
+  const magnitude = Math.min(Math.abs(goldstein), 10);
+  const r = 1.5 + magnitude * 0.2;
+  return { ...e, x, y, polarity, r };
 });
+
+// === Layer D — connection arcs (event → venue city) ===
+// For each GDELT event whose city matches a venue city, draw a hairline
+// arc from the event point to the venue point. Curved with a quadratic
+// Bezier that lifts ~12° of arc-height. Path is what we animate
+// stroke-dashoffset on for the one-shot draw-in.
+interface Arc {
+  id: string;
+  d: string;
+  venue: string;
+  city: string;
+  polarity: 'pos' | 'neg' | 'neutral';
+}
+const arcs: Arc[] = [];
+for (const e of gdeltPositions) {
+  if (!e.city) continue;
+  const venue = venueByCity.get(e.city.toLowerCase());
+  if (!venue) continue;
+  const vx = ((venue.lon + 180) / 360) * width;
+  const vy = ((90 - venue.lat) / 180) * height;
+  // Midpoint lifted 14°-of-arc-height toward the equator (visually
+  // straight enough not to misroute, but with a slight arc)
+  const mx = (e.x + vx) / 2;
+  const my = (e.y + vy) / 2 - Math.max(20, Math.abs(e.x - vx) * 0.08);
+  const d = `M ${e.x.toFixed(2)} ${e.y.toFixed(2)} Q ${mx.toFixed(2)} ${my.toFixed(2)} ${vx.toFixed(2)} ${vy.toFixed(2)}`;
+  arcs.push({
+    id: e.id,
+    d,
+    venue: venue.city,
+    city: e.city,
+    polarity: e.polarity,
+  });
+}
 
 // === Background landmass dot grid (continent-aware mask) ===
 interface BgDot {
@@ -179,6 +228,17 @@ const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circ
   if (category === 'earnings') return 'diamond';
   return 'circle';
 };
+
+// === v7.7.0 — last-sync chrome ===
+// Site is static: "now" is build-time. We compute the number of
+// minutes between the cache `fetchedAt` and the build stamp so the
+// caption reads as "synchronized Xm ago" the moment the page loads.
+const fetchedAt = cache.fetchedAt;
+const buildDateIso = cache.buildDate || fetchedAt;
+const elapsedMs = new Date(buildDateIso).getTime() - new Date(fetchedAt).getTime();
+const elapsedMin = Math.max(0, Math.floor(elapsedMs / 60_000));
+const fetchedAtStamp = fetchedAt.slice(0, 16).replace('T', ' ').slice(0, 16) + 'Z';
+const isLive = cache.source === 'gdelt';
 ---
 
 <figure class:list={['earth-map', className]}>
@@ -186,7 +246,7 @@ const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circ
     class="earth-map__svg"
     viewBox={`0 0 ${width} ${height}`}
     role="img"
-    aria-label={`Three-layer world map: ${venues.length} research venues, ${worldEvents.length} curated world events, ${dedupGdelt.length} GDELT signals (24h). Equirectangular projection.`}
+    aria-label={`Three-layer world map: ${venues.length} research venues, ${worldEvents.length} curated world events, ${dedupGdelt.length} GDELT signals (24h). Equirectangular projection. Synchronized ${fetchedAtStamp}.`}
     preserveAspectRatio="xMidYMid meet"
   >
     {/* v7.6.1 — Owner feedback 2026-07-26: removed the top-level <title>
@@ -207,7 +267,7 @@ const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circ
       )
     }
 
-    {/* === Layer A — venue cities (amber, weighted) === */}
+    {/* === Layer A — venue cities (amber, weighted, with pulse) === */}
     {
       venuePositions.map((c) => (
         <g class="earth-map__venue">
@@ -271,12 +331,25 @@ const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circ
       })
     }
 
-    {/* === Layer C — GDELT overlay (polarity-tinted, low alpha) === */}
+    {/* === Layer D — connection arcs (event → venue city) ===
+        Drawn BEFORE Layer C so the dot caps the arc visually. */}
+    {
+      arcs.map((a, i) => (
+        <path
+          d={a.d}
+          class={`earth-map__arc earth-map__arc--${a.polarity}`}
+          style={`--i: ${i}`}
+          aria-label={`${a.city} signal → ${a.venue} venue`}
+        />
+      ))
+    }
+
+    {/* === Layer C — GDELT overlay (severity-weighted, polarity-tinted) === */}
     {
       gdeltPositions.map((e) => (
-        <circle cx={e.x} cy={e.y} r="2" class={`earth-map__gdelt earth-map__gdelt--${e.polarity}`}>
+        <circle cx={e.x} cy={e.y} r={e.r.toFixed(2)} class={`earth-map__gdelt earth-map__gdelt--${e.polarity}`}>
           <title>
-            {e.title} — {e.city}
+            {e.title} — {e.city} ({e.goldstein?.toFixed(1) ?? '0.0'})
           </title>
         </circle>
       ))
@@ -299,7 +372,26 @@ const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circ
       ></span>
       {dedupGdelt.length} GDELT 24h
     </span>
-    <span class="earth-map__cap-note">equirectangular · 24h desk coverage</span>
+    {arcs.length > 0 && (
+      <>
+        <span class="earth-map__cap-sep">·</span>
+        <span class="earth-map__cap-section">
+          <span class="earth-map__cap-swatch earth-map__cap-swatch--arc" aria-hidden="true"></span>
+          {arcs.length} arcs
+        </span>
+      </>
+    )}
+    <span class="earth-map__cap-sync">
+      <span class={`earth-map__cap-badge earth-map__cap-badge--${isLive ? 'live' : 'fallback'}`}>
+        {isLive ? 'LIVE' : 'FALLBACK'}
+      </span>
+      <span class="earth-map__cap-sync-text">SYNCHRONIZED</span>
+      <span class="earth-map__cap-sync-ago" data-counter={`${elapsedMin}`} data-duration="600">
+        {elapsedMin}
+      </span>
+      <span class="earth-map__cap-sync-text">M AGO</span>
+      <span class="earth-map__cap-sync-stamp">{fetchedAtStamp}</span>
+    </span>
   </figcaption>
 </figure>
 
@@ -329,13 +421,22 @@ const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circ
     opacity: 0.18;
   }
 
-  /* === Layer A — venues (amber, weighted) === */
+  /* === Layer A — venues (amber, weighted, with pulse) === */
   .earth-map__pulse {
     fill: none;
     stroke: var(--c-primary-2);
     stroke-width: 1;
     opacity: 0.4;
+    /* v7.7.0 — bind globe-pulse (was dead code in v7.5). Reuses the
+       canonical keyframe from CoverageGlobe. Owns the single ambient
+       budget on the map. 3.6s ease-out infinite. */
+    animation: globe-pulse 3.6s ease-out infinite;
+    transform-origin: center;
+    transform-box: fill-box;
   }
+  .earth-map__pulse:nth-child(1) { animation-delay: 0s; }
+  .earth-map__pulse:nth-child(2) { animation-delay: 0.6s; }
+  .earth-map__pulse:nth-child(3) { animation-delay: 1.2s; }
   .earth-map__dot {
     fill: var(--c-primary-2);
     stroke: var(--c-primary-2-light);
@@ -368,19 +469,48 @@ const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circ
     opacity: 0.6;
   }
 
-  /* === Layer C — GDELT (polarity-tinted, low alpha) === */
+  /* === Layer D — connection arcs (hairline, one-shot draw-in) ===
+     `stroke-dasharray` is sized to the path length via CSS variables
+     set inline by the script (none yet — falls back to 320). The
+     draw-in is one-shot (no infinite loop). */
+  .earth-map__arc {
+    fill: none;
+    stroke: var(--c-warn-soft);
+    stroke-width: 0.6;
+    stroke-dasharray: 320;
+    stroke-dashoffset: 320;
+    opacity: 0.7;
+    animation: arc-draw 1.6s var(--j-ease-out) forwards;
+    animation-delay: calc(var(--i, 0) * 60ms + 800ms);
+  }
+  .earth-map__arc--pos {
+    stroke: var(--c-amber);
+  }
+  .earth-map__arc--neg {
+    stroke: var(--c-ink-3);
+  }
+  .earth-map__arc--neutral {
+    stroke: var(--c-ink-4);
+  }
+  @keyframes arc-draw {
+    to { stroke-dashoffset: 0; }
+  }
+
+  /* === Layer C — GDELT (severity-weighted, polarity-tinted) === */
   .earth-map__gdelt {
     stroke: none;
-    opacity: 0.45;
   }
   .earth-map__gdelt--pos {
     fill: var(--c-amber);
+    opacity: 0.65;
   }
   .earth-map__gdelt--neg {
     fill: var(--c-ink-2);
+    opacity: 0.55;
   }
   .earth-map__gdelt--neutral {
     fill: var(--c-ink-3);
+    opacity: 0.4;
   }
 
   /* === Caption / legend === */
@@ -418,21 +548,77 @@ const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circ
     opacity: 0.6;
     border-radius: 50%;
   }
+  .earth-map__cap-swatch--arc {
+    background: transparent;
+    border-top: 1px solid var(--c-amber);
+    height: 0;
+    width: 12px;
+    margin-block: 4px;
+  }
   .earth-map__cap-sep {
     color: var(--c-ink-4);
   }
-  .earth-map__cap-note {
+
+  /* === v7.7.0 — last-sync chrome (right-side cluster) === */
+  .earth-map__cap-sync {
     margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 9.5px;
+    letter-spacing: 0.06em;
+    color: var(--c-ink-2);
+  }
+  .earth-map__cap-badge {
+    display: inline-block;
+    padding: 1px 6px;
+    border: 1px solid currentColor;
+    font-weight: 600;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    line-height: 1.4;
+  }
+  .earth-map__cap-badge--live {
+    color: var(--c-warn);
+  }
+  .earth-map__cap-badge--fallback {
     color: var(--c-ink-3);
-    font-style: italic;
-    text-transform: none;
-    letter-spacing: 0.02em;
+  }
+  .earth-map__cap-sync-text {
+    color: var(--c-ink-3);
+  }
+  .earth-map__cap-sync-ago {
+    color: var(--c-ink);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
+    font-weight: 600;
+    min-width: 16px;
+    text-align: right;
+    display: inline-block;
+  }
+  .earth-map__cap-sync-stamp {
+    color: var(--c-ink-3);
+    margin-left: 6px;
+    font-size: 9px;
+    letter-spacing: 0.04em;
   }
 
   @media (max-width: 720px) {
-    .earth-map__cap-note {
+    .earth-map__cap-sync {
       margin-left: 0;
       flex-basis: 100%;
+    }
+  }
+
+  /* === v7.7.0 — reduced-motion guard for the new animations === */
+  @media (prefers-reduced-motion: reduce) {
+    .earth-map__pulse,
+    .earth-map__arc {
+      animation: none;
+      opacity: 1;
+    }
+    .earth-map__arc {
+      stroke-dashoffset: 0;
     }
   }
 </style>

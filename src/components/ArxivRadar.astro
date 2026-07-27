@@ -1,0 +1,625 @@
+---
+/**
+ * ArxivRadar.astro — v7.7.0 ARXIV PREPRINT RADAR.
+ *
+ * Two-lane scrolling ticker mirroring the doubled-track pattern from
+ * NewsRibbon.astro, plus a 5-column grid of the most-recent papers
+ * (one per category). Reads as "the research the desk is watching."
+ *
+ * Lane 1 — most-recent papers (id, title, primary category, timestamp).
+ * Lane 2 — methodology frames (deterministic, "QUANT RESEARCH · ARXIV · 24H").
+ *
+ * Below the ticker: a 5-column grid of the most-recent paper from each
+ * of the five categories (q-fin, stat.AP, cs.LG, cs.AI, cs.CL). Each card
+ * has a title, author shortlist, category badge, and a link to the
+ * abstract page.
+ *
+ * Visual register: light institutional / Bloomberg. Mono + 5 distinct
+ * accent colors mapped to the existing palette. No glow. No pills.
+ * No rotation. Pause-on-hover. Reduced-motion fallback.
+ *
+ * Usage:
+ *   <ArxivRadar />
+ *   <ArxivRadar speedSec={56} />
+ */
+import arxivCache from '../data/arxiv-cache.json';
+
+interface Props {
+  /** Speed of the paper ticker (seconds per full track). Default 80. */
+  speedSec?: number;
+  /** Trailing label, right-edge. */
+  trailing?: string;
+}
+const { speedSec = 80, trailing = 'arxiv · last 24h' } = Astro.props;
+
+interface ArxivItem {
+  id: string;
+  title: string;
+  link: string;
+  timestamp: string;
+  category: string;
+  categoryFull?: string;
+  authors?: string[];
+  summary?: string;
+  publisher?: string;
+}
+interface ArxivCache {
+  fetchedAt: string;
+  buildDate: string;
+  source: string;
+  url: string;
+  categories?: string[];
+  items: ArxivItem[];
+}
+const cache = arxivCache as ArxivCache;
+const items: ArxivItem[] = cache.items ?? [];
+const categories: string[] = cache.categories ?? [];
+
+// === Short-circuit if no items ===
+const hasItems = items.length > 0;
+
+// === Category → accent mapping ===
+const categoryAccent: Record<string, string> = {
+  'q-fin': 'warn',
+  'stat.AP': 'cobalt',
+  'cs.LG': 'violet',
+  'cs.AI': 'teal',
+  'cs.CL': 'sage',
+  // Fallback: any other category → ink
+  default: 'ink',
+};
+const accentFor = (cat: string): string => categoryAccent[cat] ?? 'ink';
+
+// === One most-recent paper per category for the grid ===
+const categoryLatest: Record<string, ArxivItem | undefined> = {};
+for (const cat of categories) {
+  categoryLatest[cat] = items.find((it) => it.category === cat);
+}
+
+// === Lane 1 — short-form paper ticker rows ===
+interface RibbonRow {
+  id: string;
+  cat: string;
+  accent: string;
+  title: string;
+  timestamp: string;
+  link: string;
+}
+const ribbonRows: RibbonRow[] = items.map((it) => ({
+  id: it.id,
+  cat: it.category,
+  accent: accentFor(it.category),
+  title: it.title,
+  timestamp: it.timestamp,
+  link: it.link,
+}));
+
+// === Lane 2 — methodology frames (deterministic) ===
+const methodFrames = [
+  { head: 'Q-FIN', tail: 'quantitative finance · trading / pricing / risk', accent: 'warn' },
+  { head: 'STAT.AP', tail: 'applied statistics · time-series · econometrics', accent: 'cobalt' },
+  { head: 'CS.LG', tail: 'machine learning · foundations · applications', accent: 'violet' },
+  { head: 'CS.AI', tail: 'agents · planning · reasoning', accent: 'teal' },
+  { head: 'CS.CL', tail: 'computation + language · NLP · LLMs', accent: 'sage' },
+  { head: '24H SCAN', tail: `${categories.length} CATEGORIES · TOP-20`, accent: 'warn' },
+  { head: 'BUILD-TIME', tail: 'prebuild.fetch-arxiv.mjs', accent: 'ink' },
+  { head: 'CITATION-READY', tail: 'ARXIV ID · ABSTRACT · DOI', accent: 'ink' },
+];
+
+// === Last-sync chrome (mirrors the EarthMap pattern) ===
+const fetchedAt = cache.fetchedAt || '';
+const buildDateIso = cache.buildDate || fetchedAt;
+const elapsedMs = new Date(buildDateIso).getTime() - new Date(fetchedAt).getTime();
+const elapsedMin = Math.max(0, Math.floor(elapsedMs / 60_000));
+const fetchedAtShort = fetchedAt.slice(0, 16).replace('T', ' ') + 'Z';
+const isLive = cache.source === 'arxiv';
+
+// === Format timestamp helper ===
+function formatHm(iso: string): string {
+  if (!iso) return '';
+  // Just HH:MM
+  const m = iso.match(/T(\d{2}:\d{2})/);
+  return m ? m[1] : '';
+}
+function formatDate(iso: string): string {
+  if (!iso) return '';
+  return iso.slice(0, 10);
+}
+---
+
+<section class="arxiv-radar" aria-label="arXiv preprint radar">
+  {hasItems && (
+    <>
+      <div class="arxiv-radar__ticker">
+        <div class="arxiv-radar__lane arxiv-radar__lane--title" role="region" aria-label="Latest papers">
+          <div class="arxiv-radar__lane-label mono" aria-hidden="true">ARXIV</div>
+          <div class="arxiv-radar__viewport">
+            <div class="arxiv-radar__track" style={`--arxiv-dur: ${speedSec}s`}>
+              {[...ribbonRows, ...ribbonRows].map((r) => (
+                <span class="arxiv-radar__item">
+                  <span class={`arxiv-radar__badge mono arxiv-radar__badge--${r.accent}`}>
+                    {r.cat}
+                  </span>
+                  <a
+                    class="arxiv-radar__title"
+                    href={r.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {r.title}
+                  </a>
+                  <span class="arxiv-radar__hm mono">{formatHm(r.timestamp)}</span>
+                  <span class="arxiv-radar__sep" aria-hidden="true">·</span>
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div class="arxiv-radar__lane arxiv-radar__lane--method" role="region" aria-label="Methodology frames">
+          <div class="arxiv-radar__lane-label mono" aria-hidden="true">METHOD</div>
+          <div class="arxiv-radar__viewport arxiv-radar__viewport--reverse">
+            <div class="arxiv-radar__track" style={`--arxiv-dur: ${speedSec + 24}s`}>
+              {[...methodFrames, ...methodFrames].map((f) => (
+                <span class:list={['arxiv-radar__frame', `is-${f.accent}`]}>
+                  <span class="arxiv-radar__frame-head">{f.head}</span>
+                  <span class="arxiv-radar__frame-sep" aria-hidden="true">·</span>
+                  <span class="arxiv-radar__frame-tail mono">{f.tail}</span>
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div class="arxiv-radar__stop mono" aria-hidden="true">{trailing}</div>
+      </div>
+
+      <div class="arxiv-radar__grid">
+        {categories.map((cat) => {
+          const item = categoryLatest[cat];
+          if (!item) {
+            return (
+              <div class="arxiv-radar__card arxiv-radar__card--empty">
+                <span class={`arxiv-radar__badge mono arxiv-radar__badge--${accentFor(cat)}`}>{cat}</span>
+                <p class="arxiv-radar__empty-text">no recent paper</p>
+              </div>
+            );
+          }
+          return (
+            <a
+              class={`arxiv-radar__card arxiv-radar__card--${accentFor(cat)}`}
+              href={item.link}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span class={`arxiv-radar__badge mono arxiv-radar__badge--${accentFor(cat)}`}>
+                {cat}
+              </span>
+              <p class="arxiv-radar__paper-title">{item.title}</p>
+              <p class="arxiv-radar__paper-authors">
+                {item.authors && item.authors.length > 0
+                  ? item.authors.slice(0, 3).join(', ') + (item.authors.length > 3 ? ' …' : '')
+                  : '—'}
+              </p>
+              <p class="arxiv-radar__paper-meta mono">
+                <span>{formatDate(item.timestamp)}</span>
+                <span class="arxiv-radar__paper-id">arXiv:{item.id}</span>
+              </p>
+            </a>
+          );
+        })}
+      </div>
+
+      <p class="arxiv-radar__caption mono">
+        <span class={`arxiv-radar__badge arxiv-radar__badge--${isLive ? 'live' : 'ink'}`}>
+          {isLive ? 'LIVE' : 'FALLBACK'}
+        </span>
+        <span class="arxiv-radar__cap-text">ARXIV</span>
+        <span class="arxiv-radar__cap-text">{items.length} PAPERS</span>
+        <span class="arxiv-radar__cap-sep">·</span>
+        <span class="arxiv-radar__cap-text">{categories.length} CATEGORIES</span>
+        <span class="arxiv-radar__cap-sep">·</span>
+        <span class="arxiv-radar__cap-text">SYNCHRONIZED</span>
+        <span class="arxiv-radar__cap-ago" data-counter={`${elapsedMin}`} data-duration="600">
+          {elapsedMin}
+        </span>
+        <span class="arxiv-radar__cap-text">M AGO</span>
+        <span class="arxiv-radar__cap-stamp">{fetchedAtShort}</span>
+      </p>
+    </>
+  )}
+
+  {!hasItems && (
+    <p class="arxiv-radar__empty">
+      <span class="arxiv-radar__cap-badge">FALLBACK</span>
+      <span class="arxiv-radar__cap-text">ARXIV · NO ITEMS · LAST GOOD {fetchedAtShort}</span>
+    </p>
+  )}
+</section>
+
+<style>
+  /* === Container === */
+  .arxiv-radar {
+    padding: 32px 0 48px;
+    border-block: 1px solid var(--c-rule);
+    background: var(--c-bg);
+  }
+
+  /* === Ticker (doubled-track) === */
+  .arxiv-radar__ticker {
+    position: relative;
+    background: var(--c-bg-2);
+    border: 1px solid var(--c-rule);
+    color: var(--c-ink);
+    overflow: hidden;
+    user-select: none;
+    margin-bottom: 24px;
+  }
+  .arxiv-radar__lane {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    align-items: center;
+    border-bottom: 1px solid var(--c-rule);
+    min-height: 36px;
+  }
+  .arxiv-radar__lane:last-of-type {
+    border-bottom: 0;
+  }
+  .arxiv-radar__lane-label {
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--c-ink-3);
+    padding: 0 12px;
+    border-right: 1px solid var(--c-rule);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    background: var(--c-bg);
+  }
+  .arxiv-radar__viewport {
+    overflow: hidden;
+    position: relative;
+    mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      #000 24px,
+      #000 calc(100% - 24px),
+      transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      #000 24px,
+      #000 calc(100% - 24px),
+      transparent 100%
+    );
+  }
+  .arxiv-radar__track {
+    display: inline-flex;
+    align-items: center;
+    gap: 24px;
+    white-space: nowrap;
+    padding-inline: 12px;
+    animation: arxiv-radar-scroll var(--arxiv-dur, 80s) linear infinite;
+    will-change: transform;
+  }
+  .arxiv-radar__viewport--reverse .arxiv-radar__track {
+    animation-direction: reverse;
+  }
+  .arxiv-radar__ticker:hover .arxiv-radar__track {
+    animation-play-state: paused;
+  }
+
+  /* === Lane 1 — paper items === */
+  .arxiv-radar__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    line-height: 1;
+    color: var(--c-ink);
+    padding-block: 11px;
+  }
+  .arxiv-radar__badge {
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 2px 6px;
+    border: 1px solid currentColor;
+    border-radius: 0;
+    line-height: 1.4;
+    color: var(--c-ink-2);
+  }
+  .arxiv-radar__badge--warn {
+    color: var(--c-warn);
+  }
+  .arxiv-radar__badge--cobalt {
+    color: var(--c-primary-2);
+  }
+  .arxiv-radar__badge--sage {
+    color: var(--j-sage);
+  }
+  .arxiv-radar__badge--teal {
+    color: var(--j-teal);
+  }
+  .arxiv-radar__badge--violet {
+    color: var(--j-violet);
+  }
+  .arxiv-radar__badge--ink {
+    color: var(--c-ink-2);
+  }
+  .arxiv-radar__badge--live {
+    color: var(--c-warn);
+  }
+  .arxiv-radar__title {
+    font-weight: 500;
+    color: var(--c-ink);
+    text-decoration: none;
+    transition: color 200ms var(--j-ease-out);
+    max-width: 480px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .arxiv-radar__title:hover {
+    color: var(--c-warn);
+  }
+  .arxiv-radar__hm {
+    color: var(--c-ink-3);
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
+  }
+  .arxiv-radar__sep {
+    color: var(--c-ink-4);
+    font-weight: 600;
+  }
+
+  /* === Lane 2 — methodology frames === */
+  .arxiv-radar__frame {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding-block: 11px;
+    font-size: 12px;
+    line-height: 1;
+    color: var(--c-ink);
+  }
+  .arxiv-radar__frame-head {
+    font-family: var(--serif-display);
+    font-style: italic;
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: -0.005em;
+    color: var(--c-ink);
+  }
+  .arxiv-radar__frame-tail {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--c-ink-2);
+  }
+  .arxiv-radar__frame-sep {
+    color: var(--c-ink-4);
+    font-weight: 600;
+  }
+  .arxiv-radar__frame.is-warn .arxiv-radar__frame-head {
+    color: var(--c-warn);
+  }
+  .arxiv-radar__frame.is-cobalt .arxiv-radar__frame-head {
+    color: var(--c-primary-2);
+  }
+  .arxiv-radar__frame.is-sage .arxiv-radar__frame-head {
+    color: var(--j-sage);
+  }
+  .arxiv-radar__frame.is-teal .arxiv-radar__frame-head {
+    color: var(--j-teal);
+  }
+  .arxiv-radar__frame.is-violet .arxiv-radar__frame-head {
+    color: var(--j-violet);
+  }
+
+  /* === Edge stop === */
+  .arxiv-radar__stop {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 36px;
+    display: flex;
+    align-items: center;
+    padding-inline: 12px;
+    color: var(--c-ink-3);
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, transparent, var(--c-bg-2) 30%);
+    pointer-events: none;
+  }
+
+  /* === Grid — one card per category === */
+  .arxiv-radar__grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .arxiv-radar__card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px 14px 14px;
+    background: var(--c-bg-2);
+    border: 1px solid var(--c-rule);
+    border-top: 2px solid var(--c-rule);
+    text-decoration: none;
+    color: var(--c-ink);
+    transition:
+      border-color 200ms var(--j-ease-out),
+      transform 200ms var(--j-ease-out);
+    min-height: 168px;
+  }
+  .arxiv-radar__card--warn {
+    border-top-color: var(--c-warn);
+  }
+  .arxiv-radar__card--cobalt {
+    border-top-color: var(--c-primary-2);
+  }
+  .arxiv-radar__card--sage {
+    border-top-color: var(--j-sage);
+  }
+  .arxiv-radar__card--teal {
+    border-top-color: var(--j-teal);
+  }
+  .arxiv-radar__card--violet {
+    border-top-color: var(--j-violet);
+  }
+  .arxiv-radar__card:hover {
+    transform: translateY(-2px);
+    border-color: var(--c-ink-3);
+  }
+  .arxiv-radar__card--empty {
+    border-top-color: var(--c-rule);
+    color: var(--c-ink-3);
+    cursor: default;
+  }
+  .arxiv-radar__card--empty:hover {
+    transform: none;
+  }
+  .arxiv-radar__paper-title {
+    margin: 0;
+    font: 500 12px / 1.4 var(--ff-sans);
+    color: var(--c-ink);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .arxiv-radar__paper-authors {
+    margin: 0;
+    font: 400 11px / 1.4 var(--ff-sans);
+    color: var(--c-ink-2);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .arxiv-radar__paper-meta {
+    margin: auto 0 0;
+    font-size: 9.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--c-ink-3);
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .arxiv-radar__paper-id {
+    color: var(--c-ink-2);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
+  }
+  .arxiv-radar__empty-text {
+    margin: 0;
+    font: 400 11px / 1.4 var(--ff-sans);
+    color: var(--c-ink-3);
+    font-style: italic;
+  }
+
+  /* === Caption === */
+  .arxiv-radar__caption {
+    margin: 0;
+    padding: 12px 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    font-size: 10px;
+    color: var(--c-ink-2);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .arxiv-radar__cap-text {
+    color: var(--c-ink-2);
+  }
+  .arxiv-radar__cap-sep {
+    color: var(--c-ink-4);
+  }
+  .arxiv-radar__cap-ago {
+    color: var(--c-ink);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
+    font-weight: 600;
+    min-width: 16px;
+    text-align: right;
+    display: inline-block;
+  }
+  .arxiv-radar__cap-stamp {
+    color: var(--c-ink-3);
+    margin-left: auto;
+    font-size: 9px;
+    letter-spacing: 0.04em;
+  }
+  .arxiv-radar__empty {
+    margin: 0;
+    padding: 24px 0;
+    color: var(--c-ink-2);
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .arxiv-radar__cap-badge {
+    display: inline-block;
+    padding: 1px 6px;
+    border: 1px solid currentColor;
+    font-weight: 600;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    line-height: 1.4;
+    color: var(--c-ink-3);
+  }
+
+  /* === Keyframe === */
+  @keyframes arxiv-radar-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* === Reduced motion === */
+  @media (prefers-reduced-motion: reduce) {
+    .arxiv-radar__track {
+      animation: none !important;
+    }
+    .arxiv-radar__viewport {
+      mask-image: none;
+      -webkit-mask-image: none;
+    }
+    .arxiv-radar__card:hover {
+      transform: none;
+    }
+  }
+
+  /* === Responsive === */
+  @media (max-width: 1100px) {
+    .arxiv-radar__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  @media (max-width: 720px) {
+    .arxiv-radar__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .arxiv-radar__lane {
+      grid-template-columns: 0 1fr;
+    }
+    .arxiv-radar__lane-label {
+      display: none;
+    }
+  }
+  @media (max-width: 480px) {
+    .arxiv-radar__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

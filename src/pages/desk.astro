@@ -1,20 +1,27 @@
 ---
 /**
- * desk.astro — v7.6.8 THE DESK · 24h multi-asset coverage view.
+ * desk.astro — v7.7.0 THE DESK · 24h multi-asset coverage view.
  *
  * v7.6.8 polish — owner ask 2026-07-27: "improve the UI/UX of hub. make
  * stella work on it and make it same quality as the login and main page.
  * world class. perfection in motion graphics and designs. do full audit
  * and fix all bugs."
  *
+ * v7.7.0 — live-world: ArxivRadar (research preprints) + LiveWire (macro
+ * wire headlines) slots added. EarthMap upgraded in place (severity-
+ * weighted Layer C, hairline arcs to venue cities, last-sync chrome).
+ * KPI cell "GDELT SIGNALS" → "GLOBAL SIGNALS" (sum across 3 feeds).
+ *
  * Layout (top → bottom):
  *   1. MarketTape — scrolling equity tape
  *   2. Head — eyebrow + headline + voice + sub + dual-path CTA
  *   3. KPI strip — 4 count-up stats (venues / events / signals / tz)
  *   4. Marquee — methodology frame loop
- *   5. EarthMap — 3-layer equirectangular world map
+ *   4b. ArxivRadar — 5-category research preprint ticker + grid
+ *   5. EarthMap — 3-layer equirectangular world map (upgraded)
  *   6. LiveStats — instrument panel (4 cards, perp sparkline animation)
  *   7. World events table — 10 curated events with row stagger
+ *   7b. LiveWire — 4-source macro wire ticker (Reuters/CoinDesk/Block/CoinTelegraph)
  *   8. LiveActivity — tail-of-the-loop event log
  *   9. CTABanner — back to home / open /desk link
  *
@@ -27,6 +34,8 @@ import MarketTape from '@components/MarketTape.astro';
 import NewsRibbon from '@components/NewsRibbon.astro';
 import EarthMap from '@components/EarthMap.astro';
 import Marquee from '@components/Marquee.astro';
+import ArxivRadar from '@components/ArxivRadar.astro';
+import LiveWire from '@components/LiveWire.astro';
 import LiveStats from '@components/LiveStats.astro';
 import LiveActivity from '@components/LiveActivity.astro';
 import CTABanner from '@components/CTABanner.astro';
@@ -127,9 +136,9 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
         </li>
         <li class="desk-stats__cell" style="--i: 2">
           <p class="desk-stats__num mono">
-            <span data-counter="50" data-duration="1400">50+</span>
+            <span data-counter="100" data-duration="1400">100+</span>
           </p>
-          <p class="desk-stats__lbl mono">GDELT SIGNALS</p>
+          <p class="desk-stats__lbl mono">GLOBAL SIGNALS</p>
         </li>
         <li class="desk-stats__cell" style="--i: 3">
           <p class="desk-stats__num mono">UTC+8</p>
@@ -147,7 +156,7 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     items={[
       { head: 'PUBLIC-DATA', tail: 'GDPR-CLEAN · REPRODUCIBLE', accent: 'sage' },
       { head: 'EVAL-FIRST', tail: `${profile.stats.evalGates} GATES · EXIT-0 CONTRACT`, accent: 'warn' },
-      { head: '24H SCAN', tail: '6 VENUES · 10 EVENTS · 50+ SIGNALS', accent: 'sage' },
+      { head: '24H SCAN', tail: '6 VENUES · 10 EVENTS · 100+ SIGNALS', accent: 'sage' },
       { head: 'TIMEZONE-AWARE', tail: 'UTC+8 DESK · 3/24 OVERLAP', accent: 'violet' },
       { head: 'REGIME-TAGGED', tail: 'CALM · NORMAL · STRESS', accent: 'terracotta' },
       { head: 'PIT STRICT', tail: 'NO LOOKAHEAD · NO SURVIVORSHIP', accent: 'sage' },
@@ -157,6 +166,14 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     speedSec={48}
     trailing="24h coverage · methodology"
   />
+
+  {/* === 4b. ArxivRadar — research preprint ticker (v7.7.0) === */}
+  <section class="desk-arxiv" aria-label="Latest research preprints" data-reveal>
+    <div class="container">
+      <p class="desk-arxiv__eyebrow mono">ARXIV · 5 CATEGORIES · PREPRINTS · 24H</p>
+      <ArxivRadar speedSec={66} />
+    </div>
+  </section>
 
   {/* === 5. EarthMap — 3-layer world viz === */}
   <section class="desk-map" aria-label="Three-layer world map" data-reveal>
@@ -221,6 +238,14 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
           }
         </tbody>
       </table>
+    </div>
+  </section>
+
+  {/* === 7b. LiveWire — macro wire ticker (v7.7.0) === */}
+  <section class="desk-wire" aria-label="Macro wire headlines" data-reveal>
+    <div class="container">
+      <p class="desk-wire__eyebrow mono">MACRO WIRE · 4 PUBLISHERS · HEADLINES · 24H</p>
+      <LiveWire speedSec={64} trailing="macro wire · 24h" />
     </div>
   </section>
 
@@ -385,6 +410,34 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     letter-spacing: 0.14em;
     text-transform: uppercase;
     margin: 0;
+  }
+
+  /* === v7.7.0 — ArxivRadar section chrome === */
+  .desk-arxiv {
+    padding: 48px 0;
+    border-bottom: 1px solid var(--c-rule);
+    background: var(--c-bg);
+  }
+  .desk-arxiv__eyebrow {
+    font: 500 11px / 1.4 var(--ff-mono);
+    color: var(--c-warn);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  /* === v7.7.0 — LiveWire section chrome === */
+  .desk-wire {
+    padding: 48px 0;
+    border-bottom: 1px solid var(--c-rule);
+    background: var(--c-bg);
+  }
+  .desk-wire__eyebrow {
+    font: 500 11px / 1.4 var(--ff-mono);
+    color: var(--c-warn);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin: 0 0 16px;
   }
 
   /* === Map === */
