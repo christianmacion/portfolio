@@ -496,6 +496,60 @@ void venueByCity;
           stop-opacity="0"
         />
       </radialGradient>
+      {/* v7.7.6 — realistic ocean: deeper cobalt at the limb, lighter
+          at the sub-solar point. Reads as a 3D sphere. */}
+      <radialGradient
+        id="earth-map__ocean"
+        cx="50%"
+        cy="50%"
+        r="50%"
+      >
+        <stop
+          offset="0%"
+          stop-color="var(--j-cobalt-3)"
+          stop-opacity="1"
+        />
+        <stop
+          offset="65%"
+          stop-color="var(--j-cobalt)"
+          stop-opacity="1"
+        />
+        <stop
+          offset="100%"
+          stop-color="var(--j-cobalt-deep)"
+          stop-opacity="1"
+        />
+      </radialGradient>
+      {/* v7.7.6 — atmospheric scatter ring (cobalt bloom around the
+          sphere, mimics Rayleigh scattering in real Earth photos). */}
+      <radialGradient
+        id="earth-map__scatter"
+        cx="50%"
+        cy="50%"
+        r="50%"
+      >
+        <stop offset="78%" stop-color="var(--j-cobalt-3)" stop-opacity="0" />
+        <stop offset="92%" stop-color="var(--j-cobalt-3)" stop-opacity="0.55" />
+        <stop offset="100%" stop-color="var(--j-cobalt)" stop-opacity="0" />
+      </radialGradient>
+      {/* v7.7.6 — night-side dim: a near-opaque dark mask on the
+          back hemisphere so day/night reads at a glance. */}
+      <radialGradient
+        id="earth-map__night"
+        cx="50%"
+        cy="50%"
+        r="50%"
+      >
+        <stop offset="0%" stop-color="var(--c-primary-deep)" stop-opacity="0" />
+        <stop offset="55%" stop-color="var(--c-primary-deep)" stop-opacity="0" />
+        <stop offset="78%" stop-color="var(--c-primary-deep)" stop-opacity="0.45" />
+        <stop offset="100%" stop-color="var(--c-primary-deep)" stop-opacity="0.78" />
+      </radialGradient>
+      {/* v7.7.6 — clip the rotating globe so countries that swing into
+          the back hemisphere are visually masked by the sphere edge. */}
+      <clipPath id="earth-map__sphere-clip">
+        <circle cx={GLOBE_CX} cy={GLOBE_CY} r={GLOBE_RADIUS + 1} />
+      </clipPath>
       <radialGradient
         id="earth-map__day-wash"
         cx="0.5"
@@ -548,21 +602,41 @@ void venueByCity;
       aria-hidden="true"
     />
 
-    {/* === Layer 0 — globe sphere outline + country borders === */}
+    {/* === Layer 0 — globe ocean + sphere outline + country borders ===
+         v7.7.6 — the ocean disc now carries the cobalt radial gradient
+         (deeper at the limb, lighter at the sub-solar point). The
+         rotating-country group sits on top of the ocean so continents
+         drift slowly east-to-west like Earth seen from space. */}
     <g class="earth-map__globe" aria-hidden="false">
       <path
         d={GLOBE_SPHERE_D}
         class="earth-map__sphere"
-        fill="var(--c-bg-2)"
+        fill="url(#earth-map__ocean)"
       />
-      {countryOutlines.map((c) => (
-        <path
-          d={c.dGlobe}
-          class={`earth-map__country earth-map__country--${c.id}`}
-          data-country-id={c.id}
-        />
-      ))}
+      <g class="earth-map__countries" clip-path="url(#earth-map__sphere-clip)">
+        {countryOutlines.map((c) => (
+          <path
+            d={c.dGlobe}
+            class={`earth-map__country earth-map__country--${c.id}`}
+            data-country-id={c.id}
+          />
+        ))}
+      </g>
     </g>
+
+    {/* v7.7.6 — atmospheric scatter ring (Rayleigh-style cobalt bloom
+        around the sphere limb) and night-side dim mask. Both clipped to
+        the sphere circle so they hug the planet. */}
+    <path
+      d={GLOBE_SPHERE_D}
+      class="earth-map__scatter"
+      aria-hidden="true"
+    />
+    <path
+      d={GLOBE_SPHERE_D}
+      class="earth-map__night-mask"
+      aria-hidden="true"
+    />
 
     {/* === Layer F (v7.7.4) — terminator, ortho-reprojected ===
         Day-side wash first (sits behind the country outlines via the
@@ -867,26 +941,60 @@ void venueByCity;
   }
 
   /* === Globe sphere outline + country borders === */
+  /* v7.7.6 — sphere is filled by url(#earth-map__ocean) gradient in
+     markup; CSS only declares the stroke for the limb. */
   .earth-map__sphere {
-    fill: var(--c-bg-2);
-    stroke: var(--c-primary-2);
-    stroke-opacity: 0.6;
+    stroke: var(--j-cobalt-3);
+    stroke-opacity: 0.65;
     stroke-width: 0.7;
   }
   .earth-map__sphere-edge {
     /* The crisp outer 1px stroke at 70% opacity — declares the disc edge. */
   }
+  /* v7.7.6 — continents are sage land, bordered by warm amber so the
+     silhouette of Africa / Eurasia reads instantly. */
   .earth-map__country {
-    fill: var(--c-bg-2);
-    stroke: var(--c-primary-2);
-    stroke-opacity: 0.5;
-    stroke-width: 1;
+    fill: var(--j-sage);
+    fill-opacity: 0.88;
+    stroke: var(--c-primary-2-light);
+    stroke-opacity: 0.65;
+    stroke-width: 0.9;
     stroke-linejoin: round;
     transition: fill-opacity 120ms ease, stroke-opacity 120ms ease;
   }
   .earth-map__country:hover {
-    fill: var(--c-bg-3);
-    stroke-opacity: 0.85;
+    fill-opacity: 1;
+    stroke-opacity: 0.95;
+  }
+
+  /* v7.7.6 — slow auto-rotation of the countries group. The clipPath
+     in markup keeps back-hemisphere countries masked, so the continents
+     drift across the visible disc instead of swinging off the rim. */
+  .earth-map__countries {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: earth-rotate 240s linear infinite;
+    will-change: transform;
+  }
+  @keyframes earth-rotate {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .earth-map__countries { animation: none; }
+  }
+
+  /* v7.7.6 — night-side dim. Drawn as a path on the sphere outline
+     using a radial gradient so the day/night boundary is a real gradient
+     on the limb rather than just a dashed line. */
+  .earth-map__night-mask {
+    fill: url(#earth-map__night);
+    pointer-events: none;
+    mix-blend-mode: multiply;
+  }
+  .earth-map__scatter {
+    fill: url(#earth-map__scatter);
+    pointer-events: none;
   }
 
   /* === Layer A — venues === */
