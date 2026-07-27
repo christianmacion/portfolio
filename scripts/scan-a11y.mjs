@@ -13,7 +13,6 @@
 import { readFile, readdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import { JSDOM } from 'jsdom';
-import { JSDOM as _JSDOM } from 'jsdom';
 import axeCore from 'axe-core';
 
 // Silence axe-core's noisy "You have not configured..." warnings about

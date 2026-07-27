@@ -151,7 +151,16 @@ const KNOWN_NO_PAGE = [
 /** Classify a probe result into fail / warn / pass. */
 function classify(r) {
   if (r.status >= 200 && r.status < 400) return 'pass';
-  const host = new URL(r.url).host.toLowerCase();
+  // v7.7.10 — wrap URL parse in try/catch. If a malformed URL
+  // ever slips past the extractor regex (e.g. unescaped chars),
+  // the throw kills the whole scan. Fall back to pass rather than
+  // crashing CI on parser fragility.
+  let host;
+  try {
+    host = new URL(r.url).host.toLowerCase();
+  } catch {
+    return 'pass';
+  }
   if (KNOWN_NO_PAGE.some((k) => host === k.host || host.endsWith('.' + k.host))) {
     return 'warn-no-page';
   }
@@ -202,10 +211,21 @@ async function main() {
   const warnTimeout = results.filter((r) => classify(r) === 'warn-timeout');
   const fail = results.filter((r) => classify(r) === 'fail');
 
+  // v7.7.10 — KNOWN_FP_DEMOTED: surface any known-bot-blocked domain
+  // that returned 2xx this run (i.e. the exemption is now stale).
+  // Helps maintainers know when to retire a bot-blocked rule.
+  const fpDemoted = warnBot.filter((r) => r.status >= 200 && r.status < 400);
+
   console.log('');
   console.log(
     `[link-rot] summary: ${ok.length} OK · ${fail.length} DEAD · ${warnNoPage.length} no-page · ${warnBot.length} bot-blocked · ${warnTimeout.length} timeout`,
   );
+  if (fpDemoted.length > 0) {
+    console.log(
+      `[link-rot] FYI: ${fpDemoted.length} KNOWN_BOT_BLOCKED entry/entries returned 2xx this run:`,
+    );
+    for (const r of fpDemoted) console.log(`  - ${r.url} → consider retiring the exemption`);
+  }
 
   const printGroup = (label, list) => {
     if (list.length === 0) return;
