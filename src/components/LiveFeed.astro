@@ -286,6 +286,18 @@ const timeBucketCounts = (() => {
       <span class="live-feed__empty-text">NO ITEMS IN {windowHours}H WINDOW · LAST GOOD {formatDate(cache.fetchedAt || cache.generated)} {formatHm(cache.fetchedAt || cache.generated)}</span>
     </p>
   )}
+
+  {/* v7.19 — a11y live region (announces filter result count to screen readers) */}
+  <div class="sr-only" role="status" aria-live="polite" aria-atomic="true" data-live-announcer>
+    Showing {events.length} of {events.length} events.
+  </div>
+
+  {/* v7.19 — keyboard shortcut hint (visible only to sighted users) */}
+  {hasItems && (
+    <p class="live-feed__kbd-hint mono">
+      <kbd>/</kbd> SEARCH · <kbd>ESC</kbd> CLEAR · <kbd>J</kbd>/<kbd>K</kbd> NEXT/PREV ROW
+    </p>
+  )}
 </section>
 
 <style>
@@ -509,6 +521,30 @@ const timeBucketCounts = (() => {
     color: var(--c-ink-3);
     font-size: 9.5px;
     letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  /* === v7.19 — keyboard shortcut hint ==================================== */
+  .live-feed__kbd-hint {
+    margin: 8px 0 0;
+    padding: 0;
+    color: var(--c-ink-4);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-align: right;
+  }
+  .live-feed__kbd-hint kbd {
+    display: inline-block;
+    padding: 1px 5px;
+    margin: 0 1px;
+    font-family: var(--ff-mono);
+    font-size: 9px;
+    line-height: 1.3;
+    color: var(--c-ink-2);
+    background: var(--c-bg);
+    border: 1px solid var(--c-rule);
+    border-radius: 2px;
     text-transform: uppercase;
   }
 
@@ -769,6 +805,9 @@ const timeBucketCounts = (() => {
   const cityButtons = document.querySelectorAll<HTMLButtonElement>('[data-city-filter]');
   const timeButtons = document.querySelectorAll<HTMLButtonElement>('[data-time-filter]');
   const refreshCountdown = document.querySelector<HTMLElement>('[data-refresh-countdown]');
+  /* === v7.19 — a11y live region + keyboard shortcuts ====================== */
+  const announcer = document.querySelector<HTMLElement>('[data-live-announcer]');
+  let announceTimer: number | null = null;
 
   let activeSource = 'all';
   let activeQuery = '';
@@ -836,6 +875,17 @@ const timeBucketCounts = (() => {
       }
     }
     if (counter) counter.textContent = `${visible} VISIBLE`;
+    // v7.19 — announce filter result to screen-reader users (debounced 250ms)
+    if (announcer) {
+      const total = rows.length;
+      const text = visible === total
+        ? `Showing all ${total} event${total === 1 ? '' : 's'}.`
+        : `Showing ${visible} of ${total} event${total === 1 ? '' : 's'} matching current filters.`;
+      if (announceTimer !== null) window.clearTimeout(announceTimer);
+      announceTimer = window.setTimeout(() => {
+        announcer.textContent = text;
+      }, 250);
+    }
   }
 
   /* Initial sync from URL — apply active filters before listeners wire up. */
@@ -956,6 +1006,35 @@ const timeBucketCounts = (() => {
     next.scrollIntoView({ behavior: 'smooth', block: 'center' });
     flashRow(next);
     next.focus({ preventScroll: true });
+  });
+
+  /* === v7.19 — keyboard shortcuts (/ focus search, Escape clear) ========== */
+  document.addEventListener('keydown', (ev) => {
+    const t = ev.target as HTMLElement | null;
+    const tag = t?.tagName.toLowerCase() ?? '';
+    const inEditable = tag === 'input' || tag === 'textarea' || (t?.isContentEditable ?? false);
+
+    // `/` → focus search (only when not already in an input)
+    if (ev.key === '/' && !inEditable) {
+      if (searchInput) {
+        ev.preventDefault();
+        searchInput.focus();
+        searchInput.select();
+      }
+      return;
+    }
+
+    // `Escape` → clear search (only when search is focused AND has content)
+    if (ev.key === 'Escape' && searchInput && document.activeElement === searchInput) {
+      if (searchInput.value !== '') {
+        ev.preventDefault();
+        searchInput.value = '';
+        activeQuery = '';
+        applyFilters();
+        writeFiltersToUrl();
+      }
+      return;
+    }
   });
 
   /* === v7.9.3 — refresh countdown =========================================
