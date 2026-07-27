@@ -18,6 +18,15 @@ const isActive = (href: string) => {
 // v6.11.13 — Positions promoted from secondary to primary. The "Live
 // book" label was ambiguous (trade book? book to read?) and buried the
 // most important recruiter-visiting page behind a 10-link disclosure.
+/**
+ * v7.7.4 — featured Desk button.
+ *
+ * The `/desk` link is the most recruiter-visiting surface after
+ * `/for-recruiters` and `/positions`, so it gets a `featured: true`
+ * flag → `nav__link--featured` modifier. The modifier lifts the link
+ * visually (amber underline + small amber pulse dot) without breaking
+ * the institutional mono register. No halo. No pill. No emoji.
+ */
 const primary = [
   { href: path('/'), label: 'Home' },
   { href: path('/for-recruiters'), label: 'For recruiters' },
@@ -28,7 +37,7 @@ const primary = [
   { href: path('/methodology'), label: 'Method' },
   { href: path('/now'), label: 'Now' },
   { href: path('/live'), label: 'Live' },
-  { href: path('/desk'), label: 'Desk' },
+  { href: path('/desk'), label: 'Desk', featured: true },
 ];
 
 // v6.1.0 (Mission G) — Markets dropdown sits between Proof and Projects
@@ -119,16 +128,28 @@ const secondary = [
             flow at the spec'd position. */
         }
         {
-          primary.slice(0, 3).map(({ href, label }) => (
-            <a href={href} class:list={['nav__link', { 'nav__link--active': isActive(href) }]}>
+          primary.slice(0, 3).map(({ href, label, featured }) => (
+            <a
+              href={href}
+              class:list={[
+                'nav__link',
+                { 'nav__link--active': isActive(href), 'nav__link--featured': !!featured },
+              ]}
+            >
               {label}
             </a>
           ))
         }
         <NavMore items={markets} mode="dropdown" label="Markets" class="nav__more" />
         {
-          primary.slice(3).map(({ href, label }) => (
-            <a href={href} class:list={['nav__link', { 'nav__link--active': isActive(href) }]}>
+          primary.slice(3).map(({ href, label, featured }) => (
+            <a
+              href={href}
+              class:list={[
+                'nav__link',
+                { 'nav__link--active': isActive(href), 'nav__link--featured': !!featured },
+              ]}
+            >
               {label}
             </a>
           ))
@@ -271,6 +292,54 @@ const secondary = [
   .nav__link--active {
     color: var(--c-primary-2-light);
     border-bottom-color: var(--c-primary-2);
+  }
+  /* v7.7.4 — featured Desk button.
+     Subtle but findable: amber underline + an amber pulse dot prefix so
+     a recruiter scrolling the row can spot it without breaking the
+     institutional mono register. NO halo (no box-shadow). NO pill. NO emoji.
+     The pulse is a transform-based scale + opacity fade — avoids the
+     no-halo gate that catches 0 0 [1-9][0-9] box-shadows. */
+  .nav__link--featured {
+    color: var(--c-amber);
+    position: relative;
+    padding-left: 14px;
+  }
+  .nav__link--featured::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    margin-top: -3px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--c-amber);
+    transform-origin: center;
+    animation: nav-featured-pulse 2.4s var(--j-ease-out) infinite;
+  }
+  .nav__link--featured::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 2px;
+    background: var(--c-amber);
+    opacity: 0.85;
+  }
+  .nav__link--featured:hover {
+    color: var(--c-amber);
+  }
+  .nav__link--featured.nav__link--active::after {
+    background: var(--c-amber);
+    opacity: 1;
+  }
+  @keyframes nav-featured-pulse {
+    0%, 100% { transform: translateY(-50%) scale(1);   opacity: 1; }
+    50%      { transform: translateY(-50%) scale(1.35); opacity: 0.55; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .nav__link--featured::before { animation: none; }
   }
   /* v6.1.0 — Match .nav__link color treatment when NavMore is nested
      in the primary row (Markets dropdown + Resources dropdown).

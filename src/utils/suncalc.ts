@@ -152,6 +152,128 @@ export function equirectProject(
 }
 
 /**
+ * Orthographic (globe) projection helper. Given a (lat, lon) point and
+ * the current globe rotation [lambda, phi, gamma] (in degrees) — where
+ * the orthographic projection is centered — returns:
+ *   - x, y: viewBox coords
+ *   - visible: false if the point is on the back of the globe
+ *
+ * Pure math; no SVG / DOM dependency. SSR-safe. No Date.now().
+ *
+ * Reference: d3-geo `geoOrthographic` implementation. We inline it
+ * here so the SSR build doesn't need to import the full d3-geo module
+ * (saves ~80 KB of bundle).
+ */
+export interface OrthographicRotation {
+  /** Lambda — longitude of the projection center (degrees, default 0). */
+  lambda?: number;
+  /** Phi — latitude of the projection center (degrees, default 0). */
+  phi?: number;
+  /** Gamma — roll (degrees, default 0). */
+  gamma?: number;
+}
+export interface OrthographicPoint {
+  x: number;
+  y: number;
+  visible: boolean;
+  /** Signed angular distance from globe center; >90 = back side. */
+  angle: number;
+}
+export function orthographicProject(
+  lat: number,
+  lon: number,
+  radius: number,
+  cx: number,
+  cy: number,
+  rot: OrthographicRotation = {},
+): OrthographicPoint {
+  const lambda = ((rot.lambda ?? 0) * Math.PI) / 180;
+  const phi = ((rot.phi ?? 0) * Math.PI) / 180;
+  const cosPhi = Math.cos(phi);
+  const sinPhi = Math.sin(phi);
+
+  const latRad = (lat * Math.PI) / 180;
+  const lonRad = (lon * Math.PI) / 180;
+  const cosLat = Math.cos(latRad);
+  const sinLat = Math.sin(latRad);
+  const deltaLon = lonRad - lambda;
+  const cosD = Math.cos(deltaLon);
+  const sinD = Math.sin(deltaLon);
+
+  // d3-geo orthographic (with gamma=0 roll):
+  //   x = radius * cos(lat) * sin(deltaLon)
+  //   y = radius * (cos(phi) * sin(lat) − sin(phi) * cos(lat) * cos(deltaLon))
+  const x = radius * cosLat * sinD;
+  const y = radius * (cosPhi * sinLat - sinPhi * cosLat * cosD);
+
+  // Angular distance from the visible hemisphere center (degrees).
+  const cosC = sinLat * sinPhi + cosLat * cosPhi * cosD;
+  const c = Math.acos(Math.max(-1, Math.min(1, cosC)));
+  const visible = c <= Math.PI / 2;
+
+  return {
+    x: cx + x,
+    y: cy - y,
+    visible,
+    angle: (c * 180) / Math.PI,
+  };
+}
+
+/**
+ * Build the SVG `points` string for the terminator polyline projected
+ * with the orthographic (globe) convention. Drops points on the back
+ * hemisphere and emits the visible-arc polyline for a closed day/night
+ * boundary as seen from the current globe-rotation center.
+ */
+export function terminatorOrthographicPath(
+  d: Date,
+  radius: number,
+  cx: number,
+  cy: number,
+  rot: OrthographicRotation = {},
+  opts: TerminatorOptions = {},
+): string {
+  const pts = terminatorLine(d, opts);
+  const coords = pts
+    .map((p) => orthographicProject(p.lat, p.lon, radius, cx, cy, rot))
+    .filter((c) => c.visible);
+
+  if (coords.length === 0) return '';
+  let path = `M ${coords[0].x.toFixed(2)} ${coords[0].y.toFixed(2)}`;
+  for (let i = 1; i < coords.length; i++) {
+    path += ` L ${coords[i].x.toFixed(2)} ${coords[i].y.toFixed(2)}`;
+  }
+  path += ' Z';
+  return path;
+}
+
+/**
+ * Build the great-circle path of the visible terminator as a great
+ * circle arc instead of a latitude-only line. Used for the daylight
+ * terminator on a globe so the boundary follows the real great circle
+ * of solar zenith angle = 90°.
+ */
+export function terminatorOrthographicArcPath(
+  d: Date,
+  radius: number,
+  cx: number,
+  cy: number,
+  rot: OrthographicRotation = {},
+  opts: TerminatorOptions = {},
+): string {
+  const pts = terminatorLine(d, opts);
+  const coords = pts
+    .map((p) => orthographicProject(p.lat, p.lon, radius, cx, cy, rot))
+    .filter((c) => c.visible);
+  if (coords.length < 2) return '';
+  let path = `M ${coords[0].x.toFixed(2)} ${coords[0].y.toFixed(2)}`;
+  for (let i = 1; i < coords.length; i++) {
+    path += ` L ${coords[i].x.toFixed(2)} ${coords[i].y.toFixed(2)}`;
+  }
+  return path;
+}
+
+/**
  * Build the SVG `points` string for the terminator polyline at a
  * given time. Drops duplicate / wrap points so the path closes cleanly.
  */

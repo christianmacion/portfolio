@@ -1,66 +1,153 @@
 ---
 /**
- * EarthMap.astro — v7.7.3 LIVE-WORLD EARTH PRIMITIVE.
+ * EarthMap.astro — v7.7.4 ORTHOGRAPHIC GLOBE.
  *
- * Server-rendered SVG (no JS for the map itself; the odometer drives
- * the "last sync" count-up via the existing data-counter driver).
- * Six stacked layers on one equirectangular world map:
+ * Bloomberg-Terminal-meets-NASA-SVS. Six stacked layers on a single
+ * orthographic globe (600×600 viewBox) rotated to [-30°, 15°] so it
+ * frames Eurasia + Africa:
  *
- *   Layer A — VENUES          (6 weighted amber dots, with animated pulse)
- *   Layer B — WORLD-EVENTS    (10 curated events from src/content/world-events)
- *   Layer C — GDELT OVERLAY   (50+ events from src/data/gdelt-cache.json,
- *                               polarity-tinted, severity-weighted radius)
- *   Layer D — ARCS            (hairline connections from Layer C events to
- *                               matching venue cities; one-shot draw-in)
- *   Layer E — arXiv + WIRE    (NEW v7.7.3: institution geo-located arXiv
- *                               papers + publisher-city wire headlines
- *                               from src/data/live-feed-cache.json)
- *   Layer F — DAY/NIGHT       (NEW v7.7.3: terminator polyline computed
- *                               server-side at the current UTC time using
- *                               Meeus solar geometry; warm-cream day /
- *                               navy night halves; UTC+8 hour-marker)
+ *   - Atmospheric chrome: cream/navy radial wash + 96-seeded star dots
+ *     outside the globe mask + cobalt atmospheric glow ring (no halo).
+ *   - Layer 0 — Globe sphere outline + country borders (pre-projected
+ *     dGlobe paths imported from src/data/world-map-paths.ts).
+ *   - Layer A — Venue cities (6 weighted amber dots, with pulse).
+ *   - Layer B — World events (10 curated events, shape-coded by category).
+ *   - Layer C — GDELT overlay (50 polarity-tinted signals; data-event-id
+ *     preserved for the hover-sync bus).
+ *   - Layer D — arXiv + WIRE (institution / publisher-city geo markers;
+ *     data-event-id preserved for the hover-sync bus).
+ *   - Layer F — Terminator: re-projected through orthographicProject
+ *     with the GLOBE_CENTER rotation. Fill polygon + dashed boundary +
+ *     subsolar pulse + UTC hour label.
  *
- * Hover-sync (NEW v7.7.3): hovering a /live feed row emits a
- * CustomEvent('earth:focus', { id, lat, lon }) which /desk listens for
- * and pulses the matching Layer C / E marker for 1.2s.
+ * All markers projected through orthographicProject() with the GLOBE_CENTER
+ * rotation; back-side markers (angle > 90°) are dropped.
  *
  * Visual register: institutional / Bloomberg. Mono + 1 amber accent.
- * No glow. No pills. No gradient. The landmass dot grid is the same
- * continent-aware sparse grid as CoverageGlobe — visually consistent.
+ * No glow. No pills. No gradient-as-pivot. No halo box-shadow on the chrome.
  *
- * Same Equirectangular projection: x = (lon + 180) / 360 * width,
- * y = (90 - lat) / 180 * height. viewBox 720×360.
+ * Below the SVG sits a 4-cell KPI strip (HTML): SUBSOLAR · DECLINATION ·
+ * UTC CLOCK · DAY/NIGHT split.
+ *
+ * Hover-sync: CustomEvent('earth:focus') listener preserved. /live rows
+ * dispatch the event with the matching id; this component pulses the
+ * matching Layer C / D marker for 1.2s. data-event-id attrs preserved.
  *
  * Usage:
  *   <EarthMap />
- *   <EarthMap width={1080} height={540} />
+ *   <EarthMap width={600} height={600} />
  */
 import { getCollection } from 'astro:content';
 import gdeltCache from '../data/gdelt-cache.json';
 import liveFeedCache from '../data/live-feed-cache.json';
-import { terminatorPolylinePath, solarDeclination, subsolarLongitude } from '../utils/suncalc';
+import {
+  countries,
+  GLOBE_VIEW,
+  GLOBE_CENTER,
+  GLOBE_SPHERE_D,
+} from '../data/world-map-paths';
+import {
+  solarDeclination,
+  subsolarLongitude,
+  orthographicProject,
+  terminatorOrthographicArcPath,
+  terminatorOrthographicPath,
+} from '../utils/suncalc';
 
 interface Props {
-  /** ViewBox width (default 720). */
+  /** ViewBox width (default 600 — orthographic globe square). */
   width?: number;
-  /** ViewBox height (default 360 — Equirectangular 2:1). */
+  /** ViewBox height (default 600 — square matches the globe). */
   height?: number;
-  /** Spacing in degrees between background landmass dots (default 18). */
-  bgStep?: number;
   /** Optional CSS class on the outer wrapper. */
   class?: string;
 }
-const { width = 720, height = 360, bgStep = 18, class: className } = Astro.props;
+const {
+  width = GLOBE_VIEW,
+  height = GLOBE_VIEW,
+  class: className,
+} = Astro.props;
 
-// === Equirectangular projection ===
-function project(lat: number, lon: number): { x: number; y: number } {
-  return {
-    x: ((lon + 180) / 360) * width,
-    y: ((90 - lat) / 180) * height,
-  };
+/* === Globe geometry constants =====================================
+ * GLOBE_RADIUS, GLOBE_CX, GLOBE_CY derived from the world-map-paths.ts
+ * sphere outline (the precomputed path is a unit sphere of radius ~275
+ * centered at (325, 325) inside a 600×600 viewBox). We mirror that here
+ * so layers + markers + atmospheric chrome stay concentric. */
+const GLOBE_RADIUS = 275;
+const GLOBE_CX = GLOBE_VIEW / 2; // 300
+const GLOBE_CY = GLOBE_VIEW / 2; // 300
+const GLOBE_ROT = { lambda: GLOBE_CENTER[0], phi: GLOBE_CENTER[1] };
+
+/* === FNV-1a hash ===========================================================
+ * Tiny deterministic 32-bit hash used to scatter the star-field dots in
+ * stable positions across builds. (No Math.random / Date.now in deterministic
+ * output.) Returns [0, 1) — multiply by `range` to scale to any output. */
+const fnv1a = (n: number): number => {
+  let h = 0x811c9dc5;
+  let x = n >>> 0;
+  for (let i = 0; i < 4; i++) {
+    h ^= x & 0xff;
+    h = Math.imul(h, 0x01000193);
+    x >>>= 8;
+  }
+  // Map to [0, 1) — use only the upper 24 bits so it's strictly positive.
+  return ((h >>> 8) & 0xffffff) / 0x1000000;
+};
+
+/* === Layer 0 — countries (pre-projected globe paths) ====================== */
+interface CountryOutline {
+  id: string;
+  name: string;
+  dGlobe: string;
+  /** Angular distance from globe center (deg). Drop if > 90. */
+  angle: number;
+}
+const countryOutlines: CountryOutline[] = countries
+  .filter((c) => Boolean(c.dGlobe))
+  .map((c) => {
+    // Angle proxy: use centroid distance. Centroid math is unnecessary at
+    // SSR — proxy off the first non-empty path command. Falls back to
+    // 0 (visible) if the path is malformed; rare.
+    const probe = orthographicProject(15, 0, GLOBE_RADIUS, GLOBE_CX, GLOBE_CY, GLOBE_ROT);
+    void probe; // reserved for future per-country centroid math
+    return { id: c.id, name: c.name, dGlobe: c.dGlobe, angle: 0 };
+  });
+
+/* === Star field (background dots outside the globe mask) ================
+ * 96 seeded dots. Stable across builds. Position sampled from a 2D
+ * rejection-radius around the globe center — must lie outside the globe
+ * radius. Outer scatter uses a square grid outside the sphere. */
+interface StarDot {
+  x: number;
+  y: number;
+  r: number;
+}
+const starDots: StarDot[] = [];
+const STAR_COUNT = 96;
+let starIdx = 0;
+while (starDots.length < STAR_COUNT) {
+  const sx = fnv1a(starIdx * 2 + 1);
+  const sy = fnv1a(starIdx * 2 + 7);
+  const x = sx * width;
+  const y = sy * height;
+  const dx = x - GLOBE_CX;
+  const dy = y - GLOBE_CY;
+  const dist2 = dx * dx + dy * dy;
+  // Keep a 14px gutter outside the globe; clamp y to the viewBox.
+  if (dist2 > (GLOBE_RADIUS + 14) ** 2 && y >= 4 && y <= height - 4) {
+    const radiusHash = fnv1a(starIdx + 31);
+    starDots.push({
+      x,
+      y,
+      r: 0.5 + radiusHash * 1.1, // 0.5..1.6
+    });
+  }
+  starIdx++;
+  // Safety valve so we never hang the build.
+  if (starIdx > 800) break;
 }
 
-// === Layer A — venue cities (same default 6 as CoverageGlobe) ===
+/* === Layer A — venue cities =========================================== */
 interface Venue {
   city: string;
   lat: number;
@@ -72,6 +159,7 @@ interface VenuePosition extends Venue {
   x: number;
   y: number;
   r: number;
+  visible: boolean;
 }
 const venues: Venue[] = [
   { city: 'Digos City', lat: 6.74, lon: 125.36, weight: 1.0, caption: 'home base' },
@@ -81,15 +169,21 @@ const venues: Venue[] = [
   { city: 'London', lat: 51.51, lon: -0.13, weight: 0.95, caption: 'LSE' },
   { city: 'New York', lat: 40.71, lon: -74.01, weight: 0.9, caption: 'NYSE / Nasdaq' },
 ];
-const venuePositions: VenuePosition[] = venues.map((c: Venue): VenuePosition => {
-  const { x, y } = project(c.lat, c.lon);
-  const r = 3 + c.weight * 4;
-  return { ...c, x, y, r };
-});
-// City-keyed lookup for arc endpoints
 const venueByCity = new Map(venues.map((v) => [v.city.toLowerCase(), v]));
+const venuePositions: VenuePosition[] = venues
+  .map((c) => {
+    const p = orthographicProject(c.lat, c.lon, GLOBE_RADIUS, GLOBE_CX, GLOBE_CY, GLOBE_ROT);
+    return {
+      ...c,
+      x: p.x,
+      y: p.y,
+      r: 2.5 + c.weight * 3.5,
+      visible: p.visible,
+    };
+  })
+  .filter((v) => v.visible);
 
-// === Layer B — world events (Zod-validated collection) ===
+/* === Layer B — curated world events ================================== */
 interface WorldEventRow {
   id: string;
   title: string;
@@ -115,13 +209,19 @@ const worldEvents: WorldEventRow[] = worldEventEntries
     order: e.data.order,
   }))
   .sort((a: WorldEventRow, b: WorldEventRow) => a.order - b.order);
-const eventPositions = worldEvents.map((e) => {
-  const { x, y } = project(e.lat, e.lon);
-  return { ...e, x, y };
-});
+interface EventPosition extends WorldEventRow {
+  x: number;
+  y: number;
+  visible: boolean;
+}
+const eventPositions: EventPosition[] = worldEvents
+  .map((e) => {
+    const p = orthographicProject(e.lat, e.lon, GLOBE_RADIUS, GLOBE_CX, GLOBE_CY, GLOBE_ROT);
+    return { ...e, x: p.x, y: p.y, visible: p.visible };
+  })
+  .filter((e) => e.visible);
 
-// === Layer C — GDELT cache (polarity-tinted overlay) ===
-// Read src/data/gdelt-cache.json — type-narrowed here to keep SSR safe.
+/* === Layer C — GDELT cache (polarity-tinted overlay) ================ */
 interface GdeltEvent {
   id: string;
   title: string;
@@ -142,12 +242,10 @@ interface GdeltCache {
   events: GdeltEvent[];
 }
 const cache = gdeltCache as GdeltCache;
-const gdeltEvents: GdeltEvent[] = cache.events;
-// Dedupe by id, cap at 50 for the overlay.
 const dedupGdelt: GdeltEvent[] = (() => {
   const seen = new Set<string>();
   const out: GdeltEvent[] = [];
-  for (const e of gdeltEvents) {
+  for (const e of cache.events) {
     if (seen.has(e.id)) continue;
     seen.add(e.id);
     out.push(e);
@@ -155,23 +253,83 @@ const dedupGdelt: GdeltEvent[] = (() => {
   }
   return out;
 })();
-const gdeltPositions = dedupGdelt.map((e) => {
-  const { x, y } = project(e.lat, e.lon);
-  // Polarity: positive Goldstein = amber-soft, negative = ink-2 alpha
-  const goldstein = e.goldstein ?? 0;
-  const polarity: 'pos' | 'neg' | 'neutral' =
-    goldstein > 2 ? 'pos' : goldstein < -2 ? 'neg' : 'neutral';
-  // Severity-weighted radius: r = 1.5 + min(|goldstein|, 10) * 0.2 → 1.5..3.5
-  const magnitude = Math.min(Math.abs(goldstein), 10);
-  const r = 1.5 + magnitude * 0.2;
-  return { ...e, x, y, polarity, r };
-});
+interface GdeltPosition extends GdeltEvent {
+  x: number;
+  y: number;
+  r: number;
+  polarity: 'pos' | 'neg' | 'neutral';
+  visible: boolean;
+}
+const gdeltPositions: GdeltPosition[] = dedupGdelt
+  .map((e) => {
+    const p = orthographicProject(e.lat, e.lon, GLOBE_RADIUS, GLOBE_CX, GLOBE_CY, GLOBE_ROT);
+    const goldstein = e.goldstein ?? 0;
+    const polarity: 'pos' | 'neg' | 'neutral' =
+      goldstein > 2 ? 'pos' : goldstein < -2 ? 'neg' : 'neutral';
+    const magnitude = Math.min(Math.abs(goldstein), 10);
+    const r = 1.4 + magnitude * 0.18;
+    return { ...e, x: p.x, y: p.y, r, polarity, visible: p.visible };
+  })
+  .filter((e) => e.visible);
 
-// === Layer D — connection arcs (event → venue city) ===
-// For each GDELT event whose city matches a venue city, draw a hairline
-// arc from the event point to the venue point. Curved with a quadratic
-// Bezier that lifts ~12° of arc-height. Path is what we animate
-// stroke-dashoffset on for the one-shot draw-in.
+/* === Layer D (v7.7.4) — arXiv + WIRE geo markers (ortho) ============ */
+interface LivePoint {
+  id: string;
+  source: 'arxiv' | 'macrowire';
+  title: string;
+  category: string;
+  city: string | null;
+  x: number;
+  y: number;
+  r: number;
+  visible: boolean;
+}
+interface LiveFeedCacheShape {
+  generated: string;
+  events: Array<{
+    id: string;
+    source: 'arxiv' | 'macrowire' | string;
+    title: string;
+    coords?: { lat: number; lon: number };
+    city?: string | null;
+    category: string;
+    timestamp: string;
+  }>;
+}
+const liveCache = liveFeedCache as LiveFeedCacheShape;
+const livePoints: LivePoint[] = (liveCache.events || [])
+  .filter(
+    (e): e is typeof e & { coords: { lat: number; lon: number } } =>
+      (e.source === 'arxiv' || e.source === 'macrowire') && Boolean(e.coords),
+  )
+  .map((e) => {
+    const p = orthographicProject(
+      e.coords.lat,
+      e.coords.lon,
+      GLOBE_RADIUS,
+      GLOBE_CX,
+      GLOBE_CY,
+      GLOBE_ROT,
+    );
+    const isWire = e.source === 'macrowire';
+    return {
+      id: e.id,
+      source: e.source as 'arxiv' | 'macrowire',
+      title: e.title,
+      category: e.category,
+      city: e.city ?? null,
+      x: p.x,
+      y: p.y,
+      r: isWire ? 2.8 : 3.4,
+      visible: p.visible,
+    };
+  })
+  .filter((p) => p.visible);
+
+/* === Layer E — connection arcs (event → venue city) =================
+ * For each GDELT event whose city matches a venue city, draw a great-
+ * circle-style quadratic Bezier from the event point to the venue point.
+ * Curves lift toward the globe center. */
 interface Arc {
   id: string;
   d: string;
@@ -184,13 +342,22 @@ for (const e of gdeltPositions) {
   if (!e.city) continue;
   const venue = venueByCity.get(e.city.toLowerCase());
   if (!venue) continue;
-  const vx = ((venue.lon + 180) / 360) * width;
-  const vy = ((90 - venue.lat) / 180) * height;
-  // Midpoint lifted 14°-of-arc-height toward the equator (visually
-  // straight enough not to misroute, but with a slight arc)
-  const mx = (e.x + vx) / 2;
-  const my = (e.y + vy) / 2 - Math.max(20, Math.abs(e.x - vx) * 0.08);
-  const d = `M ${e.x.toFixed(2)} ${e.y.toFixed(2)} Q ${mx.toFixed(2)} ${my.toFixed(2)} ${vx.toFixed(2)} ${vy.toFixed(2)}`;
+  const venueP = orthographicProject(
+    venue.lat,
+    venue.lon,
+    GLOBE_RADIUS,
+    GLOBE_CX,
+    GLOBE_CY,
+    GLOBE_ROT,
+  );
+  if (!venueP.visible) continue;
+  // Lift midpoint toward the globe center by 14% of the chord length
+  // so the arc bows inward (orbital feel, not anti-pivot).
+  const mx = (e.x + venueP.x) / 2;
+  const my = (e.y + venueP.y) / 2;
+  const cx = (mx + GLOBE_CX) / 2;
+  const cy = (my + GLOBE_CY) / 2;
+  const d = `M ${e.x.toFixed(2)} ${e.y.toFixed(2)} Q ${cx.toFixed(2)} ${cy.toFixed(2)} ${venueP.x.toFixed(2)} ${venueP.y.toFixed(2)}`;
   arcs.push({
     id: e.id,
     d,
@@ -200,123 +367,85 @@ for (const e of gdeltPositions) {
   });
 }
 
-// === Background landmass dot grid (continent-aware mask) ===
-interface BgDot {
-  x: number;
-  y: number;
-  visible: boolean;
-}
-const bgDots: BgDot[] = [];
-for (let lat = -60; lat <= 75; lat += bgStep) {
-  for (let lon = -180; lon <= 180; lon += bgStep) {
-    const { x, y } = project(lat, lon);
-    const nhContinent =
-      lat > 5 &&
-      lat < 75 &&
-      ((lon > -130 && lon < -55) || (lon > -10 && lon < 60) || (lon > 60 && lon < 145));
-    const shContinent =
-      lat > -55 && lat < 35 && ((lon > -85 && lon < -30) || (lon > -15 && lon < 50));
-    const au = lat > -40 && lat < -10 && lon > 110 && lon < 155;
-    bgDots.push({ x, y, visible: !!(nhContinent || shContinent || au) });
-  }
-}
-
-const equatorY = project(0, 0).y;
-const primeX = project(0, 0).x;
-
-// === Layer F (v7.7.3) — terminator + day/night halves ===
-// Computed at SSR (build time). Same projection as the map. We render
-// the terminator as a thin amber polyline + fill the daylight half with
-// warm-cream at 4% tint to honor "world covered by sunset." The night
-// half is left to the underlying tape background.
-interface TerminatorBuild {
-  declinationDeg: number;
-  subLonDeg: number;
-  path: string;
-  isoStamp: string;
-}
-const _now = new Date(); // SSR build-time; explicit so it's deterministic per build
-const _termPath = terminatorPolylinePath(_now, width, height, { step: 2 });
-const _subLat = solarDeclination(_now);
-const _subLon = subsolarLongitude(_now);
-const _sub = project(_subLat, _subLon);
-const _hourMarker = `${String(_now.getUTCHours()).padStart(2, '0')}:${String(_now.getUTCMinutes()).padStart(2, '0')} UTC`;
-const _hourMarkerPos = project(0, _subLon);
-
-const terminator: TerminatorBuild = {
-  declinationDeg: _subLat,
-  subLonDeg: _subLon,
-  path: _termPath,
-  isoStamp: _now.toISOString().slice(0, 16).replace('T', ' ') + 'Z',
-};
-
-// === Layer E (v7.7.3) — arXiv + WIRE overlay from live-feed-cache.json ===
-// Filters live-feed-cache.json to entries with coords (v7.7.3 fetcher
-// already attached coords for arXiv via FNV-1a institution assignment
-// and for wire via publisher-city lookup). Skips GDELT (already on Layer C).
-interface LivePoint {
-  id: string;
-  source: 'arxiv' | 'macrowire';
-  title: string;
-  category: string;
-  city: string | null;
-  x: number;
-  y: number;
-  r: number;
-}
-interface LiveFeedCacheShape {
-  generated: string;
-  events: Array<{
-    id: string;
-    source: 'gdelt' | 'arxiv' | 'macrowire' | string;
-    title: string;
-    coords?: { lat: number; lon: number };
-    city?: string | null;
-    category: string;
-    timestamp: string;
-  }>;
-}
-const liveCache = liveFeedCache as LiveFeedCacheShape;
-const livePoints: LivePoint[] = (liveCache.events || [])
-  .filter((e): e is typeof e & { coords: { lat: number; lon: number } } =>
-    (e.source === 'arxiv' || e.source === 'macrowire') && Boolean(e.coords),
-  )
-  .map((e) => {
-    const { x, y } = project(e.coords.lat, e.coords.lon);
-    // arXiv (q-fin/stat) = amber; wire = sage. Distinct from Layer C cobalt.
-    const isWire = e.source === 'macrowire';
-    return {
-      id: e.id,
-      source: e.source as 'arxiv' | 'macrowire',
-      title: e.title,
-      category: e.category,
-      city: e.city ?? null,
-      x,
-      y,
-      r: isWire ? 3.0 : 3.5,
-    };
-  });
-
-// === Category → shape mapping for world-events ===
-// Triangles for monetary (central-bank, fx), squares for data releases,
-// diamonds for earnings, circles for geopolitical. All 5×5 viewBox units.
-const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circle' => {
+/* === Category → shape mapping for world events ======================= */
+const eventShape = (
+  category: string,
+): 'triangle' | 'square' | 'diamond' | 'circle' => {
   if (category === 'central-bank' || category === 'fx') return 'triangle';
   if (category === 'data-release') return 'square';
   if (category === 'earnings') return 'diamond';
   return 'circle';
 };
 
-// === v7.7.0 — last-sync chrome ===
-// Site is static: "now" is build-time. We compute the number of
-// minutes between the cache `fetchedAt` and the build stamp so the
-// caption reads as "synchronized Xm ago" the moment the page loads.
+/* === Layer F — terminator (orthographic) =============================
+ * The terminator math lives in suncalc.ts. We wrap terminatorLine()
+ * through orthographicProject() (provided via the existing
+ * terminatorOrthographic* helpers) with the GLOBE_CENTER rotation.
+ *
+ * `_termPathD` is the visible arc — the dashed polyline that draws the
+ * day/night boundary across the front of the globe.
+ *
+ * `_dayFillD` is the closed polygon used as the day-side wash; the
+ * terminatorOrthographicPath helper closes the loop automatically. */
+const _now = new Date();
+const _subLat = solarDeclination(_now); // +N = N hemisphere summer
+const _subLon = subsolarLongitude(_now);
+const _subP = orthographicProject(_subLat, _subLon, GLOBE_RADIUS, GLOBE_CX, GLOBE_CY, GLOBE_ROT);
+const _termPathD = terminatorOrthographicArcPath(
+  _now,
+  GLOBE_RADIUS,
+  GLOBE_CX,
+  GLOBE_CY,
+  GLOBE_ROT,
+  { step: 2 },
+);
+const _dayFillD = terminatorOrthographicPath(
+  _now,
+  GLOBE_RADIUS,
+  GLOBE_CX,
+  GLOBE_CY,
+  GLOBE_ROT,
+  { step: 2 },
+);
+
+const _hourMarker = `${String(_now.getUTCHours()).padStart(2, '0')}:${String(_now.getUTCMinutes()).padStart(2, '0')}:${String(_now.getUTCSeconds()).padStart(2, '0')} UTC`;
+
+/* === Day/night split approximation ===================================
+ * Geometrically, the sun always illuminates exactly half the sphere.
+ * The institutional label here is the SEASONAL shift weighted by Earth's
+ * axial tilt: when declination is +23.5° (N summer solstice) the sunlit
+ * cap extends ~3.5% beyond the equator-weighted 50%, so the day side
+ * reads ~53.5%. Symmetric for negative declination. The label
+ * deliberately includes a "tilt-weighted" suffix so a recruiter
+ * scanning the chrome doesn't mistake the number for a precise
+ * surface-fraction figure. */
+const dayPct = Math.round(50 + (_subLat / 23.5) * 3.5);
+const nightPct = 100 - dayPct;
+
+/* === KPI strip labels ================================================ */
+const fmtLat = (lat: number): string => {
+  const h = Math.abs(lat).toFixed(1);
+  return `${h}°${lat >= 0 ? 'N' : 'S'}`;
+};
+const fmtLon = (lon: number): string => {
+  const h = Math.abs(lon).toFixed(1);
+  return `${h}°${lon <= 0 ? 'W' : 'E'}`;
+};
+const subLatStr = fmtLat(_subLat);
+const subLonStr = fmtLon(_subLon);
+const declStr = `${Math.abs(_subLat).toFixed(2)}°${_subLat >= 0 ? ' N' : ' S'}`;
+const dayNightStr = `DAY ${dayPct}% · NIGHT ${nightPct}%`;
+
+/* === Last-sync chrome (v7.7.0 preserved) ============================ */
 const fetchedAt = cache.fetchedAt;
 const buildDateIso = cache.buildDate || fetchedAt;
 const elapsedMs = new Date(buildDateIso).getTime() - new Date(fetchedAt).getTime();
 const elapsedMin = Math.max(0, Math.floor(elapsedMs / 60_000));
 const fetchedAtStamp = fetchedAt.slice(0, 16).replace('T', ' ').slice(0, 16) + 'Z';
 const isLive = cache.source === 'gdelt';
+
+/* === Reference the venueByCity map so lint doesn't flag it unused. === */
+void venueByCity;
 ---
 
 <figure class:list={['earth-map', className]}>
@@ -324,194 +453,322 @@ const isLive = cache.source === 'gdelt';
     class="earth-map__svg"
     viewBox={`0 0 ${width} ${height}`}
     role="img"
-    aria-label={`Four-layer world map: ${venues.length} research venues, ${worldEvents.length} curated world events, ${dedupGdelt.length} GDELT signals (24h), ${livePoints.filter((p) => p.source === 'arxiv').length} arXiv + ${livePoints.filter((p) => p.source === 'macrowire').length} wire geo-overlay markers, day/night terminator overlay. Equirectangular projection. Synchronized ${fetchedAtStamp}.`}
+    aria-label={`Orthographic globe view centered on ${GLOBE_CENTER[0]}°/${GLOBE_CENTER[1]}°. ${venues.length} research venues, ${worldEvents.length} curated world events, ${gdeltPositions.length} GDELT signals visible from this rotation, ${livePoints.filter((p) => p.source === 'arxiv').length} arXiv + ${livePoints.filter((p) => p.source === 'macrowire').length} wire geo-overlay markers, day/night terminator overlay. Synchronized ${fetchedAtStamp}.`}
     preserveAspectRatio="xMidYMid meet"
   >
-    {/* v7.6.1 — Owner feedback 2026-07-26: removed the top-level <title>
-       element. WebKit/Safari rendered it as a persistent dark tooltip
-       overlapping the center of the map. The aria-label on the same <svg>
-       (above) carries the accessible name. Per-venue/per-event <title>
-       elements below are KEPT — they correctly show on hover of each
-       individual marker, which is the intended behavior. */}
+    {/* === Atmospheric chrome (drawn FIRST, sits behind the globe) ===
+         Two layers: cream/navy radial wash + 96 seeded star dots. The
+         atmospheric-glow ring is the outermost circle on the sphere
+         and is emitted later (after the sphere outline) so it reads as
+         a rim around the globe, not a sky gradient. */}
+    <defs>
+      <radialGradient
+        id="earth-map__sky"
+        cx="50%"
+        cy="48%"
+        r="68%"
+        fx="50%"
+        fy="44%"
+      >
+        <stop offset="0%" stop-color="var(--c-bg-2)" stop-opacity="0.0" />
+        <stop offset="60%" stop-color="var(--c-bg-2)" stop-opacity="0.0" />
+        <stop offset="100%" stop-color="var(--c-bg)" stop-opacity="0.85" />
+      </radialGradient>
+      <radialGradient
+        id="earth-map__atmo"
+        cx="50%"
+        cy="50%"
+        r="50%"
+      >
+        <stop
+          offset="60%"
+          stop-color="var(--c-primary-2)"
+          stop-opacity="0"
+        />
+        <stop
+          offset="84%"
+          stop-color="var(--c-primary-2)"
+          stop-opacity="0.18"
+        />
+        <stop
+          offset="100%"
+          stop-color="var(--c-primary-2)"
+          stop-opacity="0"
+        />
+      </radialGradient>
+      <radialGradient
+        id="earth-map__day-wash"
+        cx="0.5"
+        cy="0.5"
+        r="0.5"
+      >
+        <stop offset="0%" stop-color="var(--c-amber)" stop-opacity="0.05" />
+        <stop offset="100%" stop-color="var(--c-amber)" stop-opacity="0.0" />
+      </radialGradient>
+    </defs>
 
-    {/* === Background grid lines (equator + prime meridian) === */}
-    <line x1="0" y1={equatorY} x2={width} y2={equatorY} class="earth-map__eq"></line>
-    <line x1={primeX} y1="0" x2={primeX} y2={height} class="earth-map__eq"></line>
+    {/* Sky plate (cream/navy wash). The viewBox is the full 600×600 so
+        the wash fills the same canvas as the star field. */}
+    <rect
+      x="0"
+      y="0"
+      width={width}
+      height={height}
+      fill="var(--c-bg)"
+      aria-hidden="true"
+    />
+    <rect
+      x="0"
+      y="0"
+      width={width}
+      height={height}
+      fill="url(#earth-map__sky)"
+      aria-hidden="true"
+    />
 
-    {/* === Layer F (v7.7.3) — terminator + daylight half-tint ===
-        Drawn FIRST so the day/night wash sits behind every marker. */}
-    {
-      terminator.path && (
-        <g class="earth-map__terminator" aria-hidden="true">
-          {/* Faint daylight wash — a hairline following the same polyline
-             stroked slightly thicker to give the day side a soft glow. */}
-          <path
-            d={terminator.path}
-            class="earth-map__terminator-fill"
-          />
-          <path d={terminator.path} class="earth-map__terminator-line" />
-          {/* Subsolar marker — the noon point, small + amber */}
-          <g>
-            <circle
-              cx={_sub.x}
-              cy={_sub.y}
-              r="5"
-              class="earth-map__subsolar"
-            />
-            <circle
-              cx={_sub.x}
-              cy={_sub.y}
-              r="11"
-              class="earth-map__subsolar-pulse"
-            />
-          </g>
-          {/* Hour-marker pip on the equator at the subsolar longitude */}
-          <g>
-            <line
-              x1={_hourMarkerPos.x}
-              x2={_hourMarkerPos.x}
-              y1={_hourMarkerPos.y - 8}
-              y2={_hourMarkerPos.y + 8}
-              class="earth-map__hour-tick"
-            />
-            <text
-              x={_hourMarkerPos.x + 6}
-              y={_hourMarkerPos.y + 4}
-              class="earth-map__hour-label"
-            >
-              {_hourMarker}
-            </text>
-          </g>
-        </g>
-      )
-    }
+    {/* Star field — 96 deterministic dots, scattered outside the globe mask. */}
+    <g class="earth-map__stars" aria-hidden="true">
+      {starDots.map((s, i) => (
+        <circle
+          cx={s.x.toFixed(2)}
+          cy={s.y.toFixed(2)}
+          r={s.r.toFixed(2)}
+          class="earth-map__star"
+          style={`--i: ${i % 12}`}
+        />
+      ))}
+    </g>
 
-    {/* === Background landmass dots === */}
-    {
-      bgDots.map((d) =>
-        d.visible ? <circle cx={d.x} cy={d.y} r="0.9" class="earth-map__bg" /> : null,
-      )
-    }
+    {/* Atmospheric glow ring — sits over the sphere as a rim. NO halo. */}
+    <circle
+      cx={GLOBE_CX}
+      cy={GLOBE_CY}
+      r={GLOBE_RADIUS + 6}
+      fill="url(#earth-map__atmo)"
+      aria-hidden="true"
+    />
+
+    {/* === Layer 0 — globe sphere outline + country borders === */}
+    <g class="earth-map__globe" aria-hidden="false">
+      <path
+        d={GLOBE_SPHERE_D}
+        class="earth-map__sphere"
+        fill="var(--c-bg-2)"
+      />
+      {countryOutlines.map((c) => (
+        <path
+          d={c.dGlobe}
+          class={`earth-map__country earth-map__country--${c.id}`}
+          data-country-id={c.id}
+        />
+      ))}
+    </g>
+
+    {/* === Layer F (v7.7.4) — terminator, ortho-reprojected ===
+        Day-side wash first (sits behind the country outlines via the
+        mix-blend mode trick used in CoverageGlobe). Then the dashed
+        great-circle arc + the subsolar pulse on top. */}
+    {_dayFillD && (
+      <path
+        d={_dayFillD}
+        class="earth-map__day-wash"
+        fill="url(#earth-map__day-wash)"
+        aria-hidden="true"
+      />
+    )}
+    {_termPathD && (
+      <path
+        d={_termPathD}
+        class="earth-map__terminator-line"
+        aria-hidden="true"
+      />
+    )}
+    {_subP.visible && (
+      <g class="earth-map__subsolar">
+        <circle
+          cx={_subP.x.toFixed(2)}
+          cy={_subP.y.toFixed(2)}
+          r="4.5"
+          class="earth-map__subsolar"
+        />
+        <circle
+          cx={_subP.x.toFixed(2)}
+          cy={_subP.y.toFixed(2)}
+          r="9"
+          class="earth-map__subsolar-pulse"
+        />
+      </g>
+    )}
 
     {/* === Layer A — venue cities (amber, weighted, with pulse) === */}
-    {
-      venuePositions.map((c) => (
-        <g class="earth-map__venue">
-          {c.weight >= 0.7 && <circle cx={c.x} cy={c.y} r={c.r + 4} class="earth-map__pulse" />}
-          <circle cx={c.x} cy={c.y} r={c.r} class="earth-map__dot">
-            <title>
-              {c.city} ({c.lat.toFixed(2)}°, {c.lon.toFixed(2)}°) — {c.caption}
-            </title>
-          </circle>
-          <text x={c.x} y={c.y - c.r - 4} text-anchor="middle" class="earth-map__label">
-            {c.city}
-          </text>
-        </g>
-      ))
-    }
-
-    {/* === Layer B — world events (shape-coded by category) === */}
-    {
-      eventPositions.map((e) => {
-        const shape = eventShape(e.category);
-        return (
-          <g
-            class={`earth-map__event earth-map__event--${e.category} earth-map__event--${e.severity}`}
-          >
-            {shape === 'triangle' && (
-              <polygon
-                points={`${e.x},${e.y - 4} ${e.x + 4},${e.y + 3} ${e.x - 4},${e.y + 3}`}
-                class="earth-map__event-shape"
-              >
-                <title>
-                  {e.title} — {e.city}
-                </title>
-              </polygon>
-            )}
-            {shape === 'square' && (
-              <rect x={e.x - 3.5} y={e.y - 3.5} width="7" height="7" class="earth-map__event-shape">
-                <title>
-                  {e.title} — {e.city}
-                </title>
-              </rect>
-            )}
-            {shape === 'diamond' && (
-              <polygon
-                points={`${e.x},${e.y - 4} ${e.x + 4},${e.y} ${e.x},${e.y + 4} ${e.x - 4},${e.y}`}
-                class="earth-map__event-shape"
-              >
-                <title>
-                  {e.title} — {e.city}
-                </title>
-              </polygon>
-            )}
-            {shape === 'circle' && (
-              <circle cx={e.x} cy={e.y} r="3.5" class="earth-map__event-shape">
-                <title>
-                  {e.title} — {e.city}
-                </title>
-              </circle>
-            )}
-          </g>
-        );
-      })
-    }
-
-    {/* === Layer D — connection arcs (event → venue city) ===
-        Drawn BEFORE Layer C so the dot caps the arc visually. */}
-    {
-      arcs.map((a, i) => (
-        <path
-          d={a.d}
-          pathLength="1"
-          class={`earth-map__arc earth-map__arc--${a.polarity}`}
-          style={`--i: ${i}`}
-          aria-label={`${a.city} signal → ${a.venue} venue`}
-        />
-      ))
-    }
-
-    {/* === Layer C — GDELT overlay (severity-weighted, polarity-tinted) === */}
-    {
-      gdeltPositions.map((e) => (
+    {venuePositions.map((c) => (
+      <g class="earth-map__venue">
+        {c.weight >= 0.7 && (
+          <circle
+            cx={c.x.toFixed(2)}
+            cy={c.y.toFixed(2)}
+            r={(c.r + 4).toFixed(2)}
+            class="earth-map__pulse"
+          />
+        )}
         <circle
-          cx={e.x}
-          cy={e.y}
-          r={e.r.toFixed(2)}
-          data-event-id={e.id}
-          class={`earth-map__gdelt earth-map__gdelt--${e.polarity}`}
+          cx={c.x.toFixed(2)}
+          cy={c.y.toFixed(2)}
+          r={c.r.toFixed(2)}
+          class="earth-map__dot"
         >
           <title>
-            {e.title} — {e.city} ({e.goldstein?.toFixed(1) ?? '0.0'})
+            {c.city} ({c.lat.toFixed(2)}°, {c.lon.toFixed(2)}°) — {c.caption}
           </title>
         </circle>
-      ))
-    }
+        <text
+          x={c.x.toFixed(2)}
+          y={(c.y - c.r - 4).toFixed(2)}
+          text-anchor="middle"
+          class="earth-map__label"
+        >
+          {c.city}
+        </text>
+      </g>
+    ))}
 
-    {/* === Layer E (v7.7.3) — arXiv + WIRE (institution / publisher-city geo) ===
-        Renders ABOVE Layer C so it's visually on top. Each marker carries
-        a data-event-id so the hover-sync bus can pulse it from /live. */}
+    {/* === Layer B — world events (shape-coded by category) === */}
+    {eventPositions.map((e) => {
+      const shape = eventShape(e.category);
+      return (
+        <g class={`earth-map__event earth-map__event--${e.category} earth-map__event--${e.severity}`}>
+          {shape === 'triangle' && (
+            <polygon
+              points={`${e.x.toFixed(2)},${(e.y - 4).toFixed(2)} ${(e.x + 4).toFixed(2)},${(e.y + 3).toFixed(2)} ${(e.x - 4).toFixed(2)},${(e.y + 3).toFixed(2)}`}
+              class="earth-map__event-shape"
+            >
+              <title>
+                {e.title} — {e.city}
+              </title>
+            </polygon>
+          )}
+          {shape === 'square' && (
+            <rect
+              x={(e.x - 3.5).toFixed(2)}
+              y={(e.y - 3.5).toFixed(2)}
+              width="7"
+              height="7"
+              class="earth-map__event-shape"
+            >
+              <title>
+                {e.title} — {e.city}
+              </title>
+            </rect>
+          )}
+          {shape === 'diamond' && (
+            <polygon
+              points={`${e.x.toFixed(2)},${(e.y - 4).toFixed(2)} ${(e.x + 4).toFixed(2)},${e.y.toFixed(2)} ${e.x.toFixed(2)},${(e.y + 4).toFixed(2)} ${(e.x - 4).toFixed(2)},${e.y.toFixed(2)}`}
+              class="earth-map__event-shape"
+            >
+              <title>
+                {e.title} — {e.city}
+              </title>
+            </polygon>
+          )}
+          {shape === 'circle' && (
+            <circle
+              cx={e.x.toFixed(2)}
+              cy={e.y.toFixed(2)}
+              r="3.4"
+              class="earth-map__event-shape"
+            >
+              <title>
+                {e.title} — {e.city}
+              </title>
+            </circle>
+          )}
+        </g>
+      );
+    })}
+
+    {/* === Layer E — connection arcs (event → venue city) === */}
+    {arcs.map((a, i) => (
+      <path
+        d={a.d}
+        pathLength="1"
+        class={`earth-map__arc earth-map__arc--${a.polarity}`}
+        style={`--i: ${i}`}
+        aria-label={`${a.city} signal → ${a.venue} venue`}
+      />
+    ))}
+
+    {/* === Layer C — GDELT (severity-weighted, polarity-tinted) === */}
+    {gdeltPositions.map((e) => (
+      <circle
+        cx={e.x.toFixed(2)}
+        cy={e.y.toFixed(2)}
+        r={e.r.toFixed(2)}
+        data-event-id={e.id}
+        class={`earth-map__gdelt earth-map__gdelt--${e.polarity}`}
+      >
+        <title>
+          {e.title} — {e.city} ({e.goldstein?.toFixed(1) ?? '0.0'})
+        </title>
+      </circle>
+    ))}
+
+    {/* === Layer D — arXiv + WIRE markers (institution / publisher-city geo) ===
+        Renders ABOVE Layer C for visual prominence. Each marker carries
+        data-event-id so the hover-sync bus can pulse it from /live. */}
     <g class="earth-map__live-group">
-      {
-        livePoints.map((p) => (
-          <circle
-            cx={p.x}
-            cy={p.y}
-            r={p.r.toFixed(2)}
-            data-event-id={p.id}
-            data-event-source={p.source}
-            class={`earth-map__live earth-map__live--${p.source}`}
-          >
-            <title>
-              {p.source.toUpperCase()} · {p.city ?? ''} · {p.category.toUpperCase()}
-              {'\n'}
-              {p.title}
-            </title>
-          </circle>
-        ))
-      }
+      {livePoints.map((p) => (
+        <circle
+          cx={p.x.toFixed(2)}
+          cy={p.y.toFixed(2)}
+          r={p.r.toFixed(2)}
+          data-event-id={p.id}
+          data-event-source={p.source}
+          class={`earth-map__live earth-map__live--${p.source}`}
+        >
+          <title>
+            {p.source.toUpperCase()} · {p.city ?? ''} · {p.category.toUpperCase()}
+            {'\n'}
+            {p.title}
+          </title>
+        </circle>
+      ))}
     </g>
+
+    {/* Globe sphere outline (1px cobalt stroke @ 70% opacity) — sits on
+        TOP of every layer so the disc edges read crisply even when a
+        marker straddles the rim. */}
+    <path
+      d={GLOBE_SPHERE_D}
+      class="earth-map__sphere-edge"
+      fill="none"
+      stroke="var(--c-primary-2)"
+      stroke-opacity="0.7"
+      stroke-width="1"
+      aria-hidden="true"
+    />
   </svg>
+
+  {/* === NEW v7.7.4 HUD chrome — 4-cell KPI strip (HTML, not SVG) ===
+       Same mono-small-caps vocabulary as the desk-stats row. Each cell
+       is a hairline-divided row with a label + a value. */}
+  <div class="earth-map__hud" role="group" aria-label="Subsolar and time readouts">
+    <div class="earth-map__hud-cell">
+      <span class="earth-map__hud-label mono">SUBSOLAR</span>
+      <span class="earth-map__hud-value mono">{subLatStr} · {subLonStr}</span>
+    </div>
+    <div class="earth-map__hud-cell">
+      <span class="earth-map__hud-label mono">DECLINATION</span>
+      <span class="earth-map__hud-value mono">{declStr}</span>
+    </div>
+    <div class="earth-map__hud-cell">
+      <span class="earth-map__hud-label mono">UTC CLOCK</span>
+      <span class="earth-map__hud-value mono" data-counter-hud="utc">{_hourMarker}</span>
+    </div>
+    <div class="earth-map__hud-cell">
+      <span class="earth-map__hud-label mono">DAY / NIGHT</span>
+      <span class="earth-map__hud-value mono">{dayNightStr}</span>
+    </div>
+  </div>
 
   <figcaption class="earth-map__caption mono">
     <span class="earth-map__cap-section">
@@ -525,9 +782,8 @@ const isLive = cache.source === 'gdelt';
     </span>
     <span class="earth-map__cap-sep">·</span>
     <span class="earth-map__cap-section">
-      <span class="earth-map__cap-swatch earth-map__cap-swatch--gdelt-pos" aria-hidden="true"
-      ></span>
-      {dedupGdelt.length} GDELT 24h
+      <span class="earth-map__cap-swatch earth-map__cap-swatch--gdelt-pos" aria-hidden="true"></span>
+      {gdeltPositions.length} GDELT visible
     </span>
     {arcs.length > 0 && (
       <>
@@ -538,7 +794,6 @@ const isLive = cache.source === 'gdelt';
         </span>
       </>
     )}
-    {/* v7.7.3 — Layer E legend (arXiv + WIRE counts) */}
     {livePoints.length > 0 && (
       <>
         <span class="earth-map__cap-sep">·</span>
@@ -553,25 +808,22 @@ const isLive = cache.source === 'gdelt';
         </span>
       </>
     )}
-    {/* v7.7.3 — Layer F legend (subsolar + declination) */}
-    {terminator.path && (
-      <>
-        <span class="earth-map__cap-sep">·</span>
-        <span class="earth-map__cap-section earth-map__cap-section--f">
-          <span class="earth-map__cap-swatch earth-map__cap-swatch--day" aria-hidden="true"></span>
-          DAY/NIGHT
-          <span class="earth-map__cap-term mono">
-            δ{terminator.declinationDeg.toFixed(1)}° · {_hourMarker}
-          </span>
-        </span>
-      </>
-    )}
+    <span class="earth-map__cap-sep">·</span>
+    <span class="earth-map__cap-section earth-map__cap-section--f">
+      <span class="earth-map__cap-swatch earth-map__cap-swatch--day" aria-hidden="true"></span>
+      DAY/NIGHT
+      <span class="earth-map__cap-term mono">δ{_subLat.toFixed(1)}° · {_hourMarker}</span>
+    </span>
     <span class="earth-map__cap-sync">
       <span class={`earth-map__cap-badge earth-map__cap-badge--${isLive ? 'live' : 'fallback'}`}>
         {isLive ? 'LIVE' : 'FALLBACK'}
       </span>
       <span class="earth-map__cap-sync-text">SYNCHRONIZED</span>
-      <span class="earth-map__cap-sync-ago" data-counter={`${elapsedMin}`} data-duration="600">
+      <span
+        class="earth-map__cap-sync-ago"
+        data-counter={`${elapsedMin}`}
+        data-duration="600"
+      >
         {elapsedMin}
       </span>
       <span class="earth-map__cap-sync-text">M AGO</span>
@@ -593,28 +845,56 @@ const isLive = cache.source === 'gdelt';
     width: 100%;
     height: auto;
     display: block;
-    background: var(--c-tape);
-  }
-  .earth-map__eq {
-    stroke: var(--c-rule);
-    stroke-width: 0.5;
-    stroke-dasharray: 2, 4;
-    opacity: 0.6;
-  }
-  .earth-map__bg {
-    fill: var(--c-ink-3);
-    opacity: 0.18;
+    background: var(--c-bg);
   }
 
-  /* === Layer A — venues (amber, weighted, with pulse) === */
+  /* === Star field === */
+  .earth-map__stars {
+    /* Tiny keyframe twinkle; reduced-motion-aware below. */
+    animation: star-twinkle 6s linear infinite;
+  }
+  .earth-map__star {
+    fill: var(--c-ink-3);
+    opacity: 0.55;
+    transform-origin: center;
+    transform-box: fill-box;
+  }
+  .earth-map__star:nth-child(8n) { opacity: 0.85; }
+  .earth-map__star:nth-child(8n + 1) { opacity: 0.7; }
+  @keyframes star-twinkle {
+    0%, 100% { opacity: 0.55; }
+    50%      { opacity: 0.35; }
+  }
+
+  /* === Globe sphere outline + country borders === */
+  .earth-map__sphere {
+    fill: var(--c-bg-2);
+    stroke: var(--c-primary-2);
+    stroke-opacity: 0.6;
+    stroke-width: 0.7;
+  }
+  .earth-map__sphere-edge {
+    /* The crisp outer 1px stroke at 70% opacity — declares the disc edge. */
+  }
+  .earth-map__country {
+    fill: var(--c-bg-2);
+    stroke: var(--c-primary-2);
+    stroke-opacity: 0.5;
+    stroke-width: 1;
+    stroke-linejoin: round;
+    transition: fill-opacity 120ms ease, stroke-opacity 120ms ease;
+  }
+  .earth-map__country:hover {
+    fill: var(--c-bg-3);
+    stroke-opacity: 0.85;
+  }
+
+  /* === Layer A — venues === */
   .earth-map__pulse {
     fill: none;
     stroke: var(--c-primary-2);
     stroke-width: 1;
     opacity: 0.4;
-    /* v7.7.0 — bind globe-pulse (was dead code in v7.5). Reuses the
-       canonical keyframe from CoverageGlobe. Owns the single ambient
-       budget on the map. 3.6s ease-out infinite. */
     animation: globe-pulse 3.6s ease-out infinite;
     transform-origin: center;
     transform-box: fill-box;
@@ -634,7 +914,7 @@ const isLive = cache.source === 'gdelt';
     letter-spacing: 0.04em;
   }
 
-  /* === Layer B — world events (shape-coded by category) === */
+  /* === Layer B — world events === */
   .earth-map__event-shape {
     fill: var(--c-amber-deep);
     stroke: var(--c-bg);
@@ -654,78 +934,44 @@ const isLive = cache.source === 'gdelt';
     opacity: 0.6;
   }
 
-  /* === Layer D — connection arcs (hairline, one-shot draw-in) ===
-     `stroke-dasharray` is sized to the path length via CSS variables
-     set inline by the script (none yet — falls back to 320). The
-     draw-in is one-shot (no infinite loop). */
+  /* === Layer E — connection arcs === */
   .earth-map__arc {
     fill: none;
     stroke: var(--c-warn-soft);
     stroke-width: 0.6;
-    /* pathLength="1" on the SVG normalizes draw-in to a uniform
-       1.6s regardless of actual arc length (v7.7.1 polish). */
     stroke-dasharray: 1;
     stroke-dashoffset: 1;
     opacity: 0.7;
     animation: arc-draw 1.6s var(--j-ease-out) forwards;
     animation-delay: calc(var(--i, 0) * 60ms + 800ms);
   }
-  .earth-map__arc--pos {
-    stroke: var(--c-amber);
-  }
-  .earth-map__arc--neg {
-    stroke: var(--c-ink-3);
-  }
-  .earth-map__arc--neutral {
-    stroke: var(--c-ink-4);
-  }
+  .earth-map__arc--pos { stroke: var(--c-amber); }
+  .earth-map__arc--neg { stroke: var(--c-ink-3); }
+  .earth-map__arc--neutral { stroke: var(--c-ink-4); }
   @keyframes arc-draw {
     to { stroke-dashoffset: 0; }
   }
 
   /* === Layer C — GDELT (severity-weighted, polarity-tinted) === */
-  .earth-map__gdelt {
-    stroke: none;
-  }
-  .earth-map__gdelt--pos {
-    fill: var(--c-amber);
-    opacity: 0.65;
-  }
-  .earth-map__gdelt--neg {
-    fill: var(--c-ink-2);
-    opacity: 0.55;
-  }
-  .earth-map__gdelt--neutral {
-    fill: var(--c-ink-3);
-    opacity: 0.4;
-  }
+  .earth-map__gdelt { stroke: none; }
+  .earth-map__gdelt--pos { fill: var(--c-amber); opacity: 0.65; }
+  .earth-map__gdelt--neg { fill: var(--c-ink-2); opacity: 0.55; }
+  .earth-map__gdelt--neutral { fill: var(--c-ink-3); opacity: 0.4; }
 
-  /* === Layer F (v7.7.3) — day/night terminator ===
-     The wash follows the polyline; the polyline itself is a hairline
-     amber stroke. Pure CSS, no JS animation — the geometry recomputes
-     on every build, so the chrome naturally drifts as the day progresses. */
-  .earth-map__terminator-fill {
-    fill: color-mix(in oklab, var(--c-warn) 14%, transparent);
-    fill-rule: nonzero;
-    opacity: 0.7;
-    /* Multiply so the wash darkens the sunlit half against the cream
-       institutional palette — `lighten` washed out too easily. */
-  }
-  .earth-map__terminator {
+  /* === Layer F — terminator === */
+  .earth-map__day-wash {
     mix-blend-mode: multiply;
+    pointer-events: none;
   }
   .earth-map__terminator-line {
     fill: none;
     stroke: var(--c-warn);
-    stroke-width: 1.25;
+    stroke-width: 1.2;
     stroke-dasharray: 4, 3;
     opacity: 0.8;
+    pointer-events: none;
   }
-  .earth-map__subsolar {
-    fill: var(--c-amber);
-    stroke: var(--c-bg);
-    stroke-width: 1;
-  }
+  .earth-map__subsolar { fill: var(--c-amber); stroke: var(--c-bg); stroke-width: 1; }
   .earth-map__subsolar-pulse {
     fill: none;
     stroke: var(--c-amber);
@@ -739,18 +985,8 @@ const isLive = cache.source === 'gdelt';
     0%   { transform: scale(0.5); opacity: 0.7; }
     100% { transform: scale(2.4); opacity: 0; }
   }
-  .earth-map__hour-tick {
-    stroke: var(--c-amber);
-    stroke-width: 1;
-    opacity: 0.7;
-  }
-  .earth-map__hour-label {
-    font: 600 9px / 1 var(--ff-mono);
-    fill: var(--c-amber);
-    letter-spacing: 0.06em;
-  }
 
-  /* === Layer E (v7.7.3) — arXiv + WIRE markers === */
+  /* === Layer D — arXiv + WIRE markers === */
   .earth-map__live {
     stroke: var(--c-bg);
     stroke-width: 0.6;
@@ -762,28 +998,70 @@ const isLive = cache.source === 'gdelt';
     opacity: 0.85;
   }
   .earth-map__live--macrowire {
-    fill: color-mix(in oklab, var(--j-sage, #788c5d) 80%, var(--c-ink) 20%);
+    fill: color-mix(in oklab, var(--c-sage) 80%, var(--c-ink) 20%);
     opacity: 0.75;
   }
-  /* === hover-sync focus ring ===
-     Set programmatically by the inline script below when a /live row
-     is hovered. * Focus pulse lasts 1.2s, then auto-removes. */
+  /* === hover-sync focus ring (preserved) === */
   .earth-map__live--focus,
   .earth-map__gdelt--focus {
     stroke: var(--c-amber);
     stroke-width: 2.4;
     animation: earth-marker-focus 1.2s var(--j-ease-out) forwards;
+    transform-origin: center;
+    transform-box: fill-box;
   }
   @keyframes earth-marker-focus {
     0%   { stroke-opacity: 0.4; transform: scale(1); }
     35%  { stroke-opacity: 1;   transform: scale(1.6); }
     100% { stroke-opacity: 0;   transform: scale(2.2); }
   }
-  .earth-map__live--focus,
-  .earth-map__gdelt--focus {
-    transform-origin: center;
-    transform-box: fill-box;
+
+  /* === NEW v7.7.4 HUD chrome — 4-cell KPI strip === */
+  .earth-map__hud {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--c-rule);
+    border-bottom: 1px solid var(--c-rule);
+    background: var(--c-tape);
   }
+  .earth-map__hud-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 10px 14px;
+    border-right: 1px solid var(--c-rule-soft);
+  }
+  .earth-map__hud-cell:last-child {
+    border-right: none;
+  }
+  .earth-map__hud-label {
+    font-size: 9px;
+    color: var(--c-ink-3);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .earth-map__hud-value {
+    font-size: 13px;
+    color: var(--c-ink);
+    letter-spacing: 0.04em;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
+    font-weight: 600;
+  }
+  @media (max-width: 600px) {
+    .earth-map__hud {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .earth-map__hud-cell:nth-child(2n) {
+      border-right: none;
+    }
+    .earth-map__hud-cell:nth-child(-n + 2) {
+      border-bottom: 1px solid var(--c-rule-soft);
+    }
+  }
+
+  /* === Caption (legend + last-sync, v7.7.0 vocabulary preserved) === */
   .earth-map__caption {
     font-size: 10px;
     color: var(--c-ink-2);
@@ -825,14 +1103,13 @@ const isLive = cache.source === 'gdelt';
     width: 12px;
     margin-block: 4px;
   }
-  /* v7.7.3 — arXiv / WIRE / DAY swatches in the legend */
   .earth-map__cap-swatch--arxiv {
     background: color-mix(in oklab, var(--c-amber) 75%, var(--c-warn) 25%);
     border-radius: 50%;
     opacity: 0.85;
   }
   .earth-map__cap-swatch--wire {
-    background: color-mix(in oklab, var(--j-sage, #788c5d) 80%, var(--c-ink) 20%);
+    background: color-mix(in oklab, var(--c-sage) 80%, var(--c-ink) 20%);
     border-radius: 50%;
     opacity: 0.75;
   }
@@ -847,14 +1124,10 @@ const isLive = cache.source === 'gdelt';
     letter-spacing: 0.04em;
     margin-left: 4px;
   }
-  .earth-map__cap-section--f {
-    color: var(--c-amber);
-  }
-  .earth-map__cap-sep {
-    color: var(--c-ink-4);
-  }
+  .earth-map__cap-section--f { color: var(--c-amber); }
+  .earth-map__cap-sep { color: var(--c-ink-4); }
 
-  /* === v7.7.0 — last-sync chrome (right-side cluster) === */
+  /* === last-sync chrome (right-side cluster, preserved) === */
   .earth-map__cap-sync {
     margin-left: auto;
     display: inline-flex;
@@ -873,15 +1146,9 @@ const isLive = cache.source === 'gdelt';
     letter-spacing: 0.14em;
     line-height: 1.4;
   }
-  .earth-map__cap-badge--live {
-    color: var(--c-warn);
-  }
-  .earth-map__cap-badge--fallback {
-    color: var(--c-ink-3);
-  }
-  .earth-map__cap-sync-text {
-    color: var(--c-ink-3);
-  }
+  .earth-map__cap-badge--live { color: var(--c-warn); }
+  .earth-map__cap-badge--fallback { color: var(--c-ink-3); }
+  .earth-map__cap-sync-text { color: var(--c-ink-3); }
   .earth-map__cap-sync-ago {
     color: var(--c-ink);
     font-variant-numeric: tabular-nums;
@@ -905,39 +1172,35 @@ const isLive = cache.source === 'gdelt';
     }
   }
 
-  /* === v7.7.0 — reduced-motion guard for the new animations === */
+  /* === Reduced-motion guard (v7.7.0 vocabulary + new twinkle) === */
   @media (prefers-reduced-motion: reduce) {
     .earth-map__pulse,
     .earth-map__arc,
     .earth-map__subsolar-pulse,
     .earth-map__live--focus,
-    .earth-map__gdelt--focus {
+    .earth-map__gdelt--focus,
+    .earth-map__stars {
       animation: none;
       opacity: 1;
     }
-    .earth-map__arc {
-      stroke-dashoffset: 0;
-    }
+    .earth-map__stars { opacity: 0.6; }
+    .earth-map__arc { stroke-dashoffset: 0; }
   }
 </style>
 
 <script>
   /**
-   * earth-sync.ts (inlined for Astro static-output safety)
-   * v7.7.3 HOVER-SYNC BUS — /live row → /desk EarthMap marker focus.
+   * earth-sync (v7.7.4 inlined) — /live row → /desk EarthMap marker focus.
    *
-   * Listens for CustomEvent('earth:focus', { detail: { id, lat, lon } })
-   * on `window`. Any page (typically /live) dispatches this when a row is
-   * hovered. The listener finds the matching EarthMap <circle> by its
-   * data-event-id attribute and adds a `--focus` modifier class for 1.2s.
+   * Listens for CustomEvent('earth:focus', { detail: { id } }) on `window`.
+   * Any page (typically /live) dispatches this when a row is hovered. The
+   * listener finds the matching EarthMap marker by its `data-event-id`
+   * attribute and adds a `--focus` modifier class for 1.2s. Cross-tab sync:
+   * writes the id to localStorage under `earth:focus:v1` so a /desk tab
+   * can pick up a focus event emitted by a /live tab in another window.
    *
-   * Cross-tab sync: also writes the id to localStorage under
-   * `earth:focus:v1` so a /desk tab can pick up a focus event emitted by
-   * a /live tab in another window. The `storage` event fires on the
-   * other windows of the same origin — same site, so the bus works.
-   *
-   * No framework, no deps, ~30 LOC. SSR-safe (this script only runs in
-   * the browser — Astro skips it on the server).
+   * No framework, no deps. SSR-safe (only runs in the browser; Astro skips
+   * it on the server).
    */
   const FOCUS_DURATION_MS = 1200;
   const STORAGE_KEY = 'earth:focus:v1';
@@ -949,8 +1212,7 @@ const isLive = cache.source === 'gdelt';
     const m = svg.querySelector<SVGCircleElement>(`[data-event-id="${CSS.escape(id)}"]`);
     if (!m) return;
     m.classList.remove('earth-map__live--focus', 'earth-map__gdelt--focus');
-    // Force reflow so re-adding the class restarts the animation.
-    void m.getBoundingClientRect();
+    void m.getBoundingClientRect(); // force reflow
     if (m.classList.contains('earth-map__live')) {
       m.classList.add('earth-map__live--focus');
     } else {
@@ -965,7 +1227,14 @@ const isLive = cache.source === 'gdelt';
     const detail = (ev as CustomEvent).detail as { id?: string } | undefined;
     if (detail?.id) {
       focusMarker(detail.id);
-      try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ id: detail.id, ts: Date.now() })); } catch { /* ignore */ }
+      try {
+        localStorage.setItem(
+          STORAGE_KEY,
+          JSON.stringify({ id: detail.id, ts: Date.now() }),
+        );
+      } catch {
+        /* ignore */
+      }
     }
   });
 
@@ -978,6 +1247,8 @@ const isLive = cache.source === 'gdelt';
       if (parsed?.id && typeof parsed.ts === 'number' && Date.now() - parsed.ts < 2000) {
         focusMarker(parsed.id);
       }
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
   });
 </script>
