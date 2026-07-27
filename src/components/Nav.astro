@@ -335,11 +335,20 @@ const secondary = [
     opacity: 1;
   }
   @keyframes nav-featured-pulse {
-    0%, 100% { transform: translateY(-50%) scale(1);   opacity: 1; }
-    50%      { transform: translateY(-50%) scale(1.35); opacity: 0.55; }
+    0%,
+    100% {
+      transform: translateY(-50%) scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: translateY(-50%) scale(1.35);
+      opacity: 0.55;
+    }
   }
   @media (prefers-reduced-motion: reduce) {
-    .nav__link--featured::before { animation: none; }
+    .nav__link--featured::before {
+      animation: none;
+    }
   }
   /* v6.1.0 — Match .nav__link color treatment when NavMore is nested
      in the primary row (Markets dropdown + Resources dropdown).

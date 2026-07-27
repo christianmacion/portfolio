@@ -128,115 +128,149 @@ function formatDate(iso: string): string {
 ---
 
 <section class="arxiv-radar" aria-label="arXiv preprint radar">
-  {hasItems && (
-    <>
-      <div class="arxiv-radar__ticker">
-        <div class="arxiv-radar__lane arxiv-radar__lane--title" role="region" aria-label="Latest papers">
-          <div class="arxiv-radar__lane-label mono" aria-hidden="true">ARXIV</div>
-          <div class="arxiv-radar__viewport">
-            <div class="arxiv-radar__track" style={`--arxiv-dur: ${speedSec}s`} aria-live="off" aria-atomic="false">
-              {[...ribbonRows, ...ribbonRows].map((r) => (
-                <span class="arxiv-radar__item">
-                  <span class={`arxiv-radar__badge mono arxiv-radar__badge--${r.accent}`}>
-                    {r.cat}
+  {
+    hasItems && (
+      <>
+        <div class="arxiv-radar__ticker">
+          <div
+            class="arxiv-radar__lane arxiv-radar__lane--title"
+            role="region"
+            aria-label="Latest papers"
+          >
+            <div class="arxiv-radar__lane-label mono" aria-hidden="true">
+              ARXIV
+            </div>
+            <div class="arxiv-radar__viewport">
+              <div
+                class="arxiv-radar__track"
+                style={`--arxiv-dur: ${speedSec}s`}
+                aria-live="off"
+                aria-atomic="false"
+              >
+                {[...ribbonRows, ...ribbonRows].map((r) => (
+                  <span class="arxiv-radar__item">
+                    <span class={`arxiv-radar__badge mono arxiv-radar__badge--${r.accent}`}>
+                      {r.cat}
+                    </span>
+                    <a
+                      class="arxiv-radar__title"
+                      href={r.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      referrerpolicy="strict-origin-when-cross-origin"
+                    >
+                      {r.title}
+                    </a>
+                    <span class="arxiv-radar__hm mono">{formatHm(r.timestamp)}</span>
+                    <span class="arxiv-radar__sep" aria-hidden="true">
+                      ·
+                    </span>
                   </span>
-                  <a
-                    class="arxiv-radar__title"
-                    href={r.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    referrerpolicy="strict-origin-when-cross-origin"
-                  >
-                    {r.title}
-                  </a>
-                  <span class="arxiv-radar__hm mono">{formatHm(r.timestamp)}</span>
-                  <span class="arxiv-radar__sep" aria-hidden="true">·</span>
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div class="arxiv-radar__lane arxiv-radar__lane--method" role="region" aria-label="Methodology frames">
-          <div class="arxiv-radar__lane-label mono" aria-hidden="true">METHOD</div>
-          <div class="arxiv-radar__viewport arxiv-radar__viewport--reverse">
-            <div class="arxiv-radar__track" style={`--arxiv-dur: ${speedSec + 24}s`} aria-live="off" aria-atomic="false">
-              {[...methodFrames, ...methodFrames].map((f) => (
-                <span class:list={['arxiv-radar__frame', `is-${f.accent}`]}>
-                  <span class="arxiv-radar__frame-head">{f.head}</span>
-                  <span class="arxiv-radar__frame-sep" aria-hidden="true">·</span>
-                  <span class="arxiv-radar__frame-tail mono">{f.tail}</span>
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div class="arxiv-radar__stop mono" aria-hidden="true">{trailing}</div>
-      </div>
-
-      <div class="arxiv-radar__grid">
-        {categories.map((cat) => {
-          const item = categoryLatest[cat];
-          if (!item) {
-            return (
-              <div class="arxiv-radar__card arxiv-radar__card--empty">
-                <span class={`arxiv-radar__badge mono arxiv-radar__badge--${accentFor(cat)}`}>{cat}</span>
-                <p class="arxiv-radar__empty-text">no recent paper</p>
+                ))}
               </div>
+            </div>
+          </div>
+
+          <div
+            class="arxiv-radar__lane arxiv-radar__lane--method"
+            role="region"
+            aria-label="Methodology frames"
+          >
+            <div class="arxiv-radar__lane-label mono" aria-hidden="true">
+              METHOD
+            </div>
+            <div class="arxiv-radar__viewport arxiv-radar__viewport--reverse">
+              <div
+                class="arxiv-radar__track"
+                style={`--arxiv-dur: ${speedSec + 24}s`}
+                aria-live="off"
+                aria-atomic="false"
+              >
+                {[...methodFrames, ...methodFrames].map((f) => (
+                  <span class:list={['arxiv-radar__frame', `is-${f.accent}`]}>
+                    <span class="arxiv-radar__frame-head">{f.head}</span>
+                    <span class="arxiv-radar__frame-sep" aria-hidden="true">
+                      ·
+                    </span>
+                    <span class="arxiv-radar__frame-tail mono">{f.tail}</span>
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div class="arxiv-radar__stop mono" aria-hidden="true">
+            {trailing}
+          </div>
+        </div>
+
+        <div class="arxiv-radar__grid">
+          {categories.map((cat) => {
+            const item = categoryLatest[cat];
+            if (!item) {
+              return (
+                <div class="arxiv-radar__card arxiv-radar__card--empty">
+                  <span class={`arxiv-radar__badge mono arxiv-radar__badge--${accentFor(cat)}`}>
+                    {cat}
+                  </span>
+                  <p class="arxiv-radar__empty-text">no recent paper</p>
+                </div>
+              );
+            }
+            return (
+              <a
+                class={`arxiv-radar__card arxiv-radar__card--${accentFor(cat)}`}
+                href={item.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                referrerpolicy="strict-origin-when-cross-origin"
+              >
+                <span class={`arxiv-radar__badge mono arxiv-radar__badge--${accentFor(cat)}`}>
+                  {cat}
+                </span>
+                <p class="arxiv-radar__paper-title">{item.title}</p>
+                <p class="arxiv-radar__paper-authors">
+                  {item.authors && item.authors.length > 0
+                    ? item.authors.slice(0, 3).join(', ') + (item.authors.length > 3 ? ' …' : '')
+                    : '—'}
+                </p>
+                <p class="arxiv-radar__paper-meta mono">
+                  <span>{formatDate(item.timestamp)}</span>
+                  <span class="arxiv-radar__paper-id">arXiv:{item.id}</span>
+                </p>
+              </a>
             );
-          }
-          return (
-            <a
-              class={`arxiv-radar__card arxiv-radar__card--${accentFor(cat)}`}
-              href={item.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              referrerpolicy="strict-origin-when-cross-origin"
-            >
-              <span class={`arxiv-radar__badge mono arxiv-radar__badge--${accentFor(cat)}`}>
-                {cat}
-              </span>
-              <p class="arxiv-radar__paper-title">{item.title}</p>
-              <p class="arxiv-radar__paper-authors">
-                {item.authors && item.authors.length > 0
-                  ? item.authors.slice(0, 3).join(', ') + (item.authors.length > 3 ? ' …' : '')
-                  : '—'}
-              </p>
-              <p class="arxiv-radar__paper-meta mono">
-                <span>{formatDate(item.timestamp)}</span>
-                <span class="arxiv-radar__paper-id">arXiv:{item.id}</span>
-              </p>
-            </a>
-          );
-        })}
-      </div>
+          })}
+        </div>
 
-      <p class="arxiv-radar__caption mono">
-        <span class={`arxiv-radar__badge arxiv-radar__badge--${isLive ? 'live' : 'ink'}`}>
-          {isLive ? 'LIVE' : 'FALLBACK'}
-        </span>
-        <span class="arxiv-radar__cap-text">ARXIV</span>
-        <span class="arxiv-radar__cap-text">{items.length} PAPERS</span>
-        <span class="arxiv-radar__cap-sep">·</span>
-        <span class="arxiv-radar__cap-text">{categories.length} CATEGORIES</span>
-        <span class="arxiv-radar__cap-sep">·</span>
-        <span class="arxiv-radar__cap-text">SYNCHRONIZED</span>
-        <span class="arxiv-radar__cap-ago" data-counter={`${elapsedMin}`} data-duration="600">
-          {elapsedMin}
-        </span>
-        <span class="arxiv-radar__cap-text">M AGO</span>
-        <span class="arxiv-radar__cap-stamp">{fetchedAtShort}</span>
+        <p class="arxiv-radar__caption mono">
+          <span class={`arxiv-radar__badge arxiv-radar__badge--${isLive ? 'live' : 'ink'}`}>
+            {isLive ? 'LIVE' : 'FALLBACK'}
+          </span>
+          <span class="arxiv-radar__cap-text">ARXIV</span>
+          <span class="arxiv-radar__cap-text">{items.length} PAPERS</span>
+          <span class="arxiv-radar__cap-sep">·</span>
+          <span class="arxiv-radar__cap-text">{categories.length} CATEGORIES</span>
+          <span class="arxiv-radar__cap-sep">·</span>
+          <span class="arxiv-radar__cap-text">SYNCHRONIZED</span>
+          <span class="arxiv-radar__cap-ago" data-counter={`${elapsedMin}`} data-duration="600">
+            {elapsedMin}
+          </span>
+          <span class="arxiv-radar__cap-text">M AGO</span>
+          <span class="arxiv-radar__cap-stamp">{fetchedAtShort}</span>
+        </p>
+      </>
+    )
+  }
+
+  {
+    !hasItems && (
+      <p class="arxiv-radar__empty">
+        <span class="arxiv-radar__cap-badge">FALLBACK</span>
+        <span class="arxiv-radar__cap-text">ARXIV · NO ITEMS · LAST GOOD {fetchedAtShort}</span>
       </p>
-    </>
-  )}
-
-  {!hasItems && (
-    <p class="arxiv-radar__empty">
-      <span class="arxiv-radar__cap-badge">FALLBACK</span>
-      <span class="arxiv-radar__cap-text">ARXIV · NO ITEMS · LAST GOOD {fetchedAtShort}</span>
-    </p>
-  )}
+    )
+  }
 </section>
 
 <style>
@@ -584,8 +618,12 @@ function formatDate(iso: string): string {
 
   /* === Keyframe === */
   @keyframes arxiv-radar-scroll {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
   }
 
   /* === Reduced motion === */

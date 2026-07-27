@@ -13,13 +13,55 @@
  * Reduced-motion safe: animations disabled.
  */
 const events = [
-  { time: '14:23:17', severity: 'critical', source: 'FED', text: 'FOMC statement released — 25bp cut signaled', signal: 'TSM-VT' },
-  { time: '14:23:04', severity: 'normal', source: 'NYSE', text: 'NVDA earnings beat by 4.2%', signal: 'COIN-PAIRS' },
-  { time: '14:22:48', severity: 'warn', source: 'ECB', text: 'Press conference diverges from minutes', signal: 'FX-CARRY' },
-  { time: '14:22:31', severity: 'normal', source: 'GDELT', text: 'BRICS summit pace accelerates', signal: 'REGIME' },
-  { time: '14:22:15', severity: 'critical', source: 'BOJ', text: 'YCC adjustment signals yen intervention', signal: 'VRP-X' },
-  { time: '14:22:01', severity: 'normal', source: 'PBoC', text: 'CNY fixing strengthens 312 pips', signal: 'FX-CARRY' },
-  { time: '14:21:44', severity: 'warn', source: 'BSE', text: 'GDP print lower than consensus', signal: 'REGIME' },
+  {
+    time: '14:23:17',
+    severity: 'critical',
+    source: 'FED',
+    text: 'FOMC statement released — 25bp cut signaled',
+    signal: 'TSM-VT',
+  },
+  {
+    time: '14:23:04',
+    severity: 'normal',
+    source: 'NYSE',
+    text: 'NVDA earnings beat by 4.2%',
+    signal: 'COIN-PAIRS',
+  },
+  {
+    time: '14:22:48',
+    severity: 'warn',
+    source: 'ECB',
+    text: 'Press conference diverges from minutes',
+    signal: 'FX-CARRY',
+  },
+  {
+    time: '14:22:31',
+    severity: 'normal',
+    source: 'GDELT',
+    text: 'BRICS summit pace accelerates',
+    signal: 'REGIME',
+  },
+  {
+    time: '14:22:15',
+    severity: 'critical',
+    source: 'BOJ',
+    text: 'YCC adjustment signals yen intervention',
+    signal: 'VRP-X',
+  },
+  {
+    time: '14:22:01',
+    severity: 'normal',
+    source: 'PBoC',
+    text: 'CNY fixing strengthens 312 pips',
+    signal: 'FX-CARRY',
+  },
+  {
+    time: '14:21:44',
+    severity: 'warn',
+    source: 'BSE',
+    text: 'GDP print lower than consensus',
+    signal: 'REGIME',
+  },
 ];
 ---
 
@@ -30,46 +72,56 @@ const events = [
         <span class="live-activity__live-dot" aria-hidden="true"></span>
         LIVE EVENT LOG · STELLA · TAIL OF THE LOOP
       </p>
-      <h2 class="live-activity__title">
-        What the office sees, right now.
-      </h2>
+      <h2 class="live-activity__title">What the office sees, right now.</h2>
       <p class="live-activity__lede">
-        A continuous stream of world events, evaluated and routed to research signals.
-        New entries appear every few seconds.
+        A continuous stream of world events, evaluated and routed to research signals. New entries
+        appear every few seconds.
       </p>
     </header>
 
     <div class="live-activity__panel">
       <div class="live-activity__scroll">
         <ol class="live-activity__list" aria-hidden="false">
-          {events.map((e, i) => (
-            <li
-              class={`live-activity__row live-activity__row--${e.severity}`}
-              style={`--i: ${i}`}
-            >
-              <span class="live-activity__time mono">{e.time}</span>
-              <span class={`live-activity__severity live-activity__severity--${e.severity}`} aria-hidden="true"></span>
-              <span class="live-activity__source mono">{e.source}</span>
-              <span class="live-activity__text">{e.text}</span>
-              <span class="live-activity__signal mono">→ {e.signal}</span>
-            </li>
-          ))}
-          {/* v7.6.8 — duplicate the list inside the track so the
+          {
+            events.map((e, i) => (
+              <li
+                class={`live-activity__row live-activity__row--${e.severity}`}
+                style={`--i: ${i}`}
+              >
+                <span class="live-activity__time mono">{e.time}</span>
+                <span
+                  class={`live-activity__severity live-activity__severity--${e.severity}`}
+                  aria-hidden="true"
+                />
+                <span class="live-activity__source mono">{e.source}</span>
+                <span class="live-activity__text">{e.text}</span>
+                <span class="live-activity__signal mono">→ {e.signal}</span>
+              </li>
+            ))
+          }
+          {
+            /* v7.6.8 — duplicate the list inside the track so the
              translateY(-50%) loop stays seamless. Without this, the
-             second half of every cycle was blank. */}
-          {events.map((e, i) => (
-            <li
-              class={`live-activity__row live-activity__row--${e.severity}`}
-              style={`--i: ${i + events.length}`}
-              aria-hidden="true"
-            >
-              <span class="live-activity__time mono">{e.time}</span>
-              <span class={`live-activity__severity live-activity__severity--${e.severity}`} aria-hidden="true"></span>
-              <span class="live-activity__source mono">{e.source}</span>
-              <span class="live-activity__text">{e.text}</span>
-              <span class="live-activity__signal mono">→ {e.signal}</span>
-            </li>
-          ))}
+             second half of every cycle was blank. */
+          }
+          {
+            events.map((e, i) => (
+              <li
+                class={`live-activity__row live-activity__row--${e.severity}`}
+                style={`--i: ${i + events.length}`}
+                aria-hidden="true"
+              >
+                <span class="live-activity__time mono">{e.time}</span>
+                <span
+                  class={`live-activity__severity live-activity__severity--${e.severity}`}
+                  aria-hidden="true"
+                />
+                <span class="live-activity__source mono">{e.source}</span>
+                <span class="live-activity__text">{e.text}</span>
+                <span class="live-activity__signal mono">→ {e.signal}</span>
+              </li>
+            ))
+          }
         </ol>
       </div>
       <div class="live-activity__fade" aria-hidden="true"></div>
@@ -131,8 +183,12 @@ const events = [
     animation: live-activity-scroll 28s linear infinite;
   }
   @keyframes live-activity-scroll {
-    0%   { transform: translateY(0); }
-    100% { transform: translateY(-50%); }
+    0% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(-50%);
+    }
   }
   .live-activity__row {
     display: grid;
@@ -176,8 +232,13 @@ const events = [
     background: var(--c-sage);
   }
   @keyframes live-activity-sev {
-    0%, 100% { opacity: 1; }
-    50%      { opacity: 0.5; }
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
   }
   .live-activity__source {
     color: var(--c-ink);
@@ -199,8 +260,13 @@ const events = [
     position: absolute;
     inset: 0;
     pointer-events: none;
-    background:
-      linear-gradient(to bottom, var(--c-bg) 0%, transparent 8%, transparent 92%, var(--c-bg) 100%);
+    background: linear-gradient(
+      to bottom,
+      var(--c-bg) 0%,
+      transparent 8%,
+      transparent 92%,
+      var(--c-bg) 100%
+    );
   }
 
   /* === Live dot === */
@@ -214,8 +280,12 @@ const events = [
     flex-shrink: 0;
   }
   @keyframes live-activity-dot {
-    0%   { box-shadow: 0 0 0 0 color-mix(in oklab, var(--c-terracotta) 70%, transparent); }
-    100% { box-shadow: 0 0 0 8px transparent; }
+    0% {
+      box-shadow: 0 0 0 0 color-mix(in oklab, var(--c-terracotta) 70%, transparent);
+    }
+    100% {
+      box-shadow: 0 0 0 8px transparent;
+    }
   }
 
   /* === Reduced-motion fallback === */

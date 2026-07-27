@@ -103,11 +103,10 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
       </VoiceLine>
       <p class="live-head__sub">
         A research signal only matters if you see it before the market. This is the office's
-        <em>24-hour information diet</em>:
-        GDELT for geopolitical + market-moving events, arXiv for fresh preprints in q-fin / stats /
-        ML / AI / CL, and macro-wire for Reuters / CoinDesk / The Block / CoinTelegraph headlines.
-        Cross-feed dedup means the same story does not show up three times. The count-up strip
-        reads the actual cache — never a hardcoded marketing number.
+        <em>24-hour information diet</em>: GDELT for geopolitical + market-moving events, arXiv for
+        fresh preprints in q-fin / stats / ML / AI / CL, and macro-wire for Reuters / CoinDesk / The
+        Block / CoinTelegraph headlines. Cross-feed dedup means the same story does not show up
+        three times. The count-up strip reads the actual cache — never a hardcoded marketing number.
       </p>
 
       <div class="live-head__cta">
@@ -124,7 +123,9 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
       <ul class="live-stats__grid">
         <li class="live-stats__cell" style="--i: 0">
           <p class="live-stats__num mono">
-            <span data-counter={sourceCount} data-duration="800">{String(sourceCount).padStart(2, '0')}</span>
+            <span data-counter={sourceCount} data-duration="800"
+              >{String(sourceCount).padStart(2, '0')}</span
+            >
           </p>
           <p class="live-stats__lbl mono">SOURCES</p>
         </li>
@@ -309,15 +310,21 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     padding-top: 16px;
     position: relative;
     transition: border-color 0.2s ease;
-    animation: live-stat-in 0.6s cubic-bezier(.4,.7,.3,1) backwards;
+    animation: live-stat-in 0.6s cubic-bezier(0.4, 0.7, 0.3, 1) backwards;
     animation-delay: calc(var(--i, 0) * 100ms);
   }
   .live-stats__cell:hover {
     border-top-color: var(--c-amber);
   }
   @keyframes live-stat-in {
-    from { opacity: 0; transform: translateY(8px); }
-    to   { opacity: 1; transform: none; }
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
   }
   .live-stats__num {
     font: 600 32px / 1 var(--serif-display);

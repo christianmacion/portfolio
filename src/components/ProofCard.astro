@@ -37,6 +37,21 @@ const {
 } = Astro.props;
 
 const figureStyle = aspect === 'auto' ? '' : `--proof-aspect: ${aspect}; --proof-fit: ${fit};`;
+
+/**
+ * v7.26 — intrinsic width/height hints derived from the chosen aspect ratio.
+ * Browsers reserve layout space before the image bytes arrive (CLS = 0)
+ * and Lighthouse stops flagging the missing-attribute heuristic.
+ * CSS width:100% / aspect-ratio overrides the actual render size at runtime.
+ */
+const ASPECT_WH: Record<string, [number, number]> = {
+  '16/9': [1280, 720],
+  '16/10': [1280, 800],
+  '4/3': [1200, 900],
+  '3/2': [1200, 800],
+  auto: [1000, 1000],
+};
+const [intrinsicW, intrinsicH] = ASPECT_WH[aspect] ?? [1200, 800];
 ---
 
 <figure class={`proof-card proof-card--${tone}`} style={figureStyle}>
@@ -48,6 +63,8 @@ const figureStyle = aspect === 'auto' ? '' : `--proof-aspect: ${aspect}; --proof
           alt={alt}
           loading={eager ? 'eager' : 'lazy'}
           decoding="async"
+          width={intrinsicW}
+          height={intrinsicH}
           class="proof-card__img"
         />
       </a>
@@ -57,6 +74,8 @@ const figureStyle = aspect === 'auto' ? '' : `--proof-aspect: ${aspect}; --proof
         alt={alt}
         loading={eager ? 'eager' : 'lazy'}
         decoding="async"
+        width={intrinsicW}
+        height={intrinsicH}
         class="proof-card__img"
       />
     )

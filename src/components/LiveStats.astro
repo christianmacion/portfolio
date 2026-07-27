@@ -58,36 +58,36 @@ const stats = [
         <span class="live-stats__live-dot" aria-hidden="true"></span>
         INSTRUMENT PANEL · STELLA · LAST 24H
       </p>
-      <h2 class="live-stats__title">
-        The numbers, on the wire.
-      </h2>
+      <h2 class="live-stats__title">The numbers, on the wire.</h2>
       <p class="live-stats__lede">
-        Live readouts from the {archSafe.agentCount}-agent office.
-        Every event is timestamped, every signal is eval-gated.
+        Live readouts from the {archSafe.agentCount}-agent office. Every event is timestamped, every
+        signal is eval-gated.
       </p>
     </header>
 
     <div class="live-stats__grid">
-      {stats.map((s, i) => (
-        <article class={`live-stats__card live-stats__card--${s.accent}`}>
-          <div class="live-stats__card-head">
-            <span class="live-stats__live-dot" aria-hidden="true"></span>
-            <span class="live-stats__label mono">{s.label}</span>
-          </div>
-          <div class="live-stats__value-row">
-            <span class="live-stats__value">{s.value}</span>
-            <span class="live-stats__delta mono">{s.delta}</span>
-          </div>
-          <div class="live-stats__spark">
-            {s.bars.map((h, j) => (
-              <span
-                class={`live-stats__bar live-stats__bar--${i + 1}-${j + 1}`}
-                style={`--h: ${h}%`}
-              />
-            ))}
-          </div>
-        </article>
-      ))}
+      {
+        stats.map((s, i) => (
+          <article class={`live-stats__card live-stats__card--${s.accent}`}>
+            <div class="live-stats__card-head">
+              <span class="live-stats__live-dot" aria-hidden="true" />
+              <span class="live-stats__label mono">{s.label}</span>
+            </div>
+            <div class="live-stats__value-row">
+              <span class="live-stats__value">{s.value}</span>
+              <span class="live-stats__delta mono">{s.delta}</span>
+            </div>
+            <div class="live-stats__spark">
+              {s.bars.map((h, j) => (
+                <span
+                  class={`live-stats__bar live-stats__bar--${i + 1}-${j + 1}`}
+                  style={`--h: ${h}%`}
+                />
+              ))}
+            </div>
+          </article>
+        ))
+      }
     </div>
   </div>
 </section>
@@ -195,22 +195,89 @@ const stats = [
     background: var(--c-terracotta);
   }
   /* Stagger via nth-child on each card */
-  .live-stats__bar--1-1, .live-stats__bar--2-5, .live-stats__bar--3-9, .live-stats__bar--4-3 { animation-delay: 0s; }
-  .live-stats__bar--1-2, .live-stats__bar--2-6, .live-stats__bar--3-10, .live-stats__bar--4-4 { animation-delay: -0.2s; }
-  .live-stats__bar--1-3, .live-stats__bar--2-7, .live-stats__bar--3-11, .live-stats__bar--4-5 { animation-delay: -0.4s; }
-  .live-stats__bar--1-4, .live-stats__bar--2-8, .live-stats__bar--3-12, .live-stats__bar--4-6 { animation-delay: -0.6s; }
-  .live-stats__bar--1-5, .live-stats__bar--2-9, .live-stats__bar--3-1, .live-stats__bar--4-7 { animation-delay: -0.8s; }
-  .live-stats__bar--1-6, .live-stats__bar--2-10, .live-stats__bar--3-2, .live-stats__bar--4-8 { animation-delay: -1.0s; }
-  .live-stats__bar--1-7, .live-stats__bar--2-11, .live-stats__bar--3-3, .live-stats__bar--4-9 { animation-delay: -1.2s; }
-  .live-stats__bar--1-8, .live-stats__bar--2-12, .live-stats__bar--3-4, .live-stats__bar--4-10 { animation-delay: -1.4s; }
-  .live-stats__bar--1-9, .live-stats__bar--2-1, .live-stats__bar--3-5, .live-stats__bar--4-11 { animation-delay: -1.6s; }
-  .live-stats__bar--1-10, .live-stats__bar--2-2, .live-stats__bar--3-6, .live-stats__bar--4-12 { animation-delay: -1.8s; }
-  .live-stats__bar--1-11, .live-stats__bar--2-3, .live-stats__bar--3-7, .live-stats__bar--4-1 { animation-delay: -2.0s; }
-  .live-stats__bar--1-12, .live-stats__bar--2-4, .live-stats__bar--3-8, .live-stats__bar--4-2 { animation-delay: -2.2s; }
+  .live-stats__bar--1-1,
+  .live-stats__bar--2-5,
+  .live-stats__bar--3-9,
+  .live-stats__bar--4-3 {
+    animation-delay: 0s;
+  }
+  .live-stats__bar--1-2,
+  .live-stats__bar--2-6,
+  .live-stats__bar--3-10,
+  .live-stats__bar--4-4 {
+    animation-delay: -0.2s;
+  }
+  .live-stats__bar--1-3,
+  .live-stats__bar--2-7,
+  .live-stats__bar--3-11,
+  .live-stats__bar--4-5 {
+    animation-delay: -0.4s;
+  }
+  .live-stats__bar--1-4,
+  .live-stats__bar--2-8,
+  .live-stats__bar--3-12,
+  .live-stats__bar--4-6 {
+    animation-delay: -0.6s;
+  }
+  .live-stats__bar--1-5,
+  .live-stats__bar--2-9,
+  .live-stats__bar--3-1,
+  .live-stats__bar--4-7 {
+    animation-delay: -0.8s;
+  }
+  .live-stats__bar--1-6,
+  .live-stats__bar--2-10,
+  .live-stats__bar--3-2,
+  .live-stats__bar--4-8 {
+    animation-delay: -1s;
+  }
+  .live-stats__bar--1-7,
+  .live-stats__bar--2-11,
+  .live-stats__bar--3-3,
+  .live-stats__bar--4-9 {
+    animation-delay: -1.2s;
+  }
+  .live-stats__bar--1-8,
+  .live-stats__bar--2-12,
+  .live-stats__bar--3-4,
+  .live-stats__bar--4-10 {
+    animation-delay: -1.4s;
+  }
+  .live-stats__bar--1-9,
+  .live-stats__bar--2-1,
+  .live-stats__bar--3-5,
+  .live-stats__bar--4-11 {
+    animation-delay: -1.6s;
+  }
+  .live-stats__bar--1-10,
+  .live-stats__bar--2-2,
+  .live-stats__bar--3-6,
+  .live-stats__bar--4-12 {
+    animation-delay: -1.8s;
+  }
+  .live-stats__bar--1-11,
+  .live-stats__bar--2-3,
+  .live-stats__bar--3-7,
+  .live-stats__bar--4-1 {
+    animation-delay: -2s;
+  }
+  .live-stats__bar--1-12,
+  .live-stats__bar--2-4,
+  .live-stats__bar--3-8,
+  .live-stats__bar--4-2 {
+    animation-delay: -2.2s;
+  }
 
   @keyframes live-stats-bar {
-    0%, 100% { transform: scaleY(1); opacity: 0.45; }
-    50%      { transform: scaleY(0.55); opacity: 0.85; }
+    0%,
+    100% {
+      transform: scaleY(1);
+      opacity: 0.45;
+    }
+    50% {
+      transform: scaleY(0.55);
+      opacity: 0.85;
+    }
   }
 
   /* === Live dot === */
@@ -224,8 +291,12 @@ const stats = [
     flex-shrink: 0;
   }
   @keyframes live-stats-dot {
-    0%   { box-shadow: 0 0 0 0 color-mix(in oklab, var(--c-terracotta) 70%, transparent); }
-    100% { box-shadow: 0 0 0 8px transparent; }
+    0% {
+      box-shadow: 0 0 0 0 color-mix(in oklab, var(--c-terracotta) 70%, transparent);
+    }
+    100% {
+      box-shadow: 0 0 0 8px transparent;
+    }
   }
 
   /* === Reduced-motion fallback === */

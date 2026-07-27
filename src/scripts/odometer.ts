@@ -90,7 +90,8 @@ function init(): void {
       const current = final * eased;
       el.textContent = `${parsed.prefix}${formatNumber(current, parsed.decimals)}${parsed.suffix}`;
       if (t < 1) requestAnimationFrame(animate);
-      else el.textContent = `${parsed.prefix}${formatNumber(final, parsed.decimals)}${parsed.suffix}`;
+      else
+        el.textContent = `${parsed.prefix}${formatNumber(final, parsed.decimals)}${parsed.suffix}`;
     };
 
     const io = new IntersectionObserver(

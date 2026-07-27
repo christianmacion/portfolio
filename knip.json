@@ -25,7 +25,13 @@
     "@scripts/*": ["src/scripts/*"],
     "@data/*": ["src/data/*"]
   },
-  "ignore": ["src/components/Odometer.astro", "src/scripts/*.ts"],
+  "ignore": [
+    "src/components/Odometer.astro",
+    "src/scripts/*.ts",
+    "scripts/__tests__/verify-anchors.test.mjs",
+    "scripts/build-world-map.mjs",
+    "scripts/split-world-map-paths.mjs"
+  ],
   "ignoreDependencies": [
     "astro-expressive-code",
     "@astrojs/rss",
@@ -34,7 +40,10 @@
     "lucide",
     "rehype-katex",
     "remark-math",
-    "world-atlas"
+    "world-atlas",
+    "d3-geo",
+    "topojson-client",
+    "topojson-simplify"
   ],
   "ignoreBinaries": ["pdftotext", "python3"],
   "ignoreExportsUsedInFile": true,

@@ -27,12 +27,54 @@ const lonLat = (lon: number, lat: number) => {
 };
 
 const sources = [
-  { code: 'FED', city: 'Washington', lon: -77.04, lat: 38.91, label: 'FOMC', sub: '14:00 ET · 25bp cut signaled' },
-  { code: 'ECB', city: 'Frankfurt', lon: 8.68, lat: 50.11, label: 'PRESS', sub: '13:45 CET · drift from minutes' },
-  { code: 'NYSE', city: 'New York', lon: -74.0, lat: 40.71, label: 'OPEN', sub: '09:30 ET · NVDA +4.2% beat' },
-  { code: 'BOJ', city: 'Tokyo', lon: 139.69, lat: 35.69, label: 'MINUTES', sub: '09:00 JST · YCC adjustment' },
-  { code: 'BSE', city: 'Mumbai', lon: 72.88, lat: 19.08, label: 'GDP', sub: '12:00 IST · -1.8% miss' },
-  { code: 'PBoC', city: 'Beijing', lon: 116.40, lat: 39.90, label: 'FIX', sub: '09:15 CST · CNY +312 pips' },
+  {
+    code: 'FED',
+    city: 'Washington',
+    lon: -77.04,
+    lat: 38.91,
+    label: 'FOMC',
+    sub: '14:00 ET · 25bp cut signaled',
+  },
+  {
+    code: 'ECB',
+    city: 'Frankfurt',
+    lon: 8.68,
+    lat: 50.11,
+    label: 'PRESS',
+    sub: '13:45 CET · drift from minutes',
+  },
+  {
+    code: 'NYSE',
+    city: 'New York',
+    lon: -74.0,
+    lat: 40.71,
+    label: 'OPEN',
+    sub: '09:30 ET · NVDA +4.2% beat',
+  },
+  {
+    code: 'BOJ',
+    city: 'Tokyo',
+    lon: 139.69,
+    lat: 35.69,
+    label: 'MINUTES',
+    sub: '09:00 JST · YCC adjustment',
+  },
+  {
+    code: 'BSE',
+    city: 'Mumbai',
+    lon: 72.88,
+    lat: 19.08,
+    label: 'GDP',
+    sub: '12:00 IST · -1.8% miss',
+  },
+  {
+    code: 'PBoC',
+    city: 'Beijing',
+    lon: 116.4,
+    lat: 39.9,
+    label: 'FIX',
+    sub: '09:15 CST · CNY +312 pips',
+  },
 ];
 
 const signals = [
@@ -44,19 +86,65 @@ const signals = [
 ];
 
 const feed = [
-  { time: '14:23:17', grade: 'A', source: 'FED', msg: 'FOMC statement released — 25bp cut signaled', route: 'TSM-VT' },
-  { time: '14:23:04', grade: 'C', source: 'NYSE', msg: 'NVDA earnings beat by 4.2%', route: 'COIN-PAIRS' },
-  { time: '14:22:48', grade: 'B', source: 'ECB', msg: 'Press conference diverges from minutes', route: 'FX-CARRY' },
-  { time: '14:22:31', grade: 'C', source: 'GDELT', msg: 'BRICS summit pace accelerates', route: 'REGIME' },
-  { time: '14:22:15', grade: 'A', source: 'BOJ', msg: 'YCC adjustment signals yen intervention', route: 'VRP-X' },
-  { time: '14:22:01', grade: 'C', source: 'PBoC', msg: 'CNY fixing strengthens 312 pips', route: 'FX-CARRY' },
-  { time: '14:21:44', grade: 'B', source: 'BSE', msg: 'GDP print lower than consensus', route: 'REGIME' },
+  {
+    time: '14:23:17',
+    grade: 'A',
+    source: 'FED',
+    msg: 'FOMC statement released — 25bp cut signaled',
+    route: 'TSM-VT',
+  },
+  {
+    time: '14:23:04',
+    grade: 'C',
+    source: 'NYSE',
+    msg: 'NVDA earnings beat by 4.2%',
+    route: 'COIN-PAIRS',
+  },
+  {
+    time: '14:22:48',
+    grade: 'B',
+    source: 'ECB',
+    msg: 'Press conference diverges from minutes',
+    route: 'FX-CARRY',
+  },
+  {
+    time: '14:22:31',
+    grade: 'C',
+    source: 'GDELT',
+    msg: 'BRICS summit pace accelerates',
+    route: 'REGIME',
+  },
+  {
+    time: '14:22:15',
+    grade: 'A',
+    source: 'BOJ',
+    msg: 'YCC adjustment signals yen intervention',
+    route: 'VRP-X',
+  },
+  {
+    time: '14:22:01',
+    grade: 'C',
+    source: 'PBoC',
+    msg: 'CNY fixing strengthens 312 pips',
+    route: 'FX-CARRY',
+  },
+  {
+    time: '14:21:44',
+    grade: 'B',
+    source: 'BSE',
+    msg: 'GDP print lower than consensus',
+    route: 'REGIME',
+  },
 ];
 
 const sourcesXY = sources.map((s) => ({ ...s, ...lonLat(s.lon, s.lat) }));
 ---
 
-<section class="bloomberg" id="swarm-scene" aria-label="STELLA live loop — world-class AI research assistant">
+<section
+  class="bloomberg"
+  id="swarm-scene"
+  aria-label="STELLA live loop — world-class AI research assistant"
+>
   <div class="bloomberg__frame">
     {/* === HEADER STRIP ================================================ */}
     <header class="bloomberg__header">
@@ -99,101 +187,188 @@ const sourcesXY = sources.map((s) => ({ ...s, ...lonLat(s.lon, s.lat) }));
         >
           <defs>
             <radialGradient id="bloomberg-aura" cx="0.5" cy="0.5" r="0.5">
-              <stop offset="0%" stop-color="var(--c-sage)" stop-opacity="0.18" />
-              <stop offset="50%" stop-color="var(--c-sage)" stop-opacity="0.04" />
-              <stop offset="100%" stop-color="var(--c-sage)" stop-opacity="0" />
+              <stop offset="0%" stop-color="var(--c-sage)" stop-opacity="0.18"></stop>
+              <stop offset="50%" stop-color="var(--c-sage)" stop-opacity="0.04"></stop>
+              <stop offset="100%" stop-color="var(--c-sage)" stop-opacity="0"></stop>
             </radialGradient>
             <linearGradient id="bloomberg-stream-out" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%" stop-color="var(--c-sage)" stop-opacity="0.7" />
-              <stop offset="100%" stop-color="var(--c-sage)" stop-opacity="0" />
+              <stop offset="0%" stop-color="var(--c-sage)" stop-opacity="0.7"></stop>
+              <stop offset="100%" stop-color="var(--c-sage)" stop-opacity="0"></stop>
             </linearGradient>
-            <pattern id="bloomberg-grid" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
-              <path d="M 60 0 L 0 0 0 60" fill="none" stroke="var(--c-rule)" stroke-width="0.4" opacity="0.5" />
+            <pattern
+              id="bloomberg-grid"
+              x="0"
+              y="0"
+              width="60"
+              height="60"
+              patternUnits="userSpaceOnUse"
+            >
+              <path
+                d="M 60 0 L 0 0 0 60"
+                fill="none"
+                stroke="var(--c-rule)"
+                stroke-width="0.4"
+                opacity="0.5"></path>
             </pattern>
           </defs>
 
           {/* Lat/lon grid */}
-          <rect x="0" y="0" width={MAP_WIDTH} height={MAP_HEIGHT} fill="url(#bloomberg-grid)" />
+          <rect x="0" y="0" width={MAP_WIDTH} height={MAP_HEIGHT} fill="url(#bloomberg-grid)"
+          ></rect>
 
           {/* Equator + prime meridian */}
-          <line x1="0" y1={MAP_HEIGHT / 2} x2={MAP_WIDTH} y2={MAP_HEIGHT / 2} class="bloomberg__eq" />
-          <line x1={MAP_WIDTH / 2} y1="0" x2={MAP_WIDTH / 2} y2={MAP_HEIGHT} class="bloomberg__eq" />
+          <line x1="0" y1={MAP_HEIGHT / 2} x2={MAP_WIDTH} y2={MAP_HEIGHT / 2} class="bloomberg__eq"
+          ></line>
+          <line x1={MAP_WIDTH / 2} y1="0" x2={MAP_WIDTH / 2} y2={MAP_HEIGHT} class="bloomberg__eq"
+          ></line>
 
           {/* === Real continents === */}
-          {/* v7.9 split — paths are loaded client-side from /data/world-map-equirect.json.
-              SSR ships an empty container so the prerendered HTML stays small. */}
+          {
+            /* v7.9 split — paths are loaded client-side from /data/world-map-equirect.json.
+              SSR ships an empty container so the prerendered HTML stays small. */
+          }
           <g class="bloomberg__continents" data-continents-target></g>
 
           {/* === STELLA core — at lon 0, lat 0 (Atlantic) === */}
-          {(() => {
-            const stella = lonLat(0, 20);
-            return (
-              <g class="bloomberg__stella" transform={`translate(${stella.x} ${stella.y})`}>
-                <circle r="80" fill="url(#bloomberg-aura)" class="bloomberg__aura" />
-                {/* Pulse rings (sonar ping) */}
-                <circle r="20" fill="none" stroke="var(--c-sage)" stroke-width="0.8" class="bloomberg__pulse-ring bloomberg__pulse-ring--1" />
-                <circle r="20" fill="none" stroke="var(--c-sage)" stroke-width="0.8" class="bloomberg__pulse-ring bloomberg__pulse-ring--2" />
-                <circle r="20" fill="none" stroke="var(--c-sage)" stroke-width="0.8" class="bloomberg__pulse-ring bloomberg__pulse-ring--3" />
-                {/* Hex core */}
-                <polygon
-                  points="0,-14 12,-7 12,7 0,14 -12,7 -12,-7"
-                  fill="var(--c-warn)"
-                  stroke="var(--c-warn-deep)"
-                  stroke-width="1"
-                  class="bloomberg__core"
-                />
-                <circle r="3" fill="var(--c-bg)" class="bloomberg__eye" />
-                {/* Concentric rings */}
-                <circle r="22" fill="none" stroke="var(--c-warn)" stroke-width="0.5" opacity="0.6" class="bloomberg__ring-1" />
-                <circle r="32" fill="none" stroke="var(--c-warn)" stroke-width="0.4" opacity="0.4" class="bloomberg__ring-2" />
-                <circle r="42" fill="none" stroke="var(--c-warn)" stroke-width="0.3" opacity="0.25" class="bloomberg__ring-3" />
-                <text y="56" text-anchor="middle" class="bloomberg__core-label mono">STELLA</text>
-              </g>
-            );
-          })()}
+          {
+            (() => {
+              const stella = lonLat(0, 20);
+              return (
+                <g class="bloomberg__stella" transform={`translate(${stella.x} ${stella.y})`}>
+                  <circle r="80" fill="url(#bloomberg-aura)" class="bloomberg__aura" />
+                  {/* Pulse rings (sonar ping) */}
+                  <circle
+                    r="20"
+                    fill="none"
+                    stroke="var(--c-sage)"
+                    stroke-width="0.8"
+                    class="bloomberg__pulse-ring bloomberg__pulse-ring--1"
+                  />
+                  <circle
+                    r="20"
+                    fill="none"
+                    stroke="var(--c-sage)"
+                    stroke-width="0.8"
+                    class="bloomberg__pulse-ring bloomberg__pulse-ring--2"
+                  />
+                  <circle
+                    r="20"
+                    fill="none"
+                    stroke="var(--c-sage)"
+                    stroke-width="0.8"
+                    class="bloomberg__pulse-ring bloomberg__pulse-ring--3"
+                  />
+                  {/* Hex core */}
+                  <polygon
+                    points="0,-14 12,-7 12,7 0,14 -12,7 -12,-7"
+                    fill="var(--c-warn)"
+                    stroke="var(--c-warn-deep)"
+                    stroke-width="1"
+                    class="bloomberg__core"
+                  />
+                  <circle r="3" fill="var(--c-bg)" class="bloomberg__eye" />
+                  {/* Concentric rings */}
+                  <circle
+                    r="22"
+                    fill="none"
+                    stroke="var(--c-warn)"
+                    stroke-width="0.5"
+                    opacity="0.6"
+                    class="bloomberg__ring-1"
+                  />
+                  <circle
+                    r="32"
+                    fill="none"
+                    stroke="var(--c-warn)"
+                    stroke-width="0.4"
+                    opacity="0.4"
+                    class="bloomberg__ring-2"
+                  />
+                  <circle
+                    r="42"
+                    fill="none"
+                    stroke="var(--c-warn)"
+                    stroke-width="0.3"
+                    opacity="0.25"
+                    class="bloomberg__ring-3"
+                  />
+                  <text y="56" text-anchor="middle" class="bloomberg__core-label mono">
+                    STELLA
+                  </text>
+                </g>
+              );
+            })()
+          }
 
           {/* === Sources (6) with pulse rings === */}
-          {sourcesXY.map((s, i) => (
-            <g class={`bloomberg__src bloomberg__src--${i + 1}`}>
-              <circle cx={s.x} cy={s.y} r="14" fill="none" stroke="var(--c-terracotta)" stroke-width="0.6" class="bloomberg__src-pulse" />
-              <circle cx={s.x} cy={s.y} r="6" fill="var(--c-terracotta)" />
-              <circle cx={s.x} cy={s.y} r="2.5" fill="var(--c-bg)" />
-              <text x={s.x + 10} y={s.y - 4} class="bloomberg__src-label mono">{s.code}</text>
-              <text x={s.x + 10} y={s.y + 6} class="bloomberg__src-sub mono">{s.sub}</text>
-            </g>
-          ))}
+          {
+            sourcesXY.map((s, i) => (
+              <g class={`bloomberg__src bloomberg__src--${i + 1}`}>
+                <circle
+                  cx={s.x}
+                  cy={s.y}
+                  r="14"
+                  fill="none"
+                  stroke="var(--c-terracotta)"
+                  stroke-width="0.6"
+                  class="bloomberg__src-pulse"
+                />
+                <circle cx={s.x} cy={s.y} r="6" fill="var(--c-terracotta)" />
+                <circle cx={s.x} cy={s.y} r="2.5" fill="var(--c-bg)" />
+                <text x={s.x + 10} y={s.y - 4} class="bloomberg__src-label mono">
+                  {s.code}
+                </text>
+                <text x={s.x + 10} y={s.y + 6} class="bloomberg__src-sub mono">
+                  {s.sub}
+                </text>
+              </g>
+            ))
+          }
 
           {/* === Streams from each source to STELLA === */}
-          {sourcesXY.map((s, i) => {
-            const stella = lonLat(0, 20);
-            const cx = (s.x + stella.x) / 2;
-            const cy = (s.y + stella.y) / 2 - 30;
-            return (
-              <path
-                d={`M ${s.x} ${s.y} Q ${cx} ${cy} ${stella.x} ${stella.y}`}
-                class={`bloomberg__stream bloomberg__stream--${i + 1}`}
-                fill="none"
-                stroke="var(--c-terracotta)"
-                stroke-width="0.7"
-                stroke-dasharray="4 6"
-                opacity="0.5"
-              />
-            );
-          })}
+          {
+            sourcesXY.map((s, i) => {
+              const stella = lonLat(0, 20);
+              const cx = (s.x + stella.x) / 2;
+              const cy = (s.y + stella.y) / 2 - 30;
+              return (
+                <path
+                  d={`M ${s.x} ${s.y} Q ${cx} ${cy} ${stella.x} ${stella.y}`}
+                  class={`bloomberg__stream bloomberg__stream--${i + 1}`}
+                  fill="none"
+                  stroke="var(--c-terracotta)"
+                  stroke-width="0.7"
+                  stroke-dasharray="4 6"
+                  opacity="0.5"
+                />
+              );
+            })
+          }
 
           {/* === Flying packets (6) along the streams === */}
-          {(() => {
-            const stella = lonLat(0, 20);
-            const packets = sourcesXY.map((s, i) => ({
-              d: `M ${s.x} ${s.y} Q ${(s.x + stella.x) / 2} ${(s.y + stella.y) / 2 - 30} ${stella.x} ${stella.y}`,
-              i,
-            }));
-            return packets.map((p) => (
-              <circle r="3" fill="var(--c-warn)" class={`bloomberg__packet bloomberg__packet--${p.i + 1}`}>
-                <animateMotion dur={`${3 + p.i * 0.4}s`} repeatCount="indefinite" path={p.d} rotate="auto" />
-              </circle>
-            ));
-          })()}
+          {
+            (() => {
+              const stella = lonLat(0, 20);
+              const packets = sourcesXY.map((s, i) => ({
+                d: `M ${s.x} ${s.y} Q ${(s.x + stella.x) / 2} ${(s.y + stella.y) / 2 - 30} ${stella.x} ${stella.y}`,
+                i,
+              }));
+              return packets.map((p) => (
+                <circle
+                  r="3"
+                  fill="var(--c-warn)"
+                  class={`bloomberg__packet bloomberg__packet--${p.i + 1}`}
+                >
+                  <animateMotion
+                    dur={`${3 + p.i * 0.4}s`}
+                    repeatCount="indefinite"
+                    path={p.d}
+                    rotate="auto"
+                  />
+                </circle>
+              ));
+            })()
+          }
         </svg>
       </div>
 
@@ -259,15 +434,17 @@ const sourcesXY = sources.map((s) => ({ ...s, ...lonLat(s.lon, s.lat) }));
             <span class="bloomberg__feed-pulse" aria-hidden="true"></span>
           </div>
           <ol class="bloomberg__feed-list">
-            {feed.map((f) => (
-              <li class={`bloomberg__feed-row bloomberg__feed-row--${f.grade}`}>
-                <span class="bloomberg__feed-time mono">{f.time}</span>
-                <span class={`bloomberg__feed-grade mono`}>G{f.grade}</span>
-                <span class="bloomberg__feed-source mono">{f.source}</span>
-                <span class="bloomberg__feed-msg">{f.msg}</span>
-                <span class="bloomberg__feed-route mono">→ {f.route}</span>
-              </li>
-            ))}
+            {
+              feed.map((f) => (
+                <li class={`bloomberg__feed-row bloomberg__feed-row--${f.grade}`}>
+                  <span class="bloomberg__feed-time mono">{f.time}</span>
+                  <span class={`bloomberg__feed-grade mono`}>G{f.grade}</span>
+                  <span class="bloomberg__feed-source mono">{f.source}</span>
+                  <span class="bloomberg__feed-msg">{f.msg}</span>
+                  <span class="bloomberg__feed-route mono">→ {f.route}</span>
+                </li>
+              ))
+            }
           </ol>
         </div>
       </aside>
@@ -291,17 +468,21 @@ const sourcesXY = sources.map((s) => ({ ...s, ...lonLat(s.lon, s.lat) }));
             </tr>
           </thead>
           <tbody>
-            {sources.map((s) => (
-              <tr class="bloomberg__tr">
-                <td class="bloomberg__td mono bloomberg__td--strong">{s.code}</td>
-                <td class="bloomberg__td mono">{s.city}</td>
-                <td class="bloomberg__td mono">{s.label}</td>
-                <td class="bloomberg__td mono bloomberg__td--num">{s.sub.split('·')[0].trim()}</td>
-                <td class="bloomberg__td">
-                  <span class="bloomberg__pill bloomberg__pill--ok mono">LIVE</span>
-                </td>
-              </tr>
-            ))}
+            {
+              sources.map((s) => (
+                <tr class="bloomberg__tr">
+                  <td class="bloomberg__td mono bloomberg__td--strong">{s.code}</td>
+                  <td class="bloomberg__td mono">{s.city}</td>
+                  <td class="bloomberg__td mono">{s.label}</td>
+                  <td class="bloomberg__td mono bloomberg__td--num">
+                    {s.sub.split('·')[0].trim()}
+                  </td>
+                  <td class="bloomberg__td">
+                    <span class="bloomberg__pill bloomberg__pill--ok mono">LIVE</span>
+                  </td>
+                </tr>
+              ))
+            }
           </tbody>
         </table>
       </section>
@@ -322,17 +503,19 @@ const sourcesXY = sources.map((s) => ({ ...s, ...lonLat(s.lon, s.lat) }));
             </tr>
           </thead>
           <tbody>
-            {signals.map((s) => (
-              <tr class="bloomberg__tr">
-                <td class="bloomberg__td mono bloomberg__td--strong">{s.code}</td>
-                <td class="bloomberg__td mono">{s.sub}</td>
-                <td class="bloomberg__td mono bloomberg__td--num">{s.value}</td>
-                <td class="bloomberg__td mono bloomberg__td--num">{s.meta}</td>
-                <td class="bloomberg__td">
-                  <span class="bloomberg__pill bloomberg__pill--up mono">UP</span>
-                </td>
-              </tr>
-            ))}
+            {
+              signals.map((s) => (
+                <tr class="bloomberg__tr">
+                  <td class="bloomberg__td mono bloomberg__td--strong">{s.code}</td>
+                  <td class="bloomberg__td mono">{s.sub}</td>
+                  <td class="bloomberg__td mono bloomberg__td--num">{s.value}</td>
+                  <td class="bloomberg__td mono bloomberg__td--num">{s.meta}</td>
+                  <td class="bloomberg__td">
+                    <span class="bloomberg__pill bloomberg__pill--up mono">UP</span>
+                  </td>
+                </tr>
+              ))
+            }
           </tbody>
         </table>
       </section>
@@ -456,10 +639,30 @@ const sourcesXY = sources.map((s) => ({ ...s, ...lonLat(s.lon, s.lat) }));
     border: 1px solid var(--c-ink);
     z-index: 2;
   }
-  .bloomberg__panel-corner--tl { top: 4px; left: 4px; border-right: none; border-bottom: none; }
-  .bloomberg__panel-corner--tr { top: 4px; right: 4px; border-left: none; border-bottom: none; }
-  .bloomberg__panel-corner--bl { bottom: 4px; left: 4px; border-right: none; border-top: none; }
-  .bloomberg__panel-corner--br { bottom: 4px; right: 4px; border-left: none; border-top: none; }
+  .bloomberg__panel-corner--tl {
+    top: 4px;
+    left: 4px;
+    border-right: none;
+    border-bottom: none;
+  }
+  .bloomberg__panel-corner--tr {
+    top: 4px;
+    right: 4px;
+    border-left: none;
+    border-bottom: none;
+  }
+  .bloomberg__panel-corner--bl {
+    bottom: 4px;
+    left: 4px;
+    border-right: none;
+    border-top: none;
+  }
+  .bloomberg__panel-corner--br {
+    bottom: 4px;
+    right: 4px;
+    border-left: none;
+    border-top: none;
+  }
 
   /* === Panel head ================================================= */
   .bloomberg__panel-head {
@@ -514,8 +717,15 @@ const sourcesXY = sources.map((s) => ({ ...s, ...lonLat(s.lon, s.lat) }));
     transform-origin: center;
   }
   @keyframes bloomberg-aura {
-    0%, 100% { opacity: 0.8; transform: scale(1); }
-    50%      { opacity: 1; transform: scale(1.1); }
+    0%,
+    100% {
+      opacity: 0.8;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.1);
+    }
   }
   .bloomberg__pulse-ring {
     transform-origin: center;
@@ -523,13 +733,27 @@ const sourcesXY = sources.map((s) => ({ ...s, ...lonLat(s.lon, s.lat) }));
     animation: bloomberg-pulse 3s ease-out infinite;
     opacity: 0;
   }
-  .bloomberg__pulse-ring--1 { animation-delay: 0s; }
-  .bloomberg__pulse-ring--2 { animation-delay: -1s; }
-  .bloomberg__pulse-ring--3 { animation-delay: -2s; }
+  .bloomberg__pulse-ring--1 {
+    animation-delay: 0s;
+  }
+  .bloomberg__pulse-ring--2 {
+    animation-delay: -1s;
+  }
+  .bloomberg__pulse-ring--3 {
+    animation-delay: -2s;
+  }
   @keyframes bloomberg-pulse {
-    0%   { transform: scale(0.4); opacity: 0.85; }
-    80%  { opacity: 0.05; }
-    100% { transform: scale(3); opacity: 0; }
+    0% {
+      transform: scale(0.4);
+      opacity: 0.85;
+    }
+    80% {
+      opacity: 0.05;
+    }
+    100% {
+      transform: scale(3);
+      opacity: 0;
+    }
   }
   .bloomberg__core {
     animation: bloomberg-core 2.4s ease-in-out infinite;
@@ -537,8 +761,13 @@ const sourcesXY = sources.map((s) => ({ ...s, ...lonLat(s.lon, s.lat) }));
     transform-box: fill-box;
   }
   @keyframes bloomberg-core {
-    0%, 100% { transform: scale(1); }
-    50%      { transform: scale(1.06); }
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.06);
+    }
   }
   .bloomberg__eye {
     animation: bloomberg-eye 4s ease-in-out infinite;
@@ -546,8 +775,14 @@ const sourcesXY = sources.map((s) => ({ ...s, ...lonLat(s.lon, s.lat) }));
     transform-box: fill-box;
   }
   @keyframes bloomberg-eye {
-    0%, 92%, 100% { transform: scaleY(1); }
-    95%           { transform: scaleY(0.1); }
+    0%,
+    92%,
+    100% {
+      transform: scaleY(1);
+    }
+    95% {
+      transform: scaleY(0.1);
+    }
   }
   .bloomberg__ring-1,
   .bloomberg__ring-2,
@@ -556,10 +791,17 @@ const sourcesXY = sources.map((s) => ({ ...s, ...lonLat(s.lon, s.lat) }));
     transform-box: fill-box;
     animation: bloomberg-ring-rotate 20s linear infinite;
   }
-  .bloomberg__ring-2 { animation-duration: 30s; animation-direction: reverse; }
-  .bloomberg__ring-3 { animation-duration: 45s; }
+  .bloomberg__ring-2 {
+    animation-duration: 30s;
+    animation-direction: reverse;
+  }
+  .bloomberg__ring-3 {
+    animation-duration: 45s;
+  }
   @keyframes bloomberg-ring-rotate {
-    to { transform: rotate(360deg); }
+    to {
+      transform: rotate(360deg);
+    }
   }
   .bloomberg__core-label {
     font: 600 7px / 1 var(--ff-mono);
@@ -573,14 +815,30 @@ const sourcesXY = sources.map((s) => ({ ...s, ...lonLat(s.lon, s.lat) }));
     transform-box: fill-box;
     animation: bloomberg-src-pulse 2s ease-out infinite;
   }
-  .bloomberg__src--2 .bloomberg__src-pulse { animation-delay: -0.3s; }
-  .bloomberg__src--3 .bloomberg__src-pulse { animation-delay: -0.6s; }
-  .bloomberg__src--4 .bloomberg__src-pulse { animation-delay: -0.9s; }
-  .bloomberg__src--5 .bloomberg__src-pulse { animation-delay: -1.2s; }
-  .bloomberg__src--6 .bloomberg__src-pulse { animation-delay: -1.5s; }
+  .bloomberg__src--2 .bloomberg__src-pulse {
+    animation-delay: -0.3s;
+  }
+  .bloomberg__src--3 .bloomberg__src-pulse {
+    animation-delay: -0.6s;
+  }
+  .bloomberg__src--4 .bloomberg__src-pulse {
+    animation-delay: -0.9s;
+  }
+  .bloomberg__src--5 .bloomberg__src-pulse {
+    animation-delay: -1.2s;
+  }
+  .bloomberg__src--6 .bloomberg__src-pulse {
+    animation-delay: -1.5s;
+  }
   @keyframes bloomberg-src-pulse {
-    0%   { transform: scale(0.3); opacity: 0.85; }
-    100% { transform: scale(2.5); opacity: 0; }
+    0% {
+      transform: scale(0.3);
+      opacity: 0.85;
+    }
+    100% {
+      transform: scale(2.5);
+      opacity: 0;
+    }
   }
   .bloomberg__src-label {
     font: 600 9px / 1 var(--ff-mono);
@@ -598,14 +856,28 @@ const sourcesXY = sources.map((s) => ({ ...s, ...lonLat(s.lon, s.lat) }));
     stroke-dasharray: 4 6;
     animation: bloomberg-stream-dash 2s linear infinite;
   }
-  .bloomberg__stream--1 { animation-delay: 0s; }
-  .bloomberg__stream--2 { animation-delay: -0.3s; }
-  .bloomberg__stream--3 { animation-delay: -0.6s; }
-  .bloomberg__stream--4 { animation-delay: -0.9s; }
-  .bloomberg__stream--5 { animation-delay: -1.2s; }
-  .bloomberg__stream--6 { animation-delay: -1.5s; }
+  .bloomberg__stream--1 {
+    animation-delay: 0s;
+  }
+  .bloomberg__stream--2 {
+    animation-delay: -0.3s;
+  }
+  .bloomberg__stream--3 {
+    animation-delay: -0.6s;
+  }
+  .bloomberg__stream--4 {
+    animation-delay: -0.9s;
+  }
+  .bloomberg__stream--5 {
+    animation-delay: -1.2s;
+  }
+  .bloomberg__stream--6 {
+    animation-delay: -1.5s;
+  }
   @keyframes bloomberg-stream-dash {
-    to { stroke-dashoffset: -100; }
+    to {
+      stroke-dashoffset: -100;
+    }
   }
 
   /* === Right panel — STELLA core ================================= */
@@ -670,8 +942,12 @@ const sourcesXY = sources.map((s) => ({ ...s, ...lonLat(s.lon, s.lat) }));
     animation: bloomberg-feed-pulse 1.6s ease-out infinite;
   }
   @keyframes bloomberg-feed-pulse {
-    0%   { box-shadow: 0 0 0 0 color-mix(in oklab, var(--c-terracotta) 70%, transparent); }
-    100% { box-shadow: 0 0 0 8px transparent; }
+    0% {
+      box-shadow: 0 0 0 0 color-mix(in oklab, var(--c-terracotta) 70%, transparent);
+    }
+    100% {
+      box-shadow: 0 0 0 8px transparent;
+    }
   }
   .bloomberg__feed-list {
     list-style: none;
@@ -691,14 +967,43 @@ const sourcesXY = sources.map((s) => ({ ...s, ...lonLat(s.lon, s.lat) }));
     border-left: 2px solid var(--c-ink-3);
     font: 500 9px / 1.3 var(--ff-mono);
   }
-  .bloomberg__feed-row--A { border-left-color: var(--c-terracotta); background: color-mix(in oklab, var(--c-terracotta) 6%, var(--c-bg)); }
-  .bloomberg__feed-row--B { border-left-color: var(--c-amber); }
-  .bloomberg__feed-row--C { border-left-color: var(--c-sage); }
-  .bloomberg__feed-time { color: var(--c-ink-3); font-variant-numeric: tabular-nums; }
-  .bloomberg__feed-grade { color: var(--c-ink); font-weight: 600; font-size: 8px; text-align: center; }
-  .bloomberg__feed-source { color: var(--c-ink); font-weight: 600; }
-  .bloomberg__feed-msg { color: var(--c-ink-2); font-family: var(--ff-sans); font-size: 9px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .bloomberg__feed-route { color: var(--c-sage); text-align: right; font-size: 8px; }
+  .bloomberg__feed-row--A {
+    border-left-color: var(--c-terracotta);
+    background: color-mix(in oklab, var(--c-terracotta) 6%, var(--c-bg));
+  }
+  .bloomberg__feed-row--B {
+    border-left-color: var(--c-amber);
+  }
+  .bloomberg__feed-row--C {
+    border-left-color: var(--c-sage);
+  }
+  .bloomberg__feed-time {
+    color: var(--c-ink-3);
+    font-variant-numeric: tabular-nums;
+  }
+  .bloomberg__feed-grade {
+    color: var(--c-ink);
+    font-weight: 600;
+    font-size: 8px;
+    text-align: center;
+  }
+  .bloomberg__feed-source {
+    color: var(--c-ink);
+    font-weight: 600;
+  }
+  .bloomberg__feed-msg {
+    color: var(--c-ink-2);
+    font-family: var(--ff-sans);
+    font-size: 9px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .bloomberg__feed-route {
+    color: var(--c-sage);
+    text-align: right;
+    font-size: 8px;
+  }
 
   /* === Bottom — sources + signals tables ========================= */
   .bloomberg__bottom {
@@ -783,9 +1088,15 @@ const sourcesXY = sources.map((s) => ({ ...s, ...lonLat(s.lon, s.lat) }));
     height: 7px;
     border-radius: 50%;
   }
-  .bloomberg__legend-dot--source { background: var(--c-terracotta); }
-  .bloomberg__legend-dot--stella { background: var(--c-warn); }
-  .bloomberg__legend-dot--signal { background: var(--c-sage); }
+  .bloomberg__legend-dot--source {
+    background: var(--c-terracotta);
+  }
+  .bloomberg__legend-dot--stella {
+    background: var(--c-warn);
+  }
+  .bloomberg__legend-dot--signal {
+    background: var(--c-sage);
+  }
 
   /* === Responsive ================================================= */
   @media (max-width: 980px) {

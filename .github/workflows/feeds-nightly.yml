@@ -22,7 +22,7 @@ name: Feeds Nightly Refresh
 on:
   workflow_dispatch:
   schedule:
-    - cron: '37 */4 * * *'  # off-hour; every 4h, avoids :00 thundering herd
+    - cron: '37 */4 * * *' # off-hour; every 4h, avoids :00 thundering herd
 
 permissions:
   contents: read

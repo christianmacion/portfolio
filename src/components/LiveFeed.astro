@@ -61,9 +61,7 @@ const cache = liveFeedCache as LiveFeedCache;
 // === Filter by window ===
 const now = new Date(cache.generated).getTime();
 const cutoffMs = now - windowHours * 60 * 60 * 1000;
-const freshEvents = cache.events.filter(
-  (e) => new Date(e.timestamp).getTime() >= cutoffMs,
-);
+const freshEvents = cache.events.filter((e) => new Date(e.timestamp).getTime() >= cutoffMs);
 const events: LiveEvent[] = cap ? freshEvents.slice(0, cap) : freshEvents;
 const hasItems = events.length > 0;
 
@@ -152,7 +150,11 @@ const timeBucketCounts = (() => {
 })();
 ---
 
-<section class="live-feed" aria-label="Unified live feed — GDELT + arXiv + macro-wire" data-live-feed>
+<section
+  class="live-feed"
+  aria-label="Unified live feed — GDELT + arXiv + macro-wire"
+  data-live-feed
+>
   <header class="live-feed__head">
     <p class="live-feed__eyebrow mono">
       UNIFIED · {cache.counts.gdelt} GDELT · {cache.counts.arxiv} arXiv · {cache.counts.macrowire} WIRE
@@ -163,73 +165,116 @@ const timeBucketCounts = (() => {
       <span class="live-feed__chip live-feed__chip--warn">arXiv</span>
       <span class="live-feed__sep" aria-hidden="true">·</span>
       <span class="live-feed__chip live-feed__chip--sage">WIRE</span>
-      <span class="live-feed__cap-stamp mono">GENERATED {formatDate(cache.generated)} {formatHm(cache.generated)}</span>
+      <span class="live-feed__cap-stamp mono"
+        >GENERATED {formatDate(cache.generated)} {formatHm(cache.generated)}</span
+      >
     </p>
   </header>
 
   {/* === v7.9.1 polish — filter chips + search input ========================= */}
-  {hasItems && (
-    <div class="live-feed__filters" role="toolbar" aria-label="Filter live feed">
-      <div class="live-feed__chips" role="group" aria-label="Source filter">
-        <button type="button" class="live-feed__chip-btn live-feed__chip-btn--active" data-source-filter="all">ALL</button>
-        <button type="button" class="live-feed__chip-btn" data-source-filter="gdelt">GDELT</button>
-        <button type="button" class="live-feed__chip-btn" data-source-filter="arxiv">arXiv</button>
-        <button type="button" class="live-feed__chip-btn" data-source-filter="macrowire">WIRE</button>
+  {
+    hasItems && (
+      <div class="live-feed__filters" role="toolbar" aria-label="Filter live feed">
+        <div class="live-feed__chips" role="group" aria-label="Source filter">
+          <button
+            type="button"
+            class="live-feed__chip-btn live-feed__chip-btn--active"
+            data-source-filter="all"
+          >
+            ALL
+          </button>
+          <button type="button" class="live-feed__chip-btn" data-source-filter="gdelt">
+            GDELT
+          </button>
+          <button type="button" class="live-feed__chip-btn" data-source-filter="arxiv">
+            arXiv
+          </button>
+          <button type="button" class="live-feed__chip-btn" data-source-filter="macrowire">
+            WIRE
+          </button>
+        </div>
+        {/* v7.11 — time-scope chip row (1H · 6H · 24H · ALL) */}
+        <div class="live-feed__chips" role="group" aria-label="Time-scope filter">
+          <span class="live-feed__chip-label mono">WINDOW ·</span>
+          <button
+            type="button"
+            class="live-feed__chip-btn live-feed__chip-btn--active"
+            data-time-filter="all"
+          >
+            ALL <span class="live-feed__chip-count">({timeBucketCounts.all})</span>
+          </button>
+          <button type="button" class="live-feed__chip-btn" data-time-filter="1h">
+            1H <span class="live-feed__chip-count">({timeBucketCounts['1h']})</span>
+          </button>
+          <button type="button" class="live-feed__chip-btn" data-time-filter="6h">
+            6H <span class="live-feed__chip-count">({timeBucketCounts['6h']})</span>
+          </button>
+          <button type="button" class="live-feed__chip-btn" data-time-filter="24h">
+            24H <span class="live-feed__chip-count">({timeBucketCounts['24h']})</span>
+          </button>
+        </div>
+        <label class="live-feed__search">
+          <span class="sr-only">Search live feed titles</span>
+          <input
+            type="search"
+            class="live-feed__search-input mono"
+            placeholder="SEARCH TITLE OR CITY…"
+            aria-label="Search live feed by title or city"
+            autocomplete="off"
+            spellcheck="false"
+            data-search-input
+          />
+        </label>
+        <p class="live-feed__count mono" data-visible-count>
+          {events.length} VISIBLE
+        </p>
       </div>
-      {/* v7.11 — time-scope chip row (1H · 6H · 24H · ALL) */}
-      <div class="live-feed__chips" role="group" aria-label="Time-scope filter">
-        <span class="live-feed__chip-label mono">WINDOW ·</span>
-        <button type="button" class="live-feed__chip-btn live-feed__chip-btn--active" data-time-filter="all">ALL <span class="live-feed__chip-count">({timeBucketCounts.all})</span></button>
-        <button type="button" class="live-feed__chip-btn" data-time-filter="1h">1H <span class="live-feed__chip-count">({timeBucketCounts['1h']})</span></button>
-        <button type="button" class="live-feed__chip-btn" data-time-filter="6h">6H <span class="live-feed__chip-count">({timeBucketCounts['6h']})</span></button>
-        <button type="button" class="live-feed__chip-btn" data-time-filter="24h">24H <span class="live-feed__chip-count">({timeBucketCounts['24h']})</span></button>
-      </div>
-      <label class="live-feed__search">
-        <span class="sr-only">Search live feed titles</span>
-        <input
-          type="search"
-          class="live-feed__search-input mono"
-          placeholder="SEARCH TITLE OR CITY…"
-          aria-label="Search live feed by title or city"
-          autocomplete="off"
-          spellcheck="false"
-          data-search-input
-        />
-      </label>
-      <p class="live-feed__count mono" data-visible-count>
-        {events.length} VISIBLE
-      </p>
-    </div>
-  )}
+    )
+  }
 
   {/* === v7.9.3 polish — popular-city quick filters + refresh countdown ====== */}
-  {hasItems && cityCounts.length > 0 && (
-    <div class="live-feed__cities" role="toolbar" aria-label="Filter by city">
-      <span class="live-feed__city-label mono">CITIES ·</span>
-      <button type="button" class="live-feed__city-btn live-feed__city-btn--active" data-city-filter="all">ALL</button>
-      {cityCounts.map(({ city, count }) => (
+  {
+    hasItems && cityCounts.length > 0 && (
+      <div class="live-feed__cities" role="toolbar" aria-label="Filter by city">
+        <span class="live-feed__city-label mono">CITIES ·</span>
         <button
           type="button"
-          class="live-feed__city-btn"
-          data-city-filter={city.toLowerCase()}
+          class="live-feed__city-btn live-feed__city-btn--active"
+          data-city-filter="all"
         >
-          {city.toUpperCase()} <span class="live-feed__city-count">({count})</span>
+          ALL
         </button>
-      ))}
-      <span class="live-feed__refresh mono" data-refresh-countdown data-generated={cache.generated}>
-        CACHE · REFRESH
-      </span>
-      {/* v7.10 — copy-shareable-filter-URL button (institutional register) */}
-      <button type="button" class="live-feed__share-btn mono" data-share-link title="Copy link with current filters">
-        COPY · LINK
-      </button>
-    </div>
-  )}
+        {cityCounts.map(({ city, count }) => (
+          <button type="button" class="live-feed__city-btn" data-city-filter={city.toLowerCase()}>
+            {city.toUpperCase()} <span class="live-feed__city-count">({count})</span>
+          </button>
+        ))}
+        <span
+          class="live-feed__refresh mono"
+          data-refresh-countdown
+          data-generated={cache.generated}
+        >
+          CACHE · REFRESH
+        </span>
+        {/* v7.10 — copy-shareable-filter-URL button (institutional register) */}
+        <button
+          type="button"
+          class="live-feed__share-btn mono"
+          data-share-link
+          title="Copy link with current filters"
+        >
+          COPY · LINK
+        </button>
+      </div>
+    )
+  }
 
-  {hasItems && (
-    <ol class="live-feed__list" aria-live="off" aria-atomic="false" data-live-list>
-      {events.map((e) => (
-        <li class={`live-feed__row live-feed__row--${accentFor(e.source)}`}
+  {
+    hasItems && (
+      <ol class="live-feed__list" aria-live="off" aria-atomic="false" data-live-list>
+        {events.map((e) => (
+          <li
+            class={`live-feed__row live-feed__row--${accentFor(e.source)}`}
             id={`event-${e.id}`}
             data-event-id={e.id}
             data-event-source={e.source}
@@ -239,53 +284,65 @@ const timeBucketCounts = (() => {
             data-event-city={(e.city ?? '').toLowerCase()}
             data-event-title={e.title.toLowerCase()}
             data-event-ts={new Date(e.timestamp).getTime()}
-            data-event-category={e.category.toLowerCase()}>
-          <span class={`live-feed__source mono live-feed__source--${accentFor(e.source)}`}>
-            {sourceLabel[e.source]}
-          </span>
-          <span class="live-feed__hm mono" title={e.timestamp}>
-            <span class="live-feed__hm-ago">{timeAgo(e.timestamp, cache.generated)}</span>
-            {/* v7.9.2 — venue-local clock (e.g. 15:15 GMT+8) shown on hover */}
-            <span class="live-feed__hm-local">{localClock(e.timestamp, e.coords?.lon)}</span>
-          </span>
-          <a
-            class="live-feed__title"
-            href={e.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            referrerpolicy="strict-origin-when-cross-origin"
+            data-event-category={e.category.toLowerCase()}
           >
-            {e.title}
-          </a>
-          <span class="live-feed__cat mono">
-            {e.city ? `${e.city.toUpperCase()} · ` : ''}{e.category.toUpperCase()}
-          </span>
-          {e.related && e.related.length > 0 && (
-            <span class="live-feed__related mono" title={`Also in: ${e.related.map((r) => r.source).join(', ')}`}>
-              ↔ {e.related.length}
+            <span class={`live-feed__source mono live-feed__source--${accentFor(e.source)}`}>
+              {sourceLabel[e.source]}
             </span>
-          )}
-          {/* v7.9.1 — anchor link for permalinks */}
-          <a
-            class="live-feed__anchor mono"
-            href={`#event-${e.id}`}
-            aria-label={`Permalink to ${e.title}`}
-            data-anchor-link
-            onclick="navigator.clipboard?.writeText(this.href);return false;"
-          >
-            #
-          </a>
-        </li>
-      ))}
-    </ol>
-  )}
+            <span class="live-feed__hm mono" title={e.timestamp}>
+              <span class="live-feed__hm-ago">{timeAgo(e.timestamp, cache.generated)}</span>
+              {/* v7.9.2 — venue-local clock (e.g. 15:15 GMT+8) shown on hover */}
+              <span class="live-feed__hm-local">{localClock(e.timestamp, e.coords?.lon)}</span>
+            </span>
+            <a
+              class="live-feed__title"
+              href={e.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              referrerpolicy="strict-origin-when-cross-origin"
+            >
+              {e.title}
+            </a>
+            <span class="live-feed__cat mono">
+              {e.city ? `${e.city.toUpperCase()} · ` : ''}
+              {e.category.toUpperCase()}
+            </span>
+            {e.related && e.related.length > 0 && (
+              <span
+                class="live-feed__related mono"
+                title={`Also in: ${e.related.map((r) => r.source).join(', ')}`}
+              >
+                ↔ {e.related.length}
+              </span>
+            )}
+            {/* v7.9.1 — anchor link for permalinks */}
+            <a
+              class="live-feed__anchor mono"
+              href={`#event-${e.id}`}
+              aria-label={`Permalink to ${e.title}`}
+              data-anchor-link
+              onclick="navigator.clipboard?.writeText(this.href);return false;"
+            >
+              #
+            </a>
+          </li>
+        ))}
+      </ol>
+    )
+  }
 
-  {!hasItems && (
-    <p class="live-feed__empty">
-      <span class="live-feed__chip live-feed__chip--ink">EMPTY</span>
-      <span class="live-feed__empty-text">NO ITEMS IN {windowHours}H WINDOW · LAST GOOD {formatDate(cache.fetchedAt || cache.generated)} {formatHm(cache.fetchedAt || cache.generated)}</span>
-    </p>
-  )}
+  {
+    !hasItems && (
+      <p class="live-feed__empty">
+        <span class="live-feed__chip live-feed__chip--ink">EMPTY</span>
+        <span class="live-feed__empty-text">
+          NO ITEMS IN {windowHours}H WINDOW · LAST GOOD{' '}
+          {formatDate(cache.fetchedAt || cache.generated)}{' '}
+          {formatHm(cache.fetchedAt || cache.generated)}
+        </span>
+      </p>
+    )
+  }
 
   {/* v7.19 — a11y live region (announces filter result count to screen readers) */}
   <div class="sr-only" role="status" aria-live="polite" aria-atomic="true" data-live-announcer>
@@ -293,11 +350,13 @@ const timeBucketCounts = (() => {
   </div>
 
   {/* v7.19 — keyboard shortcut hint (visible only to sighted users) */}
-  {hasItems && (
-    <p class="live-feed__kbd-hint mono">
-      <kbd>/</kbd> SEARCH · <kbd>ESC</kbd> CLEAR · <kbd>J</kbd>/<kbd>K</kbd> NEXT/PREV ROW
-    </p>
-  )}
+  {
+    hasItems && (
+      <p class="live-feed__kbd-hint mono">
+        <kbd>/</kbd> SEARCH · <kbd>ESC</kbd> CLEAR · <kbd>J</kbd>/<kbd>K</kbd> NEXT/PREV ROW
+      </p>
+    )
+  }
 </section>
 
 <style>
@@ -340,11 +399,22 @@ const timeBucketCounts = (() => {
     font-weight: 600;
     line-height: 1.4;
   }
-  .live-feed__chip--cobalt { color: var(--c-primary-2); }
-  .live-feed__chip--warn { color: var(--c-warn); }
-  .live-feed__chip--sage { color: var(--j-sage); }
-  .live-feed__chip--ink { color: var(--c-ink-3); }
-  .live-feed__sep { color: var(--c-ink-4); font-weight: 600; }
+  .live-feed__chip--cobalt {
+    color: var(--c-primary-2);
+  }
+  .live-feed__chip--warn {
+    color: var(--c-warn);
+  }
+  .live-feed__chip--sage {
+    color: var(--j-sage);
+  }
+  .live-feed__chip--ink {
+    color: var(--c-ink-3);
+  }
+  .live-feed__sep {
+    color: var(--c-ink-4);
+    font-weight: 600;
+  }
   .live-feed__cap-stamp {
     margin-left: auto;
     color: var(--c-ink-3);
@@ -440,7 +510,7 @@ const timeBucketCounts = (() => {
     outline: 2px solid var(--c-amber);
     outline-offset: 1px;
   }
-  .live-feed__share-btn[data-copied="1"] {
+  .live-feed__share-btn[data-copied='1'] {
     border-color: var(--c-amber);
     color: var(--c-amber);
   }
@@ -579,12 +649,22 @@ const timeBucketCounts = (() => {
     animation: live-row-flash 1.6s var(--j-ease-out) both;
   }
   @keyframes live-row-flash {
-    0%   { background: color-mix(in oklab, var(--c-amber) 26%, transparent); }
-    100% { background: transparent; }
+    0% {
+      background: color-mix(in oklab, var(--c-amber) 26%, transparent);
+    }
+    100% {
+      background: transparent;
+    }
   }
-  .live-feed__row--cobalt { border-left: 2px solid var(--c-primary-2); }
-  .live-feed__row--warn { border-left: 2px solid var(--c-warn); }
-  .live-feed__row--sage { border-left: 2px solid var(--j-sage); }
+  .live-feed__row--cobalt {
+    border-left: 2px solid var(--c-primary-2);
+  }
+  .live-feed__row--warn {
+    border-left: 2px solid var(--c-warn);
+  }
+  .live-feed__row--sage {
+    border-left: 2px solid var(--j-sage);
+  }
 
   .live-feed__source {
     font-size: 9.5px;
@@ -596,9 +676,15 @@ const timeBucketCounts = (() => {
     line-height: 1.4;
     text-align: center;
   }
-  .live-feed__source--cobalt { color: var(--c-primary-2); }
-  .live-feed__source--warn { color: var(--c-warn); }
-  .live-feed__source--sage { color: var(--j-sage); }
+  .live-feed__source--cobalt {
+    color: var(--c-primary-2);
+  }
+  .live-feed__source--warn {
+    color: var(--c-warn);
+  }
+  .live-feed__source--sage {
+    color: var(--j-sage);
+  }
 
   .live-feed__hm {
     font-size: 10px;
@@ -771,13 +857,15 @@ const timeBucketCounts = (() => {
     if (lastId === id && now - lastTs < EMIT_COOLDOWN_MS) return;
     row.setAttribute('data-last-emit', id);
     row.setAttribute('data-last-ts', String(now));
-    window.dispatchEvent(new CustomEvent('earth:focus', {
-      detail: {
-        id,
-        lat: row.dataset.eventLat ? Number(row.dataset.eventLat) : null,
-        lon: row.dataset.eventLon ? Number(row.dataset.eventLon) : null,
-      },
-    }));
+    window.dispatchEvent(
+      new CustomEvent('earth:focus', {
+        detail: {
+          id,
+          lat: row.dataset.eventLat ? Number(row.dataset.eventLat) : null,
+          lon: row.dataset.eventLon ? Number(row.dataset.eventLon) : null,
+        },
+      }),
+    );
   });
 
   document.addEventListener('focusin', (ev) => {
@@ -787,13 +875,15 @@ const timeBucketCounts = (() => {
     if (!row) return;
     const id = row.dataset.eventId;
     if (!id) return;
-    window.dispatchEvent(new CustomEvent('earth:focus', {
-      detail: {
-        id,
-        lat: row.dataset.eventLat ? Number(row.dataset.eventLat) : null,
-        lon: row.dataset.eventLon ? Number(row.dataset.eventLon) : null,
-      },
-    }));
+    window.dispatchEvent(
+      new CustomEvent('earth:focus', {
+        detail: {
+          id,
+          lat: row.dataset.eventLat ? Number(row.dataset.eventLat) : null,
+          lon: row.dataset.eventLon ? Number(row.dataset.eventLon) : null,
+        },
+      }),
+    );
   });
 
   /* === v7.9.1 — filter chips + search ==================================== */
@@ -815,7 +905,12 @@ const timeBucketCounts = (() => {
   let activeWindow: 'all' | '1h' | '6h' | '24h' = 'all';
 
   /* === v7.10 — URL persistence (shareable filter URLs) ==================== */
-  type FilterParams = { source: string; query: string; city: string; window: 'all' | '1h' | '6h' | '24h' };
+  type FilterParams = {
+    source: string;
+    query: string;
+    city: string;
+    window: 'all' | '1h' | '6h' | '24h';
+  };
   function readFiltersFromUrl(): FilterParams {
     const sp = new URLSearchParams(window.location.search);
     const source = sp.get('s');
@@ -823,7 +918,9 @@ const timeBucketCounts = (() => {
     const city = sp.get('c') ?? 'all';
     const win = sp.get('w') ?? 'all';
     const allowedWin: Array<'all' | '1h' | '6h' | '24h'> = ['all', '1h', '6h', '24h'];
-    const windowVal = (allowedWin as string[]).includes(win) ? (win as 'all' | '1h' | '6h' | '24h') : 'all';
+    const windowVal = (allowedWin as string[]).includes(win)
+      ? (win as 'all' | '1h' | '6h' | '24h')
+      : 'all';
     return { source: source ?? 'all', query, city, window: windowVal };
   }
   function writeFiltersToUrl(): void {
@@ -849,10 +946,14 @@ const timeBucketCounts = (() => {
   function applyFilters(): void {
     if (!list) return;
     const rows = list.querySelectorAll<HTMLElement>('.live-feed__row');
-    const winMs = activeWindow === '1h' ? 60 * 60 * 1000
-      : activeWindow === '6h' ? 6 * 60 * 60 * 1000
-      : activeWindow === '24h' ? 24 * 60 * 60 * 1000
-      : Infinity;
+    const winMs =
+      activeWindow === '1h'
+        ? 60 * 60 * 1000
+        : activeWindow === '6h'
+          ? 6 * 60 * 60 * 1000
+          : activeWindow === '24h'
+            ? 24 * 60 * 60 * 1000
+            : Infinity;
     let visible = 0;
     for (const row of rows) {
       const source = row.dataset.eventSource ?? '';
@@ -863,9 +964,7 @@ const timeBucketCounts = (() => {
       const sourceOk = activeSource === 'all' || source === activeSource;
       const queryOk = !activeQuery || title.includes(activeQuery) || city.includes(activeQuery);
       const cityOk = activeCity === 'all' || city === activeCity;
-      const winOk = activeWindow === 'all'
-        || !Number.isFinite(ts)
-        || (Date.now() - ts <= winMs);
+      const winOk = activeWindow === 'all' || !Number.isFinite(ts) || Date.now() - ts <= winMs;
       const show = sourceOk && queryOk && cityOk && winOk;
       if (show) {
         row.removeAttribute('data-filtered');
@@ -878,9 +977,10 @@ const timeBucketCounts = (() => {
     // v7.19 — announce filter result to screen-reader users (debounced 250ms)
     if (announcer) {
       const total = rows.length;
-      const text = visible === total
-        ? `Showing all ${total} event${total === 1 ? '' : 's'}.`
-        : `Showing ${visible} of ${total} event${total === 1 ? '' : 's'} matching current filters.`;
+      const text =
+        visible === total
+          ? `Showing all ${total} event${total === 1 ? '' : 's'}.`
+          : `Showing ${visible} of ${total} event${total === 1 ? '' : 's'} matching current filters.`;
       if (announceTimer !== null) window.clearTimeout(announceTimer);
       announceTimer = window.setTimeout(() => {
         announcer.textContent = text;
@@ -947,7 +1047,7 @@ const timeBucketCounts = (() => {
       }
       btn.classList.add('live-feed__chip-btn--active');
       const win = btn.dataset.timeFilter ?? 'all';
-      activeWindow = (win === '1h' || win === '6h' || win === '24h') ? win : 'all';
+      activeWindow = win === '1h' || win === '6h' || win === '24h' ? win : 'all';
       applyFilters();
       writeFiltersToUrl();
     });
@@ -985,7 +1085,8 @@ const timeBucketCounts = (() => {
   });
 
   /* === v7.9.3 — keyboard nav (j/k = next/prev row) ======================== */
-  const rows = () => Array.from(document.querySelectorAll<HTMLElement>('.live-feed__row:not([data-filtered="1"])'));
+  const rows = () =>
+    Array.from(document.querySelectorAll<HTMLElement>('.live-feed__row:not([data-filtered="1"])'));
   document.addEventListener('keydown', (ev) => {
     if (ev.key !== 'j' && ev.key !== 'k') return;
     const t = ev.target as HTMLElement | null;
@@ -997,9 +1098,7 @@ const timeBucketCounts = (() => {
     if (visible.length === 0) return;
     const active = document.activeElement as HTMLElement | null;
     const idx = visible.findIndex((r) => r === active || r.contains(active));
-    const nextIdx = ev.key === 'j'
-      ? Math.min(visible.length - 1, idx + 1)
-      : Math.max(0, idx - 1);
+    const nextIdx = ev.key === 'j' ? Math.min(visible.length - 1, idx + 1) : Math.max(0, idx - 1);
     const next = visible[nextIdx === -1 ? 0 : nextIdx];
     if (!next) return;
     ev.preventDefault();
@@ -1056,9 +1155,7 @@ const timeBucketCounts = (() => {
   function findFirstRowByCity(city: string): HTMLElement | null {
     if (!list) return null;
     const key = city.toLowerCase();
-    return list.querySelector<HTMLElement>(
-      `.live-feed__row[data-event-city="${CSS.escape(key)}"]`,
-    );
+    return list.querySelector<HTMLElement>(`.live-feed__row[data-event-city="${CSS.escape(key)}"]`);
   }
   function findFirstRowByCountry(countryName: string): HTMLElement | null {
     if (!list) return null;

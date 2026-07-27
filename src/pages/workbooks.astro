@@ -109,7 +109,9 @@ const workbooks = [
     <div class="container container-narrow">
       <p class="section__eyebrow"><span class="mono">workbooks/</span> · the 5-rung spine</p>
       <h1 class="page-head__title" data-words>
-        Prompt <span class="hl">→</span> skills <span class="hl">→</span> agents <span class="hl">→</span> loops <span class="hl">→</span> graphs.
+        Prompt <span class="hl">→</span> skills <span class="hl">→</span> agents <span class="hl"
+          >→</span
+        > loops <span class="hl">→</span> graphs.
       </h1>
       <VoiceLine class="page-head__voice">
         Modern AI systems are built in five compounding layers. Most teams plateau at the loop rung.
@@ -139,8 +141,8 @@ const workbooks = [
           Five compounding layers<span class="muted"> — pick your rung.</span>
         </h2>
         <p class="section__lede">
-          Every layer is a force multiplier on the one below it. Most teams stop at the loop.
-          The graph is where the agents start to share memory instead of re-deriving context.
+          Every layer is a force multiplier on the one below it. Most teams stop at the loop. The
+          graph is where the agents start to share memory instead of re-deriving context.
         </p>
       </header>
 
@@ -172,12 +174,10 @@ const workbooks = [
     <div class="container">
       <header class="section__head">
         <p class="section__eyebrow">Shareable</p>
-        <h2 class="section__title">
-          Two workbooks, one claim.
-        </h2>
+        <h2 class="section__title">Two workbooks, one claim.</h2>
         <p class="section__lede">
-          One big claim — the 5-rung spine. Two levels of audience — beginner, technical.
-          Each one is a self-contained PDF + shareable HTML.
+          One big claim — the 5-rung spine. Two levels of audience — beginner, technical. Each one
+          is a self-contained PDF + shareable HTML.
         </p>
       </header>
 
@@ -201,7 +201,9 @@ const workbooks = [
 
               {/* v7.16 — chapter TOC inside each workbook card */}
               <details class="workbook-card__toc">
-                <summary class="workbook-card__toc-summary mono">CHAPTERS · {w.chapters.length}</summary>
+                <summary class="workbook-card__toc-summary mono">
+                  CHAPTERS · {w.chapters.length}
+                </summary>
                 <ol class="workbook-card__toc-list mono">
                   {w.chapters.map((c) => (
                     <li>
@@ -215,8 +217,12 @@ const workbooks = [
               </details>
 
               <footer class="workbook-card__foot">
-                <a href={path(w.href)} class="btn btn--primary btn--sm">Open HTML →</a>
-                <a href={path(w.pdfHref)} class="btn btn--ghost btn--sm" download>PDF ↓</a>
+                <a href={path(w.href)} class="btn btn--primary btn--sm">
+                  Open HTML →
+                </a>
+                <a href={path(w.pdfHref)} class="btn btn--ghost btn--sm" download>
+                  PDF ↓
+                </a>
               </footer>
             </article>
           ))
@@ -456,7 +462,9 @@ const workbooks = [
     padding: 4px 0;
     user-select: none;
   }
-  .workbook-card__toc-summary::-webkit-details-marker { display: none; }
+  .workbook-card__toc-summary::-webkit-details-marker {
+    display: none;
+  }
   .workbook-card__toc-summary::before {
     content: '▸ ';
     display: inline-block;
@@ -480,7 +488,9 @@ const workbooks = [
     color: var(--c-ink-2);
     padding: 4px 6px;
     border-left: 2px solid transparent;
-    transition: border-color 120ms ease, color 120ms ease;
+    transition:
+      border-color 120ms ease,
+      color 120ms ease;
   }
   .workbook-card__toc-link:hover {
     color: var(--c-ink);

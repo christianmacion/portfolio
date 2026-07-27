@@ -16,7 +16,7 @@
 // Exits 1 on any violation. Used in: npm run ci (final gate).
 
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
-import { join, dirname, relative, sep } from 'node:path';
+import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -24,14 +24,11 @@ const root = join(__dirname, '..');
 const distDir = join(root, 'dist');
 
 // Routes to exclude from orphan detection (technical, not page routes).
-const EXCLUDED_TOP_ROUTES = new Set([
-  '_astro',
-  '_pagefind',
-]);
+const EXCLUDED_TOP_ROUTES = new Set(['_astro', '_pagefind']);
 
 interface SitemapReport {
-  locs: Set<string>;       // normalized pathnames from <loc>
-  duplicates: string[];    // <loc> values that appeared more than once
+  locs: Set<string>; // normalized pathnames from <loc>
+  duplicates: string[]; // <loc> values that appeared more than once
 }
 
 function extractLocs(xml: string): { locs: Set<string>; duplicates: string[] } {
@@ -43,7 +40,12 @@ function extractLocs(xml: string): { locs: Set<string>; duplicates: string[] } {
     counts.set(raw, (counts.get(raw) ?? 0) + 1);
     try {
       const u = new URL(raw);
-      locs.add(u.pathname.replace(/\/$/, '') || '/');
+      // Strip the configurable base path so that orphan detection works
+      // for both `npm run build` (BASE_PATH=/portfolio/...) and
+      // `npm run build:mirror` (BASE_PATH=/) without flagging false orphans.
+      const stripped = u.pathname.replace(/^\/(?:portfolio|portfolio\/)/, '');
+      const normalized = stripped.replace(/\/$/, '') || '/';
+      locs.add(normalized);
     } catch {
       // skip — caught by malformed-URL check below
     }

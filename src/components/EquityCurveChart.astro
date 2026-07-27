@@ -356,8 +356,10 @@ const regimeFill: Record<'calm' | 'normal' | 'stress', string> = {
     <li><span class="eq-chart__swatch eq-chart__swatch--stress"></span>stress (high vol)</li>
     <li class="eq-chart__legend-note">regime from rolling {volWindow}d vol of the series itself</li>
   </ul>
-  {/* v7.6.8 — moving dot traveling along the equity line after the
-       initial draw-in completes (1.6s delay). Pure CSS, deterministic. */}
+  {
+    /* v7.6.8 — moving dot traveling along the equity line after the
+       initial draw-in completes (1.6s delay). Pure CSS, deterministic. */
+  }
   <svg
     class="eq-chart__head-svg"
     viewBox={`0 0 ${width} ${height}`}
@@ -371,19 +373,11 @@ const regimeFill: Record<'calm' | 'normal' | 'stress', string> = {
       </radialGradient>
     </defs>
     <circle r="6" fill="url(#eq-head-glow)">
-      <animateMotion
-        dur="8s"
-        repeatCount="indefinite"
-        begin="1.6s"
-        path={equityPath}
+      <animateMotion dur="8s" repeatCount="indefinite" begin="1.6s" path={equityPath}
       ></animateMotion>
     </circle>
     <circle r="2.5" fill="var(--c-primary-2)">
-      <animateMotion
-        dur="8s"
-        repeatCount="indefinite"
-        begin="1.6s"
-        path={equityPath}
+      <animateMotion dur="8s" repeatCount="indefinite" begin="1.6s" path={equityPath}
       ></animateMotion>
     </circle>
   </svg>
@@ -472,8 +466,13 @@ const regimeFill: Record<'calm' | 'normal' | 'stress', string> = {
     animation: eq-swatch-pulse 3.2s ease-in-out infinite;
   }
   @keyframes eq-swatch-pulse {
-    0%, 100% { opacity: 0.7; }
-    50%      { opacity: 1; }
+    0%,
+    100% {
+      opacity: 0.7;
+    }
+    50% {
+      opacity: 1;
+    }
   }
   /* v6.11.18 — F14 amber-only migration. Was rgba(63,185,80,0.18) green
      for calm + rgba(248,81,73,0.22) red for stress. Now amber-soft for
@@ -504,8 +503,14 @@ const regimeFill: Record<'calm' | 'normal' | 'stress', string> = {
     animation-delay: var(--band-delay, 0ms);
   }
   @keyframes eq-band-fade {
-    from { opacity: 0; transform: translateY(2px); }
-    to   { opacity: 1; transform: none; }
+    from {
+      opacity: 0;
+      transform: translateY(2px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
   }
   /* Equity area fades in after bands land */
   .eq-chart__area {
@@ -513,26 +518,36 @@ const regimeFill: Record<'calm' | 'normal' | 'stress', string> = {
     animation: eq-area-fade 0.7s ease-out 0.6s forwards;
   }
   @keyframes eq-area-fade {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
   /* Equity line: drawn on then a perpetual dash-flow underneath */
   .eq-chart__line {
     stroke-dasharray: var(--eq-len);
     stroke-dashoffset: var(--eq-len);
     animation:
-      eq-line-draw 1.4s cubic-bezier(.6,.2,.3,1) 0.6s forwards,
+      eq-line-draw 1.4s cubic-bezier(0.6, 0.2, 0.3, 1) 0.6s forwards,
       eq-line-flow 8s linear 2s infinite;
     filter: drop-shadow(0 0 4px color-mix(in oklab, var(--c-primary-2) 30%, transparent));
   }
   @keyframes eq-line-draw {
-    to { stroke-dashoffset: 0; }
+    to {
+      stroke-dashoffset: 0;
+    }
   }
   @keyframes eq-line-flow {
     /* After draw, layer a slow moving dash to give perpetual life.
        Offset the dash by exactly --eq-len so the visible line stays solid. */
-    from { stroke-dashoffset: 0; }
-    to   { stroke-dashoffset: -100; }
+    from {
+      stroke-dashoffset: 0;
+    }
+    to {
+      stroke-dashoffset: -100;
+    }
   }
   /* Drawdown area fades in last */
   .eq-chart__dd-area {
@@ -540,8 +555,12 @@ const regimeFill: Record<'calm' | 'normal' | 'stress', string> = {
     animation: eq-dd-fade 0.6s ease-out 1.6s forwards;
   }
   @keyframes eq-dd-fade {
-    from { opacity: 0; }
-    to   { opacity: 0.18; }
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 0.18;
+    }
   }
   /* Head SVG overlays the original chart area. It animates a
      traveling dot via SVG animateMotion. */

@@ -6,10 +6,6 @@
 //
 // Standalone: `node scripts/__tests__/verify-anchors.test.mjs`
 
-import { mkdtempSync, writeFileSync, rmSync, readFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
-
 // Inline copy of the parser (kept in sync with scripts/verify-anchors.mjs).
 // Avoids cross-file import gymnastics for a one-shot test.
 function parseWorkbooks(src) {

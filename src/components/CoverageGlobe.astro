@@ -248,9 +248,18 @@ const primeX = project(0, 0).x;
     animation: globe-pulse 3.6s ease-out infinite;
   }
   @keyframes globe-pulse {
-    0%   { opacity: 0.55; transform: scale(0.6); }
-    80%  { opacity: 0;    transform: scale(2.4); }
-    100% { opacity: 0;    transform: scale(2.4); }
+    0% {
+      opacity: 0.55;
+      transform: scale(0.6);
+    }
+    80% {
+      opacity: 0;
+      transform: scale(2.4);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(2.4);
+    }
   }
   @media (prefers-reduced-motion: reduce) {
     .globe__pulse {

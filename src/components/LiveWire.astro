@@ -77,7 +77,11 @@ const methodFrames = [
   { head: 'MACRO', tail: 'REUTERS · WORLD NEWS', accent: 'cobalt' },
   { head: 'CRYPTO', tail: 'COINDESK · COINTELEGRAPH', accent: 'warn' },
   { head: 'INST', tail: 'THE BLOCK · INSTITUTIONAL', accent: 'violet' },
-  { head: '4 SOURCES', tail: `${Object.keys(publisherCounts).length} PUBLISHERS · 24H`, accent: 'warn' },
+  {
+    head: '4 SOURCES',
+    tail: `${Object.keys(publisherCounts).length} PUBLISHERS · 24H`,
+    accent: 'warn',
+  },
   { head: 'CHAIN-OF-CUSTODY', tail: 'FETCH → RANK → CACHE → RENDER', accent: 'ink' },
   { head: 'CITABLE', tail: 'PUBLISHER · TIMESTAMP · HEADLINE', accent: 'ink' },
 ];
@@ -102,80 +106,120 @@ function formatHm(iso: string): string {
   {/* === Chip row — publisher counts === */}
   <div class="livewire__chips mono">
     <span class="livewire__chip livewire__chip--title">MACRO WIRE</span>
-    {Object.entries(publisherCounts).map(([pub, n]) => (
-      <span class={`livewire__chip livewire__chip--${accentFor(pub)}`}>
-        {pub} · {n}
-      </span>
-    ))}
+    {
+      Object.entries(publisherCounts).map(([pub, n]) => (
+        <span class={`livewire__chip livewire__chip--${accentFor(pub)}`}>
+          {pub} · {n}
+        </span>
+      ))
+    }
     <span class="livewire__chip livewire__chip--meta">{items.length} HEADLINES · 24H</span>
   </div>
 
-  {hasItems && (
-    <>
-      <div class="livewire__ticker">
-        <div class="livewire__lane livewire__lane--title" role="region" aria-label="Latest headlines">
-          <div class="livewire__lane-label mono" aria-hidden="true">HEADLINES</div>
-          <div class="livewire__viewport">
-            <div class="livewire__track" style={`--livewire-dur: ${speedSec}s`} aria-live="off" aria-atomic="false">
-              {[...tickerRows, ...tickerRows].map((r) => (
-                <span class="livewire__item">
-                  <span class={`livewire__badge mono livewire__badge--${r.accent}`}>
-                    {r.publisher}
+  {
+    hasItems && (
+      <>
+        <div class="livewire__ticker">
+          <div
+            class="livewire__lane livewire__lane--title"
+            role="region"
+            aria-label="Latest headlines"
+          >
+            <div class="livewire__lane-label mono" aria-hidden="true">
+              HEADLINES
+            </div>
+            <div class="livewire__viewport">
+              <div
+                class="livewire__track"
+                style={`--livewire-dur: ${speedSec}s`}
+                aria-live="off"
+                aria-atomic="false"
+              >
+                {[...tickerRows, ...tickerRows].map((r) => (
+                  <span class="livewire__item">
+                    <span class={`livewire__badge mono livewire__badge--${r.accent}`}>
+                      {r.publisher}
+                    </span>
+                    <a
+                      class="livewire__title"
+                      href={r.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      referrerpolicy="strict-origin-when-cross-origin"
+                    >
+                      {r.title}
+                    </a>
+                    <span class="livewire__hm mono">{formatHm(r.timestamp)}</span>
+                    <span class="livewire__sep" aria-hidden="true">
+                      ·
+                    </span>
                   </span>
-                  <a class="livewire__title" href={r.link} target="_blank" rel="noopener noreferrer" referrerpolicy="strict-origin-when-cross-origin">
-                    {r.title}
-                  </a>
-                  <span class="livewire__hm mono">{formatHm(r.timestamp)}</span>
-                  <span class="livewire__sep" aria-hidden="true">·</span>
-                </span>
-              ))}
+                ))}
+              </div>
             </div>
+          </div>
+
+          <div
+            class="livewire__lane livewire__lane--method"
+            role="region"
+            aria-label="Methodology frames"
+          >
+            <div class="livewire__lane-label mono" aria-hidden="true">
+              METHOD
+            </div>
+            <div class="livewire__viewport livewire__viewport--reverse">
+              <div
+                class="livewire__track"
+                style={`--livewire-dur: ${speedSec + 18}s`}
+                aria-live="off"
+                aria-atomic="false"
+              >
+                {[...methodFrames, ...methodFrames].map((f) => (
+                  <span class:list={['livewire__frame', `is-${f.accent}`]}>
+                    <span class="livewire__frame-head">{f.head}</span>
+                    <span class="livewire__frame-sep" aria-hidden="true">
+                      ·
+                    </span>
+                    <span class="livewire__frame-tail mono">{f.tail}</span>
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div class="livewire__stop mono" aria-hidden="true">
+            {trailing}
           </div>
         </div>
 
-        <div class="livewire__lane livewire__lane--method" role="region" aria-label="Methodology frames">
-          <div class="livewire__lane-label mono" aria-hidden="true">METHOD</div>
-          <div class="livewire__viewport livewire__viewport--reverse">
-            <div class="livewire__track" style={`--livewire-dur: ${speedSec + 18}s`} aria-live="off" aria-atomic="false">
-              {[...methodFrames, ...methodFrames].map((f) => (
-                <span class:list={['livewire__frame', `is-${f.accent}`]}>
-                  <span class="livewire__frame-head">{f.head}</span>
-                  <span class="livewire__frame-sep" aria-hidden="true">·</span>
-                  <span class="livewire__frame-tail mono">{f.tail}</span>
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
+        <p class="livewire__caption mono">
+          <span class={`livewire__badge livewire__badge--${isLive ? 'live' : 'ink'}`}>
+            {isLive ? 'LIVE' : 'FALLBACK'}
+          </span>
+          <span class="livewire__cap-text">MACRO WIRE</span>
+          <span class="livewire__cap-text">{items.length} HEADLINES</span>
+          <span class="livewire__cap-sep">·</span>
+          <span class="livewire__cap-text">{Object.keys(publisherCounts).length} PUBLISHERS</span>
+          <span class="livewire__cap-sep">·</span>
+          <span class="livewire__cap-text">SYNCHRONIZED</span>
+          <span class="livewire__cap-ago" data-counter={`${elapsedMin}`} data-duration="600">
+            {elapsedMin}
+          </span>
+          <span class="livewire__cap-text">M AGO</span>
+          <span class="livewire__cap-stamp">{fetchedAtShort}</span>
+        </p>
+      </>
+    )
+  }
 
-        <div class="livewire__stop mono" aria-hidden="true">{trailing}</div>
-      </div>
-
-      <p class="livewire__caption mono">
-        <span class={`livewire__badge livewire__badge--${isLive ? 'live' : 'ink'}`}>
-          {isLive ? 'LIVE' : 'FALLBACK'}
-        </span>
-        <span class="livewire__cap-text">MACRO WIRE</span>
-        <span class="livewire__cap-text">{items.length} HEADLINES</span>
-        <span class="livewire__cap-sep">·</span>
-        <span class="livewire__cap-text">{Object.keys(publisherCounts).length} PUBLISHERS</span>
-        <span class="livewire__cap-sep">·</span>
-        <span class="livewire__cap-text">SYNCHRONIZED</span>
-        <span class="livewire__cap-ago" data-counter={`${elapsedMin}`} data-duration="600">
-          {elapsedMin}
-        </span>
-        <span class="livewire__cap-text">M AGO</span>
-        <span class="livewire__cap-stamp">{fetchedAtShort}</span>
+  {
+    !hasItems && (
+      <p class="livewire__empty">
+        <span class="livewire__badge livewire__badge--ink">FALLBACK</span>
+        <span class="livewire__cap-text">MACRO WIRE · NO ITEMS · LAST GOOD {fetchedAtShort}</span>
       </p>
-    </>
-  )}
-
-  {!hasItems && (
-    <p class="livewire__empty">
-      <span class="livewire__badge livewire__badge--ink">FALLBACK</span>
-      <span class="livewire__cap-text">MACRO WIRE · NO ITEMS · LAST GOOD {fetchedAtShort}</span>
-    </p>
-  )}
+    )
+  }
 </section>
 
 <style>
@@ -462,8 +506,12 @@ function formatHm(iso: string): string {
 
   /* === Keyframe === */
   @keyframes livewire-scroll {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
   }
 
   /* === Reduced motion === */

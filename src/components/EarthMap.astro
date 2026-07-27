@@ -41,11 +41,7 @@ import { getCollection } from 'astro:content';
 import gdeltCache from '../data/gdelt-cache.json';
 import liveFeedCache from '../data/live-feed-cache.json';
 import { INSTITUTIONS } from '../data/institutions';
-import {
-  GLOBE_VIEW,
-  GLOBE_CENTER,
-  GLOBE_SPHERE_D,
-} from '../data/world-map-paths';
+import { GLOBE_VIEW, GLOBE_CENTER, GLOBE_SPHERE_D } from '../data/world-map-paths';
 import {
   solarDeclination,
   subsolarLongitude,
@@ -62,11 +58,7 @@ interface Props {
   /** Optional CSS class on the outer wrapper. */
   class?: string;
 }
-const {
-  width = GLOBE_VIEW,
-  height = GLOBE_VIEW,
-  class: className,
-} = Astro.props;
+const { width = GLOBE_VIEW, height = GLOBE_VIEW, class: className } = Astro.props;
 
 /* === Globe geometry constants =====================================
  * GLOBE_RADIUS, GLOBE_CX, GLOBE_CY derived from the world-map-paths.ts
@@ -325,9 +317,9 @@ const livePoints: LivePoint[] = (liveCache.events || [])
 
 const venueResearchDomains = (venue: Venue): string[] => {
   const cityKey = venue.city.toLowerCase();
-  const institutionDomains = INSTITUTIONS
-    .filter((institution) => institution.city.toLowerCase().startsWith(cityKey))
-    .map((institution) => institution.focus.toUpperCase());
+  const institutionDomains = INSTITUTIONS.filter((institution) =>
+    institution.city.toLowerCase().startsWith(cityKey),
+  ).map((institution) => institution.focus.toUpperCase());
   const liveDomains = livePoints
     .filter((point) => point.city?.toLowerCase().startsWith(cityKey))
     .map((point) => point.category.toUpperCase());
@@ -341,7 +333,7 @@ const venueResearchDomains = (venue: Venue): string[] => {
   };
   return [...new Set([...institutionDomains, ...liveDomains])].length > 0
     ? [...new Set([...institutionDomains, ...liveDomains])]
-    : fallback[cityKey] ?? ['RESEARCH DATA'];
+    : (fallback[cityKey] ?? ['RESEARCH DATA']);
 };
 
 const venueLiveCounts = (venue: Venue): { arxiv: number; wire: number } => {
@@ -395,9 +387,7 @@ for (const e of gdeltPositions) {
 }
 
 /* === Category → shape mapping for world events ======================= */
-const eventShape = (
-  category: string,
-): 'triangle' | 'square' | 'diamond' | 'circle' => {
+const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circle' => {
   if (category === 'central-bank' || category === 'fx') return 'triangle';
   if (category === 'data-release') return 'square';
   if (category === 'earnings') return 'diamond';
@@ -440,14 +430,9 @@ const _termPathD = terminatorOrthographicArcPath(
   GLOBE_ROT,
   { step: 2 },
 );
-const _dayFillD = terminatorOrthographicPath(
-  _now,
-  GLOBE_RADIUS,
-  GLOBE_CX,
-  GLOBE_CY,
-  GLOBE_ROT,
-  { step: 2 },
-);
+const _dayFillD = terminatorOrthographicPath(_now, GLOBE_RADIUS, GLOBE_CX, GLOBE_CY, GLOBE_ROT, {
+  step: 2,
+});
 
 const _hourMarker = `${String(_now.getUTCHours()).padStart(2, '0')}:${String(_now.getUTCMinutes()).padStart(2, '0')}:${String(_now.getUTCSeconds()).padStart(2, '0')} UTC`;
 
@@ -482,8 +467,7 @@ const dayNightForPoint = (lat: number, lon: number): string => {
   const toRad = Math.PI / 180;
   const solarRelationship =
     Math.sin(lat * toRad) * Math.sin(_subLat * toRad) +
-    Math.cos(lat * toRad) * Math.cos(_subLat * toRad) *
-      Math.cos((lon - _subLon) * toRad);
+    Math.cos(lat * toRad) * Math.cos(_subLat * toRad) * Math.cos((lon - _subLon) * toRad);
   if (solarRelationship > 0.25) return 'DAY';
   if (solarRelationship < -0.25) return 'NIGHT';
   return 'TERMINATOR';
@@ -510,87 +494,49 @@ void venueByCity;
     aria-label={`Orthographic globe view centered on ${GLOBE_CENTER[0]}°/${GLOBE_CENTER[1]}°. ${venues.length} research venues, ${worldEvents.length} curated world events, ${gdeltPositions.length} GDELT signals visible from this rotation, ${livePoints.filter((p) => p.source === 'arxiv').length} arXiv + ${livePoints.filter((p) => p.source === 'macrowire').length} wire geo-overlay markers, day/night terminator overlay. Synchronized ${fetchedAtStamp}.`}
     preserveAspectRatio="xMidYMid meet"
   >
-    {/* === Atmospheric chrome (drawn FIRST, sits behind the globe) ===
+    {
+      /* === Atmospheric chrome (drawn FIRST, sits behind the globe) ===
          Two layers: cream/navy radial wash + 96 seeded star dots. The
          atmospheric-glow ring is the outermost circle on the sphere
          and is emitted later (after the sphere outline) so it reads as
-         a rim around the globe, not a sky gradient. */}
+         a rim around the globe, not a sky gradient. */
+    }
     <defs>
-      <radialGradient
-        id="earth-map__sky"
-        cx="50%"
-        cy="48%"
-        r="68%"
-        fx="50%"
-        fy="44%"
-      >
-        <stop offset="0%" stop-color="var(--c-bg-2)" stop-opacity="0.0" />
-        <stop offset="60%" stop-color="var(--c-bg-2)" stop-opacity="0.0" />
-        <stop offset="100%" stop-color="var(--c-bg)" stop-opacity="0.85" />
+      <radialGradient id="earth-map__sky" cx="50%" cy="48%" r="68%" fx="50%" fy="44%">
+        <stop offset="0%" stop-color="var(--c-bg-2)" stop-opacity="0.0"></stop>
+        <stop offset="60%" stop-color="var(--c-bg-2)" stop-opacity="0.0"></stop>
+        <stop offset="100%" stop-color="var(--c-bg)" stop-opacity="0.85"></stop>
       </radialGradient>
-      <radialGradient
-        id="earth-map__atmo"
-        cx="50%"
-        cy="50%"
-        r="50%"
-      >
-        <stop
-          offset="60%"
-          stop-color="var(--c-primary-2)"
-          stop-opacity="0"
-        />
-        <stop
-          offset="84%"
-          stop-color="var(--c-primary-2)"
-          stop-opacity="0.18"
-        />
-        <stop
-          offset="100%"
-          stop-color="var(--c-primary-2)"
-          stop-opacity="0"
-        />
+      <radialGradient id="earth-map__atmo" cx="50%" cy="50%" r="50%">
+        <stop offset="60%" stop-color="var(--c-primary-2)" stop-opacity="0"></stop>
+        <stop offset="84%" stop-color="var(--c-primary-2)" stop-opacity="0.18"></stop>
+        <stop offset="100%" stop-color="var(--c-primary-2)" stop-opacity="0"></stop>
       </radialGradient>
-      {/* v7.7.6 — realistic ocean: deeper cobalt at the limb, lighter
-          at the sub-solar point. Reads as a 3D sphere. */}
-      <radialGradient
-        id="earth-map__ocean"
-        cx="50%"
-        cy="50%"
-        r="50%"
-      >
-        <stop
-          offset="0%"
-          stop-color="var(--j-cobalt-3)"
-          stop-opacity="1"
-        />
-        <stop
-          offset="65%"
-          stop-color="var(--j-cobalt)"
-          stop-opacity="1"
-        />
-        <stop
-          offset="100%"
-          stop-color="var(--j-cobalt-deep)"
-          stop-opacity="1"
-        />
+      {
+        /* v7.7.6 — realistic ocean: deeper cobalt at the limb, lighter
+          at the sub-solar point. Reads as a 3D sphere. */
+      }
+      <radialGradient id="earth-map__ocean" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="var(--j-cobalt-3)" stop-opacity="1"></stop>
+        <stop offset="65%" stop-color="var(--j-cobalt)" stop-opacity="1"></stop>
+        <stop offset="100%" stop-color="var(--j-cobalt-deep)" stop-opacity="1"></stop>
       </radialGradient>
-      {/* v7.7.6 — atmospheric scatter ring (cobalt bloom around the
-          sphere, mimics Rayleigh scattering in real Earth photos). */}
-      <radialGradient
-        id="earth-map__scatter"
-        cx="50%"
-        cy="50%"
-        r="50%"
-      >
-        <stop offset="78%" stop-color="var(--j-cobalt-3)" stop-opacity="0" />
-        <stop offset="92%" stop-color="var(--j-cobalt-3)" stop-opacity="0.55" />
-        <stop offset="100%" stop-color="var(--j-cobalt)" stop-opacity="0" />
+      {
+        /* v7.7.6 — atmospheric scatter ring (cobalt bloom around the
+          sphere, mimics Rayleigh scattering in real Earth photos). */
+      }
+      <radialGradient id="earth-map__scatter" cx="50%" cy="50%" r="50%">
+        <stop offset="78%" stop-color="var(--j-cobalt-3)" stop-opacity="0"></stop>
+        <stop offset="92%" stop-color="var(--j-cobalt-3)" stop-opacity="0.55"></stop>
+        <stop offset="100%" stop-color="var(--j-cobalt)" stop-opacity="0"></stop>
       </radialGradient>
-      {/* v7.7.7 — night-side dim anchored at the anti-subsolar point so
+      {
+        /* v7.7.7 — night-side dim anchored at the anti-subsolar point so
           the dimming visibly tracks the Sun. userSpaceOnUse lets us
           place the gradient center in absolute SVG coords (the
           projected antipode), with r=GLOBE_RADIUS so it fades out by
-          the terminator. */}
+          the terminator. */
+      }
       <radialGradient
         id="earth-map__night"
         gradientUnits="userSpaceOnUse"
@@ -598,62 +544,51 @@ void venueByCity;
         cy={_antiSubP.y}
         r={GLOBE_RADIUS}
       >
-        <stop offset="0%" stop-color="var(--c-primary-deep)" stop-opacity="0.85" />
-        <stop offset="45%" stop-color="var(--c-primary-deep)" stop-opacity="0.6" />
-        <stop offset="78%" stop-color="var(--c-primary-deep)" stop-opacity="0.18" />
-        <stop offset="100%" stop-color="var(--c-primary-deep)" stop-opacity="0" />
+        <stop offset="0%" stop-color="var(--c-primary-deep)" stop-opacity="0.85"></stop>
+        <stop offset="45%" stop-color="var(--c-primary-deep)" stop-opacity="0.6"></stop>
+        <stop offset="78%" stop-color="var(--c-primary-deep)" stop-opacity="0.18"></stop>
+        <stop offset="100%" stop-color="var(--c-primary-deep)" stop-opacity="0"></stop>
       </radialGradient>
-      {/* v7.7.6 — clip the rotating globe so countries that swing into
-          the back hemisphere are visually masked by the sphere edge. */}
+      {
+        /* v7.7.6 — clip the rotating globe so countries that swing into
+          the back hemisphere are visually masked by the sphere edge. */
+      }
       <clipPath id="earth-map__sphere-clip">
-        <circle cx={GLOBE_CX} cy={GLOBE_CY} r={GLOBE_RADIUS + 1} />
+        <circle cx={GLOBE_CX} cy={GLOBE_CY} r={GLOBE_RADIUS + 1}></circle>
       </clipPath>
-      {/* v7.8 — country vignette: the limb resolves into ocean cobalt rather
-          than black, preserving coastline fidelity as the globe rotates. */}
-      <radialGradient
-        id="earth-map__country-vignette"
-        cx="50%"
-        cy="50%"
-        r="50%"
-      >
-        <stop offset="0%" stop-color="var(--j-cobalt)" stop-opacity="0" />
-        <stop offset="74%" stop-color="var(--j-cobalt)" stop-opacity="0" />
-        <stop offset="92%" stop-color="var(--j-cobalt-deep)" stop-opacity="0.2" />
-        <stop offset="100%" stop-color="var(--j-cobalt-deep)" stop-opacity="0.62" />
+      {
+        /* v7.8 — country vignette: the limb resolves into ocean cobalt rather
+          than black, preserving coastline fidelity as the globe rotates. */
+      }
+      <radialGradient id="earth-map__country-vignette" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="var(--j-cobalt)" stop-opacity="0"></stop>
+        <stop offset="74%" stop-color="var(--j-cobalt)" stop-opacity="0"></stop>
+        <stop offset="92%" stop-color="var(--j-cobalt-deep)" stop-opacity="0.2"></stop>
+        <stop offset="100%" stop-color="var(--j-cobalt-deep)" stop-opacity="0.62"></stop>
       </radialGradient>
-
     </defs>
 
-    {/* Sky plate (cream/navy wash). The viewBox is the full 600×600 so
-        the wash fills the same canvas as the star field. */}
-    <rect
-      x="0"
-      y="0"
-      width={width}
-      height={height}
-      fill="var(--c-bg)"
-      aria-hidden="true"
-    />
-    <rect
-      x="0"
-      y="0"
-      width={width}
-      height={height}
-      fill="url(#earth-map__sky)"
-      aria-hidden="true"
-    />
+    {
+      /* Sky plate (cream/navy wash). The viewBox is the full 600×600 so
+        the wash fills the same canvas as the star field. */
+    }
+    <rect x="0" y="0" width={width} height={height} fill="var(--c-bg)" aria-hidden="true"></rect>
+    <rect x="0" y="0" width={width} height={height} fill="url(#earth-map__sky)" aria-hidden="true"
+    ></rect>
 
     {/* Star field — 96 deterministic dots, scattered outside the globe mask. */}
     <g class="earth-map__stars" aria-hidden="true">
-      {starDots.map((s, i) => (
-        <circle
-          cx={s.x.toFixed(2)}
-          cy={s.y.toFixed(2)}
-          r={s.r.toFixed(2)}
-          class="earth-map__star"
-          style={`--i: ${i % 12}`}
-        />
-      ))}
+      {
+        starDots.map((s, i) => (
+          <circle
+            cx={s.x.toFixed(2)}
+            cy={s.y.toFixed(2)}
+            r={s.r.toFixed(2)}
+            class="earth-map__star"
+            style={`--i: ${i % 12}`}
+          />
+        ))
+      }
     </g>
 
     {/* Atmospheric glow ring — sits over the sphere as a rim. NO halo. */}
@@ -662,23 +597,22 @@ void venueByCity;
       cy={GLOBE_CY}
       r={GLOBE_RADIUS + 6}
       fill="url(#earth-map__atmo)"
-      aria-hidden="true"
-    />
+      aria-hidden="true"></circle>
 
-    {/* === Layer 0 — globe ocean + sphere outline + country borders ===
+    {
+      /* === Layer 0 — globe ocean + sphere outline + country borders ===
          v7.7.6 — the ocean disc now carries the cobalt radial gradient
          (deeper at the limb, lighter at the sub-solar point). The
          rotating-country group sits on top of the ocean so continents
-         drift slowly east-to-west like Earth seen from space. */}
+         drift slowly east-to-west like Earth seen from space. */
+    }
     <g class="earth-map__globe" aria-hidden="false">
-      <path
-        d={GLOBE_SPHERE_D}
-        class="earth-map__sphere"
-        fill="url(#earth-map__ocean)"
-      />
+      <path d={GLOBE_SPHERE_D} class="earth-map__sphere" fill="url(#earth-map__ocean)"></path>
       <g class="earth-map__countries" clip-path="url(#earth-map__sphere-clip)">
-        {/* Transparent country targets stay in the same rotating coordinate
-            system as their visible outlines. */}
+        {
+          /* Transparent country targets stay in the same rotating coordinate
+            system as their visible outlines. */
+        }
         <g class="earth-map__hitbox" clip-path="url(#earth-map__sphere-clip)" data-countries-target>
         </g>
       </g>
@@ -686,218 +620,226 @@ void venueByCity;
         d={GLOBE_SPHERE_D}
         class="earth-map__country-vignette"
         fill="url(#earth-map__country-vignette)"
-        aria-hidden="true"
-      />
+        aria-hidden="true"></path>
 
-    {/* v7.7.6 — atmospheric scatter ring (Rayleigh-style cobalt bloom
+      {
+        /* v7.7.6 — atmospheric scatter ring (Rayleigh-style cobalt bloom
         around the sphere limb) and night-side dim mask. Both clipped to
-        the sphere circle so they hug the planet. */}
-    <path
-      d={GLOBE_SPHERE_D}
-      class="earth-map__scatter"
-      aria-hidden="true"
-    />
-    <path
-      d={GLOBE_SPHERE_D}
-      class="earth-map__night-mask"
-      aria-hidden="true"
-    />
+        the sphere circle so they hug the planet. */
+      }
+      <path d={GLOBE_SPHERE_D} class="earth-map__scatter" aria-hidden="true"></path>
+      <path d={GLOBE_SPHERE_D} class="earth-map__night-mask" aria-hidden="true"></path>
 
-    {/* === Layer F (v7.7.4) — terminator, ortho-reprojected ===
+      {
+        /* === Layer F (v7.7.4) — terminator, ortho-reprojected ===
         Day-side wash first (sits behind the country outlines via the
         mix-blend mode trick used in CoverageGlobe). Then the dashed
-        great-circle arc + the subsolar pulse on top. */}
-    {_dayFillD && (
-      <path
-        d={_dayFillD}
-        class="earth-map__day-wash"
-        fill="url(#earth-map__day-wash)"
-        aria-hidden="true"
-      />
-    )}
-    {_termPathD && (
-      <path
-        d={_termPathD}
-        class="earth-map__terminator-line"
-        aria-hidden="true"
-      />
-    )}
-    {_subP.visible && (
-      <g class="earth-map__subsolar">
-        <circle
-          cx={_subP.x.toFixed(2)}
-          cy={_subP.y.toFixed(2)}
-          r="4.5"
-          class="earth-map__subsolar"
-        />
-        <circle
-          cx={_subP.x.toFixed(2)}
-          cy={_subP.y.toFixed(2)}
-          r="9"
-          class="earth-map__subsolar-pulse"
-        />
-      </g>
-    )}
-
-    {/* === Layer A — venue cities (amber, weighted, with pulse) === */}
-    {venuePositions.map((c) => (
-      <g
-        class="earth-map__venue"
-        data-venue-city={c.city}
-        data-venue-lat={c.lat}
-        data-venue-lon={c.lon}
-        data-venue-caption={c.caption}
-        data-venue-domains={venueResearchDomains(c).join(' · ')}
-        data-venue-arxiv={venueLiveCounts(c).arxiv}
-        data-venue-wire={venueLiveCounts(c).wire}
-        tabindex="0"
-        role="button"
-        aria-label={`Focus ${c.city}, ${c.caption}`}
-      >
-        {c.weight >= 0.7 && (
-          <circle
-            cx={c.x.toFixed(2)}
-            cy={c.y.toFixed(2)}
-            r={(c.r + 4).toFixed(2)}
-            class="earth-map__pulse"
+        great-circle arc + the subsolar pulse on top. */
+      }
+      {
+        _dayFillD && (
+          <path
+            d={_dayFillD}
+            class="earth-map__day-wash"
+            fill="url(#earth-map__day-wash)"
+            aria-hidden="true"
           />
-        )}
-        <circle
-          cx={c.x.toFixed(2)}
-          cy={c.y.toFixed(2)}
-          r={c.r.toFixed(2)}
-          class="earth-map__dot"
-        >
-          <title>
-            {c.city} ({c.lat.toFixed(2)}°, {c.lon.toFixed(2)}°) — {c.caption}
-          </title>
-        </circle>
-        <text
-          x={c.x.toFixed(2)}
-          y={(c.y - c.r - 4).toFixed(2)}
-          text-anchor="middle"
-          class="earth-map__label"
-        >
-          {c.city}
-        </text>
-      </g>
-    ))}
-
-    {/* === Layer B — world events (shape-coded by category) === */}
-    {eventPositions.map((e) => {
-      const shape = eventShape(e.category);
-      return (
-        <g class={`earth-map__event earth-map__event--${e.category} earth-map__event--${e.severity}`}>
-          {shape === 'triangle' && (
-            <polygon
-              points={`${e.x.toFixed(2)},${(e.y - 4).toFixed(2)} ${(e.x + 4).toFixed(2)},${(e.y + 3).toFixed(2)} ${(e.x - 4).toFixed(2)},${(e.y + 3).toFixed(2)}`}
-              class="earth-map__event-shape"
-            >
-              <title>
-                {e.title} — {e.city}
-              </title>
-            </polygon>
-          )}
-          {shape === 'square' && (
-            <rect
-              x={(e.x - 3.5).toFixed(2)}
-              y={(e.y - 3.5).toFixed(2)}
-              width="7"
-              height="7"
-              class="earth-map__event-shape"
-            >
-              <title>
-                {e.title} — {e.city}
-              </title>
-            </rect>
-          )}
-          {shape === 'diamond' && (
-            <polygon
-              points={`${e.x.toFixed(2)},${(e.y - 4).toFixed(2)} ${(e.x + 4).toFixed(2)},${e.y.toFixed(2)} ${e.x.toFixed(2)},${(e.y + 4).toFixed(2)} ${(e.x - 4).toFixed(2)},${e.y.toFixed(2)}`}
-              class="earth-map__event-shape"
-            >
-              <title>
-                {e.title} — {e.city}
-              </title>
-            </polygon>
-          )}
-          {shape === 'circle' && (
+        )
+      }
+      {_termPathD && <path d={_termPathD} class="earth-map__terminator-line" aria-hidden="true" />}
+      {
+        _subP.visible && (
+          <g class="earth-map__subsolar">
             <circle
-              cx={e.x.toFixed(2)}
-              cy={e.y.toFixed(2)}
-              r="3.4"
-              class="earth-map__event-shape"
+              cx={_subP.x.toFixed(2)}
+              cy={_subP.y.toFixed(2)}
+              r="4.5"
+              class="earth-map__subsolar"
+            />
+            <circle
+              cx={_subP.x.toFixed(2)}
+              cy={_subP.y.toFixed(2)}
+              r="9"
+              class="earth-map__subsolar-pulse"
+            />
+          </g>
+        )
+      }
+
+      {/* === Layer A — venue cities (amber, weighted, with pulse) === */}
+      {
+        venuePositions.map((c) => (
+          <g
+            class="earth-map__venue"
+            data-venue-city={c.city}
+            data-venue-lat={c.lat}
+            data-venue-lon={c.lon}
+            data-venue-caption={c.caption}
+            data-venue-domains={venueResearchDomains(c).join(' · ')}
+            data-venue-arxiv={venueLiveCounts(c).arxiv}
+            data-venue-wire={venueLiveCounts(c).wire}
+            tabindex="0"
+            role="button"
+            aria-label={`Focus ${c.city}, ${c.caption}`}
+          >
+            {c.weight >= 0.7 && (
+              <circle
+                cx={c.x.toFixed(2)}
+                cy={c.y.toFixed(2)}
+                r={(c.r + 4).toFixed(2)}
+                class="earth-map__pulse"
+              />
+            )}
+            <circle
+              cx={c.x.toFixed(2)}
+              cy={c.y.toFixed(2)}
+              r={c.r.toFixed(2)}
+              class="earth-map__dot"
             >
               <title>
-                {e.title} — {e.city}
+                {c.city} ({c.lat.toFixed(2)}°, {c.lon.toFixed(2)}°) — {c.caption}
               </title>
             </circle>
-          )}
-        </g>
-      );
-    })}
+            <text
+              x={c.x.toFixed(2)}
+              y={(c.y - c.r - 4).toFixed(2)}
+              text-anchor="middle"
+              class="earth-map__label"
+            >
+              {c.city}
+            </text>
+          </g>
+        ))
+      }
 
-    {/* === Layer E — connection arcs (event → venue city) === */}
-    {arcs.map((a, i) => (
-      <path
-        d={a.d}
-        pathLength="1"
-        class={`earth-map__arc earth-map__arc--${a.polarity}`}
-        style={`--i: ${i}`}
-        aria-label={`${a.city} signal → ${a.venue} venue`}
-      />
-    ))}
+      {/* === Layer B — world events (shape-coded by category) === */}
+      {
+        eventPositions.map((e) => {
+          const shape = eventShape(e.category);
+          return (
+            <g
+              class={`earth-map__event earth-map__event--${e.category} earth-map__event--${e.severity}`}
+            >
+              {shape === 'triangle' && (
+                <polygon
+                  points={`${e.x.toFixed(2)},${(e.y - 4).toFixed(2)} ${(e.x + 4).toFixed(2)},${(e.y + 3).toFixed(2)} ${(e.x - 4).toFixed(2)},${(e.y + 3).toFixed(2)}`}
+                  class="earth-map__event-shape"
+                >
+                  <title>
+                    {e.title} — {e.city}
+                  </title>
+                </polygon>
+              )}
+              {shape === 'square' && (
+                <rect
+                  x={(e.x - 3.5).toFixed(2)}
+                  y={(e.y - 3.5).toFixed(2)}
+                  width="7"
+                  height="7"
+                  class="earth-map__event-shape"
+                >
+                  <title>
+                    {e.title} — {e.city}
+                  </title>
+                </rect>
+              )}
+              {shape === 'diamond' && (
+                <polygon
+                  points={`${e.x.toFixed(2)},${(e.y - 4).toFixed(2)} ${(e.x + 4).toFixed(2)},${e.y.toFixed(2)} ${e.x.toFixed(2)},${(e.y + 4).toFixed(2)} ${(e.x - 4).toFixed(2)},${e.y.toFixed(2)}`}
+                  class="earth-map__event-shape"
+                >
+                  <title>
+                    {e.title} — {e.city}
+                  </title>
+                </polygon>
+              )}
+              {shape === 'circle' && (
+                <circle
+                  cx={e.x.toFixed(2)}
+                  cy={e.y.toFixed(2)}
+                  r="3.4"
+                  class="earth-map__event-shape"
+                >
+                  <title>
+                    {e.title} — {e.city}
+                  </title>
+                </circle>
+              )}
+            </g>
+          );
+        })
+      }
 
-    {/* === Layer C — GDELT (severity-weighted, polarity-tinted) === */}
-    {gdeltPositions.map((e) => (
-      <circle
-        cx={e.x.toFixed(2)}
-        cy={e.y.toFixed(2)}
-        r={e.r.toFixed(2)}
-        data-event-id={e.id}
-        class={`earth-map__gdelt earth-map__gdelt--${e.polarity}`}
-      >
-        <title>
-          {e.title} — {e.city} ({e.goldstein?.toFixed(1) ?? '0.0'})
-        </title>
-      </circle>
-    ))}
+      {/* === Layer E — connection arcs (event → venue city) === */}
+      {
+        arcs.map((a, i) => (
+          <path
+            d={a.d}
+            pathLength="1"
+            class={`earth-map__arc earth-map__arc--${a.polarity}`}
+            style={`--i: ${i}`}
+            aria-label={`${a.city} signal → ${a.venue} venue`}
+          />
+        ))
+      }
 
-    {/* === Layer D — arXiv + WIRE markers (institution / publisher-city geo) ===
+      {/* === Layer C — GDELT (severity-weighted, polarity-tinted) === */}
+      {
+        gdeltPositions.map((e) => (
+          <circle
+            cx={e.x.toFixed(2)}
+            cy={e.y.toFixed(2)}
+            r={e.r.toFixed(2)}
+            data-event-id={e.id}
+            class={`earth-map__gdelt earth-map__gdelt--${e.polarity}`}
+          >
+            <title>
+              {e.title} — {e.city} ({e.goldstein?.toFixed(1) ?? '0.0'})
+            </title>
+          </circle>
+        ))
+      }
+
+      {
+        /* === Layer D — arXiv + WIRE markers (institution / publisher-city geo) ===
         Renders ABOVE Layer C for visual prominence. Each marker carries
-        data-event-id so the hover-sync bus can pulse it from /live. */}
-    <g class="earth-map__live-group">
-      {livePoints.map((p) => (
-        <circle
-          cx={p.x.toFixed(2)}
-          cy={p.y.toFixed(2)}
-          r={p.r.toFixed(2)}
-          data-event-id={p.id}
-          data-event-source={p.source}
-          class={`earth-map__live earth-map__live--${p.source}`}
-        >
-          <title>
-            {p.source.toUpperCase()} · {p.city ?? ''} · {p.category.toUpperCase()}
-            {'\n'}
-            {p.title}
-          </title>
-        </circle>
-      ))}
-    </g>
+        data-event-id so the hover-sync bus can pulse it from /live. */
+      }
+      <g class="earth-map__live-group">
+        {
+          livePoints.map((p) => (
+            <circle
+              cx={p.x.toFixed(2)}
+              cy={p.y.toFixed(2)}
+              r={p.r.toFixed(2)}
+              data-event-id={p.id}
+              data-event-source={p.source}
+              class={`earth-map__live earth-map__live--${p.source}`}
+            >
+              <title>
+                {p.source.toUpperCase()} · {p.city ?? ''} · {p.category.toUpperCase()}
+                {'\n'}
+                {p.title}
+              </title>
+            </circle>
+          ))
+        }
+      </g>
 
-    {/* Globe sphere outline (1px cobalt stroke @ 70% opacity) — sits on
+      {
+        /* Globe sphere outline (1px cobalt stroke @ 70% opacity) — sits on
         TOP of every layer so the disc edges read crisply even when a
-        marker straddles the rim. */}
-    <path
-      d={GLOBE_SPHERE_D}
-      class="earth-map__sphere-edge"
-      fill="none"
-      stroke="var(--c-primary-2)"
-      stroke-opacity="0.7"
-      stroke-width="1"
-      aria-hidden="true"
-    />
-  </g>
+        marker straddles the rim. */
+      }
+      <path
+        d={GLOBE_SPHERE_D}
+        class="earth-map__sphere-edge"
+        fill="none"
+        stroke="var(--c-primary-2)"
+        stroke-opacity="0.7"
+        stroke-width="1"
+        aria-hidden="true"></path>
+    </g>
   </svg>
 
   <aside
@@ -911,7 +853,12 @@ void venueByCity;
   >
     <div class="earth-map__focus-head">
       <span class="earth-map__focus-kicker mono" data-focus-kind>FOCUS</span>
-      <button class="earth-map__focus-close" type="button" data-focus-close aria-label="Close focus details">CLOSE</button>
+      <button
+        class="earth-map__focus-close"
+        type="button"
+        data-focus-close
+        aria-label="Close focus details">CLOSE</button
+      >
     </div>
     <div class="earth-map__focus-title mono" data-focus-title>—</div>
     <dl class="earth-map__focus-grid" data-focus-country hidden>
@@ -929,9 +876,11 @@ void venueByCity;
     </dl>
   </aside>
 
-  {/* === NEW v7.7.4 HUD chrome — 4-cell KPI strip (HTML, not SVG) ===
+  {
+    /* === NEW v7.7.4 HUD chrome — 4-cell KPI strip (HTML, not SVG) ===
        Same mono-small-caps vocabulary as the desk-stats row. Each cell
-       is a hairline-divided row with a label + a value. */}
+       is a hairline-divided row with a label + a value. */
+  }
   <div class="earth-map__hud" role="group" aria-label="Subsolar and time readouts">
     <div class="earth-map__hud-cell">
       <span class="earth-map__hud-label mono">SUBSOLAR</span>
@@ -963,32 +912,37 @@ void venueByCity;
     </span>
     <span class="earth-map__cap-sep">·</span>
     <span class="earth-map__cap-section">
-      <span class="earth-map__cap-swatch earth-map__cap-swatch--gdelt-pos" aria-hidden="true"></span>
+      <span class="earth-map__cap-swatch earth-map__cap-swatch--gdelt-pos" aria-hidden="true"
+      ></span>
       {gdeltPositions.length} GDELT visible
     </span>
-    {arcs.length > 0 && (
-      <>
-        <span class="earth-map__cap-sep">·</span>
-        <span class="earth-map__cap-section">
-          <span class="earth-map__cap-swatch earth-map__cap-swatch--arc" aria-hidden="true"></span>
-          {arcs.length} arcs
-        </span>
-      </>
-    )}
-    {livePoints.length > 0 && (
-      <>
-        <span class="earth-map__cap-sep">·</span>
-        <span class="earth-map__cap-section">
-          <span class="earth-map__cap-swatch earth-map__cap-swatch--arxiv" aria-hidden="true"></span>
-          {livePoints.filter((p) => p.source === 'arxiv').length} arxiv
-        </span>
-        <span class="earth-map__cap-sep">·</span>
-        <span class="earth-map__cap-section">
-          <span class="earth-map__cap-swatch earth-map__cap-swatch--wire" aria-hidden="true"></span>
-          {livePoints.filter((p) => p.source === 'macrowire').length} wire
-        </span>
-      </>
-    )}
+    {
+      arcs.length > 0 && (
+        <>
+          <span class="earth-map__cap-sep">·</span>
+          <span class="earth-map__cap-section">
+            <span class="earth-map__cap-swatch earth-map__cap-swatch--arc" aria-hidden="true" />
+            {arcs.length} arcs
+          </span>
+        </>
+      )
+    }
+    {
+      livePoints.length > 0 && (
+        <>
+          <span class="earth-map__cap-sep">·</span>
+          <span class="earth-map__cap-section">
+            <span class="earth-map__cap-swatch earth-map__cap-swatch--arxiv" aria-hidden="true" />
+            {livePoints.filter((p) => p.source === 'arxiv').length} arxiv
+          </span>
+          <span class="earth-map__cap-sep">·</span>
+          <span class="earth-map__cap-section">
+            <span class="earth-map__cap-swatch earth-map__cap-swatch--wire" aria-hidden="true" />
+            {livePoints.filter((p) => p.source === 'macrowire').length} wire
+          </span>
+        </>
+      )
+    }
     <span class="earth-map__cap-sep">·</span>
     <span class="earth-map__cap-section earth-map__cap-section--f">
       <span class="earth-map__cap-swatch earth-map__cap-swatch--day" aria-hidden="true"></span>
@@ -1000,11 +954,7 @@ void venueByCity;
         {isLive ? 'LIVE' : 'FALLBACK'}
       </span>
       <span class="earth-map__cap-sync-text">SYNCHRONIZED</span>
-      <span
-        class="earth-map__cap-sync-ago"
-        data-counter={`${elapsedMin}`}
-        data-duration="600"
-      >
+      <span class="earth-map__cap-sync-ago" data-counter={`${elapsedMin}`} data-duration="600">
         {elapsedMin}
       </span>
       <span class="earth-map__cap-sync-text">M AGO</span>
@@ -1041,11 +991,20 @@ void venueByCity;
     transform-origin: center;
     transform-box: fill-box;
   }
-  .earth-map__star:nth-child(8n) { opacity: 0.85; }
-  .earth-map__star:nth-child(8n + 1) { opacity: 0.7; }
+  .earth-map__star:nth-child(8n) {
+    opacity: 0.85;
+  }
+  .earth-map__star:nth-child(8n + 1) {
+    opacity: 0.7;
+  }
   @keyframes star-twinkle {
-    0%, 100% { opacity: 0.55; }
-    50%      { opacity: 0.35; }
+    0%,
+    100% {
+      opacity: 0.55;
+    }
+    50% {
+      opacity: 0.35;
+    }
   }
 
   /* === Globe sphere outline + country borders === */
@@ -1068,7 +1027,9 @@ void venueByCity;
     stroke-opacity: 0.65;
     stroke-width: 0.9;
     stroke-linejoin: round;
-    transition: fill-opacity 120ms ease, stroke-opacity 120ms ease;
+    transition:
+      fill-opacity 120ms ease,
+      stroke-opacity 120ms ease;
   }
   .earth-map__country:hover {
     fill-opacity: 1;
@@ -1121,11 +1082,17 @@ void venueByCity;
     will-change: transform;
   }
   @keyframes earth-rotate {
-    from { transform: rotate(0deg); }
-    to   { transform: rotate(360deg); }
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
   }
   @media (prefers-reduced-motion: reduce) {
-    .earth-map__countries { animation: none; }
+    .earth-map__countries {
+      animation: none;
+    }
   }
 
   /* v7.7.6 — night-side dim. Drawn as a path on the sphere outline
@@ -1174,9 +1141,15 @@ void venueByCity;
     transform-origin: center;
     transform-box: fill-box;
   }
-  .earth-map__pulse:nth-child(1) { animation-delay: 0s; }
-  .earth-map__pulse:nth-child(2) { animation-delay: 0.6s; }
-  .earth-map__pulse:nth-child(3) { animation-delay: 1.2s; }
+  .earth-map__pulse:nth-child(1) {
+    animation-delay: 0s;
+  }
+  .earth-map__pulse:nth-child(2) {
+    animation-delay: 0.6s;
+  }
+  .earth-map__pulse:nth-child(3) {
+    animation-delay: 1.2s;
+  }
   .earth-map__dot {
     fill: var(--c-primary-2);
     stroke: var(--c-primary-2-light);
@@ -1241,18 +1214,37 @@ void venueByCity;
     animation: arc-draw 1.6s var(--j-ease-out) forwards;
     animation-delay: calc(var(--i, 0) * 60ms + 800ms);
   }
-  .earth-map__arc--pos { stroke: var(--c-amber); }
-  .earth-map__arc--neg { stroke: var(--c-ink-3); }
-  .earth-map__arc--neutral { stroke: var(--c-ink-4); }
+  .earth-map__arc--pos {
+    stroke: var(--c-amber);
+  }
+  .earth-map__arc--neg {
+    stroke: var(--c-ink-3);
+  }
+  .earth-map__arc--neutral {
+    stroke: var(--c-ink-4);
+  }
   @keyframes arc-draw {
-    to { stroke-dashoffset: 0; }
+    to {
+      stroke-dashoffset: 0;
+    }
   }
 
   /* === Layer C — GDELT (severity-weighted, polarity-tinted) === */
-  .earth-map__gdelt { stroke: none; }
-  .earth-map__gdelt--pos { fill: var(--c-amber); opacity: 0.65; }
-  .earth-map__gdelt--neg { fill: var(--c-ink-2); opacity: 0.55; }
-  .earth-map__gdelt--neutral { fill: var(--c-ink-3); opacity: 0.4; }
+  .earth-map__gdelt {
+    stroke: none;
+  }
+  .earth-map__gdelt--pos {
+    fill: var(--c-amber);
+    opacity: 0.65;
+  }
+  .earth-map__gdelt--neg {
+    fill: var(--c-ink-2);
+    opacity: 0.55;
+  }
+  .earth-map__gdelt--neutral {
+    fill: var(--c-ink-3);
+    opacity: 0.4;
+  }
 
   /* === Layer F — terminator === */
   .earth-map__day-wash {
@@ -1267,7 +1259,11 @@ void venueByCity;
     opacity: 0.8;
     pointer-events: none;
   }
-  .earth-map__subsolar { fill: var(--c-amber); stroke: var(--c-bg); stroke-width: 1; }
+  .earth-map__subsolar {
+    fill: var(--c-amber);
+    stroke: var(--c-bg);
+    stroke-width: 1;
+  }
   .earth-map__subsolar-pulse {
     fill: none;
     stroke: var(--c-amber);
@@ -1278,15 +1274,23 @@ void venueByCity;
     animation: subsolar-pulse 3.6s ease-out infinite;
   }
   @keyframes subsolar-pulse {
-    0%   { transform: scale(0.5); opacity: 0.7; }
-    100% { transform: scale(2.4); opacity: 0; }
+    0% {
+      transform: scale(0.5);
+      opacity: 0.7;
+    }
+    100% {
+      transform: scale(2.4);
+      opacity: 0;
+    }
   }
 
   /* === Layer D — arXiv + WIRE markers === */
   .earth-map__live {
     stroke: var(--c-bg);
     stroke-width: 0.6;
-    transition: stroke 120ms ease, stroke-width 120ms ease;
+    transition:
+      stroke 120ms ease,
+      stroke-width 120ms ease;
     cursor: help;
   }
   .earth-map__live--arxiv {
@@ -1307,9 +1311,18 @@ void venueByCity;
     transform-box: fill-box;
   }
   @keyframes earth-marker-focus {
-    0%   { stroke-opacity: 0.4; transform: scale(1); }
-    35%  { stroke-opacity: 1;   transform: scale(1.6); }
-    100% { stroke-opacity: 0;   transform: scale(2.2); }
+    0% {
+      stroke-opacity: 0.4;
+      transform: scale(1);
+    }
+    35% {
+      stroke-opacity: 1;
+      transform: scale(1.6);
+    }
+    100% {
+      stroke-opacity: 0;
+      transform: scale(2.2);
+    }
   }
 
   /* === v7.8.1 side-drawer click-to-dive focus panel ===
@@ -1335,8 +1348,14 @@ void venueByCity;
     display: none;
   }
   @keyframes earth-focus-in {
-    from { transform: translateX(calc(100% + var(--j-sp-3))); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
+    from {
+      transform: translateX(calc(100% + var(--j-sp-3)));
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
   }
   /* === Mobile ≤ 720px — full-width bottom-sheet === */
   @media (max-width: 720px) {
@@ -1354,8 +1373,14 @@ void venueByCity;
       animation: earth-focus-in-bottom var(--j-dur-slow) var(--j-ease-out) both;
     }
     @keyframes earth-focus-in-bottom {
-      from { transform: translateY(100%); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
+      from {
+        transform: translateY(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
     }
   }
   .earth-map__focus-head {
@@ -1536,8 +1561,12 @@ void venueByCity;
     letter-spacing: 0.04em;
     margin-left: 4px;
   }
-  .earth-map__cap-section--f { color: var(--c-amber); }
-  .earth-map__cap-sep { color: var(--c-ink-4); }
+  .earth-map__cap-section--f {
+    color: var(--c-amber);
+  }
+  .earth-map__cap-sep {
+    color: var(--c-ink-4);
+  }
 
   /* === last-sync chrome (right-side cluster, preserved) === */
   .earth-map__cap-sync {
@@ -1558,9 +1587,15 @@ void venueByCity;
     letter-spacing: 0.14em;
     line-height: 1.4;
   }
-  .earth-map__cap-badge--live { color: var(--c-warn); }
-  .earth-map__cap-badge--fallback { color: var(--c-ink-3); }
-  .earth-map__cap-sync-text { color: var(--c-ink-3); }
+  .earth-map__cap-badge--live {
+    color: var(--c-warn);
+  }
+  .earth-map__cap-badge--fallback {
+    color: var(--c-ink-3);
+  }
+  .earth-map__cap-sync-text {
+    color: var(--c-ink-3);
+  }
   .earth-map__cap-sync-ago {
     color: var(--c-ink);
     font-variant-numeric: tabular-nums;
@@ -1595,8 +1630,12 @@ void venueByCity;
       animation: none;
       opacity: 1;
     }
-    .earth-map__stars { opacity: 0.6; }
-    .earth-map__arc { stroke-dashoffset: 0; }
+    .earth-map__stars {
+      opacity: 0.6;
+    }
+    .earth-map__arc {
+      stroke-dashoffset: 0;
+    }
   }
 </style>
 
@@ -1673,11 +1712,13 @@ void venueByCity;
         lat: Number(country.dataset.countryLat ?? '0'),
         lon: Number(country.dataset.countryLon ?? '0'),
       };
-      window.dispatchEvent(new CustomEvent<CountryFocusDetail>('earth:country-focus', {
-        detail,
-        bubbles: true,
-        composed: true,
-      }));
+      window.dispatchEvent(
+        new CustomEvent<CountryFocusDetail>('earth:country-focus', {
+          detail,
+          bubbles: true,
+          composed: true,
+        }),
+      );
       return;
     }
     const venue = target.closest<SVGGElement>('[data-venue-city]');
@@ -1688,11 +1729,13 @@ void venueByCity;
       lon: Number(venue.dataset.venueLon ?? '0'),
       caption: venue.dataset.venueCaption ?? 'research venue',
     };
-    window.dispatchEvent(new CustomEvent<VenueFocusDetail>('earth:venue-focus', {
-      detail,
-      bubbles: true,
-      composed: true,
-    }));
+    window.dispatchEvent(
+      new CustomEvent<VenueFocusDetail>('earth:venue-focus', {
+        detail,
+        bubbles: true,
+        composed: true,
+      }),
+    );
   };
 
   svg?.addEventListener('click', (event: MouseEvent) => {
@@ -1761,9 +1804,7 @@ void venueByCity;
   window.addEventListener('earth:venue-focus', (event: Event) => {
     const detail = (event as CustomEvent<VenueFocusDetail>).detail;
     if (!detail || !svg) return;
-    const venue = svg.querySelector<SVGGElement>(
-      `[data-venue-city="${CSS.escape(detail.city)}"]`,
-    );
+    const venue = svg.querySelector<SVGGElement>(`[data-venue-city="${CSS.escape(detail.city)}"]`);
     if (!venue) return;
     const data = venue.dataset;
     if (focusKind) focusKind.textContent = 'VENUE FOCUS';
@@ -1778,12 +1819,16 @@ void venueByCity;
   });
 
   closeButton?.addEventListener('click', closePanel);
-  document.addEventListener('click', (event: MouseEvent) => {
-    if (!panel || panel.hidden || !(event.target instanceof Element)) return;
-    if (panel.contains(event.target)) return;
-    if (event.target.closest('.earth-map__country-hitbox, .earth-map__venue')) return;
-    closePanel();
-  }, true);
+  document.addEventListener(
+    'click',
+    (event: MouseEvent) => {
+      if (!panel || panel.hidden || !(event.target instanceof Element)) return;
+      if (panel.contains(event.target)) return;
+      if (event.target.closest('.earth-map__country-hitbox, .earth-map__venue')) return;
+      closePanel();
+    },
+    true,
+  );
   document.addEventListener('keydown', (event: KeyboardEvent) => {
     if (event.key === 'Escape') closePanel();
   });
@@ -1861,14 +1906,18 @@ void venueByCity;
       const ns = 'http://www.w3.org/2000/svg';
       const frag = document.createDocumentFragment();
       const now = new Date();
-      const subLat = ((now.getMonth() > 2 || now.getMonth() < 9 ? 1 : -1) * 23.5 * Math.cos((2 * Math.PI * (now.getMonth() < 3 ? now.getMonth() + 9 : now.getMonth() - 3)) / 12));
+      const subLat =
+        (now.getMonth() > 2 || now.getMonth() < 9 ? 1 : -1) *
+        23.5 *
+        Math.cos(
+          (2 * Math.PI * (now.getMonth() < 3 ? now.getMonth() + 9 : now.getMonth() - 3)) / 12,
+        );
       const subLon = -(now.getUTCHours() - 12) * 15;
       const toRad = Math.PI / 180;
       const lightFor = (lat: number, lon: number): string => {
         const rel =
           Math.sin(lat * toRad) * Math.sin(subLat * toRad) +
-          Math.cos(lat * toRad) * Math.cos(subLat * toRad) *
-            Math.cos((lon - subLon) * toRad);
+          Math.cos(lat * toRad) * Math.cos(subLat * toRad) * Math.cos((lon - subLon) * toRad);
         if (rel > 0.25) return 'DAY';
         if (rel < -0.25) return 'NIGHT';
         return 'TERMINATOR';
@@ -1895,13 +1944,17 @@ void venueByCity;
       countriesTarget.appendChild(frag);
       // Re-attach hover listeners to the newly-injected hitboxes.
       const HOVER_TARGET_SELECTOR = '.earth-map__country-hitbox, .earth-map__venue';
-      countriesTarget.querySelectorAll<SVGPathElement>('.earth-map__country-hitbox').forEach((el) => {
-        el.addEventListener('mouseenter', () => el.setAttribute('data-hover', '1'));
-        el.addEventListener('mouseleave', () => el.removeAttribute('data-hover'));
-        el.addEventListener('focus', () => el.setAttribute('data-hover', '1'));
-        el.addEventListener('blur', () => el.removeAttribute('data-hover'));
-        el.addEventListener('touchstart', () => el.setAttribute('data-hover', '1'), { passive: true });
-      });
+      countriesTarget
+        .querySelectorAll<SVGPathElement>('.earth-map__country-hitbox')
+        .forEach((el) => {
+          el.addEventListener('mouseenter', () => el.setAttribute('data-hover', '1'));
+          el.addEventListener('mouseleave', () => el.removeAttribute('data-hover'));
+          el.addEventListener('focus', () => el.setAttribute('data-hover', '1'));
+          el.addEventListener('blur', () => el.removeAttribute('data-hover'));
+          el.addEventListener('touchstart', () => el.setAttribute('data-hover', '1'), {
+            passive: true,
+          });
+        });
       void HOVER_TARGET_SELECTOR;
     };
     const start = (): void => {

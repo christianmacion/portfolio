@@ -167,7 +167,9 @@ const secondarySymbol = 'BTC-USD';
           <li>
             <span class="kg-callout__num mono">02</span>
             <span class="kg-callout__k">Signal lineage</span>
-            <span class="kg-callout__v">alpha factor → backtest → forward test → production → P&amp;L</span>
+            <span class="kg-callout__v"
+              >alpha factor → backtest → forward test → production → P&amp;L</span
+            >
           </li>
           <li>
             <span class="kg-callout__num mono">03</span>
@@ -674,7 +676,9 @@ const secondarySymbol = 'BTC-USD';
     font: 500 0.82rem / 1 var(--ff-mono);
     letter-spacing: 0.05em;
     text-decoration: none;
-    transition: background 0.2s ease, color 0.2s ease;
+    transition:
+      background 0.2s ease,
+      color 0.2s ease;
   }
   .kg-callout__cta:hover {
     background: var(--c-violet, #a07baf);
@@ -689,42 +693,91 @@ const secondarySymbol = 'BTC-USD';
   .mk-band__indices-row,
   .kg-callout__list li,
   .mk-terminal__panel {
-    animation: mk-rise 0.6s cubic-bezier(.4,.7,.3,1) backwards;
+    animation: mk-rise 0.6s cubic-bezier(0.4, 0.7, 0.3, 1) backwards;
     opacity: 0;
   }
-  .mk-stats__cell:nth-child(1) { animation-delay: 60ms; }
-  .mk-stats__cell:nth-child(2) { animation-delay: 160ms; }
-  .mk-stats__cell:nth-child(3) { animation-delay: 260ms; }
-  .mk-stats__cell:nth-child(4) { animation-delay: 360ms; }
-  .kg-callout__list li:nth-child(1) { animation-delay: 80ms; }
-  .kg-callout__list li:nth-child(2) { animation-delay: 200ms; }
-  .kg-callout__list li:nth-child(3) { animation-delay: 320ms; }
-  .kg-callout__list li:nth-child(4) { animation-delay: 440ms; }
-  .mk-terminal__panel--book:nth-of-type(1) { animation-delay: 100ms; }
-  .mk-terminal__panel--chart { animation-delay: 220ms; }
-  .mk-terminal__panel--book:nth-of-type(2) { animation-delay: 340ms; }
+  .mk-stats__cell:nth-child(1) {
+    animation-delay: 60ms;
+  }
+  .mk-stats__cell:nth-child(2) {
+    animation-delay: 160ms;
+  }
+  .mk-stats__cell:nth-child(3) {
+    animation-delay: 260ms;
+  }
+  .mk-stats__cell:nth-child(4) {
+    animation-delay: 360ms;
+  }
+  .kg-callout__list li:nth-child(1) {
+    animation-delay: 80ms;
+  }
+  .kg-callout__list li:nth-child(2) {
+    animation-delay: 200ms;
+  }
+  .kg-callout__list li:nth-child(3) {
+    animation-delay: 320ms;
+  }
+  .kg-callout__list li:nth-child(4) {
+    animation-delay: 440ms;
+  }
+  .mk-terminal__panel--book:nth-of-type(1) {
+    animation-delay: 100ms;
+  }
+  .mk-terminal__panel--chart {
+    animation-delay: 220ms;
+  }
+  .mk-terminal__panel--book:nth-of-type(2) {
+    animation-delay: 340ms;
+  }
   @keyframes mk-rise {
-    from { opacity: 0; transform: translateY(12px); }
-    to   { opacity: 1; transform: none; }
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
   }
 
   /* Indices list rows: each row gets a slight flicker to suggest the
      data is being read. 2.6s loop, staggered. */
   .mk-band__indices-row {
-    animation: mk-row-in 0.6s cubic-bezier(.4,.7,.3,1) backwards,
-               mk-row-flash 8.4s ease-in-out infinite 1.2s;
+    animation:
+      mk-row-in 0.6s cubic-bezier(0.4, 0.7, 0.3, 1) backwards,
+      mk-row-flash 8.4s ease-in-out infinite 1.2s;
   }
-  .mk-band__indices-row:nth-child(1) { animation-delay: 100ms, 1.2s; }
-  .mk-band__indices-row:nth-child(2) { animation-delay: 200ms, 3.8s; }
-  .mk-band__indices-row:nth-child(3) { animation-delay: 300ms, 6.4s; }
-  .mk-band__indices-row:nth-child(4) { animation-delay: 400ms, 9.0s; }
+  .mk-band__indices-row:nth-child(1) {
+    animation-delay: 100ms, 1.2s;
+  }
+  .mk-band__indices-row:nth-child(2) {
+    animation-delay: 200ms, 3.8s;
+  }
+  .mk-band__indices-row:nth-child(3) {
+    animation-delay: 300ms, 6.4s;
+  }
+  .mk-band__indices-row:nth-child(4) {
+    animation-delay: 400ms, 9s;
+  }
   @keyframes mk-row-in {
-    from { opacity: 0; transform: translateY(8px); }
-    to   { opacity: 1; transform: none; }
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
   }
   @keyframes mk-row-flash {
-    0%, 100% { background: transparent; }
-    8%, 12% { background: color-mix(in oklab, var(--c-amber) 12%, transparent); }
+    0%,
+    100% {
+      background: transparent;
+    }
+    8%,
+    12% {
+      background: color-mix(in oklab, var(--c-amber) 12%, transparent);
+    }
   }
 
   /* Book ladder rows: stat rows in the order book already draw their
@@ -733,10 +786,17 @@ const secondarySymbol = 'BTC-USD';
   .book__row--bid:first-child {
     animation: book-edge 3.2s ease-in-out infinite;
   }
-  .book__row--ask:first-child { animation-delay: 0s; }
-  .book__row--bid:first-child { animation-delay: 1.6s; }
+  .book__row--ask:first-child {
+    animation-delay: 0s;
+  }
+  .book__row--bid:first-child {
+    animation-delay: 1.6s;
+  }
   @keyframes book-edge {
-    0%, 100% { background: transparent; }
+    0%,
+    100% {
+      background: transparent;
+    }
     50% {
       background: color-mix(in oklab, var(--c-amber) 16%, transparent);
     }
@@ -747,8 +807,13 @@ const secondarySymbol = 'BTC-USD';
     animation: kg-chip-pulse 3.6s ease-in-out infinite;
   }
   @keyframes kg-chip-pulse {
-    0%, 100% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--c-violet, #a07baf) 0%, transparent); }
-    50% { box-shadow: 0 0 0 4px color-mix(in oklab, var(--c-violet, #a07baf) 28%, transparent); }
+    0%,
+    100% {
+      box-shadow: 0 0 0 0 color-mix(in oklab, var(--c-violet, #a07baf) 0%, transparent);
+    }
+    50% {
+      box-shadow: 0 0 0 4px color-mix(in oklab, var(--c-violet, #a07baf) 28%, transparent);
+    }
   }
 
   /* Reduced motion */

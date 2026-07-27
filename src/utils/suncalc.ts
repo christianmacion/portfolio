@@ -46,15 +46,14 @@ export function solarDeclination(d: Date): number {
   // Days since J2000.0
   const jd = d.getTime() / 86_400_000 + 2_451_545.0 - 1_097.5;
   // Mean longitude of the sun (degrees)
-  const L = (280.460 + 0.985_6474 * jd) % 360;
+  const L = (280.46 + 0.985_6474 * jd) % 360;
   // Mean anomaly (degrees)
   const g = ((357.528 + 0.985_6003 * jd) % 360) * (Math.PI / 180);
   // Ecliptic longitude (degrees)
-  const lambda = (L + 1.915 * Math.sin(g) + 0.020 * Math.sin(2 * g)) * (Math.PI / 180);
+  const lambda = (L + 1.915 * Math.sin(g) + 0.02 * Math.sin(2 * g)) * (Math.PI / 180);
   // Declination
   const delta =
-    Math.asin(Math.sin(ECLIPTIC_OBLIQUITY * (Math.PI / 180)) * Math.sin(lambda)) *
-    (180 / Math.PI);
+    Math.asin(Math.sin(ECLIPTIC_OBLIQUITY * (Math.PI / 180)) * Math.sin(lambda)) * (180 / Math.PI);
   return delta;
 }
 
@@ -64,10 +63,7 @@ export function solarDeclination(d: Date): number {
  * Noon at the subsolar longitude.
  */
 export function subsolarLongitude(d: Date): number {
-  const fractionalDay =
-    (d.getUTCHours() +
-      d.getUTCMinutes() / 60 +
-      d.getUTCSeconds() / 3600) / 24;
+  const fractionalDay = (d.getUTCHours() + d.getUTCMinutes() / 60 + d.getUTCSeconds() / 3600) / 24;
   // Shift so that noon UTC ≈ 0°: noon occurs when fractionalDay = 0.5
   const lon = (0.5 - fractionalDay) * 360;
   // Wrap to (-180, 180]

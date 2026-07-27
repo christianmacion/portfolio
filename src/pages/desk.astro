@@ -82,13 +82,25 @@ const CATEGORY_LABELS: Record<WorldEventEntry['category'], string> = {
   'data-release': 'DAT',
   fx: 'FX',
 };
-const CATEGORY_ORDER: WorldEventEntry['category'][] = ['central-bank', 'earnings', 'geopolitical', 'data-release', 'fx'];
+const CATEGORY_ORDER: WorldEventEntry['category'][] = [
+  'central-bank',
+  'earnings',
+  'geopolitical',
+  'data-release',
+  'fx',
+];
 const SEVERITY_ORDER: WorldEventEntry['severity'][] = ['critical', 'moderate', 'mild'];
 const categoryCounts: Record<WorldEventEntry['category'], number> = {
-  'central-bank': 0, earnings: 0, geopolitical: 0, 'data-release': 0, fx: 0,
+  'central-bank': 0,
+  earnings: 0,
+  geopolitical: 0,
+  'data-release': 0,
+  fx: 0,
 };
 const severityCounts: Record<WorldEventEntry['severity'], number> = {
-  critical: 0, moderate: 0, mild: 0,
+  critical: 0,
+  moderate: 0,
+  mild: 0,
 };
 const cityCountsMap: Map<string, number> = new Map();
 for (const e of events) {
@@ -164,10 +176,12 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     </div>
   </header>
 
-  {/* === 3. KPI strip — 6 count-up cells (v7.8.0 expanded) ===
+  {
+    /* === 3. KPI strip — 6 count-up cells (v7.8.0 expanded) ===
        Was 4 cells with "6 venues" hardcoded. Now reads the live
        INSTITUTION_STATS aggregator: 56 venues across 6 continents,
-       T1/T2/T3 split, signal count, world events, desk timezone. */}
+       T1/T2/T3 split, signal count, world events, desk timezone. */
+  }
   <section class="desk-stats" aria-label="Coverage statistics" data-reveal>
     <div class="container">
       <p class="desk-stats__eyebrow mono">24H COVERAGE · DETERMINISTIC SNAPSHOT</p>
@@ -217,7 +231,11 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
   <Marquee
     items={[
       { head: 'PUBLIC-DATA', tail: 'GDPR-CLEAN · REPRODUCIBLE', accent: 'sage' },
-      { head: 'EVAL-FIRST', tail: `${profile.stats.evalGates} GATES · EXIT-0 CONTRACT`, accent: 'warn' },
+      {
+        head: 'EVAL-FIRST',
+        tail: `${profile.stats.evalGates} GATES · EXIT-0 CONTRACT`,
+        accent: 'warn',
+      },
       { head: '24H SCAN', tail: '6 VENUES · 10 EVENTS · 100+ SIGNALS', accent: 'sage' },
       { head: 'TIMEZONE-AWARE', tail: 'UTC+8 DESK · 3/24 OVERLAP', accent: 'violet' },
       { head: 'REGIME-TAGGED', tail: 'CALM · NORMAL · STRESS', accent: 'terracotta' },
@@ -248,29 +266,33 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
         <div class="desk-map__corner desk-map__corner--br" aria-hidden="true"></div>
         <EarthMap width={600} height={600} />
       </div>
-      {/* v7.8.0 — research-power readout beneath the globe.
+      {
+        /* v7.8.0 — research-power readout beneath the globe.
          Tells the viewer: "this is the research capacity anchored to
          each continent, this is the wire/news floor, this is the
-         signal density coming out of each region." Story-driven. */}
+         signal density coming out of each region." Story-driven. */
+      }
       <div class="desk-research" aria-label="Research power and signal distribution">
         <div class="desk-research__col">
           <p class="desk-research__eyebrow mono">RESEARCH POWER · BY CONTINENT</p>
           <ul class="desk-research__bars">
-            {Object.entries(INSTITUTION_STATS.byContinent)
-              .sort((a, b) => b[1] - a[1])
-              .map(([continent, count]) => {
-                const max = Math.max(...Object.values(INSTITUTION_STATS.byContinent));
-                const pct = Math.round((count / max) * 100);
-                return (
-                  <li class="desk-research__bar">
-                    <span class="desk-research__bar-lbl mono">{continent}</span>
-                    <span class="desk-research__bar-track" aria-hidden="true">
-                      <span class="desk-research__bar-fill" style={`--pct: ${pct}%`}></span>
-                    </span>
-                    <span class="desk-research__bar-num mono">{count}</span>
-                  </li>
-                );
-              })}
+            {
+              Object.entries(INSTITUTION_STATS.byContinent)
+                .sort((a, b) => b[1] - a[1])
+                .map(([continent, count]) => {
+                  const max = Math.max(...Object.values(INSTITUTION_STATS.byContinent));
+                  const pct = Math.round((count / max) * 100);
+                  return (
+                    <li class="desk-research__bar">
+                      <span class="desk-research__bar-lbl mono">{continent}</span>
+                      <span class="desk-research__bar-track" aria-hidden="true">
+                        <span class="desk-research__bar-fill" style={`--pct: ${pct}%`} />
+                      </span>
+                      <span class="desk-research__bar-num mono">{count}</span>
+                    </li>
+                  );
+                })
+            }
           </ul>
         </div>
         <div class="desk-research__col">
@@ -281,46 +303,70 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
               <span class="desk-research__bar-track" aria-hidden="true">
                 <span class="desk-research__bar-fill" style={`--pct: 100%`}></span>
               </span>
-              <span class="desk-research__bar-num mono">{INSTITUTION_STATS.byFocus['q-fin'] || 0}</span>
+              <span class="desk-research__bar-num mono"
+                >{INSTITUTION_STATS.byFocus['q-fin'] || 0}</span
+              >
             </li>
             <li class="desk-research__bar">
               <span class="desk-research__bar-lbl mono">cs-ai</span>
               <span class="desk-research__bar-track" aria-hidden="true">
-                <span class="desk-research__bar-fill" style={`--pct: ${Math.round(((INSTITUTION_STATS.byFocus['cs-ai'] || 0) / (INSTITUTION_STATS.byFocus['q-fin'] || 1)) * 100)}%`}></span>
+                <span
+                  class="desk-research__bar-fill"
+                  style={`--pct: ${Math.round(((INSTITUTION_STATS.byFocus['cs-ai'] || 0) / (INSTITUTION_STATS.byFocus['q-fin'] || 1)) * 100)}%`}
+                ></span>
               </span>
-              <span class="desk-research__bar-num mono">{INSTITUTION_STATS.byFocus['cs-ai'] || 0}</span>
+              <span class="desk-research__bar-num mono"
+                >{INSTITUTION_STATS.byFocus['cs-ai'] || 0}</span
+              >
             </li>
             <li class="desk-research__bar">
               <span class="desk-research__bar-lbl mono">cs-lg</span>
               <span class="desk-research__bar-track" aria-hidden="true">
-                <span class="desk-research__bar-fill" style={`--pct: ${Math.round(((INSTITUTION_STATS.byFocus['cs-lg'] || 0) / (INSTITUTION_STATS.byFocus['q-fin'] || 1)) * 100)}%`}></span>
+                <span
+                  class="desk-research__bar-fill"
+                  style={`--pct: ${Math.round(((INSTITUTION_STATS.byFocus['cs-lg'] || 0) / (INSTITUTION_STATS.byFocus['q-fin'] || 1)) * 100)}%`}
+                ></span>
               </span>
-              <span class="desk-research__bar-num mono">{INSTITUTION_STATS.byFocus['cs-lg'] || 0}</span>
+              <span class="desk-research__bar-num mono"
+                >{INSTITUTION_STATS.byFocus['cs-lg'] || 0}</span
+              >
             </li>
             <li class="desk-research__bar">
               <span class="desk-research__bar-lbl mono">cs-cl</span>
               <span class="desk-research__bar-track" aria-hidden="true">
-                <span class="desk-research__bar-fill" style={`--pct: ${Math.round(((INSTITUTION_STATS.byFocus['cs-cl'] || 0) / (INSTITUTION_STATS.byFocus['q-fin'] || 1)) * 100)}%`}></span>
+                <span
+                  class="desk-research__bar-fill"
+                  style={`--pct: ${Math.round(((INSTITUTION_STATS.byFocus['cs-cl'] || 0) / (INSTITUTION_STATS.byFocus['q-fin'] || 1)) * 100)}%`}
+                ></span>
               </span>
-              <span class="desk-research__bar-num mono">{INSTITUTION_STATS.byFocus['cs-cl'] || 0}</span>
+              <span class="desk-research__bar-num mono"
+                >{INSTITUTION_STATS.byFocus['cs-cl'] || 0}</span
+              >
             </li>
             <li class="desk-research__bar">
               <span class="desk-research__bar-lbl mono">stat</span>
               <span class="desk-research__bar-track" aria-hidden="true">
-                <span class="desk-research__bar-fill" style={`--pct: ${Math.round(((INSTITUTION_STATS.byFocus['stat'] || 0) / (INSTITUTION_STATS.byFocus['q-fin'] || 1)) * 100)}%`}></span>
+                <span
+                  class="desk-research__bar-fill"
+                  style={`--pct: ${Math.round(((INSTITUTION_STATS.byFocus['stat'] || 0) / (INSTITUTION_STATS.byFocus['q-fin'] || 1)) * 100)}%`}
+                ></span>
               </span>
-              <span class="desk-research__bar-num mono">{INSTITUTION_STATS.byFocus['stat'] || 0}</span>
+              <span class="desk-research__bar-num mono"
+                >{INSTITUTION_STATS.byFocus['stat'] || 0}</span
+              >
             </li>
           </ul>
         </div>
         <div class="desk-research__col desk-research__col--story">
           <p class="desk-research__eyebrow mono">WHAT THIS EARTH SEES</p>
           <p class="desk-research__story">
-            <strong>{t1Count} T1 institutions</strong> across <strong>{continents} continents</strong>
+            <strong>{t1Count} T1 institutions</strong> across <strong
+              >{continents} continents</strong
+            >
             anchor the research-side of the desk. arxiv papers and macro-wire headlines land on these
-            cities via deterministic hash. The {gdeltItems}-point GDELT overlay is the
-            news-side: where things are <em>moving right now</em>, rendered with polarity + severity.
-            Click any country or venue to dive.
+            cities via deterministic hash. The {gdeltItems}-point GDELT overlay is the news-side:
+            where things are <em>moving right now</em>, rendered with polarity + severity. Click any
+            country or venue to dive.
           </p>
         </div>
       </div>
@@ -344,57 +390,86 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
             {events.length} VISIBLE
           </span>
         </summary>
-      <div class="desk-events__filters" role="toolbar" aria-label="Filter desk events">
-        <div class="desk-events__chips" role="group" aria-label="Category filter">
-          <span class="desk-events__chip-label mono">CAT ·</span>
-          <button type="button" class="desk-events__chip-btn desk-events__chip-btn--active" data-desk-cat="all">ALL ({events.length})</button>
-          {CATEGORY_ORDER.map((c) => (
+        <div class="desk-events__filters" role="toolbar" aria-label="Filter desk events">
+          <div class="desk-events__chips" role="group" aria-label="Category filter">
+            <span class="desk-events__chip-label mono">CAT ·</span>
             <button
               type="button"
-              class="desk-events__chip-btn"
-              data-desk-cat={c}
-              disabled={categoryCounts[c] === 0}
-            >{CATEGORY_LABELS[c]} ({categoryCounts[c]})</button>
-          ))}
-        </div>
-        <div class="desk-events__chips" role="group" aria-label="Severity filter">
-          <span class="desk-events__chip-label mono">SEV ·</span>
-          <button type="button" class="desk-events__chip-btn desk-events__chip-btn--active" data-desk-sev="all">ALL ({events.length})</button>
-          {SEVERITY_ORDER.map((s) => (
+              class="desk-events__chip-btn desk-events__chip-btn--active"
+              data-desk-cat="all">ALL ({events.length})</button
+            >
+            {
+              CATEGORY_ORDER.map((c) => (
+                <button
+                  type="button"
+                  class="desk-events__chip-btn"
+                  data-desk-cat={c}
+                  disabled={categoryCounts[c] === 0}
+                >
+                  {CATEGORY_LABELS[c]} ({categoryCounts[c]})
+                </button>
+              ))
+            }
+          </div>
+          <div class="desk-events__chips" role="group" aria-label="Severity filter">
+            <span class="desk-events__chip-label mono">SEV ·</span>
             <button
               type="button"
-              class="desk-events__chip-btn desk-events__chip-btn--{s}"
-              data-desk-sev={s}
-              disabled={severityCounts[s] === 0}
-            >{s.toUpperCase()} ({severityCounts[s]})</button>
-          ))}
-        </div>
-        <div class="desk-events__chips" role="group" aria-label="City filter">
-          <span class="desk-events__chip-label mono">CITY ·</span>
-          <button type="button" class="desk-events__chip-btn desk-events__chip-btn--active" data-desk-city="all">ALL ({events.length})</button>
-          {topCities.map(({ city, count }) => (
+              class="desk-events__chip-btn desk-events__chip-btn--active"
+              data-desk-sev="all">ALL ({events.length})</button
+            >
+            {
+              SEVERITY_ORDER.map((s) => (
+                <button
+                  type="button"
+                  class="desk-events__chip-btn desk-events__chip-btn--{s}"
+                  data-desk-sev={s}
+                  disabled={severityCounts[s] === 0}
+                >
+                  {s.toUpperCase()} ({severityCounts[s]})
+                </button>
+              ))
+            }
+          </div>
+          <div class="desk-events__chips" role="group" aria-label="City filter">
+            <span class="desk-events__chip-label mono">CITY ·</span>
             <button
               type="button"
-              class="desk-events__chip-btn"
-              data-desk-city={city.toLowerCase()}
-            >{city.toUpperCase()} ({count})</button>
-          ))}
+              class="desk-events__chip-btn desk-events__chip-btn--active"
+              data-desk-city="all">ALL ({events.length})</button
+            >
+            {
+              topCities.map(({ city, count }) => (
+                <button
+                  type="button"
+                  class="desk-events__chip-btn"
+                  data-desk-city={city.toLowerCase()}
+                >
+                  {city.toUpperCase()} ({count})
+                </button>
+              ))
+            }
+          </div>
+          <p class="desk-events__count mono" data-desk-visible-count>
+            {events.length} VISIBLE
+          </p>
+          {/* v7.14 — COPY · LINK button (mirror /live v7.10) */}
+          <button
+            type="button"
+            class="desk-events__share-btn mono"
+            data-desk-share
+            title="Copy link with current filters"
+          >
+            COPY · LINK
+          </button>
         </div>
-        <p class="desk-events__count mono" data-desk-visible-count>
-          {events.length} VISIBLE
-        </p>
-        {/* v7.14 — COPY · LINK button (mirror /live v7.10) */}
-        <button type="button" class="desk-events__share-btn mono" data-desk-share title="Copy link with current filters">
-          COPY · LINK
-        </button>
-      </div>
       </details>
 
       <table class="desk-events__table">
         <caption class="sr-only">
-          Curated world events that the desk tracks on a 24-hour rolling basis —
-          central-bank policy meetings, scheduled data releases, geopolitical
-          windows, and earnings that move the position-book.
+          Curated world events that the desk tracks on a 24-hour rolling basis — central-bank policy
+          meetings, scheduled data releases, geopolitical windows, and earnings that move the
+          position-book.
         </caption>
         <colgroup>
           <col class="desk-events__col-num" />
@@ -430,7 +505,14 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
                   aria-controls={`event-${e.id}-detail`}
                 >
                   <td class="desk-events__num mono">
-                    <a class="desk-events__anchor" href={`#event-${e.id}`} aria-label={`Permalink for event ${e.id}`} onclick="event.stopPropagation()">#</a>
+                    <a
+                      class="desk-events__anchor"
+                      href={`#event-${e.id}`}
+                      aria-label={`Permalink for event ${e.id}`}
+                      onclick="event.stopPropagation()"
+                    >
+                      #
+                    </a>
                     {String(e.order).padStart(2, '0')}
                   </td>
                   <td class="desk-events__cat mono">{e.category}</td>
@@ -442,7 +524,9 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
                   <td class="desk-events__title-cell">{e.title}</td>
                   <td class="desk-events__city mono">
                     {e.city}
-                    <span class="desk-events__expand-hint mono" aria-hidden="true">▾</span>
+                    <span class="desk-events__expand-hint mono" aria-hidden="true">
+                      ▾
+                    </span>
                   </td>
                 </tr>
                 <tr
@@ -459,7 +543,9 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
                       </div>
                       <div class="desk-events__detail-row">
                         <dt>LAT/LON</dt>
-                        <dd>{e.lat.toFixed(2)}°, {e.lon.toFixed(2)}°</dd>
+                        <dd>
+                          {e.lat.toFixed(2)}°, {e.lon.toFixed(2)}°
+                        </dd>
                       </div>
                       <div class="desk-events__detail-row">
                         <dt>CATEGORY</dt>
@@ -471,7 +557,9 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
                       </div>
                       <div class="desk-events__detail-row">
                         <dt>ID</dt>
-                        <dd><code>{e.id}</code></dd>
+                        <dd>
+                          <code>{e.id}</code>
+                        </dd>
                       </div>
                     </dl>
                   </td>
@@ -631,15 +719,21 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     padding-top: 16px;
     position: relative;
     transition: border-color 0.2s ease;
-    animation: desk-stat-in 0.6s cubic-bezier(.4,.7,.3,1) backwards;
+    animation: desk-stat-in 0.6s cubic-bezier(0.4, 0.7, 0.3, 1) backwards;
     animation-delay: calc(var(--i, 0) * 100ms);
   }
   .desk-stats__cell:hover {
     border-top-color: var(--c-amber);
   }
   @keyframes desk-stat-in {
-    from { opacity: 0; transform: translateY(8px); }
-    to   { opacity: 1; transform: none; }
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
   }
   .desk-stats__num {
     font: 600 32px / 1 var(--serif-display);
@@ -781,7 +875,7 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
       var(--c-primary-2) 70%,
       var(--c-amber) 100%
     );
-    transition: width 0.6s cubic-bezier(.4,.7,.3,1);
+    transition: width 0.6s cubic-bezier(0.4, 0.7, 0.3, 1);
   }
   .desk-research__bar-num {
     font: 600 10px / 1 var(--ff-mono);
@@ -812,10 +906,30 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     border: 1px solid var(--c-ink);
     z-index: 2;
   }
-  .desk-map__corner--tl { top: 4px;    left: 4px;   border-right: none; border-bottom: none; }
-  .desk-map__corner--tr { top: 4px;    right: 4px;  border-left: none;  border-bottom: none; }
-  .desk-map__corner--bl { bottom: 4px; left: 4px;   border-right: none; border-top: none; }
-  .desk-map__corner--br { bottom: 4px; right: 4px;  border-left: none;  border-top: none; }
+  .desk-map__corner--tl {
+    top: 4px;
+    left: 4px;
+    border-right: none;
+    border-bottom: none;
+  }
+  .desk-map__corner--tr {
+    top: 4px;
+    right: 4px;
+    border-left: none;
+    border-bottom: none;
+  }
+  .desk-map__corner--bl {
+    bottom: 4px;
+    left: 4px;
+    border-right: none;
+    border-top: none;
+  }
+  .desk-map__corner--br {
+    bottom: 4px;
+    right: 4px;
+    border-left: none;
+    border-top: none;
+  }
   .desk-map__frame::before {
     content: '';
     position: absolute;
@@ -830,8 +944,13 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     z-index: 2;
   }
   @keyframes desk-map-glow {
-    0%, 100% { border-color: color-mix(in oklab, var(--c-amber) 0%, transparent); }
-    50%      { border-color: color-mix(in oklab, var(--c-amber) 8%, transparent); }
+    0%,
+    100% {
+      border-color: color-mix(in oklab, var(--c-amber) 0%, transparent);
+    }
+    50% {
+      border-color: color-mix(in oklab, var(--c-amber) 8%, transparent);
+    }
   }
   .desk-map__frame :global(svg) {
     width: 100%;
@@ -880,7 +999,7 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     vertical-align: top;
   }
   .desk-events__row {
-    animation: desk-row-in 0.5s cubic-bezier(.4,.7,.3,1) backwards;
+    animation: desk-row-in 0.5s cubic-bezier(0.4, 0.7, 0.3, 1) backwards;
     animation-delay: calc(var(--i, 0) * 90ms + 200ms);
     transition: background 0.2s ease;
     cursor: pointer;
@@ -892,7 +1011,7 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     outline: 2px solid var(--c-amber);
     outline-offset: -2px;
   }
-  .desk-events__row[data-desk-expanded="1"] {
+  .desk-events__row[data-desk-expanded='1'] {
     background: color-mix(in oklab, var(--c-amber) 6%, transparent);
   }
   .desk-events__expand-hint {
@@ -900,9 +1019,11 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     margin-left: 8px;
     font-size: 9px;
     color: var(--c-ink-4);
-    transition: transform 0.2s ease, color 0.2s ease;
+    transition:
+      transform 0.2s ease,
+      color 0.2s ease;
   }
-  .desk-events__row[data-desk-expanded="1"] .desk-events__expand-hint {
+  .desk-events__row[data-desk-expanded='1'] .desk-events__expand-hint {
     transform: rotate(180deg);
     color: var(--c-ink);
   }
@@ -943,12 +1064,24 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     color: var(--c-ink);
   }
   @keyframes desk-detail-in {
-    from { opacity: 0; transform: translateY(-4px); }
-    to   { opacity: 1; transform: none; }
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
   }
   @keyframes desk-row-in {
-    from { opacity: 0; transform: translateX(-12px); }
-    to   { opacity: 1; transform: none; }
+    from {
+      opacity: 0;
+      transform: translateX(-12px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
   }
   .desk-events__col-num {
     width: 36px;
@@ -990,8 +1123,13 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     color: var(--c-sage);
   }
   @keyframes desk-pill-pulse {
-    0%, 100% { opacity: 1; }
-    50%      { opacity: 0.6; }
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.6;
+    }
   }
   .desk-events__title-cell {
     font: 500 14px / 1.4 var(--ff-sans);
@@ -1058,7 +1196,9 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     text-transform: uppercase;
     user-select: none;
   }
-  .desk-events__filters-summary::-webkit-details-marker { display: none; }
+  .desk-events__filters-summary::-webkit-details-marker {
+    display: none;
+  }
   .desk-events__filters-summary::before {
     content: '▸ ';
     display: inline-block;
@@ -1101,7 +1241,7 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     color: var(--c-ink-2);
     padding: 4px 10px;
     font: 600 10px / 1.4 var(--ff-mono);
-    letter-spacing: 0.10em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     cursor: pointer;
     transition:
@@ -1126,12 +1266,27 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     opacity: 0.4;
     cursor: not-allowed;
   }
-  .desk-events__chip-btn--critical { color: #8a1f1f; border-color: rgba(138,31,31,0.4); }
-  .desk-events__chip-btn--critical:hover:not(:disabled) { background: rgba(138,31,31,0.06); }
-  .desk-events__chip-btn--moderate { color: #8a6a2d; border-color: rgba(138,106,45,0.4); }
-  .desk-events__chip-btn--moderate:hover:not(:disabled) { background: rgba(138,106,45,0.06); }
-  .desk-events__chip-btn--mild { color: #2d6b3a; border-color: rgba(45,107,58,0.4); }
-  .desk-events__chip-btn--mild:hover:not(:disabled) { background: rgba(45,107,58,0.06); }
+  .desk-events__chip-btn--critical {
+    color: #8a1f1f;
+    border-color: rgba(138, 31, 31, 0.4);
+  }
+  .desk-events__chip-btn--critical:hover:not(:disabled) {
+    background: rgba(138, 31, 31, 0.06);
+  }
+  .desk-events__chip-btn--moderate {
+    color: #8a6a2d;
+    border-color: rgba(138, 106, 45, 0.4);
+  }
+  .desk-events__chip-btn--moderate:hover:not(:disabled) {
+    background: rgba(138, 106, 45, 0.06);
+  }
+  .desk-events__chip-btn--mild {
+    color: #2d6b3a;
+    border-color: rgba(45, 107, 58, 0.4);
+  }
+  .desk-events__chip-btn--mild:hover:not(:disabled) {
+    background: rgba(45, 107, 58, 0.06);
+  }
   .desk-events__count {
     margin-left: auto;
     color: var(--c-ink-3);
@@ -1152,8 +1307,12 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
   .desk-events__row:focus-within .desk-events__anchor {
     opacity: 1;
   }
-  .desk-events__anchor:hover { color: var(--c-amber); }
-  .desk-events__row[data-desk-filtered="1"] { display: none; }
+  .desk-events__anchor:hover {
+    color: var(--c-amber);
+  }
+  .desk-events__row[data-desk-filtered='1'] {
+    display: none;
+  }
   .desk-events__share-btn {
     appearance: none;
     background: transparent;
@@ -1178,7 +1337,7 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     outline: 2px solid var(--c-amber);
     outline-offset: 1px;
   }
-  .desk-events__share-btn[data-copied="1"] {
+  .desk-events__share-btn[data-copied='1'] {
     border-color: var(--c-amber);
     color: var(--c-amber);
   }
@@ -1225,7 +1384,14 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     const c = sp.get('cat') ?? 'all';
     const s = sp.get('sev') ?? 'all';
     const city = sp.get('city') ?? 'all';
-    const validCat: CatKey[] = ['all', 'central-bank', 'earnings', 'geopolitical', 'data-release', 'fx'];
+    const validCat: CatKey[] = [
+      'all',
+      'central-bank',
+      'earnings',
+      'geopolitical',
+      'data-release',
+      'fx',
+    ];
     const validSev: SevKey[] = ['all', 'critical', 'moderate', 'mild'];
     activeCat = (validCat as string[]).includes(c) ? (c as CatKey) : 'all';
     activeSev = (validSev as string[]).includes(s) ? (s as SevKey) : 'all';
@@ -1233,9 +1399,12 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
   }
   function writeFilters(): void {
     const sp = new URLSearchParams(window.location.search);
-    if (activeCat !== 'all') sp.set('cat', activeCat); else sp.delete('cat');
-    if (activeSev !== 'all') sp.set('sev', activeSev); else sp.delete('sev');
-    if (activeCity !== 'all') sp.set('city', activeCity); else sp.delete('city');
+    if (activeCat !== 'all') sp.set('cat', activeCat);
+    else sp.delete('cat');
+    if (activeSev !== 'all') sp.set('sev', activeSev);
+    else sp.delete('sev');
+    if (activeCity !== 'all') sp.set('city', activeCity);
+    else sp.delete('city');
     const qs = sp.toString();
     const next = `${window.location.pathname}${qs ? '?' + qs : ''}${window.location.hash}`;
     history.replaceState(null, '', next);
@@ -1259,7 +1428,11 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     }
     if (counter) counter.textContent = `${visible} VISIBLE`;
   }
-  function setActiveButton(group: NodeListOf<HTMLButtonElement>, attr: string, value: string): void {
+  function setActiveButton(
+    group: NodeListOf<HTMLButtonElement>,
+    attr: string,
+    value: string,
+  ): void {
     for (const btn of group) {
       if ((btn.getAttribute(attr) ?? 'all') === value) {
         for (const other of group) other.classList.remove('desk-events__chip-btn--active');
@@ -1355,4 +1528,3 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     });
   }
 </script>
-
