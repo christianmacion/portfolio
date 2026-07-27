@@ -27,4 +27,5 @@ proof:
   - 'All projects on free public data — fully reproducible'
 tags: [deflated-sharpe, PBO, CSCV, walk-forward, block-bootstrap, multiple-testing]
 lane: 'quant'
+lastUpdated: 2026-07-26
 ---

@@ -27,4 +27,5 @@ proof:
   - 'Methodology declared in project README'
 tags: [crypto, stat-arb, funding-carry, cointegration, half-life]
 lane: 'quant'
+lastUpdated: 2026-07-26
 ---

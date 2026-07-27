@@ -7,6 +7,7 @@ lon: -77.04
 city: Washington, DC
 source: government statistics release
 order: 6
+lastUpdated: 2026-07-26
 ---
 
 Labour-market headline. Drives the recession-probability bars on every

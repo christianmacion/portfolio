@@ -7,6 +7,7 @@ lon: -122.03
 city: San Francisco
 source: earnings calendar
 order: 2
+lastUpdated: 2026-07-26
 ---
 
 Quarterly earnings from a high-beta mega-cap. The print drives the index

@@ -47,4 +47,5 @@ items:
   - { name: 'Crypto Trading Deep Dive', issuer: 'Binance Academy', year: 2024, tier: 2 }
   - { name: 'Introduction to Cryptocurrency Recovery', issuer: 'AnChain.AI', year: 2025, tier: 2 }
   - { name: 'Fundamentals of Blockchain', issuer: 'AnChain.AI', year: 2025, tier: 2 }
+lastUpdated: 2026-07-26
 ---

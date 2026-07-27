@@ -25,4 +25,5 @@ items:
   - { name: 'Software Development and Design Thinking', issuer: 'DICT', year: 2024, tier: 1 }
   - { name: 'Apply AI: Analyze Customer Reviews', issuer: 'Cisco', year: 2025, tier: 2 }
   - { name: 'Blockchain4Youth (B4Y-2026-000701)', issuer: 'Bitget', year: 2026, tier: 1 }
+lastUpdated: 2026-07-26
 ---

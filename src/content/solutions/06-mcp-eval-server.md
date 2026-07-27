@@ -26,4 +26,5 @@ proof:
   - 'Documented in AI portfolio README'
 tags: [MCP, eval-harness, multi-agent, contract-first]
 lane: 'ai'
+lastUpdated: 2026-07-26
 ---

@@ -7,6 +7,7 @@ lon: 2.35
 city: Paris
 source: multilateral policy statement
 order: 8
+lastUpdated: 2026-07-26
 ---
 
 Producer-nation framework statement. The brent prompt-month re-markets

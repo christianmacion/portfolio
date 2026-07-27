@@ -7,6 +7,7 @@ lon: -74.01
 city: New York
 source: government statistics release
 order: 5
+lastUpdated: 2026-07-26
 ---
 
 Headline consumer-price release. Breakeven inflation prints are the

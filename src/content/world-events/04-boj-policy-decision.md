@@ -7,6 +7,7 @@ lon: 139.69
 city: Tokyo
 source: central-bank press release
 order: 4
+lastUpdated: 2026-07-26
 ---
 
 Policy decision. The yen carry channel is the second-order trade every

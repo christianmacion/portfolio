@@ -7,6 +7,7 @@ lon: 72.88
 city: Mumbai
 source: earnings calendar
 order: 10
+lastUpdated: 2026-07-26
 ---
 
 Sovereign external coupon. Fixed-income books re-mark the periphery

@@ -52,4 +52,5 @@ items:
     sub: 'vol targeting · regime-aware exposure · DD-aware scaling'
     level: 4
     years: 2
+lastUpdated: 2026-07-26
 ---
