@@ -65,6 +65,14 @@ const workbooks = [
     summary:
       'The 5-rung spine as a beginner-friendly walkthrough. Prompt → skills → agents → loop → graph, with Karpathy autoresearch as the concrete case.',
     accent: 'amber',
+    chapters: [
+      { num: 1, name: 'The anatomy of a prompt', anchor: '#ch-1' },
+      { num: 2, name: 'Skills: packaging recurring work', anchor: '#ch-2' },
+      { num: 3, name: 'Agents: autonomous workers', anchor: '#ch-3' },
+      { num: 4, name: 'Loop engineering: the 5-must-have primitive', anchor: '#ch-4' },
+      { num: 5, name: 'Graph engineering: the integrating layer', anchor: '#ch-5' },
+      { num: 6, name: 'Operating the stack: cost, observability, scaling', anchor: '#ch-6' },
+    ],
   },
   {
     id: 'w2',
@@ -76,6 +84,15 @@ const workbooks = [
     summary:
       'The Königsberg-to-multi-agent arc. Why context windows fail, how to build a four-stage Extract · Resolve · Assemble · Query pipeline, where it fits in your stack.',
     accent: 'teal',
+    chapters: [
+      { num: 1, name: 'The seven bridges of Königsberg', anchor: '#ch-1' },
+      { num: 2, name: 'Why context windows are not enough', anchor: '#ch-2' },
+      { num: 3, name: 'Anatomy of a knowledge graph', anchor: '#ch-3' },
+      { num: 4, name: 'The four-stage pipeline', anchor: '#ch-4' },
+      { num: 5, name: 'The shared-memory pattern', anchor: '#ch-5' },
+      { num: 6, name: 'Five agent patterns, five graph roles', anchor: '#ch-6' },
+      { num: 7, name: 'Building & shipping a graph that holds up', anchor: '#ch-7' },
+    ],
   },
 ];
 ---
@@ -181,6 +198,21 @@ const workbooks = [
               </ul>
 
               <p class="workbook-card__sum">{w.summary}</p>
+
+              {/* v7.16 — chapter TOC inside each workbook card */}
+              <details class="workbook-card__toc">
+                <summary class="workbook-card__toc-summary mono">CHAPTERS · {w.chapters.length}</summary>
+                <ol class="workbook-card__toc-list mono">
+                  {w.chapters.map((c) => (
+                    <li>
+                      <a href={`${w.href}${c.anchor}`} class="workbook-card__toc-link">
+                        <span class="workbook-card__toc-num">{String(c.num).padStart(2, '0')}</span>
+                        <span class="workbook-card__toc-name">{c.name}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ol>
+              </details>
 
               <footer class="workbook-card__foot">
                 <a href={path(w.href)} class="btn btn--primary btn--sm">Open HTML →</a>
@@ -406,5 +438,62 @@ const workbooks = [
     flex: 1;
     text-align: center;
     justify-content: center;
+  }
+
+  /* === v7.16 — chapter TOC inside each workbook card ===================== */
+  .workbook-card__toc {
+    margin-top: var(--sp-3);
+    padding-top: var(--sp-3);
+    border-top: 1px dashed var(--c-rule);
+  }
+  .workbook-card__toc-summary {
+    list-style: none;
+    cursor: pointer;
+    color: var(--c-ink-2);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 4px 0;
+    user-select: none;
+  }
+  .workbook-card__toc-summary::-webkit-details-marker { display: none; }
+  .workbook-card__toc-summary::before {
+    content: '▸ ';
+    display: inline-block;
+    transition: transform 120ms ease;
+  }
+  .workbook-card__toc[open] > .workbook-card__toc-summary::before {
+    content: '▾ ';
+  }
+  .workbook-card__toc-list {
+    list-style: none;
+    padding: 0;
+    margin: 8px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .workbook-card__toc-link {
+    display: flex;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--c-ink-2);
+    padding: 4px 6px;
+    border-left: 2px solid transparent;
+    transition: border-color 120ms ease, color 120ms ease;
+  }
+  .workbook-card__toc-link:hover {
+    color: var(--c-ink);
+    border-left-color: var(--c-amber);
+    background: var(--c-paper-2);
+  }
+  .workbook-card__toc-num {
+    color: var(--c-ink-3);
+    font-size: 10px;
+    flex: 0 0 24px;
+  }
+  .workbook-card__toc-name {
+    flex: 1;
+    font-size: 11px;
   }
 </style>
