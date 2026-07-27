@@ -21,7 +21,16 @@ export default defineConfig({
   },
   integrations: [
     mdx(),
-    sitemap(),
+    // v7.24 — surface the two static-HTML workbooks in the sitemap. The
+    // workbook HTMLs are written directly under public/workbooks/<id>/
+    // (not Astro pages), so the sitemap plugin doesn't see them by default.
+    // customPages injects them with a sane priority.
+    sitemap({
+      customPages: [
+        `${SITE}/workbooks/ai-engineering/`,
+        `${SITE}/workbooks/graph-engineering/`,
+      ],
+    }),
   ],
   vite: {
     ssr: { noExternal: ['@fontsource/inter', '@fontsource/jetbrains-mono'] },
