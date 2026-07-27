@@ -337,6 +337,13 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
       <h2 class="desk-events__title">The calendar that drives every position-book.</h2>
 
       {/* v7.12 — category + severity filter chips + visible counter */}
+      <details class="desk-events__filters-wrap" open>
+        <summary class="desk-events__filters-summary mono">
+          <span class="desk-events__filters-summary-label">FILTERS</span>
+          <span class="desk-events__filters-summary-count" data-desk-visible-count>
+            {events.length} VISIBLE
+          </span>
+        </summary>
       <div class="desk-events__filters" role="toolbar" aria-label="Filter desk events">
         <div class="desk-events__chips" role="group" aria-label="Category filter">
           <span class="desk-events__chip-label mono">CAT ·</span>
@@ -381,6 +388,7 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
           COPY · LINK
         </button>
       </div>
+      </details>
 
       <table class="desk-events__table">
         <caption class="sr-only">
@@ -934,6 +942,35 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
   }
 
   /* === v7.12 — desk events filter chips + anchor + counter ================ */
+  .desk-events__filters-wrap {
+    margin: 24px 0 16px;
+  }
+  .desk-events__filters-summary {
+    display: none;
+    list-style: none;
+    cursor: pointer;
+    padding: 10px 12px;
+    border: 1px solid var(--c-rule);
+    background: var(--c-paper-2);
+    color: var(--c-ink-1);
+    font: 600 11px / 1.4 var(--ff-mono);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    user-select: none;
+  }
+  .desk-events__filters-summary::-webkit-details-marker { display: none; }
+  .desk-events__filters-summary::before {
+    content: '▸ ';
+    display: inline-block;
+    transition: transform 120ms ease;
+  }
+  .desk-events__filters-wrap[open] > .desk-events__filters-summary::before {
+    content: '▾ ';
+  }
+  .desk-events__filters-summary-count {
+    margin-left: auto;
+    color: var(--c-ink-3);
+  }
   .desk-events__filters {
     display: flex;
     flex-wrap: wrap;
@@ -1044,6 +1081,27 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
   .desk-events__share-btn[data-copied="1"] {
     border-color: var(--c-amber);
     color: var(--c-amber);
+  }
+
+  /* === v7.15 — mobile: collapse filters into <details> on narrow widths == */
+  @media (max-width: 640px) {
+    .desk-events__filters-summary {
+      display: flex;
+      align-items: center;
+    }
+    .desk-events__filters {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 10px;
+    }
+    .desk-events__chips {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .desk-events__chip-btn {
+      width: 100%;
+      text-align: left;
+    }
   }
 </style>
 
