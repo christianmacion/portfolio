@@ -43,7 +43,7 @@ const deployedStamp = buildStampUtc8();
 
     <div class="footer__cols">
       <div class="footer__col">
-        <h4>Site</h4>
+        <h3>Site</h3>
         <ul>
           <li><a href={path('/solutions')}>Solutions</a></li>
           <li><a href={path('/projects')}>Projects</a></li>
@@ -61,7 +61,7 @@ const deployedStamp = buildStampUtc8();
       </div>
 
       <div class="footer__col">
-        <h4>Contact</h4>
+        <h3>Contact</h3>
         <ul>
           <li><a href={`mailto:${profile.contact.email}`}>{profile.contact.email}</a></li>
           <li><a href={`tel:${profile.contact.phone}`}>{profile.contact.phoneDisplay}</a></li>
@@ -88,7 +88,7 @@ const deployedStamp = buildStampUtc8();
       </div>
 
       <div class="footer__col">
-        <h4>Method</h4>
+        <h3>Method</h3>
         <ul class="mono">
           <li><a href={path('/methodology')}>eval-first discipline</a></li>
           <li>
@@ -105,7 +105,7 @@ const deployedStamp = buildStampUtc8();
       </div>
 
       <div class="footer__col">
-        <h4>Availability</h4>
+        <h3>Availability</h3>
         <ul>
           <li>Remote · {profile.availability.hours}</li>
           <li class="mono">UTC+8 · Philippines</li>
@@ -197,7 +197,7 @@ const deployedStamp = buildStampUtc8();
     grid-template-columns: repeat(4, 1fr);
     gap: var(--sp-5);
   }
-  .footer__col h4 {
+  .footer__col h3 {
     font-size: var(--fs-xs);
     font-weight: 600;
     text-transform: uppercase;
