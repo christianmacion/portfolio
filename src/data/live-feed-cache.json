@@ -884,13 +884,13 @@
       "timestamp": "2026-07-26T12:00:00Z",
       "category": "central-bank",
       "severity": "critical",
-      "city": "United States",
+      "city": "Washington, DC",
       "publisher": null,
       "fingerprint": "irn usa yield united states",
       "domain": "gdelt.org",
       "coords": {
-        "lat": 39.828175,
-        "lon": -98.5795
+        "lat": 38.9072,
+        "lon": -77.0369
       },
       "related": [
         {
@@ -958,13 +958,13 @@
       "timestamp": "2026-07-26T12:00:00Z",
       "category": "central-bank",
       "severity": "critical",
-      "city": "California",
+      "city": "San Francisco",
       "publisher": null,
       "fingerprint": "eur aid california",
       "domain": "gdelt.org",
       "coords": {
-        "lat": 36.17,
-        "lon": -119.746
+        "lat": 37.7749,
+        "lon": -122.4194
       },
       "related": [
         {
@@ -998,13 +998,13 @@
       "timestamp": "2026-07-26T12:00:00Z",
       "category": "central-bank",
       "severity": "critical",
-      "city": "California",
+      "city": "San Francisco",
       "publisher": null,
       "fingerprint": "usa eur aid california",
       "domain": "gdelt.org",
       "coords": {
-        "lat": 36.17,
-        "lon": -119.746
+        "lat": 37.7749,
+        "lon": -122.4194
       }
     },
     {
@@ -1339,13 +1339,13 @@
       "timestamp": "2026-07-26T12:00:00Z",
       "category": "geopolitical",
       "severity": "moderate",
-      "city": "United States",
+      "city": "Washington, DC",
       "publisher": null,
       "fingerprint": "aid united states",
       "domain": "gdelt.org",
       "coords": {
-        "lat": 39.828175,
-        "lon": -98.5795
+        "lat": 38.9072,
+        "lon": -77.0369
       }
     },
     {
@@ -1390,13 +1390,13 @@
       "timestamp": "2026-07-26T12:00:00Z",
       "category": "geopolitical",
       "severity": "moderate",
-      "city": "Iran",
+      "city": "Tehran",
       "publisher": null,
       "fingerprint": "irn threat iran",
       "domain": "gdelt.org",
       "coords": {
-        "lat": 32,
-        "lon": 53
+        "lat": 35.6892,
+        "lon": 51.389
       }
     },
     {
@@ -1407,13 +1407,13 @@
       "timestamp": "2026-07-26T12:00:00Z",
       "category": "geopolitical",
       "severity": "moderate",
-      "city": "Iran",
+      "city": "Tehran",
       "publisher": null,
       "fingerprint": "irn pak consultation iran",
       "domain": "gdelt.org",
       "coords": {
-        "lat": 32,
-        "lon": 53
+        "lat": 35.6892,
+        "lon": 51.389
       }
     },
     {
@@ -1515,13 +1515,13 @@
       "timestamp": "2026-07-26T12:00:00Z",
       "category": "geopolitical",
       "severity": "moderate",
-      "city": "Iran",
+      "city": "Tehran",
       "publisher": null,
       "fingerprint": "pak irn consultation iran",
       "domain": "gdelt.org",
       "coords": {
-        "lat": 32,
-        "lon": 53
+        "lat": 35.6892,
+        "lon": 51.389
       }
     },
     {
@@ -1593,5 +1593,6 @@
         }
       ]
     }
-  ]
+  ],
+  "resolutionNote": " Country-only labels resolved (Jul 2026)."
 }

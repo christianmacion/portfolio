@@ -40,6 +40,7 @@
 import { getCollection } from 'astro:content';
 import gdeltCache from '../data/gdelt-cache.json';
 import liveFeedCache from '../data/live-feed-cache.json';
+import { INSTITUTIONS } from '../data/institutions';
 import {
   countries,
   GLOBE_VIEW,
@@ -98,6 +99,8 @@ const fnv1a = (n: number): number => {
 interface CountryOutline {
   id: string;
   name: string;
+  lat: number;
+  lon: number;
   dGlobe: string;
   /** Angular distance from globe center (deg). Drop if > 90. */
   angle: number;
@@ -110,8 +113,52 @@ const countryOutlines: CountryOutline[] = countries
     // 0 (visible) if the path is malformed; rare.
     const probe = orthographicProject(15, 0, GLOBE_RADIUS, GLOBE_CX, GLOBE_CY, GLOBE_ROT);
     void probe; // reserved for future per-country centroid math
-    return { id: c.id, name: c.name, dGlobe: c.dGlobe, angle: 0 };
+    return { id: c.id, name: c.name, lat: c.lat, lon: c.lon, dGlobe: c.dGlobe, angle: 0 };
   });
+
+/** Public country facts used by the focus HUD. The atlas supplies geometry
+ * and centroids; this compact table supplies human-readable institutional
+ * context without adding a runtime geography dependency. */
+interface CountryMeta {
+  capital: string;
+  region: string;
+}
+const COUNTRY_META: Record<string, CountryMeta> = {
+  '036': { capital: 'Canberra', region: 'Oceania' },
+  '076': { capital: 'Brasília', region: 'South America' },
+  '124': { capital: 'Ottawa', region: 'North America' },
+  '156': { capital: 'Beijing', region: 'East Asia' },
+  '250': { capital: 'Paris', region: 'Western Europe' },
+  '276': { capital: 'Berlin', region: 'Central Europe' },
+  '356': { capital: 'New Delhi', region: 'South Asia' },
+  '392': { capital: 'Tokyo', region: 'East Asia' },
+  '528': { capital: 'Amsterdam', region: 'Western Europe' },
+  '608': { capital: 'Manila', region: 'Southeast Asia' },
+  '702': { capital: 'Singapore', region: 'Southeast Asia' },
+  '756': { capital: 'Bern', region: 'Central Europe' },
+  '826': { capital: 'London', region: 'Western Europe' },
+  '840': { capital: 'Washington, D.C.', region: 'North America' },
+};
+const countryMeta = (id: string): CountryMeta =>
+  COUNTRY_META[id] ?? { capital: 'NOT INDEXED', region: 'ATLAS GEOMETRY' };
+const timezoneForLongitude = (lon: number): string => {
+  const offset = Math.round(lon / 15);
+  return `UTC${offset >= 0 ? '+' : ''}${offset}`;
+};
+const countryPointCount = (id: string): number => {
+  // Philippines gets a geographic bounding-box count so the Digos example
+  // remains useful even when a GDELT city label is not normalized.
+  if (id === '608') {
+    return dedupGdelt.filter((event) =>
+      event.lat >= 4.5 && event.lat <= 21.5 && event.lon >= 116 && event.lon <= 127,
+    ).length;
+  }
+  const cityCountry: Record<string, string> = {
+    singapore: '702', tokyo: '392', zurich: '756', london: '826',
+    'new york': '840', 'new york city': '840', 'digos city': '608',
+  };
+  return dedupGdelt.filter((event) => cityCountry[event.city.toLowerCase()] === id).length;
+};
 
 /* === Star field (background dots outside the globe mask) ================
  * 96 seeded dots. Stable across builds. Position sampled from a 2D
@@ -326,6 +373,36 @@ const livePoints: LivePoint[] = (liveCache.events || [])
   })
   .filter((p) => p.visible);
 
+const venueResearchDomains = (venue: Venue): string[] => {
+  const cityKey = venue.city.toLowerCase();
+  const institutionDomains = INSTITUTIONS
+    .filter((institution) => institution.city.toLowerCase().startsWith(cityKey))
+    .map((institution) => institution.focus.toUpperCase());
+  const liveDomains = livePoints
+    .filter((point) => point.city?.toLowerCase().startsWith(cityKey))
+    .map((point) => point.category.toUpperCase());
+  const fallback: Record<string, string[]> = {
+    'digos city': ['QUANTITATIVE RESEARCH', 'AI ENGINEERING'],
+    singapore: ['Q-FINANCE', 'STATISTICS', 'MACHINE LEARNING'],
+    tokyo: ['Q-FINANCE', 'STATISTICS'],
+    zurich: ['Q-FINANCE'],
+    london: ['Q-FINANCE', 'AI ENGINEERING', 'LANGUAGE MODELS'],
+    'new york': ['Q-FINANCE', 'MACROECONOMICS'],
+  };
+  return [...new Set([...institutionDomains, ...liveDomains])].length > 0
+    ? [...new Set([...institutionDomains, ...liveDomains])]
+    : fallback[cityKey] ?? ['RESEARCH DATA'];
+};
+
+const venueLiveCounts = (venue: Venue): { arxiv: number; wire: number } => {
+  const cityKey = venue.city.toLowerCase();
+  const points = livePoints.filter((point) => point.city?.toLowerCase().startsWith(cityKey));
+  return {
+    arxiv: points.filter((point) => point.source === 'arxiv').length,
+    wire: points.filter((point) => point.source === 'macrowire').length,
+  };
+};
+
 /* === Layer E — connection arcs (event → venue city) =================
  * For each GDELT event whose city matches a venue city, draw a great-
  * circle-style quadratic Bezier from the event point to the venue point.
@@ -449,6 +526,16 @@ const subLatStr = fmtLat(_subLat);
 const subLonStr = fmtLon(_subLon);
 const declStr = `${Math.abs(_subLat).toFixed(2)}°${_subLat >= 0 ? ' N' : ' S'}`;
 const dayNightStr = `DAY ${dayPct}% · NIGHT ${nightPct}%`;
+const dayNightForPoint = (lat: number, lon: number): string => {
+  const toRad = Math.PI / 180;
+  const solarRelationship =
+    Math.sin(lat * toRad) * Math.sin(_subLat * toRad) +
+    Math.cos(lat * toRad) * Math.cos(_subLat * toRad) *
+      Math.cos((lon - _subLon) * toRad);
+  if (solarRelationship > 0.25) return 'DAY';
+  if (solarRelationship < -0.25) return 'NIGHT';
+  return 'TERMINATOR';
+};
 
 /* === Last-sync chrome (v7.7.0 preserved) ============================ */
 const fetchedAt = cache.fetchedAt;
@@ -568,15 +655,20 @@ void venueByCity;
       <clipPath id="earth-map__sphere-clip">
         <circle cx={GLOBE_CX} cy={GLOBE_CY} r={GLOBE_RADIUS + 1} />
       </clipPath>
+      {/* v7.8 — country vignette: the limb resolves into ocean cobalt rather
+          than black, preserving coastline fidelity as the globe rotates. */}
       <radialGradient
-        id="earth-map__day-wash"
-        cx="0.5"
-        cy="0.5"
-        r="0.5"
+        id="earth-map__country-vignette"
+        cx="50%"
+        cy="50%"
+        r="50%"
       >
-        <stop offset="0%" stop-color="var(--c-amber)" stop-opacity="0.05" />
-        <stop offset="100%" stop-color="var(--c-amber)" stop-opacity="0.0" />
+        <stop offset="0%" stop-color="var(--j-cobalt)" stop-opacity="0" />
+        <stop offset="74%" stop-color="var(--j-cobalt)" stop-opacity="0" />
+        <stop offset="92%" stop-color="var(--j-cobalt-deep)" stop-opacity="0.2" />
+        <stop offset="100%" stop-color="var(--j-cobalt-deep)" stop-opacity="0.62" />
       </radialGradient>
+
     </defs>
 
     {/* Sky plate (cream/navy wash). The viewBox is the full 600×600 so
@@ -632,15 +724,35 @@ void venueByCity;
         fill="url(#earth-map__ocean)"
       />
       <g class="earth-map__countries" clip-path="url(#earth-map__sphere-clip)">
-        {countryOutlines.map((c) => (
-          <path
-            d={c.dGlobe}
-            class={`earth-map__country earth-map__country--${c.id}`}
-            data-country-id={c.id}
-          />
-        ))}
+        {/* Transparent country targets stay in the same rotating coordinate
+            system as their visible outlines. */}
+        <g class="earth-map__hitbox" clip-path="url(#earth-map__sphere-clip)">
+          {countryOutlines.map((c) => (
+            <path
+              d={c.dGlobe}
+              data-country-id={c.id}
+              data-country-name={c.name}
+              data-country-lat={c.lat}
+              data-country-lon={c.lon}
+              data-country-capital={countryMeta(c.id).capital}
+              data-country-region={countryMeta(c.id).region}
+              data-country-timezone={timezoneForLongitude(c.lon)}
+              data-country-points={countryPointCount(c.id)}
+              data-country-light={dayNightForPoint(c.lat, c.lon)}
+              class="earth-map__country-hitbox"
+              tabindex="0"
+              role="button"
+              aria-label={`Focus ${c.name}`}
+            />
+          ))}
+        </g>
       </g>
-    </g>
+      <path
+        d={GLOBE_SPHERE_D}
+        class="earth-map__country-vignette"
+        fill="url(#earth-map__country-vignette)"
+        aria-hidden="true"
+      />
 
     {/* v7.7.6 — atmospheric scatter ring (Rayleigh-style cobalt bloom
         around the sphere limb) and night-side dim mask. Both clipped to
@@ -694,7 +806,19 @@ void venueByCity;
 
     {/* === Layer A — venue cities (amber, weighted, with pulse) === */}
     {venuePositions.map((c) => (
-      <g class="earth-map__venue">
+      <g
+        class="earth-map__venue"
+        data-venue-city={c.city}
+        data-venue-lat={c.lat}
+        data-venue-lon={c.lon}
+        data-venue-caption={c.caption}
+        data-venue-domains={venueResearchDomains(c).join(' · ')}
+        data-venue-arxiv={venueLiveCounts(c).arxiv}
+        data-venue-wire={venueLiveCounts(c).wire}
+        tabindex="0"
+        role="button"
+        aria-label={`Focus ${c.city}, ${c.caption}`}
+      >
         {c.weight >= 0.7 && (
           <circle
             cx={c.x.toFixed(2)}
@@ -838,7 +962,37 @@ void venueByCity;
       stroke-width="1"
       aria-hidden="true"
     />
+  </g>
   </svg>
+
+  <aside
+    class="earth-map__focus-panel"
+    data-focus-panel
+    hidden
+    role="dialog"
+    aria-label="Earth focus details"
+    aria-live="polite"
+    tabindex="-1"
+  >
+    <div class="earth-map__focus-head">
+      <span class="earth-map__focus-kicker mono" data-focus-kind>FOCUS</span>
+      <button class="earth-map__focus-close" type="button" data-focus-close aria-label="Close focus details">CLOSE</button>
+    </div>
+    <div class="earth-map__focus-title mono" data-focus-title>—</div>
+    <dl class="earth-map__focus-grid" data-focus-country hidden>
+      <div><dt>CAPITAL</dt><dd data-focus-capital>—</dd></div>
+      <div><dt>REGION</dt><dd data-focus-region>—</dd></div>
+      <div><dt>TIMEZONE</dt><dd data-focus-timezone>—</dd></div>
+      <div><dt>LIGHT</dt><dd data-focus-light>—</dd></div>
+      <div><dt>DATA POINTS</dt><dd data-focus-points>—</dd></div>
+    </dl>
+    <dl class="earth-map__focus-grid" data-focus-venue hidden>
+      <div><dt>VENUE</dt><dd data-focus-caption>—</dd></div>
+      <div><dt>DOMAINS</dt><dd data-focus-domains>—</dd></div>
+      <div><dt>ARXIV PAPERS</dt><dd data-focus-arxiv>—</dd></div>
+      <div><dt>WIRE HEADLINES</dt><dd data-focus-wire>—</dd></div>
+    </dl>
+  </aside>
 
   {/* === NEW v7.7.4 HUD chrome — 4-cell KPI strip (HTML, not SVG) ===
        Same mono-small-caps vocabulary as the desk-stats row. Each cell
@@ -926,6 +1080,7 @@ void venueByCity;
 
 <style>
   .earth-map {
+    --earth-focus-panel-width: 280px;
     margin: 0;
     padding: 0;
     background: var(--c-bg-2);
@@ -985,13 +1140,29 @@ void venueByCity;
     stroke-opacity: 0.95;
   }
 
+  .earth-map__country-hitbox {
+    fill: transparent;
+    stroke: none;
+    cursor: pointer;
+    pointer-events: all;
+  }
+  .earth-map__country-hitbox:focus-visible,
+  .earth-map__venue:focus-visible {
+    outline: none;
+    stroke: var(--c-amber);
+    stroke-width: 2;
+  }
+  .earth-map__country-vignette {
+    pointer-events: none;
+  }
+
   /* v7.7.6 — slow auto-rotation of the countries group. The clipPath
      in markup keeps back-hemisphere countries masked, so the continents
      drift across the visible disc instead of swinging off the rim. */
   .earth-map__countries {
     transform-box: fill-box;
     transform-origin: center;
-    animation: earth-rotate 240s linear infinite;
+    animation: earth-rotate 480s linear infinite;
     will-change: transform;
   }
   @keyframes earth-rotate {
@@ -1013,6 +1184,15 @@ void venueByCity;
   .earth-map__scatter {
     fill: url(#earth-map__scatter);
     pointer-events: none;
+  }
+
+  .earth-map__venue {
+    cursor: pointer;
+    outline: none;
+  }
+  .earth-map__venue:focus-visible .earth-map__dot {
+    stroke: var(--c-amber);
+    stroke-width: 2;
   }
 
   /* === Layer A — venues === */
@@ -1140,6 +1320,97 @@ void venueByCity;
     0%   { stroke-opacity: 0.4; transform: scale(1); }
     35%  { stroke-opacity: 1;   transform: scale(1.6); }
     100% { stroke-opacity: 0;   transform: scale(2.2); }
+  }
+
+  /* === v7.8 click-to-dive focus panel === */
+  .earth-map__focus-panel {
+    position: fixed;
+    inset-block-start: var(--j-sp-3);
+    inset-inline-end: var(--j-sp-3);
+    width: min(var(--earth-focus-panel-width), calc(100vw - var(--j-sp-4)));
+    z-index: 40;
+    border: var(--j-b-1);
+    background: var(--c-bg-2);
+    color: var(--c-ink);
+    padding: var(--j-sp-2);
+    transform: translateX(0);
+    animation: earth-focus-in var(--j-dur-slow) var(--j-ease-out) both;
+  }
+  .earth-map__focus-panel[hidden] {
+    display: none;
+  }
+  @keyframes earth-focus-in {
+    from { transform: translateX(calc(100% + var(--j-sp-3))); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+  .earth-map__focus-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-block-end: var(--j-sp-1);
+    border-bottom: var(--j-b-hairline);
+  }
+  .earth-map__focus-kicker,
+  .earth-map__focus-close,
+  .earth-map__focus-grid dt,
+  .earth-map__focus-grid dd {
+    font-family: var(--j-ff-mono);
+    font-size: var(--j-t-xs);
+    letter-spacing: var(--j-track-wide);
+    text-transform: uppercase;
+  }
+  .earth-map__focus-kicker {
+    color: var(--c-amber);
+  }
+  .earth-map__focus-close {
+    appearance: none;
+    border: var(--j-b-hairline);
+    border-radius: var(--j-r);
+    background: transparent;
+    color: var(--c-ink-2);
+    padding: calc(var(--j-sp-1) / 2) var(--j-sp-1);
+    cursor: pointer;
+  }
+  .earth-map__focus-close:hover {
+    color: var(--c-ink);
+    border-color: var(--c-ink-2);
+  }
+  .earth-map__focus-close:focus-visible {
+    outline: 2px solid var(--c-amber);
+    outline-offset: 2px;
+  }
+  .earth-map__focus-title {
+    padding-block: var(--j-sp-2);
+    color: var(--c-ink);
+    font-size: var(--j-t-md);
+    font-weight: var(--j-w-heading);
+    letter-spacing: var(--j-track-wide);
+    text-transform: uppercase;
+  }
+  .earth-map__focus-grid {
+    margin: 0;
+    display: grid;
+    gap: var(--j-sp-1);
+  }
+  .earth-map__focus-grid[hidden] {
+    display: none;
+  }
+  .earth-map__focus-grid div {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    gap: var(--j-sp-1);
+    padding-block: var(--j-sp-1);
+    border-top: var(--j-b-hairline);
+  }
+  .earth-map__focus-grid dt {
+    color: var(--c-ink-3);
+  }
+  .earth-map__focus-grid dd {
+    margin: 0;
+    color: var(--c-ink);
+    text-align: end;
+    line-height: var(--j-lh-snug);
+    overflow-wrap: anywhere;
   }
 
   /* === NEW v7.7.4 HUD chrome — 4-cell KPI strip === */
@@ -1316,65 +1587,182 @@ void venueByCity;
 
 <script>
   /**
-   * earth-sync (v7.7.4 inlined) — /live row → /desk EarthMap marker focus.
-   *
-   * Listens for CustomEvent('earth:focus', { detail: { id } }) on `window`.
-   * Any page (typically /live) dispatches this when a row is hovered. The
-   * listener finds the matching EarthMap marker by its `data-event-id`
-   * attribute and adds a `--focus` modifier class for 1.2s. Cross-tab sync:
-   * writes the id to localStorage under `earth:focus:v1` so a /desk tab
-   * can pick up a focus event emitted by a /live tab in another window.
-   *
-   * No framework, no deps. SSR-safe (only runs in the browser; Astro skips
-   * it on the server).
+   * earth-sync + click-to-dive (v7.8) — deliberately framework-free so the
+   * public /live ↔ /desk focus bus stays small and SSR-safe.
    */
+  interface CountryFocusDetail {
+    id: string;
+    name: string;
+    lat: number;
+    lon: number;
+  }
+  interface VenueFocusDetail {
+    city: string;
+    lat: number;
+    lon: number;
+    caption: string;
+  }
+  interface FocusStorageValue {
+    id?: string;
+    ts?: number;
+  }
+
   const FOCUS_DURATION_MS = 1200;
   const STORAGE_KEY = 'earth:focus:v1';
+  const svg = document.querySelector<SVGSVGElement>('.earth-map__svg');
+  const panel = document.querySelector<HTMLElement>('[data-focus-panel]');
+  const closeButton = document.querySelector<HTMLButtonElement>('[data-focus-close]');
+  const countryDetails = document.querySelector<HTMLElement>('[data-focus-country]');
+  const venueDetails = document.querySelector<HTMLElement>('[data-focus-venue]');
+  const focusTitle = document.querySelector<HTMLElement>('[data-focus-title]');
+  const focusKind = document.querySelector<HTMLElement>('[data-focus-kind]');
+
+  const setText = (selector: string, value: string): void => {
+    const element = document.querySelector<HTMLElement>(selector);
+    if (element) element.textContent = value;
+  };
+  const closePanel = (): void => {
+    if (!panel) return;
+    panel.hidden = true;
+    if (countryDetails) countryDetails.hidden = true;
+    if (venueDetails) venueDetails.hidden = true;
+  };
+  const openPanel = (): void => {
+    if (!panel) return;
+    panel.hidden = false;
+    panel.focus({ preventScroll: true });
+  };
 
   function focusMarker(id: string | null | undefined): void {
-    if (!id) return;
-    const svg = document.querySelector<SVGSVGElement>('.earth-map__svg');
-    if (!svg) return;
-    const m = svg.querySelector<SVGCircleElement>(`[data-event-id="${CSS.escape(id)}"]`);
-    if (!m) return;
-    m.classList.remove('earth-map__live--focus', 'earth-map__gdelt--focus');
-    void m.getBoundingClientRect(); // force reflow
-    if (m.classList.contains('earth-map__live')) {
-      m.classList.add('earth-map__live--focus');
+    if (!id || !svg) return;
+    const marker = svg.querySelector<SVGCircleElement>(`[data-event-id="${CSS.escape(id)}"]`);
+    if (!marker) return;
+    marker.classList.remove('earth-map__live--focus', 'earth-map__gdelt--focus');
+    void marker.getBoundingClientRect();
+    if (marker.classList.contains('earth-map__live')) {
+      marker.classList.add('earth-map__live--focus');
     } else {
-      m.classList.add('earth-map__gdelt--focus');
+      marker.classList.add('earth-map__gdelt--focus');
     }
     window.setTimeout(() => {
-      m.classList.remove('earth-map__live--focus', 'earth-map__gdelt--focus');
+      marker.classList.remove('earth-map__live--focus', 'earth-map__gdelt--focus');
     }, FOCUS_DURATION_MS);
   }
 
-  window.addEventListener('earth:focus', (ev) => {
-    const detail = (ev as CustomEvent).detail as { id?: string } | undefined;
-    if (detail?.id) {
-      focusMarker(detail.id);
-      try {
-        localStorage.setItem(
-          STORAGE_KEY,
-          JSON.stringify({ id: detail.id, ts: Date.now() }),
-        );
-      } catch {
-        /* ignore */
-      }
+  const emitFocus = (target: Element): void => {
+    const country = target.closest<SVGPathElement>('[data-country-id]');
+    if (country) {
+      const detail: CountryFocusDetail = {
+        id: country.dataset.countryId ?? '',
+        name: country.dataset.countryName ?? 'UNKNOWN COUNTRY',
+        lat: Number(country.dataset.countryLat ?? '0'),
+        lon: Number(country.dataset.countryLon ?? '0'),
+      };
+      window.dispatchEvent(new CustomEvent<CountryFocusDetail>('earth:country-focus', {
+        detail,
+        bubbles: true,
+        composed: true,
+      }));
+      return;
+    }
+    const venue = target.closest<SVGGElement>('[data-venue-city]');
+    if (!venue) return;
+    const detail: VenueFocusDetail = {
+      city: venue.dataset.venueCity ?? 'UNKNOWN CITY',
+      lat: Number(venue.dataset.venueLat ?? '0'),
+      lon: Number(venue.dataset.venueLon ?? '0'),
+      caption: venue.dataset.venueCaption ?? 'research venue',
+    };
+    window.dispatchEvent(new CustomEvent<VenueFocusDetail>('earth:venue-focus', {
+      detail,
+      bubbles: true,
+      composed: true,
+    }));
+  };
+
+  svg?.addEventListener('click', (event: MouseEvent) => {
+    if (event.target instanceof Element) emitFocus(event.target);
+  });
+  svg?.addEventListener('keydown', (event: KeyboardEvent) => {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    if (!(event.target instanceof Element)) return;
+    event.preventDefault();
+    emitFocus(event.target);
+  });
+
+  window.addEventListener('earth:country-focus', (event: Event) => {
+    const detail = (event as CustomEvent<CountryFocusDetail>).detail;
+    if (!detail || !svg) return;
+    const country = svg.querySelector<SVGPathElement>(
+      `[data-country-id="${CSS.escape(detail.id)}"]`,
+    );
+    if (!country) return;
+    const data = country.dataset;
+    if (focusKind) focusKind.textContent = 'COUNTRY FOCUS';
+    if (focusTitle) focusTitle.textContent = detail.name;
+    setText('[data-focus-capital]', data.countryCapital ?? 'NOT INDEXED');
+    setText('[data-focus-region]', data.countryRegion ?? 'ATLAS GEOMETRY');
+    setText('[data-focus-timezone]', data.countryTimezone ?? 'UTC');
+    setText('[data-focus-light]', data.countryLight ?? 'TERMINATOR');
+    setText('[data-focus-points]', data.countryPoints ?? '0');
+    if (countryDetails) countryDetails.hidden = false;
+    if (venueDetails) venueDetails.hidden = true;
+    openPanel();
+  });
+
+  window.addEventListener('earth:venue-focus', (event: Event) => {
+    const detail = (event as CustomEvent<VenueFocusDetail>).detail;
+    if (!detail || !svg) return;
+    const venue = svg.querySelector<SVGGElement>(
+      `[data-venue-city="${CSS.escape(detail.city)}"]`,
+    );
+    if (!venue) return;
+    const data = venue.dataset;
+    if (focusKind) focusKind.textContent = 'VENUE FOCUS';
+    if (focusTitle) focusTitle.textContent = detail.city;
+    setText('[data-focus-caption]', data.venueCaption ?? detail.caption);
+    setText('[data-focus-domains]', data.venueDomains ?? 'RESEARCH DATA');
+    setText('[data-focus-arxiv]', data.venueArxiv ?? '0');
+    setText('[data-focus-wire]', data.venueWire ?? '0');
+    if (countryDetails) countryDetails.hidden = true;
+    if (venueDetails) venueDetails.hidden = false;
+    openPanel();
+  });
+
+  closeButton?.addEventListener('click', closePanel);
+  document.addEventListener('click', (event: MouseEvent) => {
+    if (!panel || panel.hidden || !(event.target instanceof Element)) return;
+    if (panel.contains(event.target)) return;
+    if (event.target.closest('.earth-map__country-hitbox, .earth-map__venue')) return;
+    closePanel();
+  }, true);
+  document.addEventListener('keydown', (event: KeyboardEvent) => {
+    if (event.key === 'Escape') closePanel();
+  });
+
+  window.addEventListener('earth:focus', (event: Event) => {
+    const detail = (event as CustomEvent<{ id?: string }>).detail;
+    if (!detail?.id) return;
+    focusMarker(detail.id);
+    try {
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({ id: detail.id, ts: Date.now() } satisfies FocusStorageValue),
+      );
+    } catch {
+      /* localStorage may be unavailable in privacy mode. */
     }
   });
 
-  // Cross-tab fallback — listen for the localStorage ping from another tab.
-  window.addEventListener('storage', (ev) => {
-    if (ev.key !== STORAGE_KEY || !ev.newValue) return;
+  window.addEventListener('storage', (event: StorageEvent) => {
+    if (event.key !== STORAGE_KEY || !event.newValue) return;
     try {
-      const parsed = JSON.parse(ev.newValue) as { id?: string; ts?: number };
-      // Drop stale events (>2s old) so a refresh doesn't replay.
-      if (parsed?.id && typeof parsed.ts === 'number' && Date.now() - parsed.ts < 2000) {
+      const parsed = JSON.parse(event.newValue) as FocusStorageValue;
+      if (parsed.id && typeof parsed.ts === 'number' && Date.now() - parsed.ts < 2000) {
         focusMarker(parsed.id);
       }
     } catch {
-      /* ignore */
+      /* Ignore malformed cross-tab payloads. */
     }
   });
 </script>

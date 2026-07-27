@@ -45,6 +45,7 @@ import { path } from '@utils/url';
 import arxivCache from '../data/arxiv-cache.json';
 import macrowireCache from '../data/macrowire-cache.json';
 import gdeltCache from '../data/gdelt-cache.json';
+import { INSTITUTIONS, INSTITUTION_STATS } from '../data/institutions';
 
 // === Pull world events once, server-side, sort by order ===
 interface WorldEventEntry {
@@ -80,6 +81,13 @@ const arxivItems = (arxivCache as { items?: unknown[] }).items?.length ?? 0;
 const macrowireItems = (macrowireCache as { items?: unknown[] }).items?.length ?? 0;
 const gdeltItems = (gdeltCache as { events?: unknown[] }).events?.length ?? 0;
 const globalSignals = arxivItems + macrowireItems + gdeltItems;
+
+// === v7.8.0 — research-venue KPI strip ===
+// INSTITUTIONS table now carries 56 venues with researchDomains + tier.
+// Chrome reads the actual count (was hardcoded to "06" before).
+const venueCount = INSTITUTIONS.length;
+const t1Count = INSTITUTION_STATS.byTier.t1;
+const continents = Object.keys(INSTITUTION_STATS.byContinent).length;
 
 const email = profile.contact.email;
 const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hiring%20inquiry`;
@@ -128,30 +136,45 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     </div>
   </header>
 
-  {/* === 3. KPI strip — 4 count-up cells === */}
+  {/* === 3. KPI strip — 6 count-up cells (v7.8.0 expanded) ===
+       Was 4 cells with "6 venues" hardcoded. Now reads the live
+       INSTITUTION_STATS aggregator: 56 venues across 6 continents,
+       T1/T2/T3 split, signal count, world events, desk timezone. */}
   <section class="desk-stats" aria-label="Coverage statistics" data-reveal>
     <div class="container">
       <p class="desk-stats__eyebrow mono">24H COVERAGE · DETERMINISTIC SNAPSHOT</p>
-      <ul class="desk-stats__grid">
+      <ul class="desk-stats__grid desk-stats__grid--6">
         <li class="desk-stats__cell" style="--i: 0">
           <p class="desk-stats__num mono">
-            <span data-counter="6" data-duration="1200">06</span>
+            <span data-counter={venueCount} data-duration="1200">{venueCount}</span>
           </p>
           <p class="desk-stats__lbl mono">RESEARCH VENUES</p>
         </li>
         <li class="desk-stats__cell" style="--i: 1">
           <p class="desk-stats__num mono">
+            <span data-counter={t1Count} data-duration="1200">{t1Count}</span>
+          </p>
+          <p class="desk-stats__lbl mono">T1 INSTITUTIONS</p>
+        </li>
+        <li class="desk-stats__cell" style="--i: 2">
+          <p class="desk-stats__num mono">
+            <span data-counter={continents} data-duration="1200">{continents}</span>
+          </p>
+          <p class="desk-stats__lbl mono">CONTINENTS</p>
+        </li>
+        <li class="desk-stats__cell" style="--i: 3">
+          <p class="desk-stats__num mono">
             <span data-counter={events.length} data-duration="1200">{events.length}</span>
           </p>
           <p class="desk-stats__lbl mono">WORLD EVENTS</p>
         </li>
-        <li class="desk-stats__cell" style="--i: 2">
+        <li class="desk-stats__cell" style="--i: 4">
           <p class="desk-stats__num mono">
             <span data-counter={globalSignals} data-duration="1400">{globalSignals}+</span>
           </p>
           <p class="desk-stats__lbl mono">GLOBAL SIGNALS</p>
         </li>
-        <li class="desk-stats__cell" style="--i: 3">
+        <li class="desk-stats__cell" style="--i: 5">
           <p class="desk-stats__num mono">UTC+8</p>
           <p class="desk-stats__lbl mono">DESK TIMEZONE</p>
         </li>
@@ -196,6 +219,82 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
         <div class="desk-map__corner desk-map__corner--bl" aria-hidden="true"></div>
         <div class="desk-map__corner desk-map__corner--br" aria-hidden="true"></div>
         <EarthMap width={600} height={600} />
+      </div>
+      {/* v7.8.0 — research-power readout beneath the globe.
+         Tells the viewer: "this is the research capacity anchored to
+         each continent, this is the wire/news floor, this is the
+         signal density coming out of each region." Story-driven. */}
+      <div class="desk-research" aria-label="Research power and signal distribution">
+        <div class="desk-research__col">
+          <p class="desk-research__eyebrow mono">RESEARCH POWER · BY CONTINENT</p>
+          <ul class="desk-research__bars">
+            {Object.entries(INSTITUTION_STATS.byContinent)
+              .sort((a, b) => b[1] - a[1])
+              .map(([continent, count]) => {
+                const max = Math.max(...Object.values(INSTITUTION_STATS.byContinent));
+                const pct = Math.round((count / max) * 100);
+                return (
+                  <li class="desk-research__bar">
+                    <span class="desk-research__bar-lbl mono">{continent}</span>
+                    <span class="desk-research__bar-track" aria-hidden="true">
+                      <span class="desk-research__bar-fill" style={`--pct: ${pct}%`}></span>
+                    </span>
+                    <span class="desk-research__bar-num mono">{count}</span>
+                  </li>
+                );
+              })}
+          </ul>
+        </div>
+        <div class="desk-research__col">
+          <p class="desk-research__eyebrow mono">SIGNAL FLOOR · BY DOMAIN</p>
+          <ul class="desk-research__bars">
+            <li class="desk-research__bar">
+              <span class="desk-research__bar-lbl mono">q-fin</span>
+              <span class="desk-research__bar-track" aria-hidden="true">
+                <span class="desk-research__bar-fill" style={`--pct: 100%`}></span>
+              </span>
+              <span class="desk-research__bar-num mono">{INSTITUTION_STATS.byFocus['q-fin'] || 0}</span>
+            </li>
+            <li class="desk-research__bar">
+              <span class="desk-research__bar-lbl mono">cs-ai</span>
+              <span class="desk-research__bar-track" aria-hidden="true">
+                <span class="desk-research__bar-fill" style={`--pct: ${Math.round(((INSTITUTION_STATS.byFocus['cs-ai'] || 0) / (INSTITUTION_STATS.byFocus['q-fin'] || 1)) * 100)}%`}></span>
+              </span>
+              <span class="desk-research__bar-num mono">{INSTITUTION_STATS.byFocus['cs-ai'] || 0}</span>
+            </li>
+            <li class="desk-research__bar">
+              <span class="desk-research__bar-lbl mono">cs-lg</span>
+              <span class="desk-research__bar-track" aria-hidden="true">
+                <span class="desk-research__bar-fill" style={`--pct: ${Math.round(((INSTITUTION_STATS.byFocus['cs-lg'] || 0) / (INSTITUTION_STATS.byFocus['q-fin'] || 1)) * 100)}%`}></span>
+              </span>
+              <span class="desk-research__bar-num mono">{INSTITUTION_STATS.byFocus['cs-lg'] || 0}</span>
+            </li>
+            <li class="desk-research__bar">
+              <span class="desk-research__bar-lbl mono">cs-cl</span>
+              <span class="desk-research__bar-track" aria-hidden="true">
+                <span class="desk-research__bar-fill" style={`--pct: ${Math.round(((INSTITUTION_STATS.byFocus['cs-cl'] || 0) / (INSTITUTION_STATS.byFocus['q-fin'] || 1)) * 100)}%`}></span>
+              </span>
+              <span class="desk-research__bar-num mono">{INSTITUTION_STATS.byFocus['cs-cl'] || 0}</span>
+            </li>
+            <li class="desk-research__bar">
+              <span class="desk-research__bar-lbl mono">stat</span>
+              <span class="desk-research__bar-track" aria-hidden="true">
+                <span class="desk-research__bar-fill" style={`--pct: ${Math.round(((INSTITUTION_STATS.byFocus['stat'] || 0) / (INSTITUTION_STATS.byFocus['q-fin'] || 1)) * 100)}%`}></span>
+              </span>
+              <span class="desk-research__bar-num mono">{INSTITUTION_STATS.byFocus['stat'] || 0}</span>
+            </li>
+          </ul>
+        </div>
+        <div class="desk-research__col desk-research__col--story">
+          <p class="desk-research__eyebrow mono">WHAT THIS EARTH SEES</p>
+          <p class="desk-research__story">
+            <strong>{t1Count} T1 institutions</strong> across <strong>{continents} continents</strong>
+            anchor the research-side of the desk. arxiv papers and macro-wire headlines land on these
+            cities via deterministic hash. The {gdeltItems}-point GDELT overlay is the
+            news-side: where things are <em>moving right now</em>, rendered with polarity + severity.
+            Click any country or venue to dive.
+          </p>
+        </div>
       </div>
     </div>
   </section>
@@ -390,6 +489,10 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     grid-template-columns: repeat(4, 1fr);
     gap: 24px;
   }
+  .desk-stats__grid--6 {
+    grid-template-columns: repeat(6, 1fr);
+    gap: 18px;
+  }
   .desk-stats__cell {
     border-top: 1px solid var(--c-rule);
     padding-top: 16px;
@@ -411,6 +514,12 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     letter-spacing: -0.022em;
     margin: 0 0 6px;
     font-variant-numeric: tabular-nums;
+  }
+  .desk-stats__grid--6 .desk-stats__num {
+    font-size: 26px;
+  }
+  .desk-stats__grid--6 .desk-stats__lbl {
+    font-size: 9.5px;
   }
   .desk-stats__num span[data-counter] {
     color: var(--c-phi);
@@ -476,6 +585,92 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     max-width: 720px;
     margin: 0 auto;
     position: relative;
+  }
+
+  /* === v7.8.0 — research-power readout beneath the globe ===
+     Two bar charts (continent + domain) + one story paragraph.
+     Each bar is a single CSS line — mono small-caps, hairline
+     track, cobalt fill, hairline numeral at the end. The story
+     paragraph tells the viewer what the globe is actually showing. */
+  .desk-research {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.4fr;
+    gap: 24px;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid var(--c-rule);
+  }
+  .desk-research__col--story {
+    border-left: 1px solid var(--c-rule);
+    padding-left: 24px;
+  }
+  .desk-research__eyebrow {
+    font: 500 10px / 1.4 var(--ff-mono);
+    color: var(--c-warn);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin: 0 0 14px;
+  }
+  .desk-research__bars {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .desk-research__bar {
+    display: grid;
+    grid-template-columns: 48px 1fr 28px;
+    align-items: center;
+    gap: 8px;
+  }
+  .desk-research__bar-lbl {
+    font: 500 9.5px / 1.2 var(--ff-mono);
+    color: var(--c-ink-2);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .desk-research__bar-track {
+    height: 8px;
+    background: var(--c-bg-2);
+    border: 1px solid var(--c-rule);
+    position: relative;
+    overflow: hidden;
+  }
+  .desk-research__bar-fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: var(--pct, 0%);
+    background: linear-gradient(
+      90deg,
+      var(--c-primary-2) 0%,
+      var(--c-primary-2) 70%,
+      var(--c-amber) 100%
+    );
+    transition: width 0.6s cubic-bezier(.4,.7,.3,1);
+  }
+  .desk-research__bar-num {
+    font: 600 10px / 1 var(--ff-mono);
+    color: var(--c-ink);
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .desk-research__story {
+    font: 400 13px / 1.6 var(--ff-sans);
+    color: var(--c-ink-2);
+    margin: 0;
+    max-width: 48ch;
+  }
+  .desk-research__story strong {
+    color: var(--c-ink);
+    font-weight: 600;
+  }
+  .desk-research__story em {
+    color: var(--c-amber);
+    font-family: var(--serif-display);
+    font-style: italic;
+    font-weight: 500;
   }
   .desk-map__corner {
     position: absolute;
@@ -626,6 +821,9 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     .desk-stats__grid {
       grid-template-columns: repeat(2, 1fr);
       gap: 18px;
+    }
+    .desk-stats__grid--6 {
+      grid-template-columns: repeat(3, 1fr);
     }
   }
   @media (max-width: 720px) {

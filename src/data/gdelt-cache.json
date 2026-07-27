@@ -21,9 +21,9 @@
       "title": "IRN–USA yield · United States",
       "category": "central-bank",
       "severity": "critical",
-      "lat": 39.828175,
-      "lon": -98.5795,
-      "city": "United States",
+      "lat": 38.9072,
+      "lon": -77.0369,
+      "city": "Washington, DC",
       "source": "GDELT event monitor",
       "timestamp": "2026-07-26T12:00:00Z",
       "goldstein": 9
@@ -33,9 +33,9 @@
       "title": "IRN–USA yield · United States",
       "category": "central-bank",
       "severity": "critical",
-      "lat": 39.828175,
-      "lon": -98.5795,
-      "city": "United States",
+      "lat": 38.9072,
+      "lon": -77.0369,
+      "city": "Washington, DC",
       "source": "GDELT event monitor",
       "timestamp": "2026-07-26T12:00:00Z",
       "goldstein": 9
@@ -141,9 +141,9 @@
       "title": "CHN aid · China",
       "category": "central-bank",
       "severity": "critical",
-      "lat": 35,
-      "lon": 105,
-      "city": "China",
+      "lat": 39.9042,
+      "lon": 116.4074,
+      "city": "Beijing",
       "source": "GDELT event monitor",
       "timestamp": "2026-07-26T12:00:00Z",
       "goldstein": 7.4
@@ -189,9 +189,9 @@
       "title": "IRN aid · Russia",
       "category": "geopolitical",
       "severity": "critical",
-      "lat": 60,
-      "lon": 100,
-      "city": "Russia",
+      "lat": 55.7558,
+      "lon": 37.6173,
+      "city": "Moscow",
       "source": "GDELT event monitor",
       "timestamp": "2026-07-26T12:00:00Z",
       "goldstein": 7.4
@@ -369,9 +369,9 @@
       "title": "aid · United States",
       "category": "geopolitical",
       "severity": "moderate",
-      "lat": 39.828175,
-      "lon": -98.5795,
-      "city": "United States",
+      "lat": 38.9072,
+      "lon": -77.0369,
+      "city": "Washington, DC",
       "source": "GDELT event monitor",
       "timestamp": "2026-07-26T12:00:00Z",
       "goldstein": 7
@@ -417,9 +417,9 @@
       "title": "IRN threat · Iran",
       "category": "geopolitical",
       "severity": "moderate",
-      "lat": 32,
-      "lon": 53,
-      "city": "Iran",
+      "lat": 35.6892,
+      "lon": 51.389,
+      "city": "Tehran",
       "source": "GDELT event monitor",
       "timestamp": "2026-07-26T12:00:00Z",
       "goldstein": -7
@@ -429,9 +429,9 @@
       "title": "IRN–PAK consultation · Iran",
       "category": "geopolitical",
       "severity": "moderate",
-      "lat": 32,
-      "lon": 53,
-      "city": "Iran",
+      "lat": 35.6892,
+      "lon": 51.389,
+      "city": "Tehran",
       "source": "GDELT event monitor",
       "timestamp": "2026-07-26T12:00:00Z",
       "goldstein": 7
@@ -513,9 +513,9 @@
       "title": "PAK–IRN consultation · Iran",
       "category": "geopolitical",
       "severity": "moderate",
-      "lat": 32,
-      "lon": 53,
-      "city": "Iran",
+      "lat": 35.6892,
+      "lon": 51.389,
+      "city": "Tehran",
       "source": "GDELT event monitor",
       "timestamp": "2026-07-26T12:00:00Z",
       "goldstein": 7
@@ -604,5 +604,6 @@
       "timestamp": "2026-07-26T12:00:00Z",
       "goldstein": 7
     }
-  ]
+  ],
+  "resolutionNote": "Country-only events resolved to capital via CITY_RESOLVE (Jul 2026)."
 }
