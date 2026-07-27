@@ -45,6 +45,11 @@ interface Props {
   // 'light' / 'dark' forces the theme via body.theme-light / body.theme-dark.
   // Note: tokens-v6.13.css uses :has() to detect these body classes.
   theme?: 'auto' | 'light' | 'dark';
+  // v7.7.18 — ogDescription overrides the OG description used by buildMeta.
+  // Pages with long `summary_long` copy should pass a shorter string here so
+  // the OG/Twitter Card preview (LinkedIn truncates at 200 chars, Slack at ~200)
+  // doesn't cut off mid-sentence. Falls back to `description` when absent.
+  ogDescription?: string;
 }
 
 // v6.18 — `surface` now defaults to `'v6-13'` (warm-dim #1a1714) so EVERY
@@ -61,6 +66,7 @@ const {
   className,
   extraJsonLd,
   breadcrumbs,
+  ogDescription,
   surface = 'v6-13',
   // v7.6.3 — default theme is 'light' (was 'auto'). The matcha + terracotta
   // vocabulary reads institutional on cream; the warm-dim dark register
@@ -78,6 +84,10 @@ const bodyClass = [themeClass, className].filter(Boolean).join(' ');
 const meta = buildMeta({
   title,
   description: description ?? profile.titles.secondary,
+  // v7.7.18 — ogDescription is the OG/Twitter Card description (short, ≤200).
+  // Page-level `description` is the SEO meta description (longer, for search
+  // snippets). Two different audiences, two different strings.
+  ogDescription: ogDescription ?? description ?? profile.titles.secondary,
   // Default og:image is the headshot banner. `path()` prepends the configured
   // base (`/portfolio` on GH Pages) so the resolved URL points at the actual
   // deployed asset, not the site root.

@@ -13,6 +13,11 @@ import { profile } from './profile';
 export interface SEO {
   title: string;
   description: string;
+  // v7.7.18 — optional separate OG/Twitter Card description. Pages with long
+  // summary copy should pass a short string here so LinkedIn/Slack previews
+  // (which truncate at ~200 chars) don't cut off mid-sentence. Falls back
+  // to `description` when absent.
+  ogDescription?: string;
   image?: string;
   type?: 'website' | 'article' | 'profile';
   pathname?: string;
@@ -45,10 +50,20 @@ function absUrl(p: string): string {
   return `${SITE_URL}${BASE}${p}`;
 }
 
-export function buildMeta({ title, description, image, type = 'website', pathname = '/' }: SEO) {
+export function buildMeta({
+  title,
+  description,
+  ogDescription,
+  image,
+  type = 'website',
+  pathname = '/',
+}: SEO) {
   const fullTitle = title === SITE_NAME ? title : `${title} · ${SITE_NAME}`;
   const canonical = new URL(pathname, SITE_URL).toString();
   const imageUrl = image ? new URL(image, SITE_URL).toString() : undefined;
+  // v7.7.18 — ogDescription is the OG/Twitter Card description (typically
+  // shorter than `description`). Falls back to `description` when absent.
+  const ogDesc = ogDescription ?? description;
   return {
     title: fullTitle,
     description,
@@ -56,7 +71,7 @@ export function buildMeta({ title, description, image, type = 'website', pathnam
     openGraph: {
       type,
       title: fullTitle,
-      description,
+      description: ogDesc,
       url: canonical,
       site_name: SITE_NAME,
       images: imageUrl ? [{ url: imageUrl }] : undefined,
@@ -64,7 +79,7 @@ export function buildMeta({ title, description, image, type = 'website', pathnam
     twitter: {
       card: 'summary_large_image',
       title: fullTitle,
-      description,
+      description: ogDesc,
       images: imageUrl ? [imageUrl] : undefined,
     },
   };

@@ -76,7 +76,7 @@ export const terms: GlossaryTerm[] = [
     term: 'CSCV / PBO',
     category: 'Quant',
     short:
-      'Combinatorially Symmetric Cross-Validation, the standard method for estimating Probability of Backtest Overfitting. Tells you how many of your backtest winners would have been selected by chance alone.',
+      'Combinatorially Symmetric Cross-Validation, the standard method for estimating Probability of Backtest Overfitting. Tells you how many of your backtest winners would have been selected by chance alon…',
     extended: `CSCV (Combinatorially Symmetric Cross-Validation), introduced by Bailey, Borwein, López de Prado, and Zhu (2014), is the standard method for estimating the Probability of Backtest Overfitting (PBO). It partitions the backtest time-series into N blocks, then iterates over all 2^N combinations of training/test splits. The proportion of splits in which the best in-sample strategy underperforms the median out-of-sample is the PBO estimate. A PBO of 50% means half your 'best' strategies would have lost out-of-sample by chance. On this site, CSCV is gate G22 of the ${GATE_RANGE} evaluation stack; every quant project reports its PBO with the block count and split count disclosed.`,
     related: ['pbo', 'walk-forward', 'deflated-sharpe', 'minbtl', 'block-bootstrap'],
   },
@@ -95,7 +95,7 @@ export const terms: GlossaryTerm[] = [
     term: 'Deflated Sharpe Ratio (DSR)',
     category: 'Quant',
     short:
-      'A correction to the Sharpe ratio that adjusts for the number of trials, the distribution of returns, and the skew/kurtosis of the strategy. Tells you whether a high Sharpe is real or a multiple-testing artifact.',
+      'A correction to the Sharpe ratio that adjusts for the number of trials, the distribution of returns, and the skew/kurtosis of the strategy. Tells you whether a high Sharpe is real or a multiple-testi…',
     extended: `The Deflated Sharpe Ratio (Bailey & López de Prado, 2014) adjusts the observed Sharpe for: (1) the number of trials run (multiple-testing correction), (2) the non-normality of returns (skew and kurtosis), and (3) the correlation between strategies in the trial set. A backtest Sharpe of 1.5 that emerged from a 50-trial search is much less impressive than the same Sharpe from a single test. On this site, DSR is gate G21 of the ${GATE_RANGE} evaluation stack — every quant project reports DSR alongside the raw Sharpe so the recruiter can tell signal from search.`,
     related: ['sharpe', 'pbo', 'cscv-pbo', 'bonferroni-holm', 'minbtl'],
   },

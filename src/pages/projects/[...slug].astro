@@ -26,7 +26,12 @@ const laneLabel = role === 'ai' ? 'AI Engineer' : 'Quantitative Researcher';
 const laneClass = role === 'ai' ? 'pill--brand' : 'pill--accent';
 ---
 
-<BaseLayout title={title} description={summary_long ?? summary} type="article">
+<BaseLayout
+  title={title}
+  description={summary_long ?? summary}
+  ogDescription={summary}
+  type="article"
+>
   <article class="proj">
     <header class="proj__head">
       <div class="container container-narrow">
