@@ -121,6 +121,20 @@ function localClock(iso: string, lon: number | undefined): string {
 function tzOffset(lon: number | undefined): number {
   return lon === undefined ? 0 : Math.round(lon / 15);
 }
+
+// === v7.9.3 — top 6 cities by event count (for quick-filter chips) ======
+const cityCounts: Array<{ city: string; count: number }> = (() => {
+  const m = new Map<string, number>();
+  for (const e of events) {
+    const c = (e.city ?? '').trim();
+    if (!c) continue;
+    m.set(c, (m.get(c) ?? 0) + 1);
+  }
+  return Array.from(m.entries())
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 6)
+    .map(([city, count]) => ({ city, count }));
+})();
 ---
 
 <section class="live-feed" aria-label="Unified live feed — GDELT + arXiv + macro-wire" data-live-feed>
@@ -152,8 +166,8 @@ function tzOffset(lon: number | undefined): number {
         <input
           type="search"
           class="live-feed__search-input mono"
-          placeholder="SEARCH TITLE…"
-          aria-label="Search live feed by title"
+          placeholder="SEARCH TITLE OR CITY…"
+          aria-label="Search live feed by title or city"
           autocomplete="off"
           spellcheck="false"
           data-search-input
@@ -162,6 +176,26 @@ function tzOffset(lon: number | undefined): number {
       <p class="live-feed__count mono" data-visible-count>
         {events.length} VISIBLE
       </p>
+    </div>
+  )}
+
+  {/* === v7.9.3 polish — popular-city quick filters + refresh countdown ====== */}
+  {hasItems && cityCounts.length > 0 && (
+    <div class="live-feed__cities" role="toolbar" aria-label="Filter by city">
+      <span class="live-feed__city-label mono">CITIES ·</span>
+      <button type="button" class="live-feed__city-btn live-feed__city-btn--active" data-city-filter="all">ALL</button>
+      {cityCounts.map(({ city, count }) => (
+        <button
+          type="button"
+          class="live-feed__city-btn"
+          data-city-filter={city.toLowerCase()}
+        >
+          {city.toUpperCase()} <span class="live-feed__city-count">({count})</span>
+        </button>
+      ))}
+      <span class="live-feed__refresh mono" data-refresh-countdown data-generated={cache.generated}>
+        CACHE · REFRESH
+      </span>
     </div>
   )}
 
@@ -287,6 +321,61 @@ function tzOffset(lon: number | undefined): number {
     padding: 10px 0 14px;
     border-bottom: 1px solid var(--c-rule);
     margin-bottom: 8px;
+  }
+
+  /* === v7.9.3 — popular-city quick filter row =========================== */
+  .live-feed__cities {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    padding: 0 0 12px;
+  }
+  .live-feed__city-label {
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    color: var(--c-ink-3);
+    margin-right: 4px;
+  }
+  .live-feed__city-btn {
+    appearance: none;
+    background: transparent;
+    border: 1px solid var(--c-rule);
+    color: var(--c-ink-2);
+    padding: 3px 8px;
+    font: 500 9.5px / 1.4 var(--ff-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition:
+      background 120ms ease,
+      color 120ms ease,
+      border-color 120ms ease;
+  }
+  .live-feed__city-btn:hover {
+    border-color: var(--c-ink-2);
+    color: var(--c-ink);
+  }
+  .live-feed__city-btn:focus-visible {
+    outline: 2px solid var(--c-amber);
+    outline-offset: 1px;
+  }
+  .live-feed__city-btn--active {
+    background: var(--c-warn);
+    color: var(--c-bg);
+    border-color: var(--c-warn);
+  }
+  .live-feed__city-count {
+    color: inherit;
+    opacity: 0.7;
+    margin-left: 2px;
+  }
+  .live-feed__refresh {
+    margin-left: auto;
+    color: var(--c-ink-3);
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
   }
   .live-feed__chips {
     display: inline-flex;
@@ -609,9 +698,12 @@ function tzOffset(lon: number | undefined): number {
   const counter = document.querySelector<HTMLElement>('[data-visible-count]');
   const searchInput = document.querySelector<HTMLInputElement>('[data-search-input]');
   const chipButtons = document.querySelectorAll<HTMLButtonElement>('[data-source-filter]');
+  const cityButtons = document.querySelectorAll<HTMLButtonElement>('[data-city-filter]');
+  const refreshCountdown = document.querySelector<HTMLElement>('[data-refresh-countdown]');
 
   let activeSource = 'all';
   let activeQuery = '';
+  let activeCity = 'all';
 
   function flashRow(row: HTMLElement): void {
     row.setAttribute('data-flash', '1');
@@ -628,7 +720,8 @@ function tzOffset(lon: number | undefined): number {
       const city = row.dataset.eventCity ?? '';
       const sourceOk = activeSource === 'all' || source === activeSource;
       const queryOk = !activeQuery || title.includes(activeQuery) || city.includes(activeQuery);
-      const show = sourceOk && queryOk;
+      const cityOk = activeCity === 'all' || city === activeCity;
+      const show = sourceOk && queryOk && cityOk;
       if (show) {
         row.removeAttribute('data-filtered');
         visible++;
@@ -650,10 +743,60 @@ function tzOffset(lon: number | undefined): number {
     });
   }
 
+  for (const btn of cityButtons) {
+    btn.addEventListener('click', () => {
+      for (const other of cityButtons) {
+        other.classList.remove('live-feed__city-btn--active');
+      }
+      btn.classList.add('live-feed__city-btn--active');
+      activeCity = btn.dataset.cityFilter ?? 'all';
+      applyFilters();
+    });
+  }
+
   searchInput?.addEventListener('input', () => {
     activeQuery = (searchInput.value ?? '').trim().toLowerCase();
     applyFilters();
   });
+
+  /* === v7.9.3 — keyboard nav (j/k = next/prev row) ======================== */
+  const rows = () => Array.from(document.querySelectorAll<HTMLElement>('.live-feed__row:not([data-filtered="1"])'));
+  document.addEventListener('keydown', (ev) => {
+    if (ev.key !== 'j' && ev.key !== 'k') return;
+    const t = ev.target as HTMLElement | null;
+    if (!t) return;
+    // Skip when typing in an input/textarea.
+    const tag = t.tagName.toLowerCase();
+    if (tag === 'input' || tag === 'textarea' || t.isContentEditable) return;
+    const visible = rows();
+    if (visible.length === 0) return;
+    const active = document.activeElement as HTMLElement | null;
+    const idx = visible.findIndex((r) => r === active || r.contains(active));
+    const nextIdx = ev.key === 'j'
+      ? Math.min(visible.length - 1, idx + 1)
+      : Math.max(0, idx - 1);
+    const next = visible[nextIdx === -1 ? 0 : nextIdx];
+    if (!next) return;
+    ev.preventDefault();
+    next.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    flashRow(next);
+    next.focus({ preventScroll: true });
+  });
+
+  /* === v7.9.3 — refresh countdown =========================================
+     Cloudflare Pages free tier rebuilds on git push; cron doesn't trigger
+     live cache rebuilds, so this is a soft hint about how stale the data
+     is. Counts minutes since the cache was generated. */
+  if (refreshCountdown) {
+    const generatedAttr = refreshCountdown.dataset.generated;
+    const generatedMs = generatedAttr ? new Date(generatedAttr).getTime() : Date.now();
+    const tick = (): void => {
+      const ageMin = Math.max(0, Math.floor((Date.now() - generatedMs) / 60_000));
+      refreshCountdown.textContent = `CACHE · ${ageMin}M OLD`;
+    };
+    tick();
+    window.setInterval(tick, 60_000);
+  }
 
   /* === v7.9.1 — earth:venue-focus / earth:country-focus scroll ============ */
   function findFirstRowByCity(city: string): HTMLElement | null {
