@@ -1,0 +1,2763 @@
+{
+  "generated": "2026-07-27T15:10:19.937Z",
+  "counts": {
+    "agents": 107,
+    "skills": 100,
+    "relations": 3854
+  },
+  "agents": [
+    {
+      "id": "agent:a11y-specialist",
+      "name": "a11y_specialist",
+      "tier": "senior-specialist",
+      "squad": "G",
+      "mark": "♿"
+    },
+    {
+      "id": "agent:academic-analyst",
+      "name": "academic_analyst",
+      "tier": "senior-specialist",
+      "squad": "OSINT",
+      "mark": "🎓"
+    },
+    {
+      "id": "agent:ai-architect",
+      "name": "ai_architect",
+      "tier": "specialist",
+      "squad": "B",
+      "mark": "🏗️"
+    },
+    {
+      "id": "agent:ai-engineer",
+      "name": "ai_engineer",
+      "tier": "specialist",
+      "squad": "B",
+      "mark": "⚙️"
+    },
+    {
+      "id": "agent:alpha-researcher",
+      "name": "alpha_researcher",
+      "tier": "squad-pm",
+      "squad": "C",
+      "mark": "🔭"
+    },
+    {
+      "id": "agent:architecture-designer",
+      "name": "architecture_designer",
+      "tier": "T3",
+      "squad": "S",
+      "mark": "🏛️"
+    },
+    {
+      "id": "agent:audit-specialist",
+      "name": "audit_specialist",
+      "tier": "senior-specialist",
+      "squad": "OSINT",
+      "mark": "🔍"
+    },
+    {
+      "id": "agent:back-end-engineer",
+      "name": "back_end_engineer",
+      "tier": "senior-specialist",
+      "squad": "G",
+      "mark": "⚙️"
+    },
+    {
+      "id": "agent:behavioral-economist",
+      "name": "behavioral_economist",
+      "tier": "senior-specialist",
+      "squad": "E",
+      "mark": "🧠"
+    },
+    {
+      "id": "agent:burnout-watchdog",
+      "name": "burnout_watchdog",
+      "tier": "specialist",
+      "squad": "F",
+      "mark": "🚨"
+    },
+    {
+      "id": "agent:cash-goal-arbitrage-analyst",
+      "name": "cash_goal_arbitrage_analyst",
+      "tier": "specialist",
+      "squad": "A",
+      "mark": "💸"
+    },
+    {
+      "id": "agent:chief-of-staff",
+      "name": "chief_of_staff",
+      "tier": "T1",
+      "squad": "F",
+      "mark": "🎖️"
+    },
+    {
+      "id": "agent:communications-officer",
+      "name": "communications_officer",
+      "tier": "squad-pm",
+      "squad": "A",
+      "mark": "📢"
+    },
+    {
+      "id": "agent:compliance-officer",
+      "name": "compliance_officer",
+      "tier": "leadership",
+      "squad": "D",
+      "mark": "⚖️"
+    },
+    {
+      "id": "agent:comptroller",
+      "name": "comptroller",
+      "tier": "leadership",
+      "squad": "D",
+      "mark": "💰"
+    },
+    {
+      "id": "agent:content-strategist",
+      "name": "content_strategist",
+      "tier": "specialist",
+      "squad": "A",
+      "mark": "📰"
+    },
+    {
+      "id": "agent:contrarian-officer",
+      "name": "contrarian_officer",
+      "tier": "leadership",
+      "squad": "F",
+      "mark": "🦂"
+    },
+    {
+      "id": "agent:corporate-osint-analyst",
+      "name": "corporate_osint_analyst",
+      "tier": "senior-specialist",
+      "squad": "OSINT",
+      "mark": "🏢"
+    },
+    {
+      "id": "agent:cti-analyst",
+      "name": "cti_analyst",
+      "tier": "senior-specialist",
+      "squad": "OSINT",
+      "mark": "🦠"
+    },
+    {
+      "id": "agent:curriculum-engineer",
+      "name": "curriculum_engineer",
+      "tier": "specialist",
+      "squad": "F",
+      "mark": "📚"
+    },
+    {
+      "id": "agent:darkweb-analyst",
+      "name": "darkweb_analyst",
+      "tier": "senior-specialist",
+      "squad": "OSINT",
+      "mark": "🕳️"
+    },
+    {
+      "id": "agent:data-engineer",
+      "name": "data_engineer",
+      "tier": "specialist",
+      "squad": "C",
+      "mark": "🗄️"
+    },
+    {
+      "id": "agent:davao-filipino-language-coach",
+      "name": "davao-filipino-language-coach",
+      "tier": "specialist",
+      "squad": "E",
+      "mark": "🗣️"
+    },
+    {
+      "id": "agent:devops-engineer",
+      "name": "devops_engineer",
+      "tier": "senior-specialist",
+      "squad": "G",
+      "mark": "🚢"
+    },
+    {
+      "id": "agent:economist",
+      "name": "economist",
+      "tier": "senior-specialist",
+      "squad": "E",
+      "mark": "🏛️"
+    },
+    {
+      "id": "agent:editorial-director",
+      "name": "editorial_director",
+      "tier": "specialist",
+      "squad": "A",
+      "mark": "📝"
+    },
+    {
+      "id": "agent:eval-harness-lead",
+      "name": "eval_harness_lead",
+      "tier": "squad-pm",
+      "squad": "B",
+      "mark": "🎛️"
+    },
+    {
+      "id": "agent:execution-officer",
+      "name": "execution_officer",
+      "tier": "T1",
+      "squad": "F",
+      "mark": "🔨"
+    },
+    {
+      "id": "agent:financial-consultant",
+      "name": "financial_consultant",
+      "tier": "senior-specialist",
+      "squad": "E",
+      "mark": "📈"
+    },
+    {
+      "id": "agent:financial-intel-analyst",
+      "name": "financial_intel_analyst",
+      "tier": "senior-specialist",
+      "squad": "OSINT",
+      "mark": "💰"
+    },
+    {
+      "id": "agent:framing-honesty-calibrator",
+      "name": "framing_honesty_calibrator",
+      "tier": "leadership",
+      "squad": "D",
+      "mark": "🪞"
+    },
+    {
+      "id": "agent:front-end-engineer",
+      "name": "front_end_engineer",
+      "tier": "senior-specialist",
+      "squad": "G",
+      "mark": "🛠️"
+    },
+    {
+      "id": "agent:geoint-analyst",
+      "name": "geoint_analyst",
+      "tier": "senior-specialist",
+      "squad": "OSINT",
+      "mark": "🌍"
+    },
+    {
+      "id": "agent:goal-keeper",
+      "name": "goal_keeper",
+      "tier": "specialist",
+      "squad": "F",
+      "mark": "🏁"
+    },
+    {
+      "id": "agent:graph-adoption-officer",
+      "name": "graph_adoption_officer",
+      "tier": "senior-specialist",
+      "squad": "F",
+      "mark": "🌐"
+    },
+    {
+      "id": "agent:graph-engineer",
+      "name": "graph_engineer",
+      "tier": "senior-specialist",
+      "squad": "B",
+      "mark": "🕸️"
+    },
+    {
+      "id": "agent:hf-researcher",
+      "name": "hf_researcher",
+      "tier": "specialist",
+      "squad": "C",
+      "mark": "🏛️"
+    },
+    {
+      "id": "agent:hr-auditor",
+      "name": "hr_auditor",
+      "tier": "leadership",
+      "squad": "F",
+      "mark": "📊"
+    },
+    {
+      "id": "agent:hugo-trader",
+      "name": "hugo_trader",
+      "tier": "specialist",
+      "squad": "C",
+      "mark": "⚡"
+    },
+    {
+      "id": "agent:idea-validator",
+      "name": "idea_validator",
+      "tier": "T3",
+      "squad": "S",
+      "mark": "🔬"
+    },
+    {
+      "id": "agent:identity-analyst",
+      "name": "identity_analyst",
+      "tier": "senior-specialist",
+      "squad": "OSINT",
+      "mark": "🪪"
+    },
+    {
+      "id": "agent:imint-analyst",
+      "name": "imint_analyst",
+      "tier": "senior-specialist",
+      "squad": "OSINT",
+      "mark": "📷"
+    },
+    {
+      "id": "agent:innovation-consultant",
+      "name": "innovation_consultant",
+      "tier": "senior-specialist",
+      "squad": "E",
+      "mark": "💡"
+    },
+    {
+      "id": "agent:intelligence-officer",
+      "name": "intelligence_officer",
+      "tier": "squad-pm",
+      "squad": "E",
+      "mark": "🛰️"
+    },
+    {
+      "id": "agent:jd-keyword-aligner",
+      "name": "jd_keyword_aligner",
+      "tier": "specialist",
+      "squad": "A",
+      "mark": "🔑"
+    },
+    {
+      "id": "agent:leverage-strategist",
+      "name": "leverage_strategist",
+      "tier": "senior-specialist",
+      "squad": "OSINT",
+      "mark": "♟️"
+    },
+    {
+      "id": "agent:logistics-officer",
+      "name": "logistics_officer",
+      "tier": "squad-pm",
+      "squad": "D",
+      "mark": "📦"
+    },
+    {
+      "id": "agent:loop-engineer",
+      "name": "loop_engineer",
+      "tier": "specialist",
+      "squad": "D",
+      "mark": "🔁"
+    },
+    {
+      "id": "agent:marketing-consultant",
+      "name": "marketing_consultant",
+      "tier": "senior-specialist",
+      "squad": "E",
+      "mark": "🎯"
+    },
+    {
+      "id": "agent:mcp-eval-engineer",
+      "name": "mcp_eval_engineer",
+      "tier": "specialist",
+      "squad": "B",
+      "mark": "🧪"
+    },
+    {
+      "id": "agent:mcp-server-eng",
+      "name": "mcp_server_eng",
+      "tier": "specialist",
+      "squad": "B",
+      "mark": "🔌"
+    },
+    {
+      "id": "agent:media-intel-analyst",
+      "name": "media_intel_analyst",
+      "tier": "senior-specialist",
+      "squad": "OSINT",
+      "mark": "📰"
+    },
+    {
+      "id": "agent:motion-designer",
+      "name": "motion_designer",
+      "tier": "senior-specialist",
+      "squad": "G",
+      "mark": "🎬"
+    },
+    {
+      "id": "agent:nda-counsel",
+      "name": "nda_counsel",
+      "tier": "T3",
+      "squad": "S",
+      "mark": "⚖️"
+    },
+    {
+      "id": "agent:nda-preflight",
+      "name": "nda_preflight",
+      "tier": "specialist",
+      "squad": "D",
+      "mark": "🛂"
+    },
+    {
+      "id": "agent:negotiation-advisor",
+      "name": "negotiation_advisor",
+      "tier": "senior-specialist",
+      "squad": "E",
+      "mark": "🤝"
+    },
+    {
+      "id": "agent:numerai-researcher",
+      "name": "numerai_researcher",
+      "tier": "specialist",
+      "squad": "C",
+      "mark": "🎯"
+    },
+    {
+      "id": "agent:ojph-redflag-triage",
+      "name": "ojph_redflag_triage",
+      "tier": "specialist",
+      "squad": "A",
+      "mark": "🚩"
+    },
+    {
+      "id": "agent:operations-consultant",
+      "name": "operations_consultant",
+      "tier": "senior-specialist",
+      "squad": "E",
+      "mark": "⚙️"
+    },
+    {
+      "id": "agent:operations-officer",
+      "name": "operations_officer",
+      "tier": "leadership",
+      "squad": "D",
+      "mark": "🧭"
+    },
+    {
+      "id": "agent:osint-director",
+      "name": "osint_director",
+      "tier": "senior-specialist",
+      "squad": "OSINT",
+      "mark": "🔬"
+    },
+    {
+      "id": "agent:osint-engineer",
+      "name": "osint_engineer",
+      "tier": "senior-specialist",
+      "squad": "OSINT",
+      "mark": "🛠️"
+    },
+    {
+      "id": "agent:osint-reviewer",
+      "name": "osint_reviewer",
+      "tier": "senior-specialist",
+      "squad": "OSINT",
+      "mark": "📋"
+    },
+    {
+      "id": "agent:osint-targeting-analyst",
+      "name": "osint_targeting_analyst",
+      "tier": "senior-specialist",
+      "squad": "OSINT",
+      "mark": "🎯"
+    },
+    {
+      "id": "agent:pedagogy-officer",
+      "name": "pedagogy_officer",
+      "tier": "leadership",
+      "squad": "F",
+      "mark": "🦉"
+    },
+    {
+      "id": "agent:people-graph-analyst",
+      "name": "people_graph_analyst",
+      "tier": "senior-specialist",
+      "squad": "OSINT",
+      "mark": "👪"
+    },
+    {
+      "id": "agent:pilot-runner",
+      "name": "pilot_runner",
+      "tier": "T3",
+      "squad": "S",
+      "mark": "🚀"
+    },
+    {
+      "id": "agent:pitch-strategist",
+      "name": "pitch_strategist",
+      "tier": "T3",
+      "squad": "S",
+      "mark": "🎤"
+    },
+    {
+      "id": "agent:planning-officer",
+      "name": "planning_officer",
+      "tier": "T1",
+      "squad": "F",
+      "mark": "📋"
+    },
+    {
+      "id": "agent:product-strategist",
+      "name": "product_strategist",
+      "tier": "senior-specialist",
+      "squad": "E",
+      "mark": "🛠️"
+    },
+    {
+      "id": "agent:prompt-engineer",
+      "name": "prompt_engineer",
+      "tier": "specialist",
+      "squad": "B",
+      "mark": "✏️"
+    },
+    {
+      "id": "agent:prompt-optimizer",
+      "name": "prompt_optimizer",
+      "tier": "specialist",
+      "squad": "B",
+      "mark": "🔧"
+    },
+    {
+      "id": "agent:proposal-strategist",
+      "name": "proposal_strategist",
+      "tier": "T3",
+      "squad": "S",
+      "mark": "📑"
+    },
+    {
+      "id": "agent:public-facing-educator",
+      "name": "public_facing_educator",
+      "tier": "specialist",
+      "squad": "F",
+      "mark": "🛡️"
+    },
+    {
+      "id": "agent:qa-engineer",
+      "name": "qa_engineer",
+      "tier": "senior-specialist",
+      "squad": "G",
+      "mark": "✓"
+    },
+    {
+      "id": "agent:quality-officer",
+      "name": "quality_officer",
+      "tier": "leadership",
+      "squad": "D",
+      "mark": "✓"
+    },
+    {
+      "id": "agent:rag-architect",
+      "name": "rag_architect",
+      "tier": "specialist",
+      "squad": "B",
+      "mark": "🗂️"
+    },
+    {
+      "id": "agent:rag-engineer",
+      "name": "rag_engineer",
+      "tier": "specialist",
+      "squad": "B",
+      "mark": "🔍"
+    },
+    {
+      "id": "agent:replicate-ml-engineer",
+      "name": "replicate_ml_engineer",
+      "tier": "specialist",
+      "squad": "B",
+      "mark": "🦾"
+    },
+    {
+      "id": "agent:risk-manager",
+      "name": "risk_manager",
+      "tier": "specialist",
+      "squad": "C",
+      "mark": "🛡️"
+    },
+    {
+      "id": "agent:risk-strategist",
+      "name": "risk_strategist",
+      "tier": "senior-specialist",
+      "squad": "E",
+      "mark": "⚖️"
+    },
+    {
+      "id": "agent:sales-lead",
+      "name": "sales_lead",
+      "tier": "specialist",
+      "squad": "A",
+      "mark": "📣"
+    },
+    {
+      "id": "agent:security-engineer",
+      "name": "security_engineer",
+      "tier": "senior-specialist",
+      "squad": "G",
+      "mark": "🛡️"
+    },
+    {
+      "id": "agent:sharpe-truth-bridge",
+      "name": "sharpe_truth_bridge",
+      "tier": "specialist",
+      "squad": "C",
+      "mark": "🌉"
+    },
+    {
+      "id": "agent:signals-intel-analyst",
+      "name": "signals_intel_analyst",
+      "tier": "senior-specialist",
+      "squad": "OSINT",
+      "mark": "📡"
+    },
+    {
+      "id": "agent:socmint-analyst",
+      "name": "socmint_analyst",
+      "tier": "senior-specialist",
+      "squad": "OSINT",
+      "mark": "👥"
+    },
+    {
+      "id": "agent:stat-arb-pm",
+      "name": "stat_arb_pm",
+      "tier": "specialist",
+      "squad": "C",
+      "mark": "📊"
+    },
+    {
+      "id": "agent:stella-voice",
+      "name": "stella_voice",
+      "tier": "specialist",
+      "squad": "A",
+      "mark": ""
+    },
+    {
+      "id": "agent:strategist-consultant",
+      "name": "strategist_consultant",
+      "tier": "T1",
+      "squad": "E",
+      "mark": "📜"
+    },
+    {
+      "id": "agent:strategy-consultant",
+      "name": "strategy_consultant",
+      "tier": "senior-specialist",
+      "squad": "E",
+      "mark": "🏛️"
+    },
+    {
+      "id": "agent:tech-lead",
+      "name": "tech_lead",
+      "tier": "leadership",
+      "squad": "G",
+      "mark": "🏛️"
+    },
+    {
+      "id": "agent:uiux-engineer",
+      "name": "uiux_engineer",
+      "tier": "leadership",
+      "squad": "A",
+      "mark": "🎨"
+    },
+    {
+      "id": "agent:venture-architect",
+      "name": "venture_architect",
+      "tier": "T1",
+      "squad": "S",
+      "mark": "🏗️"
+    },
+    {
+      "id": "agent:venture-hr",
+      "name": "venture_hr",
+      "tier": "T3",
+      "squad": "S",
+      "mark": "🧑‍🤝‍🧑"
+    },
+    {
+      "id": "agent:venture-metrics-officer",
+      "name": "venture_metrics_officer",
+      "tier": "T3",
+      "squad": "S",
+      "mark": "📈"
+    },
+    {
+      "id": "agent:vol-trader",
+      "name": "vol_trader",
+      "tier": "specialist",
+      "squad": "C",
+      "mark": "📈"
+    },
+    {
+      "id": "agent:war-gaming-strategist",
+      "name": "war_gaming_strategist",
+      "tier": "senior-specialist",
+      "squad": "E",
+      "mark": "🗡️"
+    },
+    {
+      "id": "agent:web-archive-analyst",
+      "name": "web_archive_analyst",
+      "tier": "senior-specialist",
+      "squad": "OSINT",
+      "mark": "⏳"
+    },
+    {
+      "id": "squad:a",
+      "name": "A",
+      "tier": "T3",
+      "squad": "A",
+      "mark": ""
+    },
+    {
+      "id": "squad:b",
+      "name": "B",
+      "tier": "T3",
+      "squad": "B",
+      "mark": ""
+    },
+    {
+      "id": "squad:c",
+      "name": "C",
+      "tier": "T3",
+      "squad": "C",
+      "mark": ""
+    },
+    {
+      "id": "squad:d",
+      "name": "D",
+      "tier": "T3",
+      "squad": "D",
+      "mark": ""
+    },
+    {
+      "id": "squad:e",
+      "name": "E",
+      "tier": "T3",
+      "squad": "E",
+      "mark": ""
+    },
+    {
+      "id": "squad:f",
+      "name": "F",
+      "tier": "T3",
+      "squad": "F",
+      "mark": ""
+    },
+    {
+      "id": "squad:g",
+      "name": "G",
+      "tier": "T3",
+      "squad": "G",
+      "mark": ""
+    },
+    {
+      "id": "squad:osint",
+      "name": "OSINT",
+      "tier": "T3",
+      "squad": "OSINT",
+      "mark": ""
+    },
+    {
+      "id": "squad:S",
+      "name": "Squad S",
+      "tier": "T3",
+      "squad": "S",
+      "mark": ""
+    }
+  ],
+  "skills": [
+    {
+      "id": "skill:a11y-audit",
+      "name": "a11y-audit",
+      "type": "skill"
+    },
+    {
+      "id": "skill:afk-loop",
+      "name": "afk-loop",
+      "type": "skill"
+    },
+    {
+      "id": "skill:architecture-builder",
+      "name": "architecture-builder",
+      "type": "skill"
+    },
+    {
+      "id": "skill:art-of-seduction",
+      "name": "art-of-seduction",
+      "type": "skill"
+    },
+    {
+      "id": "skill:audit-loop",
+      "name": "audit-loop",
+      "type": "skill"
+    },
+    {
+      "id": "skill:audit-orchestrator",
+      "name": "audit-orchestrator",
+      "type": "skill"
+    },
+    {
+      "id": "skill:capability-cluster",
+      "name": "capability-cluster",
+      "type": "skill"
+    },
+    {
+      "id": "skill:cite-loop",
+      "name": "cite-loop",
+      "type": "skill"
+    },
+    {
+      "id": "skill:code-review",
+      "name": "code-review",
+      "type": "skill"
+    },
+    {
+      "id": "skill:commander",
+      "name": "commander",
+      "type": "skill"
+    },
+    {
+      "id": "skill:commander-graph-brief",
+      "name": "commander-graph-brief",
+      "type": "skill"
+    },
+    {
+      "id": "skill:consulting-orchestrator",
+      "name": "consulting-orchestrator",
+      "type": "skill"
+    },
+    {
+      "id": "skill:context-optimizer",
+      "name": "context-optimizer",
+      "type": "skill"
+    },
+    {
+      "id": "skill:davao-conyo-register-audit",
+      "name": "davao-conyo-register-audit",
+      "type": "skill"
+    },
+    {
+      "id": "skill:deep-research",
+      "name": "deep-research",
+      "type": "skill"
+    },
+    {
+      "id": "skill:deploy",
+      "name": "deploy",
+      "type": "skill"
+    },
+    {
+      "id": "skill:dispatch-handoff",
+      "name": "dispatch-handoff",
+      "type": "skill"
+    },
+    {
+      "id": "skill:doctrine",
+      "name": "doctrine",
+      "type": "skill"
+    },
+    {
+      "id": "skill:doctrine-loop",
+      "name": "doctrine-loop",
+      "type": "skill"
+    },
+    {
+      "id": "skill:draft-loop",
+      "name": "draft-loop",
+      "type": "skill"
+    },
+    {
+      "id": "skill:feedback-update",
+      "name": "feedback-update",
+      "type": "skill"
+    },
+    {
+      "id": "skill:godfather",
+      "name": "godfather",
+      "type": "skill"
+    },
+    {
+      "id": "skill:graph-aar-contract",
+      "name": "graph-aar-contract",
+      "type": "skill"
+    },
+    {
+      "id": "skill:graph-adopt",
+      "name": "graph-adopt",
+      "type": "skill"
+    },
+    {
+      "id": "skill:graph-assemble",
+      "name": "graph-assemble",
+      "type": "skill"
+    },
+    {
+      "id": "skill:graph-contract",
+      "name": "graph-contract",
+      "type": "skill"
+    },
+    {
+      "id": "skill:graph-correction",
+      "name": "graph-correction",
+      "type": "skill"
+    },
+    {
+      "id": "skill:graph-debugging",
+      "name": "graph-debugging",
+      "type": "skill"
+    },
+    {
+      "id": "skill:graph-doctrine-picker",
+      "name": "graph-doctrine-picker",
+      "type": "skill"
+    },
+    {
+      "id": "skill:graph-engineering",
+      "name": "graph-engineering",
+      "type": "skill"
+    },
+    {
+      "id": "skill:graph-extract",
+      "name": "graph-extract",
+      "type": "skill"
+    },
+    {
+      "id": "skill:graph-onboarding",
+      "name": "graph-onboarding",
+      "type": "skill"
+    },
+    {
+      "id": "skill:graph-org",
+      "name": "graph-org",
+      "type": "skill"
+    },
+    {
+      "id": "skill:graph-query",
+      "name": "graph-query",
+      "type": "skill"
+    },
+    {
+      "id": "skill:graph-resolve",
+      "name": "graph-resolve",
+      "type": "skill"
+    },
+    {
+      "id": "skill:graph-schema-evolve",
+      "name": "graph-schema-evolve",
+      "type": "skill"
+    },
+    {
+      "id": "skill:graph-scope",
+      "name": "graph-scope",
+      "type": "skill"
+    },
+    {
+      "id": "skill:graph-snapshot",
+      "name": "graph-snapshot",
+      "type": "skill"
+    },
+    {
+      "id": "skill:graph-verify",
+      "name": "graph-verify",
+      "type": "skill"
+    },
+    {
+      "id": "skill:graph-write-loop",
+      "name": "graph-write-loop",
+      "type": "skill"
+    },
+    {
+      "id": "skill:idea-validator",
+      "name": "idea-validator",
+      "type": "skill"
+    },
+    {
+      "id": "skill:incident",
+      "name": "incident",
+      "type": "skill"
+    },
+    {
+      "id": "skill:live-mirror",
+      "name": "live-mirror",
+      "type": "skill"
+    },
+    {
+      "id": "skill:loop-engineer",
+      "name": "loop-engineer",
+      "type": "skill"
+    },
+    {
+      "id": "skill:loop-optimizer",
+      "name": "loop-optimizer",
+      "type": "skill"
+    },
+    {
+      "id": "skill:medium-article",
+      "name": "medium-article",
+      "type": "skill"
+    },
+    {
+      "id": "skill:memory-capture",
+      "name": "memory-capture",
+      "type": "skill"
+    },
+    {
+      "id": "skill:mission-queue",
+      "name": "mission-queue",
+      "type": "skill"
+    },
+    {
+      "id": "skill:mission-resume",
+      "name": "mission-resume",
+      "type": "skill"
+    },
+    {
+      "id": "skill:model-eval",
+      "name": "model-eval",
+      "type": "skill"
+    },
+    {
+      "id": "skill:multi-version-audit",
+      "name": "multi-version-audit",
+      "type": "skill"
+    },
+    {
+      "id": "skill:nda-drafter",
+      "name": "nda-drafter",
+      "type": "skill"
+    },
+    {
+      "id": "skill:osint-source-fallback",
+      "name": "osint-source-fallback",
+      "type": "skill"
+    },
+    {
+      "id": "skill:osint-source-registry",
+      "name": "osint-source-registry",
+      "type": "skill"
+    },
+    {
+      "id": "skill:osint-verification-ladder",
+      "name": "osint-verification-ladder",
+      "type": "skill"
+    },
+    {
+      "id": "skill:osint-workflow",
+      "name": "osint-workflow",
+      "type": "skill"
+    },
+    {
+      "id": "skill:pilot-runner",
+      "name": "pilot-runner",
+      "type": "skill"
+    },
+    {
+      "id": "skill:pitch-builder",
+      "name": "pitch-builder",
+      "type": "skill"
+    },
+    {
+      "id": "skill:portfolio-motion",
+      "name": "portfolio-motion",
+      "type": "skill"
+    },
+    {
+      "id": "skill:priest",
+      "name": "priest",
+      "type": "skill"
+    },
+    {
+      "id": "skill:proactive-dispatch",
+      "name": "proactive-dispatch",
+      "type": "skill"
+    },
+    {
+      "id": "skill:proposal-builder",
+      "name": "proposal-builder",
+      "type": "skill"
+    },
+    {
+      "id": "skill:qa-pyramid",
+      "name": "qa-pyramid",
+      "type": "skill"
+    },
+    {
+      "id": "skill:rfc",
+      "name": "rfc",
+      "type": "skill"
+    },
+    {
+      "id": "skill:rubric-loop",
+      "name": "rubric-loop",
+      "type": "skill"
+    },
+    {
+      "id": "skill:session-bridge",
+      "name": "session-bridge",
+      "type": "skill"
+    },
+    {
+      "id": "skill:sharp-thinking-loop",
+      "name": "sharp-thinking-loop",
+      "type": "skill"
+    },
+    {
+      "id": "skill:ship-gate",
+      "name": "ship-gate",
+      "type": "skill"
+    },
+    {
+      "id": "skill:simplify",
+      "name": "simplify",
+      "type": "skill"
+    },
+    {
+      "id": "skill:social-presence",
+      "name": "social-presence",
+      "type": "skill"
+    },
+    {
+      "id": "skill:squad-handoff",
+      "name": "squad-handoff",
+      "type": "skill"
+    },
+    {
+      "id": "skill:strategic-posture",
+      "name": "strategic-posture",
+      "type": "skill"
+    },
+    {
+      "id": "skill:system-pulse",
+      "name": "system-pulse",
+      "type": "skill"
+    },
+    {
+      "id": "skill:threat-model",
+      "name": "threat-model",
+      "type": "skill"
+    },
+    {
+      "id": "skill:venture-aar",
+      "name": "venture-aar",
+      "type": "skill"
+    },
+    {
+      "id": "skill:venture-adopt",
+      "name": "venture-adopt",
+      "type": "skill"
+    },
+    {
+      "id": "skill:venture-assemble",
+      "name": "venture-assemble",
+      "type": "skill"
+    },
+    {
+      "id": "skill:venture-contract",
+      "name": "venture-contract",
+      "type": "skill"
+    },
+    {
+      "id": "skill:venture-extract",
+      "name": "venture-extract",
+      "type": "skill"
+    },
+    {
+      "id": "skill:venture-query",
+      "name": "venture-query",
+      "type": "skill"
+    },
+    {
+      "id": "skill:venture-resolve",
+      "name": "venture-resolve",
+      "type": "skill"
+    },
+    {
+      "id": "skill:venture-snapshot",
+      "name": "venture-snapshot",
+      "type": "skill"
+    },
+    {
+      "id": "skill:venture-verify",
+      "name": "venture-verify",
+      "type": "skill"
+    },
+    {
+      "id": "skill:verify-loop",
+      "name": "verify-loop",
+      "type": "skill"
+    },
+    {
+      "id": "skill:wake-router",
+      "name": "wake-router",
+      "type": "skill"
+    },
+    {
+      "id": "skill:webcraft-no-vibe",
+      "name": "webcraft-no-vibe",
+      "type": "skill"
+    },
+    {
+      "id": "skill:workbook",
+      "name": "workbook",
+      "type": "skill"
+    },
+    {
+      "id": "skill:workspace-loader",
+      "name": "workspace-loader",
+      "type": "skill"
+    },
+    {
+      "id": "skill:context-types",
+      "name": "context-types",
+      "type": "skill"
+    },
+    {
+      "id": "skill:cross-workspace-merge",
+      "name": "cross-workspace-merge",
+      "type": "skill"
+    },
+    {
+      "id": "skill:disambiguation",
+      "name": "disambiguation",
+      "type": "skill"
+    },
+    {
+      "id": "skill:parallel-dispatch",
+      "name": "parallel-dispatch",
+      "type": "skill"
+    },
+    {
+      "id": "skill:project-bootstrap",
+      "name": "project-bootstrap",
+      "type": "skill"
+    },
+    {
+      "id": "skill:ship-pipeline",
+      "name": "ship-pipeline",
+      "type": "skill"
+    },
+    {
+      "id": "skill:library-catalog",
+      "name": "library-catalog",
+      "type": "skill"
+    },
+    {
+      "id": "skill:recruiter-letter",
+      "name": "recruiter-letter",
+      "type": "skill"
+    },
+    {
+      "id": "skill:ojp-application-format",
+      "name": "ojp-application-format",
+      "type": "skill"
+    },
+    {
+      "id": "skill:stella-voice",
+      "name": "stella-voice",
+      "type": "skill"
+    },
+    {
+      "id": "skill:verify-diagnostic",
+      "name": "verify-diagnostic",
+      "type": "skill"
+    },
+    {
+      "id": "skill:drift-reconcile",
+      "name": "drift-reconcile",
+      "type": "skill"
+    }
+  ],
+  "relations": [
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    }
+  ]
+}

@@ -1080,7 +1080,7 @@ void venueByCity;
 
 <style>
   .earth-map {
-    --earth-focus-panel-width: 280px;
+    --earth-focus-panel-width: 380px;
     margin: 0;
     padding: 0;
     background: var(--c-bg-2);
@@ -1140,17 +1140,37 @@ void venueByCity;
     stroke-opacity: 0.95;
   }
 
+  /* === v7.8.1 — country hover-highlight ============================
+     The hitbox carries the geometry. By default the country is
+     transparent; on hover/focus it brightens with a sage fill + amber
+     stroke. The --hover custom property is set by the
+     :hover/:focus-visible pseudo-class so JS-driven state (touch,
+     programmatic focus) can mirror the same look via a class. */
   .earth-map__country-hitbox {
     fill: transparent;
-    stroke: none;
+    stroke: transparent;
+    stroke-width: 1.2;
     cursor: pointer;
     pointer-events: all;
+    transition:
+      fill var(--j-dur) var(--j-ease-snappy),
+      stroke var(--j-dur) var(--j-ease-snappy),
+      stroke-opacity var(--j-dur) var(--j-ease-snappy);
+  }
+  .earth-map__country-hitbox:hover,
+  .earth-map__country-hitbox:focus-visible,
+  .earth-map__country-hitbox[data-hover='1'] {
+    --hover: 1;
+    fill: color-mix(in oklab, var(--j-sage) 22%, transparent);
+    stroke: var(--c-warn);
+    stroke-opacity: 0.95;
   }
   .earth-map__country-hitbox:focus-visible,
   .earth-map__venue:focus-visible {
     outline: none;
-    stroke: var(--c-amber);
+    stroke: var(--c-warn);
     stroke-width: 2;
+    stroke-opacity: 1;
   }
   .earth-map__country-vignette {
     pointer-events: none;
@@ -1186,13 +1206,27 @@ void venueByCity;
     pointer-events: none;
   }
 
+  /* === v7.8.1 — venue hover-highlight ===============================
+     The dot is brightened on hover/focus (amber stroke + scale up), and
+     the custom mono label (city name) fades in. Same --hover hook as the
+     country hitbox so JS-driven state mirrors the pseudo-class look. */
   .earth-map__venue {
     cursor: pointer;
     outline: none;
   }
+  .earth-map__venue:hover .earth-map__dot,
+  .earth-map__venue:focus-visible .earth-map__dot,
+  .earth-map__venue[data-hover='1'] .earth-map__dot {
+    stroke: var(--c-warn);
+    stroke-width: 2.4;
+    filter: brightness(1.2);
+  }
   .earth-map__venue:focus-visible .earth-map__dot {
-    stroke: var(--c-amber);
+    stroke: var(--c-warn);
     stroke-width: 2;
+  }
+  .earth-map__venue:focus-visible {
+    outline: none;
   }
 
   /* === Layer A — venues === */
@@ -1212,12 +1246,33 @@ void venueByCity;
     fill: var(--c-primary-2);
     stroke: var(--c-primary-2-light);
     stroke-width: 1;
+    transition:
+      stroke var(--j-dur) var(--j-ease-snappy),
+      stroke-width var(--j-dur) var(--j-ease-snappy),
+      filter var(--j-dur) var(--j-ease-snappy);
   }
+  /* === v7.8.1 — custom mono label, hidden by default, fades in on
+     venue hover/focus. Painted stroke makes it readable against any
+     background (cobalt ocean, sage continent, amber dot, terminator). */
   .earth-map__label {
-    font-size: 10px;
-    fill: var(--c-ink);
+    font-family: var(--j-ff-mono);
+    font-size: 9.5px;
+    fill: var(--c-warn);
     font-weight: 600;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    opacity: 0;
+    pointer-events: none;
+    paint-order: stroke;
+    stroke: var(--c-bg);
+    stroke-width: 3;
+    stroke-linejoin: round;
+    transition: opacity var(--j-dur) var(--j-ease-snappy);
+  }
+  .earth-map__venue:hover .earth-map__label,
+  .earth-map__venue:focus-visible .earth-map__label,
+  .earth-map__venue[data-hover='1'] .earth-map__label {
+    opacity: 1;
   }
 
   /* === Layer B — world events === */
@@ -1322,12 +1377,17 @@ void venueByCity;
     100% { stroke-opacity: 0;   transform: scale(2.2); }
   }
 
-  /* === v7.8 click-to-dive focus panel === */
+  /* === v7.8.1 side-drawer click-to-dive focus panel ===
+     Right-anchored drawer on desktop (380px), full-width bottom-sheet
+     on mobile ≤ 720px. Animates in via the slide-in keyframe. */
   .earth-map__focus-panel {
     position: fixed;
     inset-block-start: var(--j-sp-3);
     inset-inline-end: var(--j-sp-3);
+    inset-block-end: auto;
     width: min(var(--earth-focus-panel-width), calc(100vw - var(--j-sp-4)));
+    max-block-size: calc(100vh - var(--j-sp-4) - var(--j-sp-4));
+    overflow-y: auto;
     z-index: 40;
     border: var(--j-b-1);
     background: var(--c-bg-2);
@@ -1342,6 +1402,26 @@ void venueByCity;
   @keyframes earth-focus-in {
     from { transform: translateX(calc(100% + var(--j-sp-3))); opacity: 0; }
     to { transform: translateX(0); opacity: 1; }
+  }
+  /* === Mobile ≤ 720px — full-width bottom-sheet === */
+  @media (max-width: 720px) {
+    .earth-map__focus-panel {
+      inset-block-start: auto;
+      inset-block-end: 0;
+      inset-inline-start: 0;
+      inset-inline-end: 0;
+      width: 100%;
+      max-block-size: 60vh;
+      border: var(--j-b-1);
+      border-block-end: none;
+      border-inline-start: none;
+      border-inline-end: none;
+      animation: earth-focus-in-bottom var(--j-dur-slow) var(--j-ease-out) both;
+    }
+    @keyframes earth-focus-in-bottom {
+      from { transform: translateY(100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
   }
   .earth-map__focus-head {
     display: flex;
@@ -1689,6 +1769,39 @@ void venueByCity;
     event.preventDefault();
     emitFocus(event.target);
   });
+
+  /* === v7.8.1 — JS-driven --hover (data-hover='1') state =============
+     CSS :hover works on mouse; touch + programmatic focus need an
+     explicit toggle. Mirrors the same custom-mono-label reveal used by
+     :hover/:focus-visible. */
+  type Hoverable = SVGPathElement | SVGGElement;
+  const HOVER_TARGET_SELECTOR = '.earth-map__country-hitbox, .earth-map__venue';
+  const hoverable = svg?.querySelectorAll<Hoverable>(HOVER_TARGET_SELECTOR) ?? null;
+  const setHover = (target: Element, on: boolean): void => {
+    const host = target.closest<Hoverable>(HOVER_TARGET_SELECTOR);
+    if (!host) return;
+    if (on) host.setAttribute('data-hover', '1');
+    else host.removeAttribute('data-hover');
+  };
+  hoverable?.forEach((el) => {
+    el.addEventListener('mouseenter', () => setHover(el, true));
+    el.addEventListener('mouseleave', () => setHover(el, false));
+    el.addEventListener('focus', () => setHover(el, true));
+    el.addEventListener('blur', () => setHover(el, false));
+    el.addEventListener('touchstart', () => setHover(el, true), { passive: true });
+  });
+  document.addEventListener(
+    'touchstart',
+    (event: TouchEvent) => {
+      if (!svg) return;
+      const t = event.target as Element | null;
+      if (!t) return;
+      if (t.closest(HOVER_TARGET_SELECTOR)) return;
+      // Tap outside any hoverable → clear all data-hover
+      hoverable?.forEach((el) => el.removeAttribute('data-hover'));
+    },
+    { passive: true },
+  );
 
   window.addEventListener('earth:country-focus', (event: Event) => {
     const detail = (event as CustomEvent<CountryFocusDetail>).detail;
