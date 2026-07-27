@@ -74,6 +74,27 @@ const events: WorldEventEntry[] = eventEntries
   }))
   .sort((a: WorldEventEntry, b: WorldEventEntry) => a.order - b.order);
 
+// === v7.12 — category + severity counts for filter chips =================
+const CATEGORY_LABELS: Record<WorldEventEntry['category'], string> = {
+  'central-bank': 'CB',
+  earnings: 'ERN',
+  geopolitical: 'GEO',
+  'data-release': 'DAT',
+  fx: 'FX',
+};
+const CATEGORY_ORDER: WorldEventEntry['category'][] = ['central-bank', 'earnings', 'geopolitical', 'data-release', 'fx'];
+const SEVERITY_ORDER: WorldEventEntry['severity'][] = ['critical', 'moderate', 'mild'];
+const categoryCounts: Record<WorldEventEntry['category'], number> = {
+  'central-bank': 0, earnings: 0, geopolitical: 0, 'data-release': 0, fx: 0,
+};
+const severityCounts: Record<WorldEventEntry['severity'], number> = {
+  critical: 0, moderate: 0, mild: 0,
+};
+for (const e of events) {
+  categoryCounts[e.category]++;
+  severityCounts[e.severity]++;
+}
+
 // === v7.7.1 — derive global-signal count from cache JSONs ===
 // Sum across arxiv papers + macrowire headlines + gdelt events. The
 // chrome reads "N+ SIGNALS" — the actual count, never hardcoded.
@@ -308,6 +329,37 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
       <p class="desk-events__eyebrow mono">{events.length} CURATED WORLD EVENTS</p>
       <h2 class="desk-events__title">The calendar that drives every position-book.</h2>
 
+      {/* v7.12 — category + severity filter chips + visible counter */}
+      <div class="desk-events__filters" role="toolbar" aria-label="Filter desk events">
+        <div class="desk-events__chips" role="group" aria-label="Category filter">
+          <span class="desk-events__chip-label mono">CAT ·</span>
+          <button type="button" class="desk-events__chip-btn desk-events__chip-btn--active" data-desk-cat="all">ALL ({events.length})</button>
+          {CATEGORY_ORDER.map((c) => (
+            <button
+              type="button"
+              class="desk-events__chip-btn"
+              data-desk-cat={c}
+              disabled={categoryCounts[c] === 0}
+            >{CATEGORY_LABELS[c]} ({categoryCounts[c]})</button>
+          ))}
+        </div>
+        <div class="desk-events__chips" role="group" aria-label="Severity filter">
+          <span class="desk-events__chip-label mono">SEV ·</span>
+          <button type="button" class="desk-events__chip-btn desk-events__chip-btn--active" data-desk-sev="all">ALL ({events.length})</button>
+          {SEVERITY_ORDER.map((s) => (
+            <button
+              type="button"
+              class="desk-events__chip-btn desk-events__chip-btn--{s}"
+              data-desk-sev={s}
+              disabled={severityCounts[s] === 0}
+            >{s.toUpperCase()} ({severityCounts[s]})</button>
+          ))}
+        </div>
+        <p class="desk-events__count mono" data-desk-visible-count>
+          {events.length} VISIBLE
+        </p>
+      </div>
+
       <table class="desk-events__table">
         <caption class="sr-only">
           Curated world events that the desk tracks on a 24-hour rolling basis —
@@ -333,8 +385,17 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
         <tbody>
           {
             events.map((e, i) => (
-              <tr class="desk-events__row" style={`--i: ${i}`}>
-                <td class="desk-events__num mono">{String(e.order).padStart(2, '0')}</td>
+              <tr
+                class="desk-events__row"
+                style={`--i: ${i}`}
+                id={`event-${e.id}`}
+                data-desk-cat={e.category}
+                data-desk-sev={e.severity}
+              >
+                <td class="desk-events__num mono">
+                  <a class="desk-events__anchor" href={`#event-${e.id}`} aria-label={`Permalink for event ${e.id}`}>#</a>
+                  {String(e.order).padStart(2, '0')}
+                </td>
                 <td class="desk-events__cat mono">{e.category}</td>
                 <td class="desk-events__sev mono">
                   <span class={`desk-events__pill desk-events__pill--${e.severity}`}>
@@ -848,5 +909,168 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
       background: transparent;
     }
   }
+
+  /* === v7.12 — desk events filter chips + anchor + counter ================ */
+  .desk-events__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 18px;
+    margin: 24px 0 16px;
+    padding: 12px 0;
+    border-top: 1px solid var(--c-rule);
+    border-bottom: 1px solid var(--c-rule);
+    align-items: center;
+  }
+  .desk-events__chips {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    align-items: center;
+  }
+  .desk-events__chip-label {
+    color: var(--c-ink-3);
+    font: 600 10px / 1.4 var(--ff-mono);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-right: 2px;
+  }
+  .desk-events__chip-btn {
+    appearance: none;
+    background: transparent;
+    border: 1px solid var(--c-rule);
+    color: var(--c-ink-2);
+    padding: 4px 10px;
+    font: 600 10px / 1.4 var(--ff-mono);
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition:
+      background 120ms ease,
+      color 120ms ease,
+      border-color 120ms ease;
+  }
+  .desk-events__chip-btn:hover:not(:disabled) {
+    border-color: var(--c-ink-2);
+    color: var(--c-ink);
+  }
+  .desk-events__chip-btn:focus-visible {
+    outline: 2px solid var(--c-amber);
+    outline-offset: 1px;
+  }
+  .desk-events__chip-btn--active {
+    background: var(--c-ink);
+    color: var(--c-bg);
+    border-color: var(--c-ink);
+  }
+  .desk-events__chip-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .desk-events__chip-btn--critical { color: #8a1f1f; border-color: rgba(138,31,31,0.4); }
+  .desk-events__chip-btn--critical:hover:not(:disabled) { background: rgba(138,31,31,0.06); }
+  .desk-events__chip-btn--moderate { color: #8a6a2d; border-color: rgba(138,106,45,0.4); }
+  .desk-events__chip-btn--moderate:hover:not(:disabled) { background: rgba(138,106,45,0.06); }
+  .desk-events__chip-btn--mild { color: #2d6b3a; border-color: rgba(45,107,58,0.4); }
+  .desk-events__chip-btn--mild:hover:not(:disabled) { background: rgba(45,107,58,0.06); }
+  .desk-events__count {
+    margin-left: auto;
+    color: var(--c-ink-3);
+    font: 600 11px / 1.4 var(--ff-mono);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .desk-events__anchor {
+    display: inline-block;
+    width: 16px;
+    color: var(--c-ink-3);
+    text-decoration: none;
+    opacity: 0;
+    transition: opacity 120ms ease;
+    margin-right: 4px;
+  }
+  .desk-events__row:hover .desk-events__anchor,
+  .desk-events__row:focus-within .desk-events__anchor {
+    opacity: 1;
+  }
+  .desk-events__anchor:hover { color: var(--c-amber); }
+  .desk-events__row[data-desk-filtered="1"] { display: none; }
 </style>
+
+<script>
+  /* === v7.12 — /desk events filter chips + URL persistence =============== */
+  type CatKey = 'central-bank' | 'earnings' | 'geopolitical' | 'data-release' | 'fx' | 'all';
+  type SevKey = 'critical' | 'moderate' | 'mild' | 'all';
+
+  const catButtons = document.querySelectorAll<HTMLButtonElement>('[data-desk-cat]');
+  const sevButtons = document.querySelectorAll<HTMLButtonElement>('[data-desk-sev]');
+  const counter = document.querySelector<HTMLElement>('[data-desk-visible-count]');
+  const rows = document.querySelectorAll<HTMLTableRowElement>('.desk-events__row');
+
+  let activeCat: CatKey = 'all';
+  let activeSev: SevKey = 'all';
+
+  function readFilters(): void {
+    const sp = new URLSearchParams(window.location.search);
+    const c = sp.get('cat') ?? 'all';
+    const s = sp.get('sev') ?? 'all';
+    const validCat: CatKey[] = ['all', 'central-bank', 'earnings', 'geopolitical', 'data-release', 'fx'];
+    const validSev: SevKey[] = ['all', 'critical', 'moderate', 'mild'];
+    activeCat = (validCat as string[]).includes(c) ? (c as CatKey) : 'all';
+    activeSev = (validSev as string[]).includes(s) ? (s as SevKey) : 'all';
+  }
+  function writeFilters(): void {
+    const sp = new URLSearchParams(window.location.search);
+    if (activeCat !== 'all') sp.set('cat', activeCat); else sp.delete('cat');
+    if (activeSev !== 'all') sp.set('sev', activeSev); else sp.delete('sev');
+    const qs = sp.toString();
+    const next = `${window.location.pathname}${qs ? '?' + qs : ''}${window.location.hash}`;
+    history.replaceState(null, '', next);
+  }
+  function applyFilters(): void {
+    let visible = 0;
+    for (const row of rows) {
+      const cat = row.dataset.deskCat ?? '';
+      const sev = row.dataset.deskSev ?? '';
+      const ok = (activeCat === 'all' || cat === activeCat) && (activeSev === 'all' || sev === activeSev);
+      if (ok) {
+        row.removeAttribute('data-desk-filtered');
+        visible++;
+      } else {
+        row.setAttribute('data-desk-filtered', '1');
+      }
+    }
+    if (counter) counter.textContent = `${visible} VISIBLE`;
+  }
+  function setActiveButton(group: NodeListOf<HTMLButtonElement>, attr: string, value: string): void {
+    for (const btn of group) {
+      if ((btn.getAttribute(attr) ?? 'all') === value) {
+        for (const other of group) other.classList.remove('desk-events__chip-btn--active');
+        btn.classList.add('desk-events__chip-btn--active');
+      }
+    }
+  }
+
+  // Hydrate from URL first.
+  readFilters();
+  setActiveButton(catButtons, 'data-desk-cat', activeCat);
+  setActiveButton(sevButtons, 'data-desk-sev', activeSev);
+  applyFilters();
+
+  for (const btn of catButtons) {
+    btn.addEventListener('click', () => {
+      activeCat = (btn.getAttribute('data-desk-cat') ?? 'all') as CatKey;
+      setActiveButton(catButtons, 'data-desk-cat', activeCat);
+      applyFilters();
+      writeFilters();
+    });
+  }
+  for (const btn of sevButtons) {
+    btn.addEventListener('click', () => {
+      activeSev = (btn.getAttribute('data-desk-sev') ?? 'all') as SevKey;
+      setActiveButton(sevButtons, 'data-desk-sev', activeSev);
+      applyFilters();
+      writeFilters();
+    });
+  }
+</script>
 
