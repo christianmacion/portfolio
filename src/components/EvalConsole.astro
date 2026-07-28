@@ -205,7 +205,7 @@ const passRateStr = passRate.toFixed(3);
           <h3 class="eval-family__name">{f.name}</h3>
           <span class="eval-family__source">— {f.source}</span>
         </header>
-        <table class="eval-table">
+        <table class="eval-table" aria-label={`Evaluation results for ${f.name}`}>
           <colgroup>
             <col class="col-id" />
             <col class="col-label" />

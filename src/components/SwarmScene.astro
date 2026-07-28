@@ -457,7 +457,7 @@ const sourcesXY = sources.map((s) => ({ ...s, ...lonLat(s.lon, s.lat) }));
           <span class="bloomberg__panel-title mono">SOURCES · WORLD</span>
           <span class="bloomberg__panel-meta mono">{sources.length} ACTIVE</span>
         </div>
-        <table class="bloomberg__table">
+        <table class="bloomberg__table" aria-label="World sources table">
           <thead>
             <tr>
               <th class="bloomberg__th mono">CODE</th>
@@ -492,7 +492,7 @@ const sourcesXY = sources.map((s) => ({ ...s, ...lonLat(s.lon, s.lat) }));
           <span class="bloomberg__panel-title mono">SIGNALS · RESEARCH</span>
           <span class="bloomberg__panel-meta mono">{signals.length} ROUTING</span>
         </div>
-        <table class="bloomberg__table">
+        <table class="bloomberg__table" aria-label="Research signals table">
           <thead>
             <tr>
               <th class="bloomberg__th mono">CODE</th>
