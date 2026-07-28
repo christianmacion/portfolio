@@ -1,7 +1,7 @@
 {
   "name": "christianmacion-portfolio",
   "type": "module",
-  "version": "7.7.42",
+  "version": "7.7.43",
   "private": true,
   "description": "Christian T. Macion — AI Engineer + Quantitative Researcher. Personal portfolio site.",
   "scripts": {
@@ -30,7 +30,7 @@
     "version:bump": "tsx scripts/bump-version.ts",
     "sitemap:check": "tsx scripts/validate-sitemap.ts",
     "typecheck": "astro check",
-    "ci": "npm run lint:md && npm run lint && npm run format:check && npm run knip && npm run no-bulbs && npm run build && npm run verify:anchors && npm run no-f14 && npm run no-halo && npm run bundle:budget && npm run perf:audit && npm run a11y:scan && npm run contrast:check && npm run headings:check && npm run link:rot && npm run anchor:rot && npm run link:target:validity && npm run live:integrity && npm run meta:integrity && npm run feed:integrity && npm run sitemap:integrity && npm run jsonld:integrity && npm run og:integrity && npm run canonical:url:integrity && npm run hreflang:integrity && npm run favicon:integrity && npm run image:alt:integrity && npm run structured:data:coverage && npm run robots:txt:integrity && npm run security:headers:integrity && npm run build:output:integrity && npm run internal:link:graph:integrity && npm run content:freshness:integrity && npm run frontmatter:required:fields && npm run cross:reference:integrity && npm run image:dimension:attributes && npm run webp:availability && npm run picture:source:pairing && npm run picture:count && npm run picture:source:order && npm run picture:source:srcset && npm run picture:source:srcset:resolves && npm run picture:img:fallback:resolves && npm run raster:img:outside:picture && npm run img:loading:attribute && npm run audit && npm run sitemap:check",
+    "ci": "npm run lint:md && npm run lint && npm run format:check && npm run knip && npm run no-bulbs && npm run build && npm run verify:anchors && npm run no-f14 && npm run no-halo && npm run bundle:budget && npm run perf:audit && npm run a11y:scan && npm run contrast:check && npm run headings:check && npm run link:rot && npm run anchor:rot && npm run link:target:validity && npm run live:integrity && npm run meta:integrity && npm run feed:integrity && npm run sitemap:integrity && npm run jsonld:integrity && npm run og:integrity && npm run canonical:url:integrity && npm run hreflang:integrity && npm run favicon:integrity && npm run image:alt:integrity && npm run structured:data:coverage && npm run robots:txt:integrity && npm run security:headers:integrity && npm run build:output:integrity && npm run internal:link:graph:integrity && npm run content:freshness:integrity && npm run frontmatter:required:fields && npm run cross:reference:integrity && npm run image:dimension:attributes && npm run webp:availability && npm run picture:source:pairing && npm run picture:count && npm run picture:source:order && npm run picture:source:srcset && npm run picture:source:srcset:resolves && npm run picture:img:fallback:resolves && npm run raster:img:outside:picture && npm run img:loading:attribute && npm run img:decoding:attribute && npm run audit && npm run sitemap:check",
     "no-bulbs": "bash scripts/check-no-lightbulb-halos.sh",
     "no-f14": "bash scripts/check-no-f14-traffic-light.sh",
     "headings:check": "node scripts/check-heading-hierarchy.mjs",
@@ -65,6 +65,7 @@
     "picture:img:fallback:resolves": "node scripts/check-picture-img-fallback-resolves.mjs",
     "raster:img:outside:picture": "node scripts/check-raster-img-outside-picture.mjs",
     "img:loading:attribute": "node scripts/check-img-loading-attribute.mjs",
+    "img:decoding:attribute": "node scripts/check-img-decoding-attribute.mjs",
     "bundle:budget": "node scripts/check-bundle-budget.mjs",
     "no-halo": "grep -rn 'box-shadow:\\s*0\\s*0\\s*[1-9][0-9]' src/ 2>/dev/null && echo 'FAIL: halo/glow box-shadow detected' && exit 1 || echo 'PASS: no halo/glow box-shadows'",
     "verify:anchors": "node scripts/verify-anchors.mjs",
