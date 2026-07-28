@@ -212,6 +212,18 @@ const passRateStr = passRate.toFixed(3);
             <col class="col-result" />
             <col class="col-value" />
           </colgroup>
+          <thead>
+            <tr>
+              <th class="mono" scope="col">
+                ID
+              </th>
+              <th scope="col">Gate</th>
+              <th scope="col">Result</th>
+              <th class="mono" scope="col">
+                Value
+              </th>
+            </tr>
+          </thead>
           <tbody>
             {f.gates.map((g) => (
               <tr class:list={['eval-row', `eval-row--${g.result.toLowerCase()}`]}>

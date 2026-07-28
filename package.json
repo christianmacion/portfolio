@@ -1,7 +1,7 @@
 {
   "name": "christianmacion-portfolio",
   "type": "module",
-  "version": "7.7.52",
+  "version": "7.7.53",
   "private": true,
   "description": "Christian T. Macion — AI Engineer + Quantitative Researcher. Personal portfolio site.",
   "scripts": {
@@ -30,7 +30,7 @@
     "version:bump": "tsx scripts/bump-version.ts",
     "sitemap:check": "tsx scripts/validate-sitemap.ts",
     "typecheck": "astro check",
-    "ci": "npm run lint:md && npm run lint && npm run format:check && npm run knip && npm run no-bulbs && npm run build && npm run verify:anchors && npm run no-f14 && npm run no-halo && npm run bundle:budget && npm run perf:audit && npm run a11y:scan && npm run contrast:check && npm run headings:check && npm run link:rot && npm run anchor:rot && npm run link:target:validity && npm run live:integrity && npm run meta:integrity && npm run feed:integrity && npm run sitemap:integrity && npm run jsonld:integrity && npm run og:integrity && npm run canonical:url:integrity && npm run hreflang:integrity && npm run favicon:integrity && npm run image:alt:integrity && npm run structured:data:coverage && npm run robots:txt:integrity && npm run security:headers:integrity && npm run build:output:integrity && npm run internal:link:graph:integrity && npm run content:freshness:integrity && npm run frontmatter:required:fields && npm run cross:reference:integrity && npm run image:dimension:attributes && npm run webp:availability && npm run picture:source:pairing && npm run picture:count && npm run picture:source:order && npm run picture:source:srcset && npm run picture:source:srcset:resolves && npm run picture:img:fallback:resolves && npm run raster:img:outside:picture && npm run img:loading:attribute && npm run img:decoding:attribute && npm run img:fetchpriority:attribute && npm run site:chrome:coverage && npm run heading:hierarchy:skip && npm run heading:uniqueness && npm run form:input:label:association && npm run skip:link:presence && npm run button:accessible:name && npm run link:accessible:name && npm run video:caption:track && npm run audit && npm run sitemap:check",
+    "ci": "npm run lint:md && npm run lint && npm run format:check && npm run knip && npm run no-bulbs && npm run build && npm run verify:anchors && npm run no-f14 && npm run no-halo && npm run bundle:budget && npm run perf:audit && npm run a11y:scan && npm run contrast:check && npm run headings:check && npm run link:rot && npm run anchor:rot && npm run link:target:validity && npm run live:integrity && npm run meta:integrity && npm run feed:integrity && npm run sitemap:integrity && npm run jsonld:integrity && npm run og:integrity && npm run canonical:url:integrity && npm run hreflang:integrity && npm run favicon:integrity && npm run image:alt:integrity && npm run structured:data:coverage && npm run robots:txt:integrity && npm run security:headers:integrity && npm run build:output:integrity && npm run internal:link:graph:integrity && npm run content:freshness:integrity && npm run frontmatter:required:fields && npm run cross:reference:integrity && npm run image:dimension:attributes && npm run webp:availability && npm run picture:source:pairing && npm run picture:count && npm run picture:source:order && npm run picture:source:srcset && npm run picture:source:srcset:resolves && npm run picture:img:fallback:resolves && npm run raster:img:outside:picture && npm run img:loading:attribute && npm run img:decoding:attribute && npm run img:fetchpriority:attribute && npm run site:chrome:coverage && npm run heading:hierarchy:skip && npm run heading:uniqueness && npm run form:input:label:association && npm run skip:link:presence && npm run button:accessible:name && npm run link:accessible:name && npm run video:caption:track && npm run table:headers:presence && npm run audit && npm run sitemap:check",
     "no-bulbs": "bash scripts/check-no-lightbulb-halos.sh",
     "no-f14": "bash scripts/check-no-f14-traffic-light.sh",
     "headings:check": "node scripts/check-heading-hierarchy.mjs",
@@ -75,6 +75,7 @@
     "button:accessible:name": "node scripts/check-button-accessible-name.mjs",
     "link:accessible:name": "node scripts/check-link-accessible-name.mjs",
     "video:caption:track": "node scripts/check-video-caption-track.mjs",
+    "table:headers:presence": "node scripts/check-table-headers-presence.mjs",
     "bundle:budget": "node scripts/check-bundle-budget.mjs",
     "no-halo": "grep -rn 'box-shadow:\\s*0\\s*0\\s*[1-9][0-9]' src/ 2>/dev/null && echo 'FAIL: halo/glow box-shadow detected' && exit 1 || echo 'PASS: no halo/glow box-shadows'",
     "verify:anchors": "node scripts/verify-anchors.mjs",
