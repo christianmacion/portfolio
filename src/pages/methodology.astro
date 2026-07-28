@@ -120,8 +120,16 @@ const charter = [
         <Equation
           block
           size="lg"
-          latex={`\\Pr(\\text{ship}) \\;=\\; \\Pr(\\text{ship} \\mid \\text{passes G1--G${profile.stats.evalGates}}) \\cdot \\prod_{i=1}^{${profile.stats.evalGates}} \\Pr(G_i \\mid \\text{evidence}_i)`}
+          latex={`\\Pr(\\text{ship}) \\;\\approx\\; \\Pr\\!\\left(\\text{ship} \\,\\middle|\\, \\textstyle\\bigwedge_{i=1}^{${profile.stats.evalGates}} G_i \\right) \\;\\cdot\\; \\prod_{i=1}^{${profile.stats.evalGates}} \\Pr\\!\\left(G_i \\,\\middle|\\, \\text{evidence}_i \\right)`}
         />
+        <p class="method-head__eq-note">
+          Equality holds <em>under the conditional-independence assumption</em>: each gate $G_i$
+          depends on its own evidence (call it $e_i$), and gates are independent given that
+          evidence. In practice, gates share the same underlying code, so the product is a useful
+          upper-bound approximation — not an exact equality. We use it as a <strong
+            >discipline signal</strong
+          >, not a calibrated probability.
+        </p>
       </div>
 
       {/* === Headline stats — gate lattice at a glance === */}
@@ -439,6 +447,20 @@ const charter = [
     border: 1px solid var(--c-rule);
     border-radius: var(--radius);
     overflow-x: auto;
+  }
+  .method-head__eq-note {
+    margin-top: var(--sp-4);
+    font: 400 var(--fs-sm) / var(--lh-loose) var(--ff-sans);
+    color: var(--c-ink-2);
+    max-width: 60ch;
+  }
+  .method-head__eq-note em {
+    font-style: italic;
+    color: var(--c-ink);
+  }
+  .method-head__eq-note strong {
+    font-weight: 600;
+    color: var(--c-ink);
   }
   .method-head__stats {
     display: grid;
