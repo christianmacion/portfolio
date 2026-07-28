@@ -1,224 +1,59 @@
 {
-  "generated": "2026-07-28T09:52:16.577Z",
-  "fetchedAt": "2026-07-28T09:52:15.456Z",
+  "generated": "2026-07-28T11:00:41.304Z",
+  "fetchedAt": "2026-07-28T11:00:40.176Z",
   "cap": 100,
   "counts": {
     "arxiv": 20,
     "macrowire": 30,
-    "gdelt": 43
+    "gdelt": 37
   },
-  "total": 93,
+  "total": 87,
   "events": [
     {
-      "id": "gdelt-irn yield tehran",
+      "id": "gdelt-can yield toronto",
       "source": "gdelt",
-      "title": "IRN yield · Tehran",
-      "link": "https://gdelt.org/event/1315662437",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "critical",
-      "city": "Tehran",
-      "publisher": null,
-      "fingerprint": "irn yield tehran",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 35.75,
-        "lon": 51.5148
-      }
-    },
-    {
-      "id": "gdelt-yield ukraine",
-      "source": "gdelt",
-      "title": "yield · Ukraine",
-      "link": "https://gdelt.org/event/1315662586",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "critical",
-      "city": "Ukraine",
-      "publisher": null,
-      "fingerprint": "yield ukraine",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 49,
-        "lon": 32
-      }
-    },
-    {
-      "id": "gdelt-diplomacy konshisha",
-      "source": "gdelt",
-      "title": "diplomacy · Konshisha",
-      "link": "https://gdelt.org/event/1315662042",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "critical",
-      "city": "Konshisha",
-      "publisher": null,
-      "fingerprint": "diplomacy konshisha",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 7.2124,
-        "lon": 8.8921
-      }
-    },
-    {
-      "id": "gdelt-usa diplomacy twickenham",
-      "source": "gdelt",
-      "title": "USA diplomacy · Twickenham",
-      "link": "https://gdelt.org/event/1315662075",
+      "title": "CAN yield · Toronto",
+      "link": "https://gdelt.org/event/1315671871",
       "timestamp": "2026-07-28T12:00:00Z",
       "category": "central-bank",
       "severity": "critical",
-      "city": "Twickenham",
+      "city": "Toronto",
       "publisher": null,
-      "fingerprint": "usa diplomacy twickenham",
+      "fingerprint": "can yield toronto",
       "domain": "gdelt.org",
       "coords": {
-        "lat": 51.4333,
-        "lon": -0.316667
-      },
-      "related": [
-        {
-          "source": "gdelt",
-          "id": "gdelt-usa diplomacy twickenham"
-        }
-      ]
-    },
-    {
-      "id": "gdelt-diplomacy kerala",
-      "source": "gdelt",
-      "title": "diplomacy · Kerala",
-      "link": "https://gdelt.org/event/1315662105",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "critical",
-      "city": "Kerala",
-      "publisher": null,
-      "fingerprint": "diplomacy kerala",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 10,
-        "lon": 76.5
+        "lat": 43.6667,
+        "lon": -79.4167
       }
     },
     {
-      "id": "gdelt-diplomacy benue state",
+      "id": "gdelt-chn yield japan",
       "source": "gdelt",
-      "title": "diplomacy · Benue State",
-      "link": "https://gdelt.org/event/1315662323",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "critical",
-      "city": "Benue State",
-      "publisher": null,
-      "fingerprint": "diplomacy benue state",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 7.33333,
-        "lon": 8.75
-      }
-    },
-    {
-      "id": "gdelt-nga diplomacy benue state",
-      "source": "gdelt",
-      "title": "NGA diplomacy · Benue State",
-      "link": "https://gdelt.org/event/1315662370",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "critical",
-      "city": "Benue State",
-      "publisher": null,
-      "fingerprint": "nga diplomacy benue state",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 7.33333,
-        "lon": 8.75
-      },
-      "related": [
-        {
-          "source": "gdelt",
-          "id": "gdelt-nga diplomacy benue state"
-        }
-      ]
-    },
-    {
-      "id": "gdelt-nga diplomacy konshisha",
-      "source": "gdelt",
-      "title": "NGA diplomacy · Konshisha",
-      "link": "https://gdelt.org/event/1315662371",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "critical",
-      "city": "Konshisha",
-      "publisher": null,
-      "fingerprint": "nga diplomacy konshisha",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 7.2124,
-        "lon": 8.8921
-      }
-    },
-    {
-      "id": "gdelt-lbr aid grand bassa county",
-      "source": "gdelt",
-      "title": "LBR aid · Grand Bassa County",
-      "link": "https://gdelt.org/event/1315662065",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "critical",
-      "city": "Grand Bassa County",
-      "publisher": null,
-      "fingerprint": "lbr aid grand bassa county",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 6.25,
-        "lon": -9.75
-      }
-    },
-    {
-      "id": "gdelt-aid shanghai",
-      "source": "gdelt",
-      "title": "aid · Shanghai",
-      "link": "https://gdelt.org/event/1315662160",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "critical",
-      "city": "Shanghai",
-      "publisher": null,
-      "fingerprint": "aid shanghai",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 31.2222,
-        "lon": 121.458
-      }
-    },
-    {
-      "id": "gdelt-usa aid wisconsin",
-      "source": "gdelt",
-      "title": "USA aid · Wisconsin",
-      "link": "https://gdelt.org/event/1315662161",
+      "title": "CHN yield · Japan",
+      "link": "https://gdelt.org/event/1315671887",
       "timestamp": "2026-07-28T12:00:00Z",
       "category": "central-bank",
       "severity": "critical",
-      "city": "Wisconsin",
+      "city": "Japan",
       "publisher": null,
-      "fingerprint": "usa aid wisconsin",
+      "fingerprint": "chn yield japan",
       "domain": "gdelt.org",
       "coords": {
-        "lat": 44.2563,
-        "lon": -89.6385
+        "lat": 36,
+        "lon": 138
       }
     },
     {
-      "id": "gdelt-deu aid germany",
+      "id": "gdelt-deu yield germany",
       "source": "gdelt",
-      "title": "DEU aid · Germany",
-      "link": "https://gdelt.org/event/1315662231",
+      "title": "DEU yield · Germany",
+      "link": "https://gdelt.org/event/1315671951",
       "timestamp": "2026-07-28T12:00:00Z",
       "category": "geopolitical",
       "severity": "critical",
       "city": "Germany",
       "publisher": null,
-      "fingerprint": "deu aid germany",
+      "fingerprint": "deu yield germany",
       "domain": "gdelt.org",
       "coords": {
         "lat": 51.5,
@@ -226,374 +61,244 @@
       }
     },
     {
-      "id": "gdelt-aid nottinghamshire",
+      "id": "gdelt-irn aid red sea",
       "source": "gdelt",
-      "title": "aid · Nottinghamshire",
-      "link": "https://gdelt.org/event/1315662327",
+      "title": "IRN aid · Red Sea",
+      "link": "https://gdelt.org/event/1315672147",
       "timestamp": "2026-07-28T12:00:00Z",
       "category": "geopolitical",
       "severity": "critical",
-      "city": "Nottinghamshire",
+      "city": "Red Sea",
       "publisher": null,
-      "fingerprint": "aid nottinghamshire",
+      "fingerprint": "irn aid red sea",
       "domain": "gdelt.org",
       "coords": {
-        "lat": 53.1667,
-        "lon": -1
+        "lat": 19,
+        "lon": 39.5
       }
     },
     {
-      "id": "gdelt-usa aid ohio",
+      "id": "gdelt-irn aid sanaa",
       "source": "gdelt",
-      "title": "USA aid · Ohio",
-      "link": "https://gdelt.org/event/1315662596",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "central-bank",
-      "severity": "critical",
-      "city": "Ohio",
-      "publisher": null,
-      "fingerprint": "usa aid ohio",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 40.3736,
-        "lon": -82.7755
-      }
-    },
-    {
-      "id": "gdelt-qat aid doha",
-      "source": "gdelt",
-      "title": "QAT aid · Doha",
-      "link": "https://gdelt.org/event/1315662642",
+      "title": "IRN aid · Sanaa",
+      "link": "https://gdelt.org/event/1315672148",
       "timestamp": "2026-07-28T12:00:00Z",
       "category": "geopolitical",
       "severity": "critical",
-      "city": "Doha",
+      "city": "Sanaa",
       "publisher": null,
-      "fingerprint": "qat aid doha",
+      "fingerprint": "irn aid sanaa",
       "domain": "gdelt.org",
       "coords": {
-        "lat": 25.2867,
-        "lon": 51.5333
+        "lat": 15.3547,
+        "lon": 44.2067
       }
     },
     {
-      "id": "gdelt-usa aid guinea",
+      "id": "gdelt-irn aid iran",
       "source": "gdelt",
-      "title": "USA aid · Guinea",
-      "link": "https://gdelt.org/event/1315662687",
+      "title": "IRN aid · Iran",
+      "link": "https://gdelt.org/event/1315672149",
       "timestamp": "2026-07-28T12:00:00Z",
-      "category": "central-bank",
+      "category": "geopolitical",
       "severity": "critical",
-      "city": "Guinea",
+      "city": "Iran",
       "publisher": null,
-      "fingerprint": "usa aid guinea",
+      "fingerprint": "irn aid iran",
       "domain": "gdelt.org",
       "coords": {
-        "lat": 11,
-        "lon": -10
+        "lat": 32,
+        "lon": 53
       }
     },
     {
-      "id": "gdelt-consultation bendigo",
+      "id": "gdelt-nga aid anambra state",
       "source": "gdelt",
-      "title": "consultation · Bendigo",
-      "link": "https://gdelt.org/event/1315662016",
+      "title": "NGA aid · Anambra State",
+      "link": "https://gdelt.org/event/1315672297",
       "timestamp": "2026-07-28T12:00:00Z",
       "category": "geopolitical",
-      "severity": "moderate",
-      "city": "Bendigo",
+      "severity": "critical",
+      "city": "Anambra State",
       "publisher": null,
-      "fingerprint": "consultation bendigo",
+      "fingerprint": "nga aid anambra state",
       "domain": "gdelt.org",
       "coords": {
-        "lat": -36.7582,
-        "lon": 144.28
-      }
-    },
-    {
-      "id": "gdelt-grc yield ukraine",
-      "source": "gdelt",
-      "title": "GRC yield · Ukraine",
-      "link": "https://gdelt.org/event/1315662044",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "moderate",
-      "city": "Ukraine",
-      "publisher": null,
-      "fingerprint": "grc yield ukraine",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 49,
-        "lon": 32
-      }
-    },
-    {
-      "id": "gdelt-diplomacy arizona",
-      "source": "gdelt",
-      "title": "diplomacy · Arizona",
-      "link": "https://gdelt.org/event/1315662073",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "moderate",
-      "city": "Arizona",
-      "publisher": null,
-      "fingerprint": "diplomacy arizona",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 33.7712,
-        "lon": -111.388
-      }
-    },
-    {
-      "id": "gdelt-usa yield arizona",
-      "source": "gdelt",
-      "title": "USA yield · Arizona",
-      "link": "https://gdelt.org/event/1315662085",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "central-bank",
-      "severity": "moderate",
-      "city": "Arizona",
-      "publisher": null,
-      "fingerprint": "usa yield arizona",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 33.7712,
-        "lon": -111.388
-      }
-    },
-    {
-      "id": "gdelt-afr yield johannesburg",
-      "source": "gdelt",
-      "title": "AFR yield · Johannesburg",
-      "link": "https://gdelt.org/event/1315662094",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "moderate",
-      "city": "Johannesburg",
-      "publisher": null,
-      "fingerprint": "afr yield johannesburg",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": -26.2,
-        "lon": 28.0833
+        "lat": 6.33333,
+        "lon": 7
       },
       "related": [
         {
           "source": "gdelt",
-          "id": "gdelt-afr yield johannesburg"
+          "id": "gdelt-nga aid anambra state"
         }
       ]
     },
     {
-      "id": "gdelt-afr eri yield bisha",
+      "id": "gdelt-nga aid lagos",
       "source": "gdelt",
-      "title": "AFR–ERI yield · Bisha",
-      "link": "https://gdelt.org/event/1315662098",
+      "title": "NGA aid · Lagos",
+      "link": "https://gdelt.org/event/1315672300",
       "timestamp": "2026-07-28T12:00:00Z",
       "category": "geopolitical",
-      "severity": "moderate",
-      "city": "Bisha",
+      "severity": "critical",
+      "city": "Lagos",
       "publisher": null,
-      "fingerprint": "afr eri yield bisha",
+      "fingerprint": "nga aid lagos",
       "domain": "gdelt.org",
       "coords": {
-        "lat": 15.4839,
-        "lon": 37.5447
+        "lat": 6.45306,
+        "lon": 3.39583
       }
     },
     {
-      "id": "gdelt-afr yield accra",
+      "id": "gdelt-diplomacy scania",
       "source": "gdelt",
-      "title": "AFR yield · Accra",
-      "link": "https://gdelt.org/event/1315662100",
+      "title": "diplomacy · Scania",
+      "link": "https://gdelt.org/event/1315671732",
       "timestamp": "2026-07-28T12:00:00Z",
       "category": "geopolitical",
-      "severity": "moderate",
-      "city": "Accra",
+      "severity": "critical",
+      "city": "Scania",
       "publisher": null,
-      "fingerprint": "afr yield accra",
+      "fingerprint": "diplomacy scania",
       "domain": "gdelt.org",
       "coords": {
-        "lat": 5.55,
-        "lon": -0.216667
+        "lat": 55.9833,
+        "lon": 13.5
       },
       "related": [
         {
           "source": "gdelt",
-          "id": "gdelt-afr yield accra"
+          "id": "gdelt-diplomacy scania"
         }
       ]
     },
     {
-      "id": "gdelt-aus threat niddrie",
+      "id": "gdelt-swe diplomacy scania",
       "source": "gdelt",
-      "title": "AUS threat · Niddrie",
-      "link": "https://gdelt.org/event/1315662113",
+      "title": "SWE diplomacy · Scania",
+      "link": "https://gdelt.org/event/1315671865",
       "timestamp": "2026-07-28T12:00:00Z",
       "category": "geopolitical",
-      "severity": "moderate",
-      "city": "Niddrie",
+      "severity": "critical",
+      "city": "Scania",
       "publisher": null,
-      "fingerprint": "aus threat niddrie",
+      "fingerprint": "swe diplomacy scania",
       "domain": "gdelt.org",
       "coords": {
-        "lat": -28.5946,
-        "lon": 114.865
-      }
-    },
-    {
-      "id": "gdelt-aus irq aid melbourne",
-      "source": "gdelt",
-      "title": "AUS–IRQ aid · Melbourne",
-      "link": "https://gdelt.org/event/1315662117",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "central-bank",
-      "severity": "moderate",
-      "city": "Melbourne",
-      "publisher": null,
-      "fingerprint": "aus irq aid melbourne",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": -37.8167,
-        "lon": 144.967
-      }
-    },
-    {
-      "id": "gdelt-aus irq aid iraq",
-      "source": "gdelt",
-      "title": "AUS–IRQ aid · Iraq",
-      "link": "https://gdelt.org/event/1315662118",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "central-bank",
-      "severity": "moderate",
-      "city": "Iraq",
-      "publisher": null,
-      "fingerprint": "aus irq aid iraq",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 33,
-        "lon": 44
-      }
-    },
-    {
-      "id": "gdelt-aus irq yield melbourne",
-      "source": "gdelt",
-      "title": "AUS–IRQ yield · Melbourne",
-      "link": "https://gdelt.org/event/1315662119",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "central-bank",
-      "severity": "moderate",
-      "city": "Melbourne",
-      "publisher": null,
-      "fingerprint": "aus irq yield melbourne",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": -37.8167,
-        "lon": 144.967
-      }
-    },
-    {
-      "id": "gdelt-aus irq yield iraq",
-      "source": "gdelt",
-      "title": "AUS–IRQ yield · Iraq",
-      "link": "https://gdelt.org/event/1315662120",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "central-bank",
-      "severity": "moderate",
-      "city": "Iraq",
-      "publisher": null,
-      "fingerprint": "aus irq yield iraq",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 33,
-        "lon": 44
-      }
-    },
-    {
-      "id": "gdelt-aid south africa",
-      "source": "gdelt",
-      "title": "aid · South Africa",
-      "link": "https://gdelt.org/event/1315662151",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "moderate",
-      "city": "South Africa",
-      "publisher": null,
-      "fingerprint": "aid south africa",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": -30,
-        "lon": 26
-      }
-    },
-    {
-      "id": "gdelt-khm aid pursat",
-      "source": "gdelt",
-      "title": "KHM aid · Pursat",
-      "link": "https://gdelt.org/event/1315662155",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "moderate",
-      "city": "Pursat",
-      "publisher": null,
-      "fingerprint": "khm aid pursat",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 12.5388,
-        "lon": 103.919
-      }
-    },
-    {
-      "id": "gdelt-khm aid phnom penh",
-      "source": "gdelt",
-      "title": "KHM aid · Phnom Penh",
-      "link": "https://gdelt.org/event/1315662156",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "moderate",
-      "city": "Phnom Penh",
-      "publisher": null,
-      "fingerprint": "khm aid phnom penh",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 11.55,
-        "lon": 104.917
-      }
-    },
-    {
-      "id": "gdelt-chn aid heilongjiang",
-      "source": "gdelt",
-      "title": "CHN aid · Heilongjiang",
-      "link": "https://gdelt.org/event/1315662172",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "central-bank",
-      "severity": "moderate",
-      "city": "Heilongjiang",
-      "publisher": null,
-      "fingerprint": "chn aid heilongjiang",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 48,
-        "lon": 128
+        "lat": 55.9833,
+        "lon": 13.5
       },
       "related": [
         {
           "source": "gdelt",
-          "id": "gdelt-chn aid heilongjiang"
+          "id": "gdelt-swe diplomacy scania"
         }
       ]
     },
     {
-      "id": "gdelt-gbr cooperation london",
+      "id": "gdelt-grc fra diplomacy china",
       "source": "gdelt",
-      "title": "GBR cooperation · London",
-      "link": "https://gdelt.org/event/1315662267",
+      "title": "GRC–FRA diplomacy · China",
+      "link": "https://gdelt.org/event/1315672091",
       "timestamp": "2026-07-28T12:00:00Z",
       "category": "geopolitical",
-      "severity": "moderate",
+      "severity": "critical",
+      "city": "China",
+      "publisher": null,
+      "fingerprint": "grc fra diplomacy china",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 35,
+        "lon": 105
+      }
+    },
+    {
+      "id": "gdelt-grc fra diplomacy russia",
+      "source": "gdelt",
+      "title": "GRC–FRA diplomacy · Russia",
+      "link": "https://gdelt.org/event/1315672092",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "geopolitical",
+      "severity": "critical",
+      "city": "Russia",
+      "publisher": null,
+      "fingerprint": "grc fra diplomacy russia",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 60,
+        "lon": 100
+      }
+    },
+    {
+      "id": "gdelt-irn diplomacy tehran",
+      "source": "gdelt",
+      "title": "IRN diplomacy · Tehran",
+      "link": "https://gdelt.org/event/1315672134",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "geopolitical",
+      "severity": "critical",
+      "city": "Tehran",
+      "publisher": null,
+      "fingerprint": "irn diplomacy tehran",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 35.75,
+        "lon": 51.5148
+      },
+      "related": [
+        {
+          "source": "gdelt",
+          "id": "gdelt-irn diplomacy tehran"
+        }
+      ]
+    },
+    {
+      "id": "gdelt-can aid edmonton",
+      "source": "gdelt",
+      "title": "CAN aid · Edmonton",
+      "link": "https://gdelt.org/event/1315671869",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "central-bank",
+      "severity": "critical",
+      "city": "Edmonton",
+      "publisher": null,
+      "fingerprint": "can aid edmonton",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 53.55,
+        "lon": -113.5
+      }
+    },
+    {
+      "id": "gdelt-aid hungary",
+      "source": "gdelt",
+      "title": "aid · Hungary",
+      "link": "https://gdelt.org/event/1315671927",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "geopolitical",
+      "severity": "critical",
+      "city": "Hungary",
+      "publisher": null,
+      "fingerprint": "aid hungary",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 47,
+        "lon": 20
+      }
+    },
+    {
+      "id": "gdelt-gbr aid london",
+      "source": "gdelt",
+      "title": "GBR aid · London",
+      "link": "https://gdelt.org/event/1315672017",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "central-bank",
+      "severity": "critical",
       "city": "London",
       "publisher": null,
-      "fingerprint": "gbr cooperation london",
+      "fingerprint": "gbr aid london",
       "domain": "gdelt.org",
       "coords": {
         "lat": 51.5,
@@ -601,33 +306,16 @@
       }
     },
     {
-      "id": "gdelt-gbr aid wrexham",
+      "id": "gdelt-aid london",
       "source": "gdelt",
-      "title": "GBR aid · Wrexham",
-      "link": "https://gdelt.org/event/1315662273",
+      "title": "aid · London",
+      "link": "https://gdelt.org/event/1315672026",
       "timestamp": "2026-07-28T12:00:00Z",
-      "category": "central-bank",
-      "severity": "moderate",
-      "city": "Wrexham",
-      "publisher": null,
-      "fingerprint": "gbr aid wrexham",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 53.05,
-        "lon": -3
-      }
-    },
-    {
-      "id": "gdelt-gbr yield london",
-      "source": "gdelt",
-      "title": "GBR yield · London",
-      "link": "https://gdelt.org/event/1315662274",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "central-bank",
-      "severity": "moderate",
+      "category": "geopolitical",
+      "severity": "critical",
       "city": "London",
       "publisher": null,
-      "fingerprint": "gbr yield london",
+      "fingerprint": "aid london",
       "domain": "gdelt.org",
       "coords": {
         "lat": 51.5,
@@ -635,145 +323,497 @@
       }
     },
     {
-      "id": "gdelt-gbr consultation united kingdom",
+      "id": "gdelt-aid university of chicago",
       "source": "gdelt",
-      "title": "GBR consultation · United Kingdom",
-      "link": "https://gdelt.org/event/1315662289",
+      "title": "aid · University Of Chicago",
+      "link": "https://gdelt.org/event/1315672049",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "geopolitical",
+      "severity": "critical",
+      "city": "University Of Chicago",
+      "publisher": null,
+      "fingerprint": "aid university of chicago",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 41.7898,
+        "lon": -87.5998
+      }
+    },
+    {
+      "id": "gdelt-usa aid university of chicago",
+      "source": "gdelt",
+      "title": "USA aid · University Of Chicago",
+      "link": "https://gdelt.org/event/1315672077",
       "timestamp": "2026-07-28T12:00:00Z",
       "category": "central-bank",
+      "severity": "critical",
+      "city": "University Of Chicago",
+      "publisher": null,
+      "fingerprint": "usa aid university of chicago",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 41.7898,
+        "lon": -87.5998
+      }
+    },
+    {
+      "id": "gdelt-aid waikato",
+      "source": "gdelt",
+      "title": "aid · Waikato",
+      "link": "https://gdelt.org/event/1315672109",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "geopolitical",
+      "severity": "critical",
+      "city": "Waikato",
+      "publisher": null,
+      "fingerprint": "aid waikato",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": -38,
+        "lon": 175.5
+      }
+    },
+    {
+      "id": "gdelt-engagement lagos",
+      "source": "gdelt",
+      "title": "engagement · Lagos",
+      "link": "https://gdelt.org/event/1315672275",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "geopolitical",
+      "severity": "critical",
+      "city": "Lagos",
+      "publisher": null,
+      "fingerprint": "engagement lagos",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 6.45306,
+        "lon": 3.39583
+      }
+    },
+    {
+      "id": "gdelt-nor aid lofoten",
+      "source": "gdelt",
+      "title": "NOR aid · Lofoten",
+      "link": "https://gdelt.org/event/1315672312",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "geopolitical",
+      "severity": "critical",
+      "city": "Lofoten",
+      "publisher": null,
+      "fingerprint": "nor aid lofoten",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 68.4711,
+        "lon": 13.8636
+      }
+    },
+    {
+      "id": "gdelt-pol aid wieliczka",
+      "source": "gdelt",
+      "title": "POL aid · Wieliczka",
+      "link": "https://gdelt.org/event/1315672355",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "geopolitical",
+      "severity": "critical",
+      "city": "Wieliczka",
+      "publisher": null,
+      "fingerprint": "pol aid wieliczka",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 49.9841,
+        "lon": 20.0622
+      }
+    },
+    {
+      "id": "gdelt-usa aid texas",
+      "source": "gdelt",
+      "title": "USA aid · Texas",
+      "link": "https://gdelt.org/event/1315672454",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "central-bank",
+      "severity": "critical",
+      "city": "Texas",
+      "publisher": null,
+      "fingerprint": "usa aid texas",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 31.106,
+        "lon": -97.6475
+      }
+    },
+    {
+      "id": "gdelt-usa jor aid amman",
+      "source": "gdelt",
+      "title": "USA–JOR aid · Amman",
+      "link": "https://gdelt.org/event/1315672480",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "central-bank",
+      "severity": "critical",
+      "city": "Amman",
+      "publisher": null,
+      "fingerprint": "usa jor aid amman",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 31.95,
+        "lon": 35.9333
+      },
+      "related": [
+        {
+          "source": "gdelt",
+          "id": "gdelt-usa jor aid amman"
+        }
+      ]
+    },
+    {
+      "id": "gdelt-usa jor aid washington",
+      "source": "gdelt",
+      "title": "USA–JOR aid · Washington",
+      "link": "https://gdelt.org/event/1315672482",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "central-bank",
+      "severity": "critical",
+      "city": "Washington",
+      "publisher": null,
+      "fingerprint": "usa jor aid washington",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 38.8951,
+        "lon": -77.0364
+      },
+      "related": [
+        {
+          "source": "gdelt",
+          "id": "gdelt-usa jor aid washington"
+        }
+      ]
+    },
+    {
+      "id": "gdelt-aus consultation switzerland",
+      "source": "gdelt",
+      "title": "AUS consultation · Switzerland",
+      "link": "https://gdelt.org/event/1315671725",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "central-bank",
+      "severity": "moderate",
+      "city": "Switzerland",
+      "publisher": null,
+      "fingerprint": "aus consultation switzerland",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 47,
+        "lon": 8
+      }
+    },
+    {
+      "id": "gdelt-aus consultation bermuda",
+      "source": "gdelt",
+      "title": "AUS consultation · Bermuda",
+      "link": "https://gdelt.org/event/1315671726",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "central-bank",
+      "severity": "moderate",
+      "city": "Bermuda",
+      "publisher": null,
+      "fingerprint": "aus consultation bermuda",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 32.333333,
+        "lon": -64.75
+      },
+      "related": [
+        {
+          "source": "gdelt",
+          "id": "gdelt-aus consultation bermuda"
+        }
+      ]
+    },
+    {
+      "id": "gdelt-eur consultation montenegro",
+      "source": "gdelt",
+      "title": "EUR consultation · Montenegro",
+      "link": "https://gdelt.org/event/1315671763",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "central-bank",
+      "severity": "moderate",
+      "city": "Montenegro",
+      "publisher": null,
+      "fingerprint": "eur consultation montenegro",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 42.5,
+        "lon": 19.3
+      }
+    },
+    {
+      "id": "gdelt-eur consultation turkey",
+      "source": "gdelt",
+      "title": "EUR consultation · Turkey",
+      "link": "https://gdelt.org/event/1315671764",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "central-bank",
+      "severity": "moderate",
+      "city": "Turkey",
+      "publisher": null,
+      "fingerprint": "eur consultation turkey",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 39.059012,
+        "lon": 34.911546
+      }
+    },
+    {
+      "id": "gdelt-consultation delhi",
+      "source": "gdelt",
+      "title": "consultation · Delhi",
+      "link": "https://gdelt.org/event/1315671777",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "geopolitical",
+      "severity": "moderate",
+      "city": "Delhi",
+      "publisher": null,
+      "fingerprint": "consultation delhi",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 28.6667,
+        "lon": 77.2167
+      }
+    },
+    {
+      "id": "gdelt-usa consultation port of tacoma",
+      "source": "gdelt",
+      "title": "USA consultation · Port Of Tacoma",
+      "link": "https://gdelt.org/event/1315671806",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "central-bank",
+      "severity": "moderate",
+      "city": "Port Of Tacoma",
+      "publisher": null,
+      "fingerprint": "usa consultation port of tacoma",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 47.2712,
+        "lon": -122.413
+      }
+    },
+    {
+      "id": "gdelt-can yield quebec",
+      "source": "gdelt",
+      "title": "CAN yield · Quebec",
+      "link": "https://gdelt.org/event/1315671870",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "central-bank",
+      "severity": "moderate",
+      "city": "Quebec",
+      "publisher": null,
+      "fingerprint": "can yield quebec",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 47.5,
+        "lon": -72
+      }
+    },
+    {
+      "id": "gdelt-can threat toronto",
+      "source": "gdelt",
+      "title": "CAN threat · Toronto",
+      "link": "https://gdelt.org/event/1315671874",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "geopolitical",
+      "severity": "moderate",
+      "city": "Toronto",
+      "publisher": null,
+      "fingerprint": "can threat toronto",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 43.6667,
+        "lon": -79.4167
+      }
+    },
+    {
+      "id": "gdelt-can usa yield toronto",
+      "source": "gdelt",
+      "title": "CAN–USA yield · Toronto",
+      "link": "https://gdelt.org/event/1315671880",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "central-bank",
+      "severity": "moderate",
+      "city": "Toronto",
+      "publisher": null,
+      "fingerprint": "can usa yield toronto",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 43.6667,
+        "lon": -79.4167
+      }
+    },
+    {
+      "id": "gdelt-yield united kingdom",
+      "source": "gdelt",
+      "title": "yield · United Kingdom",
+      "link": "https://gdelt.org/event/1315671909",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "geopolitical",
       "severity": "moderate",
       "city": "United Kingdom",
       "publisher": null,
-      "fingerprint": "gbr consultation united kingdom",
+      "fingerprint": "yield united kingdom",
       "domain": "gdelt.org",
       "coords": {
         "lat": 54,
         "lon": -4
-      },
-      "related": [
-        {
-          "source": "gdelt",
-          "id": "gdelt-gbr consultation united kingdom"
-        }
-      ]
+      }
     },
     {
-      "id": "gdelt-aid phnom penh",
+      "id": "gdelt-yield pennsylvania",
       "source": "gdelt",
-      "title": "aid · Phnom Penh",
-      "link": "https://gdelt.org/event/1315662325",
+      "title": "yield · Pennsylvania",
+      "link": "https://gdelt.org/event/1315671913",
       "timestamp": "2026-07-28T12:00:00Z",
       "category": "geopolitical",
       "severity": "moderate",
-      "city": "Phnom Penh",
+      "city": "Pennsylvania",
       "publisher": null,
-      "fingerprint": "aid phnom penh",
+      "fingerprint": "yield pennsylvania",
       "domain": "gdelt.org",
       "coords": {
-        "lat": 11.55,
-        "lon": 104.917
+        "lat": 40.5773,
+        "lon": -77.264
       }
     },
     {
-      "id": "gdelt-aid fiji",
-      "source": "gdelt",
-      "title": "aid · Fiji",
-      "link": "https://gdelt.org/event/1315662326",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "moderate",
-      "city": "Fiji",
-      "publisher": null,
-      "fingerprint": "aid fiji",
-      "domain": "gdelt.org",
+      "id": "macrowire-1inch opens aqua liquidity protocol across 13 ch",
+      "source": "macrowire",
+      "title": "1inch opens Aqua liquidity protocol across 13 chains",
+      "link": "https://www.coindesk.com/web3/2026/07/27/1inch-opens-aqua-liquidity-protocol-across-13-chains",
+      "timestamp": "2026-07-28T11:00:00.000Z",
+      "category": "COINDESK",
+      "severity": null,
+      "city": "New York, NY",
+      "publisher": "COINDESK",
+      "fingerprint": "1inch opens aqua liquidity protocol across 13 chains",
+      "domain": "coindesk.com",
       "coords": {
-        "lat": -18,
-        "lon": 178
+        "lat": 40.7128,
+        "lon": -74.006
       }
     },
     {
-      "id": "gdelt-fji aid fiji",
-      "source": "gdelt",
-      "title": "FJI aid · Fiji",
-      "link": "https://gdelt.org/event/1315662347",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "moderate",
-      "city": "Fiji",
-      "publisher": null,
-      "fingerprint": "fji aid fiji",
-      "domain": "gdelt.org",
+      "id": "macrowire-zidane lands dream job as france hand him reins ",
+      "source": "macrowire",
+      "title": "Zidane lands dream job as France hand him reins through 2030 World Cup - Reuters",
+      "link": "https://news.google.com/rss/articles/CBMivgFBVV95cUxQLUVOdFkyRmVpay1hUFJRYnBHQmZQaW96ZS1tNWlPM1k1MTdyUzlSdDZmNXItZnQ5UEVMb0phLVV2WHh1VGtCcUlZV3hWZDJUMkJ3ZGtaTjN5U1dqbk43cngyRmluMVVtVVZTd3RYU1gxemxkSHUxczN4ZkJ5VGJEb241M09IM2V4QmlMbTdpeWNNQ01zTERzdnZVaWV2dC1mbDlMVk0wTklKR1RnemZnVGUzaEhmYkR1MG9OSG1n?oc=5",
+      "timestamp": "2026-07-28T10:46:09.000Z",
+      "category": "REUTERS",
+      "severity": null,
+      "city": "London, UK",
+      "publisher": "REUTERS",
+      "fingerprint": "zidane lands dream job as france hand him reins through 2030 world cup reuters",
+      "domain": "news.google.com",
       "coords": {
-        "lat": -18,
-        "lon": 178
+        "lat": 51.5074,
+        "lon": -0.1278
       }
     },
     {
-      "id": "gdelt-ind aid pune",
-      "source": "gdelt",
-      "title": "IND aid · Pune",
-      "link": "https://gdelt.org/event/1315662415",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "central-bank",
-      "severity": "moderate",
-      "city": "Pune",
-      "publisher": null,
-      "fingerprint": "ind aid pune",
-      "domain": "gdelt.org",
+      "id": "macrowire-japan quake injures at least 50 disrupts power a",
+      "source": "macrowire",
+      "title": "Japan quake injures at least 50, disrupts power and travel - Reuters",
+      "link": "https://news.google.com/rss/articles/CBMitgFBVV95cUxQREx4N194TTNIVm1ocmk3TEpxZ3hPSVpKQ2dwdEpuOTZNVXNsWVNjX1pjSGhkTHh6M01iWFZQeENTQ09KTHNQSzl0TzdwWGJqN2lrMmV2Vng4Z19ISUZWM1l3NXU1U2ptMENYZVRqSzd5Y0pLelAtOHJHZ19jbm5IdXhmYjhuekNDLW9aV1BvQUtUTTlLOWZhemRNSF81MS1LSXYybms2UGliMzhHaW14SW52V2ZOZw?oc=5",
+      "timestamp": "2026-07-28T10:40:54.000Z",
+      "category": "REUTERS",
+      "severity": null,
+      "city": "London, UK",
+      "publisher": "REUTERS",
+      "fingerprint": "japan quake injures at least 50 disrupts power and travel reuters",
+      "domain": "news.google.com",
       "coords": {
-        "lat": 18.5333,
-        "lon": 73.8667
+        "lat": 51.5074,
+        "lon": -0.1278
       }
     },
     {
-      "id": "gdelt-ind diplomacy kashmir",
-      "source": "gdelt",
-      "title": "IND diplomacy · Kashmir",
-      "link": "https://gdelt.org/event/1315662419",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "central-bank",
-      "severity": "moderate",
-      "city": "Kashmir",
-      "publisher": null,
-      "fingerprint": "ind diplomacy kashmir",
-      "domain": "gdelt.org",
+      "id": "macrowire-imf warns brazil s stablecoin activity outpaces ",
+      "source": "macrowire",
+      "title": "IMF warns Brazil’s stablecoin activity outpaces traditional capital flows",
+      "link": "https://cointelegraph.com/news/imf-brazil-stablecoin-activity-outpaces-traditional-capital-flows?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "timestamp": "2026-07-28T10:09:47.000Z",
+      "category": "COINTELEGRAPH",
+      "severity": null,
+      "city": "Zurich, CH",
+      "publisher": "COINTELEGRAPH",
+      "fingerprint": "imf warns brazil s stablecoin activity outpaces traditional capital flows",
+      "domain": "cointelegraph.com",
       "coords": {
-        "lat": 33.9167,
-        "lon": 76.6667
+        "lat": 47.3769,
+        "lon": 8.5417
       }
     },
     {
-      "id": "gdelt-kgz consultation bishkek",
-      "source": "gdelt",
-      "title": "KGZ consultation · Bishkek",
-      "link": "https://gdelt.org/event/1315662502",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "moderate",
-      "city": "Bishkek",
-      "publisher": null,
-      "fingerprint": "kgz consultation bishkek",
-      "domain": "gdelt.org",
+      "id": "macrowire-oman presented regional mechanism for hormuz to ",
+      "source": "macrowire",
+      "title": "Oman presented regional mechanism for Hormuz to Iran, source says - Reuters",
+      "link": "https://news.google.com/rss/articles/CBMisAFBVV95cUxNRFRBNlNicGc0ZnNMeVJWaGRJRjhNNEh6eUpSSHBFcXRGcW5iTkZYbV90Skg4VU5rQ0IwZjRkcmc2YVJxTzVIeFVfU2twSXlnQThKdXhmcURGM3FlakJQVHFwQ2hFdHVlN3Fqd1BMNWVTNVUyYktnTlp5aDg4N0NFWVlIVXp2YUg3bjM4V0RnUjNRYnhOT3Nvdmp1T2FlTUYzYzBzcmNQckZWc0hWOXpNag?oc=5",
+      "timestamp": "2026-07-28T10:08:48.000Z",
+      "category": "REUTERS",
+      "severity": null,
+      "city": "London, UK",
+      "publisher": "REUTERS",
+      "fingerprint": "oman presented regional mechanism for hormuz to iran source says reuters",
+      "domain": "news.google.com",
       "coords": {
-        "lat": 42.8731,
-        "lon": 74.6003
+        "lat": 51.5074,
+        "lon": -0.1278
       }
     },
     {
-      "id": "gdelt-kor consultation cheongju",
-      "source": "gdelt",
-      "title": "KOR consultation · Cheongju",
-      "link": "https://gdelt.org/event/1315662519",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "central-bank",
-      "severity": "moderate",
-      "city": "Cheongju",
-      "publisher": null,
-      "fingerprint": "kor consultation cheongju",
-      "domain": "gdelt.org",
+      "id": "macrowire-perpetuals tied to sk hynix hit by flash crash t",
+      "source": "macrowire",
+      "title": "Perpetuals tied to SK Hynix hit by flash crash to $900 on Hyperliquid",
+      "link": "https://www.coindesk.com/markets/2026/07/28/perpetuals-tied-to-sk-hynix-suffer-a-flash-crash-to-usd900-on-hyperliquid",
+      "timestamp": "2026-07-28T10:05:43.000Z",
+      "category": "COINDESK",
+      "severity": null,
+      "city": "New York, NY",
+      "publisher": "COINDESK",
+      "fingerprint": "perpetuals tied to sk hynix hit by flash crash to 900 on hyperliquid",
+      "domain": "coindesk.com",
       "coords": {
-        "lat": 36.6372,
-        "lon": 127.49
+        "lat": 40.7128,
+        "lon": -74.006
+      }
+    },
+    {
+      "id": "macrowire-france braces for fourth major heatwave as crews",
+      "source": "macrowire",
+      "title": "France braces for fourth major heatwave as crews tackle Bordeaux blaze - Reuters",
+      "link": "https://news.google.com/rss/articles/CBMivAFBVV95cUxNX1VLMWJINXpZb0N6cFdyQXdEelhlNE1Sd2tVbGJ4Y0lBd0dYa2ZRRmlneU9MSmNEaXFhd2lWazY3V05wU0hjTnh4M280VzNBblI0LUt4cUt2eElCQ1RzbjlXVE90ODFfX0ctdUIwWlZJdjhEV1pLejRfNlFGSTRKWnRBdlFmUEFseU82OVRtVlMydkNzb053aklaeE5aTVEzMGxsLVNWMUNTQnVXT0c2eEpmVDUzd3ZKbTFPVw?oc=5",
+      "timestamp": "2026-07-28T10:02:11.000Z",
+      "category": "REUTERS",
+      "severity": null,
+      "city": "London, UK",
+      "publisher": "REUTERS",
+      "fingerprint": "france braces for fourth major heatwave as crews tackle bordeaux blaze reuters",
+      "domain": "news.google.com",
+      "coords": {
+        "lat": 51.5074,
+        "lon": -0.1278
+      }
+    },
+    {
+      "id": "macrowire-world stocks hit one month low as chip rout wors",
+      "source": "macrowire",
+      "title": "World stocks hit one-month low as chip rout worsens - Reuters",
+      "link": "https://news.google.com/rss/articles/CBMigwFBVV95cUxNWUF6MHN4NmxzbUxRX0JpZGFFTlliRjB0WW1DQ3NvVUpQVFJ3aFNoUFJ6cG0tNGx2anJ3OFFTWXk3VUdQQVowWHdoRnVzZTZsZV9KdTR1cWxDeFpXTTFidGxCR25jc2ZYUXp1Z2lYRzJwZDcweHNJalJfamhJT0lvTXRKWQ?oc=5",
+      "timestamp": "2026-07-28T09:38:56.000Z",
+      "category": "REUTERS",
+      "severity": null,
+      "city": "London, UK",
+      "publisher": "REUTERS",
+      "fingerprint": "world stocks hit one month low as chip rout worsens reuters",
+      "domain": "news.google.com",
+      "coords": {
+        "lat": 51.5074,
+        "lon": -0.1278
       }
     },
     {
@@ -791,6 +831,23 @@
       "coords": {
         "lat": 40.7128,
         "lon": -74.006
+      }
+    },
+    {
+      "id": "macrowire-white phosphorus leak inside us air base in sout",
+      "source": "macrowire",
+      "title": "White Phosphorus 'leak' inside US air base in South Korea, Seoul says - Reuters",
+      "link": "https://news.google.com/rss/articles/CBMiugFBVV95cUxNMHVUeklHcEE4Y19MbW1hbl9Fa3RnSkUwaDNQWE1jYUFfYlFHYkVSaUVHTi1SQ250SmNKOV9ubF9ISDZ5OFZOSUMwV3djeW81cmFzNWxUemlKcGY1U3lXZGFHZW55VnlndW9TUlpxeUlBY0RjaVl0NkVzUGlZNHlKQ2RBLXpyb0lkMG8xN1doOUhNQ1haNkNLMldBSmRITUdOdk5iRXJiTjlabEVLQ0hiQXBCWmp2TzR2a2c?oc=5",
+      "timestamp": "2026-07-28T09:24:39.000Z",
+      "category": "REUTERS",
+      "severity": null,
+      "city": "London, UK",
+      "publisher": "REUTERS",
+      "fingerprint": "white phosphorus leak inside us air base in south korea seoul says reuters",
+      "domain": "news.google.com",
+      "coords": {
+        "lat": 51.5074,
+        "lon": -0.1278
       }
     },
     {
@@ -828,16 +885,16 @@
       }
     },
     {
-      "id": "macrowire-major earthquake hits japan s kyushu region reut",
+      "id": "macrowire-taiwan drills to test relocating arms production",
       "source": "macrowire",
-      "title": "Major earthquake hits Japan's Kyushu region - Reuters",
-      "link": "https://news.google.com/rss/articles/CBMitgFBVV95cUxQREx4N194TTNIVm1ocmk3TEpxZ3hPSVpKQ2dwdEpuOTZNVXNsWVNjX1pjSGhkTHh6M01iWFZQeENTQ09KTHNQSzl0TzdwWGJqN2lrMmV2Vng4Z19ISUZWM1l3NXU1U2ptMENYZVRqSzd5Y0pLelAtOHJHZ19jbm5IdXhmYjhuekNDLW9aV1BvQUtUTTlLOWZhemRNSF81MS1LSXYybms2UGliMzhHaW14SW52V2ZOZw?oc=5",
-      "timestamp": "2026-07-28T08:58:09.000Z",
+      "title": "Taiwan drills to test relocating arms production under Chinese attack - Reuters",
+      "link": "https://news.google.com/rss/articles/CBMitAFBVV95cUxNYjhIdUNGamJpdkF5S25rVkZCb3JXbmVhMXRCRWswemdaa3Q1b0J3Vlk2cVN0eW5QTHFBbTQ2R1ZkWnZMZzZCUE91T0xSMEhkdHdfbHpRMXkwbVU3bTZEOTM0MDdOZVlCbGZHRjhxMWlMUF9ZNXRhM2l5aEJhaWlFU3prUGlZbDN1MWE1Z2hmSURjTVB1OUpFc0VtaVVzZ2JQaktLUGw3aVBKSHF1Q3hDNmhvd0w?oc=5",
+      "timestamp": "2026-07-28T08:26:32.000Z",
       "category": "REUTERS",
       "severity": null,
       "city": "London, UK",
       "publisher": "REUTERS",
-      "fingerprint": "major earthquake hits japan s kyushu region reuters",
+      "fingerprint": "taiwan drills to test relocating arms production under chinese attack reuters",
       "domain": "news.google.com",
       "coords": {
         "lat": 51.5074,
@@ -896,23 +953,6 @@
       }
     },
     {
-      "id": "macrowire-un chief guterres sounds out cyprus sides on pro",
-      "source": "macrowire",
-      "title": "UN chief Guterres sounds out Cyprus sides on prospects for peace talks - Reuters",
-      "link": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxNMG5jdl9tWGt6YkFUZ254RmJ3NXpkSnhfWU9kMzJnQlNtZFZoYUVBRjF5RHBUcHlHRXZwT2Y1TW1oRWhweWdLSWdLbGY0OUhhUjZlSldtakp0SjhIWDV2V2tKa3pZZWtWaDI0dXJGcXNEc09XVVktbkw4M0JBRk5GZjRMVDMwSXZMYXd1SG9jM3BWeVdyNUFHTmlLdzEwT0JZU3pNWThBTkh4a1VVZHYzT216b2VHVjhU?oc=5",
-      "timestamp": "2026-07-28T07:41:30.000Z",
-      "category": "REUTERS",
-      "severity": null,
-      "city": "London, UK",
-      "publisher": "REUTERS",
-      "fingerprint": "un chief guterres sounds out cyprus sides on prospects for peace talks reuters",
-      "domain": "news.google.com",
-      "coords": {
-        "lat": 51.5074,
-        "lon": -0.1278
-      }
-    },
-    {
       "id": "macrowire-apple faces lawsuit over alleged 1 8m bitcoin wa",
       "source": "macrowire",
       "title": "Apple faces lawsuit over alleged $1.8M Bitcoin wallet app losses",
@@ -930,16 +970,33 @@
       }
     },
     {
-      "id": "macrowire-asian chip stocks slide as china competition fea",
+      "id": "macrowire-bab el mandeb shipping rises amid hopes of resol",
       "source": "macrowire",
-      "title": "Asian chip stocks slide as China competition fears rattle AI trade - Reuters",
-      "link": "https://news.google.com/rss/articles/CBMiugFBVV95cUxNbm9DUFBRMVNrTExpUDkzSlpGZGxTaEtRbTVWZTNjTVlzRklHX0lBVW9fcU5ULTFBbFlZb040TlVRR0pkNGZsRUo1TkhiLU95SzVwX0N0OC1PU2x3bXkySE1ZSmlDcldEZjF1OWR5NnU1M3RVQ3lvQ2pLeHlMNjQxT3dienkwRERwZlhWWlZwMXpTRVQ1czlFVVZReFpoelhHb202ZVB1VnFpR0llQ1Fsd2N0RDNsa0hiRlE?oc=5",
-      "timestamp": "2026-07-28T07:37:48.000Z",
+      "title": "Bab el-Mandeb shipping rises amid hopes of resolution in US-Iran war - Reuters",
+      "link": "https://news.google.com/rss/articles/CBMitwFBVV95cUxPOVRYeklCVkdfd0l2ZjNMQWgwUFQ3RjVqQVVoUWV0ZlNWQTNhYWx2NnJWcE1lMncwLU0wcDhjakQ4MmtLb055cXJyVDZyeWVIVEJ4OEg3Z0tTbXVfTUtjT3NxNHpyWFZicm5DV1plVXVDWHBDZGtlMkdENVNlSkZzTVN1V29sQWE2Vm1YS3JHYTFlVmhsRzYyTHJFMWhQa2NRa1lNUmhJcnBvNzVvUm9BTnJyYWQ3Z2M?oc=5",
+      "timestamp": "2026-07-28T07:31:43.000Z",
       "category": "REUTERS",
       "severity": null,
       "city": "London, UK",
       "publisher": "REUTERS",
-      "fingerprint": "asian chip stocks slide as china competition fears rattle ai trade reuters",
+      "fingerprint": "bab el mandeb shipping rises amid hopes of resolution in us iran war reuters",
+      "domain": "news.google.com",
+      "coords": {
+        "lat": 51.5074,
+        "lon": -0.1278
+      }
+    },
+    {
+      "id": "macrowire-south korea s kospi posts biggest fall since ear",
+      "source": "macrowire",
+      "title": "South Korea's KOSPI posts biggest fall since early March as chipmakers slump - Reuters",
+      "link": "https://news.google.com/rss/articles/CBMitAFBVV95cUxOYlFYaS1BQVhMWVpiSVZ3S1RMQkI0YTZ2RWFUcEwyRXJRMTV5NUphTFJISW9CSGs4STZxejBfalBTYUtWOFNJeDAySzJYcmdCdWloZlpnSThPU25TMWYwT3g1TUR6UzRzLV9FbFRqVTBmcFo4V3JieWJ5S2djdFdHTTYyaktsVXBYVGh6ODRMdm1UUS01ZmpYLVlWQ3czSkxhSGVPMjNLRzJZNkNneXFUeHFlM00?oc=5",
+      "timestamp": "2026-07-28T07:24:29.000Z",
+      "category": "REUTERS",
+      "severity": null,
+      "city": "London, UK",
+      "publisher": "REUTERS",
+      "fingerprint": "south korea s kospi posts biggest fall since early march as chipmakers slump reuters",
       "domain": "news.google.com",
       "coords": {
         "lat": 51.5074,
@@ -981,33 +1038,16 @@
       }
     },
     {
-      "id": "macrowire-oman presented regional mechanism for hormuz to ",
+      "id": "macrowire-un chief guterres sounds out cyprus sides on pro",
       "source": "macrowire",
-      "title": "Oman presented regional mechanism for Hormuz to Iran, source says - Reuters",
-      "link": "https://news.google.com/rss/articles/CBMisAFBVV95cUxNRFRBNlNicGc0ZnNMeVJWaGRJRjhNNEh6eUpSSHBFcXRGcW5iTkZYbV90Skg4VU5rQ0IwZjRkcmc2YVJxTzVIeFVfU2twSXlnQThKdXhmcURGM3FlakJQVHFwQ2hFdHVlN3Fqd1BMNWVTNVUyYktnTlp5aDg4N0NFWVlIVXp2YUg3bjM4V0RnUjNRYnhOT3Nvdmp1T2FlTUYzYzBzcmNQckZWc0hWOXpNag?oc=5",
-      "timestamp": "2026-07-28T06:57:32.000Z",
+      "title": "UN chief Guterres sounds out Cyprus sides on prospects for peace talks - Reuters",
+      "link": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxNMG5jdl9tWGt6YkFUZ254RmJ3NXpkSnhfWU9kMzJnQlNtZFZoYUVBRjF5RHBUcHlHRXZwT2Y1TW1oRWhweWdLSWdLbGY0OUhhUjZlSldtakp0SjhIWDV2V2tKa3pZZWtWaDI0dXJGcXNEc09XVVktbkw4M0JBRk5GZjRMVDMwSXZMYXd1SG9jM3BWeVdyNUFHTmlLdzEwT0JZU3pNWThBTkh4a1VVZHYzT216b2VHVjhU?oc=5",
+      "timestamp": "2026-07-28T06:28:00.000Z",
       "category": "REUTERS",
       "severity": null,
       "city": "London, UK",
       "publisher": "REUTERS",
-      "fingerprint": "oman presented regional mechanism for hormuz to iran source says reuters",
-      "domain": "news.google.com",
-      "coords": {
-        "lat": 51.5074,
-        "lon": -0.1278
-      }
-    },
-    {
-      "id": "macrowire-finland closes airspace restricts maritime traff",
-      "source": "macrowire",
-      "title": "Finland closes airspace, restricts maritime traffic near Russia over drone risk - Reuters",
-      "link": "https://news.google.com/rss/articles/CBMipAFBVV95cUxNOExKdlZiNkltclhvaVFlRjlmUE5mUnJWSWZ2REJ5ZnNGNWJSSWs0X05JVkhxMkNhcElKZFFHQnFSc2xxMHVoTGtBaXM3Q3ZvSXM1ZWQ1QmdwOFNYdlN1ZUdRbjUtenpkeDNpU3VKSjNrRWViTU1LQmFOelR0V2l2cDN2R1h6YkFUbUV2OE1xQTYtdTk3YmZ0N0xyeXhTTTFjQzV2RQ?oc=5",
-      "timestamp": "2026-07-28T06:40:00.000Z",
-      "category": "REUTERS",
-      "severity": null,
-      "city": "London, UK",
-      "publisher": "REUTERS",
-      "fingerprint": "finland closes airspace restricts maritime traffic near russia over drone risk reuters",
+      "fingerprint": "un chief guterres sounds out cyprus sides on prospects for peace talks reuters",
       "domain": "news.google.com",
       "coords": {
         "lat": 51.5074,
@@ -1019,12 +1059,29 @@
       "source": "macrowire",
       "title": "China hopes for constructive role by Slovakia in ties with EU, Xinhua reports - Reuters",
       "link": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxPRDNRVlJORWVoLWFjVWFUMXA4SzNSU3I5eENvY2JDcmpBNG1wbUNhZUFsQ19ucHBiVnphTHBWdWNrR3lud2ZTSTdqRHhKTkUtc2ZHcnZCdTV4aWp0VE1FbTNLWUNnWkFjZTJGUS1kYU5CcV9IdXYzYnZtMC1PMXZlRWREVG50MlRlVWs5eFMtRVZmS2tLS0x0YW1kYnA3eDFseE4ybmdEWkxPUmpBWEo5STlFZkhSNU9t?oc=5",
-      "timestamp": "2026-07-28T06:07:43.000Z",
+      "timestamp": "2026-07-28T06:06:00.000Z",
       "category": "REUTERS",
       "severity": null,
       "city": "London, UK",
       "publisher": "REUTERS",
       "fingerprint": "china hopes for constructive role by slovakia in ties with eu xinhua reports reuters",
+      "domain": "news.google.com",
+      "coords": {
+        "lat": 51.5074,
+        "lon": -0.1278
+      }
+    },
+    {
+      "id": "macrowire-unilever lifts outlook on strongest volume growt",
+      "source": "macrowire",
+      "title": "Unilever lifts outlook on strongest volume growth in over a decade - Reuters",
+      "link": "https://news.google.com/rss/articles/CBMiswFBVV95cUxQdnBpbEFMQzhPN25qYTZlMnQ3SzUwRUtRR3NaX2FraHVRQXluZS11Vmo2Wi1YdzNIellXV1NOUko2R0xnYjAyaldLN0VRRGpWaW82UDlBdlRkSHFCdHh5Nk5jU05KS0VPZ3dNVWJFYVBQeFFkTTdCTi1kbUsxdElreG82cEZYTW9UcWdTTzAwT0tiYVV6aWtKTnRrMUV5YWpLcXVfcFpFSGdiWjJ5ZGJ3WDVJNA?oc=5",
+      "timestamp": "2026-07-28T06:05:00.000Z",
+      "category": "REUTERS",
+      "severity": null,
+      "city": "London, UK",
+      "publisher": "REUTERS",
+      "fingerprint": "unilever lifts outlook on strongest volume growth in over a decade reuters",
       "domain": "news.google.com",
       "coords": {
         "lat": 51.5074,
@@ -1053,7 +1110,7 @@
       "source": "macrowire",
       "title": "Iran's foreign minister discusses security of Strait of Hormuz with Saudi, Omani counterparts - Reuters",
       "link": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQRjhRVHZEYWd5aEJick5tT05haTdpX2RsSmRrTkRLUEZUSDRwTGhMTER4UmhZV0dPNkVfZlhEa0QxMXZDVll3bWYxcXdCQl91VjBpUFZoZzJQQzlBQkxDbkFTbTBUcGdyTE5hTXVqaXNmZEZiMTd5bFF1aUkxRXlzSUh1VzJRWmxhRXFXakNWTTZZaVR2dXpIaHBqZVNORU4wSEFjSGJIVXZGV1hkaHNNeEU1eXhfVmNEdTNCcTQyVk9NUVFT?oc=5",
-      "timestamp": "2026-07-28T05:38:00.000Z",
+      "timestamp": "2026-07-28T05:38:52.000Z",
       "category": "REUTERS",
       "severity": null,
       "city": "London, UK",
@@ -1131,40 +1188,6 @@
       "coords": {
         "lat": 47.3769,
         "lon": 8.5417
-      }
-    },
-    {
-      "id": "macrowire-taiwan drills to test relocating arms production",
-      "source": "macrowire",
-      "title": "Taiwan drills to test relocating arms production under Chinese attack - Reuters",
-      "link": "https://news.google.com/rss/articles/CBMitAFBVV95cUxNYjhIdUNGamJpdkF5S25rVkZCb3JXbmVhMXRCRWswemdaa3Q1b0J3Vlk2cVN0eW5QTHFBbTQ2R1ZkWnZMZzZCUE91T0xSMEhkdHdfbHpRMXkwbVU3bTZEOTM0MDdOZVlCbGZHRjhxMWlMUF9ZNXRhM2l5aEJhaWlFU3prUGlZbDN1MWE1Z2hmSURjTVB1OUpFc0VtaVVzZ2JQaktLUGw3aVBKSHF1Q3hDNmhvd0w?oc=5",
-      "timestamp": "2026-07-28T04:25:00.000Z",
-      "category": "REUTERS",
-      "severity": null,
-      "city": "London, UK",
-      "publisher": "REUTERS",
-      "fingerprint": "taiwan drills to test relocating arms production under chinese attack reuters",
-      "domain": "news.google.com",
-      "coords": {
-        "lat": 51.5074,
-        "lon": -0.1278
-      }
-    },
-    {
-      "id": "macrowire-apartment building in chekhov near moscow damage",
-      "source": "macrowire",
-      "title": "Apartment building in Chekhov near Moscow damaged in drone attack, regional governor says - Reuters",
-      "link": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQVDNoMktQZDZqdkJSamVsZGx6WGpYZGJsRy0zVkd4ajkwcHQ4V2VUNHNhTXFjbEhjV0tFLTF3T3lsS1NlSmVQTlNJNUktT21aWmpEeU1vUjlrYWdkMXVNY2RVT0NlVzVuTVVoZkJDS3pEYi1Ca3ViSk1QWDBZSWlFRGltM0tZSF9jT3dySFA5Wk9zWFZDM1NOMmVwb184VGZ0SUVoZl96OTBoMVdoMG4tbkcxN0Q3bDBReURRbGRJMWhlckhH?oc=5",
-      "timestamp": "2026-07-28T04:20:00.000Z",
-      "category": "REUTERS",
-      "severity": null,
-      "city": "London, UK",
-      "publisher": "REUTERS",
-      "fingerprint": "apartment building in chekhov near moscow damaged in drone attack regional governor says reuters",
-      "domain": "news.google.com",
-      "coords": {
-        "lat": 51.5074,
-        "lon": -0.1278
       }
     },
     {
@@ -1505,125 +1528,6 @@
       "coords": {
         "lat": 48.1507,
         "lon": 11.568
-      }
-    },
-    {
-      "id": "macrowire-zimbabwe admits 7 fintech projects to regulatory",
-      "source": "macrowire",
-      "title": "Zimbabwe admits 7 fintech projects to regulatory sandbox",
-      "link": "https://cointelegraph.com/news/zimbabwe-seven-fintech-projects-regulatory-sandbox?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
-      "timestamp": "2026-07-28T03:17:10.000Z",
-      "category": "COINTELEGRAPH",
-      "severity": null,
-      "city": "Zurich, CH",
-      "publisher": "COINTELEGRAPH",
-      "fingerprint": "zimbabwe admits 7 fintech projects to regulatory sandbox",
-      "domain": "cointelegraph.com",
-      "coords": {
-        "lat": 47.3769,
-        "lon": 8.5417
-      }
-    },
-    {
-      "id": "macrowire-us customs officials inspect china linked factor",
-      "source": "macrowire",
-      "title": "US customs officials inspect China-linked factories in Vietnam, Bloomberg News reports - Reuters",
-      "link": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxOQTJlOTBkV2VyVGw3T0YxZXlKT2VhMkh4VkdDazNSUFVkellUX0Q3RFA5bjYyMUFYdXViZUtWeUREMFpfaER0cjNuZnRNNmxvTlloZnV1OTh2Sll2dXpTeWZSV3ZCdnA1Q2Vwb0NnYVdrV2RYU1VyZmxoTjljOC01emc3aEV2T2hab1Vzb3V2ZFNjMjNoeGF3QlI1Y0ZXeWRqQW85TVdybnZMMWgxSkR1MUZXZmVjblJHOWoybkhkQzFacU8wVTRtQw?oc=5",
-      "timestamp": "2026-07-28T02:46:00.000Z",
-      "category": "REUTERS",
-      "severity": null,
-      "city": "London, UK",
-      "publisher": "REUTERS",
-      "fingerprint": "us customs officials inspect china linked factories in vietnam bloomberg news reports reuters",
-      "domain": "news.google.com",
-      "coords": {
-        "lat": 51.5074,
-        "lon": -0.1278
-      }
-    },
-    {
-      "id": "macrowire-ai anxiety sparks tech rout broad selloff in asi",
-      "source": "macrowire",
-      "title": "AI anxiety sparks tech rout, broad selloff in Asian markets - Reuters",
-      "link": "https://news.google.com/rss/articles/CBMigwFBVV95cUxNWUF6MHN4NmxzbUxRX0JpZGFFTlliRjB0WW1DQ3NvVUpQVFJ3aFNoUFJ6cG0tNGx2anJ3OFFTWXk3VUdQQVowWHdoRnVzZTZsZV9KdTR1cWxDeFpXTTFidGxCR25jc2ZYUXp1Z2lYRzJwZDcweHNJalJfamhJT0lvTXRKWQ?oc=5",
-      "timestamp": "2026-07-28T02:30:00.000Z",
-      "category": "REUTERS",
-      "severity": null,
-      "city": "London, UK",
-      "publisher": "REUTERS",
-      "fingerprint": "ai anxiety sparks tech rout broad selloff in asian markets reuters",
-      "domain": "news.google.com",
-      "coords": {
-        "lat": 51.5074,
-        "lon": -0.1278
-      }
-    },
-    {
-      "id": "macrowire-hong kong prepares banks for quantum threats ami",
-      "source": "macrowire",
-      "title": "Hong Kong prepares banks for quantum threats amid tokenization push",
-      "link": "https://cointelegraph.com/news/hong-kong-banks-quantum-threats-tokenization?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
-      "timestamp": "2026-07-28T02:21:04.000Z",
-      "category": "COINTELEGRAPH",
-      "severity": null,
-      "city": "Zurich, CH",
-      "publisher": "COINTELEGRAPH",
-      "fingerprint": "hong kong prepares banks for quantum threats amid tokenization push",
-      "domain": "cointelegraph.com",
-      "coords": {
-        "lat": 47.3769,
-        "lon": 8.5417
-      }
-    },
-    {
-      "id": "macrowire-what is a digital commodity",
-      "source": "macrowire",
-      "title": "What Is a Digital Commodity?",
-      "link": "https://www.theblock.co/learn/409682/what-is-a-digital-commodity?utm_source=rss&utm_medium=rss",
-      "timestamp": "2026-07-28T01:55:46.000Z",
-      "category": "THEBLOCK",
-      "severity": null,
-      "city": "New York, NY",
-      "publisher": "THEBLOCK",
-      "fingerprint": "what is a digital commodity",
-      "domain": "theblock.co",
-      "coords": {
-        "lat": 40.7128,
-        "lon": -74.006
-      }
-    },
-    {
-      "id": "macrowire-binance phishes its own staff monthly india cens",
-      "source": "macrowire",
-      "title": "Binance phishes its own staff monthly, India censors BitChat code: Asia Express",
-      "link": "https://cointelegraph.com/magazine/india-bans-bitchat-binance-phishs-its-own-staff-asia-express?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
-      "timestamp": "2026-07-28T01:23:07.000Z",
-      "category": "COINTELEGRAPH",
-      "severity": null,
-      "city": "Zurich, CH",
-      "publisher": "COINTELEGRAPH",
-      "fingerprint": "binance phishes its own staff monthly india censors bitchat code asia express",
-      "domain": "cointelegraph.com",
-      "coords": {
-        "lat": 47.3769,
-        "lon": 8.5417
-      }
-    },
-    {
-      "id": "macrowire-south korea s kospi posts biggest fall since ear",
-      "source": "macrowire",
-      "title": "South Korea's KOSPI posts biggest fall since early March as chipmakers slump - Reuters",
-      "link": "https://news.google.com/rss/articles/CBMitAFBVV95cUxOYlFYaS1BQVhMWVpiSVZ3S1RMQkI0YTZ2RWFUcEwyRXJRMTV5NUphTFJISW9CSGs4STZxejBfalBTYUtWOFNJeDAySzJYcmdCdWloZlpnSThPU25TMWYwT3g1TUR6UzRzLV9FbFRqVTBmcFo4V3JieWJ5S2djdFdHTTYyaktsVXBYVGh6ODRMdm1UUS01ZmpYLVlWQ3czSkxhSGVPMjNLRzJZNkNneXFUeHFlM00?oc=5",
-      "timestamp": "2026-07-28T00:56:00.000Z",
-      "category": "REUTERS",
-      "severity": null,
-      "city": "London, UK",
-      "publisher": "REUTERS",
-      "fingerprint": "south korea s kospi posts biggest fall since early march as chipmakers slump reuters",
-      "domain": "news.google.com",
-      "coords": {
-        "lat": 51.5074,
-        "lon": -0.1278
       }
     }
   ]
