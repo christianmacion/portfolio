@@ -58,6 +58,22 @@ const [intrinsicW, intrinsicH] = ASPECT_WH[aspect] ?? [1200, 800];
   {
     href ? (
       <a href={href} class="proof-card__link" target="_blank" rel="noopener noreferrer">
+        <picture>
+          <source type="image/webp" srcset={src.replace(/\.(png|jpg|jpeg)$/i, '.webp')} />
+          <img
+            src={src}
+            alt={alt}
+            loading={eager ? 'eager' : 'lazy'}
+            decoding="async"
+            width={intrinsicW}
+            height={intrinsicH}
+            class="proof-card__img"
+          />
+        </picture>
+      </a>
+    ) : (
+      <picture>
+        <source type="image/webp" srcset={src.replace(/\.(png|jpg|jpeg)$/i, '.webp')} />
         <img
           src={src}
           alt={alt}
@@ -66,20 +82,8 @@ const [intrinsicW, intrinsicH] = ASPECT_WH[aspect] ?? [1200, 800];
           width={intrinsicW}
           height={intrinsicH}
           class="proof-card__img"
-          data-no-webp="1"
         />
-      </a>
-    ) : (
-      <img
-        src={src}
-        alt={alt}
-        loading={eager ? 'eager' : 'lazy'}
-        decoding="async"
-        width={intrinsicW}
-        height={intrinsicH}
-        class="proof-card__img"
-        data-no-webp="1"
-      />
+      </picture>
     )
   }
   {
