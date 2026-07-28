@@ -1,7 +1,7 @@
 {
-  "generated": "2026-07-28T08:05:29.028Z",
+  "generated": "2026-07-28T08:36:51.101Z",
   "counts": {
-    "agents": 110,
+    "agents": 120,
     "skills": 120,
     "relations": 6713
   },
@@ -775,6 +775,76 @@
       "tier": "T3",
       "squad": "pedagogy-and-doctrine",
       "mark": "🎯"
+    },
+    {
+      "id": "agent:arendt-doctrine-owner",
+      "name": "arendt_doctrine_owner",
+      "tier": "T2",
+      "squad": "E",
+      "mark": "🪞"
+    },
+    {
+      "id": "agent:deming-doctrine-owner",
+      "name": "deming_doctrine_owner",
+      "tier": "T2",
+      "squad": "E",
+      "mark": "🔁"
+    },
+    {
+      "id": "agent:hr-director",
+      "name": "hr_director",
+      "tier": "T1",
+      "squad": "H",
+      "mark": "🎖️"
+    },
+    {
+      "id": "agent:kahneman-doctrine-owner",
+      "name": "kahneman_doctrine_owner",
+      "tier": "T2",
+      "squad": "E",
+      "mark": "⚓"
+    },
+    {
+      "id": "agent:performance-auditor",
+      "name": "performance_auditor",
+      "tier": "T2",
+      "squad": "H",
+      "mark": "📈"
+    },
+    {
+      "id": "agent:sagan-doctrine-owner",
+      "name": "sagan_doctrine_owner",
+      "tier": "T2",
+      "squad": "E",
+      "mark": "🌌"
+    },
+    {
+      "id": "agent:squad-h",
+      "name": "squad_h",
+      "tier": "T1",
+      "squad": "H",
+      "mark": "🎖️"
+    },
+    {
+      "id": "agent:squad-k",
+      "name": "squad_k",
+      "tier": "T1",
+      "squad": "K",
+      "mark": "🌐"
+    },
+    {
+      "id": "agent:talent-sourcer",
+      "name": "talent_sourcer",
+      "tier": "T2",
+      "squad": "H",
+      "mark": "🔍"
+    },
+    {
+      "id": "agent:training-officer",
+      "name": "training_officer",
+      "tier": "T2",
+      "squad": "H",
+      "mark": "📚"
     }
   ],
   "skills": [
