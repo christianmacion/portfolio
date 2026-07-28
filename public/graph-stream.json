@@ -1,9 +1,9 @@
 {
-  "generated": "2026-07-28T03:58:37.694Z",
+  "generated": "2026-07-28T07:42:32.169Z",
   "counts": {
-    "agents": 107,
-    "skills": 105,
-    "relations": 3859
+    "agents": 108,
+    "skills": 120,
+    "relations": 6688
   },
   "agents": [
     {
@@ -754,6 +754,13 @@
       "tier": "T3",
       "squad": "S",
       "mark": ""
+    },
+    {
+      "id": "agent:roster_officer",
+      "name": "roster_officer",
+      "tier": "T2",
+      "squad": "cross-workspace",
+      "mark": "🧬"
     }
   ],
   "skills": [
