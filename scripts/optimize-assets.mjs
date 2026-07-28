@@ -86,13 +86,60 @@ async function generateFavicons() {
   return total;
 }
 
+async function generateWebpSiblings() {
+  // Categories that should have .webp alongside the original (LCP-critical):
+  //   - /headshot.jpg               — hero image on homepage
+  //   - /proof/*.jpg                 — cert photos on /proof and /certifications
+  //   - /workbooks/*/figures/*.png   — workbook chapter figures
+  //
+  // Categories that intentionally stay raster-only (browser-required formats):
+  //   - favicon-*.png, apple-touch-icon*.png, maskable-icon*.png
+  //     (browsers require PNG for these, no benefit from webp sibling)
+  //   - og-image*.jpg
+  //     (used as <meta og:image> — only crawlers consume them, no LCP)
+  //
+  // Idempotent: skips files that already have a .webp sibling.
+  const targets = [
+    join(publicDir, 'headshot.jpg'),
+    ...['ai-workflow.jpg', 'ateneo-american-corner-2025-11.jpg', 'bida-meta-aiccelerate-2025-11.jpg', 'bitget-b4y-2026.jpg', 'cryptoneeds-christ-chart.jpg', 'cta-cert-portrait-2026-01.jpg', 'usep-lecture.jpg'].map((f) => join(publicDir, 'proof', f)),
+  ];
+  // workbook figures
+  const workbookRoots = [
+    join(publicDir, 'workbooks', 'ai-engineering', 'figures'),
+    join(publicDir, 'workbooks', 'graph-engineering', 'figures'),
+  ];
+  for (const dir of workbookRoots) {
+    if (!existsSync(dir)) continue;
+    for (const f of readdirSync(dir).filter((f) => /\.(png|jpg|jpeg)$/i.test(f))) {
+      targets.push(join(dir, f));
+    }
+  }
+  let total = 0, skipped = 0;
+  for (const src of targets) {
+    if (!existsSync(src)) continue;
+    const dst = src.replace(/\.(png|jpg|jpeg)$/i, '.webp');
+    if (existsSync(dst)) {
+      skipped++;
+      continue;
+    }
+    const before = statSync(src).size;
+    await sharp(src).webp({ quality: 88, effort: 4 }).toFile(dst);
+    const after = statSync(dst).size;
+    console.log(`  ${src.replace(publicDir + '/', '')} → .webp  ${(before / 1024).toFixed(1)}KB → ${(after / 1024).toFixed(1)}KB  (kept original)`);
+    total++;
+  }
+  return { total, skipped };
+}
+
 async function main() {
-  console.log('[optimize-assets] converting PNG figures → WebP ...');
+  console.log('[optimize-assets] generating WebP siblings (LCP-critical) ...');
+  const { total: webpCount, skipped: webpSkipped } = await generateWebpSiblings();
+  console.log(`\n[optimize-assets] converting PNG figures → WebP ...`);
   const pngCount = await convertPngs();
   console.log(`\n[optimize-assets] generating favicon set ...`);
   const favCount = await generateFavicons();
   console.log(
-    `\n[optimize-assets] done — ${pngCount} PNG(s) converted, ${favCount} favicon(s) generated.`,
+    `\n[optimize-assets] done — ${webpCount} webp sibling(s) generated (${webpSkipped} already existed), ${pngCount} PNG(s) converted, ${favCount} favicon(s) generated.`,
   );
 }
 
