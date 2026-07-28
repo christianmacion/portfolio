@@ -1,4 +1,20 @@
 WEBVTT
 
+NOTE
+Silent recording — workflow session audio was not captured.
+Captions describe visual content (screen + cursor + typing).
+
 00:00:00.000 --> 00:00:55.000
-AI workflow — ChatGPT-assisted slide-deck authoring for the same USeP EGE 313 lecture. Three weeks before the lecture, the slide deck was drafted end-to-end via a ChatGPT-assisted authoring pipeline. The recording shows the AI-engineering workflow that produced the deck — the same precursor pattern that today runs through a 31-gate evaluation harness before any artifact ships. This is the lineage of the eval-first method: a 2024 single-agent drafting flow → the current 11-agent orchestrator + 31-gate harness. Public, NDA-clean, on-disk provenance preserved.
+[00:00] Screen capture begins. ChatGPT web UI in left panel; PowerPoint in right panel; presenter document (Manobo lecture outline) in lower-left.
+
+[00:06] Cursor types prompt: "Draft a 19-slide lecture deck on the Manobo people of Mindanao, UNDRIP, IPRA, and Philippine indigenous cultural rights. Use the outline below as scaffold."
+
+[00:14] ChatGPT streams back the slide-by-slide outline. Presenter copies the first slide title into PowerPoint Slide 1.
+
+[00:24] Presenter pastes ChatGPT-generated bullet structure into Slide 3. Cursor reformats in PowerPoint.
+
+[00:35] Presenter pastes regional map image (Caraga + Davao provinces) into Slide 2.
+
+[00:46] Final deck has 19 slides. Cursor clicks Save. Webcam upper-right corner shows presenter nodding.
+
+[00:54] Recording ends. Deck file saved as EGE313-Manobo-Lecture.pptx on desktop.
