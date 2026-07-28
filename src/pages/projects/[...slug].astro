@@ -43,7 +43,7 @@ const laneClass = role === 'ai' ? 'pill--brand' : 'pill--accent';
 
         {
           hero && (
-            <figure class="proj__hero-figure">
+            <figure class="proj__hero-figure" aria-label={hero.alt}>
               <img
                 src={path(hero.src)}
                 alt={hero.alt}
