@@ -180,16 +180,32 @@ const timeBucketCounts = (() => {
             type="button"
             class="live-feed__chip-btn live-feed__chip-btn--active"
             data-source-filter="all"
+            aria-pressed="true"
           >
             ALL
           </button>
-          <button type="button" class="live-feed__chip-btn" data-source-filter="gdelt">
+          <button
+            type="button"
+            class="live-feed__chip-btn"
+            data-source-filter="gdelt"
+            aria-pressed="false"
+          >
             GDELT
           </button>
-          <button type="button" class="live-feed__chip-btn" data-source-filter="arxiv">
+          <button
+            type="button"
+            class="live-feed__chip-btn"
+            data-source-filter="arxiv"
+            aria-pressed="false"
+          >
             arXiv
           </button>
-          <button type="button" class="live-feed__chip-btn" data-source-filter="macrowire">
+          <button
+            type="button"
+            class="live-feed__chip-btn"
+            data-source-filter="macrowire"
+            aria-pressed="false"
+          >
             WIRE
           </button>
         </div>
@@ -200,16 +216,32 @@ const timeBucketCounts = (() => {
             type="button"
             class="live-feed__chip-btn live-feed__chip-btn--active"
             data-time-filter="all"
+            aria-pressed="true"
           >
             ALL <span class="live-feed__chip-count">({timeBucketCounts.all})</span>
           </button>
-          <button type="button" class="live-feed__chip-btn" data-time-filter="1h">
+          <button
+            type="button"
+            class="live-feed__chip-btn"
+            data-time-filter="1h"
+            aria-pressed="false"
+          >
             1H <span class="live-feed__chip-count">({timeBucketCounts['1h']})</span>
           </button>
-          <button type="button" class="live-feed__chip-btn" data-time-filter="6h">
+          <button
+            type="button"
+            class="live-feed__chip-btn"
+            data-time-filter="6h"
+            aria-pressed="false"
+          >
             6H <span class="live-feed__chip-count">({timeBucketCounts['6h']})</span>
           </button>
-          <button type="button" class="live-feed__chip-btn" data-time-filter="24h">
+          <button
+            type="button"
+            class="live-feed__chip-btn"
+            data-time-filter="24h"
+            aria-pressed="false"
+          >
             24H <span class="live-feed__chip-count">({timeBucketCounts['24h']})</span>
           </button>
         </div>
@@ -241,11 +273,17 @@ const timeBucketCounts = (() => {
           type="button"
           class="live-feed__city-btn live-feed__city-btn--active"
           data-city-filter="all"
+          aria-pressed="true"
         >
           ALL
         </button>
         {cityCounts.map(({ city, count }) => (
-          <button type="button" class="live-feed__city-btn" data-city-filter={city.toLowerCase()}>
+          <button
+            type="button"
+            class="live-feed__city-btn"
+            data-city-filter={city.toLowerCase()}
+            aria-pressed="false"
+          >
             {city.toUpperCase()} <span class="live-feed__city-count">({count})</span>
           </button>
         ))}

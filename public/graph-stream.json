@@ -1,9 +1,9 @@
 {
-  "generated": "2026-07-28T07:53:47.067Z",
+  "generated": "2026-07-28T08:05:29.028Z",
   "counts": {
-    "agents": 108,
+    "agents": 110,
     "skills": 120,
-    "relations": 6688
+    "relations": 6713
   },
   "agents": [
     {
@@ -761,6 +761,20 @@
       "tier": "T2",
       "squad": "cross-workspace",
       "mark": "🧬"
+    },
+    {
+      "id": "agent:munger_doctrine_owner",
+      "name": "munger_doctrine_owner",
+      "tier": "T3",
+      "squad": "pedagogy-and-doctrine",
+      "mark": "🌉"
+    },
+    {
+      "id": "agent:tetlock-doctrine-owner",
+      "name": "tetlock_doctrine_owner",
+      "tier": "T3",
+      "squad": "pedagogy-and-doctrine",
+      "mark": "🎯"
     }
   ],
   "skills": [

@@ -396,7 +396,8 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
             <button
               type="button"
               class="desk-events__chip-btn desk-events__chip-btn--active"
-              data-desk-cat="all">ALL ({events.length})</button
+              data-desk-cat="all"
+              aria-pressed="true">ALL ({events.length})</button
             >
             {
               CATEGORY_ORDER.map((c) => (
@@ -405,6 +406,7 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
                   class="desk-events__chip-btn"
                   data-desk-cat={c}
                   disabled={categoryCounts[c] === 0}
+                  aria-pressed="false"
                 >
                   {CATEGORY_LABELS[c]} ({categoryCounts[c]})
                 </button>
@@ -416,7 +418,8 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
             <button
               type="button"
               class="desk-events__chip-btn desk-events__chip-btn--active"
-              data-desk-sev="all">ALL ({events.length})</button
+              data-desk-sev="all"
+              aria-pressed="true">ALL ({events.length})</button
             >
             {
               SEVERITY_ORDER.map((s) => (
@@ -425,6 +428,7 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
                   class="desk-events__chip-btn desk-events__chip-btn--{s}"
                   data-desk-sev={s}
                   disabled={severityCounts[s] === 0}
+                  aria-pressed="false"
                 >
                   {s.toUpperCase()} ({severityCounts[s]})
                 </button>
@@ -436,7 +440,8 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
             <button
               type="button"
               class="desk-events__chip-btn desk-events__chip-btn--active"
-              data-desk-city="all">ALL ({events.length})</button
+              data-desk-city="all"
+              aria-pressed="true">ALL ({events.length})</button
             >
             {
               topCities.map(({ city, count }) => (
@@ -444,6 +449,7 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
                   type="button"
                   class="desk-events__chip-btn"
                   data-desk-city={city.toLowerCase()}
+                  aria-pressed="false"
                 >
                   {city.toUpperCase()} ({count})
                 </button>
