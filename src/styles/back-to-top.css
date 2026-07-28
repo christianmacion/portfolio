@@ -17,7 +17,8 @@
     opacity 200ms var(--j-ease-snappy),
     transform 200ms var(--j-ease-snappy);
 }
-#back-to-top:hover {
+#back-to-top:hover,
+#back-to-top:focus-visible {
   background: var(--j-warn);
   color: var(--j-bg);
   transform: translateY(-2px);

@@ -259,11 +259,17 @@
   .proof-card__img:hover,
   .flagship:hover::after,
   .flagship-card:hover,
+  .flagship-card:focus-visible,
+  .work-card:hover,
+  .work-card:focus-visible,
+  .research-card:hover,
+  .research-card:focus-visible,
   .stat:hover,
   .trust-pill:hover,
   .dsr-calc__slider::-webkit-slider-thumb:hover,
   .dsr-calc__slider::-moz-range-thumb:hover,
-  a.trust-pill:hover {
+  a.trust-pill:hover,
+  a.trust-pill:focus-visible {
     transform: none !important;
     box-shadow: none !important;
     filter: none !important;

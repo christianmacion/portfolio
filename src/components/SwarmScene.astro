@@ -700,7 +700,8 @@ const sourcesXY = sources.map((s) => ({ ...s, ...lonLat(s.lon, s.lat) }));
     fill-opacity: 0.85;
     transition: fill-opacity 200ms ease;
   }
-  .bloomberg__country:hover {
+  .bloomberg__country:hover,
+  .bloomberg__country:focus-visible {
     fill: var(--c-bg-3, var(--c-paper));
     fill-opacity: 1;
   }
@@ -1034,7 +1035,8 @@ const sourcesXY = sources.map((s) => ({ ...s, ...lonLat(s.lon, s.lat) }));
   .bloomberg__tr {
     transition: background 100ms ease;
   }
-  .bloomberg__tr:hover {
+  .bloomberg__tr:hover,
+  .bloomberg__tr:focus-visible {
     background: var(--c-bg-2);
   }
   .bloomberg__td {

@@ -228,7 +228,8 @@ const shortSha = buildSha ? buildSha.replace(/^.*?([0-9a-f]{7,})$/, '$1').slice(
       background var(--transition),
       transform var(--transition);
   }
-  a.trust-pill:hover {
+  a.trust-pill:hover,
+  a.trust-pill:focus-visible {
     border-color: var(--c-amber-deep);
     /* v6.10.41 — derive hover tint from --c-amber via color-mix so
        palette tweaks propagate. Was rgba(196,138,22,0.06). */

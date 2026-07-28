@@ -500,7 +500,8 @@ const timeBucketCounts = (() => {
       color 120ms ease,
       border-color 120ms ease;
   }
-  .live-feed__city-btn:hover {
+  .live-feed__city-btn:hover,
+  .live-feed__city-btn:focus-visible {
     border-color: var(--c-ink-2);
     color: var(--c-ink);
   }
@@ -539,7 +540,8 @@ const timeBucketCounts = (() => {
       color 120ms ease,
       border-color 120ms ease;
   }
-  .live-feed__share-btn:hover {
+  .live-feed__share-btn:hover,
+  .live-feed__share-btn:focus-visible {
     border-color: var(--c-ink-1);
     color: var(--c-ink);
     background: var(--c-paper-2);
@@ -572,7 +574,8 @@ const timeBucketCounts = (() => {
       color 120ms ease,
       border-color 120ms ease;
   }
-  .live-feed__chip-btn:hover {
+  .live-feed__chip-btn:hover,
+  .live-feed__chip-btn:focus-visible {
     border-color: var(--c-ink-2);
     color: var(--c-ink);
   }
@@ -675,7 +678,8 @@ const timeBucketCounts = (() => {
       box-shadow 0.2s ease;
     scroll-margin-top: 80px;
   }
-  .live-feed__row:hover {
+  .live-feed__row:hover,
+  .live-feed__row:focus-visible {
     background: color-mix(in oklab, var(--c-amber) 4%, transparent);
   }
   /* v7.9.1 — dimmed state when filtered out */
@@ -756,7 +760,8 @@ const timeBucketCounts = (() => {
     text-decoration: none;
     transition: color 200ms var(--j-ease-out);
   }
-  .live-feed__title:hover {
+  .live-feed__title:hover,
+  .live-feed__title:focus-visible {
     color: var(--c-warn);
   }
 
@@ -787,7 +792,8 @@ const timeBucketCounts = (() => {
     transition: color 120ms ease;
     line-height: 1.4;
   }
-  .live-feed__anchor:hover {
+  .live-feed__anchor:hover,
+  .live-feed__anchor:focus-visible {
     color: var(--c-warn);
   }
   .live-feed__anchor:focus-visible {
@@ -855,7 +861,8 @@ const timeBucketCounts = (() => {
 
   /* === Reduced motion === */
   @media (prefers-reduced-motion: reduce) {
-    .live-feed__row:hover {
+    .live-feed__row:hover,
+    .live-feed__row:focus-visible {
       background: transparent;
     }
     .live-feed__title {

@@ -170,7 +170,8 @@ const gradId = `card-grad-${event.id.replace(/[^a-z0-9]/gi, '')}`;
     min-width: 0;
     transition: border-color var(--transition);
   }
-  .card:hover {
+  .card:hover,
+  .card:focus-visible {
     border-color: var(--c-primary-2);
   }
   .card__top {

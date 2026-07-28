@@ -293,7 +293,8 @@ function shortTitle(t: string): string {
     border-bottom: 1px dotted transparent;
     transition: border-color var(--transition);
   }
-  .factor__link:hover {
+  .factor__link:hover,
+  .factor__link:focus-visible {
     border-bottom-color: var(--c-amber);
   }
   .factor__order {
@@ -394,7 +395,8 @@ function shortTitle(t: string): string {
 
   @media (prefers-reduced-motion: reduce) {
     .factor__link,
-    .factor__link:hover {
+    .factor__link:hover,
+    .factor__link:focus-visible {
       transition: none;
     }
   }

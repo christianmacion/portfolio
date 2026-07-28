@@ -204,7 +204,8 @@ function meterFor(i: number): boolean[] {
       border-color var(--transition),
       transform var(--transition);
   }
-  .collaborator:hover {
+  .collaborator:hover,
+  .collaborator:focus-visible {
     border-color: var(--c-primary-2);
   }
 
@@ -321,7 +322,8 @@ function meterFor(i: number): boolean[] {
     display: inline-flex;
     align-items: center;
   }
-  .collaborator__deliverable a:hover {
+  .collaborator__deliverable a:hover,
+  .collaborator__deliverable a:focus-visible {
     border-bottom-color: var(--c-primary-2-light);
     color: var(--c-amber-light);
   }

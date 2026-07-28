@@ -284,7 +284,8 @@ const updatedHuman = new Date(updated).toLocaleDateString('en-GB', {
     text-decoration-color: var(--c-rule);
     text-underline-offset: 2px;
   }
-  .now-list a:hover {
+  .now-list a:hover,
+  .now-list a:focus-visible {
     text-decoration-color: var(--c-amber-deep);
   }
   .now-list--not li::before {

@@ -398,7 +398,8 @@ function formatDate(iso: string): string {
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .arxiv-radar__title:hover {
+  .arxiv-radar__title:hover,
+  .arxiv-radar__title:focus-visible {
     color: var(--c-warn);
   }
   .arxiv-radar__hm {
@@ -511,7 +512,8 @@ function formatDate(iso: string): string {
   .arxiv-radar__card--violet {
     border-top-color: var(--j-violet);
   }
-  .arxiv-radar__card:hover {
+  .arxiv-radar__card:hover,
+  .arxiv-radar__card:focus-visible {
     transform: translateY(-2px);
     border-color: var(--c-ink-3);
   }
@@ -520,7 +522,8 @@ function formatDate(iso: string): string {
     color: var(--c-ink-3);
     cursor: default;
   }
-  .arxiv-radar__card--empty:hover {
+  .arxiv-radar__card--empty:hover,
+  .arxiv-radar__card--empty:focus-visible {
     transform: none;
   }
   .arxiv-radar__paper-title {
@@ -635,7 +638,8 @@ function formatDate(iso: string): string {
       mask-image: none;
       -webkit-mask-image: none;
     }
-    .arxiv-radar__card:hover {
+    .arxiv-radar__card:hover,
+    .arxiv-radar__card:focus-visible {
       transform: none;
     }
   }

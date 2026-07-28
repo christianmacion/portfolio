@@ -129,7 +129,8 @@ const updatedFmt = updatedDate ? updatedDate.toISOString().slice(0, 10) : null;
     text-underline-offset: 3px;
     text-decoration-color: var(--c-amber-deep-decor);
   }
-  .read-meta__proof:hover {
+  .read-meta__proof:hover,
+  .read-meta__proof:focus-visible {
     text-decoration-color: var(--c-primary-2-deep);
   }
 </style>

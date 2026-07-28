@@ -559,7 +559,8 @@ const tradingDays = equitySeries.length;
       box-shadow var(--transition),
       transform var(--transition);
   }
-  .positions-metric:hover {
+  .positions-metric:hover,
+  .positions-metric:focus-visible {
     border-color: var(--c-amber-deep);
     transform: translateY(-1px);
     box-shadow: var(--shadow-sm);
@@ -583,7 +584,8 @@ const tradingDays = equitySeries.length;
     .positions-metric {
       animation: none;
     }
-    .positions-metric:hover {
+    .positions-metric:hover,
+    .positions-metric:focus-visible {
       transform: none;
     }
   }
@@ -802,7 +804,8 @@ const tradingDays = equitySeries.length;
       box-shadow var(--transition),
       transform var(--transition);
   }
-  .role-card:hover {
+  .role-card:hover,
+  .role-card:focus-visible {
     border-color: var(--c-ink-3);
     box-shadow: var(--shadow-md);
   }

@@ -660,7 +660,8 @@ function signalPillColor(sig: string): string {
   .earth-drawer__panel[open] summary::after {
     content: '−';
   }
-  .earth-drawer__panel summary:hover {
+  .earth-drawer__panel summary:hover,
+  .earth-drawer__panel summary:focus-visible {
     color: var(--c-amber-light);
   }
   .earth-drawer__city {
@@ -737,7 +738,8 @@ function signalPillColor(sig: string): string {
     display: inline-flex;
     align-items: center;
   }
-  .earth-drawer__deep:hover {
+  .earth-drawer__deep:hover,
+  .earth-drawer__deep:focus-visible {
     text-decoration: underline;
   }
 

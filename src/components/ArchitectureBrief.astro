@@ -207,7 +207,8 @@ const { class: className, id: idOverride = 'arch-brief' } = Astro.props;
     letter-spacing: 0.14em;
     text-transform: uppercase;
   }
-  .arch-brief__cta a:hover {
+  .arch-brief__cta a:hover,
+  .arch-brief__cta a:focus-visible {
     color: var(--c-warn);
     border-bottom-color: var(--c-warn);
   }

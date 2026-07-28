@@ -172,7 +172,8 @@ const groupActive = items.some((it) => isActive(it.href));
       background var(--transition);
     white-space: nowrap;
   }
-  .nav-more__link:hover {
+  .nav-more__link:hover,
+  .nav-more__link:focus-visible {
     color: var(--c-primary);
     background: var(--c-bg-2);
   }

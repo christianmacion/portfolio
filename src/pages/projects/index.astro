@@ -440,7 +440,8 @@ const itemListJsonLd = projectListJsonLd(
       background var(--transition),
       color var(--transition);
   }
-  .lane-filter__chip:hover {
+  .lane-filter__chip:hover,
+  .lane-filter__chip:focus-visible {
     border-color: var(--c-amber);
     color: var(--c-ink);
   }
@@ -472,7 +473,8 @@ const itemListJsonLd = projectListJsonLd(
     padding: var(--sp-5);
     transition: border-color 120ms ease;
   }
-  .book-card:hover {
+  .book-card:hover,
+  .book-card:focus-visible {
     border-color: var(--c-amber-deep);
   }
   .book-card__layer {

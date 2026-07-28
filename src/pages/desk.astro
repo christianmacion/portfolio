@@ -683,7 +683,8 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     color: var(--c-bg);
     border-color: var(--c-warn);
   }
-  .cta--primary:hover {
+  .cta--primary:hover,
+  .cta--primary:focus-visible {
     background: var(--c-amber-deep);
     border-color: var(--c-amber-deep);
   }
@@ -692,7 +693,8 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     color: var(--c-ink);
     border-color: var(--c-rule);
   }
-  .cta--ghost:hover {
+  .cta--ghost:hover,
+  .cta--ghost:focus-visible {
     color: var(--c-warn);
     border-color: var(--c-warn);
   }
@@ -730,7 +732,8 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     animation: desk-stat-in 0.6s cubic-bezier(0.4, 0.7, 0.3, 1) backwards;
     animation-delay: calc(var(--i, 0) * 100ms);
   }
-  .desk-stats__cell:hover {
+  .desk-stats__cell:hover,
+  .desk-stats__cell:focus-visible {
     border-top-color: var(--c-amber);
   }
   @keyframes desk-stat-in {
@@ -1012,7 +1015,8 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     transition: background 0.2s ease;
     cursor: pointer;
   }
-  .desk-events__row:hover {
+  .desk-events__row:hover,
+  .desk-events__row:focus-visible {
     background: color-mix(in oklab, var(--c-amber) 4%, transparent);
   }
   .desk-events__row:focus-visible {
@@ -1182,7 +1186,8 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
       animation: none;
       opacity: 1;
     }
-    .desk-events__row:hover {
+    .desk-events__row:hover,
+    .desk-events__row:focus-visible {
       background: transparent;
     }
   }
@@ -1325,7 +1330,8 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
   .desk-events__row:focus-within .desk-events__anchor {
     opacity: 1;
   }
-  .desk-events__anchor:hover {
+  .desk-events__anchor:hover,
+  .desk-events__anchor:focus-visible {
     color: var(--c-amber);
   }
   .desk-events__row[data-desk-filtered='1'] {
@@ -1346,7 +1352,8 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
       color 120ms ease,
       border-color 120ms ease;
   }
-  .desk-events__share-btn:hover {
+  .desk-events__share-btn:hover,
+  .desk-events__share-btn:focus-visible {
     border-color: var(--c-ink-1);
     color: var(--c-ink);
     background: var(--c-paper-2);

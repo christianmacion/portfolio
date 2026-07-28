@@ -181,7 +181,8 @@ a {
   display: inline-flex;
   align-items: center;
 }
-a:hover {
+a:hover,
+a:focus-visible {
   color: var(--c-primary-2-light);
   text-decoration-color: currentColor;
 }
@@ -473,7 +474,8 @@ li {
   color: var(--c-primary-deep);
   border-color: var(--c-amber);
 }
-.btn--primary:hover {
+.btn--primary:hover,
+.btn--primary:focus-visible {
   background: var(--c-amber);
   color: var(--c-primary-deep);
 }
@@ -483,7 +485,8 @@ li {
   color: var(--c-amber-deep);
   border-color: var(--c-rule);
 }
-.btn--ghost:hover {
+.btn--ghost:hover,
+.btn--ghost:focus-visible {
   border-color: var(--c-amber);
   background: var(--c-bg-2);
 }
@@ -504,7 +507,8 @@ li {
     border-color var(--transition),
     box-shadow var(--transition);
 }
-.card:hover {
+.card:hover,
+.card:focus-visible {
   border-color: var(--c-ink-3);
   box-shadow: var(--shadow-sm);
 }
@@ -737,7 +741,8 @@ li {
   }
 
   /* Reduce tile shadow/transform on hover-capable touch devices */
-  .tile:hover {
+  .tile:hover,
+  .tile:focus-visible {
     transform: none;
   }
 }

@@ -387,7 +387,8 @@ const platforms = [
       transform var(--transition),
       box-shadow var(--transition);
   }
-  .contact-card:hover {
+  .contact-card:hover,
+  .contact-card:focus-visible {
     border-color: var(--c-primary);
     box-shadow: var(--shadow-md);
     color: var(--c-ink);
@@ -449,7 +450,8 @@ const platforms = [
     text-decoration: none;
     transition: border-color var(--transition);
   }
-  .platform-card:hover {
+  .platform-card:hover,
+  .platform-card:focus-visible {
     border-color: var(--c-ink-3);
     color: var(--c-ink);
   }

@@ -270,7 +270,8 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     color: var(--c-bg);
     border-color: var(--c-warn);
   }
-  .cta--primary:hover {
+  .cta--primary:hover,
+  .cta--primary:focus-visible {
     background: var(--c-amber-deep);
     border-color: var(--c-amber-deep);
   }
@@ -279,7 +280,8 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     color: var(--c-ink);
     border-color: var(--c-rule);
   }
-  .cta--ghost:hover {
+  .cta--ghost:hover,
+  .cta--ghost:focus-visible {
     color: var(--c-warn);
     border-color: var(--c-warn);
   }
@@ -313,7 +315,8 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     animation: live-stat-in 0.6s cubic-bezier(0.4, 0.7, 0.3, 1) backwards;
     animation-delay: calc(var(--i, 0) * 100ms);
   }
-  .live-stats__cell:hover {
+  .live-stats__cell:hover,
+  .live-stats__cell:focus-visible {
     border-top-color: var(--c-amber);
   }
   @keyframes live-stat-in {

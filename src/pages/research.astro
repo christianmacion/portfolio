@@ -549,7 +549,8 @@ statsRow[3].spark = sparkFor(2, 14, 0.5, 24);
       border-color var(--transition),
       box-shadow var(--transition);
   }
-  .r-card:hover {
+  .r-card:hover,
+  .r-card:focus-visible {
     border-color: var(--c-amber);
     box-shadow: var(--shadow-md);
   }
@@ -609,7 +610,8 @@ statsRow[3].spark = sparkFor(2, 14, 0.5, 24);
     border-bottom: 1px dotted transparent;
     transition: border-color var(--transition);
   }
-  .r-card__link:hover {
+  .r-card__link:hover,
+  .r-card__link:focus-visible {
     border-bottom-color: var(--c-amber);
   }
   .r-card__summary {
@@ -669,7 +671,8 @@ statsRow[3].spark = sparkFor(2, 14, 0.5, 24);
     transition: border-color var(--transition);
   }
   .r-card__cta:hover,
-  .r-card__ext:hover {
+  .r-card__ext:hover,
+  .r-card__ext:focus-visible {
     border-bottom-color: var(--c-amber);
   }
 
@@ -736,7 +739,8 @@ statsRow[3].spark = sparkFor(2, 14, 0.5, 24);
     border-bottom: 1px solid var(--c-amber);
     padding-bottom: 2px;
   }
-  .r-disclose__link a:hover {
+  .r-disclose__link a:hover,
+  .r-disclose__link a:focus-visible {
     color: var(--c-amber-light);
     border-bottom-color: var(--c-amber-light);
   }

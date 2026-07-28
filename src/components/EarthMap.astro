@@ -1032,7 +1032,8 @@ void venueByCity;
       fill-opacity 120ms ease,
       stroke-opacity 120ms ease;
   }
-  .earth-map__country:hover {
+  .earth-map__country:hover,
+  .earth-map__country:focus-visible {
     fill-opacity: 1;
     stroke-opacity: 0.95;
   }
@@ -1412,7 +1413,8 @@ void venueByCity;
     padding: calc(var(--j-sp-1) / 2) var(--j-sp-1);
     cursor: pointer;
   }
-  .earth-map__focus-close:hover {
+  .earth-map__focus-close:hover,
+  .earth-map__focus-close:focus-visible {
     color: var(--c-ink);
     border-color: var(--c-ink-2);
   }

@@ -805,7 +805,8 @@ const platformInputs = [
   .ai-card__title a {
     color: inherit;
   }
-  .ai-card__title a:hover {
+  .ai-card__title a:hover,
+  .ai-card__title a:focus-visible {
     color: var(--c-amber-light);
   }
   .ai-card__sum {
@@ -856,7 +857,8 @@ const platformInputs = [
     text-decoration: none;
     letter-spacing: 0.02em;
   }
-  .ai-card__more:hover {
+  .ai-card__more:hover,
+  .ai-card__more:focus-visible {
     color: var(--c-amber-light);
   }
 
@@ -931,14 +933,17 @@ const platformInputs = [
   .stella-cell--rung::before {
     background: var(--c-violet, #a07baf);
   }
-  .stella-cell:hover {
+  .stella-cell:hover,
+  .stella-cell:focus-visible {
     transform: translateY(-2px);
     border-color: var(--c-amber);
   }
-  .stella-cell--graph:hover {
+  .stella-cell--graph:hover,
+  .stella-cell--graph:focus-visible {
     border-color: var(--c-teal, #5ba8a3);
   }
-  .stella-cell--rung:hover {
+  .stella-cell--rung:hover,
+  .stella-cell--rung:focus-visible {
     border-color: var(--c-violet, #a07baf);
   }
   .stella-cell__num {
@@ -979,7 +984,8 @@ const platformInputs = [
     border-top: 1px dashed var(--c-rule);
     transition: opacity 0.2s ease;
   }
-  .stella-cell__link:hover {
+  .stella-cell__link:hover,
+  .stella-cell__link:focus-visible {
     opacity: 0.7;
   }
 
@@ -1044,16 +1050,20 @@ const platformInputs = [
   .kg-card--adapt::before {
     background: var(--c-violet, #a07baf);
   }
-  .kg-card:hover {
+  .kg-card:hover,
+  .kg-card:focus-visible {
     transform: translateY(-2px);
   }
-  .kg-card--source:hover {
+  .kg-card--source:hover,
+  .kg-card--source:focus-visible {
     border-color: var(--c-amber);
   }
-  .kg-card--adopt:hover {
+  .kg-card--adopt:hover,
+  .kg-card--adopt:focus-visible {
     border-color: var(--c-teal, #5ba8a3);
   }
-  .kg-card--adapt:hover {
+  .kg-card--adapt:hover,
+  .kg-card--adapt:focus-visible {
     border-color: var(--c-violet, #a07baf);
   }
   .kg-card__num {
@@ -1107,7 +1117,8 @@ const platformInputs = [
     border-bottom: 1px solid var(--c-amber-decor);
     transition: color 0.2s ease;
   }
-  .kg-card__list a:hover {
+  .kg-card__list a:hover,
+  .kg-card__list a:focus-visible {
     color: var(--c-amber);
   }
   .kg-card__meta {
@@ -1130,7 +1141,8 @@ const platformInputs = [
   .kg-card--adapt .kg-card__link {
     color: var(--c-violet, #a07baf);
   }
-  .kg-card__link:hover {
+  .kg-card__link:hover,
+  .kg-card__link:focus-visible {
     opacity: 0.7;
   }
 

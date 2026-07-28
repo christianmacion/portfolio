@@ -372,12 +372,14 @@ const workbooks = [
   .workbook-card--teal::before {
     background: var(--c-teal);
   }
-  .workbook-card:hover {
+  .workbook-card:hover,
+  .workbook-card:focus-visible {
     transform: translateY(-2px);
     border-color: var(--c-amber);
     box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
   }
-  .workbook-card--teal:hover {
+  .workbook-card--teal:hover,
+  .workbook-card--teal:focus-visible {
     border-color: var(--c-teal);
   }
   .workbook-card__head {
@@ -492,7 +494,8 @@ const workbooks = [
       border-color 120ms ease,
       color 120ms ease;
   }
-  .workbook-card__toc-link:hover {
+  .workbook-card__toc-link:hover,
+  .workbook-card__toc-link:focus-visible {
     color: var(--c-ink);
     border-left-color: var(--c-amber);
     background: var(--c-paper-2);

@@ -1109,7 +1109,8 @@ const paginate = (items: any[]) => {
        stays exactly under the visible glyph; only the hit rect grows). */
     padding-inline: 0.25rem;
   }
-  .proof-head__sub a:hover {
+  .proof-head__sub a:hover,
+  .proof-head__sub a:focus-visible {
     text-decoration-color: var(--c-amber-deep);
     color: var(--c-amber-deep);
   }
@@ -1156,7 +1157,8 @@ const paginate = (items: any[]) => {
     border-bottom: 1px solid var(--c-rule-soft);
     transition: background var(--transition);
   }
-  .proof-list__row:hover {
+  .proof-list__row:hover,
+  .proof-list__row:focus-visible {
     background: var(--c-paper);
   }
   .proof-list__title {
@@ -1168,7 +1170,8 @@ const paginate = (items: any[]) => {
     color: var(--c-ink);
     text-decoration: none;
   }
-  .proof-list__title:hover {
+  .proof-list__title:hover,
+  .proof-list__title:focus-visible {
     color: var(--c-primary);
   }
   .proof-list__kind {
@@ -1339,7 +1342,8 @@ const paginate = (items: any[]) => {
       border-color var(--transition),
       background var(--transition);
   }
-  .filter-chip:hover {
+  .filter-chip:hover,
+  .filter-chip:focus-visible {
     color: var(--c-primary);
     border-color: var(--c-ink-3);
   }
@@ -1437,7 +1441,8 @@ const paginate = (items: any[]) => {
       border-color var(--transition),
       background var(--transition);
   }
-  .proof-pager__chip:hover {
+  .proof-pager__chip:hover,
+  .proof-pager__chip:focus-visible {
     color: var(--c-primary);
     border-color: var(--c-ink-3);
   }
@@ -1479,7 +1484,8 @@ const paginate = (items: any[]) => {
     align-items: baseline;
     transition: background var(--transition);
   }
-  .ptr__row:hover {
+  .ptr__row:hover,
+  .ptr__row:focus-visible {
     background: var(--c-bg-2);
   }
   .ptr__cell--platform {
@@ -1516,7 +1522,8 @@ const paginate = (items: any[]) => {
     text-decoration-color: var(--c-rule-strong);
     text-underline-offset: 3px;
   }
-  .ptr__link:hover {
+  .ptr__link:hover,
+  .ptr__link:focus-visible {
     color: var(--c-amber-deep);
     text-decoration-color: var(--c-amber-deep);
   }

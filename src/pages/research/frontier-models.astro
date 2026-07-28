@@ -692,7 +692,8 @@ const companions = [
     text-transform: uppercase;
     transition: background var(--transition);
   }
-  .cta-card__btn:hover {
+  .cta-card__btn:hover,
+  .cta-card__btn:focus-visible {
     background: var(--c-amber-light);
     border-color: var(--c-amber-light);
   }
@@ -735,7 +736,8 @@ const companions = [
     cursor: pointer;
     transition: background var(--transition);
   }
-  .cite-copy:hover {
+  .cite-copy:hover,
+  .cite-copy:focus-visible {
     background: var(--c-amber);
     color: var(--c-primary-deep);
   }
@@ -799,7 +801,8 @@ const companions = [
     transition: border-color var(--transition);
     font-size: var(--fs-base);
   }
-  .comp__link:hover {
+  .comp__link:hover,
+  .comp__link:focus-visible {
     border-bottom-color: var(--c-amber);
     color: var(--c-amber-deep);
   }

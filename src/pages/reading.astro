@@ -291,7 +291,8 @@ function statusPill(s: ShelfItem['status']): string {
       border-color var(--transition),
       transform var(--transition);
   }
-  .shelf__row:hover {
+  .shelf__row:hover,
+  .shelf__row:focus-visible {
     border-color: var(--c-amber-deep);
   }
   @media (max-width: 640px) {
@@ -341,7 +342,8 @@ function statusPill(s: ShelfItem['status']): string {
     text-decoration: none;
     border-bottom: 1px solid var(--c-rule);
   }
-  .shelf__title a:hover {
+  .shelf__title a:hover,
+  .shelf__title a:focus-visible {
     border-bottom-color: var(--c-amber-deep);
   }
   .shelf__author {
