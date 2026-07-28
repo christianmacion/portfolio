@@ -236,7 +236,7 @@ const shelf: Book[] = [
               <div class="shelf__body">
                 <h3 class="shelf__title">
                   {b.href ? (
-                    <a href={b.href} target="_blank" rel="noopener noreferrer">
+                    <a href={b.href} target="_blank" referrerpolicy="strict-origin-when-cross-origin" rel="noopener noreferrer">
                       {b.title}
                     </a>
                   ) : (

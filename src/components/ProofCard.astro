@@ -57,7 +57,7 @@ const [intrinsicW, intrinsicH] = ASPECT_WH[aspect] ?? [1200, 800];
 <figure class={`proof-card proof-card--${tone}`} style={figureStyle}>
   {
     href ? (
-      <a href={href} class="proof-card__link" target="_blank" rel="noopener noreferrer">
+      <a href={href} class="proof-card__link" target="_blank" referrerpolicy="strict-origin-when-cross-origin" rel="noopener noreferrer">
         <picture>
           <source type="image/webp" srcset={src.replace(/\.(png|jpg|jpeg)$/i, '.webp')} />
           <img

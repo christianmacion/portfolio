@@ -214,7 +214,7 @@ const licenses = [
           The site is NDA-safe by construction. Every published research artifact uses only
           public-data sources. A build-time script (<a
             href="https://github.com/christianmacion26/portfolio/blob/main/src/utils/nda-audit.ts"
-            target="_blank"
+            target="_blank" referrerpolicy="strict-origin-when-cross-origin"
             rel="noopener noreferrer"><code class="mono">src/utils/nda-audit.ts</code></a
           >) walks the built <code class="mono">dist/</code> directory and fails the build if any NDA-prohibited
           content slips into the public-facing HTML or PDFs.
@@ -267,7 +267,7 @@ const licenses = [
           repos.map((r) => (
             <li class="repo__row">
               <h3 class="repo__name">
-                <a href={r.href} target="_blank" rel="noopener noreferrer">
+                <a href={r.href} target="_blank" referrerpolicy="strict-origin-when-cross-origin" rel="noopener noreferrer">
                   {r.name}
                 </a>
               </h3>
@@ -295,7 +295,7 @@ const licenses = [
             <div class="lic__row">
               <span class="lic__name mono">{l.name}</span>
               <span class="lic__value">
-                <a href={l.href} target="_blank" rel="noopener noreferrer">
+                <a href={l.href} target="_blank" referrerpolicy="strict-origin-when-cross-origin" rel="noopener noreferrer">
                   {l.label}
                 </a>
                 {l.desc}

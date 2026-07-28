@@ -198,7 +198,7 @@ const platforms = [
       <div class="platforms-grid">
         {
           platforms.map((p) => (
-            <a class="platform-card" href={p.href} target="_blank" rel="noopener noreferrer">
+            <a class="platform-card" href={p.href} target="_blank" referrerpolicy="strict-origin-when-cross-origin" rel="noopener noreferrer">
               <div class="platform-card__label mono">{p.label}</div>
               <div class="platform-card__value mono">{p.value}</div>
               <div class="platform-card__hint">{p.use}</div>
