@@ -487,7 +487,7 @@ If it isn't reproducible from public data, it isn't here.
 
 A gallery of public, NDA-clean artifacts — records, charts, co-signed certificates — that back up the claims on[/experience](/experience/),[/certifications](/certifications/), and [/now](/now/).34 artifacts on disk, 25 surfaced below. Updated when something new ships; never deleted when something expires.
 
-v7.7.59 · 2026-07-28
+v7.7.67 · 2026-07-28
 trust/[testednumerical-eval](/proof/#code)[reproduciblepublic repos](/projects/)[NDA-cleanby construction](/experience/)[RSS/feed.xml](/feed.xml)verified2026-07-28
 
 11 min read · last updated2026-07-28 · [how verified ↗](/proof/)
@@ -861,7 +861,16 @@ Five-era stability. One regime is anecdote.
 Public-data by construction. NDA-positive from prompt one.
 
 One engineering principle. Applied to LLM outputs and to systematic trading strategies with the same gate stack. The method is what scales; the tools change.
-Pr(ship)=Pr(ship∣passes G1–G31)⋅i=1∏31​Pr(Gi​∣evidencei​)31statistical gates6gate families11agents on the same method0rollbacks on shipped worktrust/[testednumerical-eval](/proof/#code)[reproduciblepublic repos](/projects/)[NDA-cleanby construction](/experience/)[RSS/feed.xml](/feed.xml)verified2026-07-28
+Pr(ship)≈Pr(ship​⋀i=131​Gi​)⋅i=1∏31​Pr(Gi​∣evidencei​)
+
+Equality holds 
+
+under the conditional-independence assumption
+: each gate $G_i$ depends on its own evidence (call it $e_i$), and gates are independent given that evidence. In practice, gates share the same underlying code, so the product is a useful upper-bound approximation — not an exact equality. We use it as a 
+
+discipline signal
+, not a calibrated probability.
+31statistical gates6gate families11agents on the same method0rollbacks on shipped worktrust/[testednumerical-eval](/proof/#code)[reproduciblepublic repos](/projects/)[NDA-cleanby construction](/experience/)[RSS/feed.xml](/feed.xml)verified2026-07-28
 
 11 min read · last updated2026-07-28 · [how verified ↗](/proof/)
 On this methodology page

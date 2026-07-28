@@ -85,7 +85,7 @@ const groupActive = items.some((it) => isActive(it.href));
       {showLabelInline && <div class="nav-more__flat-head mono">{label}</div>}
       <ul role="list">
         {items.map(({ href, label }) => (
-          <li>
+          <li role="listitem">
             <a
               href={href}
               class:list={['nav-more__link', { 'nav-more__link--active': isActive(href) }]}

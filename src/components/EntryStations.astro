@@ -310,7 +310,7 @@ const stations = [
     <ol class="entry-stations__grid" role="list">
       {
         stations.map((s) => (
-          <li class="entry-station-wrap">
+          <li class="entry-station-wrap" role="listitem">
             <a href={path(s.href)} class="entry-station">
               <div class="entry-station__id mono">
                 <span class="entry-station__id-bar" aria-hidden="true" />
@@ -326,7 +326,7 @@ const stations = [
               <p class="entry-station__caption mono">{s.caption}</p>
               <ul class="entry-station__stats mono" role="list">
                 {s.stats.map(([k, v]) => (
-                  <li>
+                  <li role="listitem">
                     <span class="entry-station__stat-k">{k}</span>
                     <span class="entry-station__stat-v">{v}</span>
                   </li>
