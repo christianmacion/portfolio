@@ -278,7 +278,10 @@ const totalCount = quantPubs.length + aiPubs.length + workbooks.length + press.l
       {
         quantByYear.map(([year, pubs]) => (
           <div class="pub-year-group">
-            <h3 class="pub-year mono">{year}</h3>
+            <h3 class="pub-year mono">
+              <span class="sr-only">Quant research </span>
+              {year}
+            </h3>
             <div class="pub-list" data-pub-list="quant">
               {pubs.map((p) => (
                 <article class="pub">
@@ -328,7 +331,10 @@ const totalCount = quantPubs.length + aiPubs.length + workbooks.length + press.l
       {
         aiByYear.map(([year, pubs]) => (
           <div class="pub-year-group">
-            <h3 class="pub-year mono">{year}</h3>
+            <h3 class="pub-year mono">
+              <span class="sr-only">AI builds </span>
+              {year}
+            </h3>
             <div class="pub-list" data-pub-list="ai">
               {pubs.map((p) => (
                 <article class="pub">

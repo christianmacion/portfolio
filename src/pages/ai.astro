@@ -84,7 +84,11 @@ function miniSeries(seed: string, n: number): number[] {
 
 const loopSteps = [
   { num: '01', title: 'Idea', desc: 'Draft the eval harness BEFORE writing the prompt.' },
-  { num: '02', title: 'Eval', desc: `Score against ${GATE_RANGE}. Evidence per gate, exit codes.` },
+  {
+    num: '02',
+    title: 'Score',
+    desc: `Score against ${GATE_RANGE}. Evidence per gate, exit codes.`,
+  },
   { num: '03', title: 'Ship', desc: 'Tier-routed agents. Per-step budget. Cut-over only on pass.' },
   { num: '04', title: 'Measure', desc: "OTel traces · Cohen's κ · bootstrap CIs · DSR." },
   { num: '05', title: 'Next', desc: 'Reflect → revise → loop. No-progress halt ships nothing.' },
