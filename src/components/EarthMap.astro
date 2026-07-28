@@ -679,7 +679,7 @@ void venueByCity;
             data-venue-arxiv={venueLiveCounts(c).arxiv}
             data-venue-wire={venueLiveCounts(c).wire}
             tabindex="0"
-            role="button"
+            role="group"
             aria-label={`Focus ${c.city}, ${c.caption}`}
           >
             {c.weight >= 0.7 && (
@@ -773,7 +773,7 @@ void venueByCity;
       {/* === Layer E — connection arcs (event → venue city) === */}
       {
         arcs.map((a, i) => (
-          <g role="img" aria-label={`${a.city} signal → ${a.venue} venue`}>
+          <g role="group" aria-label={`${a.city} signal → ${a.venue} venue`}>
             <path
               d={a.d}
               pathLength="1"
@@ -843,7 +843,7 @@ void venueByCity;
     </g>
   </svg>
 
-  <aside
+  <div
     class="earth-map__focus-panel"
     data-focus-panel
     hidden
@@ -875,7 +875,7 @@ void venueByCity;
       <div><dt>ARXIV PAPERS</dt><dd data-focus-arxiv>—</dd></div>
       <div><dt>WIRE HEADLINES</dt><dd data-focus-wire>—</dd></div>
     </dl>
-  </aside>
+  </div>
 
   {
     /* === NEW v7.7.4 HUD chrome — 4-cell KPI strip (HTML, not SVG) ===

@@ -45,7 +45,8 @@ const updatedHuman = new Date(updated).toLocaleDateString('en-GB', {
         A dated one-pager. Updated ~monthly, or on regime-event override (job change, paper-trade
         regime flip, new gate added to the stack). Inspired by <a
           href="https://nownownow.com/about"
-          target="_blank" referrerpolicy="strict-origin-when-cross-origin"
+          target="_blank"
+          referrerpolicy="strict-origin-when-cross-origin"
           rel="noopener noreferrer">/now</a
         >.
       </p>
@@ -102,7 +103,8 @@ const updatedHuman = new Date(updated).toLocaleDateString('en-GB', {
         <li>
           <strong>This site:</strong> ongoing edits — see <a
             href="https://github.com/christianmacion26/portfolio/commits/main"
-            target="_blank" referrerpolicy="strict-origin-when-cross-origin"
+            target="_blank"
+            referrerpolicy="strict-origin-when-cross-origin"
             rel="noopener noreferrer">commit history</a
           >
           for a dated build log.
@@ -165,22 +167,31 @@ const updatedHuman = new Date(updated).toLocaleDateString('en-GB', {
         </li>
         <li>
           <strong>For casual / paper-trail:</strong>
-          <a href={profile.contact.linkedin} target="_blank" referrerpolicy="strict-origin-when-cross-origin" rel="noopener noreferrer"
-            >LinkedIn DM</a
+          <a
+            href={profile.contact.linkedin}
+            target="_blank"
+            referrerpolicy="strict-origin-when-cross-origin"
+            rel="noopener noreferrer">LinkedIn DM</a
           >.
         </li>
         <li>
           <strong>For public work / proof:</strong>
-          <a href={profile.contact.github} target="_blank" referrerpolicy="strict-origin-when-cross-origin" rel="noopener noreferrer">GitHub</a> ({
-            profile.stats.repoCount
-          } public repos, all NDA-safe). Stack: see <a href={path('/uses')}>/uses</a>.
+          <a
+            href={profile.contact.github}
+            target="_blank"
+            referrerpolicy="strict-origin-when-cross-origin"
+            rel="noopener noreferrer">GitHub</a
+          > ({profile.stats.repoCount} public repos, all NDA-safe). Stack: see <a
+            href={path('/uses')}>/uses</a
+          >.
         </li>
       </ul>
 
       <div class="now-foot mono">
         This page is versioned. <a
           href={`https://github.com/christianmacion26/portfolio/commits/main/src/pages/now.astro`}
-          target="_blank" referrerpolicy="strict-origin-when-cross-origin"
+          target="_blank"
+          referrerpolicy="strict-origin-when-cross-origin"
           rel="noopener noreferrer">Edit history →</a
         >
       </div>
