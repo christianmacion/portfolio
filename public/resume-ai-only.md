@@ -74,7 +74,7 @@ Before the AI work, a self-directed quant-trading practice (crypto and futures) 
 
 ### AI Systems Engineer · LLM Research Platform (contract) — systematic-strategy desk (NDA-protected; closed past contract 03/2026 – 06/2026)
 
-*Remote · 03/2026 – 06/2026*
+_Remote · 03/2026 – 06/2026_
 
 - Architected and operated an 11-agent orchestrator-worker AI research platform (~27,500 words of role-scoped agent charters) with contracted hand-off packets, few-shot routing, separation-of-duties between generation and validation agents, and a scribe-owned single source of truth.
 - Designed a 31-gate statistical evaluation harness (block-bootstrap CIs, random-timing nulls, walk-forward, 5-era stability, Deflated Sharpe, CSCV-based PBO, Minimum Backtest Length) implemented scipy-free in numpy — kills false results before they cost anything.
@@ -84,21 +84,21 @@ Before the AI work, a self-directed quant-trading practice (crypto and futures) 
 
 ### Founder & AI Systems Engineer — Macion Ventures
 
-*Remote · 2026 – Present*
+_Remote · 2026 – Present_
 
 - Built a 7-agent venture-incubation pipeline (5 judgment-tier + 2 mechanical) with 10 lifecycle skills; produced 31 decision-grade artifacts and engineered an anti-self-approval governance pattern (the agent that proposes never approves).
 - Encoded Philippine tax/regulatory rules (DTI/SEC/BIR/LGU, ₱3M VAT threshold, 8%-flat vs graduated election) directly into agent and skill prompts.
 
 ### AI Systems Engineer (Independent) — Editorial / content automation
 
-*Remote · 2026 – Present*
+_Remote · 2026 – Present_
 
 - Built an 8-agent content-production pipeline (topic-scout → researcher → drafter → editor → producer → art-director → chart-maker → exporter) and a 290-line AI-output (slop) evaluator scoring drafts on 13 literature-grounded metrics; drove a real draft from HEAVY (index 81) to CLEAN (index 3).
 - Engineered a dependency-free rendering pipeline (HTML/SVG → headless-Chrome PNG; Markdown → publish-ready PDF).
 
 ### Trading Platform Testing & AI-Workflow Research Analyst (contract) — AI-engineering consultancy (closed past contract)
 
-*Remote · 04/2026 – 06/2026*
+_Remote · 04/2026 – 06/2026_
 
 - Conducted structured testing of trading platform onboarding flows to evaluate execution clarity, workflow logic, and system usability from a trader-first perspective.
 - Applied AI prompting tools (ChatGPT, Claude, Gemini) to accelerate literature review and pattern recognition while manually verifying accuracy of all outputs.
@@ -106,14 +106,14 @@ Before the AI work, a self-directed quant-trading practice (crypto and futures) 
 
 ### Independent AI Systems Engineer — Personal Portfolio & Self-Directed Study
 
-*Remote · 01/2025 – 05/2026*
+_Remote · 01/2025 – 05/2026_
 
 - Designed and shipped multi-agent LLM systems end-to-end: agent charters, eval harnesses, model-routing policy, structured-output contracts, persistent memory, and Python tooling — for content automation, venture incubation, and personal-knowledge workflows.
 - Built, audited, and open-sourced a portfolio of runnable AI projects (RAG scorecard, ReAct tool-calling agent with OTel traces, LLM-as-judge validated vs humans, MCP eval server, self-critiquing reflection agent, AI-slop evaluation gate).
 
 ### Financial Market Educator & AI Integration Specialist (ongoing side) — Independent / Various Universities and Communities
 
-*Remote / Davao Region · 12/2024 – Ongoing*
+_Remote / Davao Region · 12/2024 – Ongoing_
 
 - Delivered workshops, webinars, and presentations on financial markets, AI applications, and emerging technologies.
 - Served as a guest speaker at universities and professional communities on topics involving AI, financial literacy, and blockchain technologies.
