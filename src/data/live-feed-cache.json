@@ -1,708 +1,657 @@
 {
-  "generated": "2026-07-28T03:15:27.065Z",
-  "fetchedAt": "2026-07-28T03:15:26.042Z",
+  "generated": "2026-07-28T03:27:19.425Z",
+  "fetchedAt": "2026-07-28T03:27:18.579Z",
   "cap": 100,
   "counts": {
     "arxiv": 20,
     "macrowire": 30,
-    "gdelt": 39
+    "gdelt": 38
   },
-  "total": 89,
+  "total": 88,
   "events": [
     {
-      "id": "gdelt-irn yield iran",
+      "id": "gdelt-yield australia",
       "source": "gdelt",
-      "title": "IRN yield · Iran",
-      "link": "https://gdelt.org/event/1315617880",
+      "title": "yield · Australia",
+      "link": "https://gdelt.org/event/1315618743",
       "timestamp": "2026-07-28T12:00:00Z",
       "category": "geopolitical",
-      "severity": "critical",
-      "city": "Iran",
-      "publisher": null,
-      "fingerprint": "irn yield iran",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 32,
-        "lon": 53
-      }
-    },
-    {
-      "id": "gdelt-aid namibia",
-      "source": "gdelt",
-      "title": "aid · Namibia",
-      "link": "https://gdelt.org/event/1315617586",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "critical",
-      "city": "Namibia",
-      "publisher": null,
-      "fingerprint": "aid namibia",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": -22,
-        "lon": 17
-      }
-    },
-    {
-      "id": "gdelt-aus diplomacy australia",
-      "source": "gdelt",
-      "title": "AUS diplomacy · Australia",
-      "link": "https://gdelt.org/event/1315617454",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "central-bank",
       "severity": "critical",
       "city": "Australia",
       "publisher": null,
-      "fingerprint": "aus diplomacy australia",
+      "fingerprint": "yield australia",
       "domain": "gdelt.org",
       "coords": {
         "lat": -25,
         "lon": 135
-      },
-      "related": [
-        {
-          "source": "gdelt",
-          "id": "gdelt-aus diplomacy australia"
-        }
-      ]
-    },
-    {
-      "id": "gdelt-eur diplomacy united states",
-      "source": "gdelt",
-      "title": "EUR diplomacy · United States",
-      "link": "https://gdelt.org/event/1315617474",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "central-bank",
-      "severity": "critical",
-      "city": "United States",
-      "publisher": null,
-      "fingerprint": "eur diplomacy united states",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 39.828175,
-        "lon": -98.5795
-      },
-      "related": [
-        {
-          "source": "gdelt",
-          "id": "gdelt-eur diplomacy united states"
-        }
-      ]
-    },
-    {
-      "id": "gdelt-usa diplomacy wuhan",
-      "source": "gdelt",
-      "title": "USA diplomacy · Wuhan",
-      "link": "https://gdelt.org/event/1315617525",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "central-bank",
-      "severity": "critical",
-      "city": "Wuhan",
-      "publisher": null,
-      "fingerprint": "usa diplomacy wuhan",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 30.5833,
-        "lon": 114.267
       }
     },
     {
-      "id": "gdelt-usa diplomacy kentucky",
+      "id": "gdelt-diplomacy india",
       "source": "gdelt",
-      "title": "USA diplomacy · Kentucky",
-      "link": "https://gdelt.org/event/1315617526",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "central-bank",
-      "severity": "critical",
-      "city": "Kentucky",
-      "publisher": null,
-      "fingerprint": "usa diplomacy kentucky",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 37.669,
-        "lon": -84.6514
-      }
-    },
-    {
-      "id": "gdelt-afr eur diplomacy united states",
-      "source": "gdelt",
-      "title": "AFR–EUR diplomacy · United States",
-      "link": "https://gdelt.org/event/1315617542",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "central-bank",
-      "severity": "critical",
-      "city": "United States",
-      "publisher": null,
-      "fingerprint": "afr eur diplomacy united states",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 39.828175,
-        "lon": -98.5795
-      }
-    },
-    {
-      "id": "gdelt-eur afr diplomacy united states",
-      "source": "gdelt",
-      "title": "EUR–AFR diplomacy · United States",
-      "link": "https://gdelt.org/event/1315617755",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "central-bank",
-      "severity": "critical",
-      "city": "United States",
-      "publisher": null,
-      "fingerprint": "eur afr diplomacy united states",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 39.828175,
-        "lon": -98.5795
-      }
-    },
-    {
-      "id": "gdelt-usa diplomacy philadelphia",
-      "source": "gdelt",
-      "title": "USA diplomacy · Philadelphia",
-      "link": "https://gdelt.org/event/1315618141",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "central-bank",
-      "severity": "critical",
-      "city": "Philadelphia",
-      "publisher": null,
-      "fingerprint": "usa diplomacy philadelphia",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 39.9523,
-        "lon": -75.1638
-      }
-    },
-    {
-      "id": "gdelt-aus aid gleneagle",
-      "source": "gdelt",
-      "title": "AUS aid · Gleneagle",
-      "link": "https://gdelt.org/event/1315617596",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "central-bank",
-      "severity": "critical",
-      "city": "Gleneagle",
-      "publisher": null,
-      "fingerprint": "aus aid gleneagle",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": -27.9333,
-        "lon": 152.983
-      },
-      "related": [
-        {
-          "source": "gdelt",
-          "id": "gdelt-aus aid gleneagle"
-        }
-      ]
-    },
-    {
-      "id": "gdelt-can aid canada",
-      "source": "gdelt",
-      "title": "CAN aid · Canada",
-      "link": "https://gdelt.org/event/1315617618",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "central-bank",
-      "severity": "critical",
-      "city": "Canada",
-      "publisher": null,
-      "fingerprint": "can aid canada",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 60,
-        "lon": -96
-      }
-    },
-    {
-      "id": "gdelt-aid moruya",
-      "source": "gdelt",
-      "title": "aid · Moruya",
-      "link": "https://gdelt.org/event/1315617793",
+      "title": "diplomacy · India",
+      "link": "https://gdelt.org/event/1315618594",
       "timestamp": "2026-07-28T12:00:00Z",
       "category": "geopolitical",
       "severity": "critical",
-      "city": "Moruya",
+      "city": "India",
       "publisher": null,
-      "fingerprint": "aid moruya",
+      "fingerprint": "diplomacy india",
       "domain": "gdelt.org",
       "coords": {
-        "lat": -35.9125,
-        "lon": 150.081
-      }
-    },
-    {
-      "id": "gdelt-aid queanbeyan",
-      "source": "gdelt",
-      "title": "aid · Queanbeyan",
-      "link": "https://gdelt.org/event/1315617794",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "critical",
-      "city": "Queanbeyan",
-      "publisher": null,
-      "fingerprint": "aid queanbeyan",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": -35.3549,
-        "lon": 149.232
-      }
-    },
-    {
-      "id": "gdelt-aid scone",
-      "source": "gdelt",
-      "title": "aid · Scone",
-      "link": "https://gdelt.org/event/1315617795",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "critical",
-      "city": "Scone",
-      "publisher": null,
-      "fingerprint": "aid scone",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": -32.0501,
-        "lon": 150.869
-      },
-      "related": [
-        {
-          "source": "gdelt",
-          "id": "gdelt-aid scone"
-        }
-      ]
-    },
-    {
-      "id": "gdelt-aid ulladulla",
-      "source": "gdelt",
-      "title": "aid · Ulladulla",
-      "link": "https://gdelt.org/event/1315617796",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "critical",
-      "city": "Ulladulla",
-      "publisher": null,
-      "fingerprint": "aid ulladulla",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": -35.3591,
-        "lon": 150.472
-      }
-    },
-    {
-      "id": "gdelt-aid united states",
-      "source": "gdelt",
-      "title": "aid · United States",
-      "link": "https://gdelt.org/event/1315617797",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "critical",
-      "city": "United States",
-      "publisher": null,
-      "fingerprint": "aid united states",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 39.828175,
-        "lon": -98.5795
-      }
-    },
-    {
-      "id": "gdelt-aus aid moruya",
-      "source": "gdelt",
-      "title": "AUS aid · Moruya",
-      "link": "https://gdelt.org/event/1315617809",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "central-bank",
-      "severity": "critical",
-      "city": "Moruya",
-      "publisher": null,
-      "fingerprint": "aus aid moruya",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": -35.9125,
-        "lon": 150.081
-      }
-    },
-    {
-      "id": "gdelt-aus aid queanbeyan",
-      "source": "gdelt",
-      "title": "AUS aid · Queanbeyan",
-      "link": "https://gdelt.org/event/1315617810",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "central-bank",
-      "severity": "critical",
-      "city": "Queanbeyan",
-      "publisher": null,
-      "fingerprint": "aus aid queanbeyan",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": -35.3549,
-        "lon": 149.232
-      }
-    },
-    {
-      "id": "gdelt-aus aid ulladulla",
-      "source": "gdelt",
-      "title": "AUS aid · Ulladulla",
-      "link": "https://gdelt.org/event/1315617811",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "central-bank",
-      "severity": "critical",
-      "city": "Ulladulla",
-      "publisher": null,
-      "fingerprint": "aus aid ulladulla",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": -35.3591,
-        "lon": 150.472
-      }
-    },
-    {
-      "id": "gdelt-aus aid scone",
-      "source": "gdelt",
-      "title": "AUS aid · Scone",
-      "link": "https://gdelt.org/event/1315617813",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "central-bank",
-      "severity": "critical",
-      "city": "Scone",
-      "publisher": null,
-      "fingerprint": "aus aid scone",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": -32.0501,
-        "lon": 150.869
-      }
-    },
-    {
-      "id": "gdelt-aid nigeria",
-      "source": "gdelt",
-      "title": "aid · Nigeria",
-      "link": "https://gdelt.org/event/1315617822",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "critical",
-      "city": "Nigeria",
-      "publisher": null,
-      "fingerprint": "aid nigeria",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 10,
-        "lon": 8
-      }
-    },
-    {
-      "id": "gdelt-aid ukwa",
-      "source": "gdelt",
-      "title": "aid · Ukwa",
-      "link": "https://gdelt.org/event/1315617925",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "critical",
-      "city": "Ukwa",
-      "publisher": null,
-      "fingerprint": "aid ukwa",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 5.01091,
-        "lon": 7.83875
-      }
-    },
-    {
-      "id": "gdelt-aid village of downers grove",
-      "source": "gdelt",
-      "title": "aid · Village Of Downers Grove",
-      "link": "https://gdelt.org/event/1315617952",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "critical",
-      "city": "Village Of Downers Grove",
-      "publisher": null,
-      "fingerprint": "aid village of downers grove",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 41.7948,
-        "lon": -88.0169
-      }
-    },
-    {
-      "id": "gdelt-aid chicago",
-      "source": "gdelt",
-      "title": "aid · Chicago",
-      "link": "https://gdelt.org/event/1315617953",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "critical",
-      "city": "Chicago",
-      "publisher": null,
-      "fingerprint": "aid chicago",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 41.85,
-        "lon": -87.6501
-      }
-    },
-    {
-      "id": "gdelt-aid new delhi",
-      "source": "gdelt",
-      "title": "aid · New Delhi",
-      "link": "https://gdelt.org/event/1315617970",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "critical",
-      "city": "New Delhi",
-      "publisher": null,
-      "fingerprint": "aid new delhi",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 28.6,
-        "lon": 77.2
-      }
-    },
-    {
-      "id": "gdelt-nga aid nigeria",
-      "source": "gdelt",
-      "title": "NGA aid · Nigeria",
-      "link": "https://gdelt.org/event/1315618045",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "critical",
-      "city": "Nigeria",
-      "publisher": null,
-      "fingerprint": "nga aid nigeria",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 10,
-        "lon": 8
-      }
-    },
-    {
-      "id": "gdelt-usa aid village of downers grove",
-      "source": "gdelt",
-      "title": "USA aid · Village Of Downers Grove",
-      "link": "https://gdelt.org/event/1315618142",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "central-bank",
-      "severity": "critical",
-      "city": "Village Of Downers Grove",
-      "publisher": null,
-      "fingerprint": "usa aid village of downers grove",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 41.7948,
-        "lon": -88.0169
-      },
-      "related": [
-        {
-          "source": "gdelt",
-          "id": "gdelt-usa aid village of downers grove"
-        }
-      ]
-    },
-    {
-      "id": "gdelt-consultation lahaul",
-      "source": "gdelt",
-      "title": "consultation · Lahaul",
-      "link": "https://gdelt.org/event/1315617459",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "moderate",
-      "city": "Lahaul",
-      "publisher": null,
-      "fingerprint": "consultation lahaul",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 32.5833,
+        "lat": 20,
         "lon": 77
       },
       "related": [
         {
           "source": "gdelt",
-          "id": "gdelt-consultation lahaul"
+          "id": "gdelt-diplomacy india"
         }
       ]
     },
     {
-      "id": "gdelt-chn consultation washington",
+      "id": "gdelt-ken diplomacy jogoo",
       "source": "gdelt",
-      "title": "CHN consultation · Washington",
-      "link": "https://gdelt.org/event/1315617462",
+      "title": "KEN diplomacy · Jogoo",
+      "link": "https://gdelt.org/event/1315618638",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "geopolitical",
+      "severity": "critical",
+      "city": "Jogoo",
+      "publisher": null,
+      "fingerprint": "ken diplomacy jogoo",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": -0.166667,
+        "lon": 35.7167
+      },
+      "related": [
+        {
+          "source": "gdelt",
+          "id": "gdelt-ken diplomacy jogoo"
+        }
+      ]
+    },
+    {
+      "id": "gdelt-afr diplomacy kano state",
+      "source": "gdelt",
+      "title": "AFR diplomacy · Kano State",
+      "link": "https://gdelt.org/event/1315618945",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "geopolitical",
+      "severity": "critical",
+      "city": "Kano State",
+      "publisher": null,
+      "fingerprint": "afr diplomacy kano state",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 11.5,
+        "lon": 8.5
+      }
+    },
+    {
+      "id": "gdelt-usa diplomacy white house",
+      "source": "gdelt",
+      "title": "USA diplomacy · White House",
+      "link": "https://gdelt.org/event/1315618968",
       "timestamp": "2026-07-28T12:00:00Z",
       "category": "central-bank",
-      "severity": "moderate",
-      "city": "Washington",
+      "severity": "critical",
+      "city": "White House",
       "publisher": null,
-      "fingerprint": "chn consultation washington",
+      "fingerprint": "usa diplomacy white house",
       "domain": "gdelt.org",
       "coords": {
         "lat": 38.8951,
         "lon": -77.0364
-      },
-      "related": [
-        {
-          "source": "gdelt",
-          "id": "gdelt-chn consultation washington"
-        }
-      ]
-    },
-    {
-      "id": "gdelt-consultation singapore",
-      "source": "gdelt",
-      "title": "consultation · Singapore",
-      "link": "https://gdelt.org/event/1315617468",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "moderate",
-      "city": "Singapore",
-      "publisher": null,
-      "fingerprint": "consultation singapore",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 1.366667,
-        "lon": 103.8
       }
     },
     {
-      "id": "gdelt-consultation ukraine",
+      "id": "gdelt-usa diplomacy mexico",
       "source": "gdelt",
-      "title": "consultation · Ukraine",
-      "link": "https://gdelt.org/event/1315617486",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "moderate",
-      "city": "Ukraine",
-      "publisher": null,
-      "fingerprint": "consultation ukraine",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 49,
-        "lon": 32
-      }
-    },
-    {
-      "id": "gdelt-ind consultation lahaul",
-      "source": "gdelt",
-      "title": "IND consultation · Lahaul",
-      "link": "https://gdelt.org/event/1315617494",
+      "title": "USA diplomacy · Mexico",
+      "link": "https://gdelt.org/event/1315618969",
       "timestamp": "2026-07-28T12:00:00Z",
       "category": "central-bank",
-      "severity": "moderate",
-      "city": "Lahaul",
+      "severity": "critical",
+      "city": "Mexico",
       "publisher": null,
-      "fingerprint": "ind consultation lahaul",
+      "fingerprint": "usa diplomacy mexico",
       "domain": "gdelt.org",
       "coords": {
-        "lat": 32.5833,
-        "lon": 77
+        "lat": 23,
+        "lon": -102
       },
       "related": [
         {
           "source": "gdelt",
-          "id": "gdelt-ind consultation lahaul"
+          "id": "gdelt-usa diplomacy mexico"
         }
       ]
     },
     {
-      "id": "gdelt-nga yield maitama",
+      "id": "gdelt-irq usa diplomacy kirkuk",
       "source": "gdelt",
-      "title": "NGA yield · Maitama",
-      "link": "https://gdelt.org/event/1315617499",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "moderate",
-      "city": "Maitama",
-      "publisher": null,
-      "fingerprint": "nga yield maitama",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 9.10306,
-        "lon": 7.49444
-      }
-    },
-    {
-      "id": "gdelt-tto yield trinidad and tobago",
-      "source": "gdelt",
-      "title": "TTO yield · Trinidad And Tobago",
-      "link": "https://gdelt.org/event/1315617509",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "moderate",
-      "city": "Trinidad And Tobago",
-      "publisher": null,
-      "fingerprint": "tto yield trinidad and tobago",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 11,
-        "lon": -61
-      }
-    },
-    {
-      "id": "gdelt-ukr consultation ukraine",
-      "source": "gdelt",
-      "title": "UKR consultation · Ukraine",
-      "link": "https://gdelt.org/event/1315617510",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "moderate",
-      "city": "Ukraine",
-      "publisher": null,
-      "fingerprint": "ukr consultation ukraine",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": 49,
-        "lon": 32
-      }
-    },
-    {
-      "id": "gdelt-usa consultation san diego",
-      "source": "gdelt",
-      "title": "USA consultation · San Diego",
-      "link": "https://gdelt.org/event/1315617524",
+      "title": "IRQ–USA diplomacy · Kirkuk",
+      "link": "https://gdelt.org/event/1315619065",
       "timestamp": "2026-07-28T12:00:00Z",
       "category": "central-bank",
-      "severity": "moderate",
-      "city": "San Diego",
+      "severity": "critical",
+      "city": "Kirkuk",
       "publisher": null,
-      "fingerprint": "usa consultation san diego",
+      "fingerprint": "irq usa diplomacy kirkuk",
       "domain": "gdelt.org",
       "coords": {
-        "lat": 32.7153,
-        "lon": -117.157
-      }
-    },
-    {
-      "id": "gdelt-afr aid verulam",
-      "source": "gdelt",
-      "title": "AFR aid · Verulam",
-      "link": "https://gdelt.org/event/1315617538",
-      "timestamp": "2026-07-28T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "moderate",
-      "city": "Verulam",
-      "publisher": null,
-      "fingerprint": "afr aid verulam",
-      "domain": "gdelt.org",
-      "coords": {
-        "lat": -29.6434,
-        "lon": 31.0471
+        "lat": 35.4681,
+        "lon": 44.3922
       },
       "related": [
         {
           "source": "gdelt",
-          "id": "gdelt-afr aid verulam"
+          "id": "gdelt-irq usa diplomacy kirkuk"
         }
       ]
     },
     {
-      "id": "gdelt-cooperation california",
+      "id": "gdelt-jpn tur diplomacy tokyo",
       "source": "gdelt",
-      "title": "cooperation · California",
-      "link": "https://gdelt.org/event/1315617578",
+      "title": "JPN–TUR diplomacy · Tokyo",
+      "link": "https://gdelt.org/event/1315619120",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "central-bank",
+      "severity": "critical",
+      "city": "Tokyo",
+      "publisher": null,
+      "fingerprint": "jpn tur diplomacy tokyo",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 35.685,
+        "lon": 139.751
+      },
+      "related": [
+        {
+          "source": "gdelt",
+          "id": "gdelt-jpn tur diplomacy tokyo"
+        }
+      ]
+    },
+    {
+      "id": "gdelt-usa irq diplomacy kirkuk",
+      "source": "gdelt",
+      "title": "USA–IRQ diplomacy · Kirkuk",
+      "link": "https://gdelt.org/event/1315619236",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "central-bank",
+      "severity": "critical",
+      "city": "Kirkuk",
+      "publisher": null,
+      "fingerprint": "usa irq diplomacy kirkuk",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 35.4681,
+        "lon": 44.3922
+      },
+      "related": [
+        {
+          "source": "gdelt",
+          "id": "gdelt-usa irq diplomacy kirkuk"
+        }
+      ]
+    },
+    {
+      "id": "gdelt-tur jpn diplomacy ginza",
+      "source": "gdelt",
+      "title": "TUR–JPN diplomacy · Ginza",
+      "link": "https://gdelt.org/event/1315619330",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "central-bank",
+      "severity": "critical",
+      "city": "Ginza",
+      "publisher": null,
+      "fingerprint": "tur jpn diplomacy ginza",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 35.6667,
+        "lon": 139.767
+      }
+    },
+    {
+      "id": "gdelt-tur jpn diplomacy tokyo",
+      "source": "gdelt",
+      "title": "TUR–JPN diplomacy · Tokyo",
+      "link": "https://gdelt.org/event/1315619331",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "central-bank",
+      "severity": "critical",
+      "city": "Tokyo",
+      "publisher": null,
+      "fingerprint": "tur jpn diplomacy tokyo",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 35.685,
+        "lon": 139.751
+      }
+    },
+    {
+      "id": "gdelt-usa diplomacy new jersey",
+      "source": "gdelt",
+      "title": "USA diplomacy · New Jersey",
+      "link": "https://gdelt.org/event/1315619527",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "central-bank",
+      "severity": "critical",
+      "city": "New Jersey",
+      "publisher": null,
+      "fingerprint": "usa diplomacy new jersey",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 40.314,
+        "lon": -74.5089
+      },
+      "related": [
+        {
+          "source": "gdelt",
+          "id": "gdelt-usa diplomacy new jersey"
+        }
+      ]
+    },
+    {
+      "id": "gdelt-aus aid melbourne",
+      "source": "gdelt",
+      "title": "AUS aid · Melbourne",
+      "link": "https://gdelt.org/event/1315618706",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "central-bank",
+      "severity": "critical",
+      "city": "Melbourne",
+      "publisher": null,
+      "fingerprint": "aus aid melbourne",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": -37.8167,
+        "lon": 144.967
+      }
+    },
+    {
+      "id": "gdelt-aus aid union hill",
+      "source": "gdelt",
+      "title": "AUS aid · Union Hill",
+      "link": "https://gdelt.org/event/1315618707",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "central-bank",
+      "severity": "critical",
+      "city": "Union Hill",
+      "publisher": null,
+      "fingerprint": "aus aid union hill",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": -31.7167,
+        "lon": 131.817
+      }
+    },
+    {
+      "id": "gdelt-aus aid wudinna",
+      "source": "gdelt",
+      "title": "AUS aid · Wudinna",
+      "link": "https://gdelt.org/event/1315618745",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "central-bank",
+      "severity": "critical",
+      "city": "Wudinna",
+      "publisher": null,
+      "fingerprint": "aus aid wudinna",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": -33.0501,
+        "lon": 135.464
+      }
+    },
+    {
+      "id": "gdelt-aid martin baptist church",
+      "source": "gdelt",
+      "title": "aid · Martin Baptist Church",
+      "link": "https://gdelt.org/event/1315618747",
       "timestamp": "2026-07-28T12:00:00Z",
       "category": "geopolitical",
-      "severity": "moderate",
+      "severity": "critical",
+      "city": "Martin Baptist Church",
+      "publisher": null,
+      "fingerprint": "aid martin baptist church",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 34.4912,
+        "lon": -83.1849
+      }
+    },
+    {
+      "id": "gdelt-chn aid anhui",
+      "source": "gdelt",
+      "title": "CHN aid · Anhui",
+      "link": "https://gdelt.org/event/1315618761",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "central-bank",
+      "severity": "critical",
+      "city": "Anhui",
+      "publisher": null,
+      "fingerprint": "chn aid anhui",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 32,
+        "lon": 117
+      }
+    },
+    {
+      "id": "gdelt-aid georgia",
+      "source": "gdelt",
+      "title": "aid · Georgia",
+      "link": "https://gdelt.org/event/1315618773",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "geopolitical",
+      "severity": "critical",
+      "city": "Georgia",
+      "publisher": null,
+      "fingerprint": "aid georgia",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 32.9866,
+        "lon": -83.6487
+      }
+    },
+    {
+      "id": "gdelt-aid turkana",
+      "source": "gdelt",
+      "title": "aid · Turkana",
+      "link": "https://gdelt.org/event/1315618804",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "geopolitical",
+      "severity": "critical",
+      "city": "Turkana",
+      "publisher": null,
+      "fingerprint": "aid turkana",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 0.665673,
+        "lon": 37.8897
+      }
+    },
+    {
+      "id": "gdelt-aid denver",
+      "source": "gdelt",
+      "title": "aid · Denver",
+      "link": "https://gdelt.org/event/1315618813",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "geopolitical",
+      "severity": "critical",
+      "city": "Denver",
+      "publisher": null,
+      "fingerprint": "aid denver",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 39.7392,
+        "lon": -104.985
+      }
+    },
+    {
+      "id": "gdelt-usa aid denver",
+      "source": "gdelt",
+      "title": "USA aid · Denver",
+      "link": "https://gdelt.org/event/1315618825",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "central-bank",
+      "severity": "critical",
+      "city": "Denver",
+      "publisher": null,
+      "fingerprint": "usa aid denver",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 39.7392,
+        "lon": -104.985
+      },
+      "related": [
+        {
+          "source": "gdelt",
+          "id": "gdelt-usa aid denver"
+        }
+      ]
+    },
+    {
+      "id": "gdelt-aid glen innes",
+      "source": "gdelt",
+      "title": "aid · Glen Innes",
+      "link": "https://gdelt.org/event/1315618922",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "geopolitical",
+      "severity": "critical",
+      "city": "Glen Innes",
+      "publisher": null,
+      "fingerprint": "aid glen innes",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": -29.7348,
+        "lon": 151.738
+      }
+    },
+    {
+      "id": "gdelt-aid merimbula",
+      "source": "gdelt",
+      "title": "aid · Merimbula",
+      "link": "https://gdelt.org/event/1315618923",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "geopolitical",
+      "severity": "critical",
+      "city": "Merimbula",
+      "publisher": null,
+      "fingerprint": "aid merimbula",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": -36.889,
+        "lon": 149.91
+      }
+    },
+    {
+      "id": "gdelt-aid riverina",
+      "source": "gdelt",
+      "title": "aid · Riverina",
+      "link": "https://gdelt.org/event/1315618924",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "geopolitical",
+      "severity": "critical",
+      "city": "Riverina",
+      "publisher": null,
+      "fingerprint": "aid riverina",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": -33.2569,
+        "lon": 115.817
+      }
+    },
+    {
+      "id": "gdelt-aus aid glen innes",
+      "source": "gdelt",
+      "title": "AUS aid · Glen Innes",
+      "link": "https://gdelt.org/event/1315618935",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "central-bank",
+      "severity": "critical",
+      "city": "Glen Innes",
+      "publisher": null,
+      "fingerprint": "aus aid glen innes",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": -29.7348,
+        "lon": 151.738
+      }
+    },
+    {
+      "id": "gdelt-aus aid merimbula",
+      "source": "gdelt",
+      "title": "AUS aid · Merimbula",
+      "link": "https://gdelt.org/event/1315618936",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "central-bank",
+      "severity": "critical",
+      "city": "Merimbula",
+      "publisher": null,
+      "fingerprint": "aus aid merimbula",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": -36.889,
+        "lon": 149.91
+      }
+    },
+    {
+      "id": "gdelt-aus aid riverina",
+      "source": "gdelt",
+      "title": "AUS aid · Riverina",
+      "link": "https://gdelt.org/event/1315618937",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "central-bank",
+      "severity": "critical",
+      "city": "Riverina",
+      "publisher": null,
+      "fingerprint": "aus aid riverina",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": -33.2569,
+        "lon": 115.817
+      }
+    },
+    {
+      "id": "gdelt-aid kyiv",
+      "source": "gdelt",
+      "title": "aid · Kyiv",
+      "link": "https://gdelt.org/event/1315618950",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "geopolitical",
+      "severity": "critical",
+      "city": "Kyiv",
+      "publisher": null,
+      "fingerprint": "aid kyiv",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 50.4333,
+        "lon": 30.5167
+      }
+    },
+    {
+      "id": "gdelt-aid zelenskiy",
+      "source": "gdelt",
+      "title": "aid · Zelenskiy",
+      "link": "https://gdelt.org/event/1315618951",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "geopolitical",
+      "severity": "critical",
+      "city": "Zelenskiy",
+      "publisher": null,
+      "fingerprint": "aid zelenskiy",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 48.2907,
+        "lon": 46.5039
+      }
+    },
+    {
+      "id": "gdelt-aid australia",
+      "source": "gdelt",
+      "title": "aid · Australia",
+      "link": "https://gdelt.org/event/1315618978",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "geopolitical",
+      "severity": "critical",
+      "city": "Australia",
+      "publisher": null,
+      "fingerprint": "aid australia",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": -25,
+        "lon": 135
+      }
+    },
+    {
+      "id": "gdelt-aid wayne county",
+      "source": "gdelt",
+      "title": "aid · Wayne County",
+      "link": "https://gdelt.org/event/1315619171",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "geopolitical",
+      "severity": "critical",
+      "city": "Wayne County",
+      "publisher": null,
+      "fingerprint": "aid wayne county",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 42.2506,
+        "lon": -83.2833
+      }
+    },
+    {
+      "id": "gdelt-aid michigan",
+      "source": "gdelt",
+      "title": "aid · Michigan",
+      "link": "https://gdelt.org/event/1315619172",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "geopolitical",
+      "severity": "critical",
+      "city": "Michigan",
+      "publisher": null,
+      "fingerprint": "aid michigan",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 43.3504,
+        "lon": -84.5603
+      }
+    },
+    {
+      "id": "gdelt-aid ghana",
+      "source": "gdelt",
+      "title": "aid · Ghana",
+      "link": "https://gdelt.org/event/1315619284",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "geopolitical",
+      "severity": "critical",
+      "city": "Ghana",
+      "publisher": null,
+      "fingerprint": "aid ghana",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 8,
+        "lon": -2
+      }
+    },
+    {
+      "id": "gdelt-usa aid beverly hills",
+      "source": "gdelt",
+      "title": "USA aid · Beverly Hills",
+      "link": "https://gdelt.org/event/1315619389",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "central-bank",
+      "severity": "critical",
+      "city": "Beverly Hills",
+      "publisher": null,
+      "fingerprint": "usa aid beverly hills",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 34.0736,
+        "lon": -118.4
+      },
+      "related": [
+        {
+          "source": "gdelt",
+          "id": "gdelt-usa aid beverly hills"
+        }
+      ]
+    },
+    {
+      "id": "gdelt-usa aid california",
+      "source": "gdelt",
+      "title": "USA aid · California",
+      "link": "https://gdelt.org/event/1315619390",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "central-bank",
+      "severity": "critical",
       "city": "California",
       "publisher": null,
-      "fingerprint": "cooperation california",
+      "fingerprint": "usa aid california",
       "domain": "gdelt.org",
       "coords": {
         "lat": 36.17,
@@ -710,20 +659,71 @@
       }
     },
     {
-      "id": "gdelt-aid sri lanka",
+      "id": "gdelt-usa aid boone county",
       "source": "gdelt",
-      "title": "aid · Sri Lanka",
-      "link": "https://gdelt.org/event/1315617585",
+      "title": "USA aid · Boone County",
+      "link": "https://gdelt.org/event/1315619391",
       "timestamp": "2026-07-28T12:00:00Z",
-      "category": "geopolitical",
-      "severity": "moderate",
-      "city": "Sri Lanka",
+      "category": "central-bank",
+      "severity": "critical",
+      "city": "Boone County",
       "publisher": null,
-      "fingerprint": "aid sri lanka",
+      "fingerprint": "usa aid boone county",
       "domain": "gdelt.org",
       "coords": {
-        "lat": 7,
-        "lon": 81
+        "lat": 42.3334,
+        "lon": -88.8168
+      }
+    },
+    {
+      "id": "gdelt-usa aid illinois",
+      "source": "gdelt",
+      "title": "USA aid · Illinois",
+      "link": "https://gdelt.org/event/1315619393",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "central-bank",
+      "severity": "critical",
+      "city": "Illinois",
+      "publisher": null,
+      "fingerprint": "usa aid illinois",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 40.3363,
+        "lon": -89.0022
+      }
+    },
+    {
+      "id": "gdelt-usa lca aid boone county",
+      "source": "gdelt",
+      "title": "USA–LCA aid · Boone County",
+      "link": "https://gdelt.org/event/1315619489",
+      "timestamp": "2026-07-28T12:00:00Z",
+      "category": "central-bank",
+      "severity": "critical",
+      "city": "Boone County",
+      "publisher": null,
+      "fingerprint": "usa lca aid boone county",
+      "domain": "gdelt.org",
+      "coords": {
+        "lat": 42.3334,
+        "lon": -88.8168
+      }
+    },
+    {
+      "id": "macrowire-zimbabwe admits seven fintech projects to regula",
+      "source": "macrowire",
+      "title": "Zimbabwe admits seven fintech projects to regulatory sandbox",
+      "link": "https://cointelegraph.com/news/zimbabwe-seven-fintech-projects-regulatory-sandbox?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "timestamp": "2026-07-28T03:17:10.000Z",
+      "category": "COINTELEGRAPH",
+      "severity": null,
+      "city": "Zurich, CH",
+      "publisher": "COINTELEGRAPH",
+      "fingerprint": "zimbabwe admits seven fintech projects to regulatory sandbox",
+      "domain": "cointelegraph.com",
+      "coords": {
+        "lat": 47.3769,
+        "lon": 8.5417
       }
     },
     {
@@ -1217,23 +1217,6 @@
       "coords": {
         "lat": 40.7128,
         "lon": -74.006
-      }
-    },
-    {
-      "id": "macrowire-here s what happened in crypto today",
-      "source": "macrowire",
-      "title": "Here’s what happened in crypto today",
-      "link": "https://cointelegraph.com/news/what-happened-in-crypto-today?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
-      "timestamp": "2026-07-27T18:51:58.000Z",
-      "category": "COINTELEGRAPH",
-      "severity": null,
-      "city": "Zurich, CH",
-      "publisher": "COINTELEGRAPH",
-      "fingerprint": "here s what happened in crypto today",
-      "domain": "cointelegraph.com",
-      "coords": {
-        "lat": 47.3769,
-        "lon": 8.5417
       }
     },
     {
