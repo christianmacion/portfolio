@@ -1,24 +1,33 @@
 {
-  "fetchedAt": "2026-07-28T07:42:32.109Z",
+  "fetchedAt": "2026-07-28T07:53:47.016Z",
   "buildDate": "2026-07-10T00:00:00.000Z",
   "source": "macrowire",
   "url": "multi-source RSS",
-  "sources": [
-    "REUTERS",
-    "COINDESK",
-    "THEBLOCK",
-    "COINTELEGRAPH"
-  ],
+  "sources": ["REUTERS", "COINDESK", "THEBLOCK", "COINTELEGRAPH"],
   "items": [
+    {
+      "id": "2db25a23-a6de-422a-9b75-b79c209d8d53",
+      "title": "Bitcoin recovers from Asian session lows; Nasdaq futures remain under pressure",
+      "link": "https://www.coindesk.com/markets/2026/07/28/bitcoin-recovers-from-asian-session-lows-nasdaq-futures-remain-under-pressure",
+      "timestamp": "2026-07-28T07:46:22.000Z",
+      "publisher": "COINDESK",
+      "tags": ["crypto"]
+    },
+    {
+      "id": "https://cointelegraph.com/news/apple-lawsuit-alleged-1-8-million-loss-fake-bitcoin-wallet",
+      "title": "Apple faces lawsuit over alleged $1.8M Bitcoin wallet app losses",
+      "link": "https://cointelegraph.com/news/apple-lawsuit-alleged-1-8-million-loss-fake-bitcoin-wallet?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "timestamp": "2026-07-28T07:40:40.000Z",
+      "publisher": "COINTELEGRAPH",
+      "tags": ["crypto"]
+    },
     {
       "id": "https://www.theblock.co/post/409861",
       "title": "Judge blocks Minnesota from enforcing prediction market ban in win for Kalshi, Polymarket",
       "link": "https://www.theblock.co/post/409861/judge-blocks-minnesota-prediction-market-ban?utm_source=rss&utm_medium=rss",
       "timestamp": "2026-07-28T07:22:20.000Z",
       "publisher": "THEBLOCK",
-      "tags": [
-        "crypto-inst"
-      ]
+      "tags": ["crypto-inst"]
     },
     {
       "id": "CBMipAFBVV95cUxNOExKdlZiNkltclhvaVFlRjlmUE5mUnJWSWZ2REJ5ZnNGNWJSSWs0X05JVkhxMkNhcElKZFFHQnFSc2xxMHVoTGtBaXM3Q3ZvSXM1ZWQ1QmdwOFNYdlN1ZUdRbjUtenpkeDNpU3VKSjNrRWViTU1LQmFOelR0V2l2cDN2R1h6YkFUbUV2OE1xQTYtdTk3YmZ0N0xyeXhTTTFjQzV2RQ",
@@ -26,9 +35,7 @@
       "link": "https://news.google.com/rss/articles/CBMipAFBVV95cUxNOExKdlZiNkltclhvaVFlRjlmUE5mUnJWSWZ2REJ5ZnNGNWJSSWs0X05JVkhxMkNhcElKZFFHQnFSc2xxMHVoTGtBaXM3Q3ZvSXM1ZWQ1QmdwOFNYdlN1ZUdRbjUtenpkeDNpU3VKSjNrRWViTU1LQmFOelR0V2l2cDN2R1h6YkFUbUV2OE1xQTYtdTk3YmZ0N0xyeXhTTTFjQzV2RQ?oc=5",
       "timestamp": "2026-07-28T06:40:00.000Z",
       "publisher": "REUTERS",
-      "tags": [
-        "macro"
-      ]
+      "tags": ["macro"]
     },
     {
       "id": "https://cointelegraph.com/news/binance-co-founder-cz-backs-crypto-license-passporting-across-asean",
@@ -36,9 +43,7 @@
       "link": "https://cointelegraph.com/news/binance-co-founder-cz-backs-crypto-license-passporting-across-asean?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
       "timestamp": "2026-07-28T06:00:54.000Z",
       "publisher": "COINTELEGRAPH",
-      "tags": [
-        "crypto"
-      ]
+      "tags": ["crypto"]
     },
     {
       "id": "CBMixAFBVV95cUxQRjhRVHZEYWd5aEJick5tT05haTdpX2RsSmRrTkRLUEZUSDRwTGhMTER4UmhZV0dPNkVfZlhEa0QxMXZDVll3bWYxcXdCQl91VjBpUFZoZzJQQzlBQkxDbkFTbTBUcGdyTE5hTXVqaXNmZEZiMTd5bFF1aUkxRXlzSUh1VzJRWmxhRXFXakNWTTZZaVR2dXpIaHBqZVNORU4wSEFjSGJIVXZGV1hkaHNNeEU1eXhfVmNEdTNCcTQyVk9NUVFT",
@@ -46,9 +51,7 @@
       "link": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQRjhRVHZEYWd5aEJick5tT05haTdpX2RsSmRrTkRLUEZUSDRwTGhMTER4UmhZV0dPNkVfZlhEa0QxMXZDVll3bWYxcXdCQl91VjBpUFZoZzJQQzlBQkxDbkFTbTBUcGdyTE5hTXVqaXNmZEZiMTd5bFF1aUkxRXlzSUh1VzJRWmxhRXFXakNWTTZZaVR2dXpIaHBqZVNORU4wSEFjSGJIVXZGV1hkaHNNeEU1eXhfVmNEdTNCcTQyVk9NUVFT?oc=5",
       "timestamp": "2026-07-28T05:38:00.000Z",
       "publisher": "REUTERS",
-      "tags": [
-        "macro"
-      ]
+      "tags": ["macro"]
     },
     {
       "id": "https://www.theblock.co/learn/409571",
@@ -56,9 +59,7 @@
       "link": "https://www.theblock.co/learn/409571/what-is-kucoin?utm_source=rss&utm_medium=rss",
       "timestamp": "2026-07-28T05:14:22.000Z",
       "publisher": "THEBLOCK",
-      "tags": [
-        "crypto-inst"
-      ]
+      "tags": ["crypto-inst"]
     },
     {
       "id": "CBMitgFBVV95cUxOU29yMTU1THpKbENSbHlzS1ZVQW9XY0p1d3dZSk1sWFFtRmljaFNwUGl3Q0JqMTV3X1Rib28zQi0xOHdZMDZoOWRiNU40QThuVDhIZ1FZNERlMTYtQk01dnUyYUtnOC03VjhnbndITDNQNzFwdjZpUWsyaGdJLS10d0lKMmJrakh5S1hKS2xWcGZxcFV0WUZTT2Rjay1ZdzQ4cl9Uc25kaEJqMUwxRTMtUGVMU25Hdw",
@@ -66,9 +67,7 @@
       "link": "https://news.google.com/rss/articles/CBMitgFBVV95cUxOU29yMTU1THpKbENSbHlzS1ZVQW9XY0p1d3dZSk1sWFFtRmljaFNwUGl3Q0JqMTV3X1Rib28zQi0xOHdZMDZoOWRiNU40QThuVDhIZ1FZNERlMTYtQk01dnUyYUtnOC03VjhnbndITDNQNzFwdjZpUWsyaGdJLS10d0lKMmJrakh5S1hKS2xWcGZxcFV0WUZTT2Rjay1ZdzQ4cl9Uc25kaEJqMUwxRTMtUGVMU25Hdw?oc=5",
       "timestamp": "2026-07-28T05:03:00.000Z",
       "publisher": "REUTERS",
-      "tags": [
-        "macro"
-      ]
+      "tags": ["macro"]
     },
     {
       "id": "CBMitAFBVV95cUxNYjhIdUNGamJpdkF5S25rVkZCb3JXbmVhMXRCRWswemdaa3Q1b0J3Vlk2cVN0eW5QTHFBbTQ2R1ZkWnZMZzZCUE91T0xSMEhkdHdfbHpRMXkwbVU3bTZEOTM0MDdOZVlCbGZHRjhxMWlMUF9ZNXRhM2l5aEJhaWlFU3prUGlZbDN1MWE1Z2hmSURjTVB1OUpFc0VtaVVzZ2JQaktLUGw3aVBKSHF1Q3hDNmhvd0w",
@@ -76,9 +75,15 @@
       "link": "https://news.google.com/rss/articles/CBMitAFBVV95cUxNYjhIdUNGamJpdkF5S25rVkZCb3JXbmVhMXRCRWswemdaa3Q1b0J3Vlk2cVN0eW5QTHFBbTQ2R1ZkWnZMZzZCUE91T0xSMEhkdHdfbHpRMXkwbVU3bTZEOTM0MDdOZVlCbGZHRjhxMWlMUF9ZNXRhM2l5aEJhaWlFU3prUGlZbDN1MWE1Z2hmSURjTVB1OUpFc0VtaVVzZ2JQaktLUGw3aVBKSHF1Q3hDNmhvd0w?oc=5",
       "timestamp": "2026-07-28T04:54:20.000Z",
       "publisher": "REUTERS",
-      "tags": [
-        "macro"
-      ]
+      "tags": ["macro"]
+    },
+    {
+      "id": "CBMirwFBVV95cUxPNFhTNkJUMGlVY3ZwMFM1UUNBZmxLTHE1c29Qd0dJTWNoUG1GSFU0N29DcjZjUkotalFWZ0dUa2huUEZtVEVjazQ1aFg0cXpVV0hBMHQ4M2dMcFBwakZNYzZybHVYWjZ2bVpzRC1EMnVvSVQ2WjFGN1NYR1h0WHJBOXRSdDhLZ1daZmpqRjFCdXpTU2F0Wm1GZXM3SWQ2MlBXNWE5NS1SX2d0UDVpOGUw",
+      "title": "Southern, central China brace for flood risk after typhoon - Reuters",
+      "link": "https://news.google.com/rss/articles/CBMirwFBVV95cUxPNFhTNkJUMGlVY3ZwMFM1UUNBZmxLTHE1c29Qd0dJTWNoUG1GSFU0N29DcjZjUkotalFWZ0dUa2huUEZtVEVjazQ1aFg0cXpVV0hBMHQ4M2dMcFBwakZNYzZybHVYWjZ2bVpzRC1EMnVvSVQ2WjFGN1NYR1h0WHJBOXRSdDhLZ1daZmpqRjFCdXpTU2F0Wm1GZXM3SWQ2MlBXNWE5NS1SX2d0UDVpOGUw?oc=5",
+      "timestamp": "2026-07-28T04:50:00.000Z",
+      "publisher": "REUTERS",
+      "tags": ["macro"]
     },
     {
       "id": "8938db01-eeea-485d-84ce-b5fcde5337d5",
@@ -86,9 +91,7 @@
       "link": "https://www.coindesk.com/markets/2026/07/28/bitcoin-slides-2-after-u-s-close-while-korea-s-kospi-plunges-10",
       "timestamp": "2026-07-28T04:32:39.000Z",
       "publisher": "COINDESK",
-      "tags": [
-        "crypto"
-      ]
+      "tags": ["crypto"]
     },
     {
       "id": "https://cointelegraph.com/news/us-judge-blocks-minnesota-prediction-market-ban",
@@ -96,9 +99,7 @@
       "link": "https://cointelegraph.com/news/us-judge-blocks-minnesota-prediction-market-ban?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
       "timestamp": "2026-07-28T04:28:10.000Z",
       "publisher": "COINTELEGRAPH",
-      "tags": [
-        "crypto"
-      ]
+      "tags": ["crypto"]
     },
     {
       "id": "CBMixAFBVV95cUxQVDNoMktQZDZqdkJSamVsZGx6WGpYZGJsRy0zVkd4ajkwcHQ4V2VUNHNhTXFjbEhjV0tFLTF3T3lsS1NlSmVQTlNJNUktT21aWmpEeU1vUjlrYWdkMXVNY2RVT0NlVzVuTVVoZkJDS3pEYi1Ca3ViSk1QWDBZSWlFRGltM0tZSF9jT3dySFA5Wk9zWFZDM1NOMmVwb184VGZ0SUVoZl96OTBoMVdoMG4tbkcxN0Q3bDBReURRbGRJMWhlckhH",
@@ -106,9 +107,7 @@
       "link": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQVDNoMktQZDZqdkJSamVsZGx6WGpYZGJsRy0zVkd4ajkwcHQ4V2VUNHNhTXFjbEhjV0tFLTF3T3lsS1NlSmVQTlNJNUktT21aWmpEeU1vUjlrYWdkMXVNY2RVT0NlVzVuTVVoZkJDS3pEYi1Ca3ViSk1QWDBZSWlFRGltM0tZSF9jT3dySFA5Wk9zWFZDM1NOMmVwb184VGZ0SUVoZl96OTBoMVdoMG4tbkcxN0Q3bDBReURRbGRJMWhlckhH?oc=5",
       "timestamp": "2026-07-28T04:20:00.000Z",
       "publisher": "REUTERS",
-      "tags": [
-        "macro"
-      ]
+      "tags": ["macro"]
     },
     {
       "id": "https://cointelegraph.com/news/zimbabwe-seven-fintech-projects-regulatory-sandbox",
@@ -116,9 +115,7 @@
       "link": "https://cointelegraph.com/news/zimbabwe-seven-fintech-projects-regulatory-sandbox?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
       "timestamp": "2026-07-28T03:17:10.000Z",
       "publisher": "COINTELEGRAPH",
-      "tags": [
-        "crypto"
-      ]
+      "tags": ["crypto"]
     },
     {
       "id": "CBMiyAFBVV95cUxOQTJlOTBkV2VyVGw3T0YxZXlKT2VhMkh4VkdDazNSUFVkellUX0Q3RFA5bjYyMUFYdXViZUtWeUREMFpfaER0cjNuZnRNNmxvTlloZnV1OTh2Sll2dXpTeWZSV3ZCdnA1Q2Vwb0NnYVdrV2RYU1VyZmxoTjljOC01emc3aEV2T2hab1Vzb3V2ZFNjMjNoeGF3QlI1Y0ZXeWRqQW85TVdybnZMMWgxSkR1MUZXZmVjblJHOWoybkhkQzFacU8wVTRtQw",
@@ -126,9 +123,7 @@
       "link": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxOQTJlOTBkV2VyVGw3T0YxZXlKT2VhMkh4VkdDazNSUFVkellUX0Q3RFA5bjYyMUFYdXViZUtWeUREMFpfaER0cjNuZnRNNmxvTlloZnV1OTh2Sll2dXpTeWZSV3ZCdnA1Q2Vwb0NnYVdrV2RYU1VyZmxoTjljOC01emc3aEV2T2hab1Vzb3V2ZFNjMjNoeGF3QlI1Y0ZXeWRqQW85TVdybnZMMWgxSkR1MUZXZmVjblJHOWoybkhkQzFacU8wVTRtQw?oc=5",
       "timestamp": "2026-07-28T02:46:00.000Z",
       "publisher": "REUTERS",
-      "tags": [
-        "macro"
-      ]
+      "tags": ["macro"]
     },
     {
       "id": "CBMigwFBVV95cUxNWUF6MHN4NmxzbUxRX0JpZGFFTlliRjB0WW1DQ3NvVUpQVFJ3aFNoUFJ6cG0tNGx2anJ3OFFTWXk3VUdQQVowWHdoRnVzZTZsZV9KdTR1cWxDeFpXTTFidGxCR25jc2ZYUXp1Z2lYRzJwZDcweHNJalJfamhJT0lvTXRKWQ",
@@ -136,9 +131,7 @@
       "link": "https://news.google.com/rss/articles/CBMigwFBVV95cUxNWUF6MHN4NmxzbUxRX0JpZGFFTlliRjB0WW1DQ3NvVUpQVFJ3aFNoUFJ6cG0tNGx2anJ3OFFTWXk3VUdQQVowWHdoRnVzZTZsZV9KdTR1cWxDeFpXTTFidGxCR25jc2ZYUXp1Z2lYRzJwZDcweHNJalJfamhJT0lvTXRKWQ?oc=5",
       "timestamp": "2026-07-28T02:30:00.000Z",
       "publisher": "REUTERS",
-      "tags": [
-        "macro"
-      ]
+      "tags": ["macro"]
     },
     {
       "id": "https://cointelegraph.com/news/hong-kong-banks-quantum-threats-tokenization",
@@ -146,9 +139,7 @@
       "link": "https://cointelegraph.com/news/hong-kong-banks-quantum-threats-tokenization?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
       "timestamp": "2026-07-28T02:21:04.000Z",
       "publisher": "COINTELEGRAPH",
-      "tags": [
-        "crypto"
-      ]
+      "tags": ["crypto"]
     },
     {
       "id": "https://www.theblock.co/learn/409682",
@@ -156,9 +147,7 @@
       "link": "https://www.theblock.co/learn/409682/what-is-a-digital-commodity?utm_source=rss&utm_medium=rss",
       "timestamp": "2026-07-28T01:55:46.000Z",
       "publisher": "THEBLOCK",
-      "tags": [
-        "crypto-inst"
-      ]
+      "tags": ["crypto-inst"]
     },
     {
       "id": "https://cointelegraph.com/magazine/india-bans-bitchat-binance-phishs-its-own-staff-asia-express",
@@ -166,9 +155,7 @@
       "link": "https://cointelegraph.com/magazine/india-bans-bitchat-binance-phishs-its-own-staff-asia-express?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
       "timestamp": "2026-07-28T01:23:07.000Z",
       "publisher": "COINTELEGRAPH",
-      "tags": [
-        "crypto"
-      ]
+      "tags": ["crypto"]
     },
     {
       "id": "CBMitAFBVV95cUxOYlFYaS1BQVhMWVpiSVZ3S1RMQkI0YTZ2RWFUcEwyRXJRMTV5NUphTFJISW9CSGs4STZxejBfalBTYUtWOFNJeDAySzJYcmdCdWloZlpnSThPU25TMWYwT3g1TUR6UzRzLV9FbFRqVTBmcFo4V3JieWJ5S2djdFdHTTYyaktsVXBYVGh6ODRMdm1UUS01ZmpYLVlWQ3czSkxhSGVPMjNLRzJZNkNneXFUeHFlM00",
@@ -176,9 +163,7 @@
       "link": "https://news.google.com/rss/articles/CBMitAFBVV95cUxOYlFYaS1BQVhMWVpiSVZ3S1RMQkI0YTZ2RWFUcEwyRXJRMTV5NUphTFJISW9CSGs4STZxejBfalBTYUtWOFNJeDAySzJYcmdCdWloZlpnSThPU25TMWYwT3g1TUR6UzRzLV9FbFRqVTBmcFo4V3JieWJ5S2djdFdHTTYyaktsVXBYVGh6ODRMdm1UUS01ZmpYLVlWQ3czSkxhSGVPMjNLRzJZNkNneXFUeHFlM00?oc=5",
       "timestamp": "2026-07-28T00:56:00.000Z",
       "publisher": "REUTERS",
-      "tags": [
-        "macro"
-      ]
+      "tags": ["macro"]
     },
     {
       "id": "b084b7b0-ae35-491e-9c1f-9a84ae0efd43",
@@ -186,9 +171,7 @@
       "link": "https://www.coindesk.com/policy/2026/07/27/u-s-senate-puts-off-crypto-clarity-act-for-now-as-it-focuses-limited-bandwidth-elsewhere",
       "timestamp": "2026-07-27T23:55:16.000Z",
       "publisher": "COINDESK",
-      "tags": [
-        "crypto"
-      ]
+      "tags": ["crypto"]
     },
     {
       "id": "CBMivAFBVV95cUxOckpUdmJOY3h6NkRFMkhJa1BvcEx1UkRRTEJLTWRhdWwycmRCQVBnS0JNUC03d3BfaHpQNF84ZzZiYmtGV3dCUHF6UG9vaTV1MU1hTXdPd3ljWEFqM2NrY1Z2cGtyb0tPN2RmeEF5VnFILW00dng2MmJjWm42YktRQmFPM3NLNURTTmg4ZEZBelFQc2ZSWGVxOUJIREhoVzNuejlnMXBJakVLM2Y2eGNsbHpCcHNhajAwUzdSXw",
@@ -196,9 +179,7 @@
       "link": "https://news.google.com/rss/articles/CBMivAFBVV95cUxOckpUdmJOY3h6NkRFMkhJa1BvcEx1UkRRTEJLTWRhdWwycmRCQVBnS0JNUC03d3BfaHpQNF84ZzZiYmtGV3dCUHF6UG9vaTV1MU1hTXdPd3ljWEFqM2NrY1Z2cGtyb0tPN2RmeEF5VnFILW00dng2MmJjWm42YktRQmFPM3NLNURTTmg4ZEZBelFQc2ZSWGVxOUJIREhoVzNuejlnMXBJakVLM2Y2eGNsbHpCcHNhajAwUzdSXw?oc=5",
       "timestamp": "2026-07-27T23:44:00.000Z",
       "publisher": "REUTERS",
-      "tags": [
-        "macro"
-      ]
+      "tags": ["macro"]
     },
     {
       "id": "7f940abc-abe1-41f7-8364-229de36a2cf9",
@@ -206,9 +187,7 @@
       "link": "https://www.coindesk.com/policy/2026/07/27/kalshi-polymarket-win-pause-against-minnesota-s-prediction-market-ban",
       "timestamp": "2026-07-27T23:29:38.000Z",
       "publisher": "COINDESK",
-      "tags": [
-        "crypto"
-      ]
+      "tags": ["crypto"]
     },
     {
       "id": "https://cointelegraph.com/news/new-york-ag-clarity-act-state-crypto-enforcement",
@@ -216,9 +195,7 @@
       "link": "https://cointelegraph.com/news/new-york-ag-clarity-act-state-crypto-enforcement?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
       "timestamp": "2026-07-27T22:55:44.000Z",
       "publisher": "COINTELEGRAPH",
-      "tags": [
-        "crypto"
-      ]
+      "tags": ["crypto"]
     },
     {
       "id": "CBMiyAFBVV95cUxOTG0xXzNPZFNIX05DODdlUjRhNGhXNndHSzJxWjVFdEZua3ItV3R2S1V5c3c5R0VJdUhIa1ZJMUxHWmI0eGg2TEJ5V3djdm5vbG9BOFZZSjZYYzZGckRCd0E2ZE1GMzBYeG1rZTZ5NFJCeENwQlNLaG5MaGZabm85dE9IcXR6WmJmTnoyUUhfTFIxb3ZLN0hoRVhnRVZtTWFWYmNWdENVekg2MVpmdVZkS3NQblUxT3ZLdE9lM1Fpb1hiaENseW9IZg",
@@ -226,9 +203,7 @@
       "link": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxOTG0xXzNPZFNIX05DODdlUjRhNGhXNndHSzJxWjVFdEZua3ItV3R2S1V5c3c5R0VJdUhIa1ZJMUxHWmI0eGg2TEJ5V3djdm5vbG9BOFZZSjZYYzZGckRCd0E2ZE1GMzBYeG1rZTZ5NFJCeENwQlNLaG5MaGZabm85dE9IcXR6WmJmTnoyUUhfTFIxb3ZLN0hoRVhnRVZtTWFWYmNWdENVekg2MVpmdVZkS3NQblUxT3ZLdE9lM1Fpb1hiaENseW9IZg?oc=5",
       "timestamp": "2026-07-27T22:48:19.000Z",
       "publisher": "REUTERS",
-      "tags": [
-        "macro"
-      ]
+      "tags": ["macro"]
     },
     {
       "id": "CBMirwFBVV95cUxPejlpTy01TXFzVUY0UlRTN1BHRXNKZUNaYzNqSVpBZ0JEUTV6S3lIMEROdEk2Smt0VHpCQ3hxSzZyb21JOGtWQ1NCYlo3ZE1qY0hCbjA3MGNUT1YwYXVDZmZsYU80b29MRnEyVTd0aGJZWlZDdEQtOTdTYmFORmN4N2ZtUzI1NFVEeTFxOGdPUHlCNk4yR01ZZjlkSWN3ZlJZODdaT184MEE1WEtTV1RB",
@@ -236,9 +211,7 @@
       "link": "https://news.google.com/rss/articles/CBMirwFBVV95cUxPejlpTy01TXFzVUY0UlRTN1BHRXNKZUNaYzNqSVpBZ0JEUTV6S3lIMEROdEk2Smt0VHpCQ3hxSzZyb21JOGtWQ1NCYlo3ZE1qY0hCbjA3MGNUT1YwYXVDZmZsYU80b29MRnEyVTd0aGJZWlZDdEQtOTdTYmFORmN4N2ZtUzI1NFVEeTFxOGdPUHlCNk4yR01ZZjlkSWN3ZlJZODdaT184MEE1WEtTV1RB?oc=5",
       "timestamp": "2026-07-27T22:24:40.000Z",
       "publisher": "REUTERS",
-      "tags": [
-        "macro"
-      ]
+      "tags": ["macro"]
     },
     {
       "id": "CBMitgFBVV95cUxNdVZqZ1NYcF9uSWJObmVKa0VNcTgtNEFGdm1pVGRfRkhkLU0wemhGVWswMFRaOEJrSE5yc1U2alViLXNWd1k4Y1g5VmUxOGtYVHpFeVRCXzA0bThLb0N0UF9MaUc4bU1ORlktWVlvWnQzWnlRVWlVTGQ0UlFaWmNnMXFfYU5RTHZHSU9yR3lnV1dFSzUyYUhXR0hNYTFNR2pmcHZBUkVCZmZOZXkwRXhxc1ZZT2Nzdw",
@@ -246,9 +219,7 @@
       "link": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNdVZqZ1NYcF9uSWJObmVKa0VNcTgtNEFGdm1pVGRfRkhkLU0wemhGVWswMFRaOEJrSE5yc1U2alViLXNWd1k4Y1g5VmUxOGtYVHpFeVRCXzA0bThLb0N0UF9MaUc4bU1ORlktWVlvWnQzWnlRVWlVTGQ0UlFaWmNnMXFfYU5RTHZHSU9yR3lnV1dFSzUyYUhXR0hNYTFNR2pmcHZBUkVCZmZOZXkwRXhxc1ZZT2Nzdw?oc=5",
       "timestamp": "2026-07-27T22:21:43.000Z",
       "publisher": "REUTERS",
-      "tags": [
-        "macro"
-      ]
+      "tags": ["macro"]
     },
     {
       "id": "CBMizAFBVV95cUxNYTFockhLM1gwNUk3MFAxOVJmeUtpM01BdUhvT2RYck5RZlVENUFBa1VsbzBpbzBxUS1KUlk0eEw1QVN5VzFQSHFscU42VEVfTE5EcERscXZxWlZtRzBvbkVLRWJxRkRkazdONFhrY3J1TEJWa2QxQWNUd3NsR1lQOGVaYU1tNFFiVk5yeDJwVlYtWWlBTl93ZzgxakdsSDRUcE9xM0F6MUMzZzBSMVZIb1RSYjFXOF9sc1pjUXo4blNEbDJBejhIRE16alI",
@@ -256,9 +227,7 @@
       "link": "https://news.google.com/rss/articles/CBMizAFBVV95cUxNYTFockhLM1gwNUk3MFAxOVJmeUtpM01BdUhvT2RYck5RZlVENUFBa1VsbzBpbzBxUS1KUlk0eEw1QVN5VzFQSHFscU42VEVfTE5EcERscXZxWlZtRzBvbkVLRWJxRkRkazdONFhrY3J1TEJWa2QxQWNUd3NsR1lQOGVaYU1tNFFiVk5yeDJwVlYtWWlBTl93ZzgxakdsSDRUcE9xM0F6MUMzZzBSMVZIb1RSYjFXOF9sc1pjUXo4blNEbDJBejhIRE16alI?oc=5",
       "timestamp": "2026-07-27T22:13:49.000Z",
       "publisher": "REUTERS",
-      "tags": [
-        "macro"
-      ]
+      "tags": ["macro"]
     },
     {
       "id": "CBMiuwFBVV95cUxPUENSU3cxZnhXQWVEQ0VlbUlCX2U4V05HS1RqcTNqSjN3dHhVc3duLW9lNzdMSWhsWHFXSWEybzhOOU1GVUxqeHBISVUzVUFVbE9DNmNqYS01SlV0bmtYTmQ3dXBIVXFKMWZJdkpua0xZUmxWd3NqcFBHSGtDM0tILVN6b2lDZzFnTk1tY1IwWFRpTElycEwwLVpGQ2I5WVhDdHhFN1NaMV9RMXdPbmxIYmFsbzRGSzlFNWZJ",
@@ -266,9 +235,7 @@
       "link": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxPUENSU3cxZnhXQWVEQ0VlbUlCX2U4V05HS1RqcTNqSjN3dHhVc3duLW9lNzdMSWhsWHFXSWEybzhOOU1GVUxqeHBISVUzVUFVbE9DNmNqYS01SlV0bmtYTmQ3dXBIVXFKMWZJdkpua0xZUmxWd3NqcFBHSGtDM0tILVN6b2lDZzFnTk1tY1IwWFRpTElycEwwLVpGQ2I5WVhDdHhFN1NaMV9RMXdPbmxIYmFsbzRGSzlFNWZJ?oc=5",
       "timestamp": "2026-07-27T22:13:40.000Z",
       "publisher": "REUTERS",
-      "tags": [
-        "macro"
-      ]
+      "tags": ["macro"]
     },
     {
       "id": "CBMixgFBVV95cUxQVEdyUHZVN2hZVi1aSm9yckxMcG96eDdNQ3JMUjNPVTRKSkItYWVKdnFDSzVPeklGY0YwSGdUQmVlOGE1dlJBT3ZIVFY0RFpQY3dhUDU1eW1oMHltNkhwZkRaMlBOSWdVWXhYcjY4V1ZBcURWSUtQT2k1YUI4T1FOckpwSWR1eWNuTUhzYnRTeHkyUmhtTzRmRmpsSXFzamFTb285RmlBaG9DTnVRZ3RfZldBcFNaTnY2WEdvUnhEOGJFekVmLWc",
@@ -276,39 +243,7 @@
       "link": "https://news.google.com/rss/articles/CBMixgFBVV95cUxQVEdyUHZVN2hZVi1aSm9yckxMcG96eDdNQ3JMUjNPVTRKSkItYWVKdnFDSzVPeklGY0YwSGdUQmVlOGE1dlJBT3ZIVFY0RFpQY3dhUDU1eW1oMHltNkhwZkRaMlBOSWdVWXhYcjY4V1ZBcURWSUtQT2k1YUI4T1FOckpwSWR1eWNuTUhzYnRTeHkyUmhtTzRmRmpsSXFzamFTb285RmlBaG9DTnVRZ3RfZldBcFNaTnY2WEdvUnhEOGJFekVmLWc?oc=5",
       "timestamp": "2026-07-27T22:01:30.000Z",
       "publisher": "REUTERS",
-      "tags": [
-        "macro"
-      ]
-    },
-    {
-      "id": "https://www.theblock.co/post/409846",
-      "title": "NFL urges CFTC to strengthen rules on sports prediction markets: report",
-      "link": "https://www.theblock.co/post/409846/nfl-urges-cftc-to-strengthen-rules-on-sports-prediction-markets-report?utm_source=rss&utm_medium=rss",
-      "timestamp": "2026-07-27T21:57:24.000Z",
-      "publisher": "THEBLOCK",
-      "tags": [
-        "crypto-inst"
-      ]
-    },
-    {
-      "id": "CBMixgFBVV95cUxQcGNLcHVmbXlxOWpvQUdsYTFtT1NYdmgxaXAyV2tETXdoQklpU0ZJSjdEamgyRUd1Q0ZfeTdlci1RSHR3aF9RTXJmNjBGNXZ0ZXg4T3VUM1RhNFRTT3FKTWd5SzZCaVpmVzA4ZENtZzBVNlZ2RFlCdVNVcllCVVZLcWxPQ0J2Yks1eHRjOEhMSHRLNUQzclprVVY1Y2d4YU9Sc0FKaFZOQ0JQMGRsTHZYWWpXc0NGTVhmcmRGVGY4MjBGUUlzOVE",
-      "title": "Customer data from India's Bank of Baroda leaked online, source and researcher say - Reuters",
-      "link": "https://news.google.com/rss/articles/CBMixgFBVV95cUxQcGNLcHVmbXlxOWpvQUdsYTFtT1NYdmgxaXAyV2tETXdoQklpU0ZJSjdEamgyRUd1Q0ZfeTdlci1RSHR3aF9RTXJmNjBGNXZ0ZXg4T3VUM1RhNFRTT3FKTWd5SzZCaVpmVzA4ZENtZzBVNlZ2RFlCdVNVcllCVVZLcWxPQ0J2Yks1eHRjOEhMSHRLNUQzclprVVY1Y2d4YU9Sc0FKaFZOQ0JQMGRsTHZYWWpXc0NGTVhmcmRGVGY4MjBGUUlzOVE?oc=5",
-      "timestamp": "2026-07-27T21:41:32.000Z",
-      "publisher": "REUTERS",
-      "tags": [
-        "macro"
-      ]
-    },
-    {
-      "id": "CBMizAFBVV95cUxQYTcyMDhXSXVNVFp4QlpqSGdQc3ZqaFN0c1hYSml1ZWhZS1FXbVN1Ql8zYUllVkpETjdMbXNRWUV3eHVqZWFnYnlBY1pvTzQ0WGNESmRyOGhCaFU4dEZwQXptVEV6Q19xb2FBVGxuLWFmUUZ0c0hjRFAzZXJMN2RYd0diYnJQM1M0Ylp6NWp1M0NBMFlFWi1scUNFRGtJblVFUEJzWF9iRTY3QXY4OFZuWmM4Rk01NFF6REllM0NpSEVXVmd3OFc5bnc0ZFM",
-      "title": "Trump says US and Tehran having 'good talks' as drones hit Iran's neighbours - Reuters",
-      "link": "https://news.google.com/rss/articles/CBMizAFBVV95cUxQYTcyMDhXSXVNVFp4QlpqSGdQc3ZqaFN0c1hYSml1ZWhZS1FXbVN1Ql8zYUllVkpETjdMbXNRWUV3eHVqZWFnYnlBY1pvTzQ0WGNESmRyOGhCaFU4dEZwQXptVEV6Q19xb2FBVGxuLWFmUUZ0c0hjRFAzZXJMN2RYd0diYnJQM1M0Ylp6NWp1M0NBMFlFWi1scUNFRGtJblVFUEJzWF9iRTY3QXY4OFZuWmM4Rk01NFF6REllM0NpSEVXVmd3OFc5bnc0ZFM?oc=5",
-      "timestamp": "2026-07-27T21:32:50.000Z",
-      "publisher": "REUTERS",
-      "tags": [
-        "macro"
-      ]
+      "tags": ["macro"]
     }
   ]
 }
