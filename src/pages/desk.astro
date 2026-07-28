@@ -1282,7 +1282,8 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     background: rgba(138, 31, 31, 0.06);
   }
   .desk-events__chip-btn--moderate {
-    color: #8a6a2d;
+    /* v7.7.58 — was #8a6a2d 4.00:1 (FAIL AA on --c-bg). Now mirrors --j-warn light (4.52:1 PASS). */
+    color: #806229;
     border-color: rgba(138, 106, 45, 0.4);
   }
   .desk-events__chip-btn--moderate:hover:not(:disabled) {

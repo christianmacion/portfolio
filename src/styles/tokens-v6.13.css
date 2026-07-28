@@ -56,7 +56,7 @@
  *   DARK  --j-paper       #2a2622    (panel; ink-2 = 8.05:1 AAA)
  *   LIGHT --j-ink         #1a1714    on #d4cebd → 11.20:1 (AAA)
  *   LIGHT --j-ink-3       #5e5b53    on #d4cebd →  4.85:1 (AA body)
- *   LIGHT --j-warn        #6b5524    on #d4cebd →  5.05:1 (AA body)
+ *   LIGHT --j-warn        #806229    on #ece5d4 →  4.52:1 (AA body)  v7.7.58 (was #8a6a2d 4.00:1 FAIL)
  *   LIGHT --j-cobalt      #3e4d8a    on #d4cebd →  5.85:1 (AA link)
  *   LIGHT --j-sage        #3f6b2a    on #d4cebd →  5.10:1 (AA body)  NEW
  *   LIGHT --j-terracotta  #8a3a1f    on #d4cebd →  5.85:1 (AA body)  NEW
@@ -376,8 +376,8 @@
 
   /* === PRIMARY ACCENT — v7 muted institutional amber ===
      No garish orange. Citadel/Renaissance restraint — goldenrod with amber tint. */
-  --j-warn: #8a6a2d; /* muted institutional amber — 5.30:1 AA on cream */
-  --j-warn-deep: #6b5220; /* deeper, for hover */
+  --j-warn: #806229; /* v7.7.58 — muted institutional amber — 4.52:1 AA on #ece5d4 (was #8a6a2d 4.00:1 — failed AA on bg + bg-elev) */
+  --j-warn-deep: #6b5220; /* deeper, for hover — 5.86:1 on bg */
   --j-warn-soft: rgba(138, 106, 45, 0.12);
 
   /* === SECONDARY ACCENT — v7 deep cobalt ===
@@ -446,7 +446,7 @@
     --j-ink-3: #525f72;
     --j-ink-4: #8a92a3;
 
-    --j-warn: #8a6a2d;
+    --j-warn: #806229; /* v7.7.58 — see explicit .theme-light block */
     --j-warn-deep: #6b5220;
     --j-warn-soft: rgba(138, 106, 45, 0.12);
 
