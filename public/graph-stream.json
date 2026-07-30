@@ -1,9 +1,9 @@
 {
-  "generated": "2026-07-30T19:15:56.511Z",
+  "generated": "2026-07-30T19:36:14.045Z",
   "counts": {
     "agents": 140,
-    "skills": 161,
-    "relations": 9297
+    "skills": 162,
+    "relations": 9361
   },
   "agents": [
     {
@@ -1064,6 +1064,11 @@
       "type": "skill"
     },
     {
+      "id": "skill:browser-use-integration",
+      "name": "browser-use-integration",
+      "type": "skill"
+    },
+    {
       "id": "skill:capability-cluster",
       "name": "capability-cluster",
       "type": "skill"
@@ -1481,11 +1486,6 @@
     {
       "id": "skill:project-bootstrap",
       "name": "project-bootstrap",
-      "type": "skill"
-    },
-    {
-      "id": "skill:proposal-builder",
-      "name": "proposal-builder",
       "type": "skill"
     }
   ],

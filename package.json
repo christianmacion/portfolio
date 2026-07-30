@@ -1,11 +1,7 @@
 {
   "name": "christianmacion-portfolio",
   "type": "module",
-<<<<<<< HEAD
-  "version": "7.5.0",
-=======
-  "version": "7.7.0",
->>>>>>> 21663f4 (v8.1.x WIP consolidation — terminal-austere chrome + bloomberg tape + 6-layer globe (EarthMap 1983 LOC))
+  "version": "8.1.0",
   "private": true,
   "description": "Christian T. Macion — AI Engineer + Quantitative Researcher. Personal portfolio site.",
   "scripts": {
@@ -16,11 +12,7 @@
     "format": "prettier --write \"**/*.{js,ts,tsx,jsx,astro,md,mdx,json,css,yml,yaml}\"",
     "format:check": "prettier --check \"**/*.{js,ts,tsx,jsx,astro,md,mdx,json,css,yml,yaml}\"",
     "knip": "knip --no-progress",
-<<<<<<< HEAD
-    "prebuild": "node scripts/build-resumes.mjs && node scripts/build-resumes-md.mjs && node scripts/build-og-image.mjs && node scripts/optimize-assets.mjs && node scripts/fetch-gdelt.mjs",
-=======
-    "prebuild": "node scripts/build-resumes.mjs && node scripts/build-resumes-md.mjs && node scripts/build-og-image.mjs && node scripts/optimize-assets.mjs && node scripts/build-earth-110m.mjs && node scripts/fetch-gdelt.mjs && node scripts/build-graph-snapshot.mjs && node scripts/check-tokens.mjs",
->>>>>>> 21663f4 (v8.1.x WIP consolidation — terminal-austere chrome + bloomberg tape + 6-layer globe (EarthMap 1983 LOC))
+    "prebuild": "node scripts/build-resumes.mjs && node scripts/build-resumes-md.mjs && node scripts/build-og-image.mjs && node scripts/optimize-assets.mjs && node scripts/build-earth-110m.mjs && node scripts/fetch-gdelt.mjs && node scripts/build-graph-snapshot.mjs",
     "build": "BUILD_DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ) astro build && node scripts/build-llms-full.mjs",
     "build:mirror": "BUILD_DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ) BASE_PATH=/ PUBLIC_SITE_URL=https://christianmacion-portfolio.pages.dev astro build && node scripts/build-llms-full.mjs && cp public/llms-full.txt dist/llms-full.txt && node scripts/asset-audit.mjs && pagefind --site dist --output-subdir _pagefind && npm run no-f14",
     "deploy:mirror": "npm run build:mirror && npx wrangler pages deploy dist --project-name christianmacion-portfolio --commit-dirty=true --branch main",
