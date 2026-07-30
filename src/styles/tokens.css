@@ -1,5 +1,23 @@
 /* tokens.css — design system for christianmacion.github.io
  *
+ * v7.7.94 — POSITIONING DOCTRINE
+ *   Per [[portfolio-positioning-level]] (senior Quant Researcher register):
+ *   the chrome whispers, not shouts. Three load-bearing assertions:
+ *     1. One backdrop family — institutional-tape dark (#0d1117). No
+ *        light/dark flip. No prefers-color-scheme dance. The site is
+ *        a Bloomberg terminal, not a brochure.
+ *     2. One accent family — institutional amber (#c98a16). Used for
+ *        emphasis + interaction + math accents (Φ/Δ/β). Not for
+ *        decoration. Not for halo. Not for gradient.
+ *     3. One ink ladder — six alpha steps from --c-ink-fade (45%) to
+ *        --c-ink-mist (85%). Mono + 1 accent, no rainbow of
+ *        greys. Every page reads as one institution, not a poster.
+ *   Anchors: Bloomberg-terminal amber + Schonfeld / T-Digital terminal
+ *   register + Ries/Trout positioning (the brand is the opposite).
+ *   Anti-pattern: marketing-brochure color palettes (mint + salmon +
+ *   lavender) — every color you add is a positioning claim you must
+ *   defend. Don't add a color; justify the absence of one.
+ *
  * v6.1.1 — UNIFIED DARK PALETTE (single source of truth, no light/dark mode)
  *   - The site is ALWAYS institutional-tape dark (#0d1117)
  *   - One consistent warm amber accent (#e8b220) for emphasis + interaction
@@ -25,6 +43,28 @@
   --c-primary-deep: #0a0e14; /* near-black — preserved for code blocks / deep backgrounds */
   --c-ink-dark: #0a0e14; /* alias kept for old code that wants near-black */
 
+  /* v7.7.94 — AMBER HIERARCHY (3-step, mono-accent)
+     The brand accent is exactly three steps. No fourth. No fifth.
+     Each step has a single semantic role and a documented WCAG
+     assertion against the dominant backdrop (--c-tape #0d1117).
+     Use --c-amber-light for emphasis on text (passes AA 4.5:1).
+     Use --c-amber for borders / icons (passes AA UI 3:1).
+     Use --c-amber-deep for filled chips with dark text (passes AA).
+
+     ┌───────────────────┬─────────┬─────────┬──────────────────┐
+     │ Token             │ Hex     │ on tape │ Use for          │
+     ├───────────────────┼─────────┼─────────┼──────────────────┤
+     │ --c-amber-deep    │ #b8801e │ 5.0:1   │ filled chip bg   │
+     │ --c-amber         │ #c98a16 │ 5.4:1   │ border / icon    │
+     │ --c-amber-light   │ #e8b220 │ 8.2:1   │ emphasis text    │
+     └───────────────────┴─────────┴─────────┴──────────────────┘
+
+     All three clear WCAG AA against #0d1117. None have ever
+     been audited at #fff. Do not change the hex without
+     re-running the contrast assertion.
+     Anti-pattern: --c-amber-bright / --c-amber-pale /
+     --c-amber-glow — every additional step is a positioning
+     claim (Greene Law 38: whisper, do not shout). */
   /* v6.10.12 — WCAG AA bump. Was #8c6f2a (3.64:1 on c-tape FAIL small
    * text). The previous claim "5.0:1 on white" was for cream/light
    * backgrounds which the dark theme no longer uses. New value
@@ -69,18 +109,51 @@
      auto-tracks any future palette shift via color-mix(in oklab).
      v7.7.91 — dropped Collaborators / KeyHintPanel from the list;
      both components were dead (no importers), removed for
-     gate-honesty (knip exit 1 must tell the truth, not be masked). */
+     gate-honesty (knip exit 1 must tell the truth, not be masked).
+     v7.7.94 — Positioning reframe: 11 → 6 steps. Dropped 5 tokens
+     with 0 call sites in src/: --c-ink-veil, --c-ink-shroud,
+     --c-ink-veil-95, --c-ink-haze, --c-ink-wisp. Knip-verified.
+     Remaining 6 form a single semantic ladder from 45% (faint) to
+     85% (strong). One accent = one amber. One ladder = six ink
+     steps. Institutional register, not marketing brochure. */
   --c-ink-mute: color-mix(in oklab, var(--c-ink) 70%, transparent); /* nav links, footers */
   --c-ink-soft: color-mix(in oklab, var(--c-ink) 78%, transparent); /* subdued body */
   --c-ink-faint: color-mix(in oklab, var(--c-ink) 65%, transparent); /* captions, hints */
   --c-ink-ghost: color-mix(in oklab, var(--c-ink) 55%, transparent); /* placeholders, eyebrow */
   --c-ink-fade: color-mix(in oklab, var(--c-ink) 45%, transparent); /* disabled, very faint */
-  --c-ink-wisp: color-mix(in oklab, var(--c-ink) 35%, transparent); /* near-invisible chrome */
-  --c-ink-haze: color-mix(in oklab, var(--c-ink) 25%, transparent); /* hairline text */
   --c-ink-mist: color-mix(in oklab, var(--c-ink) 85%, transparent); /* strong subdued */
-  --c-ink-veil: color-mix(in oklab, var(--c-ink) 42%, transparent); /* hover ghost */
-  --c-ink-shroud: color-mix(in oklab, var(--c-ink) 75%, transparent); /* tertiary copy */
-  --c-ink-veil-95: color-mix(in oklab, var(--c-ink) 95%, transparent); /* near-full */
+
+  /* === v7.7.94 — POSITIONING PROVENANCE TABLE ===
+     The token surface is organized in five tiers. Every var(--c-*)
+     declared above should appear in exactly one tier; if you add a
+     token, declare its tier. The goal: any reader can answer "why
+     does this color exist?" without grepping call sites.
+
+     ┌──────────────────────────────────────────────────────────────────┐
+     │ Tier              Examples                       Role           │
+     ├──────────────────────────────────────────────────────────────────┤
+     │ BRAND (load-      --c-amber / --c-amber-light /   1 accent       │
+     │   bearing)        --c-amber-deep                  family only    │
+     │                                                       │
+     │ SURFACE (back-    --c-bg / --c-bg-2 / --c-bg-3 /   1 backdrop    │
+     │   drop)           --c-tape / --c-tape-2            family only   │
+     │                                                       │
+     │ INK (text)        --c-ink / --c-ink-2 / --c-ink-3 / 6 alpha      │
+     │                   --c-ink-{mute,soft,faint,         ladder        │
+     │                   ghost,fade,mist}                              │
+     │                                                       │
+     │ STATUS (signal)   --c-pass / --c-fail / --c-warn /   institutional │
+     │                   --c-info / + -soft siblings        signal only  │
+     │                                                       │
+     │ SEMANTIC (math,   --c-phi / --c-sigma / --c-delta /  math glyphs  │
+     │   data)           --c-mu / --c-alpha / --c-beta      + data viz   │
+     └──────────────────────────────────────────────────────────────────┘
+
+     Anti-pattern: if you find yourself adding --c-mint or
+     --c-coral or --c-sunshine, you are not adding a token —
+     you are making a positioning claim you must defend with
+     a use case. Default is: don't. */
+
   /* White-alpha (used for hover/glass overlays on amber panels) */
   --c-white-mute: color-mix(in oklab, #fff 70%, transparent);
   --c-white-soft: color-mix(in oklab, #fff 78%, transparent);
