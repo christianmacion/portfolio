@@ -1,10 +1,11 @@
 ---
+import MiniSpark from '@components/MiniSpark.astro';
 /**
  * PredictionCard.astro — single binary-event-market card.
  *
  * Layout (top → bottom):
  *   - Category pill (mono, uppercase)
- *   - Title (h3)
+ *   - Title (h3) + inline MiniSpark (60x14) — v8.0.5
  *   - Big implied probability (e.g. "18¢") + secondary fair value
  *   - Edge badge (positive = green, negative = red)
  *   - Per-card probability walk SVG (24 points, deterministic seed)
@@ -15,6 +16,7 @@
  *
  * Usage:
  *   <PredictionCard event={ev} />
+ *   <PredictionCard event={ev} sparkline={[0.10, 0.12, ..., 0.25]} />
  */
 interface Event {
   id: string;
@@ -34,8 +36,10 @@ interface Event {
 interface Props {
   event: Event;
   buildDate?: string;
+  /** v8.0.5 — optional 12-point MiniSpark series shown next to the title. */
+  sparkline?: number[];
 }
-const { event } = Astro.props;
+const { event, sparkline } = Astro.props;
 const e = event.data;
 const impliedCents = Math.round(e.impliedPx * 100);
 const fairCents = Math.round((e.impliedPx + e.edge) * 100);
@@ -104,6 +108,14 @@ const gradId = `card-grad-${event.id.replace(/[^a-z0-9]/gi, '')}`;
   </div>
 
   <h3 class="card__title">{e.title}</h3>
+
+  {
+    sparkline && sparkline.length >= 3 && (
+      <div class="card__sparkline" aria-hidden="true">
+        <MiniSpark points={sparkline} width={220} height={28} trend="auto" />
+      </div>
+    )
+  }
 
   <div class="card__numbers">
     <div class="card__price">
@@ -220,6 +232,15 @@ const gradId = `card-grad-${event.id.replace(/[^a-z0-9]/gi, '')}`;
     margin: 0;
     letter-spacing: -0.012em;
     min-height: 2.6em;
+  }
+  /* v8.0.5 — inline MiniSpark under the title. Visual rhythm — gives the
+     reader a quick "where the series has been" before drilling into the
+     320x84 SVG walk below. */
+  .card__sparkline {
+    display: block;
+    margin: 0 0 var(--sp-2);
+    padding: 4px 0;
+    border-bottom: 1px dashed var(--c-rule-soft);
   }
   .card__numbers {
     display: grid;

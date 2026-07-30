@@ -315,6 +315,15 @@ const NGATE = `${profile.stats.evalGates}-gate`;
         open-source runnable projects. If a proof you need is missing, email me the JD and I'll send
         back a tailored version within 24 hours.
       </p>
+
+      <nav class="orphan-crosslinks" aria-label="Related surfaces">
+        <p class="mono orphan-crosslinks__eyebrow">Source code + failure log</p>
+        <a href={path('/mistakes')}>Mistakes (5 postmortems)</a>
+        <a href={path('/methodology')}>Methodology (G1–G31)</a>
+        <a href={path('/proof')}>Proof (Tier-1 certs)</a>
+        <a href={path('/colophon')}>Colophon (design system)</a>
+        <a href={path('/for-recruiters')}>For recruiters</a>
+      </nav>
     </div>
   </section>
 
@@ -326,6 +335,10 @@ const NGATE = `${profile.stats.evalGates}-gate`;
     secondaryLabel="Download resume ↓"
     secondaryHref={path('/resume')}
   />
+  <p class="about-canref mono">
+    Built with reference to the open-source canon — see
+    <a href={path('/methodology')}>{path('/methodology')} → References &amp; licenses</a>.
+  </p>
 </BaseLayout>
 
 <style>

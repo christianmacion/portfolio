@@ -11,6 +11,7 @@
  * materials referenced anywhere on this page.
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
+import { path } from '@utils/url';
 import { buildStampUtc8 } from '@utils/build-stamp';
 import VoiceLine from '@components/VoiceLine.astro';
 
@@ -258,6 +259,14 @@ function statusPill(s: ShelfItem['status']): string {
       </ul>
     </div>
   </section>
+
+  <nav class="orphan-crosslinks" aria-label="Related surfaces">
+    <p class="mono orphan-crosslinks__eyebrow">Skills in production</p>
+    <a href={path('/projects')}>Projects</a>
+    <a href={path('/proof')}>Proof</a>
+    <a href={path('/methodology')}>Method</a>
+    <a href={path('/for-recruiters')}>For recruiters</a>
+  </nav>
 </BaseLayout>
 
 <style>

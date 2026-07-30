@@ -1,7 +1,11 @@
 {
   "name": "christianmacion-portfolio",
   "type": "module",
+<<<<<<< HEAD
   "version": "7.5.0",
+=======
+  "version": "7.7.0",
+>>>>>>> 21663f4 (v8.1.x WIP consolidation — terminal-austere chrome + bloomberg tape + 6-layer globe (EarthMap 1983 LOC))
   "private": true,
   "description": "Christian T. Macion — AI Engineer + Quantitative Researcher. Personal portfolio site.",
   "scripts": {
@@ -12,7 +16,11 @@
     "format": "prettier --write \"**/*.{js,ts,tsx,jsx,astro,md,mdx,json,css,yml,yaml}\"",
     "format:check": "prettier --check \"**/*.{js,ts,tsx,jsx,astro,md,mdx,json,css,yml,yaml}\"",
     "knip": "knip --no-progress",
+<<<<<<< HEAD
     "prebuild": "node scripts/build-resumes.mjs && node scripts/build-resumes-md.mjs && node scripts/build-og-image.mjs && node scripts/optimize-assets.mjs && node scripts/fetch-gdelt.mjs",
+=======
+    "prebuild": "node scripts/build-resumes.mjs && node scripts/build-resumes-md.mjs && node scripts/build-og-image.mjs && node scripts/optimize-assets.mjs && node scripts/build-earth-110m.mjs && node scripts/fetch-gdelt.mjs && node scripts/build-graph-snapshot.mjs && node scripts/check-tokens.mjs",
+>>>>>>> 21663f4 (v8.1.x WIP consolidation — terminal-austere chrome + bloomberg tape + 6-layer globe (EarthMap 1983 LOC))
     "build": "BUILD_DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ) astro build && node scripts/build-llms-full.mjs",
     "build:mirror": "BUILD_DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ) BASE_PATH=/ PUBLIC_SITE_URL=https://christianmacion-portfolio.pages.dev astro build && node scripts/build-llms-full.mjs && cp public/llms-full.txt dist/llms-full.txt && node scripts/asset-audit.mjs && pagefind --site dist --output-subdir _pagefind && npm run no-f14",
     "deploy:mirror": "npm run build:mirror && npx wrangler pages deploy dist --project-name christianmacion-portfolio --commit-dirty=true --branch main",
@@ -27,9 +35,12 @@
     "version:bump": "tsx scripts/bump-version.ts",
     "sitemap:check": "tsx scripts/validate-sitemap.ts",
     "typecheck": "astro check",
-    "ci": "npm run lint:md && npm run lint && npm run format:check && npm run knip && npm run no-bulbs && npm run build && npm run no-f14 && npm run audit && npm run sitemap:check",
+    "ci": "npm run lint:md && npm run lint && npm run format:check && npm run knip && npm run no-bulbs && npm run build && npm run no-f14 && npm run no-halo && npm run bundle:budget && npm run audit && npm run sitemap:check",
     "no-bulbs": "bash scripts/check-no-lightbulb-halos.sh",
-    "no-f14": "bash scripts/check-no-f14-traffic-light.sh"
+    "no-f14": "bash scripts/check-no-f14-traffic-light.sh",
+    "bundle:budget": "node scripts/check-bundle-budget.mjs",
+    "no-halo": "grep -rn 'box-shadow:\\s*0\\s*0\\s*[1-9][0-9]' src/ 2>/dev/null && echo 'FAIL: halo/glow box-shadow detected' && exit 1 || echo 'PASS: no halo/glow box-shadows'",
+    "check:tokens": "node scripts/check-tokens.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.9",
@@ -39,6 +50,7 @@
     "@fontsource/inter": "^5.2.8",
     "@fontsource/jetbrains-mono": "^5.2.8",
     "@fontsource/source-serif-4": "^5.2.9",
+    "@mojs/core": "^1.3.0",
     "astro": "^7.0.0",
     "astro-expressive-code": "^0.44.0",
     "astro-icon": "^1.1.5",

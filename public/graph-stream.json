@@ -1,0 +1,2994 @@
+{
+  "generated": "2026-07-30T19:15:56.511Z",
+  "counts": {
+    "agents": 140,
+    "skills": 161,
+    "relations": 9297
+  },
+  "agents": [
+    {
+      "id": "agent:org-chart-ascii",
+      "name": "ORG-CHART-ASCII",
+      "tier": "T3",
+      "squad": "other",
+      "mark": ""
+    },
+    {
+      "id": "agent:schema",
+      "name": "SCHEMA",
+      "tier": "T3",
+      "squad": "other",
+      "mark": ""
+    },
+    {
+      "id": "agent:a11y-specialist",
+      "name": "a11y_specialist",
+      "tier": "T3",
+      "squad": "G",
+      "mark": ""
+    },
+    {
+      "id": "agent:academic-analyst",
+      "name": "academic_analyst",
+      "tier": "T3",
+      "squad": "O",
+      "mark": ""
+    },
+    {
+      "id": "agent:ai-architect",
+      "name": "ai_architect",
+      "tier": "T3",
+      "squad": "B",
+      "mark": ""
+    },
+    {
+      "id": "agent:ai-engineer",
+      "name": "ai_engineer",
+      "tier": "T3",
+      "squad": "B",
+      "mark": ""
+    },
+    {
+      "id": "agent:alpha-researcher",
+      "name": "alpha_researcher",
+      "tier": "T3",
+      "squad": "C",
+      "mark": ""
+    },
+    {
+      "id": "agent:architecture-designer",
+      "name": "architecture_designer",
+      "tier": "T3",
+      "squad": "S",
+      "mark": ""
+    },
+    {
+      "id": "agent:arendt-doctrine-owner",
+      "name": "arendt_doctrine_owner",
+      "tier": "T3",
+      "squad": "E",
+      "mark": ""
+    },
+    {
+      "id": "agent:audit-specialist",
+      "name": "audit_specialist",
+      "tier": "T3",
+      "squad": "O",
+      "mark": ""
+    },
+    {
+      "id": "agent:back-end-engineer",
+      "name": "back_end_engineer",
+      "tier": "T3",
+      "squad": "G",
+      "mark": ""
+    },
+    {
+      "id": "agent:behavioral-economist",
+      "name": "behavioral_economist",
+      "tier": "T3",
+      "squad": "E",
+      "mark": ""
+    },
+    {
+      "id": "agent:burnout-watchdog",
+      "name": "burnout_watchdog",
+      "tier": "T3",
+      "squad": "W",
+      "mark": ""
+    },
+    {
+      "id": "agent:cash-goal-arbitrage-analyst",
+      "name": "cash_goal_arbitrage_analyst",
+      "tier": "T3",
+      "squad": "A",
+      "mark": ""
+    },
+    {
+      "id": "agent:chief-of-staff",
+      "name": "chief_of_staff",
+      "tier": "T3",
+      "squad": "W",
+      "mark": ""
+    },
+    {
+      "id": "agent:communications-officer",
+      "name": "communications_officer",
+      "tier": "T3",
+      "squad": "A",
+      "mark": ""
+    },
+    {
+      "id": "agent:compliance-officer",
+      "name": "compliance_officer",
+      "tier": "T3",
+      "squad": "L",
+      "mark": ""
+    },
+    {
+      "id": "agent:comptroller",
+      "name": "comptroller",
+      "tier": "T3",
+      "squad": "D",
+      "mark": ""
+    },
+    {
+      "id": "agent:content-strategist",
+      "name": "content_strategist",
+      "tier": "T3",
+      "squad": "A",
+      "mark": ""
+    },
+    {
+      "id": "agent:contrarian-officer",
+      "name": "contrarian_officer",
+      "tier": "T3",
+      "squad": "W",
+      "mark": ""
+    },
+    {
+      "id": "agent:corporate-counsel",
+      "name": "corporate_counsel",
+      "tier": "T3",
+      "squad": "L",
+      "mark": ""
+    },
+    {
+      "id": "agent:corporate-osint-analyst",
+      "name": "corporate_osint_analyst",
+      "tier": "T3",
+      "squad": "O",
+      "mark": ""
+    },
+    {
+      "id": "agent:cti-analyst",
+      "name": "cti_analyst",
+      "tier": "T3",
+      "squad": "O",
+      "mark": ""
+    },
+    {
+      "id": "agent:curriculum-engineer",
+      "name": "curriculum_engineer",
+      "tier": "T3",
+      "squad": "F",
+      "mark": ""
+    },
+    {
+      "id": "agent:darkweb-analyst",
+      "name": "darkweb_analyst",
+      "tier": "T3",
+      "squad": "O",
+      "mark": ""
+    },
+    {
+      "id": "agent:data-engineer",
+      "name": "data_engineer",
+      "tier": "T3",
+      "squad": "C",
+      "mark": ""
+    },
+    {
+      "id": "agent:data-privacy-officer",
+      "name": "data_privacy_officer",
+      "tier": "T3",
+      "squad": "L",
+      "mark": ""
+    },
+    {
+      "id": "agent:davao-filipino-language-coach",
+      "name": "davao-filipino-language-coach",
+      "tier": "T3",
+      "squad": "E",
+      "mark": ""
+    },
+    {
+      "id": "agent:deming-doctrine-owner",
+      "name": "deming_doctrine_owner",
+      "tier": "T3",
+      "squad": "E",
+      "mark": ""
+    },
+    {
+      "id": "agent:devops-engineer",
+      "name": "devops_engineer",
+      "tier": "T3",
+      "squad": "G",
+      "mark": ""
+    },
+    {
+      "id": "agent:economist",
+      "name": "economist",
+      "tier": "T3",
+      "squad": "E",
+      "mark": ""
+    },
+    {
+      "id": "agent:editorial-director",
+      "name": "editorial_director",
+      "tier": "T3",
+      "squad": "A",
+      "mark": ""
+    },
+    {
+      "id": "agent:eval-harness-lead",
+      "name": "eval_harness_lead",
+      "tier": "T3",
+      "squad": "B",
+      "mark": ""
+    },
+    {
+      "id": "agent:execution-officer",
+      "name": "execution_officer",
+      "tier": "T3",
+      "squad": "W",
+      "mark": ""
+    },
+    {
+      "id": "agent:finance-manager",
+      "name": "finance_manager",
+      "tier": "T3",
+      "squad": "P",
+      "mark": ""
+    },
+    {
+      "id": "agent:financial-consultant",
+      "name": "financial_consultant",
+      "tier": "T3",
+      "squad": "E",
+      "mark": ""
+    },
+    {
+      "id": "agent:financial-intel-analyst",
+      "name": "financial_intel_analyst",
+      "tier": "T3",
+      "squad": "O",
+      "mark": ""
+    },
+    {
+      "id": "agent:framing-honesty-calibrator",
+      "name": "framing_honesty_calibrator",
+      "tier": "T3",
+      "squad": "D",
+      "mark": ""
+    },
+    {
+      "id": "agent:front-end-engineer",
+      "name": "front_end_engineer",
+      "tier": "T3",
+      "squad": "G",
+      "mark": ""
+    },
+    {
+      "id": "agent:geoint-analyst",
+      "name": "geoint_analyst",
+      "tier": "T3",
+      "squad": "O",
+      "mark": ""
+    },
+    {
+      "id": "agent:goal-architect",
+      "name": "goal_architect",
+      "tier": "T3",
+      "squad": "P",
+      "mark": ""
+    },
+    {
+      "id": "agent:goal-keeper",
+      "name": "goal_keeper",
+      "tier": "T3",
+      "squad": "W",
+      "mark": ""
+    },
+    {
+      "id": "agent:goldratt-doctrine-owner",
+      "name": "goldratt_doctrine_owner",
+      "tier": "T3",
+      "squad": "F",
+      "mark": ""
+    },
+    {
+      "id": "agent:graph-adoption-officer",
+      "name": "graph_adoption_officer",
+      "tier": "T3",
+      "squad": "K",
+      "mark": ""
+    },
+    {
+      "id": "agent:graph-engineer",
+      "name": "graph_engineer",
+      "tier": "T3",
+      "squad": "K",
+      "mark": ""
+    },
+    {
+      "id": "agent:hf-researcher",
+      "name": "hf_researcher",
+      "tier": "T3",
+      "squad": "C",
+      "mark": ""
+    },
+    {
+      "id": "agent:hr-auditor",
+      "name": "hr_auditor",
+      "tier": "T3",
+      "squad": "W",
+      "mark": ""
+    },
+    {
+      "id": "agent:hr-director",
+      "name": "hr_director",
+      "tier": "T3",
+      "squad": "H",
+      "mark": ""
+    },
+    {
+      "id": "agent:hugo-trader",
+      "name": "hugo_trader",
+      "tier": "T3",
+      "squad": "C",
+      "mark": ""
+    },
+    {
+      "id": "agent:idea-validator",
+      "name": "idea_validator",
+      "tier": "T3",
+      "squad": "S",
+      "mark": ""
+    },
+    {
+      "id": "agent:identity-analyst",
+      "name": "identity_analyst",
+      "tier": "T3",
+      "squad": "O",
+      "mark": ""
+    },
+    {
+      "id": "agent:imint-analyst",
+      "name": "imint_analyst",
+      "tier": "T3",
+      "squad": "O",
+      "mark": ""
+    },
+    {
+      "id": "agent:innovation-consultant",
+      "name": "innovation_consultant",
+      "tier": "T3",
+      "squad": "E",
+      "mark": ""
+    },
+    {
+      "id": "agent:intelligence-officer",
+      "name": "intelligence_officer",
+      "tier": "T3",
+      "squad": "E",
+      "mark": ""
+    },
+    {
+      "id": "agent:ip-counsel",
+      "name": "ip_counsel",
+      "tier": "T3",
+      "squad": "L",
+      "mark": ""
+    },
+    {
+      "id": "agent:jd-keyword-aligner",
+      "name": "jd_keyword_aligner",
+      "tier": "T3",
+      "squad": "A",
+      "mark": ""
+    },
+    {
+      "id": "agent:kahneman-doctrine-owner",
+      "name": "kahneman_doctrine_owner",
+      "tier": "T3",
+      "squad": "E",
+      "mark": ""
+    },
+    {
+      "id": "agent:labor-counsel",
+      "name": "labor_counsel",
+      "tier": "T3",
+      "squad": "L",
+      "mark": ""
+    },
+    {
+      "id": "agent:legal-architect",
+      "name": "legal_architect",
+      "tier": "T3",
+      "squad": "L",
+      "mark": ""
+    },
+    {
+      "id": "agent:leverage-strategist",
+      "name": "leverage_strategist",
+      "tier": "T3",
+      "squad": "O",
+      "mark": ""
+    },
+    {
+      "id": "agent:litigation-strategist",
+      "name": "litigation_strategist",
+      "tier": "T3",
+      "squad": "L",
+      "mark": ""
+    },
+    {
+      "id": "agent:logistics-officer",
+      "name": "logistics_officer",
+      "tier": "T3",
+      "squad": "D",
+      "mark": ""
+    },
+    {
+      "id": "agent:loop-engineer",
+      "name": "loop_engineer",
+      "tier": "T3",
+      "squad": "D",
+      "mark": ""
+    },
+    {
+      "id": "agent:marketing-consultant",
+      "name": "marketing_consultant",
+      "tier": "T3",
+      "squad": "E",
+      "mark": ""
+    },
+    {
+      "id": "agent:mcp-eval-engineer",
+      "name": "mcp_eval_engineer",
+      "tier": "T3",
+      "squad": "B",
+      "mark": ""
+    },
+    {
+      "id": "agent:mcp-server-eng",
+      "name": "mcp_server_eng",
+      "tier": "T3",
+      "squad": "B",
+      "mark": ""
+    },
+    {
+      "id": "agent:media-intel-analyst",
+      "name": "media_intel_analyst",
+      "tier": "T3",
+      "squad": "O",
+      "mark": ""
+    },
+    {
+      "id": "agent:milestone-tracker",
+      "name": "milestone_tracker",
+      "tier": "T3",
+      "squad": "P",
+      "mark": ""
+    },
+    {
+      "id": "agent:motion-designer",
+      "name": "motion_designer",
+      "tier": "T3",
+      "squad": "G",
+      "mark": ""
+    },
+    {
+      "id": "agent:munger-doctrine-owner",
+      "name": "munger_doctrine_owner",
+      "tier": "T3",
+      "squad": "F",
+      "mark": ""
+    },
+    {
+      "id": "agent:nda-counsel",
+      "name": "nda_counsel",
+      "tier": "T3",
+      "squad": "L",
+      "mark": ""
+    },
+    {
+      "id": "agent:nda-preflight",
+      "name": "nda_preflight",
+      "tier": "T3",
+      "squad": "D",
+      "mark": ""
+    },
+    {
+      "id": "agent:negotiation-advisor",
+      "name": "negotiation_advisor",
+      "tier": "T3",
+      "squad": "E",
+      "mark": ""
+    },
+    {
+      "id": "agent:numerai-researcher",
+      "name": "numerai_researcher",
+      "tier": "T3",
+      "squad": "C",
+      "mark": ""
+    },
+    {
+      "id": "agent:ojph-redflag-triage",
+      "name": "ojph_redflag_triage",
+      "tier": "T3",
+      "squad": "A",
+      "mark": ""
+    },
+    {
+      "id": "agent:operations-consultant",
+      "name": "operations_consultant",
+      "tier": "T3",
+      "squad": "E",
+      "mark": ""
+    },
+    {
+      "id": "agent:operations-officer",
+      "name": "operations_officer",
+      "tier": "T3",
+      "squad": "D",
+      "mark": ""
+    },
+    {
+      "id": "agent:osint-director",
+      "name": "osint_director",
+      "tier": "T3",
+      "squad": "O",
+      "mark": ""
+    },
+    {
+      "id": "agent:osint-engineer",
+      "name": "osint_engineer",
+      "tier": "T3",
+      "squad": "O",
+      "mark": ""
+    },
+    {
+      "id": "agent:osint-reviewer",
+      "name": "osint_reviewer",
+      "tier": "T3",
+      "squad": "O",
+      "mark": ""
+    },
+    {
+      "id": "agent:osint-targeting-analyst",
+      "name": "osint_targeting_analyst",
+      "tier": "T3",
+      "squad": "O",
+      "mark": ""
+    },
+    {
+      "id": "agent:pedagogy-officer",
+      "name": "pedagogy_officer",
+      "tier": "T3",
+      "squad": "F",
+      "mark": ""
+    },
+    {
+      "id": "agent:people-graph-analyst",
+      "name": "people_graph_analyst",
+      "tier": "T3",
+      "squad": "O",
+      "mark": ""
+    },
+    {
+      "id": "agent:performance-auditor",
+      "name": "performance_auditor",
+      "tier": "T3",
+      "squad": "H",
+      "mark": ""
+    },
+    {
+      "id": "agent:pilot-runner",
+      "name": "pilot_runner",
+      "tier": "T3",
+      "squad": "S",
+      "mark": ""
+    },
+    {
+      "id": "agent:pitch-strategist",
+      "name": "pitch_strategist",
+      "tier": "T3",
+      "squad": "S",
+      "mark": ""
+    },
+    {
+      "id": "agent:planning-officer",
+      "name": "planning_officer",
+      "tier": "T3",
+      "squad": "W",
+      "mark": ""
+    },
+    {
+      "id": "agent:product-strategist",
+      "name": "product_strategist",
+      "tier": "T3",
+      "squad": "E",
+      "mark": ""
+    },
+    {
+      "id": "agent:prompt-engineer",
+      "name": "prompt_engineer",
+      "tier": "T3",
+      "squad": "B",
+      "mark": ""
+    },
+    {
+      "id": "agent:prompt-optimizer",
+      "name": "prompt_optimizer",
+      "tier": "T3",
+      "squad": "B",
+      "mark": ""
+    },
+    {
+      "id": "agent:proposal-strategist",
+      "name": "proposal_strategist",
+      "tier": "T3",
+      "squad": "S",
+      "mark": ""
+    },
+    {
+      "id": "agent:public-facing-educator",
+      "name": "public_facing_educator",
+      "tier": "T3",
+      "squad": "F",
+      "mark": ""
+    },
+    {
+      "id": "agent:qa-engineer",
+      "name": "qa_engineer",
+      "tier": "T3",
+      "squad": "G",
+      "mark": ""
+    },
+    {
+      "id": "agent:quality-officer",
+      "name": "quality_officer",
+      "tier": "T3",
+      "squad": "D",
+      "mark": ""
+    },
+    {
+      "id": "agent:rag-architect",
+      "name": "rag_architect",
+      "tier": "T3",
+      "squad": "B",
+      "mark": ""
+    },
+    {
+      "id": "agent:rag-engineer",
+      "name": "rag_engineer",
+      "tier": "T3",
+      "squad": "B",
+      "mark": ""
+    },
+    {
+      "id": "agent:regulatory-researcher",
+      "name": "regulatory_researcher",
+      "tier": "T3",
+      "squad": "L",
+      "mark": ""
+    },
+    {
+      "id": "agent:replicate-ml-engineer",
+      "name": "replicate_ml_engineer",
+      "tier": "T3",
+      "squad": "B",
+      "mark": ""
+    },
+    {
+      "id": "agent:risk-manager",
+      "name": "risk_manager",
+      "tier": "T3",
+      "squad": "C",
+      "mark": ""
+    },
+    {
+      "id": "agent:risk-strategist",
+      "name": "risk_strategist",
+      "tier": "T3",
+      "squad": "E",
+      "mark": ""
+    },
+    {
+      "id": "agent:roster-officer",
+      "name": "roster_officer",
+      "tier": "T3",
+      "squad": "H",
+      "mark": ""
+    },
+    {
+      "id": "agent:sagan-doctrine-owner",
+      "name": "sagan_doctrine_owner",
+      "tier": "T3",
+      "squad": "E",
+      "mark": ""
+    },
+    {
+      "id": "agent:sales-lead",
+      "name": "sales_lead",
+      "tier": "T3",
+      "squad": "A",
+      "mark": ""
+    },
+    {
+      "id": "agent:security-engineer",
+      "name": "security_engineer",
+      "tier": "T3",
+      "squad": "G",
+      "mark": ""
+    },
+    {
+      "id": "agent:sharpe-truth-bridge",
+      "name": "sharpe_truth_bridge",
+      "tier": "T3",
+      "squad": "C",
+      "mark": ""
+    },
+    {
+      "id": "agent:signals-intel-analyst",
+      "name": "signals_intel_analyst",
+      "tier": "T3",
+      "squad": "O",
+      "mark": ""
+    },
+    {
+      "id": "agent:socmint-analyst",
+      "name": "socmint_analyst",
+      "tier": "T3",
+      "squad": "O",
+      "mark": ""
+    },
+    {
+      "id": "agent:squad-h",
+      "name": "squad_h",
+      "tier": "T3",
+      "squad": "H",
+      "mark": ""
+    },
+    {
+      "id": "agent:squad-k",
+      "name": "squad_k",
+      "tier": "T3",
+      "squad": "K",
+      "mark": ""
+    },
+    {
+      "id": "agent:stat-arb-pm",
+      "name": "stat_arb_pm",
+      "tier": "T3",
+      "squad": "C",
+      "mark": ""
+    },
+    {
+      "id": "agent:stella-voice",
+      "name": "stella_voice",
+      "tier": "T3",
+      "squad": "A",
+      "mark": ""
+    },
+    {
+      "id": "agent:strategist-consultant",
+      "name": "strategist_consultant",
+      "tier": "T3",
+      "squad": "E",
+      "mark": ""
+    },
+    {
+      "id": "agent:strategy-consultant",
+      "name": "strategy_consultant",
+      "tier": "T3",
+      "squad": "E",
+      "mark": ""
+    },
+    {
+      "id": "agent:talent-sourcer",
+      "name": "talent_sourcer",
+      "tier": "T3",
+      "squad": "H",
+      "mark": ""
+    },
+    {
+      "id": "agent:tax-counsel",
+      "name": "tax_counsel",
+      "tier": "T3",
+      "squad": "L",
+      "mark": ""
+    },
+    {
+      "id": "agent:tech-lead",
+      "name": "tech_lead",
+      "tier": "T3",
+      "squad": "G",
+      "mark": ""
+    },
+    {
+      "id": "agent:tetlock-doctrine-owner",
+      "name": "tetlock_doctrine_owner",
+      "tier": "T3",
+      "squad": "F",
+      "mark": ""
+    },
+    {
+      "id": "agent:training-officer",
+      "name": "training_officer",
+      "tier": "T3",
+      "squad": "H",
+      "mark": ""
+    },
+    {
+      "id": "agent:uiux-engineer",
+      "name": "uiux_engineer",
+      "tier": "T3",
+      "squad": "A",
+      "mark": ""
+    },
+    {
+      "id": "agent:venture-architect",
+      "name": "venture_architect",
+      "tier": "T3",
+      "squad": "S",
+      "mark": ""
+    },
+    {
+      "id": "agent:venture-hr",
+      "name": "venture_hr",
+      "tier": "T3",
+      "squad": "S",
+      "mark": ""
+    },
+    {
+      "id": "agent:venture-metrics-officer",
+      "name": "venture_metrics_officer",
+      "tier": "T3",
+      "squad": "S",
+      "mark": ""
+    },
+    {
+      "id": "agent:vol-trader",
+      "name": "vol_trader",
+      "tier": "T3",
+      "squad": "C",
+      "mark": ""
+    },
+    {
+      "id": "agent:war-gaming-strategist",
+      "name": "war_gaming_strategist",
+      "tier": "T3",
+      "squad": "E",
+      "mark": ""
+    },
+    {
+      "id": "agent:web-archive-analyst",
+      "name": "web_archive_analyst",
+      "tier": "T3",
+      "squad": "O",
+      "mark": ""
+    },
+    {
+      "id": "squad:a",
+      "name": "A",
+      "tier": "T3",
+      "squad": "A",
+      "mark": ""
+    },
+    {
+      "id": "squad:b",
+      "name": "B",
+      "tier": "T3",
+      "squad": "B",
+      "mark": ""
+    },
+    {
+      "id": "squad:c",
+      "name": "C",
+      "tier": "T3",
+      "squad": "C",
+      "mark": ""
+    },
+    {
+      "id": "squad:d",
+      "name": "D",
+      "tier": "T3",
+      "squad": "D",
+      "mark": ""
+    },
+    {
+      "id": "squad:e",
+      "name": "E",
+      "tier": "T3",
+      "squad": "E",
+      "mark": ""
+    },
+    {
+      "id": "squad:f",
+      "name": "F",
+      "tier": "T3",
+      "squad": "F",
+      "mark": ""
+    },
+    {
+      "id": "squad:g",
+      "name": "G",
+      "tier": "T3",
+      "squad": "G",
+      "mark": ""
+    },
+    {
+      "id": "squad:h",
+      "name": "H",
+      "tier": "T3",
+      "squad": "H",
+      "mark": ""
+    },
+    {
+      "id": "squad:k",
+      "name": "K",
+      "tier": "T3",
+      "squad": "K",
+      "mark": ""
+    },
+    {
+      "id": "squad:l",
+      "name": "L",
+      "tier": "T3",
+      "squad": "L",
+      "mark": ""
+    },
+    {
+      "id": "squad:p",
+      "name": "P",
+      "tier": "T3",
+      "squad": "P",
+      "mark": ""
+    },
+    {
+      "id": "squad:s",
+      "name": "S",
+      "tier": "T3",
+      "squad": "S",
+      "mark": ""
+    },
+    {
+      "id": "squad:o",
+      "name": "O",
+      "tier": "T3",
+      "squad": "O",
+      "mark": ""
+    },
+    {
+      "id": "squad:w",
+      "name": "W",
+      "tier": "T3",
+      "squad": "W",
+      "mark": ""
+    },
+    {
+      "id": "squad:other",
+      "name": "other",
+      "tier": "T3",
+      "squad": "other",
+      "mark": ""
+    }
+  ],
+  "skills": [
+    {
+      "id": "skill:a11y-audit",
+      "name": "a11y-audit",
+      "type": "skill"
+    },
+    {
+      "id": "skill:aar-status-broadcast",
+      "name": "aar-status-broadcast",
+      "type": "skill"
+    },
+    {
+      "id": "skill:addyosmani-agent-skills",
+      "name": "addyosmani-agent-skills",
+      "type": "skill"
+    },
+    {
+      "id": "skill:afk-loop",
+      "name": "afk-loop",
+      "type": "skill"
+    },
+    {
+      "id": "skill:agent-onboarding",
+      "name": "agent-onboarding",
+      "type": "skill"
+    },
+    {
+      "id": "skill:architecture-builder",
+      "name": "architecture-builder",
+      "type": "skill"
+    },
+    {
+      "id": "skill:ars-patterns",
+      "name": "ars-patterns",
+      "type": "skill"
+    },
+    {
+      "id": "skill:art-of-seduction",
+      "name": "art-of-seduction",
+      "type": "skill"
+    },
+    {
+      "id": "skill:audit-loop",
+      "name": "audit-loop",
+      "type": "skill"
+    },
+    {
+      "id": "skill:audit-orchestrator",
+      "name": "audit-orchestrator",
+      "type": "skill"
+    },
+    {
+      "id": "skill:autoresearch-loop",
+      "name": "autoresearch-loop",
+      "type": "skill"
+    },
+    {
+      "id": "skill:awesome-ceo-integration",
+      "name": "awesome-ceo-integration",
+      "type": "skill"
+    },
+    {
+      "id": "skill:awesome-cto-integration",
+      "name": "awesome-cto-integration",
+      "type": "skill"
+    },
+    {
+      "id": "skill:banner-design",
+      "name": "banner-design",
+      "type": "skill"
+    },
+    {
+      "id": "skill:brand",
+      "name": "brand",
+      "type": "skill"
+    },
+    {
+      "id": "skill:capability-cluster",
+      "name": "capability-cluster",
+      "type": "skill"
+    },
+    {
+      "id": "skill:cascading-drift-alert",
+      "name": "cascading-drift-alert",
+      "type": "skill"
+    },
+    {
+      "id": "skill:cite-loop",
+      "name": "cite-loop",
+      "type": "skill"
+    },
+    {
+      "id": "skill:code-review",
+      "name": "code-review",
+      "type": "skill"
+    },
+    {
+      "id": "skill:commander",
+      "name": "commander",
+      "type": "skill"
+    },
+    {
+      "id": "skill:commander-graph-brief",
+      "name": "commander-graph-brief",
+      "type": "skill"
+    },
+    {
+      "id": "skill:consulting-orchestrator",
+      "name": "consulting-orchestrator",
+      "type": "skill"
+    },
+    {
+      "id": "skill:context-optimizer",
+      "name": "context-optimizer",
+      "type": "skill"
+    },
+    {
+      "id": "skill:context-types",
+      "name": "context-types",
+      "type": "skill"
+    },
+    {
+      "id": "skill:convex-bet-audit",
+      "name": "convex-bet-audit",
+      "type": "skill"
+    },
+    {
+      "id": "skill:cross-workspace-merge",
+      "name": "cross-workspace-merge",
+      "type": "skill"
+    },
+    {
+      "id": "skill:daily-prep",
+      "name": "daily-prep",
+      "type": "skill"
+    },
+    {
+      "id": "skill:davao-conyo-register-audit",
+      "name": "davao-conyo-register-audit",
+      "type": "skill"
+    },
+    {
+      "id": "skill:deep-research",
+      "name": "deep-research",
+      "type": "skill"
+    },
+    {
+      "id": "skill:deploy",
+      "name": "deploy",
+      "type": "skill"
+    },
+    {
+      "id": "skill:design",
+      "name": "design",
+      "type": "skill"
+    },
+    {
+      "id": "skill:design-system",
+      "name": "design-system",
+      "type": "skill"
+    },
+    {
+      "id": "skill:disambiguation",
+      "name": "disambiguation",
+      "type": "skill"
+    },
+    {
+      "id": "skill:dispatch-handoff",
+      "name": "dispatch-handoff",
+      "type": "skill"
+    },
+    {
+      "id": "skill:doctrine",
+      "name": "doctrine",
+      "type": "skill"
+    },
+    {
+      "id": "skill:doctrine-loop",
+      "name": "doctrine-loop",
+      "type": "skill"
+    },
+    {
+      "id": "skill:doctrine-pick",
+      "name": "doctrine-pick",
+      "type": "skill"
+    },
+    {
+      "id": "skill:draft-loop",
+      "name": "draft-loop",
+      "type": "skill"
+    },
+    {
+      "id": "skill:drift-reconcile",
+      "name": "drift-reconcile",
+      "type": "skill"
+    },
+    {
+      "id": "skill:feedback-update",
+      "name": "feedback-update",
+      "type": "skill"
+    },
+    {
+      "id": "skill:firecrawl-tradecraft",
+      "name": "firecrawl-tradecraft",
+      "type": "skill"
+    },
+    {
+      "id": "skill:g44-frontmatter-spec",
+      "name": "g44-frontmatter-spec",
+      "type": "skill"
+    },
+    {
+      "id": "skill:goal-tree",
+      "name": "goal-tree",
+      "type": "skill"
+    },
+    {
+      "id": "skill:godfather",
+      "name": "godfather",
+      "type": "skill"
+    },
+    {
+      "id": "skill:google-research-curation",
+      "name": "google-research-curation",
+      "type": "skill"
+    },
+    {
+      "id": "skill:graph-aar-contract",
+      "name": "graph-aar-contract",
+      "type": "skill"
+    },
+    {
+      "id": "skill:graph-adopt",
+      "name": "graph-adopt",
+      "type": "skill"
+    },
+    {
+      "id": "skill:graph-archaeology",
+      "name": "graph-archaeology",
+      "type": "skill"
+    },
+    {
+      "id": "skill:graph-assemble",
+      "name": "graph-assemble",
+      "type": "skill"
+    },
+    {
+      "id": "skill:graph-autoresearch",
+      "name": "graph-autoresearch",
+      "type": "skill"
+    },
+    {
+      "id": "skill:graph-contract",
+      "name": "graph-contract",
+      "type": "skill"
+    },
+    {
+      "id": "skill:graph-correction",
+      "name": "graph-correction",
+      "type": "skill"
+    },
+    {
+      "id": "skill:graph-debugging",
+      "name": "graph-debugging",
+      "type": "skill"
+    },
+    {
+      "id": "skill:graph-doctrine-picker",
+      "name": "graph-doctrine-picker",
+      "type": "skill"
+    },
+    {
+      "id": "skill:graph-engineering",
+      "name": "graph-engineering",
+      "type": "skill"
+    },
+    {
+      "id": "skill:graph-engineering-doctrine",
+      "name": "graph-engineering-doctrine",
+      "type": "skill"
+    },
+    {
+      "id": "skill:graph-extract",
+      "name": "graph-extract",
+      "type": "skill"
+    },
+    {
+      "id": "skill:graph-onboarding",
+      "name": "graph-onboarding",
+      "type": "skill"
+    },
+    {
+      "id": "skill:graph-org",
+      "name": "graph-org",
+      "type": "skill"
+    },
+    {
+      "id": "skill:graph-query",
+      "name": "graph-query",
+      "type": "skill"
+    },
+    {
+      "id": "skill:graph-resolve",
+      "name": "graph-resolve",
+      "type": "skill"
+    },
+    {
+      "id": "skill:graph-schema-evolve",
+      "name": "graph-schema-evolve",
+      "type": "skill"
+    },
+    {
+      "id": "skill:graph-scope",
+      "name": "graph-scope",
+      "type": "skill"
+    },
+    {
+      "id": "skill:graph-snapshot",
+      "name": "graph-snapshot",
+      "type": "skill"
+    },
+    {
+      "id": "skill:graph-verify",
+      "name": "graph-verify",
+      "type": "skill"
+    },
+    {
+      "id": "skill:graph-write-loop",
+      "name": "graph-write-loop",
+      "type": "skill"
+    },
+    {
+      "id": "skill:hr-audit",
+      "name": "hr-audit",
+      "type": "skill"
+    },
+    {
+      "id": "skill:idea-validator",
+      "name": "idea-validator",
+      "type": "skill"
+    },
+    {
+      "id": "skill:incident",
+      "name": "incident",
+      "type": "skill"
+    },
+    {
+      "id": "skill:institutional-document-standard",
+      "name": "institutional-document-standard",
+      "type": "skill"
+    },
+    {
+      "id": "skill:library-catalog",
+      "name": "library-catalog",
+      "type": "skill"
+    },
+    {
+      "id": "skill:live-mirror",
+      "name": "live-mirror",
+      "type": "skill"
+    },
+    {
+      "id": "skill:loop-discipline",
+      "name": "loop-discipline",
+      "type": "skill"
+    },
+    {
+      "id": "skill:loop-engineer",
+      "name": "loop-engineer",
+      "type": "skill"
+    },
+    {
+      "id": "skill:loop-optimizer",
+      "name": "loop-optimizer",
+      "type": "skill"
+    },
+    {
+      "id": "skill:medium-article",
+      "name": "medium-article",
+      "type": "skill"
+    },
+    {
+      "id": "skill:memo-cache-pattern",
+      "name": "memo-cache-pattern",
+      "type": "skill"
+    },
+    {
+      "id": "skill:memory-capture",
+      "name": "memory-capture",
+      "type": "skill"
+    },
+    {
+      "id": "skill:mission-queue",
+      "name": "mission-queue",
+      "type": "skill"
+    },
+    {
+      "id": "skill:mission-resume",
+      "name": "mission-resume",
+      "type": "skill"
+    },
+    {
+      "id": "skill:model-eval",
+      "name": "model-eval",
+      "type": "skill"
+    },
+    {
+      "id": "skill:monthly-close",
+      "name": "monthly-close",
+      "type": "skill"
+    },
+    {
+      "id": "skill:multi-version-audit",
+      "name": "multi-version-audit",
+      "type": "skill"
+    },
+    {
+      "id": "skill:nda-drafter",
+      "name": "nda-drafter",
+      "type": "skill"
+    },
+    {
+      "id": "skill:ojp-application-format",
+      "name": "ojp-application-format",
+      "type": "skill"
+    },
+    {
+      "id": "skill:osint-source-fallback",
+      "name": "osint-source-fallback",
+      "type": "skill"
+    },
+    {
+      "id": "skill:osint-source-registry",
+      "name": "osint-source-registry",
+      "type": "skill"
+    },
+    {
+      "id": "skill:osint-verification-ladder",
+      "name": "osint-verification-ladder",
+      "type": "skill"
+    },
+    {
+      "id": "skill:osint-workflow",
+      "name": "osint-workflow",
+      "type": "skill"
+    },
+    {
+      "id": "skill:parallel-dispatch",
+      "name": "parallel-dispatch",
+      "type": "skill"
+    },
+    {
+      "id": "skill:performance-review",
+      "name": "performance-review",
+      "type": "skill"
+    },
+    {
+      "id": "skill:pilot-runner",
+      "name": "pilot-runner",
+      "type": "skill"
+    },
+    {
+      "id": "skill:pitch-builder",
+      "name": "pitch-builder",
+      "type": "skill"
+    },
+    {
+      "id": "skill:ponytail-integration",
+      "name": "ponytail-integration",
+      "type": "skill"
+    },
+    {
+      "id": "skill:portfolio-motion",
+      "name": "portfolio-motion",
+      "type": "skill"
+    },
+    {
+      "id": "skill:portfolio-positioning-check",
+      "name": "portfolio-positioning-check",
+      "type": "skill"
+    },
+    {
+      "id": "skill:priest",
+      "name": "priest",
+      "type": "skill"
+    },
+    {
+      "id": "skill:proactive-dispatch",
+      "name": "proactive-dispatch",
+      "type": "skill"
+    },
+    {
+      "id": "skill:project-bootstrap",
+      "name": "project-bootstrap",
+      "type": "skill"
+    },
+    {
+      "id": "skill:proposal-builder",
+      "name": "proposal-builder",
+      "type": "skill"
+    }
+  ],
+  "relations": [
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    },
+    {
+      "type": "RELATED"
+    }
+  ]
+}

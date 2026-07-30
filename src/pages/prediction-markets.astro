@@ -38,6 +38,37 @@ const events = allEvents.sort((a, b) => a.data.order - b.data.order);
 
 const buildDate = buildStampUtc8();
 
+// === v8.0.5 — inline 12-point sparkline per event.
+// Deterministic FNV-1a hash on the slug; walks from impliedPx → impliedPx+edge
+// with 3% sinusoidal noise. Same series on every build. Same seed pattern as
+// PredictionCard's SVG walk — these two series tell the same story twice
+// (the sparkline = the "today" snapshot; the SVG walk = the 24-step path).
+function slugSeed(slug: string): number {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < slug.length; i++) {
+    h ^= slug.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
+  }
+  return (h >>> 0) / 4294967296;
+}
+function genSparkline(slug: string, implied: number, edge: number): number[] {
+  const seed = slugSeed(slug);
+  const target = Math.max(0.005, Math.min(0.995, implied + edge));
+  const pts: number[] = [];
+  let cur = implied;
+  const N = 12;
+  for (let i = 0; i < N; i++) {
+    const t = i / (N - 1);
+    const pull = (target - cur) * 0.22;
+    const noise = Math.sin(seed * Math.PI * 2 + t * Math.PI * 4) * 0.012;
+    cur = Math.max(0.005, Math.min(0.995, cur + pull + noise));
+    pts.push(+cur.toFixed(3));
+  }
+  // Force terminal at fair value for clean anchor
+  pts[N - 1] = +target.toFixed(3);
+  return pts;
+}
+
 // === v6.1 polish — aggregate stats across all 8 events ===
 // Computed deterministically from the same events array; no extra seeding.
 const n = events.length;
@@ -207,7 +238,13 @@ const decayPoints = events.map((e) => ({
       </header>
 
       <div class="grid">
-        {events.map((ev) => <PredictionCard event={ev} buildDate={buildDate} />)}
+        {events.map((ev) => (
+          <PredictionCard
+            event={ev}
+            buildDate={buildDate}
+            sparkline={genSparkline(ev.id, ev.data.impliedPx, ev.data.edge)}
+          />
+        ))}
       </div>
     </div>
   </section>

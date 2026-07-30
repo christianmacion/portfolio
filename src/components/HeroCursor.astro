@@ -1,0 +1,130 @@
+---
+/**
+ * HeroCursor.astro — v7.7 SUBTLE HERO POINTER FOLLOW
+ *
+ * A 1px amber ring (8px) that follows the cursor with a 180ms
+ * lerp delay. Invisible on touch devices. Reduced-motion-safe: when
+ * prefers-reduced-motion is reduce, the ring is hidden entirely.
+ *
+ * NOT a magnetic cursor. NOT a tilt. NOT a glow. Per the v7.4
+ * motion-vocab brief: max 1 infinite-running animation per viewport,
+ * no mousemove on CTAs, no transform: rotate, no halo, no glow.
+ * This is a hairline ring that lags the cursor by 180ms.
+ *
+ * Use:
+ *   <HeroCursor />
+ *   <HeroCursor size={14} accent="cobalt" />
+ *
+ * Server-rendered. Zero markup initially; only the script adds the
+ * ring to the DOM. Tiny runtime JS (~400 bytes).
+ */
+interface Props {
+  /** Ring diameter in pixels. Default 8. */
+  size?: number;
+  /** Accent color token name. Default 'warn' (amber). */
+  accent?: 'warn' | 'cobalt' | 'sage' | 'terracotta';
+  /** Lerp factor (0-1). Lower = laggier. Default 0.18 ≈ 180ms. */
+  lerp?: number;
+}
+const { size = 8, accent = 'warn', lerp = 0.18 } = Astro.props;
+---
+
+<script>
+  class HeroCursor {
+    ring: HTMLElement;
+    mouseX = 0;
+    mouseY = 0;
+    curX = 0;
+    curY = 0;
+    raf = 0;
+    active = false;
+
+    constructor(opts: { size: number; accent: string; lerp: number }) {
+      // Reduced-motion gate
+      const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+      if (mq.matches || window.matchMedia('(hover: none)').matches) return;
+
+      // Touch gate
+      if ('ontouchstart' in window) return;
+
+      this.ring = document.createElement('div');
+      this.ring.className = `hero-cursor hero-cursor--${opts.accent}`;
+      this.ring.style.width = `${opts.size}px`;
+      this.ring.style.height = `${opts.size}px`;
+      this.ring.setAttribute('aria-hidden', 'true');
+      document.body.appendChild(this.ring);
+
+      this.lerp = opts.lerp;
+      this.bind();
+      this.tick();
+    }
+
+    lerp: number;
+
+    bind() {
+      document.addEventListener('mousemove', (e) => {
+        this.mouseX = e.clientX;
+        this.mouseY = e.clientY;
+        if (!this.active) {
+          this.curX = this.mouseX;
+          this.curY = this.mouseY;
+          this.active = true;
+          this.ring.classList.add('is-active');
+        }
+      });
+      document.addEventListener('mouseleave', () => {
+        this.active = false;
+        this.ring.classList.remove('is-active');
+      });
+    }
+
+    tick() {
+      this.curX += (this.mouseX - this.curX) * this.lerp;
+      this.curY += (this.mouseY - this.curY) * this.lerp;
+      this.ring.style.transform = `translate(${this.curX}px, ${this.curY}px) translate(-50%, -50%)`;
+      this.raf = requestAnimationFrame(() => this.tick());
+    }
+  }
+
+  // Initialize once — sized from the first matched section's data attr
+  const init = () => {
+    const inst = document.querySelector<HTMLElement>('[data-hero-cursor]');
+    if (!inst) return;
+    const size = Number(inst.dataset.cursorSize || '8');
+    const accent = inst.dataset.cursorAccent || 'warn';
+    const lerp = Number(inst.dataset.cursorLerp || '0.18');
+    new HeroCursor({ size, accent, lerp });
+  };
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+</script>
+
+<style is:global>
+  .hero-cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    border: 1px solid var(--c-warn);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 220ms var(--j-ease-out, ease-out);
+    mix-blend-mode: multiply;
+  }
+  .hero-cursor--warn { border-color: var(--c-warn); }
+  .hero-cursor--cobalt { border-color: var(--c-cobalt, #1e40af); }
+  .hero-cursor--sage { border-color: var(--c-sage, #7a8b5c); }
+  .hero-cursor--terracotta { border-color: var(--c-terracotta, #b85a3a); }
+  .hero-cursor.is-active { opacity: 0.6; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-cursor { display: none; }
+  }
+  @media (hover: none) {
+    .hero-cursor { display: none; }
+  }
+</style>

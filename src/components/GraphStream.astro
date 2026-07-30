@@ -1,0 +1,246 @@
+---
+/**
+ * GraphStream.astro — v7.7 LIVE-STYLE GRAPH EMBED
+ *
+ * Renders a tiny force-directed graph of the STELLA knowledge graph
+ * snapshot (public-safe slice). The data is built at compile time
+ * from `~/.claude/cache/stella/graph/` via scripts/build-graph-snapshot.mjs
+ * and shipped as /graph-stream.json. The client renders with a small
+ * (~3KB) d3-style implementation — no CDN dependency, no tailwind,
+ * no halo.
+ *
+ * Use:
+ *   <GraphStream height={420} />
+ *   <GraphStream height={600} showLabels={true} />
+ *
+ * Server-rendered shell. Tiny runtime JS. Reduced-motion-safe.
+ */
+interface Props {
+  /** Canvas height in pixels. Default 380. */
+  height?: number;
+  /** Show node labels. Default false. */
+  showLabels?: boolean;
+  /** Filter to a squad. Default 'all'. */
+  squad?: 'all' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F';
+  /** Number of nodes to render. Default 60. */
+  limit?: number;
+}
+
+const { height = 380, showLabels = false, squad = 'all', limit = 60 } = Astro.props;
+const streamId = `graph-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<section
+  class="graph-stream"
+  data-stream-id={streamId}
+  data-show-labels={showLabels ? 'true' : 'false'}
+  data-squad={squad}
+  data-limit={limit}
+  data-stream-height={height}
+  aria-label="Live knowledge graph (public-safe slice)"
+>
+  <div class="graph-stream__head">
+    <p class="graph-stream__eyebrow mono">BY CHRISTIAN MACION · QUANT RESEARCH + AI ENGINEERING</p>
+    <p class="graph-stream__caption">
+      <span class="graph-stream__pulse" aria-hidden="true"></span>
+      <span data-stream-count>–</span> agents online · <span data-stream-edges>–</span> edges
+    </p>
+  </div>
+  <svg
+    class="graph-stream__svg"
+    role="img"
+    aria-hidden="true"
+    viewBox="0 0 800 380"
+    width="100%"
+    height={height}
+  ></svg>
+  <noscript>
+    <p class="graph-stream__nojs mono">graph renders client-side (JS required)</p>
+  </noscript>
+</section>
+
+<style>
+  .graph-stream {
+    border: 1px solid var(--c-rule);
+    padding: 14px 16px 16px;
+    /* --c-bg-2 is always defined in v6-13 surface; no fallback required */
+    background: var(--c-bg-2);
+    border-radius: 0;
+  }
+  .graph-stream__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .graph-stream__eyebrow {
+    font: 500 10px / 1.4 var(--ff-mono);
+    color: var(--c-warn);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+  .graph-stream__caption {
+    font: 500 11px / 1.4 var(--ff-mono);
+    color: var(--c-ink-2);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    letter-spacing: 0.04em;
+  }
+  .graph-stream__pulse {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--c-warn);
+    box-shadow: 0 0 0 0 var(--j-pulse-end);
+    animation: pulseDot 1.6s var(--j-ease-out, ease-out) infinite;
+  }
+  @keyframes pulseDot {
+    0% { box-shadow: 0 0 0 0 var(--j-pulse-peak); }
+    70% { box-shadow: 0 0 0 8px var(--j-pulse-end); }
+    100% { box-shadow: 0 0 0 0 var(--j-pulse-end); }
+  }
+  .graph-stream__svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .graph-stream__nojs {
+    font: 500 11px / 1.4 var(--ff-mono);
+    color: var(--c-ink-3);
+    text-align: center;
+    padding: 40px 0;
+  }
+
+  .gs-node { fill: var(--c-ink); }
+  .gs-node--A { fill: var(--c-warn); }
+  .gs-node--B { fill: var(--gs-node-B); }
+  .gs-node--C { fill: var(--gs-node-C); }
+  .gs-node--D { fill: var(--gs-node-D); }
+  .gs-node--E { fill: var(--gs-node-E); }
+  .gs-node--F { fill: var(--c-ink-2); }
+  .gs-edge { stroke: var(--c-rule); stroke-width: 0.5; opacity: 0.6; }
+  .gs-label {
+    font: 500 9px / 1 var(--ff-mono);
+    fill: var(--c-ink-3);
+    letter-spacing: 0.04em;
+    pointer-events: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .graph-stream__pulse { animation: none; }
+  }
+</style>
+
+<script>
+  class GraphStream {
+    root: HTMLElement;
+    svg: SVGSVGElement;
+    data: any = null;
+    nodes: any[] = [];
+    edges: any[] = [];
+    raf = 0;
+    constructor(root: HTMLElement) {
+      this.root = root;
+      this.svg = root.querySelector('svg') as SVGSVGElement;
+      this.fetch();
+    }
+
+    async fetch() {
+      try {
+        const r = await fetch('/graph-stream.json');
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        this.data = await r.json();
+        const sq = this.root.dataset.squad;
+        const limit = parseInt(this.root.dataset.limit || '60');
+        let nodes = this.data.agents;
+        if (sq && sq !== 'all') nodes = nodes.filter((n: any) => n.squad === sq);
+        nodes = nodes.slice(0, limit);
+        const ids = new Set(nodes.map((n: any) => n.id));
+        const edges = this.data.relations.filter((e: any) => ids.has(e.from) && ids.has(e.to));
+        this.nodes = nodes.map((n: any, i: number) => ({
+          ...n,
+          x: 400 + Math.cos(i * 2.4) * 200,
+          y: (this.svg.viewBox.baseVal.height || 380) / 2 + Math.sin(i * 2.4) * 100,
+          vx: 0, vy: 0,
+        }));
+        this.edges = edges;
+        this.updateCount();
+        this.layout();
+      } catch (e) {
+        console.warn('graph-stream: fetch failed', e);
+      }
+    }
+
+    updateCount() {
+      const n = this.root.querySelector('[data-stream-count]');
+      const e = this.root.querySelector('[data-stream-edges]');
+      if (n) n.textContent = String(this.nodes.length);
+      if (e) e.textContent = String(this.edges.length);
+    }
+
+    layout() {
+      const W = 800;
+      const H = this.svg.viewBox.baseVal.height || 380;
+      const cx = W / 2, cy = H / 2;
+      const nodes = this.nodes;
+      const edges = this.edges;
+      // Static radial layout — fast, no animation library needed
+      const rings = 4;
+      nodes.forEach((node: any, i: number) => {
+        const ring = Math.floor(i / (nodes.length / rings));
+        const inRing = i % Math.max(1, Math.floor(nodes.length / rings));
+        const r = 80 + ring * 60;
+        const a = (inRing / Math.max(1, Math.floor(nodes.length / rings))) * Math.PI * 2;
+        node.x = cx + Math.cos(a) * r;
+        node.y = cy + Math.sin(a) * r;
+      });
+
+      const showLabels = this.root.dataset.showLabels === 'true';
+      this.svg.innerHTML = '';
+      // Edges
+      const edgeGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      edgeGroup.setAttribute('class', 'gs-edges');
+      for (const e of edges) {
+        const a = nodes.find((n: any) => n.id === e.from);
+        const b = nodes.find((n: any) => n.id === e.to);
+        if (!a || !b) continue;
+        const l = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        l.setAttribute('x1', String(a.x));
+        l.setAttribute('y1', String(a.y));
+        l.setAttribute('x2', String(b.x));
+        l.setAttribute('y2', String(b.y));
+        l.setAttribute('class', 'gs-edge');
+        edgeGroup.appendChild(l);
+      }
+      this.svg.appendChild(edgeGroup);
+      // Nodes
+      const nodeGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      nodeGroup.setAttribute('class', 'gs-nodes');
+      for (const n of nodes) {
+        const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        c.setAttribute('cx', String(n.x));
+        c.setAttribute('cy', String(n.y));
+        c.setAttribute('r', n.tier === 'T1' ? '5' : n.tier === 'T2' ? '3.5' : '2.5');
+        c.setAttribute('class', `gs-node gs-node--${n.squad || 'A'}`);
+        c.setAttribute('data-name', n.name);
+        nodeGroup.appendChild(c);
+        if (showLabels) {
+          const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          t.setAttribute('x', String(n.x + 6));
+          t.setAttribute('y', String(n.y + 3));
+          t.setAttribute('class', 'gs-label');
+          t.textContent = n.name;
+          nodeGroup.appendChild(t);
+        }
+      }
+      this.svg.appendChild(nodeGroup);
+    }
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-stream-id]').forEach((el) => new GraphStream(el));
+</script>

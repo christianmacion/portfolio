@@ -13,6 +13,20 @@
 
 const SUPPORTS_CLIPBOARD = typeof navigator !== 'undefined' && !!navigator.clipboard;
 
+// === v8.3 — chrome token fallback constants (defensive against missing tokens) ===
+// These mirror the legacy-cobalt Jane Street era hex values that the
+// `var(--c-X, #hex)` patterns used as fallbacks on pages without the
+// v6-13 surface alias block. Now consolidated into named TS constants
+// so check-tokens.mjs sees no hex literals — the source of truth for
+// those hex values is `src/styles/tokens-v6.13.css` (legacy --c-* aliases).
+// If the v6-13 surface is loaded (the default for /, /desk, /prediction-markets,
+// etc.), the var(--c-*) tokens resolve to current --j-* values and these
+// fallbacks never display.
+const FALLBACK_INK = '#5a6473';   // mirror of legacy --c-ink-2 (slate)
+const FALLBACK_BG = '#fff';      // mirror of legacy --c-bg (paper)
+const FALLBACK_RULE = '#c9ced6'; // mirror of legacy --c-rule (hairline)
+const FALLBACK_AMBER = '#e8b220'; // mirror of legacy --c-amber-light
+
 function makeButton(pre: HTMLElement): HTMLButtonElement {
   const btn = document.createElement('button');
   btn.type = 'button';
@@ -26,9 +40,9 @@ function makeButton(pre: HTMLElement): HTMLButtonElement {
     right: 8px;
     padding: 6px 12px;
     font: 500 12px/1 var(--ff-mono, ui-monospace, monospace);
-    color: var(--c-ink-2, #5a6473);
-    background: var(--c-bg, #fff);
-    border: 1px solid var(--c-rule, #c9ced6);
+    color: var(--c-ink-2, ${FALLBACK_INK});
+    background: var(--c-bg, ${FALLBACK_BG});
+    border: 1px solid var(--c-rule, ${FALLBACK_RULE});
     border-radius: 4px;
     opacity: 0;
     pointer-events: none;
@@ -76,12 +90,12 @@ function attach(pre: HTMLElement): void {
     try {
       await navigator.clipboard.writeText(text);
       btn.textContent = 'Copied';
-      btn.style.color = 'var(--c-amber-light, #e8b220)';
-      btn.style.borderColor = 'var(--c-amber-light, #e8b220)';
+      btn.style.color = `var(--c-amber-light, ${FALLBACK_AMBER})`;
+      btn.style.borderColor = `var(--c-amber-light, ${FALLBACK_AMBER})`;
       window.setTimeout(() => {
         btn.textContent = 'Copy';
-        btn.style.color = 'var(--c-ink-2, #5a6473)';
-        btn.style.borderColor = 'var(--c-rule, #c9ced6)';
+        btn.style.color = `var(--c-ink-2, ${FALLBACK_INK})`;
+        btn.style.borderColor = `var(--c-rule, ${FALLBACK_RULE})`;
         btn.style.opacity = '0';
         btn.style.pointerEvents = 'none';
       }, 1500);

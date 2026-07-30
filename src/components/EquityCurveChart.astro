@@ -192,11 +192,19 @@ const gradId = `eq-grad-${hashSeed(`${data.length}|${data[0]}|${data[data.length
 // red for stress. F14 rule: monochrome amber + ink. Calm = amber-soft
 // (positive state, less saturated), stress = ink-2 with 6% opacity
 // (negative state, dimmed — same hue family, sign lives in intensity).
-const regimeFill: Record<'calm' | 'normal' | 'stress', string> = {
-  calm: 'rgba(212, 160, 23, 0.08)',
-  normal: 'rgba(212, 160, 23, 0.05)',
-  stress: 'rgba(173, 186, 199, 0.10)',
-};
+// v8.2.1 — values read from CSS tokens at runtime so palette shifts propagate.
+const regimeFill: Record<'calm' | 'normal' | 'stress', string> = (() => {
+  if (typeof window === 'undefined') {
+    return { calm: 'transparent', normal: 'transparent', stress: 'transparent' };
+  }
+  const s = getComputedStyle(document.documentElement);
+  const tok = (k: string) => s.getPropertyValue(k).trim() || 'transparent';
+  return {
+    calm: tok('--j-calm-tint-soft'),
+    normal: tok('--j-normal-tint-soft'),
+    stress: tok('--j-stress-tint-soft'),
+  };
+})();
 ---
 
 <figure class="eq-chart">
@@ -408,15 +416,16 @@ const regimeFill: Record<'calm' | 'normal' | 'stress', string> = {
   }
   /* v6.11.18 — F14 amber-only migration. Was rgba(63,185,80,0.18) green
      for calm + rgba(248,81,73,0.22) red for stress. Now amber-soft for
-     calm + ink-2 18% for stress. Sign lives in intensity, not hue. */
+     calm + ink-2 18% for stress. Sign lives in intensity, not hue.
+     v8.2.1 — values read from tokens-v6.13.css: --j-calm/normal/stress-tint. */
   .eq-chart__swatch--calm {
-    background: rgba(212, 160, 23, 0.22);
+    background: var(--j-calm-tint);
   }
   .eq-chart__swatch--normal {
-    background: rgba(212, 160, 23, 0.16);
+    background: var(--j-normal-tint);
   }
   .eq-chart__swatch--stress {
-    background: rgba(173, 186, 199, 0.2);
+    background: var(--j-stress-tint);
   }
   .eq-chart__caption {
     font-size: var(--fs-xs);

@@ -1,0 +1,108 @@
+---
+/**
+ * ScrollReveal.astro — v7.7 GENERIC SCROLL-TRIGGERED REVEAL
+ *
+ * Drops a fade+rise reveal on any element. Wraps slot content with
+ * a [data-reveal-target] marker. IntersectionObserver triggers the
+ * reveal once (does not re-trigger on scroll-back).
+ *
+ * Use:
+ *   <ScrollReveal>
+ *     <h2>...</h2>
+ *   </ScrollReveal>
+ *
+ *   <ScrollReveal delayMs={120} rise={12} once={true}>
+ *     ...
+ *   </ScrollReveal>
+ *
+ * Server-rendered shell. Tiny runtime JS (~500 bytes). Reduced-motion-safe
+ * (renders with no animation when prefers-reduced-motion: reduce).
+ */
+interface Props {
+  /** Delay before reveal in ms. Default 0. */
+  delayMs?: number;
+  /** Translation distance in px. Default 12. */
+  rise?: number;
+  /** Reveal once (true) or every time the element enters (false). Default true. */
+  once?: boolean;
+}
+const { delayMs = 0, rise = 12, once = true } = Astro.props;
+const revealId = `reveal-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<div
+  class="scroll-reveal"
+  data-reveal-id={revealId}
+  data-reveal-delay={delayMs}
+  data-reveal-rise={rise}
+  data-reveal-once={once ? 'true' : 'false'}
+>
+  <slot />
+</div>
+
+<style>
+  .scroll-reveal {
+    opacity: 0;
+    transform: translateY(var(--reveal-rise, 12px));
+    transition: opacity 600ms var(--j-ease-out, ease-out),
+                transform 600ms var(--j-ease-out, ease-out);
+    transition-delay: var(--reveal-delay, 0ms);
+    will-change: transform, opacity;
+  }
+  .scroll-reveal.is-revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-reveal {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  class ScrollReveal {
+    root: HTMLElement;
+    obs: IntersectionObserver | null = null;
+
+    constructor(root: HTMLElement) {
+      this.root = root;
+      const rise = parseInt(root.dataset.revealRise || '12');
+      const delay = parseInt(root.dataset.revealDelay || '0');
+      const once = root.dataset.revealOnce !== 'false';
+      root.style.setProperty('--reveal-rise', `${rise}px`);
+      root.style.setProperty('--reveal-delay', `${delay}ms`);
+
+      if (typeof IntersectionObserver === 'undefined') {
+        root.classList.add('is-revealed');
+        return;
+      }
+
+      const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+      if (mq.matches) {
+        root.classList.add('is-revealed');
+        return;
+      }
+
+      this.obs = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) {
+              (e.target as HTMLElement).classList.add('is-revealed');
+              if (once && this.obs) this.obs.unobserve(e.target);
+            } else if (!once) {
+              (e.target as HTMLElement).classList.remove('is-revealed');
+            }
+          }
+        },
+        { rootMargin: '0px 0px -10% 0px', threshold: 0.1 },
+      );
+      this.obs.observe(root);
+    }
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-reveal-id]').forEach((el) => new ScrollReveal(el));
+</script>

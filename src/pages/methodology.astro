@@ -399,6 +399,13 @@ const charter = [
     </div>
   </section>
 
+  <p class="method-canref mono">
+    Open-source canon behind the method:
+    <a href="https://github.com/karpathy/autoresearch" rel="noopener" data-license="MIT" target="_blank">karpathy/autoresearch</a> (MIT) ·
+    <a href="https://github.com/obra/superpowers" rel="noopener" data-license="MIT" target="_blank">obra/superpowers</a> (MIT) ·
+    <a href="https://github.com/jeffallan/claude-skills" rel="noopener" data-license="MIT" target="_blank">ui-ux-pro-max</a> (MIT).
+  </p>
+
   <CTABanner
     title="Method under-spec? Send the JD."
     sub={`If your role has a written spec, send it. I'll respond with which gates from ${GATE_RANGE} already apply to your stack, and which I'd build.`}
@@ -406,6 +413,67 @@ const charter = [
     secondaryLabel="View solutions"
     secondaryHref={path('/solutions')}
   />
+  <section class="method-refs" id="references">
+    <div class="container">
+      <header class="section__head">
+        <p class="section__eyebrow">References &amp; licenses</p>
+        <h2 class="section__title">Where the canon lives.</h2>
+        <p class="section__sub">
+          Ten open-source repositories that anchor the methodology, motion, and chrome contracts on this
+          site. License verified 2026-07-31 against each repo's LICENSE file or README badge.
+        </p>
+      </header>
+      <details class="method-refs__block">
+        <summary>10 references — click to expand</summary>
+        <ul class="method-refs__list mono">
+          <li>
+            <a href="https://github.com/legomushroom/mojs" rel="noopener" data-license="MIT" target="_blank">legomushroom/mojs</a>
+            — MIT — installed for /desk motion
+          </li>
+          <li>
+            <a href="https://github.com/theatre-js/theatre" rel="noopener" data-license="Apache-2.0" target="_blank">theatre-js/theatre</a>
+            — Apache-2.0 (core) / AGPL-3.0 (studio) — reference-only; studio is dev-only
+          </li>
+          <li>
+            <a href="https://github.com/jeffallan/claude-skills" rel="noopener" data-license="MIT" target="_blank">jeffallan/claude-skills (ui-ux-pro-max)</a>
+            — MIT — 7/8 skills symlinked for chrome governance reference
+          </li>
+          <li>
+            <a href="https://github.com/karpathy/autoresearch" rel="noopener" data-license="MIT" target="_blank">karpathy/autoresearch</a>
+            — MIT — pattern-only (autonomous research loop)
+          </li>
+          <li>
+            <a href="https://github.com/obra/superpowers" rel="noopener" data-license="MIT" target="_blank">obra/superpowers</a>
+            — MIT — pattern-only (skill authoring methodology)
+          </li>
+          <li>
+            <a href="https://github.com/i-dencker/research-writing" rel="noopener" data-license="MIT" target="_blank">i-dencker/research-writing</a>
+            — MIT — pattern-only (research-writing methodology)
+          </li>
+          <li>
+            <a href="https://github.com/ImThePony/ponytail" rel="noopener" data-license="MIT" target="_blank">ImThePony/ponytail</a>
+            — MIT — chrome reference (animation primitive)
+          </li>
+          <li>
+            <a href="https://github.com/Imbad0202/academic-research-skills-codex" rel="noopener" data-license="CC-BY-NC-4.0" target="_blank">Imbad0202/academic-research-skills-codex</a>
+            — CC BY-NC 4.0 — reference-only (non-commercial clause)
+          </li>
+          <li>
+            <a href="https://github.com/mendableai/firecrawl" rel="noopener" data-license="AGPL-3.0" target="_blank">mendableai/firecrawl</a>
+            — AGPL-3.0 — pattern-only (no portfolio embed)
+          </li>
+          <li>
+            <a href="https://github.com/addyosmani/addyosmani.github.io" rel="noopener" data-license="MIT" target="_blank">addyosmani/addyosmani.github.io</a>
+            — MIT (inferred) — pattern-only (engineering-blog canon)
+          </li>
+        </ul>
+        <p class="method-refs__note mono">
+          License disclosures verified 2026-07-31. See verification table at
+          <code>~/.claude/cache/stella/research/repo-licenses-2026-07-31.md</code>.
+        </p>
+      </details>
+    </div>
+  </section>
 </BaseLayout>
 
 <style>

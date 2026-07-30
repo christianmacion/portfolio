@@ -269,7 +269,7 @@ const popular = [
     const empty = document.getElementById('search-empty');
     if (empty) {
       empty.innerHTML =
-        '<p style="color: var(--c-ink-2)">Search index unavailable. Run <code>npm run build</code> to regenerate.</p>';
+        '<p class="search-fallback">Search index unavailable. Run <code>npm run build</code> to regenerate.</p>';
     }
   });
 </script>
@@ -357,7 +357,7 @@ const popular = [
     margin: 0;
   }
   :global(#search-root .pagefind-ui__result-excerpt mark) {
-    background: rgba(212, 160, 23, 0.25);
+    background: var(--c-search-mark);
     color: var(--c-ink);
     padding: 0 0.15em;
     border-radius: 2px;
@@ -376,6 +376,10 @@ const popular = [
   /* === Empty state — popular destinations grid === */
   .search-empty {
     margin-top: var(--sp-6);
+  }
+  .search-fallback {
+    color: var(--c-ink-2);
+    margin: 0 0 var(--sp-2);
   }
   .search-empty__title {
     font-size: var(--fs-lg);

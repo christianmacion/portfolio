@@ -8,9 +8,13 @@
  *   - <meta name="robots" content="noindex"> to prevent SEO leakage.
  *   - Quick-link cards (3): /proof, /now, /contact — institutional defaults.
  *   - Search box (Pagefind) so visitors can pivot to a known query.
+ *
+ * v8.0.2 — Added "If you're hiring, start here" CTA strip pointing to
+ * /for-recruiters (recruiter-as-404 visitor = the highest-leverage rescue).
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
 import Equation from '@components/Equation.astro';
+import CTABanner from '@components/CTABanner.astro';
 import { path } from '@utils/url';
 
 const links = [
@@ -113,6 +117,15 @@ const quickCards = [
       </nav>
     </div>
   </section>
+
+  <CTABanner
+    title="If you're hiring, start here."
+    sub="Most 404 visitors are recruiters. The /for-recruiters page answers the 8 questions you'll ask in 60 seconds — availability, location, seats, NDA, resume, reply SLA."
+    primaryLabel="Open recruiter brief"
+    primaryHref={path('/for-recruiters')}
+    secondaryLabel="Read method"
+    secondaryHref={path('/methodology')}
+  />
 </BaseLayout>
 
 <style>

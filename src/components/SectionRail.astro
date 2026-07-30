@@ -1,0 +1,225 @@
+---
+/**
+ * SectionRail.astro — v7.7 SECTION RAIL (segmented navigation)
+ *
+ * Slim vertical-rail segment-control for section navigation on long
+ * pages (proof, research, methodology). Tracks the section the reader
+ * is currently in via IntersectionObserver and updates the active
+ * segment. Click a segment to smooth-scroll to its anchor.
+ *
+ * World-class register: hairline 1px, 8px width, mono labels, no
+ * fill, no gradient, no halo. The active segment shows a 2px amber
+ * marker that animates in with the institutional ease.
+ *
+ * Use:
+ *   <SectionRail sections={[
+ *     { id: 'identity',    label: '01·Identity' },
+ *     { id: 'credentials', label: '02·Credentials' },
+ *     { id: 'code',        label: '03·Code' },
+ *     { id: 'research',    label: '04·Research' },
+ *     { id: 'track',       label: '05·Track' },
+ *   ]} />
+ *
+ * Server-rendered. Tiny runtime JS (~600 bytes). Reduced-motion-safe
+ * (the active-marker transition is opacity + transform, gated by
+ * prefers-reduced-motion at the global layer).
+ */
+interface RailSection {
+  id: string;
+  label: string;
+}
+
+interface Props {
+  sections: RailSection[];
+  /** Position on screen. Default 'right'. */
+  position?: 'left' | 'right';
+}
+const { sections, position = 'right' } = Astro.props;
+const railId = `rail-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<nav
+  class:list={['section-rail', `section-rail--${position}`]}
+  aria-label="Section navigation"
+  data-rail-id={railId}
+  data-rail-sections={JSON.stringify(sections.map((s) => ({ id: s.id, label: s.label })))}
+>
+  <ol class="section-rail__list" role="list">
+    {sections.map((s, i) => (
+      <li class="section-rail__item">
+        <a
+          class="section-rail__link"
+          href={`#${s.id}`}
+          data-rail-target={s.id}
+          aria-label={`Jump to ${s.label}`}
+        >
+          <span class="section-rail__marker" aria-hidden="true"></span>
+          <span class="section-rail__label mono">{s.label}</span>
+        </a>
+      </li>
+    ))}
+  </ol>
+</nav>
+
+<style>
+  .section-rail {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 30;
+    padding: 12px 0;
+    pointer-events: none;
+  }
+  .section-rail--right { right: 16px; }
+  .section-rail--left  { left: 16px;  }
+
+  .section-rail__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    pointer-events: auto;
+  }
+
+  .section-rail__link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 6px;
+    text-decoration: none;
+    color: var(--c-ink-3);
+    transition: color 200ms var(--j-ease-out, ease-out);
+    border-radius: 0;
+  }
+
+  .section-rail__marker {
+    display: block;
+    width: 8px;
+    height: 1px;
+    background: var(--c-ink-3);
+    transition: width 280ms var(--j-ease-out, ease-out),
+                background-color 280ms var(--j-ease-out, ease-out);
+  }
+  .section-rail__link[aria-current="true"] .section-rail__marker {
+    width: 18px;
+    background: var(--c-warn);
+  }
+  .section-rail__link:hover {
+    color: var(--c-ink);
+  }
+  .section-rail__link:hover .section-rail__marker {
+    width: 14px;
+    background: var(--c-ink);
+  }
+
+  .section-rail__label {
+    font: 500 10px / 1.4 var(--ff-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: opacity 220ms var(--j-ease-out, ease-out),
+                transform 220ms var(--j-ease-out, ease-out);
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  .section-rail--right .section-rail__label { transform: translateX(4px); }
+  .section-rail__link:hover .section-rail__label,
+  .section-rail__link[aria-current="true"] .section-rail__label {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  .section-rail__link[aria-current="true"] .section-rail__label {
+    color: var(--c-warn);
+  }
+
+  /* Mobile — collapse to footer-style pager */
+  @media (max-width: 720px) {
+    .section-rail {
+      position: static;
+      transform: none;
+      padding: 8px 16px;
+      border-top: 1px solid var(--c-rule);
+      border-bottom: 1px solid var(--c-rule);
+    }
+    .section-rail__list {
+      flex-direction: row;
+      overflow-x: auto;
+      gap: 4px;
+    }
+    .section-rail__label {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .section-rail__marker,
+    .section-rail__label,
+    .section-rail__link {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  // Tiny runtime — IntersectionObserver + active-section sync.
+  class SectionRail {
+    rail: HTMLElement;
+    sections: { id: string; label: string }[];
+
+    constructor(rail: HTMLElement) {
+      this.rail = rail;
+      this.sections = JSON.parse(rail.dataset.railSections || '[]');
+      const links = Array.from(rail.querySelectorAll<HTMLAnchorElement>('[data-rail-target]'));
+      this.links = links;
+      this.bindScroll();
+      this.bindClicks();
+    }
+
+    links: HTMLAnchorElement[];
+
+    bindScroll() {
+      const obs = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) this.setActive(e.target.id);
+          }
+        },
+        { rootMargin: '-40% 0% -40% 0%', threshold: 0 },
+      );
+      for (const s of this.sections) {
+        const el = document.getElementById(s.id);
+        if (el) obs.observe(el);
+      }
+    }
+
+    setActive(id: string) {
+      for (const a of this.links) {
+        if (a.dataset.railTarget === id) {
+          a.setAttribute('aria-current', 'true');
+        } else {
+          a.removeAttribute('aria-current');
+        }
+      }
+    }
+
+    bindClicks() {
+      for (const a of this.links) {
+        a.addEventListener('click', (ev) => {
+          ev.preventDefault();
+          const id = a.dataset.railTarget;
+          const target = id ? document.getElementById(id) : null;
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            history.replaceState(null, '', `#${id}`);
+          }
+        });
+      }
+    }
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-rail-id]').forEach((r) => new SectionRail(r));
+</script>

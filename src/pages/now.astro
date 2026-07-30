@@ -4,7 +4,7 @@
  *
  * A single dated page that says what I'm shipping this month, who I'm
  * open to working with, what I'm *not* doing, and where I am. Highest-
- * leverage one-page artifact in the 2026 personal-site canon.
+ * impact one-page artifact in the 2026 personal-site canon.
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
 import CTABanner from '@components/CTABanner.astro';
@@ -153,6 +153,7 @@ const updatedHuman = new Date(updated).toLocaleDateString('en-GB', {
           Closest peer work to my <a href={path('/glossary/eval-harness')}>eval-harness</a> + MCP server.
         </li>
         <li><em>Hamlet</em> — Shakespeare. Sometimes you have to step away from the screen.</li>
+        <li><em>Research writing patterns</em> — for technical audiences. <a href="https://github.com/agentipedia/research-writing" target="_blank" rel="noopener noreferrer">GitHub</a> + <em>Karpathy / autoresearch</em> — autonomous research loops. <a href="https://github.com/karpathy/autoresearch" target="_blank" rel="noopener noreferrer">MIT licensed</a>.</li>
       </ul>
 
       <h2 class="now-h2">How to reach me</h2>

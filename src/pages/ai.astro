@@ -19,6 +19,8 @@ import EvalConsole from '@components/EvalConsole.astro';
 import MiniSpark from '@components/MiniSpark.astro';
 import VoiceLine from '@components/VoiceLine.astro';
 import Stat from '@components/Stat.astro';
+import GraphStream from '@components/GraphStream.astro';
+import ScrollReveal from '@components/ScrollReveal.astro';
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { path } from '@utils/url';
 import { profile } from '@utils/profile';
@@ -192,6 +194,24 @@ const platformInputs = [
           <span class="ai-cap-list__v">Feedback → Orchestrator — this is the system</span>
         </li>
       </ul>
+    </div>
+  </section>
+
+  {/* === Section 1.5 — Live graph snapshot (v7.7) === */}
+  <section class="section" id="live-graph" data-toc-id="live-graph" data-toc-label="Live graph">
+    <div class="container">
+      <header class="section__head">
+        <p class="section__eyebrow">Live graph · public-safe slice</p>
+        <h2 class="section__title">The graph is the spine.</h2>
+        <p class="section__sub">
+          Every claim, every artifact, every agent — wired through one knowledge graph
+          that ships at compile time. T1 (5px) > T2 (3.5px) > T3 (2.5px). Squad color
+          marks the channel. NDA-protected entities are filtered out before public.
+        </p>
+      </header>
+      <ScrollReveal delayMs={120} rise={16}>
+        <GraphStream height={420} limit={60} />
+      </ScrollReveal>
     </div>
   </section>
 
