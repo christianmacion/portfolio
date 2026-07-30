@@ -306,7 +306,8 @@ async function main() {
     log('ERROR', `write failed: ${err.message}`);
     const fallback = readFallbackItems();
     writeCache(fallback, 'fallback', true);
-    process.exit(0);
+    // v7.7.93 — Deming SoPK: fail-closed. Was exit(0) (silent degradation).
+    process.exit(1);
   }
 }
 

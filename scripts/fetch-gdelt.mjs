@@ -463,9 +463,10 @@ async function main() {
     log('WARN', 'writing empty cache (source=fallback); live pins will be hidden');
     const fallback = readFallbackEvents();
     writeCache(fallback, 'fallback', true);
-    // Exit 0 — graceful degradation. The deploy still ships; live
-    // events disappear but the static 10-event collection still renders.
-    process.exit(0);
+    // v7.7.93 — Deming SoPK: fail-closed. Was exit(0) (silent degradation).
+    // Now exit(1) so CI flags the degraded mode; the deploy still ships
+    // with the fallback cache, but the gate honesty is preserved.
+    process.exit(1);
   }
 }
 

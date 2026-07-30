@@ -98,12 +98,24 @@ const secondary = [
       <CMMark class="nav__brand-mark" width={40} height={40} />
     </a>
 
-    <input type="checkbox" id="nav-toggle" class="nav__toggle-input" aria-hidden="true" />
-    <label for="nav-toggle" class="nav__toggle" aria-label="Toggle navigation">
+    {/* v7.7.93 — WCAG 2.1.1 + 2.4.3: replaced <input type="checkbox"> + <label>
+        with a real <button aria-expanded aria-controls>. The previous
+        checkbox+label pattern was not keyboard-accessible: the input was
+        display:none (removed from tab order), and <label> is not focusable
+        on its own. Screen-reader + keyboard users could not open the mobile
+        menu. The button keeps the same visible chrome. */}
+    <button
+      id="nav-toggle"
+      type="button"
+      class="nav__toggle"
+      aria-expanded="false"
+      aria-controls="primary-nav"
+      aria-label="Toggle navigation"
+    >
       <span></span><span></span><span></span>
-    </label>
+    </button>
 
-    <nav class="nav__links" aria-label="Primary">
+    <nav id="primary-nav" class="nav__links" aria-label="Primary">
       <div class="nav__primary">
         {
           /* v6.1.0 (Mission G) — Markets dropdown sits BETWEEN Proof and Projects.
@@ -176,6 +188,57 @@ const secondary = [
     </nav>
   </div>
 </header>
+
+<script>
+  /* v7.7.93 — WCAG 2.1.1 + 2.4.3: progressive-enhancement handler.
+     * The <button aria-expanded> pattern needs JS to flip the attribute
+     * (CSS responds via `[aria-expanded="true"] ~ .nav__links`).
+     * If JS is unavailable the menu just doesn't open — keyboard users
+     * still can't reach the menu, but no worse than the pre-fix state,
+     * and screen readers properly announce aria-expanded="false".
+     *
+     * Behaviors:
+     *   click on #nav-toggle → toggle aria-expanded
+     *   Escape → close (if open)
+     *   click outside → close (if open)
+     *   resize past breakpoint → close (prevent stuck-open state)
+     */
+  (function () {
+    const btn = document.getElementById('nav-toggle');
+    const menu = document.getElementById('primary-nav');
+    if (!btn || !menu) return;
+
+    const setOpen = (open: boolean) => {
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    };
+
+    const isOpen = () => btn.getAttribute('aria-expanded') === 'true';
+
+    btn.addEventListener('click', () => setOpen(!isOpen()));
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isOpen()) setOpen(false);
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!isOpen()) return;
+      const t = e.target as Node | null;
+      if (t && (t === btn || btn.contains(t) || menu.contains(t))) return;
+      setOpen(false);
+    });
+
+    let lastBp = window.innerWidth;
+    window.addEventListener('resize', () => {
+      const w = window.innerWidth;
+      if ((lastBp <= 980 && w > 980) || (lastBp > 980 && w <= 980)) {
+        setOpen(false);
+        lastBp = w;
+      } else {
+        lastBp = w;
+      }
+    });
+  })();
+</script>
 
 <style>
   .nav {
@@ -422,9 +485,9 @@ const secondary = [
      was removed (single palette, no light/dark flip) but the CSS
      survived. Aspirational bloat. */
 
-  .nav__toggle-input {
-    display: none;
-  }
+  /* v7.7.93 — WCAG 2.1.1: .nav__toggle is now a real <button> (was
+     <label> for a hidden <input>). Focusable in tab order; aria-expanded
+     toggles via JS. Reset native button chrome. */
   .nav__toggle {
     display: none;
     flex-direction: column;
@@ -433,6 +496,9 @@ const secondary = [
     width: 44px;
     height: 44px;
     cursor: pointer;
+    padding: 0;
+    background: transparent;
+    border: 0;
     /* v7.7.90 — CHROME-10 (WCAG 2.5.5): burger hit-rect was 28×24.
        Expand to 44×44 (the AAA tap target floor); the visible 28×24
        bars inside stay unchanged because of the inner <span>. */
@@ -479,7 +545,10 @@ const secondary = [
       overscroll-behavior: contain;
       box-shadow: none;
     }
-    .nav__toggle-input:checked ~ .nav__links {
+    /* v7.7.93 — was .nav__toggle-input:checked ~ .nav__links. Now uses
+       aria-expanded="true" on the button. The JS handler (inline, see
+       below) toggles the attribute on click. */
+    .nav__toggle[aria-expanded="true"] ~ .nav__links {
       transform: translateY(0);
     }
     /* On mobile: collapse primary row into the flat list, hide the dropdown */

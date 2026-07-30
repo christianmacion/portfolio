@@ -70,6 +70,12 @@ function attach(): void {
   };
   const togglePanel = (): void => {
     if (!panel) return;
+    // v7.7.93 — gate on viewport: keyboard UX not relevant to touch-first
+    // (<=720px). CSS already hides the panel via display:none on mobile, but
+    // without this gate the handler still flips aria-hidden="false" and
+    // strips `hidden`, leaving state incoherent (panel claims open while
+    // CSS hides it). Skip the toggle entirely.
+    if (window.innerWidth < 720) return;
     if (panel.classList.contains('is-open')) closePanel();
     else openPanel();
   };
