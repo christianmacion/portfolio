@@ -22,29 +22,8 @@ const phoneDisplay = profile.contact.phoneDisplay;
 const linkedin = profile.contact.linkedin;
 const NGATE = `${profile.stats.evalGates}-gate`;
 
-// v6.12 — cold-email template. The {placeholder} tokens must appear as
-// literal text (the recruiter is supposed to copy-paste then fill them),
-// not as JSX expressions. Stored as a string in the frontmatter and
-// rendered via <pre>{...}</pre> so Astro doesn't try to evaluate them.
-const emailTemplate = `Subject: [{role-tag}] {seniority} · JD attached — {company}
-
-Hi Christian —
-
-I’m a {your-role} at {company}, sourcing for a {role} seat.
-The JD is attached. Highlights:
-  - {JD bullet 1}
-  - {JD bullet 2}
-  - {JD bullet 3}
-
-If you’re open, I’d like a 30-min screening this {Tue|Wed|Thu}
-between 18:00–22:00 PHT (UTC+8). Full agenda: christianmacion-portfolio.pages.dev/screening-call
-If not, who do you recommend?
-
-— {name}`;
-
-// Same template, ASCII-punctuated, for the mailto body. Slightly different
-// (— → -, ’ → ') so it survives ASCII-only transport cleanly.
-const emailBody = `Hi Christian —\n\nI'm a {your-role} at {company}, sourcing for a {role} seat.\nThe JD is attached. Highlights:\n  - {JD bullet 1}\n  - {JD bullet 2}\n  - {JD bullet 3}\n\nIf you're open, I'd like a 30-min screening this {Tue|Wed|Thu} between 18:00-22:00 PHT (UTC+8).\nFull agenda: https://christianmacion-portfolio.pages.dev/screening-call\n\nIf not, who do you recommend?\n\n— {name}`;
+// v7.7.83 — cold-email template removed per positioning audit (Option B).
+// Replaced by the fit-primer 5-bullet block at L195+. Reserved for git archaeology.
 
 const faqs = [
   {
@@ -61,7 +40,7 @@ const faqs = [
   },
   {
     q: 'Where are they based, and what is their work authorization?',
-    a: `Based in ${loc.display}. Filipino citizen, Philippine passport. Fully remote, all hours delivered over the internet. Familiar with US pre-market (UTC-5 to UTC-8) and APAC overlap windows; primary working hours anchored at UTC+8.`,
+    a: `Based in ${loc.display}. Filipino citizen, Philippine passport. Fully remote, all hours delivered over the internet. Fully remote; UTC+8 primary, APAC and US pre-market overlap available`,
   },
   {
     q: 'Do they have a one-page resume PDF?',
@@ -103,6 +82,13 @@ const jsonLd = {
 >
   <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
+  <!-- ============================================================
+       v7.7.91 — A14 BLACK STRAP REMOVAL (mirrors home).
+       Version stamp DATA preserved in src/utils/build-stamp.ts; the
+       dark band is gone. The version stamp is now rendered in the
+       Footer as a small footnote.
+       ============================================================ -->
+
   <section class="hero">
     <div class="container container--narrow">
       <p class="eyebrow mono">
@@ -114,7 +100,7 @@ const jsonLd = {
       </p>
       <h1 class="hero__title" data-words>{fullName}</h1>
       <VoiceLine class="hero__voice">
-        60-second skim. NDA-clean. Built so a hiring manager can decide in one read.
+        60-second skim. NDA-clean. Each line on this page backs a verifiable artifact in /proof.
       </VoiceLine>
       <p class="hero__sub">
         Senior Quantitative Researcher &amp; AI Engineer. {loc.display}.<br />
@@ -187,47 +173,72 @@ const jsonLd = {
         >
         <a class="btn btn--ghost" href={path('/resume')}>View resumes →</a>
         <a class="btn btn--ghost" href={path('/proof')}>See proof →</a>
-        <a class="btn btn--ghost" href="#cold-email-template">Cold-email template ↓</a>
+        <a class="btn btn--ghost" href="#fit-primer">Fit primer ↓</a>
       </div>
     </div>
   </section>
 
-  <section id="cold-email-template" class="section">
+  <section id="fit-primer" class="section">
     <div class="container container--narrow">
       <header class="section__head">
-        <p class="section__eyebrow mono">intro/</p>
-        <h2 class="section__title">Cold-email template — paste, fill, send.</h2>
+        <p class="section__eyebrow mono">fit/</p>
+        <h2 class="section__title">What gets a fast yes — and a faster no.</h2>
         <p class="section__sub">
-          Copy the block below. Two mailto links pre-fill subject + body. Reply SLA: 4 business
-          hours during UTC+8 day.
+          Five signals I read for. If four line up, reply lands within four business hours during
+          UTC+8 day. If they don't, I tell you in the same window — no black hole.
         </p>
       </header>
 
-      <div class="intro-template">
-        <pre
-          class="intro-template__body mono"
-          aria-label="Cold email template body">{emailTemplate}</pre>
-        <ul class="intro-template__links">
-          <li>
-            <a
-              class="btn btn--primary"
-              href={`mailto:${email}?subject=${encodeURIComponent('[QR] Senior · JD attached — {role}')}&body=${encodeURIComponent(emailBody)}`}
-            >
-              Email [QR] track →
-            </a>
-          </li>
-          <li>
-            <a
-              class="btn btn--ghost"
-              href={`mailto:${email}?subject=${encodeURIComponent('[AI] Eval-first · JD attached — {role}')}&body=${encodeURIComponent(emailBody)}`}
-            >
-              Email [AI] track →
-            </a>
-          </li>
-          <li class="intro-template__meta">
-            Reply SLA · 4 business hours during UTC+8 day. Cold DMs: 24h SLA.
-          </li>
-        </ul>
+      <ol class="fit-primer">
+        <li class="fit-primer__item">
+          <p class="fit-primer__q">Senior QR, QR-rotational, or research-engineer seat.</p>
+          <p class="fit-primer__a">
+            Staff, lead, or solo IC only. QR-rotational considered when there is a named desk and a
+            named PM. Junior seats, analyst-as-tickets, or "researcher in name, data engineer in
+            practice" — pass.
+          </p>
+        </li>
+        <li class="fit-primer__item">
+          <p class="fit-primer__q">Public-data reproducibility is the bar.</p>
+          <p class="fit-primer__a">
+            Every artifact on this site ships NDA-clean by construction: Yahoo Finance, CoinGecko,
+            FRED, EDGAR, public CME/CBOE chains. If your desk needs proprietary alpha or non-public
+            signal, this is the wrong seat.
+          </p>
+        </li>
+        <li class="fit-primer__item">
+          <p class="fit-primer__q">A comp band that respects senior signal.</p>
+          <p class="fit-primer__a">
+            Senior QR comp at the firm's listed location, fully-remote EOR. If your band is below
+            that, the conversation is short — and I will recommend someone else.
+          </p>
+        </li>
+        <li class="fit-primer__item">
+          <p class="fit-primer__q">Async-first, written-spec screening.</p>
+          <p class="fit-primer__a">
+            18:00–22:00 PHT (UTC+8) is my overlap window. I do not interview by phone without a
+            written JD in hand. Full agenda at christianmacion-portfolio.pages.dev/screening-call.
+          </p>
+        </li>
+        <li class="fit-primer__item">
+          <p class="fit-primer__q">A manager I can name, not a funnel stage.</p>
+          <p class="fit-primer__a">
+            If the role goes through three layers of "talent partner" before I see a hiring manager,
+            the seat is junior-coded. Pass.
+          </p>
+        </li>
+      </ol>
+
+      <div class="fit-primer__cta">
+        <a
+          class="btn btn--primary"
+          href={`mailto:${email}?subject=${encodeURIComponent('[Senior QR] JD attached — {role-tag}')}&body=${encodeURIComponent('Hi Christian —\n\nJD attached. Range + desk + manager name in the first reply.\n\n— {name}')}`}
+        >
+          Email {fullName.split(',')[0]} →
+        </a>
+        <p class="fit-primer__sla mono">
+          Reply SLA · 4 business hours during UTC+8 day · 24h on weekends.
+        </p>
       </div>
     </div>
   </section>
@@ -239,6 +250,11 @@ const jsonLd = {
         <h2 class="section__title">Reading paths — choose by role.</h2>
         <p class="section__sub">Two ways to skim. Same site. Same eval gates. Different subset.</p>
       </header>
+
+      <p class="section__sub">
+        Both lanes share the same eval-gate methodology, the same proof artifacts, and the same
+        resume stack — two outputs of one practice, not two practices.
+      </p>
 
       <div class="persona-grid">
         <article class="persona-card">
@@ -338,8 +354,8 @@ const jsonLd = {
         </p>
         <p class="contact__next mono">
           <span class="contact__next-tag">NEXT</span>
-          A recruiter-grade summary stack + graph engineering as the integrating layer across the 31-gate
-          eval harness. Reply lands within 24h on weekdays.
+          A recruiter-grade summary stack + a 31-gate frozen-spec eval harness. Reply lands within 24h
+          on weekdays.
         </p>
       </div>
     </div>
@@ -528,55 +544,56 @@ const jsonLd = {
     }
   }
 
-  /* v6.12 — cold-email template block. Two-column on desktop, stacked on
-     mobile. Mailto deep-links pre-fill subject + body via encodeURIComponent. */
-  .intro-template {
-    display: grid;
-    grid-template-columns: 1.4fr 1fr;
-    gap: var(--sp-5);
-    align-items: start;
-  }
-  .intro-template__body {
-    background: var(--c-bg);
-    border: 1px solid var(--c-rule);
-    border-radius: var(--radius);
-    padding: var(--sp-5);
-    font-size: var(--fs-sm);
-    line-height: 1.55;
-    color: var(--c-ink);
-    white-space: pre-wrap;
-    word-break: break-word;
-    overflow-x: auto;
-    margin: 0;
-  }
-  .intro-template__links {
+  /* v7.7.83 — fit-primer block (5-bullet senior-set-terms primer). Replaces
+     the v6.12 cold-email template. Single mailto CTA + SLA footer. */
+  .fit-primer {
     list-style: none;
+    margin: 0 0 var(--sp-7);
     padding: 0;
+    counter-reset: fit;
+    border-top: var(--border);
+  }
+  .fit-primer__item {
+    padding-block: var(--sp-5);
+    border-bottom: var(--border);
+    counter-increment: fit;
+    position: relative;
+    padding-left: calc(2.5ch + var(--sp-3));
+  }
+  .fit-primer__item::before {
+    content: counter(fit, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: var(--sp-5);
+    font-family: var(--ff-mono);
+    font-size: var(--fs-sm);
+    color: var(--c-amber-deep);
+    letter-spacing: 0.05em;
+  }
+  .fit-primer__q {
+    margin: 0 0 var(--sp-2);
+    font-weight: 600;
+    color: var(--c-ink);
+    font-size: var(--fs-base);
+    line-height: 1.4;
+  }
+  .fit-primer__a {
     margin: 0;
+    color: var(--c-ink-2);
+    font-size: var(--fs-sm);
+    line-height: var(--lh-loose);
+    max-width: 64ch;
+  }
+  .fit-primer__cta {
     display: flex;
-    flex-direction: column;
-    gap: var(--sp-3);
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-4);
   }
-  .intro-template__links li {
-    margin: 0;
-  }
-  .intro-template__links .btn {
-    width: 100%;
-    justify-content: center;
-  }
-  .intro-template__meta {
+  .fit-primer__sla {
     color: var(--c-ink-3);
     font-size: var(--fs-xs);
-    font-family: var(--ff-mono);
-    line-height: var(--lh-loose);
-    padding-top: var(--sp-2);
-    border-top: 1px solid var(--c-rule-soft);
-  }
-
-  @media (max-width: 720px) {
-    .intro-template {
-      grid-template-columns: 1fr;
-    }
+    letter-spacing: 0.04em;
   }
 
   /* v6.12 — persona split. 2-pane reading-path grid; single column on
@@ -681,7 +698,7 @@ const jsonLd = {
     display: inline-block;
     padding: 2px 8px;
     border: 1px solid var(--c-amber-deep);
-    border-radius: 999px;
+    border-radius: 2px;
     color: var(--c-amber-deep);
     font-weight: 600;
     font-size: 10px;

@@ -236,7 +236,11 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
         tail: `${profile.stats.evalGates} GATES · EXIT-0 CONTRACT`,
         accent: 'warn',
       },
-      { head: '24H SCAN', tail: '6 VENUES · 10 EVENTS · 100+ SIGNALS', accent: 'sage' },
+      {
+        head: '24H SCAN',
+        tail: `${venueCount} VENUES · ${events.length} EVENTS · ${archSafe.agentCount}-AGENT SCAN`,
+        accent: 'sage',
+      },
       { head: 'TIMEZONE-AWARE', tail: 'UTC+8 DESK · 3/24 OVERLAP', accent: 'violet' },
       { head: 'REGIME-TAGGED', tail: 'CALM · NORMAL · STRESS', accent: 'terracotta' },
       { head: 'PIT STRICT', tail: 'NO LOOKAHEAD · NO SURVIVORSHIP', accent: 'sage' },
@@ -1280,26 +1284,32 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     cursor: not-allowed;
   }
   .desk-events__chip-btn--critical {
-    color: #8a1f1f;
-    border-color: rgba(138, 31, 31, 0.4);
+    /* v7.7.89 — was raw hex #8a1f1f (F14 traffic-light violation; no-f14 gate
+       missed it because the gate scans --c-* tokens, not raw hex).
+       Now tokenized via --c-ink-2 (12.05:1 AAA on --c-bg). */
+    color: var(--c-ink-2);
+    border-color: color-mix(in oklab, var(--c-ink-2) 40%, transparent);
   }
   .desk-events__chip-btn--critical:hover:not(:disabled) {
-    background: rgba(138, 31, 31, 0.06);
+    background: color-mix(in oklab, var(--c-ink-2) 6%, transparent);
   }
   .desk-events__chip-btn--moderate {
-    /* v7.7.58 — was #8a6a2d 4.00:1 (FAIL AA on --c-bg). Now mirrors --j-warn light (4.52:1 PASS). */
-    color: #806229;
-    border-color: rgba(138, 106, 45, 0.4);
+    /* v7.7.58 — was #8a6a2d 4.00:1 (FAIL AA on --c-bg). Now mirrors --j-warn light (4.52:1 PASS).
+       v7.7.89 — tokenized to var(--c-warn-deep) for source-of-truth. */
+    color: var(--c-warn-deep);
+    border-color: color-mix(in oklab, var(--c-warn-deep) 40%, transparent);
   }
   .desk-events__chip-btn--moderate:hover:not(:disabled) {
-    background: rgba(138, 106, 45, 0.06);
+    background: color-mix(in oklab, var(--c-warn-deep) 6%, transparent);
   }
   .desk-events__chip-btn--mild {
-    color: #2d6b3a;
-    border-color: rgba(45, 107, 58, 0.4);
+    /* v7.7.89 — was raw hex #2d6b3a (F14 traffic-light violation).
+       Sign lives in intensity (border weight / opacity), not hue. */
+    color: var(--c-ink-3);
+    border-color: color-mix(in oklab, var(--c-ink-3) 40%, transparent);
   }
   .desk-events__chip-btn--mild:hover:not(:disabled) {
-    background: rgba(45, 107, 58, 0.06);
+    background: color-mix(in oklab, var(--c-ink-3) 6%, transparent);
   }
   .desk-events__count {
     margin-left: auto;

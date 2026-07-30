@@ -7,12 +7,13 @@
  */
 import { profile } from '@utils/profile';
 import { path } from '@utils/url';
-import { buildYear, buildStampUtc8 } from '@utils/build-stamp';
+import { buildYear, buildStampUtc8, packageVersion } from '@utils/build-stamp';
 import BrandMotif from '@components/BrandMotif.astro';
 import Avatar from '@components/Avatar.astro';
 
 const year = buildYear();
 const deployedStamp = buildStampUtc8();
+const pkgVersion = packageVersion();
 ---
 
 <footer class="footer">
@@ -151,6 +152,15 @@ const deployedStamp = buildStampUtc8();
         </small>
         <small class="mono">
           portfolio.os · last deployed {deployedStamp} · built with Astro
+        </small>
+        {
+          /* v7.7.92 — version stamp maintained post A14. */
+          /* v7.7.91 — A14: version stamp moved here from the removed hero-anchor
+           band. Hairline-styled footnote: mono, 9-10px, tracking 0.1em, color
+           --c-ink-3. Not the dominant visual — institutional chrome, not chrome strap. */
+        }
+        <small class="footer__version mono" aria-label="Site version">
+          v{pkgVersion} · {deployedStamp}
         </small>
       </div>
     </div>
@@ -291,6 +301,15 @@ const deployedStamp = buildStampUtc8();
   .footer__base-meta a:focus-visible {
     color: var(--c-primary-2-light);
     text-decoration-color: var(--c-amber);
+  }
+  /* v7.7.91 — A14 footer version stamp. Hairline footnote: mono, 9-10px,
+     tracking 0.1em, --c-ink-3. Chrome contract: mono + 1 amber elsewhere,
+     ink-3 here for "whisper" register. */
+  .footer__version {
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--c-ink-3);
   }
 
   @media (max-width: 880px) {

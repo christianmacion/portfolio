@@ -160,7 +160,11 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
       { head: 'CHRONOLOGICAL', tail: 'DESC · 24H WINDOW', accent: 'sage' },
       { head: 'NDA-POSITIVE', tail: 'NO EMPLOYER · NO PLATFORM', accent: 'violet' },
       { head: 'PUBLIC-DATA', tail: 'GDPR-CLEAN · CC-BY', accent: 'sage' },
-      { head: 'EVAL-FIRST', tail: '6 GATES · EXIT-0 CONTRACT', accent: 'warn' },
+      {
+        head: 'EVAL-FIRST',
+        tail: `${profile.stats.evalGates} GATES · EXIT-0 CONTRACT`,
+        accent: 'warn',
+      },
       { head: 'CHAIN-OF-CUSTODY', tail: 'SEED → SIGNAL → CITATION', accent: 'sage' },
       { head: 'TIMEZONE-AWARE', tail: 'UTC+8 DESK · ISO TIMESTAMPS', accent: 'terracotta' },
     ]}

@@ -52,7 +52,7 @@ function walk(dir, files = []) {
   return files;
 }
 
-function hasAccessibleName(attrs, inner) {
+function hasAccessibleName(attrs, _inner) {
   // Match quoted aria-labelledby / aria-label AND Astro/JSX expression values.
   if (/\baria-labelledby\s*=\s*(?:"[^"]+"|'[^']+'|\{[^}]+\})/i.test(attrs)) return true;
   if (/\baria-label\s*=\s*(?:"[^"]+"|'[^']+'|\{[^}]+\})/i.test(attrs)) return true;

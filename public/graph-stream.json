@@ -1,696 +1,885 @@
 {
-  "generated": "2026-07-28T11:12:30.593Z",
+  "generated": "2026-07-30T09:53:35.012Z",
   "counts": {
-    "agents": 120,
-    "skills": 123,
-    "relations": 4151
+    "agents": 134,
+    "skills": 142,
+    "relations": 6594
   },
   "agents": [
     {
+      "id": "agent:org-chart-ascii",
+      "name": "ORG-CHART-ASCII",
+      "tier": "T3",
+      "squad": "other",
+      "mark": ""
+    },
+    {
+      "id": "agent:schema",
+      "name": "SCHEMA",
+      "tier": "T3",
+      "squad": "other",
+      "mark": ""
+    },
+    {
       "id": "agent:a11y-specialist",
       "name": "a11y_specialist",
-      "tier": "senior-specialist",
+      "tier": "T3",
       "squad": "G",
-      "mark": "♿"
+      "mark": ""
     },
     {
       "id": "agent:academic-analyst",
       "name": "academic_analyst",
-      "tier": "senior-specialist",
+      "tier": "T3",
       "squad": "OSINT",
-      "mark": "🎓"
+      "mark": ""
     },
     {
       "id": "agent:ai-architect",
       "name": "ai_architect",
-      "tier": "specialist",
+      "tier": "T3",
       "squad": "B",
-      "mark": "🏗️"
+      "mark": ""
     },
     {
       "id": "agent:ai-engineer",
       "name": "ai_engineer",
-      "tier": "specialist",
+      "tier": "T3",
       "squad": "B",
-      "mark": "⚙️"
+      "mark": ""
     },
     {
       "id": "agent:alpha-researcher",
       "name": "alpha_researcher",
-      "tier": "squad-pm",
+      "tier": "T3",
       "squad": "C",
-      "mark": "🔭"
+      "mark": ""
     },
     {
       "id": "agent:architecture-designer",
       "name": "architecture_designer",
       "tier": "T3",
-      "squad": "S",
-      "mark": "🏛️"
+      "squad": "other",
+      "mark": ""
+    },
+    {
+      "id": "agent:arendt-doctrine-owner",
+      "name": "arendt_doctrine_owner",
+      "tier": "T3",
+      "squad": "E",
+      "mark": ""
     },
     {
       "id": "agent:audit-specialist",
       "name": "audit_specialist",
-      "tier": "senior-specialist",
+      "tier": "T3",
       "squad": "OSINT",
-      "mark": "🔍"
+      "mark": ""
     },
     {
       "id": "agent:back-end-engineer",
       "name": "back_end_engineer",
-      "tier": "senior-specialist",
+      "tier": "T3",
       "squad": "G",
-      "mark": "⚙️"
+      "mark": ""
     },
     {
       "id": "agent:behavioral-economist",
       "name": "behavioral_economist",
-      "tier": "senior-specialist",
+      "tier": "T3",
       "squad": "E",
-      "mark": "🧠"
+      "mark": ""
     },
     {
       "id": "agent:burnout-watchdog",
       "name": "burnout_watchdog",
-      "tier": "specialist",
+      "tier": "T3",
       "squad": "F",
-      "mark": "🚨"
+      "mark": ""
     },
     {
       "id": "agent:cash-goal-arbitrage-analyst",
       "name": "cash_goal_arbitrage_analyst",
-      "tier": "specialist",
+      "tier": "T3",
       "squad": "A",
-      "mark": "💸"
+      "mark": ""
     },
     {
       "id": "agent:chief-of-staff",
       "name": "chief_of_staff",
-      "tier": "T1",
+      "tier": "T3",
       "squad": "F",
-      "mark": "🎖️"
+      "mark": ""
     },
     {
       "id": "agent:communications-officer",
       "name": "communications_officer",
-      "tier": "squad-pm",
+      "tier": "T3",
       "squad": "A",
-      "mark": "📢"
+      "mark": ""
     },
     {
       "id": "agent:compliance-officer",
       "name": "compliance_officer",
-      "tier": "leadership",
-      "squad": "D",
-      "mark": "⚖️"
+      "tier": "T3",
+      "squad": "other",
+      "mark": ""
     },
     {
       "id": "agent:comptroller",
       "name": "comptroller",
-      "tier": "leadership",
+      "tier": "T3",
       "squad": "D",
-      "mark": "💰"
+      "mark": ""
     },
     {
       "id": "agent:content-strategist",
       "name": "content_strategist",
-      "tier": "specialist",
+      "tier": "T3",
       "squad": "A",
-      "mark": "📰"
+      "mark": ""
     },
     {
       "id": "agent:contrarian-officer",
       "name": "contrarian_officer",
-      "tier": "leadership",
+      "tier": "T3",
       "squad": "F",
-      "mark": "🦂"
+      "mark": ""
+    },
+    {
+      "id": "agent:corporate-counsel",
+      "name": "corporate_counsel",
+      "tier": "T3",
+      "squad": "other",
+      "mark": ""
     },
     {
       "id": "agent:corporate-osint-analyst",
       "name": "corporate_osint_analyst",
-      "tier": "senior-specialist",
+      "tier": "T3",
       "squad": "OSINT",
-      "mark": "🏢"
+      "mark": ""
     },
     {
       "id": "agent:cti-analyst",
       "name": "cti_analyst",
-      "tier": "senior-specialist",
+      "tier": "T3",
       "squad": "OSINT",
-      "mark": "🦠"
+      "mark": ""
     },
     {
       "id": "agent:curriculum-engineer",
       "name": "curriculum_engineer",
-      "tier": "specialist",
+      "tier": "T3",
       "squad": "F",
-      "mark": "📚"
+      "mark": ""
     },
     {
       "id": "agent:darkweb-analyst",
       "name": "darkweb_analyst",
-      "tier": "senior-specialist",
+      "tier": "T3",
       "squad": "OSINT",
-      "mark": "🕳️"
+      "mark": ""
     },
     {
       "id": "agent:data-engineer",
       "name": "data_engineer",
-      "tier": "specialist",
+      "tier": "T3",
       "squad": "C",
-      "mark": "🗄️"
+      "mark": ""
+    },
+    {
+      "id": "agent:data-privacy-officer",
+      "name": "data_privacy_officer",
+      "tier": "T3",
+      "squad": "other",
+      "mark": ""
     },
     {
       "id": "agent:davao-filipino-language-coach",
       "name": "davao-filipino-language-coach",
-      "tier": "specialist",
+      "tier": "T3",
       "squad": "E",
-      "mark": "🗣️"
+      "mark": ""
+    },
+    {
+      "id": "agent:deming-doctrine-owner",
+      "name": "deming_doctrine_owner",
+      "tier": "T3",
+      "squad": "E",
+      "mark": ""
     },
     {
       "id": "agent:devops-engineer",
       "name": "devops_engineer",
-      "tier": "senior-specialist",
+      "tier": "T3",
       "squad": "G",
-      "mark": "🚢"
+      "mark": ""
     },
     {
       "id": "agent:economist",
       "name": "economist",
-      "tier": "senior-specialist",
+      "tier": "T3",
       "squad": "E",
-      "mark": "🏛️"
+      "mark": ""
     },
     {
       "id": "agent:editorial-director",
       "name": "editorial_director",
-      "tier": "specialist",
+      "tier": "T3",
       "squad": "A",
-      "mark": "📝"
+      "mark": ""
     },
     {
       "id": "agent:eval-harness-lead",
       "name": "eval_harness_lead",
-      "tier": "squad-pm",
+      "tier": "T3",
       "squad": "B",
-      "mark": "🎛️"
+      "mark": ""
     },
     {
       "id": "agent:execution-officer",
       "name": "execution_officer",
-      "tier": "T1",
+      "tier": "T3",
       "squad": "F",
-      "mark": "🔨"
+      "mark": ""
+    },
+    {
+      "id": "agent:finance-manager",
+      "name": "finance_manager",
+      "tier": "T3",
+      "squad": "other",
+      "mark": ""
     },
     {
       "id": "agent:financial-consultant",
       "name": "financial_consultant",
-      "tier": "senior-specialist",
+      "tier": "T3",
       "squad": "E",
-      "mark": "📈"
+      "mark": ""
     },
     {
       "id": "agent:financial-intel-analyst",
       "name": "financial_intel_analyst",
-      "tier": "senior-specialist",
+      "tier": "T3",
       "squad": "OSINT",
-      "mark": "💰"
+      "mark": ""
     },
     {
       "id": "agent:framing-honesty-calibrator",
       "name": "framing_honesty_calibrator",
-      "tier": "leadership",
+      "tier": "T3",
       "squad": "D",
-      "mark": "🪞"
+      "mark": ""
     },
     {
       "id": "agent:front-end-engineer",
       "name": "front_end_engineer",
-      "tier": "senior-specialist",
+      "tier": "T3",
       "squad": "G",
-      "mark": "🛠️"
+      "mark": ""
     },
     {
       "id": "agent:geoint-analyst",
       "name": "geoint_analyst",
-      "tier": "senior-specialist",
+      "tier": "T3",
       "squad": "OSINT",
-      "mark": "🌍"
+      "mark": ""
+    },
+    {
+      "id": "agent:goal-architect",
+      "name": "goal_architect",
+      "tier": "T3",
+      "squad": "other",
+      "mark": ""
     },
     {
       "id": "agent:goal-keeper",
       "name": "goal_keeper",
-      "tier": "specialist",
+      "tier": "T3",
       "squad": "F",
-      "mark": "🏁"
+      "mark": ""
+    },
+    {
+      "id": "agent:goldratt-doctrine-owner",
+      "name": "goldratt_doctrine_owner",
+      "tier": "T3",
+      "squad": "F",
+      "mark": ""
     },
     {
       "id": "agent:graph-adoption-officer",
       "name": "graph_adoption_officer",
-      "tier": "senior-specialist",
-      "squad": "F",
-      "mark": "🌐"
+      "tier": "T3",
+      "squad": "other",
+      "mark": ""
     },
     {
       "id": "agent:graph-engineer",
       "name": "graph_engineer",
-      "tier": "senior-specialist",
-      "squad": "B",
-      "mark": "🕸️"
+      "tier": "T3",
+      "squad": "other",
+      "mark": ""
     },
     {
       "id": "agent:hf-researcher",
       "name": "hf_researcher",
-      "tier": "specialist",
+      "tier": "T3",
       "squad": "C",
-      "mark": "🏛️"
+      "mark": ""
     },
     {
       "id": "agent:hr-auditor",
       "name": "hr_auditor",
-      "tier": "leadership",
+      "tier": "T3",
       "squad": "F",
-      "mark": "📊"
+      "mark": ""
+    },
+    {
+      "id": "agent:hr-director",
+      "name": "hr_director",
+      "tier": "T3",
+      "squad": "other",
+      "mark": ""
     },
     {
       "id": "agent:hugo-trader",
       "name": "hugo_trader",
-      "tier": "specialist",
+      "tier": "T3",
       "squad": "C",
-      "mark": "⚡"
+      "mark": ""
     },
     {
       "id": "agent:idea-validator",
       "name": "idea_validator",
       "tier": "T3",
-      "squad": "S",
-      "mark": "🔬"
+      "squad": "other",
+      "mark": ""
     },
     {
       "id": "agent:identity-analyst",
       "name": "identity_analyst",
-      "tier": "senior-specialist",
+      "tier": "T3",
       "squad": "OSINT",
-      "mark": "🪪"
+      "mark": ""
     },
     {
       "id": "agent:imint-analyst",
       "name": "imint_analyst",
-      "tier": "senior-specialist",
+      "tier": "T3",
       "squad": "OSINT",
-      "mark": "📷"
+      "mark": ""
     },
     {
       "id": "agent:innovation-consultant",
       "name": "innovation_consultant",
-      "tier": "senior-specialist",
+      "tier": "T3",
       "squad": "E",
-      "mark": "💡"
+      "mark": ""
     },
     {
       "id": "agent:intelligence-officer",
       "name": "intelligence_officer",
-      "tier": "squad-pm",
+      "tier": "T3",
       "squad": "E",
-      "mark": "🛰️"
+      "mark": ""
+    },
+    {
+      "id": "agent:ip-counsel",
+      "name": "ip_counsel",
+      "tier": "T3",
+      "squad": "other",
+      "mark": ""
     },
     {
       "id": "agent:jd-keyword-aligner",
       "name": "jd_keyword_aligner",
-      "tier": "specialist",
+      "tier": "T3",
       "squad": "A",
-      "mark": "🔑"
+      "mark": ""
+    },
+    {
+      "id": "agent:kahneman-doctrine-owner",
+      "name": "kahneman_doctrine_owner",
+      "tier": "T3",
+      "squad": "E",
+      "mark": ""
+    },
+    {
+      "id": "agent:labor-counsel",
+      "name": "labor_counsel",
+      "tier": "T3",
+      "squad": "other",
+      "mark": ""
+    },
+    {
+      "id": "agent:legal-architect",
+      "name": "legal_architect",
+      "tier": "T3",
+      "squad": "other",
+      "mark": ""
     },
     {
       "id": "agent:leverage-strategist",
       "name": "leverage_strategist",
-      "tier": "senior-specialist",
+      "tier": "T3",
       "squad": "OSINT",
-      "mark": "♟️"
+      "mark": ""
+    },
+    {
+      "id": "agent:litigation-strategist",
+      "name": "litigation_strategist",
+      "tier": "T3",
+      "squad": "other",
+      "mark": ""
     },
     {
       "id": "agent:logistics-officer",
       "name": "logistics_officer",
-      "tier": "squad-pm",
+      "tier": "T3",
       "squad": "D",
-      "mark": "📦"
+      "mark": ""
     },
     {
       "id": "agent:loop-engineer",
       "name": "loop_engineer",
-      "tier": "specialist",
+      "tier": "T3",
       "squad": "D",
-      "mark": "🔁"
+      "mark": ""
     },
     {
       "id": "agent:marketing-consultant",
       "name": "marketing_consultant",
-      "tier": "senior-specialist",
+      "tier": "T3",
       "squad": "E",
-      "mark": "🎯"
+      "mark": ""
     },
     {
       "id": "agent:mcp-eval-engineer",
       "name": "mcp_eval_engineer",
-      "tier": "specialist",
+      "tier": "T3",
       "squad": "B",
-      "mark": "🧪"
+      "mark": ""
     },
     {
       "id": "agent:mcp-server-eng",
       "name": "mcp_server_eng",
-      "tier": "specialist",
+      "tier": "T3",
       "squad": "B",
-      "mark": "🔌"
+      "mark": ""
     },
     {
       "id": "agent:media-intel-analyst",
       "name": "media_intel_analyst",
-      "tier": "senior-specialist",
+      "tier": "T3",
       "squad": "OSINT",
-      "mark": "📰"
+      "mark": ""
+    },
+    {
+      "id": "agent:milestone-tracker",
+      "name": "milestone_tracker",
+      "tier": "T3",
+      "squad": "other",
+      "mark": ""
     },
     {
       "id": "agent:motion-designer",
       "name": "motion_designer",
-      "tier": "senior-specialist",
+      "tier": "T3",
       "squad": "G",
-      "mark": "🎬"
+      "mark": ""
+    },
+    {
+      "id": "agent:munger-doctrine-owner",
+      "name": "munger_doctrine_owner",
+      "tier": "T3",
+      "squad": "F",
+      "mark": ""
     },
     {
       "id": "agent:nda-counsel",
       "name": "nda_counsel",
       "tier": "T3",
-      "squad": "S",
-      "mark": "⚖️"
+      "squad": "other",
+      "mark": ""
     },
     {
       "id": "agent:nda-preflight",
       "name": "nda_preflight",
-      "tier": "specialist",
+      "tier": "T3",
       "squad": "D",
-      "mark": "🛂"
+      "mark": ""
     },
     {
       "id": "agent:negotiation-advisor",
       "name": "negotiation_advisor",
-      "tier": "senior-specialist",
+      "tier": "T3",
       "squad": "E",
-      "mark": "🤝"
+      "mark": ""
     },
     {
       "id": "agent:numerai-researcher",
       "name": "numerai_researcher",
-      "tier": "specialist",
+      "tier": "T3",
       "squad": "C",
-      "mark": "🎯"
+      "mark": ""
     },
     {
       "id": "agent:ojph-redflag-triage",
       "name": "ojph_redflag_triage",
-      "tier": "specialist",
+      "tier": "T3",
       "squad": "A",
-      "mark": "🚩"
+      "mark": ""
     },
     {
       "id": "agent:operations-consultant",
       "name": "operations_consultant",
-      "tier": "senior-specialist",
+      "tier": "T3",
       "squad": "E",
-      "mark": "⚙️"
+      "mark": ""
     },
     {
       "id": "agent:operations-officer",
       "name": "operations_officer",
-      "tier": "leadership",
+      "tier": "T3",
       "squad": "D",
-      "mark": "🧭"
+      "mark": ""
     },
     {
       "id": "agent:osint-director",
       "name": "osint_director",
-      "tier": "senior-specialist",
+      "tier": "T3",
       "squad": "OSINT",
-      "mark": "🔬"
+      "mark": ""
     },
     {
       "id": "agent:osint-engineer",
       "name": "osint_engineer",
-      "tier": "senior-specialist",
+      "tier": "T3",
       "squad": "OSINT",
-      "mark": "🛠️"
+      "mark": ""
     },
     {
       "id": "agent:osint-reviewer",
       "name": "osint_reviewer",
-      "tier": "senior-specialist",
+      "tier": "T3",
       "squad": "OSINT",
-      "mark": "📋"
+      "mark": ""
     },
     {
       "id": "agent:osint-targeting-analyst",
       "name": "osint_targeting_analyst",
-      "tier": "senior-specialist",
+      "tier": "T3",
       "squad": "OSINT",
-      "mark": "🎯"
+      "mark": ""
     },
     {
       "id": "agent:pedagogy-officer",
       "name": "pedagogy_officer",
-      "tier": "leadership",
+      "tier": "T3",
       "squad": "F",
-      "mark": "🦉"
+      "mark": ""
     },
     {
       "id": "agent:people-graph-analyst",
       "name": "people_graph_analyst",
-      "tier": "senior-specialist",
+      "tier": "T3",
       "squad": "OSINT",
-      "mark": "👪"
+      "mark": ""
+    },
+    {
+      "id": "agent:performance-auditor",
+      "name": "performance_auditor",
+      "tier": "T3",
+      "squad": "other",
+      "mark": ""
     },
     {
       "id": "agent:pilot-runner",
       "name": "pilot_runner",
       "tier": "T3",
-      "squad": "S",
-      "mark": "🚀"
+      "squad": "other",
+      "mark": ""
     },
     {
       "id": "agent:pitch-strategist",
       "name": "pitch_strategist",
       "tier": "T3",
-      "squad": "S",
-      "mark": "🎤"
+      "squad": "other",
+      "mark": ""
     },
     {
       "id": "agent:planning-officer",
       "name": "planning_officer",
-      "tier": "T1",
+      "tier": "T3",
       "squad": "F",
-      "mark": "📋"
+      "mark": ""
     },
     {
       "id": "agent:product-strategist",
       "name": "product_strategist",
-      "tier": "senior-specialist",
+      "tier": "T3",
       "squad": "E",
-      "mark": "🛠️"
+      "mark": ""
     },
     {
       "id": "agent:prompt-engineer",
       "name": "prompt_engineer",
-      "tier": "specialist",
+      "tier": "T3",
       "squad": "B",
-      "mark": "✏️"
+      "mark": ""
     },
     {
       "id": "agent:prompt-optimizer",
       "name": "prompt_optimizer",
-      "tier": "specialist",
+      "tier": "T3",
       "squad": "B",
-      "mark": "🔧"
+      "mark": ""
     },
     {
       "id": "agent:proposal-strategist",
       "name": "proposal_strategist",
       "tier": "T3",
-      "squad": "S",
-      "mark": "📑"
+      "squad": "other",
+      "mark": ""
     },
     {
       "id": "agent:public-facing-educator",
       "name": "public_facing_educator",
-      "tier": "specialist",
+      "tier": "T3",
       "squad": "F",
-      "mark": "🛡️"
+      "mark": ""
     },
     {
       "id": "agent:qa-engineer",
       "name": "qa_engineer",
-      "tier": "senior-specialist",
+      "tier": "T3",
       "squad": "G",
-      "mark": "✓"
+      "mark": ""
     },
     {
       "id": "agent:quality-officer",
       "name": "quality_officer",
-      "tier": "leadership",
+      "tier": "T3",
       "squad": "D",
-      "mark": "✓"
+      "mark": ""
     },
     {
       "id": "agent:rag-architect",
       "name": "rag_architect",
-      "tier": "specialist",
+      "tier": "T3",
       "squad": "B",
-      "mark": "🗂️"
+      "mark": ""
     },
     {
       "id": "agent:rag-engineer",
       "name": "rag_engineer",
-      "tier": "specialist",
+      "tier": "T3",
       "squad": "B",
-      "mark": "🔍"
+      "mark": ""
+    },
+    {
+      "id": "agent:regulatory-researcher",
+      "name": "regulatory_researcher",
+      "tier": "T3",
+      "squad": "other",
+      "mark": ""
     },
     {
       "id": "agent:replicate-ml-engineer",
       "name": "replicate_ml_engineer",
-      "tier": "specialist",
+      "tier": "T3",
       "squad": "B",
-      "mark": "🦾"
+      "mark": ""
     },
     {
       "id": "agent:risk-manager",
       "name": "risk_manager",
-      "tier": "specialist",
+      "tier": "T3",
       "squad": "C",
-      "mark": "🛡️"
+      "mark": ""
     },
     {
       "id": "agent:risk-strategist",
       "name": "risk_strategist",
-      "tier": "senior-specialist",
+      "tier": "T3",
       "squad": "E",
-      "mark": "⚖️"
+      "mark": ""
+    },
+    {
+      "id": "agent:roster-officer",
+      "name": "roster_officer",
+      "tier": "T3",
+      "squad": "other",
+      "mark": ""
+    },
+    {
+      "id": "agent:sagan-doctrine-owner",
+      "name": "sagan_doctrine_owner",
+      "tier": "T3",
+      "squad": "E",
+      "mark": ""
     },
     {
       "id": "agent:sales-lead",
       "name": "sales_lead",
-      "tier": "specialist",
+      "tier": "T3",
       "squad": "A",
-      "mark": "📣"
+      "mark": ""
     },
     {
       "id": "agent:security-engineer",
       "name": "security_engineer",
-      "tier": "senior-specialist",
+      "tier": "T3",
       "squad": "G",
-      "mark": "🛡️"
+      "mark": ""
     },
     {
       "id": "agent:sharpe-truth-bridge",
       "name": "sharpe_truth_bridge",
-      "tier": "specialist",
+      "tier": "T3",
       "squad": "C",
-      "mark": "🌉"
+      "mark": ""
     },
     {
       "id": "agent:signals-intel-analyst",
       "name": "signals_intel_analyst",
-      "tier": "senior-specialist",
+      "tier": "T3",
       "squad": "OSINT",
-      "mark": "📡"
+      "mark": ""
     },
     {
       "id": "agent:socmint-analyst",
       "name": "socmint_analyst",
-      "tier": "senior-specialist",
+      "tier": "T3",
       "squad": "OSINT",
-      "mark": "👥"
+      "mark": ""
+    },
+    {
+      "id": "agent:squad-h",
+      "name": "squad_h",
+      "tier": "T3",
+      "squad": "other",
+      "mark": ""
+    },
+    {
+      "id": "agent:squad-k",
+      "name": "squad_k",
+      "tier": "T3",
+      "squad": "other",
+      "mark": ""
     },
     {
       "id": "agent:stat-arb-pm",
       "name": "stat_arb_pm",
-      "tier": "specialist",
+      "tier": "T3",
       "squad": "C",
-      "mark": "📊"
+      "mark": ""
     },
     {
       "id": "agent:stella-voice",
       "name": "stella_voice",
-      "tier": "specialist",
+      "tier": "T3",
       "squad": "A",
       "mark": ""
     },
     {
       "id": "agent:strategist-consultant",
       "name": "strategist_consultant",
-      "tier": "T1",
+      "tier": "T3",
       "squad": "E",
-      "mark": "📜"
+      "mark": ""
     },
     {
       "id": "agent:strategy-consultant",
       "name": "strategy_consultant",
-      "tier": "senior-specialist",
+      "tier": "T3",
       "squad": "E",
-      "mark": "🏛️"
+      "mark": ""
+    },
+    {
+      "id": "agent:talent-sourcer",
+      "name": "talent_sourcer",
+      "tier": "T3",
+      "squad": "other",
+      "mark": ""
+    },
+    {
+      "id": "agent:tax-counsel",
+      "name": "tax_counsel",
+      "tier": "T3",
+      "squad": "other",
+      "mark": ""
     },
     {
       "id": "agent:tech-lead",
       "name": "tech_lead",
-      "tier": "leadership",
+      "tier": "T3",
       "squad": "G",
-      "mark": "🏛️"
+      "mark": ""
+    },
+    {
+      "id": "agent:tetlock-doctrine-owner",
+      "name": "tetlock_doctrine_owner",
+      "tier": "T3",
+      "squad": "F",
+      "mark": ""
+    },
+    {
+      "id": "agent:training-officer",
+      "name": "training_officer",
+      "tier": "T3",
+      "squad": "other",
+      "mark": ""
     },
     {
       "id": "agent:uiux-engineer",
       "name": "uiux_engineer",
-      "tier": "leadership",
+      "tier": "T3",
       "squad": "A",
-      "mark": "🎨"
+      "mark": ""
     },
     {
       "id": "agent:venture-architect",
       "name": "venture_architect",
-      "tier": "T1",
-      "squad": "S",
-      "mark": "🏗️"
+      "tier": "T3",
+      "squad": "other",
+      "mark": ""
     },
     {
       "id": "agent:venture-hr",
       "name": "venture_hr",
       "tier": "T3",
-      "squad": "S",
-      "mark": "🧑‍🤝‍🧑"
+      "squad": "other",
+      "mark": ""
     },
     {
       "id": "agent:venture-metrics-officer",
       "name": "venture_metrics_officer",
       "tier": "T3",
-      "squad": "S",
-      "mark": "📈"
+      "squad": "other",
+      "mark": ""
     },
     {
       "id": "agent:vol-trader",
       "name": "vol_trader",
-      "tier": "specialist",
+      "tier": "T3",
       "squad": "C",
-      "mark": "📈"
+      "mark": ""
     },
     {
       "id": "agent:war-gaming-strategist",
       "name": "war_gaming_strategist",
-      "tier": "senior-specialist",
+      "tier": "T3",
       "squad": "E",
-      "mark": "🗡️"
+      "mark": ""
     },
     {
       "id": "agent:web-archive-analyst",
       "name": "web_archive_analyst",
-      "tier": "senior-specialist",
+      "tier": "T3",
       "squad": "OSINT",
-      "mark": "⏳"
+      "mark": ""
     },
     {
       "id": "squad:a",
@@ -749,102 +938,11 @@
       "mark": ""
     },
     {
-      "id": "squad:S",
-      "name": "Squad S",
+      "id": "squad:other",
+      "name": "other",
       "tier": "T3",
-      "squad": "S",
+      "squad": "other",
       "mark": ""
-    },
-    {
-      "id": "agent:roster_officer",
-      "name": "roster_officer",
-      "tier": "T2",
-      "squad": "cross-workspace",
-      "mark": "🧬"
-    },
-    {
-      "id": "agent:munger_doctrine_owner",
-      "name": "munger_doctrine_owner",
-      "tier": "T3",
-      "squad": "pedagogy-and-doctrine",
-      "mark": "🌉"
-    },
-    {
-      "id": "agent:tetlock-doctrine-owner",
-      "name": "tetlock_doctrine_owner",
-      "tier": "T3",
-      "squad": "pedagogy-and-doctrine",
-      "mark": "🎯"
-    },
-    {
-      "id": "agent:arendt-doctrine-owner",
-      "name": "arendt_doctrine_owner",
-      "tier": "T2",
-      "squad": "E",
-      "mark": "🪞"
-    },
-    {
-      "id": "agent:deming-doctrine-owner",
-      "name": "deming_doctrine_owner",
-      "tier": "T2",
-      "squad": "E",
-      "mark": "🔁"
-    },
-    {
-      "id": "agent:hr-director",
-      "name": "hr_director",
-      "tier": "T1",
-      "squad": "H",
-      "mark": "🎖️"
-    },
-    {
-      "id": "agent:kahneman-doctrine-owner",
-      "name": "kahneman_doctrine_owner",
-      "tier": "T2",
-      "squad": "E",
-      "mark": "⚓"
-    },
-    {
-      "id": "agent:performance-auditor",
-      "name": "performance_auditor",
-      "tier": "T2",
-      "squad": "H",
-      "mark": "📈"
-    },
-    {
-      "id": "agent:sagan-doctrine-owner",
-      "name": "sagan_doctrine_owner",
-      "tier": "T2",
-      "squad": "E",
-      "mark": "🌌"
-    },
-    {
-      "id": "agent:squad-h",
-      "name": "squad_h",
-      "tier": "T1",
-      "squad": "H",
-      "mark": "🎖️"
-    },
-    {
-      "id": "agent:squad-k",
-      "name": "squad_k",
-      "tier": "T1",
-      "squad": "K",
-      "mark": "🌐"
-    },
-    {
-      "id": "agent:talent-sourcer",
-      "name": "talent_sourcer",
-      "tier": "T2",
-      "squad": "H",
-      "mark": "🔍"
-    },
-    {
-      "id": "agent:training-officer",
-      "name": "training_officer",
-      "tier": "T2",
-      "squad": "H",
-      "mark": "📚"
     }
   ],
   "skills": [
@@ -854,8 +952,18 @@
       "type": "skill"
     },
     {
+      "id": "skill:aar-status-broadcast",
+      "name": "aar-status-broadcast",
+      "type": "skill"
+    },
+    {
       "id": "skill:afk-loop",
       "name": "afk-loop",
+      "type": "skill"
+    },
+    {
+      "id": "skill:agent-onboarding",
+      "name": "agent-onboarding",
       "type": "skill"
     },
     {
@@ -881,6 +989,11 @@
     {
       "id": "skill:capability-cluster",
       "name": "capability-cluster",
+      "type": "skill"
+    },
+    {
+      "id": "skill:cascading-drift-alert",
+      "name": "cascading-drift-alert",
       "type": "skill"
     },
     {
@@ -914,6 +1027,26 @@
       "type": "skill"
     },
     {
+      "id": "skill:context-types",
+      "name": "context-types",
+      "type": "skill"
+    },
+    {
+      "id": "skill:convex-bet-audit",
+      "name": "convex-bet-audit",
+      "type": "skill"
+    },
+    {
+      "id": "skill:cross-workspace-merge",
+      "name": "cross-workspace-merge",
+      "type": "skill"
+    },
+    {
+      "id": "skill:daily-prep",
+      "name": "daily-prep",
+      "type": "skill"
+    },
+    {
       "id": "skill:davao-conyo-register-audit",
       "name": "davao-conyo-register-audit",
       "type": "skill"
@@ -926,6 +1059,11 @@
     {
       "id": "skill:deploy",
       "name": "deploy",
+      "type": "skill"
+    },
+    {
+      "id": "skill:disambiguation",
+      "name": "disambiguation",
       "type": "skill"
     },
     {
@@ -944,13 +1082,33 @@
       "type": "skill"
     },
     {
+      "id": "skill:doctrine-pick",
+      "name": "doctrine-pick",
+      "type": "skill"
+    },
+    {
       "id": "skill:draft-loop",
       "name": "draft-loop",
       "type": "skill"
     },
     {
+      "id": "skill:drift-reconcile",
+      "name": "drift-reconcile",
+      "type": "skill"
+    },
+    {
       "id": "skill:feedback-update",
       "name": "feedback-update",
+      "type": "skill"
+    },
+    {
+      "id": "skill:g44-frontmatter-spec",
+      "name": "g44-frontmatter-spec",
+      "type": "skill"
+    },
+    {
+      "id": "skill:goal-tree",
+      "name": "goal-tree",
       "type": "skill"
     },
     {
@@ -969,8 +1127,18 @@
       "type": "skill"
     },
     {
+      "id": "skill:graph-archaeology",
+      "name": "graph-archaeology",
+      "type": "skill"
+    },
+    {
       "id": "skill:graph-assemble",
       "name": "graph-assemble",
+      "type": "skill"
+    },
+    {
+      "id": "skill:graph-autoresearch",
+      "name": "graph-autoresearch",
       "type": "skill"
     },
     {
@@ -996,6 +1164,11 @@
     {
       "id": "skill:graph-engineering",
       "name": "graph-engineering",
+      "type": "skill"
+    },
+    {
+      "id": "skill:graph-engineering-doctrine",
+      "name": "graph-engineering-doctrine",
       "type": "skill"
     },
     {
@@ -1049,6 +1222,11 @@
       "type": "skill"
     },
     {
+      "id": "skill:hr-audit",
+      "name": "hr-audit",
+      "type": "skill"
+    },
+    {
       "id": "skill:idea-validator",
       "name": "idea-validator",
       "type": "skill"
@@ -1059,8 +1237,23 @@
       "type": "skill"
     },
     {
+      "id": "skill:institutional-document-standard",
+      "name": "institutional-document-standard",
+      "type": "skill"
+    },
+    {
+      "id": "skill:library-catalog",
+      "name": "library-catalog",
+      "type": "skill"
+    },
+    {
       "id": "skill:live-mirror",
       "name": "live-mirror",
+      "type": "skill"
+    },
+    {
+      "id": "skill:loop-discipline",
+      "name": "loop-discipline",
       "type": "skill"
     },
     {
@@ -1076,6 +1269,11 @@
     {
       "id": "skill:medium-article",
       "name": "medium-article",
+      "type": "skill"
+    },
+    {
+      "id": "skill:memo-cache-pattern",
+      "name": "memo-cache-pattern",
       "type": "skill"
     },
     {
@@ -1099,6 +1297,11 @@
       "type": "skill"
     },
     {
+      "id": "skill:monthly-close",
+      "name": "monthly-close",
+      "type": "skill"
+    },
+    {
       "id": "skill:multi-version-audit",
       "name": "multi-version-audit",
       "type": "skill"
@@ -1106,6 +1309,11 @@
     {
       "id": "skill:nda-drafter",
       "name": "nda-drafter",
+      "type": "skill"
+    },
+    {
+      "id": "skill:ojp-application-format",
+      "name": "ojp-application-format",
       "type": "skill"
     },
     {
@@ -1129,6 +1337,16 @@
       "type": "skill"
     },
     {
+      "id": "skill:parallel-dispatch",
+      "name": "parallel-dispatch",
+      "type": "skill"
+    },
+    {
+      "id": "skill:performance-review",
+      "name": "performance-review",
+      "type": "skill"
+    },
+    {
       "id": "skill:pilot-runner",
       "name": "pilot-runner",
       "type": "skill"
@@ -1144,6 +1362,11 @@
       "type": "skill"
     },
     {
+      "id": "skill:portfolio-positioning-check",
+      "name": "portfolio-positioning-check",
+      "type": "skill"
+    },
+    {
       "id": "skill:priest",
       "name": "priest",
       "type": "skill"
@@ -1151,6 +1374,11 @@
     {
       "id": "skill:proactive-dispatch",
       "name": "proactive-dispatch",
+      "type": "skill"
+    },
+    {
+      "id": "skill:project-bootstrap",
+      "name": "project-bootstrap",
       "type": "skill"
     },
     {
@@ -1164,8 +1392,23 @@
       "type": "skill"
     },
     {
+      "id": "skill:quarterly-reframe",
+      "name": "quarterly-reframe",
+      "type": "skill"
+    },
+    {
+      "id": "skill:recruiter-letter",
+      "name": "recruiter-letter",
+      "type": "skill"
+    },
+    {
       "id": "skill:rfc",
       "name": "rfc",
+      "type": "skill"
+    },
+    {
+      "id": "skill:roster-pipeline",
+      "name": "roster-pipeline",
       "type": "skill"
     },
     {
@@ -1189,6 +1432,11 @@
       "type": "skill"
     },
     {
+      "id": "skill:ship-pipeline",
+      "name": "ship-pipeline",
+      "type": "skill"
+    },
+    {
       "id": "skill:simplify",
       "name": "simplify",
       "type": "skill"
@@ -1196,156 +1444,6 @@
     {
       "id": "skill:social-presence",
       "name": "social-presence",
-      "type": "skill"
-    },
-    {
-      "id": "skill:squad-handoff",
-      "name": "squad-handoff",
-      "type": "skill"
-    },
-    {
-      "id": "skill:strategic-posture",
-      "name": "strategic-posture",
-      "type": "skill"
-    },
-    {
-      "id": "skill:system-pulse",
-      "name": "system-pulse",
-      "type": "skill"
-    },
-    {
-      "id": "skill:threat-model",
-      "name": "threat-model",
-      "type": "skill"
-    },
-    {
-      "id": "skill:venture-aar",
-      "name": "venture-aar",
-      "type": "skill"
-    },
-    {
-      "id": "skill:venture-adopt",
-      "name": "venture-adopt",
-      "type": "skill"
-    },
-    {
-      "id": "skill:venture-assemble",
-      "name": "venture-assemble",
-      "type": "skill"
-    },
-    {
-      "id": "skill:venture-contract",
-      "name": "venture-contract",
-      "type": "skill"
-    },
-    {
-      "id": "skill:venture-extract",
-      "name": "venture-extract",
-      "type": "skill"
-    },
-    {
-      "id": "skill:venture-query",
-      "name": "venture-query",
-      "type": "skill"
-    },
-    {
-      "id": "skill:venture-resolve",
-      "name": "venture-resolve",
-      "type": "skill"
-    },
-    {
-      "id": "skill:venture-snapshot",
-      "name": "venture-snapshot",
-      "type": "skill"
-    },
-    {
-      "id": "skill:venture-verify",
-      "name": "venture-verify",
-      "type": "skill"
-    },
-    {
-      "id": "skill:verify-loop",
-      "name": "verify-loop",
-      "type": "skill"
-    },
-    {
-      "id": "skill:wake-router",
-      "name": "wake-router",
-      "type": "skill"
-    },
-    {
-      "id": "skill:webcraft-no-vibe",
-      "name": "webcraft-no-vibe",
-      "type": "skill"
-    },
-    {
-      "id": "skill:workbook",
-      "name": "workbook",
-      "type": "skill"
-    },
-    {
-      "id": "skill:workspace-loader",
-      "name": "workspace-loader",
-      "type": "skill"
-    },
-    {
-      "id": "skill:context-types",
-      "name": "context-types",
-      "type": "skill"
-    },
-    {
-      "id": "skill:cross-workspace-merge",
-      "name": "cross-workspace-merge",
-      "type": "skill"
-    },
-    {
-      "id": "skill:disambiguation",
-      "name": "disambiguation",
-      "type": "skill"
-    },
-    {
-      "id": "skill:parallel-dispatch",
-      "name": "parallel-dispatch",
-      "type": "skill"
-    },
-    {
-      "id": "skill:project-bootstrap",
-      "name": "project-bootstrap",
-      "type": "skill"
-    },
-    {
-      "id": "skill:ship-pipeline",
-      "name": "ship-pipeline",
-      "type": "skill"
-    },
-    {
-      "id": "skill:library-catalog",
-      "name": "library-catalog",
-      "type": "skill"
-    },
-    {
-      "id": "skill:recruiter-letter",
-      "name": "recruiter-letter",
-      "type": "skill"
-    },
-    {
-      "id": "skill:ojp-application-format",
-      "name": "ojp-application-format",
-      "type": "skill"
-    },
-    {
-      "id": "skill:stella-voice",
-      "name": "stella-voice",
-      "type": "skill"
-    },
-    {
-      "id": "skill:verify-diagnostic",
-      "name": "verify-diagnostic",
-      "type": "skill"
-    },
-    {
-      "id": "skill:drift-reconcile",
-      "name": "drift-reconcile",
       "type": "skill"
     }
   ],

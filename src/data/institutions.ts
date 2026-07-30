@@ -1557,13 +1557,13 @@ export const INSTITUTIONS: Institution[] = [
  * Wire-publisher → city lookup. Used by the live-feed fetcher to attach
  * a (lat, lon) to each macro-wire headline for Layer E on /desk earth.
  * Each publisher has a single home — public-record data.
+ *
+ * v7.7.91 — gate-honesty: removed (knip exit 1). This Record was exported
+ * but never imported by any .astro / .ts file. Macro-wire pin coords are
+ * hardcoded inline in macrowire-cache.json's source data; no runtime
+ * lookup against this map exists.
  */
-export const WIRE_PUBLISHER_CITY: Record<string, { lat: number; lon: number; city: string }> = {
-  reuters: { lat: 51.5074, lon: -0.1278, city: 'London, UK' },
-  coindesk: { lat: 40.7128, lon: -74.006, city: 'New York, NY' },
-  theblock: { lat: 40.7128, lon: -74.006, city: 'New York, NY' },
-  cointelegraph: { lat: 47.3769, lon: 8.5417, city: 'Zurich, CH' },
-};
+// export const WIRE_PUBLISHER_CITY = { /* removed v7.7.91 */ };
 
 /**
  * Aggregate stats — used by click-to-dive HUD for "research power at a glance".
@@ -1658,15 +1658,10 @@ function continentOf(country: string): string {
  * Same paper id → same institution on every build. Uses 32-bit FNV-1a
  * over the paper id so the result is table-wide-deterministic and
  * cache-friendly. No Math.random() (per standing-order anti-pattern).
+ *
+ * v7.7.91 — gate-honesty: removed (knip exit 1). The same FNV-1a logic
+ * lives inline in scripts/build-live-feed.mjs:173 (assignInstitution
+ * helper used by the arxiv normalization pass). Keeping both copies
+ * was double-maintenance; the Astro side never imported this one.
  */
-export function assignInstitution(paperId: string, focus: Institution['focus']): Institution {
-  // FNV-1a 32-bit hash
-  let h = 0x811c9dc5;
-  for (let i = 0; i < paperId.length; i++) {
-    h ^= paperId.charCodeAt(i);
-    h = (h + ((h << 1) + (h << 4) + (h << 7) + (h << 8) + (h << 24))) >>> 0;
-  }
-  const pool = INSTITUTIONS.filter((i) => i.focus === focus);
-  if (pool.length === 0) return INSTITUTIONS[0];
-  return pool[h % pool.length];
-}
+// export function assignInstitution(paperId: string, focus: Institution['focus']): Institution { /* removed v7.7.91 */ }

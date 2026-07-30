@@ -1,309 +1,177 @@
 ---
 /**
- * KeyHintPanel.astro — v6.6 (Mission 6.6, Graphic Visual Dynamic)
+ * KeyHintPanel.astro — v7.7.92 (Mission F-A2-mount)
  * Floating keyboard-shortcut hints. Toggle with `?`.
  *
- * v6.6 — Converted from a wordy list to a graphic-visual-dynamic panel.
- * Each shortcut is now a 240×96 tile with three stacked elements:
- *   1. Top: a 56×28 SVG keyboard-key visualization — a 1px-stroked
- *      square with a 4×5 grid of 4×4 amber cells and a centered
- *      bracket-label like `[?]`, `[G]`, `[j]`, `[k]`, `[b]`, `[/]`.
- *   2. Middle: an 11px mono label naming the action.
- *   3. Bottom: a 60×6 wave-pattern SVG showing 4 rounded humps; the
- *      per-hump opacity encodes shortcut-coverage density
- *      (deterministic from `seedFromString(buildSeed())`).
+ * v7.7.92 — Re-mounted after C1 deletion in v7.7.91. The panel was dead
+ * (only DOM-queried via `#keyhint-panel`, never imported) so knip + A11
+ * gate-honesty flagged it. Now imported by BaseLayout, so every page
+ * carries the panel and `?` actually does something useful.
  *
- * Behavior:
- *   - Initially hidden (no `.is-open` class).
- *   - `?` toggles `.is-open`. `Esc` closes.
- *   - `j` scrolls page down a viewport-height; `k` up. `g` top, `b` bottom.
- *   - `/` focuses the first `[data-search]` element on the page.
+ * v7.7.91 — Modifier-bind all single-char shortcuts to satisfy WCAG
+ * 2.1.4 AA (Character Key Shortcuts). Bare single-char shortcuts fire on
+ * any press, including typed text. Cmd+/, Cmd+j, Cmd+k, Cmd+↑, Cmd+↓ all
+ * require metaKey or ctrlKey. `?` stays bare (W3C exempt) for panel toggle.
+ *
+ * Chrome contract: 0px radii, mono + 1 amber, no halo, no glow, no gradient.
+ * Hidden by default (`hidden` attribute + `aria-hidden="true"`). `?` opens.
  *
  * Wired by `src/scripts/keyboard-shortcuts.ts` (imported via BaseLayout).
  * Honors `prefers-reduced-motion` (opacity transition only — no slide).
  */
-import { seedFromString, buildSeed } from '@utils/prng';
 
 interface Shortcut {
-  key: string;
-  desc: string;
-  humps: boolean[];
+  keys: string[]; // multi-key combos displayed together
+  label: string;
 }
 
-const shortcuts: Shortcut[] = (() => {
-  const base: Omit<Shortcut, 'humps'>[] = [
-    { key: '?', desc: 'Toggle keyboard map' },
-    { key: 'j', desc: 'Jump down a viewport' },
-    { key: 'k', desc: 'Jump up a viewport' },
-    { key: 'g', desc: 'Go to top' },
-    { key: 'b', desc: 'Go to bottom' },
-    { key: '/', desc: 'Focus search' },
-  ];
-  // === Per-tile deterministic hump-coverage =========================
-  // Each tile gets 4 humps; the seeded PRNG picks which humps are
-  // "covered" (full opacity) vs "outline" (low opacity). Deterministic
-  // per build, so the same build always renders the same density map.
-  const humpRng = seedFromString(buildSeed() + '::keyhint-waves');
-  return base.map((s) => ({
-    ...s,
-    humps: [0, 1, 2, 3].map(() => humpRng() > 0.5),
-  }));
-})();
+const shortcuts: Shortcut[] = [
+  { keys: ['?'], label: 'Toggle this panel' },
+  { keys: ['⌘', '/'], label: 'Focus search' },
+  { keys: ['⌘', 'j'], label: 'Jump down a viewport' },
+  { keys: ['⌘', 'k'], label: 'Jump up a viewport' },
+  { keys: ['⌘', '↑'], label: 'Go to top' },
+  { keys: ['⌘', '↓'], label: 'Go to bottom' },
+  { keys: ['Esc'], label: 'Close panel' },
+];
 ---
 
-<div
+<aside
   id="keyhint-panel"
-  class="keyhint"
-  role="dialog"
-  aria-modal="false"
+  class="khp"
+  role="region"
   aria-label="Keyboard shortcuts"
+  aria-hidden="true"
   hidden
 >
-  <header class="keyhint__head">
-    <span class="keyhint__eyebrow mono">Keyboard</span>
-    <h3 class="keyhint__title">Shortcuts</h3>
-    <p class="keyhint__press">Press <kbd class="keyhint__kbd mono">?</kbd> again to close</p>
+  <header class="khp__header">
+    <span class="khp__title">Keyboard</span>
+    <span class="khp__hint">press <kbd class="khp__kbd khp__kbd--inline">?</kbd> to toggle</span>
   </header>
-
-  <div class="keyhint__grid">
-    {
-      shortcuts.map((s) => (
-        <div class="keyhint__tile">
-          {/* === Keyboard-key visualization (56×28) ===
-            4×5 grid of 4×4 SVG cells (texture) + centered bracket-label. */}
-          <div class="keyhint__key">
-            <svg viewBox="0 0 56 28" class="keyhint__keysvg" aria-hidden="true">
-              <rect
-                x="0.5"
-                y="0.5"
-                width="55"
-                height="27"
-                rx="2"
-                fill="none"
-                stroke="var(--c-amber)"
-                stroke-width="1"
-                stroke-opacity="0.85"
-              />
-              {/* v6.10.17 — hoist fill/fill-opacity to <g> (was on each of
-                20 rects × 6 shortcuts = 120 attrs ≈ 3KB). */}
-              <g fill="var(--c-amber)" fill-opacity="0.32">
-                {Array.from({ length: 5 }).map((_, row) =>
-                  Array.from({ length: 4 }).map((__, col) => (
-                    <rect x={20 + col * 4} y={4 + row * 4} width="3" height="3" />
-                  )),
-                )}
-              </g>
-              <text
-                x="28"
-                y="17.5"
-                class="keyhint__keylabel"
-                text-anchor="middle"
-                dominant-baseline="middle"
-              >{`[${s.key}]`}</text>
-            </svg>
-          </div>
-
-          {/* === Action label (11px mono) === */}
-          <p class="keyhint__label mono">{s.desc}</p>
-
-          {/* === Wave-pattern coverage (60×6, 4 humps) ===
-            v6.10.18 — hoist fill/stroke/stroke-width/stroke-linecap to <g>
-            (4 attrs × 4 paths × 6 tiles = 96 attrs saved ≈ 1.2KB). */}
-          <svg viewBox="0 0 60 6" class="keyhint__wave" aria-hidden="true">
-            <g fill="none" stroke="var(--c-amber)" stroke-width="1" stroke-linecap="round">
-              {s.humps.map((filled, i) => (
-                <path
-                  d={`M ${i * 15} 3 Q ${i * 15 + 7.5} ${i % 2 === 0 ? 0 : 6} ${(i + 1) * 15} 3`}
-                  stroke-opacity={filled ? 1 : 0.25}
-                />
-              ))}
-            </g>
-          </svg>
-        </div>
-      ))
-    }
-  </div>
-</div>
+  <ul class="khp__list">
+    {shortcuts.map((s) => (
+      <li class="khp__row">
+        <span class="khp__keys">
+          {s.keys.map((k, i) => (
+            <>
+              {i > 0 && <span class="khp__plus" aria-hidden="true">+</span>}
+              <kbd class="khp__kbd">{k}</kbd>
+            </>
+          ))}
+        </span>
+        <span class="khp__label">{s.label}</span>
+      </li>
+    ))}
+  </ul>
+</aside>
 
 <style>
-  /* ============================================================
-     PANEL SHELL — fixed bottom-right, tape-dark, 1px amber rule.
-     ============================================================ */
-  .keyhint {
+  /* v7.7.92 — F-A2-mount restoration.
+     Chrome contract: 0px radii, mono + 1 amber, hairline borders only. */
+  .khp {
     position: fixed;
-    right: var(--sp-5);
-    bottom: var(--sp-5);
-    width: 528px; /* 240 × 2 tiles + 16 gap + 32 padding */
-    max-width: calc(100vw - var(--sp-7));
-    background: var(--c-tape);
-    color: var(--ink-on-tape);
-    border: 1px solid var(--c-rule);
-    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade */
-    padding: var(--sp-4);
-    box-shadow: var(--shadow-lg);
-    z-index: var(--z-toast);
+    top: calc(var(--nav-h, 56px) + var(--sp-3, 12px));
+    right: var(--sp-3, 12px);
+    z-index: 90;
+    width: min(320px, calc(100vw - var(--sp-6, 24px)));
+    padding: var(--sp-4, 16px);
+    background: var(--c-paper, #0a0a0a);
+    border: 1px solid var(--c-rule, #2a2a2a);
+    border-radius: 0;
+    color: var(--c-ink, #e8e8e8);
+    font-family: var(--ff-mono, ui-monospace, monospace);
+    font-size: 11px;
+    line-height: 1.5;
+    letter-spacing: 0.04em;
+    box-shadow: none;
     opacity: 0;
-    transform: translateY(12px);
-    pointer-events: none;
+    transform: translateY(-4px);
     transition:
-      opacity 220ms var(--ease-out, ease-out),
-      transform 220ms var(--ease-out, ease-out);
+      opacity 0.18s ease,
+      transform 0.18s ease;
+    pointer-events: none;
   }
-  .keyhint:not([hidden]).is-open {
+  .khp.is-open {
     opacity: 1;
     transform: translateY(0);
     pointer-events: auto;
   }
   @media (prefers-reduced-motion: reduce) {
-    .keyhint {
-      transition: opacity 120ms linear;
-      transform: none !important;
-    }
-    .keyhint__wave path {
-      transition: stroke-opacity 120ms linear !important;
+    .khp {
+      transform: none;
+      transition: opacity 0.01ms linear;
     }
   }
-
-  /* ============================================================
-     HEADER — eyebrow + title + "press ? to close" hint.
-     ============================================================ */
-  .keyhint__head {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: var(--sp-1);
-    margin-bottom: var(--sp-3);
-    padding-bottom: var(--sp-2);
-    border-bottom: 1px solid var(--c-rule);
+  .khp__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: var(--sp-3, 12px);
+    margin-bottom: var(--sp-3, 12px);
+    border-bottom: 1px solid var(--c-rule-soft, #1a1a1a);
   }
-  .keyhint__eyebrow {
-    font-size: var(--fs-xs);
-    text-transform: uppercase;
+  .khp__title {
+    font-size: 11px;
+    font-weight: 600;
     letter-spacing: 0.12em;
-    color: var(--c-amber);
-    font-weight: 600;
-    grid-column: 1 / 2;
+    text-transform: uppercase;
+    color: var(--c-amber, #c79b4a);
   }
-  .keyhint__title {
-    font-size: var(--fs-base);
-    color: var(--c-ink);
-    font-weight: 600;
+  .khp__hint {
+    font-size: 10px;
+    color: var(--c-white-faint, #7a7a7a);
+    letter-spacing: 0.06em;
+  }
+  .khp__list {
+    list-style: none;
     margin: 0;
-    grid-column: 1 / 2;
-    line-height: 1.2;
-  }
-  .keyhint__press {
-    grid-column: 1 / 3;
-    grid-row: 1 / 3;
-    align-self: end;
-    justify-self: end;
-    font-size: var(--fs-xs);
-    color: var(--c-ink-2);
-    margin: 0;
-    white-space: nowrap;
-  }
-  .keyhint__kbd {
-    display: inline-block;
-    min-width: 1.4em;
-    padding: 0.18em 0.45em;
-    font-size: 0.72rem;
-    text-align: center;
-    background: var(--c-tape);
-    color: var(--c-amber);
-    border: 1px solid var(--c-amber);
-    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade (was 4px) */
-    line-height: 1;
-  }
-
-  /* ============================================================
-     TILE GRID — 2 columns × 3 rows of 240×96 tiles.
-     On narrow viewports, fall back to 1 column with horizontal scroll.
-     ============================================================ */
-  .keyhint__grid {
-    display: grid;
-    grid-template-columns: repeat(2, 240px);
-    gap: var(--sp-3);
-    justify-content: center;
-  }
-  @media (max-width: 560px) {
-    .keyhint__grid {
-      grid-template-columns: 240px;
-    }
-  }
-
-  /* ============================================================
-     TILE — fixed 240×96, three stacked elements (key / label / wave).
-     ============================================================ */
-  .keyhint__tile {
-    width: 240px;
-    height: 96px;
+    padding: 0;
     display: flex;
     flex-direction: column;
+    gap: var(--sp-2, 8px);
+  }
+  .khp__row {
+    display: grid;
+    grid-template-columns: minmax(96px, auto) 1fr;
+    gap: var(--sp-3, 12px);
     align-items: center;
-    justify-content: space-between;
-    padding: 8px 12px;
-    background: var(--c-ink-haze);
-    border: 1px solid var(--c-rule);
-    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade */
-    transition:
-      border-color 200ms ease,
-      background 200ms ease;
   }
-  .keyhint__tile:hover,
-  .keyhint__tile:focus-visible {
-    border-color: var(--c-amber);
-    background: var(--c-amberl-faint);
+  .khp__keys {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: nowrap;
   }
-  .keyhint__tile:hover .keyhint__wave path {
-    stroke-opacity: 1;
+  .khp__plus {
+    color: var(--c-white-faint, #7a7a7a);
+    font-size: 10px;
+    margin: 0 2px;
   }
-
-  /* ============================================================
-     KEYBOARD-KEY SVG (56×28)
-     ============================================================ */
-  .keyhint__key {
-    width: 56px;
-    height: 28px;
-    flex-shrink: 0;
-  }
-  .keyhint__keysvg {
-    width: 100%;
-    height: 100%;
-    display: block;
-  }
-  .keyhint__keylabel {
-    font-size: 9px;
-    font-family: var(--ff-mono);
-    fill: var(--c-amber);
-    font-weight: 600;
-    letter-spacing: 0;
-  }
-
-  /* ============================================================
-     ACTION LABEL (11px mono)
-     ============================================================ */
-  .keyhint__label {
-    font-size: 11px;
-    color: var(--c-ink-2);
+  .khp__kbd {
+    display: inline-block;
+    min-width: 22px;
+    padding: 2px 6px;
+    background: var(--c-tape, #111);
+    border: 1px solid var(--c-rule, #2a2a2a);
+    border-radius: 0;
+    color: var(--c-amber, #c79b4a);
+    font: inherit;
+    font-size: 10px;
     text-align: center;
-    line-height: 1.2;
-    margin: 0;
-    letter-spacing: 0.02em;
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    letter-spacing: 0.04em;
   }
-
-  /* ============================================================
-     WAVE-PATTERN COVERAGE (60×6)
-     ============================================================ */
-  .keyhint__wave {
-    width: 60px;
-    height: 6px;
-    display: block;
-    flex-shrink: 0;
+  .khp__kbd--inline {
+    color: var(--c-amber, #c79b4a);
   }
-  .keyhint__wave path {
-    transition: stroke-opacity 240ms ease;
+  .khp__label {
+    font-size: 10px;
+    color: var(--c-white-faint, #7a7a7a);
+    letter-spacing: 0.04em;
+  }
+  /* Hide on small viewports — keyboard UX not relevant to touch-first. */
+  @media (max-width: 720px) {
+    .khp {
+      display: none;
+    }
   }
 </style>

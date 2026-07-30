@@ -26,15 +26,18 @@ import { readFileSync } from 'node:fs';
 const CACHE_PATH = 'src/data/live-feed-cache.json';
 const MAX_AGE_DAYS = 7;
 
-const REQUIRED_FIELDS = [
-  'id',
-  'source',
-  'title',
-  'link',
-  'timestamp',
-  'fingerprint',
-  'domain',
-];
+// v7.7.91 — ARCH-13 gdelt fabrication: `link` is now OPTIONAL for gdelt
+// entries (no canonical per-event URL exists; the normalizeGdelt pass emits
+// link=null). Required for arxiv + macrowire (real upstream URLs).
+// v7.7.91 — ARCH-13 gdelt fabrication: `link` AND `domain` are now
+// OPTIONAL for gdelt entries (no canonical per-event URL exists; the
+// normalizeGdelt pass emits link=null + domain='' (the empty string
+// from urlDomain(''))).
+// Required for arxiv + macrowire (real upstream URLs + domains).
+const REQUIRED_FIELDS = ['id', 'source', 'title', 'timestamp', 'fingerprint'];
+// Documented contract; underscore prefix satisfies no-unused-vars rule
+// while preserving intent for downstream tooling.
+const _OPTIONAL_FIELDS = ['link', 'domain'];
 const VALID_SOURCES = new Set(['arxiv', 'macrowire', 'gdelt']);
 
 function audit(cache) {
@@ -70,8 +73,11 @@ function audit(cache) {
   }
 
   // (c) duplicate link (the strongest dedupe signal — same article twice)
+  // v7.7.91 — gdelt entries have link=null (ARCH-13); skip null links in
+  // the duplicate check to avoid false positives.
   const linkCounts = new Map();
   for (const e of events) {
+    if (e.link == null) continue;
     // Strip UTM params so two syndicated versions of the same article dedupe
     const normalized = stripUtm(e.link);
     linkCounts.set(normalized, (linkCounts.get(normalized) || 0) + 1);

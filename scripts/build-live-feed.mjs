@@ -225,8 +225,13 @@ function normalizeGdelt(cache) {
   return freshish(cache.events)
     .filter((ev) => isNdaClean(ev.title))
     .map((ev) => {
-      const syntheticLink = ev.link || `https://gdelt.org/event/${ev.id}`;
-      return asLiveEvent({ ...ev, link: syntheticLink }, 'gdelt', {
+      // v7.7.91 — ARCH-13 gdelt fabrication fix: GDELT events have no canonical
+      // web page (gdelt.org hosts the GKG/API dashboard but no per-event URL).
+      // Anchoring fabricated URLs like `https://gdelt.org/event/${ev.id}` is a
+      // lie. Render GDELT entries as plain text + title attr (handled by the
+      // LiveFeed component); force link=null in the persisted cache so the
+      // dataset is honest at rest, not just in render.
+      const out = asLiveEvent(ev, 'gdelt', {
         category: ev.category || 'geopolitical',
         severity: ev.severity || 'moderate',
         city: ev.city || null,
@@ -235,6 +240,10 @@ function normalizeGdelt(cache) {
             ? { lat: ev.lat, lon: ev.lon }
             : undefined,
       });
+      // Override asLiveEvent's `link: item.link || ''` default to enforce null
+      // (asLiveEvent would otherwise coerce missing/empty into '').
+      out.link = null;
+      return out;
     });
 }
 
@@ -269,6 +278,16 @@ function dedupe(events) {
     byFp.set(e.fingerprint, e);
     out.push(e);
     if (out.length >= CAP) break;
+  }
+
+  // v7.7.89 — disambiguate duplicate ids (two articles with similar 48-char
+  // title slugs collide). Append a counter on collision so React keys stay unique.
+  const seenIds = new Map();
+  for (const e of out) {
+    const base = e.id;
+    const n = seenIds.get(base) ?? 0;
+    if (n > 0) e.id = `${base}-${n}`;
+    seenIds.set(base, n + 1);
   }
 
   return out;

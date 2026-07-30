@@ -226,6 +226,18 @@ const { class: className, id: idOverride = 'arch-brief' } = Astro.props;
     }
   }
 
+  /* v7.7.90 — CHROME-06: arch-cell pill was 22px tall (font 11px +
+     padding 6px 10px × 2 ≈ 22px). Below WCAG 2.5.5's 44×44 floor.
+     Bump to 44px via min-height (no vertical layout shift; padding
+     stays the same so the chrome shape is preserved). */
+  @media (max-width: 720px) {
+    .arch-cell__pill {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+    }
+  }
+
   /* === v7.6.8 — entrance + ambient pulse ===
      Each arch-cell slides up; sub-team / must-have list rows stagger
      in. Pills glow softly. Reduced motion safe. */

@@ -332,15 +332,24 @@ const timeBucketCounts = (() => {
               {/* v7.9.2 — venue-local clock (e.g. 15:15 GMT+8) shown on hover */}
               <span class="live-feed__hm-local">{localClock(e.timestamp, e.coords?.lon)}</span>
             </span>
-            <a
-              class="live-feed__title"
-              href={e.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              referrerpolicy="strict-origin-when-cross-origin"
-            >
-              {e.title}
-            </a>
+            {e.link ? (
+              <a
+                class="live-feed__title"
+                href={e.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                referrerpolicy="strict-origin-when-cross-origin"
+              >
+                {e.title}
+              </a>
+            ) : (
+              // v7.7.91 — ARCH-13 gdelt fabrication fix: render GDELT entries as
+              // citations (plain text + title attr citing the event id), not
+              // anchors to fabricated URLs.
+              <span class="live-feed__title" title={`GDELT event · id=${e.id}`}>
+                {e.title}
+              </span>
+            )}
             <span class="live-feed__cat mono">
               {e.city ? `${e.city.toUpperCase()} · ` : ''}
               {e.category.toUpperCase()}
@@ -856,6 +865,34 @@ const timeBucketCounts = (() => {
     .live-feed__search {
       flex-basis: 100%;
       max-width: none;
+    }
+  }
+
+  /* v7.7.90 — MOBILE-04: add the missing third breakpoint between 900px
+     and 480px. The 200px "related" column leaked past 320px viewports
+     (sum: 56+32+1fr+200+18 = 306 + gaps + padding). Collapse to
+     time+signal only; hide related + cat + count at the floor. */
+  @media (max-width: 600px) {
+    .live-feed__row {
+      grid-template-columns: 48px 8px 1fr 16px;
+      gap: 6px;
+      padding: 8px 12px;
+      font-size: 11px;
+    }
+    .live-feed__cat,
+    .live-feed__related,
+    .live-feed__count {
+      display: none;
+    }
+  }
+  @media (max-width: 480px) {
+    .live-feed__row {
+      grid-template-columns: 44px 6px 1fr;
+      gap: 4px;
+      padding: 8px 10px;
+    }
+    .live-feed__anchor {
+      grid-column: 3;
     }
   }
 

@@ -134,18 +134,13 @@ export function terminatorLine(d: Date, opts: TerminatorOptions = {}): Terminato
 /**
  * Project a (lat, lon) → SVG viewBox (x, y) using the equirectangular
  * convention used by EarthMap. Same formula as in EarthMap.astro.
+ *
+ * v7.7.91 — gate-honesty: removed (knip exit 1). Only consumer was
+ * terminatorPolylinePath, also removed in this ship. EarthMap.astro
+ * inlines the same formula for the equirect terminator. If you need
+ * this, duplicate the formula inline — it is 4 lines.
  */
-export function equirectProject(
-  lat: number,
-  lon: number,
-  width: number,
-  height: number,
-): { x: number; y: number } {
-  return {
-    x: ((lon + 180) / 360) * width,
-    y: ((90 - lat) / 180) * height,
-  };
-}
+// export function equirectProject(...) { /* removed v7.7.91 */ }
 
 /**
  * Orthographic (globe) projection helper. Given a (lat, lon) point and
@@ -272,19 +267,11 @@ export function terminatorOrthographicArcPath(
 /**
  * Build the SVG `points` string for the terminator polyline at a
  * given time. Drops duplicate / wrap points so the path closes cleanly.
+ *
+ * v7.7.91 — gate-honesty: removed (knip exit 1). EarthMap.astro uses
+ * terminatorOrthographicProject / terminatorOrthographicArcPath /
+ * terminatorOrthographicPath (orthographic globe rendering), not the
+ * equirect polyline. The function was the v7.7.3-era equirect rendering
+ * path; replaced when the ortho sphere shipped in v7.9.
  */
-export function terminatorPolylinePath(
-  d: Date,
-  width: number,
-  height: number,
-  opts: TerminatorOptions = {},
-): string {
-  const pts = terminatorLine(d, opts);
-  const coords = pts.map((p) => equirectProject(p.lat, p.lon, width, height));
-  let path = `M ${coords[0].x.toFixed(2)} ${coords[0].y.toFixed(2)}`;
-  for (let i = 1; i < coords.length; i++) {
-    path += ` L ${coords[i].x.toFixed(2)} ${coords[i].y.toFixed(2)}`;
-  }
-  path += ' Z'; // close the loop
-  return path;
-}
+// export function terminatorPolylinePath(...) { /* removed v7.7.91 */ }

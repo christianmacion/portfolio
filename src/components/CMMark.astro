@@ -1,0 +1,77 @@
+---
+/**
+ * CMMark.astro — Stratum CM monogram (v7.7.86).
+ *
+ * Typographic lockup: "CM" letterforms set in the institutional serif
+ * display stack (`var(--serif-display)` = Source Serif 4) + a 1u amber
+ * hairline rule under the baseline. Echoes Jane Street, Two Sigma,
+ * Bridgewater, Citadel, Renaissance, D.E. Shaw, FT, Bloomberg BBG —
+ * research-desk register, not brand-monogram register.
+ *
+ * Replaces the prior geometric monoline (open-arc C + structural M)
+ * which read as "vector app default" at favicon size and "AI-generated
+ * monogram" at nav size. The Stratum register is "person at a research
+ * desk" — exactly the position Christian occupies per
+ * portfolio-positioning-level.md.
+ *
+ * Single source of truth: Nav.astro + the two hero-anchor pages both
+ * consume this component. Color cascades through `currentColor` (ink)
+ * + `var(--c-amber)` (accent) so the same component renders correctly
+ * on light bg (nav), dark bg (hero anchor band), and any future surface.
+ *
+ * Accessibility:
+ *   - decorative=true (default): SVG is aria-hidden + focusable=false;
+ *     the parent link owns the accessible name. Use this whenever the
+ *     mark sits inside an element that already has an aria-label.
+ *   - decorative=false: SVG owns its own role="img" + aria-label.
+ *     Use this for standalone surfaces (e.g. a lone masthead).
+ */
+interface Props {
+  /** Accessible name for screen readers. Required when `decorative=false`. */
+  accessibleName?: string;
+  /** Extra CSS classes appended to the SVG element. */
+  class?: string;
+  /** When true (default), mark is hidden from accessibility tree. */
+  decorative?: boolean;
+  /** Rendered height in CSS pixels. Default 36. */
+  height?: number;
+  /** Rendered width in CSS pixels. Default 36. */
+  width?: number;
+}
+const {
+  accessibleName,
+  class: className,
+  decorative = true,
+  height = 36,
+  width = 36,
+} = Astro.props;
+---
+
+<svg
+  viewBox="0 0 64 64"
+  width={width}
+  height={height}
+  class={className}
+  aria-hidden={decorative ? 'true' : undefined}
+  role={decorative ? undefined : 'img'}
+  aria-label={!decorative ? accessibleName : undefined}
+  focusable="false"
+>
+  {
+    /* "CM" letterforms — institutional serif display. CurrentColor cascades
+      from the parent's `color` CSS property so the same component renders
+      correctly on light bg, dark bg, and amber-on-dark surfaces. */
+  }
+  <text
+    x="32"
+    y="42"
+    style="font-family: var(--serif-display); font-size: 40px; font-weight: 500; letter-spacing: -0.02em; fill: currentColor;"
+    text-anchor="middle">CM</text
+  >
+  {
+    /* 1u amber hairline rule under the baseline. Spans full cap-height (32u),
+      offset 4u below baseline. Reads as the institutional underline mark.
+      Drops out below ~20px display size (per uiux spec). */
+  }
+  <rect x="16" y="48" width="32" height="1" fill="var(--c-amber)"></rect>
+</svg>

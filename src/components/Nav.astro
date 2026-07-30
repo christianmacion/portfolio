@@ -3,10 +3,15 @@
  * Nav.astro — top navigation, responsive (collapses on mobile).
  * v3.5: split into primary (always-visible on desktop) and secondary
  * (Resources disclosure) to keep 1280px rows breathable.
+ * v7.7.87 — brand strip reduced to the Stratum monogram alone.
+ * The wordmark ("Christian T. Macion / Quant Researcher · AI Engineer")
+ * was visually redundant next to the mark; stripped per Owner directive.
+ * `profile` import was removed (no longer referenced). Only `path`
+ * (URL helper) + NavMore + CMMark remain.
  */
 import { path } from '@utils/url';
-import { profile } from '@utils/profile';
 import NavMore from '@components/NavMore.astro';
+import CMMark from '@components/CMMark.astro';
 const { pathname } = Astro.url;
 const isActive = (href: string) => {
   const suffix = href === '/' ? '/' : href;
@@ -77,42 +82,20 @@ const secondary = [
   <div class="container nav__inner">
     <a href={path('/')} class="nav__brand" aria-label="Christian Macion - home">
       {
-        /* v7.2 2026-07-24 — logo legibility fix. The prior <picture> chose the
-           mark asset by OS `prefers-color-scheme`, but the nav background follows
-           the *body theme* (--c-tape → --j-bg): cream on theme-light, warm-dark on
-           the base surface. So a dark-OS visitor on the light home got the
-           near-white mark on a cream bar → the C/M vanished, leaving only the
-           chevron (owner's "can't be read" report). Inlining the SVG lets the C/M
-           strokes use currentColor (= --ink-on-tape = the theme's correct ink),
-           so contrast is correct in every theme × OS combination. The chevron
-           uses the AA amber token in both themes. */
+        /* v7.7.87 — nav brand strip.
+           Stratum monogram via CMMark.astro is the sole identity element
+           in the nav. The previous wordmark ("Christian T. Macion /
+           Quant Researcher · AI Engineer") was visually redundant — the
+           mark and the wordmark were saying the same thing side-by-side.
+           Stripped per Owner directive: "looks shit and redundant".
+           Pattern: Linear · Stripe · Bloomberg BBG · FT — nav asserts
+           the mark, the page title and hero carry the wordmark.
+           Ink cascades through `currentColor`, accent through
+           `var(--c-amber)`. The parent link's aria-label owns the
+           accessible name; CMMark defaults to decorative=true so
+           screen readers do not double-announce. */
       }
-      <svg
-        class="nav__brand-mark"
-        viewBox="0 0 64 64"
-        width="36"
-        height="36"
-        role="img"
-        aria-label="Christian Macion monogram"
-        focusable="false"
-      >
-        <g fill="none" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M 28 22 A 12 12 0 1 0 28 42" stroke="currentColor"></path>
-          <polyline points="36,44 36,20" stroke="currentColor"></polyline>
-          <polyline points="36,20 47,40 58,20" stroke="var(--c-amber)"></polyline>
-          <polyline points="58,20 58,44" stroke="currentColor"></polyline>
-        </g>
-      </svg>
-      <span class="nav__brand-text">
-        {
-          /* v6.10.47 — derive the brand name from profile.fullName. The ®
-            glyph is wrapped in <sup> so the existing `.nav__brand-name sup`
-            rule (font-size 0.65em + amber tint) renders it as a proper
-            typographic superscript instead of inline text. */
-        }
-        <span class="nav__brand-name">{profile.fullName}</span>
-        <span class="nav__brand-sub">{profile.titles.short}</span>
-      </span>
+      <CMMark class="nav__brand-mark" width={40} height={40} />
     </a>
 
     <input type="checkbox" id="nav-toggle" class="nav__toggle-input" aria-hidden="true" />
@@ -218,42 +201,27 @@ const secondary = [
   .nav__brand {
     display: flex;
     align-items: center;
-    gap: var(--sp-3);
     text-decoration: none;
     color: var(--c-primary); /* v6.1.0 — always tape nav, light text */
     flex-shrink: 0;
     /* v6.3 polish — enforce ≥ 44 px tap target on the brand link.
-       The audit flagged the brand chrome at 184×36 px.
-       min-height:44 lifts the rect without shifting visible content
-       because the brand is centered in a 56 px nav row. */
+       v7.7.87 — the brand is now just the Stratum mark (40×40); a
+       single small-element tap target still needs ≥44 in both axes.
+       min-width + min-height on the <a> keep the parent rect compliant
+       even though the visible mark is smaller. */
+    min-width: 44px;
     min-height: 44px;
-    padding: 0.25rem 0;
+    padding: 0.25rem;
   }
   .nav__brand-mark {
     display: block;
-    width: 36px;
-    height: 36px;
+    /* v7.7.87 — bumped 36→40 to assert identity. With the wordmark
+       gone, the mark is the sole identity element in the nav row and
+       needs to read clearly from a 14" laptop across the room.
+       40/64 = 62.5% of viewBox height; hairline still legible. */
+    width: 40px;
+    height: 40px;
     border-radius: var(--radius-sm);
-  }
-  .nav__brand-text {
-    display: flex;
-    flex-direction: column;
-    line-height: 1.1;
-  }
-  .nav__brand-name {
-    font-weight: 600;
-    font-size: var(--fs-sm);
-  }
-  .nav__brand-name sup {
-    font-size: 0.65em;
-    color: var(--c-primary-2-light);
-  }
-  .nav__brand-sub {
-    font-size: var(--fs-xs);
-    /* v7.2 — was --c-white-faint (--j-ink-4): 3.10:1 light / 1.93:1 dark, fails
-       WCAG AA at this 12px size. --c-ink-3 passes AA in both themes (6.20:1
-       light / 5.62:1 dark) while staying secondary in the hierarchy. */
-    color: var(--c-ink-3);
   }
 
   .nav__links {
@@ -396,8 +364,9 @@ const secondary = [
     background: var(--c-amber-deep);
     /* v7.2 — was --c-primary (--j-ink), which is dark navy on theme-light →
        dark-on-dark against the amber-deep chip (fails WCAG AA). Warm near-white
-       text is legible on --c-amber-deep in both themes. */
-    color: #f7f2e7;
+       text is legible on --c-amber-deep in both themes.
+       v7.7.89 — was hardcoded #f7f2e7; tokenized to --j-cta-on-amber. */
+    color: var(--j-cta-on-amber);
     border: 1px solid var(--c-amber);
     /* v6.18 polish — prevent "Resume ↓" wrapping to "Res..." on narrower
        desktops. The audit found the CTA clipped at 1024-1280px when
@@ -408,7 +377,7 @@ const secondary = [
   .nav__cta:hover,
   .nav__cta:focus-visible {
     background: var(--c-amber);
-    color: #f7f2e7;
+    color: var(--j-cta-on-amber);
   }
 
   /* === v6.1.0 — theme toggle CSS removed (the button is gone) === */
@@ -459,10 +428,15 @@ const secondary = [
   .nav__toggle {
     display: none;
     flex-direction: column;
-    justify-content: space-between;
-    width: 28px;
-    height: 24px;
+    justify-content: center;
+    align-items: center;
+    width: 44px;
+    height: 44px;
     cursor: pointer;
+    /* v7.7.90 — CHROME-10 (WCAG 2.5.5): burger hit-rect was 28×24.
+       Expand to 44×44 (the AAA tap target floor); the visible 28×24
+       bars inside stay unchanged because of the inner <span>. */
+    flex-shrink: 0;
   }
   .nav__toggle span {
     display: block;
@@ -473,23 +447,9 @@ const secondary = [
     transition: all 200ms ease;
   }
 
-  @media (max-width: 1080px) {
-    .nav__brand-sub {
-      display: none;
-    }
-  }
   @media (max-width: 600px) {
-    .nav__brand-name {
-      font-size: 0.78rem;
-      letter-spacing: -0.01em;
-    }
     .nav__inner {
       gap: var(--sp-2);
-    }
-  }
-  @media (max-width: 420px) {
-    .nav__brand-name {
-      font-size: 0.7rem;
     }
   }
   @media (max-width: 980px) {
@@ -509,7 +469,15 @@ const secondary = [
       gap: var(--sp-2);
       transform: translateY(-200%);
       transition: transform 200ms ease;
-      box-shadow: var(--shadow-md);
+      /* v7.7.90 — MOBILE-03 / MOBILE-06: cap the menu height to
+         (viewport - nav-h) and make it scroll. The 26-link flat
+         list was 1274px tall (>568px iPhone-SE viewport). The
+         nav-search is also re-bound inside the menu via flex-column
+         so it's no longer orphaned. */
+      max-height: calc(100vh - var(--nav-h));
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      box-shadow: none;
     }
     .nav__toggle-input:checked ~ .nav__links {
       transform: translateY(0);

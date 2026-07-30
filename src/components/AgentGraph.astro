@@ -674,4 +674,16 @@ const activeLength = activeEdges.reduce((acc, e) => acc + dist(e.x1, e.y1, e.x2,
       padding: var(--sp-3);
     }
   }
+
+  /* v7.7.90 — MOBILE-08: hide the SVG node labels below 600px (the
+     11-13px labels were illegible at 320px viewport because the
+     viewBox scales down). Promote the semantic <ol>/<dl> list below
+     the SVG; the labels in the list are HTML text and scale with
+     the body font. */
+  @media (max-width: 600px) {
+    .ag-node-label,
+    .ag-node-sub {
+      display: none;
+    }
+  }
 </style>

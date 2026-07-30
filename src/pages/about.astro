@@ -199,8 +199,10 @@ const NGATE = `${profile.stats.evalGates}-gate`;
         </div>
         <ul class="method-ribbon__list mono">
           <li><strong>{quantProjectCount}</strong> public-data projects shipped</li>
-          <li><strong>5</strong> asset classes covered</li>
-          <li><strong>3</strong> strategy families validated end-to-end</li>
+          <li><strong>{profile.stats.assetClassCount}</strong> asset classes covered</li>
+          <li>
+            <strong>{profile.stats.strategyFamiliesCount}</strong> strategy families validated end-to-end
+          </li>
         </ul>
       </div>
 

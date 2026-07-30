@@ -58,8 +58,20 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
   breadcrumbs={[{ name: 'Home', href: '/' }]}
 >
   <!-- ============================================================
+       v7.7.91 — A14 BLACK STRAP REMOVAL.
+       The v7.7.85 dark version-stamp + KPI band ate 22% of mobile
+       above-the-fold and read as "loud, institutional chrome should
+       whisper". The version stamp DATA is preserved in
+       src/utils/build-stamp.ts; the visual band is gone. The version
+       stamp is now rendered in the Footer as a small footnote.
+       ============================================================ -->
+
+  <!-- ============================================================
        1. NEWS-RIBBON — first chrome, "this site is updated" signal
        v7.4 motion layer (Lane 1 = updates, Lane 2 = methodology frames).
+       v7.7.85 — sits on the new cool archival ivory (#fafaf7, was
+       #ece5d4 brown-biased kraft). The two-lane institutional feed
+       reads stronger against the cooler, brighter surface.
        ============================================================ -->
   <NewsRibbon />
 
@@ -194,14 +206,14 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
           <ul class="pillar__stats mono">
             <li>
               <b class="tnum"
-                ><span class="pillar__count" data-count="0.39" data-decimals="2">0.00</span></b
+                ><span class="pillar__count" data-counter="0.39" data-decimals="2">0.00</span></b
               ><span>SHARPE · ANN.</span>
             </li>
             <li>
               <b class="tnum"
                 ><span
                   class="pillar__count"
-                  data-count="-3.6"
+                  data-counter="-3.6"
                   data-decimals="1"
                   data-suffix="%"
                   data-prefix="−">−0.0%</span
@@ -212,7 +224,7 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
               <b class="tnum"
                 ><span
                   class="pillar__count"
-                  data-count="12"
+                  data-counter="12"
                   data-decimals="0"
                   data-suffix="%"
                   data-prefix="+">+0%</span
@@ -237,21 +249,21 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
               <b class="tnum"
                 ><span
                   class="pillar__count"
-                  data-count={profile.stats.aiAgentCount}
+                  data-counter={profile.stats.aiAgentCount}
                   data-decimals="0">0</span
                 ></b
               ><span>DAG AGENTS</span>
             </li>
             <li>
               <b class="tnum"
-                ><span class="pillar__count" data-count={archSafe.subTeamCount} data-decimals="0"
+                ><span class="pillar__count" data-counter={archSafe.subTeamCount} data-decimals="0"
                   >0</span
                 ></b
               ><span>SUB-TEAMS</span>
             </li>
             <li>
               <b class="tnum"
-                ><span class="pillar__count" data-count={archSafe.mustHaveCount} data-decimals="0"
+                ><span class="pillar__count" data-counter={archSafe.mustHaveCount} data-decimals="0"
                   >0</span
                 ></b
               ><span>MUST-HAVES</span>
@@ -721,15 +733,16 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
   .pillar__count {
     display: inline-block;
     min-width: 1ch;
-    transition: filter 0.4s ease;
+    /* v7.7.90 — CHROME-01: drop the drop-shadow halo (textbook halo
+       violation per chrome contract: mono + 1 accent, no halo). */
+    transition: opacity 0.4s ease;
   }
   .pillars__grid.is-counted .pillar__count {
-    filter: drop-shadow(0 0 6px color-mix(in oklab, var(--c-amber) 40%, transparent));
+    opacity: 1;
   }
   @media (prefers-reduced-motion: reduce) {
     .pillar__count {
       transition: none;
-      filter: none !important;
     }
   }
   .pillars__eyebrow {
@@ -935,7 +948,12 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
   }
 
   /* ====== Responsive ====== */
-  @media (max-width: 900px) {
+  /* v7.7.90 — MOBILE-13: hero-anchor 2-pillar grid was cramped at
+     768-979px (the 2-col 32px-gap was tight inside the container).
+     Push the collapse to <980px so it falls in line with the nav
+     burger breakpoint; at 980-1280px the pillars keep 2-col but with
+     tighter gap. */
+  @media (max-width: 980px) {
     .pillars__grid {
       grid-template-columns: 1fr;
       gap: 24px;
@@ -961,6 +979,18 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     .hero__name .word:nth-child(2),
     .hero__name .word:nth-child(3) {
       font-size: 32px;
+    }
+    /* v7.7.90 — CHROME-02: tighter clamp at iPhone-SE (320px) so hero H1
+       doesn't wrap awkwardly. 36px was set at <720px but didn't shrink
+       further for the floor viewport. */
+  }
+  @media (max-width: 480px) {
+    .hero__name {
+      font-size: 28px;
+    }
+    .hero__name .word:nth-child(2),
+    .hero__name .word:nth-child(3) {
+      font-size: 24px;
     }
     .hero__kpis {
       grid-template-columns: repeat(2, 1fr);

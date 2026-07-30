@@ -19,6 +19,11 @@
  */
 import { archSafe } from '@utils/profile';
 
+// v7.7.91 — values below are illustrative placeholders pending wiring to a
+// deterministic snapshot from live-feed-cache.json. The illustrative badge is
+// rendered in the panel header so the recruiter reads the caveat upfront.
+// The 3rd stat (eval gates) is already derived from `archSafe`. Bound
+// TODO ARCH-25 next ship: bind events/signals/decisions to cache JSON.
 const stats = [
   {
     label: 'Events processed · 24h',
@@ -281,21 +286,24 @@ const stats = [
   }
 
   /* === Live dot === */
+  /* v7.7.90 — CHROME-03: drop the expanding-ring halo. Keep the static
+     dot; rely on opacity keyframe for liveness cue (no halo per chrome
+     contract). */
   .live-stats__live-dot {
     width: 6px;
     height: 6px;
     border-radius: 50%;
     background: var(--c-terracotta);
-    box-shadow: 0 0 0 0 var(--c-terracotta);
-    animation: live-stats-dot 1.6s ease-out infinite;
+    animation: live-stats-dot-opacity 1.6s ease-in-out infinite;
     flex-shrink: 0;
   }
-  @keyframes live-stats-dot {
-    0% {
-      box-shadow: 0 0 0 0 color-mix(in oklab, var(--c-terracotta) 70%, transparent);
-    }
+  @keyframes live-stats-dot-opacity {
+    0%,
     100% {
-      box-shadow: 0 0 0 8px transparent;
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.55;
     }
   }
 

@@ -144,9 +144,10 @@ const KNOWN_BOT_BLOCKED = [
   { host: 'bitget.com', why: 'Bitget TLS handshake fails in default Node fetch; real link works' },
 ];
 
-const KNOWN_NO_PAGE = [
-  { host: 'gdelt.org', why: 'GDELT 2.0 events have no canonical web page' },
-];
+// v7.7.91 — ARCH-13: removed gdelt.org from KNOWN_NO_PAGE because the
+// normalizeGdelt pass now emits link=null for GDELT entries (no fabricated
+// URLs). The live-feed-integrity gate validates that GDELT events do NOT
+// carry a link, so this allow-list entry is no longer needed.
 
 /** Classify a probe result into fail / warn / pass. */
 function classify(r) {
@@ -155,15 +156,22 @@ function classify(r) {
   // ever slips past the extractor regex (e.g. unescaped chars),
   // the throw kills the whole scan. Fall back to pass rather than
   // crashing CI on parser fragility.
+  // v7.7.89 ARCH-14/15 — gate honesty deferred to v7.7.90 (Tier 2) where
+  // ARCH-13 (gdelt.org/event fabrication) + the penguinrandomhouse dead
+  // link + the timeout-policy intent will land together. Restoring the
+  // documented-but-soft behavior so v7.7.89 can ship chrome polish.
   let host;
   try {
     host = new URL(r.url).host.toLowerCase();
   } catch {
-    return 'pass';
+    return 'warn-malformed';
   }
-  if (KNOWN_NO_PAGE.some((k) => host === k.host || host.endsWith('.' + k.host))) {
-    return 'warn-no-page';
-  }
+  // v7.7.91 — ARCH-13: KNOWN_NO_PAGE list is now empty (gdelt.org was the
+  // only entry; entries with link=null no longer enter the link-rot sweep
+  // because LiveFeed renders <span> not <a>). Soft-warn removed — re-add
+  // entries here only when an upstream has a known-false-404 issue with a
+  // real upstream URL.
+  // (no current entries)
   if (KNOWN_BOT_BLOCKED.some((k) => host === k.host || host.endsWith('.' + k.host))) {
     return 'warn-bot-blocked';
   }

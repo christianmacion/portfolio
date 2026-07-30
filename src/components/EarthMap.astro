@@ -1336,7 +1336,12 @@ void venueByCity;
     inset-inline-end: var(--j-sp-3);
     inset-block-end: auto;
     width: min(var(--earth-focus-panel-width), calc(100vw - var(--j-sp-4)));
-    max-block-size: calc(100vh - var(--j-sp-4) - var(--j-sp-4));
+    max-block-size: calc(
+      100vh - var(--j-sp-4) - var(--j-sp-4)
+    ); /* v7.7.91 — Android Chrome ≤115 fallback: re-bound to 100dvh below */
+    /* 100dvh reflects the dynamic viewport on iOS Safari + modern Android Chrome;
+     the 100vh fallback above handles older browsers that don't recognize dvh. */
+    max-block-size: calc(100dvh - var(--j-sp-4) - var(--j-sp-4));
     overflow-y: auto;
     z-index: 40;
     border: var(--j-b-1);

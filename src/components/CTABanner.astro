@@ -593,4 +593,16 @@ const LEGEND_COUNTS = {
       --cell: 22px;
     }
   }
+
+  /* v7.7.90 — CHROME-11: the 22×22 CTA matrix cells are below the
+     WCAG 2.5.5 44×44 touch-target floor on mobile. Disable pointer
+     events on touch devices so the matrix becomes read-only chrome
+     (the data is decorative; the row labels above are the real CTAs).
+     Hover-capable + fine-pointer devices keep the interactivity. */
+  @media (hover: none) and (pointer: coarse) {
+    .cta__cell,
+    .cta__cell--slot {
+      pointer-events: none;
+    }
+  }
 </style>

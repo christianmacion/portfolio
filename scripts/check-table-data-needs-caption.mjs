@@ -54,22 +54,6 @@ function walk(dir, files = []) {
 
 // Find <table> elements with their inner body. Returns array of
 // {file, line, attrs, inner, endIdx}.
-function findTables(html) {
-  const tables = [];
-  const re = /<table\b([^>]*?)>/gi;
-  let m;
-  while ((m = re.exec(html)) !== null) {
-    const attrs = m[1];
-    const start = m.index;
-    const closeIdx = html.indexOf('</table>', start);
-    if (closeIdx === -1) continue;
-    const inner = html.slice(start + m[0].length, closeIdx);
-    tables.push({ file: '', line: lineOf(html, start), attrs, inner });
-    re.lastIndex = closeIdx + '</table>'.length;
-  }
-  return tables;
-}
-
 function isLayoutTable(attrs, inner) {
   // role="presentation" or role="none" exempts the table.
   if (/\brole\s*=\s*["'](presentation|none)["']/i.test(attrs)) return true;
@@ -86,27 +70,6 @@ function hasAccessibleName(attrs, inner) {
   if (/\baria-label\s*=\s*(?:"[^"]+"|'[^']+'|\{[^}]+\})/i.test(attrs)) return true;
   // Wrapping region with aria-label is also acceptable — handled outside.
   return false;
-}
-
-function findCaptionViolations(html, file) {
-  const findings = [];
-  const tables = findTables(html);
-  for (const t of tables) {
-    if (isLayoutTable(t.attrs, t.inner)) continue;
-    if (hasAccessibleName(t.attrs, t.inner)) continue;
-    // Check for wrapping role="region" aria-label="...".
-    // Walk backwards from <table> to find immediate container.
-    const before = html.slice(Math.max(0, t.line * 0), t.line === 1 ? 0 : 1);
-    // Simpler heuristic: look at the 200 chars preceding <table>.
-    const pre = html.slice(Math.max(0, t.file === undefined ? 0 : 0), 0);
-    // We can't easily get offset → use a separate index-aware helper below.
-    findings.push({
-      file,
-      line: t.line,
-      reason: 'data <table> has <thead>/<th> but no <caption>, aria-labelledby, or aria-label',
-    });
-  }
-  return findings;
 }
 
 // Index-aware version (preferred).

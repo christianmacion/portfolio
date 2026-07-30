@@ -303,4 +303,18 @@ const primeX = project(0, 0).x;
   .globe__legend-cap {
     color: var(--c-ink-3);
   }
+
+  /* v7.7.90 — MOBILE-07: hide the SVG text labels below 540px (the
+     10px labels were rendering at 2.7px effective at 320px viewport
+     because the viewBox scales down). Rely on the legend <ul> below
+     for the data — semantic, screen-reader-friendly, scale-free. */
+  @media (max-width: 540px) {
+    .globe__label {
+      display: none;
+    }
+    .globe__legend {
+      font-size: 0.85rem;
+      gap: var(--sp-2);
+    }
+  }
 </style>

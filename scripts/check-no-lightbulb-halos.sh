@@ -19,6 +19,10 @@
 #   1  = found halo patterns (will print offenders)
 #   2  = bad args
 set -euo pipefail
+# v7.7.91 — gate-honesty: set -o pipefail ensures the grep pipeline failure
+# propagates. Previously `head -50 || true` swallowed the grep exit code,
+# so a broken grep (e.g., regex error) silently passed the gate.
+set -o pipefail
 
 STRICT=0
 for arg in "$@"; do

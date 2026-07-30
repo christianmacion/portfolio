@@ -65,9 +65,11 @@
 
   /* === v6.11.1 — INK ALPHA STEPS (tokenize the 47 hardcoded
      rgba(230,237,243,X) literals across Nav, Footer, ProofCard,
-     Collaborators, KeyHintPanel, Stat, Equation. Each
-     step is named for its semantic role; auto-tracks any future
-     palette shift via color-mix(in oklab). */
+     Stat, Equation. Each step is named for its semantic role;
+     auto-tracks any future palette shift via color-mix(in oklab).
+     v7.7.91 — dropped Collaborators / KeyHintPanel from the list;
+     both components were dead (no importers), removed for
+     gate-honesty (knip exit 1 must tell the truth, not be masked). */
   --c-ink-mute: color-mix(in oklab, var(--c-ink) 70%, transparent); /* nav links, footers */
   --c-ink-soft: color-mix(in oklab, var(--c-ink) 78%, transparent); /* subdued body */
   --c-ink-faint: color-mix(in oklab, var(--c-ink) 65%, transparent); /* captions, hints */
@@ -277,10 +279,12 @@
 
   /* v6.5 — defensively pause CSS-driven motion inside Earth primitives.
      Retained for any future earth-* component; currently the surviving
-     EarthMap surfaces (EarthDrawer / CoverageGlobe) ship no nested CSS
-     animations, so the rule is a no-op today. Re-asserting
-     `animation-play-state: paused` ensures nothing survives the cascade
-     in nested selectors if/when a new earth primitive ships. */
+     EarthMap surface ships no nested CSS animations, so the rule is a
+     no-op today. Re-asserting `animation-play-state: paused` ensures
+     nothing survives the cascade in nested selectors if/when a new
+     earth primitive ships.
+     v7.7.91 — dropped EarthDrawer / CoverageGlobe mention; both
+     referenced via dead components removed for gate-honesty. */
 }
 
 /* === KaTeX size adjustments === */

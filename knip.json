@@ -26,7 +26,6 @@
     "@data/*": ["src/data/*"]
   },
   "ignore": [
-    "src/components/Odometer.astro",
     "src/scripts/*.ts",
     "scripts/__tests__/verify-anchors.test.mjs",
     "scripts/build-world-map.mjs",
@@ -45,7 +44,7 @@
     "topojson-client",
     "topojson-simplify"
   ],
-  "ignoreBinaries": ["pdftotext", "python3"],
+  "ignoreBinaries": ["pdftotext", "python3", "ffprobe"],
   "ignoreExportsUsedInFile": true,
   "ignoreUnresolved": ["/_pagefind/pagefind-ui.js"]
 }

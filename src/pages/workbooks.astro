@@ -268,7 +268,7 @@ const workbooks = [
     position: relative;
     padding: var(--sp-4) var(--sp-3);
     border: 1px solid var(--c-rule);
-    border-radius: 6px;
+    border-radius: var(--radius-md);
     background: var(--c-paper);
     display: flex;
     flex-direction: column;
@@ -282,7 +282,7 @@ const workbooks = [
     width: 3px;
     height: 100%;
     background: var(--c-amber);
-    border-radius: 3px 0 0 3px;
+    border-radius: var(--radius-md);
     opacity: 0.85;
   }
   .spine__item:nth-child(2)::before {
@@ -351,7 +351,7 @@ const workbooks = [
     gap: var(--sp-3);
     padding: var(--sp-5);
     border: 1px solid var(--c-rule);
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     background: var(--c-paper);
     transition:
       transform 0.2s ease,
@@ -375,8 +375,10 @@ const workbooks = [
   .workbook-card:hover,
   .workbook-card:focus-visible {
     transform: translateY(-2px);
+    /* v7.7.91 — chrome contract: kill the box-shadow halo, keep border-color
+       amber lift for hover/focus state. */
     border-color: var(--c-amber);
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
+    border-width: 2px;
   }
   .workbook-card--teal:hover,
   .workbook-card--teal:focus-visible {
@@ -393,7 +395,7 @@ const workbooks = [
     font-size: 0.65rem;
     letter-spacing: 0.12em;
     padding: 4px 8px;
-    border-radius: 3px;
+    border-radius: var(--radius-md);
     background: rgba(46, 125, 50, 0.1);
     color: var(--c-green, #2e7d32);
     border: 1px solid rgba(46, 125, 50, 0.25);

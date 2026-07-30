@@ -940,14 +940,17 @@ const sourcesXY = sources.map((s) => ({ ...s, ...lonLat(s.lon, s.lat) }));
     height: 6px;
     border-radius: 50%;
     background: var(--c-terracotta);
-    animation: bloomberg-feed-pulse 1.6s ease-out infinite;
+    /* v7.7.90 — CHROME-03: drop the expanding-ring halo. Keep static dot;
+       opacity keyframe provides the liveness cue (no halo per chrome contract). */
+    animation: bloomberg-feed-pulse-opacity 1.6s ease-in-out infinite;
   }
-  @keyframes bloomberg-feed-pulse {
-    0% {
-      box-shadow: 0 0 0 0 color-mix(in oklab, var(--c-terracotta) 70%, transparent);
-    }
+  @keyframes bloomberg-feed-pulse-opacity {
+    0%,
     100% {
-      box-shadow: 0 0 0 8px transparent;
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.55;
     }
   }
   .bloomberg__feed-list {

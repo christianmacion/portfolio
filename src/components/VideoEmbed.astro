@@ -89,7 +89,8 @@ const isGallery = mode === 'gallery';
     background: color-mix(in oklab, var(--c-tape) 0.78%, transparent);
     color: var(--c-primary-2-deep);
     font-size: var(--fs-xs);
-    border-radius: 3px;
+    /* v7.7.91 — chrome contract: rely on --j-r token (0px). */
+    border-radius: var(--j-r);
     letter-spacing: 0.06em;
   }
   .video-embed__cap {

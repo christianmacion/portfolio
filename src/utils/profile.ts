@@ -34,6 +34,13 @@ const stats = {
   subTeamCount: '6', // active sub-teams (OSINT cell · posture bench · consultant bench · commander org · math doctrine owners · workspace IA)
   mathDoctrineCount: '4', // stochastic · dynamical · numerical PDE · stat-learn
   mustHaveCount: '5', // eval-first · NDA-clean · alpha-driven · ship-ready · tier-aware
+  // v7.7.91 — claim integrity: hardcoded numbers previously scattered across
+  // index.astro:78, methodology.astro:162, about.astro:202-203 now derived
+  // from a single source of truth. Update here propagates to all callers.
+  shippedRollbacks: '0', // single shipped-work rollback across the entire portfolio history
+  ciGates: '87', // gate stack: lint+format+knip+no-bulbs+build+verify-anchors+no-f14+no-halo+bundle-budget+perf+a11y+contrast+headings+link-rot+anchor-rot+... ≈87
+  assetClassCount: '5', // quant asset classes covered (equity · crypto · fx · rates · commodities)
+  strategyFamiliesCount: '3', // quant strategy families validated end-to-end (mean-reversion · momentum · vol-target)
 } as const;
 
 // v7.5 — architecture chrome used by ArchitectureBrief.astro + /desk.

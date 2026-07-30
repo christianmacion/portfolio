@@ -28,6 +28,7 @@ import 'katex/dist/katex.min.css';
 import Nav from '@components/Nav.astro';
 import Footer from '@components/Footer.astro';
 import V613Fonts from '@components/V613Fonts.astro';
+import KeyHintPanel from '@components/KeyHintPanel.astro';
 import { profile } from '@utils/profile';
 import { buildMeta, personJsonLd, websiteJsonLd, breadcrumbJsonLd } from '@utils/seo';
 import { path } from '@utils/url';
@@ -133,7 +134,7 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
     }
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com data:; script-src 'self' 'unsafe-inline'; connect-src 'self'; frame-src 'self' https://cal.com https://*.cal.com; frame-ancestors 'none'; base-uri 'self'; form-action 'none'"
+      content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; script-src 'self' 'unsafe-inline'; connect-src 'self'; worker-src 'self' blob:; manifest-src 'self'; media-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests"
     />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
 
@@ -233,6 +234,7 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
       <slot />
     </main>
     <Footer />
+    <KeyHintPanel />
 
     <button id="back-to-top" type="button" aria-label="Back to top" hidden>
       <svg

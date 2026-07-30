@@ -75,8 +75,6 @@ function findMisingRole(html, file) {
     if (!tagMatch) continue;
     const tagName = tagMatch[1];
     const tagAttrs = tagMatch[2];
-    // Self-closing? Tag ends with /> — check
-    const selfClosing = /\/>$/.test(tagAttrs);
     // Has role attribute?
     const hasRole = /\brole\s*=\s*(?:"[^"]+"|'[^']+'|\{[^}]+\})/i.test(tagAttrs);
     if (!hasRole) {
