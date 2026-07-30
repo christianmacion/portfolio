@@ -19,8 +19,6 @@ import CTABanner from '@components/CTABanner.astro';
 import { profile } from '@utils/profile';
 import { path } from '@utils/url';
 
-const NGATE = `${profile.stats.evalGates}-gate`;
-
 // The five-rung spine — the "AI engineering journey" thesis.
 const spine = [
   {
@@ -67,6 +65,14 @@ const workbooks = [
     summary:
       'The 5-rung spine as a beginner-friendly walkthrough. Prompt → skills → agents → loop → graph, with Karpathy autoresearch as the concrete case.',
     accent: 'amber',
+    chapters: [
+      { num: 1, name: 'The anatomy of a prompt', anchor: '#ch-1' },
+      { num: 2, name: 'Skills: packaging recurring work', anchor: '#ch-2' },
+      { num: 3, name: 'Agents: autonomous workers', anchor: '#ch-3' },
+      { num: 4, name: 'Loop engineering: the 5-must-have primitive', anchor: '#ch-4' },
+      { num: 5, name: 'Graph engineering: the integrating layer', anchor: '#ch-5' },
+      { num: 6, name: 'Operating the stack: cost, observability, scaling', anchor: '#ch-6' },
+    ],
   },
   {
     id: 'w2',
@@ -78,6 +84,15 @@ const workbooks = [
     summary:
       'The Königsberg-to-multi-agent arc. Why context windows fail, how to build a four-stage Extract · Resolve · Assemble · Query pipeline, where it fits in your stack.',
     accent: 'teal',
+    chapters: [
+      { num: 1, name: 'The seven bridges of Königsberg', anchor: '#ch-1' },
+      { num: 2, name: 'Why context windows are not enough', anchor: '#ch-2' },
+      { num: 3, name: 'Anatomy of a knowledge graph', anchor: '#ch-3' },
+      { num: 4, name: 'The four-stage pipeline', anchor: '#ch-4' },
+      { num: 5, name: 'The shared-memory pattern', anchor: '#ch-5' },
+      { num: 6, name: 'Five agent patterns, five graph roles', anchor: '#ch-6' },
+      { num: 7, name: 'Building & shipping a graph that holds up', anchor: '#ch-7' },
+    ],
   },
 ];
 ---
@@ -94,7 +109,9 @@ const workbooks = [
     <div class="container container-narrow">
       <p class="section__eyebrow"><span class="mono">workbooks/</span> · the 5-rung spine</p>
       <h1 class="page-head__title" data-words>
-        Prompt <span class="hl">→</span> skills <span class="hl">→</span> agents <span class="hl">→</span> loops <span class="hl">→</span> graphs.
+        Prompt <span class="hl">→</span> skills <span class="hl">→</span> agents <span class="hl"
+          >→</span
+        > loops <span class="hl">→</span> graphs.
       </h1>
       <VoiceLine class="page-head__voice">
         Modern AI systems are built in five compounding layers. Most teams plateau at the loop rung.
@@ -124,8 +141,8 @@ const workbooks = [
           Five compounding layers<span class="muted"> — pick your rung.</span>
         </h2>
         <p class="section__lede">
-          Every layer is a force multiplier on the one below it. Most teams stop at the loop.
-          The graph is where the agents start to share memory instead of re-deriving context.
+          Every layer is a force multiplier on the one below it. Most teams stop at the loop. The
+          graph is where the agents start to share memory instead of re-deriving context.
         </p>
       </header>
 
@@ -153,16 +170,14 @@ const workbooks = [
     inline) so the shareable HTML works on any host.
   */
   }
-  <section class="section" id="trilogy">
+  <section class="section" id="workbooks">
     <div class="container">
       <header class="section__head">
         <p class="section__eyebrow">Shareable</p>
-        <h2 class="section__title">
-          Two workbooks, one claim.
-        </h2>
+        <h2 class="section__title">Two workbooks, one claim.</h2>
         <p class="section__lede">
-          One big claim — the 5-rung spine. Two levels of audience — beginner, technical.
-          Each one is a self-contained PDF + shareable HTML.
+          One big claim — the 5-rung spine. Two levels of audience — beginner, technical. Each one
+          is a self-contained PDF + shareable HTML.
         </p>
       </header>
 
@@ -184,9 +199,30 @@ const workbooks = [
 
               <p class="workbook-card__sum">{w.summary}</p>
 
+              {/* v7.16 — chapter TOC inside each workbook card */}
+              <details class="workbook-card__toc">
+                <summary class="workbook-card__toc-summary mono">
+                  CHAPTERS · {w.chapters.length}
+                </summary>
+                <ol class="workbook-card__toc-list mono">
+                  {w.chapters.map((c) => (
+                    <li>
+                      <a href={`${w.href}${c.anchor}`} class="workbook-card__toc-link">
+                        <span class="workbook-card__toc-num">{String(c.num).padStart(2, '0')}</span>
+                        <span class="workbook-card__toc-name">{c.name}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ol>
+              </details>
+
               <footer class="workbook-card__foot">
-                <a href={path(w.href)} class="btn btn--primary btn--sm">Open HTML →</a>
-                <a href={w.pdfHref} class="btn btn--ghost btn--sm" download>PDF ↓</a>
+                <a href={path(w.href)} class="btn btn--primary btn--sm">
+                  Open HTML →
+                </a>
+                <a href={path(w.pdfHref)} class="btn btn--ghost btn--sm" download>
+                  PDF ↓
+                </a>
               </footer>
             </article>
           ))
@@ -232,7 +268,7 @@ const workbooks = [
     position: relative;
     padding: var(--sp-4) var(--sp-3);
     border: 1px solid var(--c-rule);
-    border-radius: 6px;
+    border-radius: var(--radius-md);
     background: var(--c-paper);
     display: flex;
     flex-direction: column;
@@ -246,20 +282,28 @@ const workbooks = [
     width: 3px;
     height: 100%;
     background: var(--c-amber);
-    border-radius: 3px 0 0 3px;
+    border-radius: var(--radius-md);
     opacity: 0.85;
   }
   .spine__item:nth-child(2)::before {
     background: var(--c-teal);
   }
   .spine__item:nth-child(3)::before {
-    background: var(--c-purple, #7e57c2);
+    /* v7.6.3 — was var(--c-purple, #7e57c2). --c-purple is not a canonical
+       token; rail 3 fell back to a stale hex. Use --c-violet (the named
+       accent in the v6.17.1 palette) to match the rest of the spoke. */
+    background: var(--c-violet);
   }
   .spine__item:nth-child(4)::before {
-    background: var(--c-green, #2e7d32);
+    /* v7.6.3 — was var(--c-green, #2e7d32). --c-green is not canonical;
+       rail 4 fell back to a stale hex. Use --c-sage to match the page's
+       new matcha/sage/terracotta accent spine. */
+    background: var(--c-sage);
   }
   .spine__item:nth-child(5)::before {
-    background: var(--c-ink-1);
+    /* v7.6.3 — was var(--c-ink-1) (muted neutral, effectively invisible).
+       Use --c-ink-2 for the floor rail so the 5-rung spine actually reads. */
+    background: var(--c-ink-2);
   }
   .spine__num {
     font-size: 0.75rem;
@@ -307,7 +351,7 @@ const workbooks = [
     gap: var(--sp-3);
     padding: var(--sp-5);
     border: 1px solid var(--c-rule);
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     background: var(--c-paper);
     transition:
       transform 0.2s ease,
@@ -328,12 +372,16 @@ const workbooks = [
   .workbook-card--teal::before {
     background: var(--c-teal);
   }
-  .workbook-card:hover {
+  .workbook-card:hover,
+  .workbook-card:focus-visible {
     transform: translateY(-2px);
+    /* v7.7.91 — chrome contract: kill the box-shadow halo, keep border-color
+       amber lift for hover/focus state. */
     border-color: var(--c-amber);
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
+    border-width: 2px;
   }
-  .workbook-card--teal:hover {
+  .workbook-card--teal:hover,
+  .workbook-card--teal:focus-visible {
     border-color: var(--c-teal);
   }
   .workbook-card__head {
@@ -347,7 +395,7 @@ const workbooks = [
     font-size: 0.65rem;
     letter-spacing: 0.12em;
     padding: 4px 8px;
-    border-radius: 3px;
+    border-radius: var(--radius-md);
     background: rgba(46, 125, 50, 0.1);
     color: var(--c-green, #2e7d32);
     border: 1px solid rgba(46, 125, 50, 0.25);
@@ -400,5 +448,67 @@ const workbooks = [
     flex: 1;
     text-align: center;
     justify-content: center;
+  }
+
+  /* === v7.16 — chapter TOC inside each workbook card ===================== */
+  .workbook-card__toc {
+    margin-top: var(--sp-3);
+    padding-top: var(--sp-3);
+    border-top: 1px dashed var(--c-rule);
+  }
+  .workbook-card__toc-summary {
+    list-style: none;
+    cursor: pointer;
+    color: var(--c-ink-2);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 6px 8px;
+    user-select: none;
+  }
+  .workbook-card__toc-summary::-webkit-details-marker {
+    display: none;
+  }
+  .workbook-card__toc-summary::before {
+    content: '▸ ';
+    display: inline-block;
+    transition: transform 120ms ease;
+  }
+  .workbook-card__toc[open] > .workbook-card__toc-summary::before {
+    content: '▾ ';
+  }
+  .workbook-card__toc-list {
+    list-style: none;
+    padding: 0;
+    margin: 8px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .workbook-card__toc-link {
+    display: flex;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--c-ink-2);
+    padding: 4px 6px;
+    border-left: 2px solid transparent;
+    transition:
+      border-color 120ms ease,
+      color 120ms ease;
+  }
+  .workbook-card__toc-link:hover,
+  .workbook-card__toc-link:focus-visible {
+    color: var(--c-ink);
+    border-left-color: var(--c-amber);
+    background: var(--c-paper-2);
+  }
+  .workbook-card__toc-num {
+    color: var(--c-ink-3);
+    font-size: 10px;
+    flex: 0 0 24px;
+  }
+  .workbook-card__toc-name {
+    flex: 1;
+    font-size: 11px;
   }
 </style>

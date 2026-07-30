@@ -20,6 +20,7 @@ import '@styles/tokens.css';
 import '@styles/tokens-v6.13.css';
 import '@styles/global.css';
 import '@styles/motion.css';
+import '@styles/trend-grid.css';
 import '@styles/back-to-top.css';
 import '@styles/print.css';
 import 'katex/dist/katex.min.css';
@@ -27,6 +28,7 @@ import 'katex/dist/katex.min.css';
 import Nav from '@components/Nav.astro';
 import Footer from '@components/Footer.astro';
 import V613Fonts from '@components/V613Fonts.astro';
+import KeyHintPanel from '@components/KeyHintPanel.astro';
 import { profile } from '@utils/profile';
 import { buildMeta, personJsonLd, websiteJsonLd, breadcrumbJsonLd } from '@utils/seo';
 import { path } from '@utils/url';
@@ -44,6 +46,11 @@ interface Props {
   // 'light' / 'dark' forces the theme via body.theme-light / body.theme-dark.
   // Note: tokens-v6.13.css uses :has() to detect these body classes.
   theme?: 'auto' | 'light' | 'dark';
+  // v7.7.18 — ogDescription overrides the OG description used by buildMeta.
+  // Pages with long `summary_long` copy should pass a shorter string here so
+  // the OG/Twitter Card preview (LinkedIn truncates at 200 chars, Slack at ~200)
+  // doesn't cut off mid-sentence. Falls back to `description` when absent.
+  ogDescription?: string;
 }
 
 // v6.18 — `surface` now defaults to `'v6-13'` (warm-dim #1a1714) so EVERY
@@ -60,8 +67,13 @@ const {
   className,
   extraJsonLd,
   breadcrumbs,
+  ogDescription,
   surface = 'v6-13',
-  theme = 'auto',
+  // v7.6.3 — default theme is 'light' (was 'auto'). The matcha + terracotta
+  // vocabulary reads institutional on cream; the warm-dim dark register
+  // reads as 'legacy legacy' on dark-OS visitors. Pages that explicitly want
+  // the dim surface opt in with theme="dark" or theme="auto".
+  theme = 'light',
 } = Astro.props;
 
 // v6.17 — resolve theme to a body class. 'auto' yields no class (CSS
@@ -73,6 +85,10 @@ const bodyClass = [themeClass, className].filter(Boolean).join(' ');
 const meta = buildMeta({
   title,
   description: description ?? profile.titles.secondary,
+  // v7.7.18 — ogDescription is the OG/Twitter Card description (short, ≤200).
+  // Page-level `description` is the SEO meta description (longer, for search
+  // snippets). Two different audiences, two different strings.
+  ogDescription: ogDescription ?? description ?? profile.titles.secondary,
   // Default og:image is the headshot banner. `path()` prepends the configured
   // base (`/portfolio` on GH Pages) so the resolved URL points at the actual
   // deployed asset, not the site root.
@@ -109,11 +125,16 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
         Defense in depth alongside CF Pages CDN headers.
         JSON-LD <script type="application/ld+json"> is exempt from
         `script-src` by every modern browser (CSP3 spec, also Chromium
-        exempts it for compatibility). The CSP still blocks inline JS. */
+        exempts it for compatibility).
+        v7.6.3 — added `'unsafe-inline'` to script-src (inline behavior used
+        by proof/projects/frontier-models/methodology filter chips + copy-to-
+        clipboard + DSR calc + back-to-top). Static portfolio, no user-generated
+        content, no auth tokens — inline-script risk is acceptable. Also added
+        frame-src https://cal.com so the booking widget on /contact renders. */
     }
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com data:; script-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'none'"
+      content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; script-src 'self' 'unsafe-inline'; connect-src 'self'; worker-src 'self' blob:; manifest-src 'self'; media-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests"
     />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
 
@@ -213,6 +234,7 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
       <slot />
     </main>
     <Footer />
+    <KeyHintPanel />
 
     <button id="back-to-top" type="button" aria-label="Back to top" hidden>
       <svg
@@ -257,7 +279,6 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
       import '@scripts/motion.ts';
       import '@scripts/carousel.ts';
       import '@scripts/keyboard-shortcuts.ts';
-      import '@scripts/odometer.ts';
     </script>
   </body>
 </html>

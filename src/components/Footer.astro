@@ -7,12 +7,13 @@
  */
 import { profile } from '@utils/profile';
 import { path } from '@utils/url';
-import { buildYear, buildStampUtc8 } from '@utils/build-stamp';
+import { buildYear, buildStampUtc8, packageVersion } from '@utils/build-stamp';
 import BrandMotif from '@components/BrandMotif.astro';
 import Avatar from '@components/Avatar.astro';
 
 const year = buildYear();
 const deployedStamp = buildStampUtc8();
+const pkgVersion = packageVersion();
 ---
 
 <footer class="footer">
@@ -42,8 +43,9 @@ const deployedStamp = buildStampUtc8();
     </div>
 
     <div class="footer__cols">
+      <h2 class="sr-only">Footer navigation</h2>
       <div class="footer__col">
-        <h4>Site</h4>
+        <h3>Site</h3>
         <ul>
           <li><a href={path('/solutions')}>Solutions</a></li>
           <li><a href={path('/projects')}>Projects</a></li>
@@ -61,34 +63,55 @@ const deployedStamp = buildStampUtc8();
       </div>
 
       <div class="footer__col">
-        <h4>Contact</h4>
+        <h3>Contact</h3>
         <ul>
           <li><a href={`mailto:${profile.contact.email}`}>{profile.contact.email}</a></li>
           <li><a href={`tel:${profile.contact.phone}`}>{profile.contact.phoneDisplay}</a></li>
           <li>
-            <a href={profile.contact.linkedin} target="_blank" rel="noopener noreferrer"
-              >LinkedIn ↗</a
+            <a
+              href={profile.contact.linkedin}
+              target="_blank"
+              referrerpolicy="strict-origin-when-cross-origin"
+              rel="noopener noreferrer">LinkedIn ↗</a
             >
           </li>
           <li>
-            <a href={profile.contact.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a>
-          </li>
-          <li>
-            <a href={profile.contact.medium} target="_blank" rel="noopener noreferrer">Medium ↗</a>
-          </li>
-          <li>
-            <a href={profile.contact.ojp} target="_blank" rel="noopener noreferrer"
-              >OnlineJobs.ph ↗</a
+            <a
+              href={profile.contact.github}
+              target="_blank"
+              referrerpolicy="strict-origin-when-cross-origin"
+              rel="noopener noreferrer">GitHub ↗</a
             >
           </li>
           <li>
-            <a href={profile.contact.upwork} target="_blank" rel="noopener noreferrer">Upwork ↗</a>
+            <a
+              href={profile.contact.medium}
+              target="_blank"
+              referrerpolicy="strict-origin-when-cross-origin"
+              rel="noopener noreferrer">Medium ↗</a
+            >
+          </li>
+          <li>
+            <a
+              href={profile.contact.ojp}
+              target="_blank"
+              referrerpolicy="strict-origin-when-cross-origin"
+              rel="noopener noreferrer">OnlineJobs.ph ↗</a
+            >
+          </li>
+          <li>
+            <a
+              href={profile.contact.upwork}
+              target="_blank"
+              referrerpolicy="strict-origin-when-cross-origin"
+              rel="noopener noreferrer">Upwork ↗</a
+            >
           </li>
         </ul>
       </div>
 
       <div class="footer__col">
-        <h4>Method</h4>
+        <h3>Method</h3>
         <ul class="mono">
           <li><a href={path('/methodology')}>eval-first discipline</a></li>
           <li>
@@ -105,7 +128,7 @@ const deployedStamp = buildStampUtc8();
       </div>
 
       <div class="footer__col">
-        <h4>Availability</h4>
+        <h3>Availability</h3>
         <ul>
           <li>Remote · {profile.availability.hours}</li>
           <li class="mono">UTC+8 · Philippines</li>
@@ -129,6 +152,15 @@ const deployedStamp = buildStampUtc8();
         </small>
         <small class="mono">
           portfolio.os · last deployed {deployedStamp} · built with Astro
+        </small>
+        {
+          /* v7.7.92 — version stamp maintained post A14. */
+          /* v7.7.91 — A14: version stamp moved here from the removed hero-anchor
+           band. Hairline-styled footnote: mono, 9-10px, tracking 0.1em, color
+           --c-ink-3. Not the dominant visual — institutional chrome, not chrome strap. */
+        }
+        <small class="footer__version mono" aria-label="Site version">
+          v{pkgVersion} · {deployedStamp}
         </small>
       </div>
     </div>
@@ -197,7 +229,7 @@ const deployedStamp = buildStampUtc8();
     grid-template-columns: repeat(4, 1fr);
     gap: var(--sp-5);
   }
-  .footer__col h4 {
+  .footer__col h3 {
     font-size: var(--fs-xs);
     font-weight: 600;
     text-transform: uppercase;
@@ -226,7 +258,8 @@ const deployedStamp = buildStampUtc8();
     min-height: 44px;
     padding: 0.25rem 0.75rem;
   }
-  .footer__col a:hover {
+  .footer__col a:hover,
+  .footer__col a:focus-visible {
     color: var(--c-amber-light);
   }
 
@@ -264,9 +297,19 @@ const deployedStamp = buildStampUtc8();
     min-height: 44px;
     padding: 0.25rem 0.5rem;
   }
-  .footer__base-meta a:hover {
+  .footer__base-meta a:hover,
+  .footer__base-meta a:focus-visible {
     color: var(--c-primary-2-light);
     text-decoration-color: var(--c-amber);
+  }
+  /* v7.7.91 — A14 footer version stamp. Hairline footnote: mono, 9-10px,
+     tracking 0.1em, --c-ink-3. Chrome contract: mono + 1 amber elsewhere,
+     ink-3 here for "whisper" register. */
+  .footer__version {
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--c-ink-3);
   }
 
   @media (max-width: 880px) {

@@ -29,12 +29,19 @@ const stack = [
 ];
 
 const tokens = {
+  // v7.6.3 — owner feedback 2026-07-26: "matcha and complement". These
+  // values mirror the live `src/styles/tokens-v6.13.css` (v7.6.2 matcha
+  // + terracotta), not the legacy v6.10 amber/cobalt palette. The
+  // earlier literals (legacy #0a0e14, #8c6f2a, #c98a16) were stale and
+  // visibly contradicted the rest of the site.
   color: [
-    { name: '--c-primary', value: '#0a0e14', role: 'near-black brand' },
-    { name: '--c-primary-2-deep', value: '#8c6f2a', role: 'text-safe amber' },
-    { name: '--c-amber', value: '#c98a16', role: 'decorative terminal-amber' },
-    { name: '--c-paper', value: '#fbfaf6', role: 'term-paper cream' },
-    { name: '--c-bg', value: '#ffffff', role: 'paper background' },
+    { name: '--c-primary', value: '#1a1714', role: 'warm-dark · primary text on cream' },
+    { name: '--c-primary-2', value: '#7ba755', role: 'matcha · primary 2nd accent (v7.6.2)' },
+    { name: '--c-sage', value: '#7ba755', role: 'matcha · sage primary accent (v7.6.2)' },
+    { name: '--c-terracotta', value: '#b15c3a', role: 'terracotta · warm 2nd accent (v7.6.2)' },
+    { name: '--c-amber', value: '#a88a3e', role: 'warm amber · single-accent callout' },
+    { name: '--c-paper', value: '#f4eee0', role: 'matcha cream · light-mode page bg' },
+    { name: '--c-bg', value: '#f4eee0', role: 'matcha cream · alias for paper' },
   ],
   type: [
     { name: 'Inter', role: 'sans, 400/500/600/700' },
@@ -56,22 +63,22 @@ const repos = [
   {
     name: 'mcp-backtest-server',
     desc: 'IP-clean backtest tools over the Model Context Protocol. Three tools, four textbook strategies, zero market data. 100% offline.',
-    href: 'https://github.com/christianmacion26/portfolio_v2/tree/master/mcp-backtest-server',
+    // public repo not yet published — link intentionally omitted; on disk per proof claim
   },
   {
     name: 'qfin-rag-harness',
     desc: 'Citation-grounded retrieval harness over a curated 16-paper q-fin corpus. Pure-Python TF-IDF cosine, no LLM call. 0 API keys.',
-    href: 'https://github.com/christianmacion26/portfolio_v2/tree/master/qfin-rag-harness',
+    // public repo not yet published — link intentionally omitted; on disk per proof claim
   },
   {
     name: 'numerical-faithfulness-eval',
     desc: 'Verify LLM numerical claims against deterministic fixtures. Catches the most common LLM failure mode (wrong numbers) in under one second.',
-    href: 'https://github.com/christianmacion26/portfolio_v2/tree/master/numerical-faithfulness-eval',
+    // public repo not yet published — link intentionally omitted; on disk per proof claim
   },
   {
     name: 'eval-mcp-server',
     desc: 'MCP server wrapping the AI-output quality gate as a first-class tool. 13-metric slop-evaluation gate over Tools / Resources / Prompts.',
-    href: 'https://github.com/christianmacion26/portfolio_v2/tree/master/eval-mcp-server',
+    href: 'https://github.com/christianmacion26/eval-mcp-server',
   },
 ];
 
@@ -206,8 +213,9 @@ const licenses = [
         <p class="section__sub">
           The site is NDA-safe by construction. Every published research artifact uses only
           public-data sources. A build-time script (<a
-            href="https://github.com/christianmacion26/portfolio_v2/blob/main/src/utils/nda-audit.ts"
+            href="https://github.com/christianmacion26/portfolio/blob/main/src/utils/nda-audit.ts"
             target="_blank"
+            referrerpolicy="strict-origin-when-cross-origin"
             rel="noopener noreferrer"><code class="mono">src/utils/nda-audit.ts</code></a
           >) walks the built <code class="mono">dist/</code> directory and fails the build if any NDA-prohibited
           content slips into the public-facing HTML or PDFs.
@@ -260,7 +268,12 @@ const licenses = [
           repos.map((r) => (
             <li class="repo__row">
               <h3 class="repo__name">
-                <a href={r.href} target="_blank" rel="noopener noreferrer">
+                <a
+                  href={r.href}
+                  target="_blank"
+                  referrerpolicy="strict-origin-when-cross-origin"
+                  rel="noopener noreferrer"
+                >
                   {r.name}
                 </a>
               </h3>
@@ -288,7 +301,12 @@ const licenses = [
             <div class="lic__row">
               <span class="lic__name mono">{l.name}</span>
               <span class="lic__value">
-                <a href={l.href} target="_blank" rel="noopener noreferrer">
+                <a
+                  href={l.href}
+                  target="_blank"
+                  referrerpolicy="strict-origin-when-cross-origin"
+                  rel="noopener noreferrer"
+                >
                   {l.label}
                 </a>
                 {l.desc}
@@ -387,7 +405,7 @@ const licenses = [
   .bullet code {
     background: var(--c-bg-2);
     padding: 1px 6px;
-    border-radius: 3px;
+    border-radius: var(--radius-md);
     font-size: 0.9em;
   }
   .bullet a {

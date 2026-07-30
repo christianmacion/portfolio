@@ -278,7 +278,10 @@ const totalCount = quantPubs.length + aiPubs.length + workbooks.length + press.l
       {
         quantByYear.map(([year, pubs]) => (
           <div class="pub-year-group">
-            <h3 class="pub-year mono">{year}</h3>
+            <h3 class="pub-year mono">
+              <span class="sr-only">Quant research </span>
+              {year}
+            </h3>
             <div class="pub-list" data-pub-list="quant">
               {pubs.map((p) => (
                 <article class="pub">
@@ -328,7 +331,10 @@ const totalCount = quantPubs.length + aiPubs.length + workbooks.length + press.l
       {
         aiByYear.map(([year, pubs]) => (
           <div class="pub-year-group">
-            <h3 class="pub-year mono">{year}</h3>
+            <h3 class="pub-year mono">
+              <span class="sr-only">AI builds </span>
+              {year}
+            </h3>
             <div class="pub-list" data-pub-list="ai">
               {pubs.map((p) => (
                 <article class="pub">
@@ -364,6 +370,7 @@ const totalCount = quantPubs.length + aiPubs.length + workbooks.length + press.l
                         class="btn btn--ghost btn--sm"
                         href={p.data.sourceLink}
                         target="_blank"
+                        referrerpolicy="strict-origin-when-cross-origin"
                         rel="noopener noreferrer"
                       >
                         Repo ↗
@@ -504,7 +511,8 @@ const totalCount = quantPubs.length + aiPubs.length + workbooks.length + press.l
     transition: all var(--transition);
     user-select: none;
   }
-  .topic-btn:hover {
+  .topic-btn:hover,
+  .topic-btn:focus-visible {
     border-color: var(--c-amber-deep);
     color: var(--c-primary);
   }
@@ -653,7 +661,8 @@ const totalCount = quantPubs.length + aiPubs.length + workbooks.length + press.l
       border-color var(--transition),
       box-shadow var(--transition);
   }
-  .pub:hover {
+  .pub:hover,
+  .pub:focus-visible {
     border-color: var(--c-primary);
     box-shadow: var(--shadow-sm);
   }
@@ -673,7 +682,8 @@ const totalCount = quantPubs.length + aiPubs.length + workbooks.length + press.l
   .pub__title a {
     color: var(--c-ink);
   }
-  .pub__title a:hover {
+  .pub__title a:hover,
+  .pub__title a:focus-visible {
     color: var(--c-primary);
   }
   .pub__summary {
@@ -768,7 +778,7 @@ const totalCount = quantPubs.length + aiPubs.length + workbooks.length + press.l
     /* v6.10.36 — token alias for F13 amber family. */
     background: var(--c-amber-soft);
     color: var(--c-warn);
-    border-radius: 3px;
+    border-radius: var(--radius-md);
     font-weight: 600;
     letter-spacing: 0.04em;
   }

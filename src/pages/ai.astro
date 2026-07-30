@@ -84,7 +84,11 @@ function miniSeries(seed: string, n: number): number[] {
 
 const loopSteps = [
   { num: '01', title: 'Idea', desc: 'Draft the eval harness BEFORE writing the prompt.' },
-  { num: '02', title: 'Eval', desc: `Score against ${GATE_RANGE}. Evidence per gate, exit codes.` },
+  {
+    num: '02',
+    title: 'Score',
+    desc: `Score against ${GATE_RANGE}. Evidence per gate, exit codes.`,
+  },
   { num: '03', title: 'Ship', desc: 'Tier-routed agents. Per-step budget. Cut-over only on pass.' },
   { num: '04', title: 'Measure', desc: "OTel traces · Cohen's κ · bootstrap CIs · DSR." },
   { num: '05', title: 'Next', desc: 'Reflect → revise → loop. No-progress halt ships nothing.' },
@@ -221,20 +225,28 @@ const platformInputs = [
     </div>
   </section>
 
-  {/* === Section 2b — STELLA + graph engineering === v7.6
+  {
+    /* === Section 2b — STELLA + graph engineering === v7.6
        Surfaces the next layer: STELLA Office (53-agent, 6-sub-team)
        + the graph rung. Link out to /workbooks/. NDA-safe: counts
-       and taxonomy only, no officer names. */}
-  <section class="section section--alt" id="stella" data-toc-id="stella" data-toc-label="STELLA · Graph engineering">
+       and taxonomy only, no officer names. */
+  }
+  <section
+    class="section section--alt"
+    id="stella"
+    data-toc-id="stella"
+    data-toc-label="STELLA · Graph engineering"
+  >
     <div class="container">
       <header class="section__head">
         <p class="section__eyebrow">Beyond the loop · STELLA Office</p>
         <h2 class="section__title">The next rung: graphs as shared memory.</h2>
         <p class="section__sub">
-          The 5-rung spine — <b>prompt → skills → agents → loops → graphs</b> — is what
-          STELLA's {profile.stats.aiAgentCount}-agent office runs on. The graph layer is the
-          productivity unlock: typed entities + relations + provenance, queryable, shared
-          across every agent so the corpus isn't re-derived on every dispatch.
+          The 5-rung spine — <b>prompt → skills → agents → loops → graphs</b> — is what STELLA's {
+            profile.stats.aiAgentCount
+          }-agent office runs on. The graph layer is the productivity unlock: typed entities +
+          relations + provenance, queryable, shared across every agent so the corpus isn't
+          re-derived on every dispatch.
         </p>
       </header>
 
@@ -243,9 +255,9 @@ const platformInputs = [
           <p class="stella-cell__num mono">A</p>
           <h3 class="stella-cell__name">Multi-agent office</h3>
           <p class="stella-cell__sub">
-            {profile.stats.aiAgentCount} agents in 6 sub-teams. 4 doctrinal corpora. 5-must-have
-            compliance on every loop primitive. NDA-safe by construction — counts and taxonomy
-            only, never officer names.
+            {profile.stats.aiAgentCount} agents in 6 sub-teams. 4 doctrinal corpora. 5-must-have compliance
+            on every loop primitive. NDA-safe by construction — counts and taxonomy only, never officer
+            names.
           </p>
           <a href={path('/methodology')} class="stella-cell__link">Methodology →</a>
         </div>
@@ -254,9 +266,9 @@ const platformInputs = [
           <p class="stella-cell__num mono">B</p>
           <h3 class="stella-cell__name">Knowledge graph layer</h3>
           <p class="stella-cell__sub">
-            9 entity types. 9 predicates. Four-stage pipeline — Extract · Resolve ·
-            Assemble · Query. The AAR → graph contract: every mission writes its
-            findings, every AAR mutates the graph.
+            9 entity types. 9 predicates. Four-stage pipeline — Extract · Resolve · Assemble ·
+            Query. The AAR → graph contract: every mission writes its findings, every AAR mutates
+            the graph.
           </p>
           <a href={path('/workbooks')} class="stella-cell__link">Workbook trilogy →</a>
         </div>
@@ -265,12 +277,308 @@ const platformInputs = [
           <p class="stella-cell__num mono">C</p>
           <h3 class="stella-cell__name">5-rung spine</h3>
           <p class="stella-cell__sub">
-            Most teams plateau at the loop. STELLA runs at the graph rung — and ships
-            the public-facing narrative via two workbooks
-            (<em>AI Engineering from the Ground Up</em>, <em>Graph Engineering for Everyone</em>).
+            Most teams plateau at the loop. STELLA runs at the graph rung — and ships the
+            public-facing narrative via two workbooks (<em>AI Engineering from the Ground Up</em>, <em
+              >Graph Engineering for Everyone</em
+            >).
           </p>
           <a href={path('/workbooks/ai-engineering/')} class="stella-cell__link">Read W1 →</a>
         </div>
+      </div>
+    </div>
+  </section>
+
+  {
+    /* === Section 2c — AI trends 2022→2026 === v7.6
+       Maps the 2022→2026 public AI trend line onto the 5-rung spine
+       (prompt → skills → agents → loops → graphs). Each rung is a
+       forced move by the frontier labs; each rung is matched by a
+       specific deliverable on the portfolio surface. NDA-clean by
+       construction: public events only, no employer naming. */
+  }
+  <section
+    class="section"
+    id="ai-trends"
+    data-toc-id="ai-trends"
+    data-toc-label="AI trends 2022→2026"
+  >
+    <div class="container">
+      <header class="section__head">
+        <p class="section__eyebrow">AI trends 2022→2026</p>
+        <h2 class="section__title">How the graph rung emerged.</h2>
+        <p class="section__sub">
+          The 5-rung spine — <b>prompt → skills → agents → loops → graphs</b> — is not a roadmap we invented.
+          It is what the public AI trend line actually produced, year by year, from 2022-11 to 2026-03.
+          Each rung was a forced move by the frontier labs; each rung was matched, in the portfolio, by
+          a specific deliverable on the matching surface. The lesson per year is the institutional takeaway
+          that survived contact with the next year.
+        </p>
+      </header>
+
+      <ol class="ai-trend-grid" aria-label="AI trends 2022 to 2026, mapped to the 5-rung spine">
+        <li class="ai-trend">
+          <p class="ai-trend__year mono">2022</p>
+          <h3 class="ai-trend__name">Prompt · ChatGPT goes public</h3>
+          <p class="ai-trend__body">
+            <b>Trend.</b> 2022-11 ChatGPT reaches 100M users in two months. The public surface discovers
+            the prompt as the unit of work.
+          </p>
+          <p class="ai-trend__body">
+            <b>Then.</b> A single-prompt demonstrator. No harness, no eval, no contract.
+          </p>
+          <p class="ai-trend__body">
+            <b>Lesson.</b> Prompting is not engineering. The variable that survives is the eval set, not
+            the wording.
+          </p>
+          <a href={path('/workbooks/ai-engineering/')} class="ai-trend__link">
+            W1: prompt chapter →
+          </a>
+        </li>
+
+        <li class="ai-trend">
+          <p class="ai-trend__year mono">2023</p>
+          <h3 class="ai-trend__name">Skills · GPT-4, function calling, RAG</h3>
+          <p class="ai-trend__body">
+            <b>Trend.</b> 2023-03 GPT-4 + plugins. 2023-06 function calling. 2023-10 RAG becomes the default
+            retrieval pattern. The model becomes a tool user, not a search replacement.
+          </p>
+          <p class="ai-trend__body">
+            <b>Then.</b> Skills module: tool schemas, JSON-mode contracts, retrieval-graded chunks. The
+            first eval harness ships.
+          </p>
+          <p class="ai-trend__body">
+            <b>Lesson.</b> Grounding beats fluency. A tool-using model with a real corpus beats a fluent
+            model hallucinating.
+          </p>
+          <a href={path('/research/frontier-models')} class="ai-trend__link">
+            Frontier models benchmark →
+          </a>
+        </li>
+
+        <li class="ai-trend">
+          <p class="ai-trend__year mono">2024</p>
+          <h3 class="ai-trend__name">Agents · Claude Sonnet 3.5, Computer Use</h3>
+          <p class="ai-trend__body">
+            <b>Trend.</b> 2024-06 Claude Sonnet 3.5 ships agentic coding. 2024-10 Anthropic Computer Use
+            beta. The agent becomes a first-class product surface.
+          </p>
+          <p class="ai-trend__body">
+            <b>Then.</b> Solo agent with a planner + tool belt. Eval harness measures plan quality, not
+            just answer quality.
+          </p>
+          <p class="ai-trend__body">
+            <b>Lesson.</b> An agent without a loop is a long prompt. The harness is the product.
+          </p>
+          <a href={path('/workbooks/ai-engineering/')} class="ai-trend__link">
+            W1: agent chapter →
+          </a>
+        </li>
+
+        <li class="ai-trend">
+          <p class="ai-trend__year mono">2025</p>
+          <h3 class="ai-trend__name">Loops · MCP, DeepSeek-R1, eval-driven rollout</h3>
+          <p class="ai-trend__body">
+            <b>Trend.</b> 2025-02 Anthropic MCP. 2025 DeepSeek-R1 ships reasoning on par with closed models.
+            Teams adopt eval-driven rollout, not vibe-driven rollout.
+          </p>
+          <p class="ai-trend__body">
+            <b>Then.</b> The 5-must-have loop contract lands in production: terminal state, idempotent
+            write, dedupe key, coverage filter, AAR.
+          </p>
+          <p class="ai-trend__body">
+            <b>Lesson.</b> A loop without a coverage filter is a leak. The AAR is the reliability primitive.
+          </p>
+          <a href={path('/methodology')} class="ai-trend__link">
+            Methodology: 5-must-have loop contract →
+          </a>
+        </li>
+
+        <li class="ai-trend">
+          <p class="ai-trend__year mono">2026</p>
+          <h3 class="ai-trend__name">Graphs · Claude Opus 4.5, multi-agent offices</h3>
+          <p class="ai-trend__body">
+            <b>Trend.</b> 2026-03 Claude Opus 4.5. Frontier agents stop being prompted and start composing.
+            Multi-agent offices stop being demos and start compounding across missions.
+          </p>
+          <p class="ai-trend__body">
+            <b>Now.</b> STELLA: {profile.stats.aiAgentCount} agents, 6 sub-teams, knowledge graph with
+            9 entity types and 9 predicates. Every AAR writes back to the graph.
+          </p>
+          <p class="ai-trend__body">
+            <b>Lesson.</b> The graph rung is where the office starts compounding. Without it, every agent
+            re-derives the corpus and shipping velocity collapses.
+          </p>
+          <a href={path('/workbooks/graph-engineering/')} class="ai-trend__link">
+            W3: graph engineering →
+          </a>
+        </li>
+      </ol>
+
+      <p class="section__sub section__sub--narrow">
+        The graph rung is not a destination — it is the first rung where a multi-agent office can
+        compound. Every prior rung (prompt, skills, agents, loops) is a per-call primitive. The
+        graph is the per-office primitive: a shared, typed, queryable memory that turns
+        {' '}{profile.stats.aiAgentCount} agents from collaboration cost into collaboration yield. The
+        {' '}<a href={path('/workbooks')}>workbook trilogy</a> is the public-facing narrative; the portfolio
+        is the running example.
+      </p>
+    </div>
+  </section>
+
+  {
+    /* === Section 2e — Graph engineering · source, adoption, adaptation ===
+       v7.6.7 — owner ask 2026-07-27: "highlight that we can do and have adopted
+       to graph engineering. the file in downloads. show that we can do those.
+       and we can adapt it to our quant research and trading." Two source PDFs
+       were synthesized into the portfolio's workbook trilogy; this section
+       publishes (a) the source papers, (b) the concrete adoption inside the
+       STELLA office, and (c) the 1:1 mapping from the 4-stage graph pipeline
+       onto quant research + trading. */
+  }
+  <section
+    class="section section--alt"
+    id="graph-engineering"
+    data-toc-id="graph-engineering"
+    data-toc-label="Graph engineering · adapted"
+  >
+    <div class="container">
+      <header class="section__head">
+        <p class="section__eyebrow">Method · source, adoption, adaptation</p>
+        <h2 class="section__title">Graph engineering — read, run, adapt.</h2>
+        <p class="section__sub">
+          The graph rung isn't a posture. It's three deliverables you can verify: a source you can
+          read, a production system you can run, and an adaptation you can audit against a different
+          domain. Below: the two source papers we synthesized, the STELLA office's running adoption,
+          and the 1-to-1 mapping that ports the same pipeline onto quant research + trading.
+        </p>
+      </header>
+
+      <div class="kg-strip">
+        {/* Source card */}
+        <article class="kg-card kg-card--source">
+          <p class="kg-card__num mono">01 · SOURCE</p>
+          <h3 class="kg-card__name">Two working papers</h3>
+          <p class="kg-card__sub">
+            We read both. We synthesized them into the workbook trilogy. Both PDFs ship with the
+            site — open the working notes, follow the references, verify every claim against the
+            upstream material.
+          </p>
+          <ul class="kg-card__list">
+            <li>
+              <a
+                href={path('/workbooks/sources/graph-engineering-anthropic-playbook.pdf')}
+                target="_blank"
+                referrerpolicy="strict-origin-when-cross-origin"
+                rel="noopener"
+              >
+                Graph Engineering — The Anthropic Playbook
+              </a>
+              <span class="kg-card__meta mono">177 KB · 6 pp · 4-stage pipeline</span>
+            </li>
+            <li>
+              <a
+                href={path('/workbooks/sources/graph-engineering-anthropic-karpathy-loop.pdf')}
+                target="_blank"
+                referrerpolicy="strict-origin-when-cross-origin"
+                rel="noopener"
+              >
+                Graph Engineering — Karpathy Loop × Anthropic Playbook
+              </a>
+              <span class="kg-card__meta mono">1.4 MB · loop → AgentHub → DAG → graph</span>
+            </li>
+          </ul>
+          <a href={path('/workbooks/graph-engineering/')} class="kg-card__link">
+            Public-deep synthesis (W3) →
+          </a>
+        </article>
+
+        {/* Adoption card */}
+        <article class="kg-card kg-card--adopt">
+          <p class="kg-card__num mono">02 · ADOPTION</p>
+          <h3 class="kg-card__name">STELLA runs the 4-stage pipeline</h3>
+          <p class="kg-card__sub">
+            Not as a demo. As production. The same pipeline the playbook documents — extract →
+            resolve → assemble → query — runs on every dispatch the {
+              profile.stats.aiAgentCount
+            }-agent office issues. The graph is the office's shared memory, not a sidecar.
+          </p>
+          <dl class="kg-stat-grid">
+            <div class="kg-stat">
+              <dt class="kg-stat__k mono">pipeline</dt>
+              <dd class="kg-stat__v">4 stages</dd>
+              <dd class="kg-stat__u mono">extract · resolve · assemble · query</dd>
+            </div>
+            <div class="kg-stat">
+              <dt class="kg-stat__k mono">schema</dt>
+              <dd class="kg-stat__v">9 · 9</dd>
+              <dd class="kg-stat__u mono">9 entity types · 9 predicates</dd>
+            </div>
+            <div class="kg-stat">
+              <dt class="kg-stat__k mono">contract</dt>
+              <dd class="kg-stat__v">3 lines</dd>
+              <dd class="kg-stat__u mono">AAR → graph (findings, agents, OK)</dd>
+            </div>
+            <div class="kg-stat">
+              <dt class="kg-stat__k mono">storage</dt>
+              <dd class="kg-stat__v">JSONL</dd>
+              <dd class="kg-stat__u mono">append-only · dedupe-keyed</dd>
+            </div>
+          </dl>
+          <a href={path('/workbooks/ai-engineering/')} class="kg-card__link">
+            Public-facing narrative (W1) →
+          </a>
+        </article>
+
+        {/* Adaptation card */}
+        <article class="kg-card kg-card--adapt">
+          <p class="kg-card__num mono">03 · ADAPTATION</p>
+          <h3 class="kg-card__name">Same pipeline → quant + trading</h3>
+          <p class="kg-card__sub">
+            The four stages port 1-to-1 onto the trading lane. The entity types change (instruments,
+            venues, signals instead of persons, projects, articles). The pattern doesn't.
+          </p>
+          <table
+            class="kg-pipeline-map"
+            aria-label="4-stage graph pipeline · AI lane vs trading lane"
+          >
+            <thead>
+              <tr>
+                <th class="mono">stage</th>
+                <th class="mono">AI lane</th>
+                <th class="mono">trading lane</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="kg-pipeline-map__stage mono"><b>1 · Extract</b></td>
+                <td>doc corpus → typed entities (PERSON / ORG / LOC / EVENT)</td>
+                <td>filings + events + ticker relationships → typed entities</td>
+              </tr>
+              <tr>
+                <td class="kg-pipeline-map__stage mono"><b>2 · Resolve</b></td>
+                <td>"Neil Aldrin" → "Neil Armstrong" (semantic merge by Sonnet)</td>
+                <td>"AAPL.O" → "Apple Inc" → "NASDAQ:AAPL" (canonical ID)</td>
+              </tr>
+              <tr>
+                <td class="kg-pipeline-map__stage mono"><b>3 · Assemble</b></td>
+                <td>Apollo corpus → 22 nodes · 34 edges · 1 component</td>
+                <td>
+                  4 trading-axis graphs: markets, signal lineage, trade lifecycle, risk propagation
+                </td>
+              </tr>
+              <tr>
+                <td class="kg-pipeline-map__stage mono"><b>4 · Query</b></td>
+                <td>k-hop subgraph → grounded answer (Sonnet reasons over triples)</td>
+                <td>
+                  "what generated this P&L?" → lineage trace · "where is my risk?" → factor graph
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <a href="/markets#graph-engineering-trading" class="kg-card__link">
+            See it on /markets →
+          </a>
+        </article>
       </div>
     </div>
   </section>
@@ -499,7 +807,8 @@ const platformInputs = [
   .ai-card__title a {
     color: inherit;
   }
-  .ai-card__title a:hover {
+  .ai-card__title a:hover,
+  .ai-card__title a:focus-visible {
     color: var(--c-amber-light);
   }
   .ai-card__sum {
@@ -550,7 +859,8 @@ const platformInputs = [
     text-decoration: none;
     letter-spacing: 0.02em;
   }
-  .ai-card__more:hover {
+  .ai-card__more:hover,
+  .ai-card__more:focus-visible {
     color: var(--c-amber-light);
   }
 
@@ -571,7 +881,7 @@ const platformInputs = [
     font-weight: 600;
     background: var(--c-amberl-mist);
     padding: 0 6px;
-    border-radius: 4px;
+    border-radius: var(--radius-md);
   }
 
   /* Print: simplify the page */
@@ -599,12 +909,14 @@ const platformInputs = [
   .stella-cell {
     padding: var(--sp-5);
     border: 1px solid var(--c-rule);
-    border-radius: 6px;
+    border-radius: var(--radius-md);
     background: var(--c-bg);
     display: flex;
     flex-direction: column;
     gap: var(--sp-2);
-    transition: border-color 0.2s ease, transform 0.2s ease;
+    transition:
+      border-color 0.2s ease,
+      transform 0.2s ease;
     position: relative;
   }
   .stella-cell::before {
@@ -615,7 +927,7 @@ const platformInputs = [
     width: 4px;
     height: 100%;
     background: var(--c-amber);
-    border-radius: 4px 0 0 4px;
+    border-radius: var(--radius-md);
   }
   .stella-cell--graph::before {
     background: var(--c-teal, #5ba8a3);
@@ -623,14 +935,17 @@ const platformInputs = [
   .stella-cell--rung::before {
     background: var(--c-violet, #a07baf);
   }
-  .stella-cell:hover {
+  .stella-cell:hover,
+  .stella-cell:focus-visible {
     transform: translateY(-2px);
     border-color: var(--c-amber);
   }
-  .stella-cell--graph:hover {
+  .stella-cell--graph:hover,
+  .stella-cell--graph:focus-visible {
     border-color: var(--c-teal, #5ba8a3);
   }
-  .stella-cell--rung:hover {
+  .stella-cell--rung:hover,
+  .stella-cell--rung:focus-visible {
     border-color: var(--c-violet, #a07baf);
   }
   .stella-cell__num {
@@ -671,7 +986,414 @@ const platformInputs = [
     border-top: 1px dashed var(--c-rule);
     transition: opacity 0.2s ease;
   }
-  .stella-cell__link:hover {
+  .stella-cell__link:hover,
+  .stella-cell__link:focus-visible {
     opacity: 0.7;
+  }
+
+  /* Section 2c — AI TRENDS 2022→2026
+     Note: the .ai-trend-grid + .ai-trend card styles live in
+     src/styles/trend-grid.css (loaded by BaseLayout) so the
+     pattern is reusable across /ai, /research/frontier-models, etc.
+     Only the page-specific helpers (section__sub--narrow) live here. */
+  .section__sub--narrow {
+    max-width: 64ch;
+    margin-top: var(--sp-5);
+  }
+  .section__sub--narrow a {
+    color: var(--c-amber);
+    text-decoration: underline;
+    text-decoration-color: var(--c-amber-decor);
+    text-underline-offset: 3px;
+  }
+
+  /* ============================================================
+     v7.6.7 — Section 2e: Graph engineering · source / adopt / adapt
+     ============================================================ */
+  .kg-strip {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--sp-4);
+    margin-top: var(--sp-5);
+  }
+  @media (max-width: 980px) {
+    .kg-strip {
+      grid-template-columns: 1fr;
+    }
+  }
+  .kg-card {
+    background: var(--c-bg);
+    border: 1px solid var(--c-rule);
+    border-radius: var(--radius-md);
+    padding: var(--sp-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+    position: relative;
+    transition:
+      border-color 0.2s ease,
+      transform 0.2s ease;
+  }
+  .kg-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    border-radius: var(--radius-md);
+  }
+  .kg-card--source::before {
+    background: var(--c-amber);
+  }
+  .kg-card--adopt::before {
+    background: var(--c-teal, #5ba8a3);
+  }
+  .kg-card--adapt::before {
+    background: var(--c-violet, #a07baf);
+  }
+  .kg-card:hover,
+  .kg-card:focus-visible {
+    transform: translateY(-2px);
+  }
+  .kg-card--source:hover,
+  .kg-card--source:focus-visible {
+    border-color: var(--c-amber);
+  }
+  .kg-card--adopt:hover,
+  .kg-card--adopt:focus-visible {
+    border-color: var(--c-teal, #5ba8a3);
+  }
+  .kg-card--adapt:hover,
+  .kg-card--adapt:focus-visible {
+    border-color: var(--c-violet, #a07baf);
+  }
+  .kg-card__num {
+    font: 500 0.7rem / 1 var(--ff-mono);
+    letter-spacing: 0.18em;
+    color: var(--c-amber);
+    margin: 0;
+  }
+  .kg-card--adopt .kg-card__num {
+    color: var(--c-teal, #5ba8a3);
+  }
+  .kg-card--adapt .kg-card__num {
+    color: var(--c-violet, #a07baf);
+  }
+  .kg-card__name {
+    font: 600 1.2rem / 1.25 var(--serif-display);
+    color: var(--c-ink);
+    margin: 4px 0 0;
+    letter-spacing: -0.01em;
+  }
+  .kg-card__sub {
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: var(--c-ink-2);
+    margin: 0;
+    flex: 1;
+  }
+  .kg-card__sub b {
+    color: var(--c-amber);
+    font-weight: 600;
+  }
+  .kg-card__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-2);
+  }
+  .kg-card__list li {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: var(--sp-2) 0;
+    border-top: 1px dashed var(--c-rule);
+  }
+  .kg-card__list a {
+    color: var(--c-ink);
+    font: 500 0.85rem / 1.3 var(--ff-sans);
+    text-decoration: none;
+    border-bottom: 1px solid var(--c-amber-decor);
+    transition: color 0.2s ease;
+  }
+  .kg-card__list a:hover,
+  .kg-card__list a:focus-visible {
+    color: var(--c-amber);
+  }
+  .kg-card__meta {
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    color: var(--c-ink-3);
+  }
+  .kg-card__link {
+    color: var(--c-amber);
+    font: 500 0.85rem / 1 var(--ff-mono);
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    padding-top: var(--sp-2);
+    border-top: 1px dashed var(--c-rule);
+    transition: opacity 0.2s ease;
+  }
+  .kg-card--adopt .kg-card__link {
+    color: var(--c-teal, #5ba8a3);
+  }
+  .kg-card--adapt .kg-card__link {
+    color: var(--c-violet, #a07baf);
+  }
+  .kg-card__link:hover,
+  .kg-card__link:focus-visible {
+    opacity: 0.7;
+  }
+
+  /* Adoption stat grid */
+  .kg-stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--sp-3);
+    margin: 0;
+    padding: var(--sp-3) 0;
+    border-top: 1px dashed var(--c-rule);
+    border-bottom: 1px dashed var(--c-rule);
+  }
+  .kg-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .kg-stat__k {
+    font: 500 0.65rem / 1 var(--ff-mono);
+    color: var(--c-ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 0;
+  }
+  .kg-stat__v {
+    font: 600 1.1rem / 1.1 var(--ff-mono);
+    color: var(--c-ink);
+    font-variant-numeric: tabular-nums;
+    margin: 0;
+  }
+  .kg-stat__u {
+    font: 400 0.7rem / 1.2 var(--ff-mono);
+    color: var(--c-ink-3);
+    letter-spacing: 0.04em;
+    margin: 0;
+  }
+
+  /* Pipeline map table */
+  .kg-pipeline-map {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.78rem;
+    line-height: 1.45;
+  }
+  .kg-pipeline-map th {
+    text-align: left;
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--c-rule);
+    color: var(--c-ink-3);
+    font: 500 0.65rem / 1 var(--ff-mono);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .kg-pipeline-map th:nth-child(3),
+  .kg-pipeline-map td:nth-child(3) {
+    color: var(--c-violet, #a07baf);
+  }
+  .kg-pipeline-map th:nth-child(1),
+  .kg-pipeline-map td:nth-child(1) {
+    color: var(--c-ink);
+  }
+  .kg-pipeline-map td {
+    padding: 8px;
+    border-bottom: 1px dashed var(--c-rule);
+    color: var(--c-ink-2);
+    vertical-align: top;
+  }
+  .kg-pipeline-map__stage {
+    width: 64px;
+    color: var(--c-ink);
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+  }
+  .kg-pipeline-map__stage b {
+    color: var(--c-amber);
+    font-weight: 600;
+  }
+  .kg-pipeline-map tr:last-child td {
+    border-bottom: none;
+  }
+  @media (max-width: 540px) {
+    .kg-pipeline-map {
+      font-size: 0.72rem;
+    }
+    .kg-stat-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* === v7.6.8 — entrance animations + ambient pulse for the AI lane ===
+     Pure CSS. Sequential fade-up on ai-loop + stella-grid + ai-trend-grid
+     + kg-card. Stella numerals breathe. ai-trend years get a fast amber
+     pulse. Honors prefers-reduced-motion below. */
+
+  .ai-loop__step,
+  .stella-cell,
+  .ai-trend,
+  .kg-card {
+    animation: ai-rise 0.7s cubic-bezier(0.4, 0.7, 0.3, 1) backwards;
+  }
+  .ai-loop__step:nth-child(1) {
+    animation-delay: 80ms;
+  }
+  .ai-loop__step:nth-child(2) {
+    animation-delay: 180ms;
+  }
+  .ai-loop__step:nth-child(3) {
+    animation-delay: 280ms;
+  }
+  .ai-loop__step:nth-child(4) {
+    animation-delay: 380ms;
+  }
+  .ai-loop__step:nth-child(5) {
+    animation-delay: 480ms;
+  }
+  .stella-cell--arch {
+    animation-delay: 120ms;
+  }
+  .stella-cell--graph {
+    animation-delay: 240ms;
+  }
+  .stella-cell--rung {
+    animation-delay: 360ms;
+  }
+  .ai-trend:nth-child(1) {
+    animation-delay: 100ms;
+  }
+  .ai-trend:nth-child(2) {
+    animation-delay: 220ms;
+  }
+  .ai-trend:nth-child(3) {
+    animation-delay: 340ms;
+  }
+  .ai-trend:nth-child(4) {
+    animation-delay: 460ms;
+  }
+  .ai-trend:nth-child(5) {
+    animation-delay: 580ms;
+  }
+  .kg-card:nth-child(1) {
+    animation-delay: 100ms;
+  }
+  .kg-card:nth-child(2) {
+    animation-delay: 240ms;
+  }
+  .kg-card:nth-child(3) {
+    animation-delay: 380ms;
+  }
+  @keyframes ai-rise {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* AI-trend year gets a fast amber pulse to draw the eye through the
+     timeline without being loud. */
+  .ai-trend__year {
+    animation: ai-year-pulse 4.8s ease-in-out infinite 1.4s;
+  }
+  @keyframes ai-year-pulse {
+    0%,
+    100% {
+      color: var(--c-amber);
+    }
+    50% {
+      color: var(--c-amber-deep);
+    }
+  }
+
+  /* Loop steps get a fading accent ring on the number */
+  .ai-loop__num {
+    animation: ai-num-pulse 5.4s ease-in-out infinite;
+  }
+  .ai-loop__step:nth-child(1) .ai-loop__num {
+    animation-delay: 1s;
+  }
+  .ai-loop__step:nth-child(2) .ai-loop__num {
+    animation-delay: 2s;
+  }
+  .ai-loop__step:nth-child(3) .ai-loop__num {
+    animation-delay: 3s;
+  }
+  .ai-loop__step:nth-child(4) .ai-loop__num {
+    animation-delay: 4s;
+  }
+  .ai-loop__step:nth-child(5) .ai-loop__num {
+    animation-delay: 5s;
+  }
+  @keyframes ai-num-pulse {
+    0%,
+    80%,
+    100% {
+      color: var(--c-amber-deep);
+    }
+    15%,
+    30% {
+      color: var(--c-amber);
+    }
+  }
+
+  /* Stella cells: rail under the numeral glows slowly */
+  .stella-cell::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--c-amber), transparent);
+    opacity: 0.55;
+    animation: stella-rail 5.6s ease-in-out infinite;
+  }
+  .stella-cell--graph::after {
+    animation-delay: 1.6s;
+  }
+  .stella-cell--rung::after {
+    animation-delay: 3.2s;
+  }
+  @keyframes stella-rail {
+    0%,
+    100% {
+      transform: translateX(-30%);
+      opacity: 0.55;
+    }
+    50% {
+      transform: translateX(30%);
+      opacity: 0.9;
+    }
+  }
+
+  /* === Reduced motion === */
+  @media (prefers-reduced-motion: reduce) {
+    .ai-loop__step,
+    .stella-cell,
+    .ai-trend,
+    .kg-card {
+      animation: none;
+      opacity: 1;
+    }
+    .ai-trend__year,
+    .ai-loop__num,
+    .stella-cell::after {
+      animation: none;
+    }
   }
 </style>

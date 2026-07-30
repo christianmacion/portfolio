@@ -1,0 +1,541 @@
+---
+/**
+ * LiveWire.astro — v7.7.0 MACRO-WIRE TICKER.
+ *
+ * Single-lane scrolling ticker of headlines from the macro-wire fetcher.
+ * Each item carries a publisher badge + headline + timestamp. Items are
+ * rendered twice in the track so the linear keyframe loops seamlessly.
+ *
+ * Visual register: light institutional / Bloomberg. Mono + 4 publisher
+ * accents (Reuters → cobalt, CoinDesk → warn, The Block → violet,
+ * CoinTelegraph → sage). No glow. No pills. Pause-on-hover. Reduced-motion
+ * fallback.
+ *
+ * Usage:
+ *   <LiveWire />
+ *   <LiveWire speedSec={60} />
+ */
+import macrowireCache from '../data/macrowire-cache.json';
+
+interface Props {
+  /** Speed of the ticker (seconds per full track). Default 60. */
+  speedSec?: number;
+  /** Trailing label, right-edge. */
+  trailing?: string;
+}
+const { speedSec = 60, trailing = 'macro wire · 24h' } = Astro.props;
+
+interface WireItem {
+  id: string;
+  title: string;
+  link: string;
+  timestamp: string;
+  publisher: string;
+  tags?: string[];
+}
+interface WireCache {
+  fetchedAt: string;
+  buildDate: string;
+  source: string;
+  url: string;
+  sources?: string[];
+  items: WireItem[];
+}
+const cache = macrowireCache as WireCache;
+const items: WireItem[] = cache.items ?? [];
+const hasItems = items.length > 0;
+
+// === Publisher → accent mapping ===
+const publisherAccent: Record<string, string> = {
+  REUTERS: 'cobalt',
+  COINDESK: 'warn',
+  THEBLOCK: 'violet',
+  COINTELEGRAPH: 'sage',
+  BINANCE: 'sage',
+  default: 'ink',
+};
+const accentFor = (pub: string): string => publisherAccent[pub] ?? 'ink';
+
+// === Publisher counts for the chip row ===
+const publisherCounts: Record<string, number> = {};
+for (const it of items) {
+  publisherCounts[it.publisher] = (publisherCounts[it.publisher] ?? 0) + 1;
+}
+
+// === Lane 1 — ticker rows ===
+const tickerRows = items.map((it) => ({
+  id: it.id,
+  publisher: it.publisher,
+  accent: accentFor(it.publisher),
+  title: it.title,
+  timestamp: it.timestamp,
+  link: it.link,
+}));
+
+// === Lane 2 — methodology frames (deterministic) ===
+const methodFrames = [
+  { head: 'MACRO', tail: 'REUTERS · WORLD NEWS', accent: 'cobalt' },
+  { head: 'CRYPTO', tail: 'COINDESK · COINTELEGRAPH', accent: 'warn' },
+  { head: 'INST', tail: 'THE BLOCK · INSTITUTIONAL', accent: 'violet' },
+  {
+    head: '4 SOURCES',
+    tail: `${Object.keys(publisherCounts).length} PUBLISHERS · 24H`,
+    accent: 'warn',
+  },
+  { head: 'CHAIN-OF-CUSTODY', tail: 'FETCH → RANK → CACHE → RENDER', accent: 'ink' },
+  { head: 'CITABLE', tail: 'PUBLISHER · TIMESTAMP · HEADLINE', accent: 'ink' },
+];
+
+// === Last-sync chrome ===
+const fetchedAt = cache.fetchedAt || '';
+const buildDateIso = cache.buildDate || fetchedAt;
+const elapsedMs = new Date(buildDateIso).getTime() - new Date(fetchedAt).getTime();
+const elapsedMin = Math.max(0, Math.floor(elapsedMs / 60_000));
+const fetchedAtShort = fetchedAt.slice(0, 16).replace('T', ' ') + 'Z';
+const isLive = cache.source === 'macrowire';
+
+// === Format HH:MM ===
+function formatHm(iso: string): string {
+  if (!iso) return '';
+  const m = iso.match(/T(\d{2}:\d{2})/);
+  return m ? m[1] : '';
+}
+---
+
+<section class="livewire" aria-label="Macro wire headlines">
+  {/* === Chip row — publisher counts === */}
+  <div class="livewire__chips mono">
+    <span class="livewire__chip livewire__chip--title">MACRO WIRE</span>
+    {
+      Object.entries(publisherCounts).map(([pub, n]) => (
+        <span class={`livewire__chip livewire__chip--${accentFor(pub)}`}>
+          {pub} · {n}
+        </span>
+      ))
+    }
+    <span class="livewire__chip livewire__chip--meta">{items.length} HEADLINES · 24H</span>
+  </div>
+
+  {
+    hasItems && (
+      <>
+        <div class="livewire__ticker">
+          <div
+            class="livewire__lane livewire__lane--title"
+            role="region"
+            aria-label="Latest headlines"
+          >
+            <div class="livewire__lane-label mono" aria-hidden="true">
+              HEADLINES
+            </div>
+            <div class="livewire__viewport">
+              <div
+                class="livewire__track"
+                style={`--livewire-dur: ${speedSec}s`}
+                aria-live="off"
+                aria-atomic="false"
+              >
+                {[...tickerRows, ...tickerRows].map((r) => (
+                  <span class="livewire__item">
+                    <span class={`livewire__badge mono livewire__badge--${r.accent}`}>
+                      {r.publisher}
+                    </span>
+                    <a
+                      class="livewire__title"
+                      href={r.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      referrerpolicy="strict-origin-when-cross-origin"
+                    >
+                      {r.title}
+                    </a>
+                    <span class="livewire__hm mono">{formatHm(r.timestamp)}</span>
+                    <span class="livewire__sep" aria-hidden="true">
+                      ·
+                    </span>
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="livewire__lane livewire__lane--method"
+            role="region"
+            aria-label="Methodology frames"
+          >
+            <div class="livewire__lane-label mono" aria-hidden="true">
+              METHOD
+            </div>
+            <div class="livewire__viewport livewire__viewport--reverse">
+              <div
+                class="livewire__track"
+                style={`--livewire-dur: ${speedSec + 18}s`}
+                aria-live="off"
+                aria-atomic="false"
+              >
+                {[...methodFrames, ...methodFrames].map((f) => (
+                  <span class:list={['livewire__frame', `is-${f.accent}`]}>
+                    <span class="livewire__frame-head">{f.head}</span>
+                    <span class="livewire__frame-sep" aria-hidden="true">
+                      ·
+                    </span>
+                    <span class="livewire__frame-tail mono">{f.tail}</span>
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div class="livewire__stop mono" aria-hidden="true">
+            {trailing}
+          </div>
+        </div>
+
+        <p class="livewire__caption mono">
+          <span class={`livewire__badge livewire__badge--${isLive ? 'live' : 'ink'}`}>
+            {isLive ? 'LIVE' : 'FALLBACK'}
+          </span>
+          <span class="livewire__cap-text">MACRO WIRE</span>
+          <span class="livewire__cap-text">{items.length} HEADLINES</span>
+          <span class="livewire__cap-sep">·</span>
+          <span class="livewire__cap-text">{Object.keys(publisherCounts).length} PUBLISHERS</span>
+          <span class="livewire__cap-sep">·</span>
+          <span class="livewire__cap-text">SYNCHRONIZED</span>
+          <span class="livewire__cap-ago" data-counter={`${elapsedMin}`} data-duration="600">
+            {elapsedMin}
+          </span>
+          <span class="livewire__cap-text">M AGO</span>
+          <span class="livewire__cap-stamp">{fetchedAtShort}</span>
+        </p>
+      </>
+    )
+  }
+
+  {
+    !hasItems && (
+      <p class="livewire__empty">
+        <span class="livewire__badge livewire__badge--ink">FALLBACK</span>
+        <span class="livewire__cap-text">MACRO WIRE · NO ITEMS · LAST GOOD {fetchedAtShort}</span>
+      </p>
+    )
+  }
+</section>
+
+<style>
+  /* === Container === */
+  .livewire {
+    padding: 32px 0 48px;
+    border-block: 1px solid var(--c-rule);
+    background: var(--c-bg);
+  }
+
+  /* === Chip row === */
+  .livewire__chips {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .livewire__chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 8px;
+    border: 1px solid currentColor;
+    border-radius: 0;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+  .livewire__chip--title {
+    color: var(--c-ink);
+    font-size: 11px;
+    padding: 4px 10px;
+    letter-spacing: 0.16em;
+  }
+  .livewire__chip--cobalt {
+    color: var(--c-primary-2);
+  }
+  .livewire__chip--warn {
+    color: var(--c-warn);
+  }
+  .livewire__chip--sage {
+    color: var(--j-sage);
+  }
+  .livewire__chip--violet {
+    color: var(--j-violet);
+  }
+  .livewire__chip--meta {
+    color: var(--c-ink-3);
+    margin-left: auto;
+  }
+
+  /* === Ticker (doubled-track) === */
+  .livewire__ticker {
+    position: relative;
+    background: var(--c-bg-2);
+    border: 1px solid var(--c-rule);
+    color: var(--c-ink);
+    overflow: hidden;
+    user-select: none;
+    margin-bottom: 24px;
+  }
+  .livewire__lane {
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    align-items: center;
+    border-bottom: 1px solid var(--c-rule);
+    min-height: 36px;
+  }
+  .livewire__lane:last-of-type {
+    border-bottom: 0;
+  }
+  .livewire__lane-label {
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--c-ink-3);
+    padding: 0 12px;
+    border-right: 1px solid var(--c-rule);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    background: var(--c-bg);
+  }
+  .livewire__viewport {
+    overflow: hidden;
+    position: relative;
+    mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      #000 24px,
+      #000 calc(100% - 24px),
+      transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      #000 24px,
+      #000 calc(100% - 24px),
+      transparent 100%
+    );
+  }
+  .livewire__track {
+    display: inline-flex;
+    align-items: center;
+    gap: 24px;
+    white-space: nowrap;
+    padding-inline: 12px;
+    animation: livewire-scroll var(--livewire-dur, 60s) linear infinite;
+    will-change: transform;
+  }
+  .livewire__viewport--reverse .livewire__track {
+    animation-direction: reverse;
+  }
+  .livewire__ticker:hover .livewire__track {
+    animation-play-state: paused;
+  }
+
+  /* === Lane 1 — headline items === */
+  .livewire__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    line-height: 1;
+    color: var(--c-ink);
+    padding-block: 11px;
+  }
+  .livewire__badge {
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 2px 6px;
+    border: 1px solid currentColor;
+    border-radius: 0;
+    line-height: 1.4;
+    color: var(--c-ink-2);
+  }
+  .livewire__badge--warn {
+    color: var(--c-warn);
+  }
+  .livewire__badge--cobalt {
+    color: var(--c-primary-2);
+  }
+  .livewire__badge--sage {
+    color: var(--j-sage);
+  }
+  .livewire__badge--violet {
+    color: var(--j-violet);
+  }
+  .livewire__badge--ink {
+    color: var(--c-ink-2);
+  }
+  .livewire__badge--live {
+    color: var(--c-warn);
+  }
+  .livewire__title {
+    font-weight: 500;
+    color: var(--c-ink);
+    text-decoration: none;
+    transition: color 200ms var(--j-ease-out);
+    max-width: 480px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .livewire__title:hover,
+  .livewire__title:focus-visible {
+    color: var(--c-warn);
+  }
+  .livewire__hm {
+    color: var(--c-ink-3);
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
+  }
+  .livewire__sep {
+    color: var(--c-ink-4);
+    font-weight: 600;
+  }
+
+  /* === Lane 2 — methodology frames === */
+  .livewire__frame {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding-block: 11px;
+    font-size: 12px;
+    line-height: 1;
+    color: var(--c-ink);
+  }
+  .livewire__frame-head {
+    font-family: var(--serif-display);
+    font-style: italic;
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: -0.005em;
+    color: var(--c-ink);
+  }
+  .livewire__frame-tail {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--c-ink-2);
+  }
+  .livewire__frame-sep {
+    color: var(--c-ink-4);
+    font-weight: 600;
+  }
+  .livewire__frame.is-warn .livewire__frame-head {
+    color: var(--c-warn);
+  }
+  .livewire__frame.is-cobalt .livewire__frame-head {
+    color: var(--c-primary-2);
+  }
+  .livewire__frame.is-sage .livewire__frame-head {
+    color: var(--j-sage);
+  }
+  .livewire__frame.is-violet .livewire__frame-head {
+    color: var(--j-violet);
+  }
+
+  /* === Edge stop === */
+  .livewire__stop {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 36px;
+    display: flex;
+    align-items: center;
+    padding-inline: 12px;
+    color: var(--c-ink-3);
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, transparent, var(--c-bg-2) 30%);
+    pointer-events: none;
+  }
+
+  /* === Caption === */
+  .livewire__caption {
+    margin: 0;
+    padding: 12px 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    font-size: 10px;
+    color: var(--c-ink-2);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .livewire__cap-text {
+    color: var(--c-ink-2);
+  }
+  .livewire__cap-sep {
+    color: var(--c-ink-4);
+  }
+  .livewire__cap-ago {
+    color: var(--c-ink);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
+    font-weight: 600;
+    min-width: 16px;
+    text-align: right;
+    display: inline-block;
+  }
+  .livewire__cap-stamp {
+    color: var(--c-ink-3);
+    margin-left: auto;
+    font-size: 9px;
+    letter-spacing: 0.04em;
+  }
+  .livewire__empty {
+    margin: 0;
+    padding: 24px 0;
+    color: var(--c-ink-2);
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* === Keyframe === */
+  @keyframes livewire-scroll {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  /* === Reduced motion === */
+  @media (prefers-reduced-motion: reduce) {
+    .livewire__track {
+      animation: none !important;
+    }
+    .livewire__viewport {
+      mask-image: none;
+      -webkit-mask-image: none;
+    }
+  }
+
+  /* === Responsive === */
+  @media (max-width: 720px) {
+    .livewire__lane {
+      grid-template-columns: 0 1fr;
+    }
+    .livewire__lane-label {
+      display: none;
+    }
+    .livewire__chip--meta {
+      margin-left: 0;
+    }
+  }
+</style>

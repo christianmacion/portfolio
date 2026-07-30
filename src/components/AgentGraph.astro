@@ -26,8 +26,11 @@ interface Props {
    * less width. 11 nodes → 7 nodes (orchestrator + 3 middles + 3 outputs).
    */
   compact?: boolean;
+  /** v7.6.8 — per-instance id, so two AgentGraphs on one page don't
+   * alias each other's arrowhead marker (markers are document-global). */
+  instanceId?: string;
 }
-const { class: className, compact = false } = Astro.props;
+const { class: className, compact = false, instanceId = 'ag' } = Astro.props;
 
 // === DETERMINISTIC LAYOUT CONSTANTS ===
 // viewBox: 800 x 440 (full), or 560 x 440 (compact).
@@ -302,8 +305,13 @@ const activeLength = activeEdges.reduce((acc, e) => acc + dist(e.x1, e.y1, e.x2,
     xmlns="http://www.w3.org/2000/svg"
   >
     <defs>
+      {
+        /* v7.6.8 — SVG marker IDs are document-global; prefix with the
+         component instance id so two AgentGraphs on one page don't
+         alias one another's arrowheads. */
+      }
       <marker
-        id="ag-arrow"
+        id={`${instanceId}-arrow`}
         viewBox="0 0 10 10"
         refX="9"
         refY="5"
@@ -315,7 +323,7 @@ const activeLength = activeEdges.reduce((acc, e) => acc + dist(e.x1, e.y1, e.x2,
         <path d="M0,0 L10,5 L0,10 Z" class="ag-arrow-head"></path>
       </marker>
       <marker
-        id="ag-arrow-active"
+        id={`${instanceId}-arrow-active`}
         viewBox="0 0 10 10"
         refX="9"
         refY="5"
@@ -347,7 +355,12 @@ const activeLength = activeEdges.reduce((acc, e) => acc + dist(e.x1, e.y1, e.x2,
       resolved
         .filter((e) => !e.active)
         .map((e, i) => (
-          <path d={edgePath(e, i)} class="ag-edge" fill="none" marker-end="url(#ag-arrow)" />
+          <path
+            d={edgePath(e, i)}
+            class="ag-edge"
+            fill="none"
+            marker-end={`url(#${instanceId}-arrow)`}
+          />
         ))
     }
 
@@ -356,7 +369,7 @@ const activeLength = activeEdges.reduce((acc, e) => acc + dist(e.x1, e.y1, e.x2,
       d={activePathD}
       class="ag-edge ag-edge--active-track"
       fill="none"
-      marker-end="url(#ag-arrow-active)"></path>
+      marker-end={`url(#${instanceId}-arrow-active)`}></path>
 
     {/* === Active-loop traveling dot via animated stroke-dashoffset === */}
     <path
@@ -380,7 +393,7 @@ const activeLength = activeEdges.reduce((acc, e) => acc + dist(e.x1, e.y1, e.x2,
               d={edgePath(e, dummyIdx)}
               class="ag-edge ag-edge--active-flow"
               fill="none"
-              marker-end="url(#ag-arrow-active)"
+              marker-end={`url(#${instanceId}-arrow-active)`}
               style={`--ag-flow-len: ${Math.round(activeLength)}; --ag-flow-delay: ${(prior.length / activeEdges.length) * 4}s;`}
             />
           );
@@ -502,9 +515,16 @@ const activeLength = activeEdges.reduce((acc, e) => acc + dist(e.x1, e.y1, e.x2,
 
   /* === Reduced motion: freeze dot, no animation === */
   @media (prefers-reduced-motion: reduce) {
-    .ag-edge--active-flow {
-      animation: none;
+    .ag-edge--active-flow,
+    .ag-node,
+    .ag-node-rect,
+    .ag-edge:not(.ag-edge--active-flow):not(.ag-edge--active-track) {
+      animation: none !important;
       stroke-dashoffset: 0;
+      opacity: 1;
+    }
+    .ag-node {
+      transform: none;
     }
   }
 
@@ -513,6 +533,9 @@ const activeLength = activeEdges.reduce((acc, e) => acc + dist(e.x1, e.y1, e.x2,
     fill: var(--c-tape-2);
     stroke: var(--c-rule);
     stroke-width: 1.4;
+    transition:
+      stroke 200ms ease,
+      fill 200ms ease;
   }
   .ag-node--input .ag-node-rect {
     stroke: var(--c-ink-3);
@@ -527,6 +550,95 @@ const activeLength = activeEdges.reduce((acc, e) => acc + dist(e.x1, e.y1, e.x2,
     fill: var(--c-tape-3);
     stroke: var(--c-amber);
     stroke-width: 2;
+  }
+
+  /* === v7.6.8 — entrance + ambient pulse ===
+     Nodes fade in left-to-right; orchestrator lands last.
+     Non-active edges pulse opacity (slow) so the chart never sits dead.
+     Middles fire cycle-highlight every 8s (3 nodes × 2.6s offset). */
+  .ag-node {
+    opacity: 0;
+    transform-origin: center;
+    transform-box: fill-box;
+    animation: ag-node-in 0.7s cubic-bezier(0.4, 0.7, 0.3, 1) forwards;
+  }
+  .ag-node--input {
+    animation-delay: 0ms;
+  }
+  .ag-node--middle {
+    animation-delay: 360ms;
+  }
+  .ag-node--orch {
+    animation-delay: 600ms;
+  }
+  .ag-node--output {
+    animation-delay: 820ms;
+  }
+  @keyframes ag-node-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px) scale(0.94);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  /* Non-active edges: perpetual, slow opacity wave */
+  .ag-edge:not(.ag-edge--active-flow):not(.ag-edge--active-track) {
+    animation: ag-edge-pulse 6s ease-in-out infinite;
+  }
+  @keyframes ag-edge-pulse {
+    0%,
+    100% {
+      opacity: 0.55;
+    }
+    50% {
+      opacity: 0.25;
+    }
+  }
+  /* Cycle highlight: each middle + output gets a 3.2s "breathe" pass offset
+     so the eye sees one node light up at a time. */
+  .ag-node--middle .ag-node-rect,
+  .ag-node--output .ag-node-rect {
+    animation:
+      ag-node-in 0.7s cubic-bezier(0.4, 0.7, 0.3, 1) forwards,
+      ag-cycle 9.6s ease-in-out infinite 2s;
+  }
+  .ag-node--middle:nth-child(2) .ag-node-rect {
+    animation-delay: 360ms, 2s;
+  }
+  .ag-node--middle:nth-child(3) .ag-node-rect {
+    animation-delay: 360ms, 5.2s;
+  }
+  .ag-node--middle:nth-child(4) .ag-node-rect {
+    animation-delay: 360ms, 8.4s;
+  }
+  @keyframes ag-cycle {
+    0%,
+    80%,
+    100% {
+      stroke: var(--c-amber-deep);
+      stroke-width: 1.4;
+    }
+    15%,
+    30% {
+      stroke: var(--c-amber);
+      stroke-width: 2.4;
+    }
+  }
+  /* Orchestrator breathes slowly */
+  .ag-node--highlight .ag-node-rect {
+    animation: ag-orch-breathe 4.2s ease-in-out infinite 2s;
+  }
+  @keyframes ag-orch-breathe {
+    0%,
+    100% {
+      stroke-width: 2;
+    }
+    50% {
+      stroke-width: 3.4;
+    }
   }
 
   .ag-node-label {
@@ -560,6 +672,18 @@ const activeLength = activeEdges.reduce((acc, e) => acc + dist(e.x1, e.y1, e.x2,
   @media (max-width: 760px) {
     .agent-graph {
       padding: var(--sp-3);
+    }
+  }
+
+  /* v7.7.90 — MOBILE-08: hide the SVG node labels below 600px (the
+     11-13px labels were illegible at 320px viewport because the
+     viewBox scales down). Promote the semantic <ol>/<dl> list below
+     the SVG; the labels in the list are HTML text and scale with
+     the body font. */
+  @media (max-width: 600px) {
+    .ag-node-label,
+    .ag-node-sub {
+      display: none;
     }
   }
 </style>

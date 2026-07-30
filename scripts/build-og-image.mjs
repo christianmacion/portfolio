@@ -1,10 +1,15 @@
 // scripts/build-og-image.mjs
 //
 // Composites the og:image banner used for LinkedIn / Slack / Twitter / Facebook previews.
-// Input:  src/assets/portrait/headshot-source.jpg + public/cm-mark-amber.svg
+// Input:  src/assets/portrait/headshot-source.jpg + public/cm-mark.svg (Stratum)
 // Output: public/og-image.jpg          (1600×900, LinkedIn / Slack / Twitter large)
 //         public/og-image-twitter.jpg  (1200×675, Twitter summary_large_image)
 //         public/og-image-facebook.jpg  (1200×630, Facebook OG spec)
+//
+// v7.7.87 — switched monogram source from the legacy `cm-mark-amber.svg`
+// (geometric monoline, pre-Stratum) to `cm-mark.svg` (Stratum typographic
+// lockup). Keeps the OG social-share preview consistent with the live
+// nav mark and the favicon set.
 //
 // Invoked by `npm run build` via the `prebuild` hook. Outputs are gitignored.
 
@@ -17,7 +22,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, '..');
 
 const headshotPath = join(root, 'src/assets/portrait/headshot-source.jpg');
-const monogramPath = join(root, 'public/cm-mark-amber.svg');
+const monogramPath = join(root, 'public/cm-mark.svg');
 const publicDir = join(root, 'public');
 
 // ── SVG composition ──────────────────────────────────────────────────────────
@@ -165,7 +170,7 @@ async function buildOne({ width, height, outFile, headshotBox, monogramSize, qua
 try { readFileSync(monogramPath); }
 catch {
   console.error(`✗ Missing monogram: ${monogramPath}`);
-  console.error(`  Re-run after restoring public/cm-mark-amber.svg`);
+  console.error(`  Re-run after restoring public/cm-mark.svg (Stratum source)`);
   process.exit(1);
 }
 

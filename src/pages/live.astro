@@ -1,0 +1,387 @@
+---
+/**
+ * live.astro — v7.7.2 UNIFIED LIVE FEED PAGE.
+ *
+ * Cross-source chronological feed that interleaves:
+ *   - GDELT events    (geopolitical / market-moving 24h signals)
+ *   - arXiv papers    (q-fin / stat.AP / cs.LG / cs.AI / cs.CL preprints)
+ *   - macro-wire      (Reuters / CoinDesk / The Block / CoinTelegraph)
+ *
+ * Items are pre-sorted DESC by timestamp and cross-feed-deduplicated
+ * by URL fingerprint + title fingerprint (see scripts/build-live-feed.mjs).
+ *
+ * Layout (top → bottom):
+ *   1. MarketTape — scrolling equity tape (carries /desk chrome DNA)
+ *   2. Head — eyebrow + headline + voice + sub + dual-path CTA
+ *   3. KPI strip — 4 count-up stats (sources / window / total / freshness)
+ *   4. Marquee — methodology frame loop
+ *   5. LiveFeed — cross-source chronological list (NEW v7.7.2)
+ *   6. LiveStats — instrument panel (4 cards, perp sparkline animation)
+ *   7. CTABanner — back to /desk for full map / open hiring inquiry
+ *
+ * NDA-positive by construction. No employer or platform names; this
+ * page is the public-facing "now" view of the multi-agent office's
+ * information diet.
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import VoiceLine from '@components/VoiceLine.astro';
+import MarketTape from '@components/MarketTape.astro';
+import NewsRibbon from '@components/NewsRibbon.astro';
+import Marquee from '@components/Marquee.astro';
+import LiveFeed from '@components/LiveFeed.astro';
+import LiveStats from '@components/LiveStats.astro';
+import CTABanner from '@components/CTABanner.astro';
+import { profile, archSafe } from '@utils/profile';
+import { path } from '@utils/url';
+import liveFeedCache from '../data/live-feed-cache.json';
+
+// === LiveFeed cache shapes ===
+interface LiveEvent {
+  id: string;
+  source: 'gdelt' | 'arxiv' | 'macrowire';
+  title: string;
+  link: string;
+  timestamp: string;
+  category: string;
+  severity?: string | null;
+  city?: string | null;
+  publisher?: string | null;
+  fingerprint: string;
+  domain: string;
+  coords?: { lat: number; lon: number };
+  related?: { source: string; id: string }[];
+}
+interface LiveFeedCache {
+  generated: string;
+  fetchedAt: string | null;
+  cap: number;
+  counts: { arxiv: number; macrowire: number; gdelt: number };
+  total: number;
+  events: LiveEvent[];
+}
+const cache = liveFeedCache as LiveFeedCache;
+const totalEvents = cache.total;
+const sourceCount = 3; // gdelt + arxiv + macrowire
+const windowHours = 24;
+// Freshness: minutes since the most recent event in the cache
+const mostRecentIso = cache.events[0]?.timestamp ?? cache.generated;
+const freshnessMin = Math.max(
+  0,
+  Math.floor((new Date(cache.generated).getTime() - new Date(mostRecentIso).getTime()) / 60_000),
+);
+
+const email = profile.contact.email;
+const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hiring%20inquiry`;
+---
+
+<BaseLayout
+  title="The Live Feed"
+  description={`24h unified live feed — ${sourceCount} sources (GDELT + arXiv + macro-wire), ${totalEvents}+ signals, ${archSafe.agentCount}-agent office. Cross-feed dedup. NDA-positive by construction.`}
+  surface="v6-13"
+  theme="light"
+  breadcrumbs={[
+    { name: 'Home', href: '/' },
+    { name: 'The Live Feed', href: '/live' },
+  ]}
+>
+  {/* === 1. MarketTape === */}
+  <MarketTape />
+
+  {/* === 2. Head === */}
+  <header class="live-head" data-reveal>
+    <div class="container">
+      <p class="live-head__eyebrow mono">
+        <span class="status-dot" aria-hidden="true"></span>
+        THE LIVE FEED · {sourceCount} SOURCES · {windowHours}H WINDOW · CROSS-FEED DEDUP
+      </p>
+      <h1 class="live-head__title" data-words>
+        One stream, <span class="hl">three feeds</span>.
+      </h1>
+      <VoiceLine class="live-head__voice">
+        GDELT geopolitics, arXiv preprints, and macro-wire headlines — interleaved on one timeline,
+        deduplicated across sources, refreshed every build.
+      </VoiceLine>
+      <p class="live-head__sub">
+        A research signal only matters if you see it before the market. This is the office's
+        <em>24-hour information diet</em>: GDELT for geopolitical + market-moving events, arXiv for
+        fresh preprints in q-fin / stats / ML / AI / CL, and macro-wire for Reuters / CoinDesk / The
+        Block / CoinTelegraph headlines. Cross-feed dedup means the same story does not show up
+        three times. The count-up strip reads the actual cache — never a hardcoded marketing number.
+      </p>
+
+      <div class="live-head__cta">
+        <a class="cta cta--primary" href={mailto}>EMAIL — HIRING INQUIRY</a>
+        <a class="cta cta--ghost" href={path('/desk')}>OPEN THE DESK →</a>
+      </div>
+    </div>
+  </header>
+
+  {/* === 3. KPI strip — 4 count-up cells === */}
+  <section class="live-stats" aria-label="Live feed statistics" data-reveal>
+    <div class="container">
+      <p class="live-stats__eyebrow mono">FEED · DETERMINISTIC SNAPSHOT</p>
+      <ul class="live-stats__grid">
+        <li class="live-stats__cell" style="--i: 0">
+          <p class="live-stats__num mono">
+            <span data-counter={sourceCount} data-duration="800"
+              >{String(sourceCount).padStart(2, '0')}</span
+            >
+          </p>
+          <p class="live-stats__lbl mono">SOURCES</p>
+        </li>
+        <li class="live-stats__cell" style="--i: 1">
+          <p class="live-stats__num mono">
+            {windowHours}<span class="live-stats__unit">H</span>
+          </p>
+          <p class="live-stats__lbl mono">WINDOW</p>
+        </li>
+        <li class="live-stats__cell" style="--i: 2">
+          <p class="live-stats__num mono">
+            <span data-counter={totalEvents} data-duration="1400">{totalEvents}+</span>
+          </p>
+          <p class="live-stats__lbl mono">SIGNALS</p>
+        </li>
+        <li class="live-stats__cell" style="--i: 3">
+          <p class="live-stats__num mono">{freshnessMin}M</p>
+          <p class="live-stats__lbl mono">SINCE LATEST</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  {/* === 4. NewsRibbon — methodology frames === */}
+  <NewsRibbon />
+
+  {/* === 5. Marquee — methodology frames === */}
+  <Marquee
+    items={[
+      { head: '3 SOURCES', tail: 'GDELT + arXiv + WIRE', accent: 'sage' },
+      { head: 'CROSS-FEED DEDUP', tail: 'URL · TITLE FINGERPRINT', accent: 'warn' },
+      { head: 'CHRONOLOGICAL', tail: 'DESC · 24H WINDOW', accent: 'sage' },
+      { head: 'NDA-POSITIVE', tail: 'NO EMPLOYER · NO PLATFORM', accent: 'violet' },
+      { head: 'PUBLIC-DATA', tail: 'GDPR-CLEAN · CC-BY', accent: 'sage' },
+      {
+        head: 'EVAL-FIRST',
+        tail: `${profile.stats.evalGates} GATES · EXIT-0 CONTRACT`,
+        accent: 'warn',
+      },
+      { head: 'CHAIN-OF-CUSTODY', tail: 'SEED → SIGNAL → CITATION', accent: 'sage' },
+      { head: 'TIMEZONE-AWARE', tail: 'UTC+8 DESK · ISO TIMESTAMPS', accent: 'terracotta' },
+    ]}
+    speedSec={48}
+    trailing="live feed · methodology"
+  />
+
+  {/* === 6. LiveFeed — cross-source chronological list === */}
+  <section class="live-list" aria-label="Unified live feed" data-reveal>
+    <div class="container">
+      <LiveFeed windowHours={windowHours} />
+    </div>
+  </section>
+
+  {/* === 7. LiveStats — instrument panel (4 cards) === */}
+  <LiveStats />
+
+  {/* === 8. CTA banner === */}
+  <CTABanner
+    title="Hire the operator, not the dashboard."
+    sub={`${archSafe.agentCount}-agent multi-agent office · ${profile.stats.evalGates}-gate eval harness · ${profile.stats.locPython} LOC Python · NDA-clean by construction. Email below — reply within 24h.`}
+    primaryHref={mailto}
+    primaryLabel="EMAIL — HIRING INQUIRY"
+    secondaryHref={path('/desk')}
+    secondaryLabel="OPEN THE DESK →"
+  />
+</BaseLayout>
+
+<style>
+  /* === Container === */
+  .container {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* === Head === */
+  .live-head {
+    padding: 56px 0 48px;
+    border-bottom: 1px solid var(--c-rule);
+  }
+  .live-head__eyebrow {
+    font: 500 11px / 1.4 var(--ff-mono);
+    color: var(--c-warn);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin: 0 0 24px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .live-head__title {
+    font: 600 48px / 1 var(--serif-display);
+    color: var(--c-ink);
+    letter-spacing: -0.024em;
+    margin: 0 0 24px;
+    max-width: 18ch;
+  }
+  .live-head__title .hl {
+    font-style: italic;
+    color: var(--c-amber);
+  }
+  .live-head__voice {
+    font: 500 16px / 1.5 var(--serif-display);
+    color: var(--c-ink-2);
+    font-style: italic;
+    margin: 0 0 24px;
+    max-width: 56ch;
+  }
+  .live-head__sub {
+    font: 400 15px / 1.6 var(--ff-sans);
+    color: var(--c-ink);
+    margin: 0 0 28px;
+    max-width: 64ch;
+  }
+  .live-head__sub em {
+    font-family: var(--serif-display);
+    font-style: italic;
+    color: var(--c-warn);
+    font-weight: 600;
+  }
+  .live-head__cta {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  /* CTA (shared with /desk) */
+  .cta {
+    display: inline-block;
+    padding: 14px 24px;
+    font: 600 11px / 1 var(--ff-mono);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid var(--c-rule);
+    cursor: pointer;
+    transition:
+      background 200ms ease,
+      color 200ms ease,
+      border-color 200ms ease;
+    background: transparent;
+    color: var(--c-ink);
+  }
+  .cta--primary {
+    background: var(--c-warn);
+    color: var(--c-bg);
+    border-color: var(--c-warn);
+  }
+  .cta--primary:hover,
+  .cta--primary:focus-visible {
+    background: var(--c-amber-deep);
+    border-color: var(--c-amber-deep);
+  }
+  .cta--ghost {
+    background: transparent;
+    color: var(--c-ink);
+    border-color: var(--c-rule);
+  }
+  .cta--ghost:hover,
+  .cta--ghost:focus-visible {
+    color: var(--c-warn);
+    border-color: var(--c-warn);
+  }
+
+  /* === KPI strip === */
+  .live-stats {
+    padding: 48px 0 56px;
+    background: var(--c-bg-2);
+    border-bottom: 1px solid var(--c-rule);
+  }
+  .live-stats__eyebrow {
+    font: 500 11px / 1.4 var(--ff-mono);
+    color: var(--c-warn);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin: 0 0 24px;
+  }
+  .live-stats__grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+  .live-stats__cell {
+    border-top: 1px solid var(--c-rule);
+    padding-top: 16px;
+    position: relative;
+    transition: border-color 0.2s ease;
+    animation: live-stat-in 0.6s cubic-bezier(0.4, 0.7, 0.3, 1) backwards;
+    animation-delay: calc(var(--i, 0) * 100ms);
+  }
+  .live-stats__cell:hover,
+  .live-stats__cell:focus-visible {
+    border-top-color: var(--c-amber);
+  }
+  @keyframes live-stat-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .live-stats__num {
+    font: 600 32px / 1 var(--serif-display);
+    color: var(--c-ink);
+    letter-spacing: -0.022em;
+    margin: 0 0 6px;
+    font-variant-numeric: tabular-nums;
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+  }
+  .live-stats__num span[data-counter] {
+    color: var(--c-phi);
+  }
+  .live-stats__unit {
+    font: 500 18px / 1 var(--ff-mono);
+    color: var(--c-warn);
+    margin-left: 2px;
+  }
+  .live-stats__lbl {
+    font: 500 10px / 1.2 var(--ff-mono);
+    color: var(--c-ink-2);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  /* === LiveFeed section chrome === */
+  .live-list {
+    padding: 0;
+    border-bottom: 1px solid var(--c-rule);
+    background: var(--c-bg);
+  }
+
+  /* === Responsive === */
+  @media (max-width: 900px) {
+    .live-head__title {
+      font-size: 36px;
+    }
+    .live-stats__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+  }
+
+  /* === Reduced motion === */
+  @media (prefers-reduced-motion: reduce) {
+    .live-stats__cell {
+      animation: none;
+      opacity: 1;
+    }
+  }
+</style>

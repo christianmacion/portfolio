@@ -199,14 +199,30 @@ const strings = isFrameSet ? null : (items as string[]);
     }
   }
 
-  /* Reduced-motion: flatten the loop. */
+  /* Reduced-motion: flatten the loop + keep the static content visible.
+     Without `animation: none`, the first copy of the track is offscreen
+     (translateX(-100%) is the resting state for the loop seam), and the
+     reduced-motion fallback rendered blank. */
   @media (prefers-reduced-motion: reduce) {
     .marquee__track {
       animation: none !important;
+      transform: none !important;
     }
     .marquee__viewport {
       mask-image: none;
       -webkit-mask-image: none;
+      overflow-x: auto;
+    }
+  }
+
+  /* v7.7.90 — MOBILE-20: viewport-tie the marquee duration. The 30s
+     default meant mobile viewports (where the same content needs to
+     travel less horizontal distance) whipped text 4-5× faster than
+     desktop. Bump duration to 90s on mobile so it reads at human
+     speed; desktop keeps the snappier 30s rhythm. */
+  @media (max-width: 720px) {
+    .marquee__track {
+      animation-duration: 90s !important;
     }
   }
 </style>

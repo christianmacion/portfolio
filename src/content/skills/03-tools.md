@@ -52,4 +52,5 @@ items:
     sub: 'knowledge base · agent-memory governance'
     level: 4
     years: 3
+lastUpdated: 2026-07-26
 ---

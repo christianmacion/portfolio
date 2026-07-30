@@ -62,7 +62,8 @@ const laneClass = lane === 'ai' ? 'pill--brand' : 'pill--accent';
       box-shadow var(--transition),
       transform var(--transition);
   }
-  .proj-card:hover {
+  .proj-card:hover,
+  .proj-card:focus-visible {
     border-color: var(--c-ink-3);
     box-shadow: var(--shadow-md);
   }
@@ -89,7 +90,8 @@ const laneClass = lane === 'ai' ? 'pill--brand' : 'pill--accent';
     color: var(--c-ink);
     text-decoration: none;
   }
-  .proj-card__title a:hover {
+  .proj-card__title a:hover,
+  .proj-card__title a:focus-visible {
     color: var(--c-primary-2-light);
   }
   .proj-card__summary {
@@ -143,7 +145,8 @@ const laneClass = lane === 'ai' ? 'pill--brand' : 'pill--accent';
     color: var(--c-phi);
     transition: color var(--transition);
   }
-  .proj-card__more:hover {
+  .proj-card__more:hover,
+  .proj-card__more:focus-visible {
     color: var(--c-primary-2-light);
   }
 </style>

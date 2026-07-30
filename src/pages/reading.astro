@@ -167,7 +167,9 @@ function statusPill(s: ShelfItem['status']): string {
           now.map((b) => (
             <li class="shelf__row">
               <div class="shelf__meta">
-                <span class="shelf__status shelf__status--{b.status}">{statusPill(b.status)}</span>
+                <span class:list={['shelf__status', `shelf__status--${b.status}`]}>
+                  {statusPill(b.status)}
+                </span>
                 <span class="shelf__year mono">{b.year}</span>
               </div>
               <div class="shelf__body">
@@ -199,7 +201,9 @@ function statusPill(s: ShelfItem['status']): string {
           queue.map((b) => (
             <li class="shelf__row">
               <div class="shelf__meta">
-                <span class="shelf__status shelf__status--{b.status}">{statusPill(b.status)}</span>
+                <span class:list={['shelf__status', `shelf__status--${b.status}`]}>
+                  {statusPill(b.status)}
+                </span>
                 <span class="shelf__year mono">{b.year}</span>
               </div>
               <div class="shelf__body">
@@ -223,7 +227,9 @@ function statusPill(s: ShelfItem['status']): string {
           reference.map((b) => (
             <li class="shelf__row">
               <div class="shelf__meta">
-                <span class="shelf__status shelf__status--{b.status}">{statusPill(b.status)}</span>
+                <span class:list={['shelf__status', `shelf__status--${b.status}`]}>
+                  {statusPill(b.status)}
+                </span>
                 <span class="shelf__year mono">{b.year}</span>
               </div>
               <div class="shelf__body">
@@ -285,7 +291,8 @@ function statusPill(s: ShelfItem['status']): string {
       border-color var(--transition),
       transform var(--transition);
   }
-  .shelf__row:hover {
+  .shelf__row:hover,
+  .shelf__row:focus-visible {
     border-color: var(--c-amber-deep);
   }
   @media (max-width: 640px) {
@@ -310,7 +317,7 @@ function statusPill(s: ShelfItem['status']): string {
     width: fit-content;
   }
   .shelf__status--reading {
-    background: color-mix(in oklab, var(--c-amber) 0.18%, transparent);
+    background: color-mix(in oklab, var(--c-amber) 18%, transparent);
     color: var(--c-amber-deep);
   }
   .shelf__status--re-read {
@@ -335,7 +342,8 @@ function statusPill(s: ShelfItem['status']): string {
     text-decoration: none;
     border-bottom: 1px solid var(--c-rule);
   }
-  .shelf__title a:hover {
+  .shelf__title a:hover,
+  .shelf__title a:focus-visible {
     border-bottom-color: var(--c-amber-deep);
   }
   .shelf__author {

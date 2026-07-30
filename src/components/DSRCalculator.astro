@@ -324,18 +324,20 @@
     background: var(--c-rule);
     border-radius: 2px;
   }
+  /* v7.7.61 — WCAG 2.5.8 Target Size (Minimum): slider thumbs were 18×18, lifted to 24×24 (AA). */
   .dsr-calc__slider::-webkit-slider-thumb {
     appearance: none;
-    width: 18px;
-    height: 18px;
+    width: 24px;
+    height: 24px;
     background: var(--c-primary);
     border: 2px solid var(--c-bg);
     border-radius: 50%;
-    margin-top: -7px;
+    margin-top: -10px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
     transition: transform 0.1s;
   }
-  .dsr-calc__slider::-webkit-slider-thumb:hover {
+  .dsr-calc__slider::-webkit-slider-thumb:hover,
+  .dsr-calc__slider::-webkit-slider-thumb:focus-visible {
     transform: scale(1.15);
   }
   .dsr-calc__slider::-moz-range-track {
@@ -344,8 +346,8 @@
     border-radius: 2px;
   }
   .dsr-calc__slider::-moz-range-thumb {
-    width: 18px;
-    height: 18px;
+    width: 24px;
+    height: 24px;
     background: var(--c-primary);
     border: 2px solid var(--c-bg);
     border-radius: 50%;

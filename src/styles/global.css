@@ -104,7 +104,11 @@ body {
      24px radial dot at 1px opacity 2.5%. No decoration, no halo,
      just paper-noise. Renders as a fixed background-attachment so it
      doesn't scroll-shimmer. Suppressed on paper sections to keep
-     the cream band clean. */
+     the cream band clean.
+     v7.7.85 — grain drift animation. The 24px tile slides 24px on each
+     axis over 90s, so the page surface looks like it has slow material
+     weight rather than a static raster. Loop is seamless (end point =
+     start point + one tile). Reduced-motion users freeze the surface. */
   background-image: radial-gradient(
     circle at 1px 1px,
     rgba(235, 229, 212, 0.025) 1px,
@@ -112,10 +116,21 @@ body {
   );
   background-size: 24px 24px;
   background-attachment: fixed;
+  will-change: background-position;
+  animation: grain-drift 90s linear infinite;
 }
-@media (prefers-color-scheme: dark) {
-  /* token already controls ink; the grid ink stays paper-cream at
-     2.5% so dark and paper themes render the same grain. */
+@keyframes grain-drift {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 24px 24px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  body {
+    animation: none;
+  }
 }
 
 /* Allow content panels to scroll horizontally on narrow viewports
@@ -181,7 +196,8 @@ a {
   display: inline-flex;
   align-items: center;
 }
-a:hover {
+a:hover,
+a:focus-visible {
   color: var(--c-primary-2-light);
   text-decoration-color: currentColor;
 }
@@ -467,10 +483,14 @@ li {
 
 .btn--primary {
   background: var(--c-amber-deep);
-  color: var(--c-primary);
+  /* v7.7.11 — contrast: was --c-primary (pale ink) which is 2.89:1 on
+     amber-deep, failing WCAG AA normal-text 4.5:1. --c-primary-deep
+     (near-black) on amber-deep clears ~13:1 (AAA). */
+  color: var(--c-primary-deep);
   border-color: var(--c-amber);
 }
-.btn--primary:hover {
+.btn--primary:hover,
+.btn--primary:focus-visible {
   background: var(--c-amber);
   color: var(--c-primary-deep);
 }
@@ -480,7 +500,8 @@ li {
   color: var(--c-amber-deep);
   border-color: var(--c-rule);
 }
-.btn--ghost:hover {
+.btn--ghost:hover,
+.btn--ghost:focus-visible {
   border-color: var(--c-amber);
   background: var(--c-bg-2);
 }
@@ -501,7 +522,8 @@ li {
     border-color var(--transition),
     box-shadow var(--transition);
 }
-.card:hover {
+.card:hover,
+.card:focus-visible {
   border-color: var(--c-ink-3);
   box-shadow: var(--shadow-sm);
 }
@@ -734,7 +756,8 @@ li {
   }
 
   /* Reduce tile shadow/transform on hover-capable touch devices */
-  .tile:hover {
+  .tile:hover,
+  .tile:focus-visible {
     transform: none;
   }
 }
@@ -771,3 +794,16 @@ li {
     white-space: nowrap;
   }
 }
+
+/* === v7.7.91 — HERO-ANCHOR SHELL REMOVED (A14)
+   The dark anchor band (`.hero-anchor` + sub-elements) shipped in
+   v7.7.85 and dominated 22% of iPhone-SE above the fold (per
+   MOBILE-09 audit). Owner directive 2026-07-29: "remove the dark
+   version-stamp + KPI band between the Nav and Updates ticker".
+   Markup removed from src/pages/index.astro + for-recruiters.astro.
+   CSS rules removed (this block).
+   Version stamp DATA preserved in src/utils/build-stamp.ts;
+   rendered in src/components/Footer.astro as a hairline footnote.
+   Tokens --c-anchor-bg / --c-anchor-ink / --c-anchor-accent may be
+   referenced by Login.jarvis / CMMark / research.dark surfaces —
+   not removed. See src/styles/tokens-v6.13.css for token retention. */

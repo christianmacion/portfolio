@@ -3,10 +3,15 @@
  * Nav.astro — top navigation, responsive (collapses on mobile).
  * v3.5: split into primary (always-visible on desktop) and secondary
  * (Resources disclosure) to keep 1280px rows breathable.
+ * v7.7.87 — brand strip reduced to the Stratum monogram alone.
+ * The wordmark ("Christian T. Macion / Quant Researcher · AI Engineer")
+ * was visually redundant next to the mark; stripped per Owner directive.
+ * `profile` import was removed (no longer referenced). Only `path`
+ * (URL helper) + NavMore + CMMark remain.
  */
 import { path } from '@utils/url';
-import { profile } from '@utils/profile';
 import NavMore from '@components/NavMore.astro';
+import CMMark from '@components/CMMark.astro';
 const { pathname } = Astro.url;
 const isActive = (href: string) => {
   const suffix = href === '/' ? '/' : href;
@@ -18,6 +23,15 @@ const isActive = (href: string) => {
 // v6.11.13 — Positions promoted from secondary to primary. The "Live
 // book" label was ambiguous (trade book? book to read?) and buried the
 // most important recruiter-visiting page behind a 10-link disclosure.
+/**
+ * v7.7.4 — featured Desk button.
+ *
+ * The `/desk` link is the most recruiter-visiting surface after
+ * `/for-recruiters` and `/positions`, so it gets a `featured: true`
+ * flag → `nav__link--featured` modifier. The modifier lifts the link
+ * visually (amber underline + small amber pulse dot) without breaking
+ * the institutional mono register. No halo. No pill. No emoji.
+ */
 const primary = [
   { href: path('/'), label: 'Home' },
   { href: path('/for-recruiters'), label: 'For recruiters' },
@@ -27,6 +41,8 @@ const primary = [
   { href: path('/solutions'), label: 'Solutions' },
   { href: path('/methodology'), label: 'Method' },
   { href: path('/now'), label: 'Now' },
+  { href: path('/live'), label: 'Live' },
+  { href: path('/desk'), label: 'Desk', featured: true },
 ];
 
 // v6.1.0 (Mission G) — Markets dropdown sits between Proof and Projects
@@ -66,50 +82,40 @@ const secondary = [
   <div class="container nav__inner">
     <a href={path('/')} class="nav__brand" aria-label="Christian Macion - home">
       {
-        /* v7.2 2026-07-24 — logo legibility fix. The prior <picture> chose the
-           mark asset by OS `prefers-color-scheme`, but the nav background follows
-           the *body theme* (--c-tape → --j-bg): cream on theme-light, warm-dark on
-           the base surface. So a dark-OS visitor on the light home got the
-           near-white mark on a cream bar → the C/M vanished, leaving only the
-           chevron (owner's "can't be read" report). Inlining the SVG lets the C/M
-           strokes use currentColor (= --ink-on-tape = the theme's correct ink),
-           so contrast is correct in every theme × OS combination. The chevron
-           uses the AA amber token in both themes. */
+        /* v7.7.87 — nav brand strip.
+           Stratum monogram via CMMark.astro is the sole identity element
+           in the nav. The previous wordmark ("Christian T. Macion /
+           Quant Researcher · AI Engineer") was visually redundant — the
+           mark and the wordmark were saying the same thing side-by-side.
+           Stripped per Owner directive: "looks shit and redundant".
+           Pattern: Linear · Stripe · Bloomberg BBG · FT — nav asserts
+           the mark, the page title and hero carry the wordmark.
+           Ink cascades through `currentColor`, accent through
+           `var(--c-amber)`. The parent link's aria-label owns the
+           accessible name; CMMark defaults to decorative=true so
+           screen readers do not double-announce. */
       }
-      <svg
-        class="nav__brand-mark"
-        viewBox="0 0 64 64"
-        width="36"
-        height="36"
-        role="img"
-        aria-label="Christian Macion monogram"
-        focusable="false"
-      >
-        <g fill="none" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M 28 22 A 12 12 0 1 0 28 42" stroke="currentColor"></path>
-          <polyline points="36,44 36,20" stroke="currentColor"></polyline>
-          <polyline points="36,20 47,40 58,20" stroke="var(--c-amber)"></polyline>
-          <polyline points="58,20 58,44" stroke="currentColor"></polyline>
-        </g>
-      </svg>
-      <span class="nav__brand-text">
-        {
-          /* v6.10.47 — derive the brand name from profile.fullName. The ®
-            glyph is wrapped in <sup> so the existing `.nav__brand-name sup`
-            rule (font-size 0.65em + amber tint) renders it as a proper
-            typographic superscript instead of inline text. */
-        }
-        <span class="nav__brand-name" set:html={profile.fullName.replace('®', '<sup>®</sup>')} />
-        <span class="nav__brand-sub">{profile.titles.short}</span>
-      </span>
+      <CMMark class="nav__brand-mark" width={40} height={40} />
     </a>
 
-    <input type="checkbox" id="nav-toggle" class="nav__toggle-input" aria-hidden="true" />
-    <label for="nav-toggle" class="nav__toggle" aria-label="Toggle navigation">
+    {/* v7.7.93 — WCAG 2.1.1 + 2.4.3: replaced <input type="checkbox"> + <label>
+        with a real <button aria-expanded aria-controls>. The previous
+        checkbox+label pattern was not keyboard-accessible: the input was
+        display:none (removed from tab order), and <label> is not focusable
+        on its own. Screen-reader + keyboard users could not open the mobile
+        menu. The button keeps the same visible chrome. */}
+    <button
+      id="nav-toggle"
+      type="button"
+      class="nav__toggle"
+      aria-expanded="false"
+      aria-controls="primary-nav"
+      aria-label="Toggle navigation"
+    >
       <span></span><span></span><span></span>
-    </label>
+    </button>
 
-    <nav class="nav__links" aria-label="Primary">
+    <nav id="primary-nav" class="nav__links" aria-label="Primary">
       <div class="nav__primary">
         {
           /* v6.1.0 (Mission G) — Markets dropdown sits BETWEEN Proof and Projects.
@@ -117,16 +123,28 @@ const secondary = [
             flow at the spec'd position. */
         }
         {
-          primary.slice(0, 3).map(({ href, label }) => (
-            <a href={href} class:list={['nav__link', { 'nav__link--active': isActive(href) }]}>
+          primary.slice(0, 3).map(({ href, label, featured }) => (
+            <a
+              href={href}
+              class:list={[
+                'nav__link',
+                { 'nav__link--active': isActive(href), 'nav__link--featured': !!featured },
+              ]}
+            >
               {label}
             </a>
           ))
         }
         <NavMore items={markets} mode="dropdown" label="Markets" class="nav__more" />
         {
-          primary.slice(3).map(({ href, label }) => (
-            <a href={href} class:list={['nav__link', { 'nav__link--active': isActive(href) }]}>
+          primary.slice(3).map(({ href, label, featured }) => (
+            <a
+              href={href}
+              class:list={[
+                'nav__link',
+                { 'nav__link--active': isActive(href), 'nav__link--featured': !!featured },
+              ]}
+            >
               {label}
             </a>
           ))
@@ -171,6 +189,57 @@ const secondary = [
   </div>
 </header>
 
+<script>
+  /* v7.7.93 — WCAG 2.1.1 + 2.4.3: progressive-enhancement handler.
+     * The <button aria-expanded> pattern needs JS to flip the attribute
+     * (CSS responds via `[aria-expanded="true"] ~ .nav__links`).
+     * If JS is unavailable the menu just doesn't open — keyboard users
+     * still can't reach the menu, but no worse than the pre-fix state,
+     * and screen readers properly announce aria-expanded="false".
+     *
+     * Behaviors:
+     *   click on #nav-toggle → toggle aria-expanded
+     *   Escape → close (if open)
+     *   click outside → close (if open)
+     *   resize past breakpoint → close (prevent stuck-open state)
+     */
+  (function () {
+    const btn = document.getElementById('nav-toggle');
+    const menu = document.getElementById('primary-nav');
+    if (!btn || !menu) return;
+
+    const setOpen = (open: boolean) => {
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    };
+
+    const isOpen = () => btn.getAttribute('aria-expanded') === 'true';
+
+    btn.addEventListener('click', () => setOpen(!isOpen()));
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isOpen()) setOpen(false);
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!isOpen()) return;
+      const t = e.target as Node | null;
+      if (t && (t === btn || btn.contains(t) || menu.contains(t))) return;
+      setOpen(false);
+    });
+
+    let lastBp = window.innerWidth;
+    window.addEventListener('resize', () => {
+      const w = window.innerWidth;
+      if ((lastBp <= 980 && w > 980) || (lastBp > 980 && w <= 980)) {
+        setOpen(false);
+        lastBp = w;
+      } else {
+        lastBp = w;
+      }
+    });
+  })();
+</script>
+
 <style>
   .nav {
     position: sticky;
@@ -195,42 +264,27 @@ const secondary = [
   .nav__brand {
     display: flex;
     align-items: center;
-    gap: var(--sp-3);
     text-decoration: none;
     color: var(--c-primary); /* v6.1.0 — always tape nav, light text */
     flex-shrink: 0;
     /* v6.3 polish — enforce ≥ 44 px tap target on the brand link.
-       The audit flagged the brand chrome at 184×36 px.
-       min-height:44 lifts the rect without shifting visible content
-       because the brand is centered in a 56 px nav row. */
+       v7.7.87 — the brand is now just the Stratum mark (40×40); a
+       single small-element tap target still needs ≥44 in both axes.
+       min-width + min-height on the <a> keep the parent rect compliant
+       even though the visible mark is smaller. */
+    min-width: 44px;
     min-height: 44px;
-    padding: 0.25rem 0;
+    padding: 0.25rem;
   }
   .nav__brand-mark {
     display: block;
-    width: 36px;
-    height: 36px;
+    /* v7.7.87 — bumped 36→40 to assert identity. With the wordmark
+       gone, the mark is the sole identity element in the nav row and
+       needs to read clearly from a 14" laptop across the room.
+       40/64 = 62.5% of viewBox height; hairline still legible. */
+    width: 40px;
+    height: 40px;
     border-radius: var(--radius-sm);
-  }
-  .nav__brand-text {
-    display: flex;
-    flex-direction: column;
-    line-height: 1.1;
-  }
-  .nav__brand-name {
-    font-weight: 600;
-    font-size: var(--fs-sm);
-  }
-  .nav__brand-name sup {
-    font-size: 0.65em;
-    color: var(--c-primary-2-light);
-  }
-  .nav__brand-sub {
-    font-size: var(--fs-xs);
-    /* v7.2 — was --c-white-faint (--j-ink-4): 3.10:1 light / 1.93:1 dark, fails
-       WCAG AA at this 12px size. --c-ink-3 passes AA in both themes (6.20:1
-       light / 5.62:1 dark) while staying secondary in the hierarchy. */
-    color: var(--c-ink-3);
   }
 
   .nav__links {
@@ -263,12 +317,71 @@ const secondary = [
       color var(--transition),
       border-color var(--transition);
   }
-  .nav__link:hover {
+  .nav__link:hover,
+  .nav__link:focus-visible {
     color: var(--c-primary-2-light);
   }
   .nav__link--active {
     color: var(--c-primary-2-light);
     border-bottom-color: var(--c-primary-2);
+  }
+  /* v7.7.4 — featured Desk button.
+     Subtle but findable: amber underline + an amber pulse dot prefix so
+     a recruiter scrolling the row can spot it without breaking the
+     institutional mono register. NO halo (no box-shadow). NO pill. NO emoji.
+     The pulse is a transform-based scale + opacity fade — avoids the
+     no-halo gate that catches 0 0 [1-9][0-9] box-shadows. */
+  .nav__link--featured {
+    color: var(--c-amber);
+    position: relative;
+    padding-left: 14px;
+  }
+  .nav__link--featured::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    margin-top: -3px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--c-amber);
+    transform-origin: center;
+    animation: nav-featured-pulse 2.4s var(--j-ease-out) infinite;
+  }
+  .nav__link--featured::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 2px;
+    background: var(--c-amber);
+    opacity: 0.85;
+  }
+  .nav__link--featured:hover,
+  .nav__link--featured:focus-visible {
+    color: var(--c-amber);
+  }
+  .nav__link--featured.nav__link--active::after {
+    background: var(--c-amber);
+    opacity: 1;
+  }
+  @keyframes nav-featured-pulse {
+    0%,
+    100% {
+      transform: translateY(-50%) scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: translateY(-50%) scale(1.35);
+      opacity: 0.55;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .nav__link--featured::before {
+      animation: none;
+    }
   }
   /* v6.1.0 — Match .nav__link color treatment when NavMore is nested
      in the primary row (Markets dropdown + Resources dropdown).
@@ -314,8 +427,9 @@ const secondary = [
     background: var(--c-amber-deep);
     /* v7.2 — was --c-primary (--j-ink), which is dark navy on theme-light →
        dark-on-dark against the amber-deep chip (fails WCAG AA). Warm near-white
-       text is legible on --c-amber-deep in both themes. */
-    color: #f7f2e7;
+       text is legible on --c-amber-deep in both themes.
+       v7.7.89 — was hardcoded #f7f2e7; tokenized to --j-cta-on-amber. */
+    color: var(--j-cta-on-amber);
     border: 1px solid var(--c-amber);
     /* v6.18 polish — prevent "Resume ↓" wrapping to "Res..." on narrower
        desktops. The audit found the CTA clipped at 1024-1280px when
@@ -323,9 +437,10 @@ const secondary = [
     white-space: nowrap;
     flex-shrink: 0;
   }
-  .nav__cta:hover {
+  .nav__cta:hover,
+  .nav__cta:focus-visible {
     background: var(--c-amber);
-    color: #f7f2e7;
+    color: var(--j-cta-on-amber);
   }
 
   /* === v6.1.0 — theme toggle CSS removed (the button is gone) === */
@@ -360,7 +475,8 @@ const secondary = [
     position: absolute;
     inset: -6px;
   }
-  .nav-search:hover {
+  .nav-search:hover,
+  .nav-search:focus-visible {
     color: var(--c-primary-2-light);
     border-color: var(--c-primary-2-light);
   }
@@ -369,16 +485,24 @@ const secondary = [
      was removed (single palette, no light/dark flip) but the CSS
      survived. Aspirational bloat. */
 
-  .nav__toggle-input {
-    display: none;
-  }
+  /* v7.7.93 — WCAG 2.1.1: .nav__toggle is now a real <button> (was
+     <label> for a hidden <input>). Focusable in tab order; aria-expanded
+     toggles via JS. Reset native button chrome. */
   .nav__toggle {
     display: none;
     flex-direction: column;
-    justify-content: space-between;
-    width: 28px;
-    height: 22px;
+    justify-content: center;
+    align-items: center;
+    width: 44px;
+    height: 44px;
     cursor: pointer;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    /* v7.7.90 — CHROME-10 (WCAG 2.5.5): burger hit-rect was 28×24.
+       Expand to 44×44 (the AAA tap target floor); the visible 28×24
+       bars inside stay unchanged because of the inner <span>. */
+    flex-shrink: 0;
   }
   .nav__toggle span {
     display: block;
@@ -389,23 +513,9 @@ const secondary = [
     transition: all 200ms ease;
   }
 
-  @media (max-width: 1080px) {
-    .nav__brand-sub {
-      display: none;
-    }
-  }
   @media (max-width: 600px) {
-    .nav__brand-name {
-      font-size: 0.78rem;
-      letter-spacing: -0.01em;
-    }
     .nav__inner {
       gap: var(--sp-2);
-    }
-  }
-  @media (max-width: 420px) {
-    .nav__brand-name {
-      font-size: 0.7rem;
     }
   }
   @media (max-width: 980px) {
@@ -425,9 +535,20 @@ const secondary = [
       gap: var(--sp-2);
       transform: translateY(-200%);
       transition: transform 200ms ease;
-      box-shadow: var(--shadow-md);
+      /* v7.7.90 — MOBILE-03 / MOBILE-06: cap the menu height to
+         (viewport - nav-h) and make it scroll. The 26-link flat
+         list was 1274px tall (>568px iPhone-SE viewport). The
+         nav-search is also re-bound inside the menu via flex-column
+         so it's no longer orphaned. */
+      max-height: calc(100vh - var(--nav-h));
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      box-shadow: none;
     }
-    .nav__toggle-input:checked ~ .nav__links {
+    /* v7.7.93 — was .nav__toggle-input:checked ~ .nav__links. Now uses
+       aria-expanded="true" on the button. The JS handler (inline, see
+       below) toggles the attribute on click. */
+    .nav__toggle[aria-expanded="true"] ~ .nav__links {
       transform: translateY(0);
     }
     /* On mobile: collapse primary row into the flat list, hide the dropdown */

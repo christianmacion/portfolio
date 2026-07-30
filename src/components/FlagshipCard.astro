@@ -74,7 +74,8 @@ const {
     position: relative;
     overflow: hidden;
   }
-  .flagship:hover {
+  .flagship:hover,
+  .flagship:focus-visible {
     border-color: var(--c-primary);
     box-shadow: var(--shadow-sm);
   }
@@ -135,7 +136,8 @@ const {
     text-underline-offset: 3px;
     margin-top: auto;
   }
-  .flagship__link:hover {
+  .flagship__link:hover,
+  .flagship__link:focus-visible {
     color: var(--c-primary);
   }
 </style>

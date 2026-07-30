@@ -192,7 +192,8 @@
   cursor: pointer;
   transition: background-color 200ms var(--j-ease-out-soft);
 }
-.work__row:hover {
+.work__row:hover,
+.work__row:focus-visible {
   background-color: var(--j-warn-soft);
 }
 .work__row .work__title {
@@ -247,7 +248,8 @@
 .cta:hover::after {
   transform: scaleX(1);
 }
-.cta:hover {
+.cta:hover,
+.cta:focus-visible {
   transform: translateY(-1px);
 }
 .cta:active {

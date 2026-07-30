@@ -97,7 +97,7 @@ const laneClass = data.role === 'ai' ? 'pill--brand' : 'pill--accent';
   <Marquee
     items={[
       { head: 'EVAL-FIRST', tail: '31 GATES', accent: 'warn' },
-      { head: 'NDA-CLEAN', tail: 'PUBLIC DATA', accent: 'cobalt' },
+      { head: 'NDA-CLEAN', tail: 'PUBLIC DATA', accent: 'sage' },
       { head: 'ALPHA', tail: 'SIGNAL > NOISE', accent: 'sage' },
       { head: 'REPRODUCIBLE', tail: 'NOTEBOOK-COMMITTED', accent: 'sage' },
       { head: 'CITABLE', tail: 'BIBTEX + DOI', accent: 'warn' },
@@ -118,7 +118,7 @@ const laneClass = data.role === 'ai' ? 'pill--brand' : 'pill--accent';
       </header>
 
       <div class="cite-card">
-        <pre class="cite-bib mono"><code>{bibtex}</code></pre>
+        <pre class="cite-bib mono" aria-label="BibTeX citation"><code>{bibtex}</code></pre>
         <button
           type="button"
           class="cite-copy"
@@ -252,7 +252,8 @@ const laneClass = data.role === 'ai' ? 'pill--brand' : 'pill--accent';
     border-bottom: 1px dotted var(--c-rule);
     transition: border-color var(--transition);
   }
-  .eyebrow a:hover {
+  .eyebrow a:hover,
+  .eyebrow a:focus-visible {
     border-bottom-color: var(--c-amber);
   }
   .hero__title {
@@ -338,7 +339,8 @@ const laneClass = data.role === 'ai' ? 'pill--brand' : 'pill--accent';
     cursor: pointer;
     transition: background var(--transition);
   }
-  .cite-copy:hover {
+  .cite-copy:hover,
+  .cite-copy:focus-visible {
     background: var(--c-amber);
     color: var(--c-primary-deep);
   }
@@ -375,7 +377,8 @@ const laneClass = data.role === 'ai' ? 'pill--brand' : 'pill--accent';
     border-bottom: 1px dotted var(--c-rule);
     word-break: break-word;
   }
-  .canon__link:hover {
+  .canon__link:hover,
+  .canon__link:focus-visible {
     border-bottom-color: var(--c-amber);
   }
   .canon__metrics {

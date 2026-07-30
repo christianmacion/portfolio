@@ -85,7 +85,7 @@ const groupActive = items.some((it) => isActive(it.href));
       {showLabelInline && <div class="nav-more__flat-head mono">{label}</div>}
       <ul role="list">
         {items.map(({ href, label }) => (
-          <li>
+          <li role="listitem">
             <a
               href={href}
               class:list={['nav-more__link', { 'nav-more__link--active': isActive(href) }]}
@@ -150,8 +150,10 @@ const groupActive = items.some((it) => isActive(it.href));
     list-style: none;
     background: var(--c-bg);
     border: var(--border);
-    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade */
-    box-shadow: var(--shadow-lg);
+    /* v7.7.90 — CHROME-07: drop latent halo (box-shadow: var(--shadow-lg)
+       was a 3rd-tier halo per chrome contract: no halo). Rely on 1px border
+       + z-stack for menu chrome depth. */
+    box-shadow: none;
     z-index: var(--z-nav-more);
     display: flex;
     flex-direction: column;
@@ -172,7 +174,8 @@ const groupActive = items.some((it) => isActive(it.href));
       background var(--transition);
     white-space: nowrap;
   }
-  .nav-more__link:hover {
+  .nav-more__link:hover,
+  .nav-more__link:focus-visible {
     color: var(--c-primary);
     background: var(--c-bg-2);
   }

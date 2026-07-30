@@ -46,6 +46,7 @@ const updatedHuman = new Date(updated).toLocaleDateString('en-GB', {
         regime flip, new gate added to the stack). Inspired by <a
           href="https://nownownow.com/about"
           target="_blank"
+          referrerpolicy="strict-origin-when-cross-origin"
           rel="noopener noreferrer">/now</a
         >.
       </p>
@@ -103,6 +104,7 @@ const updatedHuman = new Date(updated).toLocaleDateString('en-GB', {
           <strong>This site:</strong> ongoing edits — see <a
             href="https://github.com/christianmacion26/portfolio/commits/main"
             target="_blank"
+            referrerpolicy="strict-origin-when-cross-origin"
             rel="noopener noreferrer">commit history</a
           >
           for a dated build log.
@@ -165,15 +167,23 @@ const updatedHuman = new Date(updated).toLocaleDateString('en-GB', {
         </li>
         <li>
           <strong>For casual / paper-trail:</strong>
-          <a href={profile.contact.linkedin} target="_blank" rel="noopener noreferrer"
-            >LinkedIn DM</a
+          <a
+            href={profile.contact.linkedin}
+            target="_blank"
+            referrerpolicy="strict-origin-when-cross-origin"
+            rel="noopener noreferrer">LinkedIn DM</a
           >.
         </li>
         <li>
           <strong>For public work / proof:</strong>
-          <a href={profile.contact.github} target="_blank" rel="noopener noreferrer">GitHub</a> ({
-            profile.stats.repoCount
-          } public repos, all NDA-safe). Stack: see <a href={path('/uses')}>/uses</a>.
+          <a
+            href={profile.contact.github}
+            target="_blank"
+            referrerpolicy="strict-origin-when-cross-origin"
+            rel="noopener noreferrer">GitHub</a
+          > ({profile.stats.repoCount} public repos, all NDA-safe). Stack: see <a
+            href={path('/uses')}>/uses</a
+          >.
         </li>
       </ul>
 
@@ -181,6 +191,7 @@ const updatedHuman = new Date(updated).toLocaleDateString('en-GB', {
         This page is versioned. <a
           href={`https://github.com/christianmacion26/portfolio/commits/main/src/pages/now.astro`}
           target="_blank"
+          referrerpolicy="strict-origin-when-cross-origin"
           rel="noopener noreferrer">Edit history →</a
         >
       </div>
@@ -284,7 +295,8 @@ const updatedHuman = new Date(updated).toLocaleDateString('en-GB', {
     text-decoration-color: var(--c-rule);
     text-underline-offset: 2px;
   }
-  .now-list a:hover {
+  .now-list a:hover,
+  .now-list a:focus-visible {
     text-decoration-color: var(--c-amber-deep);
   }
   .now-list--not li::before {

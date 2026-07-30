@@ -27,3 +27,15 @@ export function path(p: string): string {
   const suffix = p.startsWith('/') ? p : `/${p}`;
   return `${BASE}${ensureTrailingSlash(suffix)}`;
 }
+
+/**
+ * For href values that may be either an internal path or an
+ * absolute http(s) URL (e.g. external certification links stored in
+ * markdown content collections). Leaves `https://…` / `http://…`
+ * untouched; routes everything else through `path()` so the
+ * configured base prefix still applies for internal links.
+ */
+export function hrefOrPath(href: string): string {
+  if (/^https?:\/\//i.test(href)) return href;
+  return path(href);
+}

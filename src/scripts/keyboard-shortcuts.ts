@@ -70,6 +70,12 @@ function attach(): void {
   };
   const togglePanel = (): void => {
     if (!panel) return;
+    // v7.7.93 — gate on viewport: keyboard UX not relevant to touch-first
+    // (<=720px). CSS already hides the panel via display:none on mobile, but
+    // without this gate the handler still flips aria-hidden="false" and
+    // strips `hidden`, leaving state incoherent (panel claims open while
+    // CSS hides it). Skip the toggle entirely.
+    if (window.innerWidth < 720) return;
     if (panel.classList.contains('is-open')) closePanel();
     else openPanel();
   };
@@ -110,10 +116,21 @@ function attach(): void {
     // Modifier keys disqualify all shortcuts except Escape.
     if (e.metaKey || e.ctrlKey || e.altKey) return;
 
+    // v7.7.91 — modifier-bind all single-char shortcuts to satisfy WCAG 2.1.4 AA
+    // (Character Key Shortcuts). Bare single-char shortcuts fire on any press,
+    // including typed text. Cmd+/, Cmd+j, Cmd+k, Cmd+Up, Cmd+Down, Cmd+f all
+    // require metaKey or ctrlKey. Escape stays un-modified (W3C exempt).
+    const wantsMod = e.metaKey || e.ctrlKey;
     switch (e.key) {
       case '?':
-        togglePanel();
-        e.preventDefault();
+      case '/':
+        if (wantsMod) {
+          focusSearch();
+          e.preventDefault();
+        } else if (e.key === '?') {
+          togglePanel();
+          e.preventDefault();
+        }
         break;
       case 'Escape':
         if (panel && panel.classList.contains('is-open')) {
@@ -122,27 +139,37 @@ function attach(): void {
         }
         break;
       case 'j':
-        if (!e.repeat) viewportStep(1);
-        e.preventDefault();
+        if (wantsMod) {
+          if (!e.repeat) viewportStep(1);
+          e.preventDefault();
+        }
         break;
       case 'k':
-        if (!e.repeat) viewportStep(-1);
-        e.preventDefault();
+        if (wantsMod) {
+          if (!e.repeat) viewportStep(-1);
+          e.preventDefault();
+        }
+        break;
+      case 'ArrowUp':
+        if (wantsMod) {
+          if (!e.repeat) scrollTo(0);
+          e.preventDefault();
+        }
+        break;
+      case 'ArrowDown':
+        if (wantsMod) {
+          if (!e.repeat) {
+            const max = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+            scrollTo(max);
+          }
+          e.preventDefault();
+        }
         break;
       case 'g':
-        if (!e.repeat) scrollTo(0);
-        e.preventDefault();
+        // bare 'g' ignored — Cmd+Up handles top-scroll (browser convention)
         break;
       case 'b':
-        if (!e.repeat) {
-          const max = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-          scrollTo(max);
-        }
-        e.preventDefault();
-        break;
-      case '/':
-        focusSearch();
-        e.preventDefault();
+        // bare 'b' ignored — Cmd+Down handles bottom-scroll (browser convention)
         break;
     }
   };

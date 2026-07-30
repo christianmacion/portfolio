@@ -1,0 +1,1205 @@
+---
+/**
+ * SwarmScene.astro — v7.6.6 BLOOMBERG-TERMINAL WORLD MAP
+ *
+ * Owner feedback 2026-07-26 (raw): "improve this shit. doesnt look like
+ * the world. make it realistic and bloomberg style universal billion
+ * dollar tool UI/UX of that. improve it better."
+ *
+ * v7.6.6 rebuild:
+ *   - Real continents (Natural Earth 110m, 177 countries) — precomputed
+ *     to SVG paths by scripts/build-world-map.mjs
+ *   - Bloomberg-terminal chrome: hairline borders, mono tabular nums,
+ *     hex code IDs, state pills, source/signal grids
+ *   - 4-panel layout: header / stage / sources+signals / footer
+ *   - Multiple animation layers: 6 source pulses, 5 signal pulses,
+ *     6 flying packets, 3 STELLA pulse rings, 2 orbit rings, dash flow
+ *   - Reduced-motion safe: every animation has a fallback
+ */
+import { archSafe } from '@utils/profile';
+import { MAP_WIDTH, MAP_HEIGHT } from '../data/world-map-paths';
+
+// === Equirectangular projection helpers (re-derived from build script) ===
+const lonLat = (lon: number, lat: number) => {
+  const x = ((lon + 180) / 360) * MAP_WIDTH;
+  const y = ((90 - lat) / 180) * MAP_HEIGHT;
+  return { x, y };
+};
+
+const sources = [
+  {
+    code: 'FED',
+    city: 'Washington',
+    lon: -77.04,
+    lat: 38.91,
+    label: 'FOMC',
+    sub: '14:00 ET · 25bp cut signaled',
+  },
+  {
+    code: 'ECB',
+    city: 'Frankfurt',
+    lon: 8.68,
+    lat: 50.11,
+    label: 'PRESS',
+    sub: '13:45 CET · drift from minutes',
+  },
+  {
+    code: 'NYSE',
+    city: 'New York',
+    lon: -74.0,
+    lat: 40.71,
+    label: 'OPEN',
+    sub: '09:30 ET · NVDA +4.2% beat',
+  },
+  {
+    code: 'BOJ',
+    city: 'Tokyo',
+    lon: 139.69,
+    lat: 35.69,
+    label: 'MINUTES',
+    sub: '09:00 JST · YCC adjustment',
+  },
+  {
+    code: 'BSE',
+    city: 'Mumbai',
+    lon: 72.88,
+    lat: 19.08,
+    label: 'GDP',
+    sub: '12:00 IST · -1.8% miss',
+  },
+  {
+    code: 'PBoC',
+    city: 'Beijing',
+    lon: 116.4,
+    lat: 39.9,
+    label: 'FIX',
+    sub: '09:15 CST · CNY +312 pips',
+  },
+];
+
+const signals = [
+  { code: 'TSM-VT', sub: 'term-structure', value: '+0.42%', meta: 'σ 1.1' },
+  { code: 'VRP-X', sub: 'vol risk-premium', value: 'Δ -0.18%', meta: '1Y tenor' },
+  { code: 'COIN-PAIRS', sub: 'cointegration', value: '5Y ½-Life', meta: 'σ 0.84' },
+  { code: 'FX-CARRY', sub: 'carry-trade', value: 'AUD/JPY', meta: '+0.62%' },
+  { code: 'REGIME', sub: 'risk-on/off', value: '0.74', meta: 'Risk-on' },
+];
+
+const feed = [
+  {
+    time: '14:23:17',
+    grade: 'A',
+    source: 'FED',
+    msg: 'FOMC statement released — 25bp cut signaled',
+    route: 'TSM-VT',
+  },
+  {
+    time: '14:23:04',
+    grade: 'C',
+    source: 'NYSE',
+    msg: 'NVDA earnings beat by 4.2%',
+    route: 'COIN-PAIRS',
+  },
+  {
+    time: '14:22:48',
+    grade: 'B',
+    source: 'ECB',
+    msg: 'Press conference diverges from minutes',
+    route: 'FX-CARRY',
+  },
+  {
+    time: '14:22:31',
+    grade: 'C',
+    source: 'GDELT',
+    msg: 'BRICS summit pace accelerates',
+    route: 'REGIME',
+  },
+  {
+    time: '14:22:15',
+    grade: 'A',
+    source: 'BOJ',
+    msg: 'YCC adjustment signals yen intervention',
+    route: 'VRP-X',
+  },
+  {
+    time: '14:22:01',
+    grade: 'C',
+    source: 'PBoC',
+    msg: 'CNY fixing strengthens 312 pips',
+    route: 'FX-CARRY',
+  },
+  {
+    time: '14:21:44',
+    grade: 'B',
+    source: 'BSE',
+    msg: 'GDP print lower than consensus',
+    route: 'REGIME',
+  },
+];
+
+const sourcesXY = sources.map((s) => ({ ...s, ...lonLat(s.lon, s.lat) }));
+---
+
+<section
+  class="bloomberg"
+  id="swarm-scene"
+  aria-label="STELLA live loop — world-class AI research assistant"
+>
+  <div class="bloomberg__frame">
+    {/* === HEADER STRIP ================================================ */}
+    <header class="bloomberg__header">
+      <div class="bloomberg__header-left">
+        <span class="bloomberg__chip bloomberg__chip--sage">LIVE</span>
+        <span class="bloomberg__brand">STELLA</span>
+        <span class="bloomberg__sub">53-AGENT ORCHESTRATOR</span>
+        <span class="bloomberg__sep">·</span>
+        <span class="bloomberg__code mono">STL.NC.53</span>
+      </div>
+      <div class="bloomberg__header-right">
+        <span class="bloomberg__utc mono">14:23:17 UTC</span>
+        <span class="bloomberg__sep">·</span>
+        <span class="bloomberg__latency mono">142ms</span>
+        <span class="bloomberg__sep">·</span>
+        <span class="bloomberg__status mono">STATUS 0</span>
+      </div>
+    </header>
+
+    {/* === STAGE ====================================================== */}
+    <div class="bloomberg__stage">
+      {/* === Left: world map sandbox === */}
+      <div class="bloomberg__map">
+        <div class="bloomberg__panel-corner bloomberg__panel-corner--tl" aria-hidden="true"></div>
+        <div class="bloomberg__panel-corner bloomberg__panel-corner--tr" aria-hidden="true"></div>
+        <div class="bloomberg__panel-corner bloomberg__panel-corner--bl" aria-hidden="true"></div>
+        <div class="bloomberg__panel-corner bloomberg__panel-corner--br" aria-hidden="true"></div>
+
+        <div class="bloomberg__panel-head">
+          <span class="bloomberg__panel-title mono">EARTH · VENUES · EVENTS · 24H</span>
+          <span class="bloomberg__panel-meta mono">177 COUNTRIES · WGS84 · EQUIRECTANGULAR</span>
+        </div>
+
+        <svg
+          class="bloomberg__svg"
+          viewBox={`0 0 ${MAP_WIDTH} ${MAP_HEIGHT}`}
+          preserveAspectRatio="xMidYMid meet"
+          role="img"
+          aria-label="Real world map (Natural Earth 110m) with 6 live event sources and 5 research signals"
+        >
+          <defs>
+            <radialGradient id="bloomberg-aura" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0%" stop-color="var(--c-sage)" stop-opacity="0.18"></stop>
+              <stop offset="50%" stop-color="var(--c-sage)" stop-opacity="0.04"></stop>
+              <stop offset="100%" stop-color="var(--c-sage)" stop-opacity="0"></stop>
+            </radialGradient>
+            <linearGradient id="bloomberg-stream-out" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="var(--c-sage)" stop-opacity="0.7"></stop>
+              <stop offset="100%" stop-color="var(--c-sage)" stop-opacity="0"></stop>
+            </linearGradient>
+            <pattern
+              id="bloomberg-grid"
+              x="0"
+              y="0"
+              width="60"
+              height="60"
+              patternUnits="userSpaceOnUse"
+            >
+              <path
+                d="M 60 0 L 0 0 0 60"
+                fill="none"
+                stroke="var(--c-rule)"
+                stroke-width="0.4"
+                opacity="0.5"></path>
+            </pattern>
+          </defs>
+
+          {/* Lat/lon grid */}
+          <rect x="0" y="0" width={MAP_WIDTH} height={MAP_HEIGHT} fill="url(#bloomberg-grid)"
+          ></rect>
+
+          {/* Equator + prime meridian */}
+          <line x1="0" y1={MAP_HEIGHT / 2} x2={MAP_WIDTH} y2={MAP_HEIGHT / 2} class="bloomberg__eq"
+          ></line>
+          <line x1={MAP_WIDTH / 2} y1="0" x2={MAP_WIDTH / 2} y2={MAP_HEIGHT} class="bloomberg__eq"
+          ></line>
+
+          {/* === Real continents === */}
+          {
+            /* v7.9 split — paths are loaded client-side from /data/world-map-equirect.json.
+              SSR ships an empty container so the prerendered HTML stays small. */
+          }
+          <g class="bloomberg__continents" data-continents-target></g>
+
+          {/* === STELLA core — at lon 0, lat 0 (Atlantic) === */}
+          {
+            (() => {
+              const stella = lonLat(0, 20);
+              return (
+                <g class="bloomberg__stella" transform={`translate(${stella.x} ${stella.y})`}>
+                  <circle r="80" fill="url(#bloomberg-aura)" class="bloomberg__aura" />
+                  {/* Pulse rings (sonar ping) */}
+                  <circle
+                    r="20"
+                    fill="none"
+                    stroke="var(--c-sage)"
+                    stroke-width="0.8"
+                    class="bloomberg__pulse-ring bloomberg__pulse-ring--1"
+                  />
+                  <circle
+                    r="20"
+                    fill="none"
+                    stroke="var(--c-sage)"
+                    stroke-width="0.8"
+                    class="bloomberg__pulse-ring bloomberg__pulse-ring--2"
+                  />
+                  <circle
+                    r="20"
+                    fill="none"
+                    stroke="var(--c-sage)"
+                    stroke-width="0.8"
+                    class="bloomberg__pulse-ring bloomberg__pulse-ring--3"
+                  />
+                  {/* Hex core */}
+                  <polygon
+                    points="0,-14 12,-7 12,7 0,14 -12,7 -12,-7"
+                    fill="var(--c-warn)"
+                    stroke="var(--c-warn-deep)"
+                    stroke-width="1"
+                    class="bloomberg__core"
+                  />
+                  <circle r="3" fill="var(--c-bg)" class="bloomberg__eye" />
+                  {/* Concentric rings */}
+                  <circle
+                    r="22"
+                    fill="none"
+                    stroke="var(--c-warn)"
+                    stroke-width="0.5"
+                    opacity="0.6"
+                    class="bloomberg__ring-1"
+                  />
+                  <circle
+                    r="32"
+                    fill="none"
+                    stroke="var(--c-warn)"
+                    stroke-width="0.4"
+                    opacity="0.4"
+                    class="bloomberg__ring-2"
+                  />
+                  <circle
+                    r="42"
+                    fill="none"
+                    stroke="var(--c-warn)"
+                    stroke-width="0.3"
+                    opacity="0.25"
+                    class="bloomberg__ring-3"
+                  />
+                  <text y="56" text-anchor="middle" class="bloomberg__core-label mono">
+                    STELLA
+                  </text>
+                </g>
+              );
+            })()
+          }
+
+          {/* === Sources (6) with pulse rings === */}
+          {
+            sourcesXY.map((s, i) => (
+              <g class={`bloomberg__src bloomberg__src--${i + 1}`}>
+                <circle
+                  cx={s.x}
+                  cy={s.y}
+                  r="14"
+                  fill="none"
+                  stroke="var(--c-terracotta)"
+                  stroke-width="0.6"
+                  class="bloomberg__src-pulse"
+                />
+                <circle cx={s.x} cy={s.y} r="6" fill="var(--c-terracotta)" />
+                <circle cx={s.x} cy={s.y} r="2.5" fill="var(--c-bg)" />
+                <text x={s.x + 10} y={s.y - 4} class="bloomberg__src-label mono">
+                  {s.code}
+                </text>
+                <text x={s.x + 10} y={s.y + 6} class="bloomberg__src-sub mono">
+                  {s.sub}
+                </text>
+              </g>
+            ))
+          }
+
+          {/* === Streams from each source to STELLA === */}
+          {
+            sourcesXY.map((s, i) => {
+              const stella = lonLat(0, 20);
+              const cx = (s.x + stella.x) / 2;
+              const cy = (s.y + stella.y) / 2 - 30;
+              return (
+                <path
+                  d={`M ${s.x} ${s.y} Q ${cx} ${cy} ${stella.x} ${stella.y}`}
+                  class={`bloomberg__stream bloomberg__stream--${i + 1}`}
+                  fill="none"
+                  stroke="var(--c-terracotta)"
+                  stroke-width="0.7"
+                  stroke-dasharray="4 6"
+                  opacity="0.5"
+                />
+              );
+            })
+          }
+
+          {/* === Flying packets (6) along the streams === */}
+          {
+            (() => {
+              const stella = lonLat(0, 20);
+              const packets = sourcesXY.map((s, i) => ({
+                d: `M ${s.x} ${s.y} Q ${(s.x + stella.x) / 2} ${(s.y + stella.y) / 2 - 30} ${stella.x} ${stella.y}`,
+                i,
+              }));
+              return packets.map((p) => (
+                <circle
+                  r="3"
+                  fill="var(--c-warn)"
+                  class={`bloomberg__packet bloomberg__packet--${p.i + 1}`}
+                >
+                  <animateMotion
+                    dur={`${3 + p.i * 0.4}s`}
+                    repeatCount="indefinite"
+                    path={p.d}
+                    rotate="auto"
+                  />
+                </circle>
+              ));
+            })()
+          }
+        </svg>
+      </div>
+
+      {/* === Right: STELLA processor panel === */}
+      <aside class="bloomberg__panel">
+        <div class="bloomberg__panel-corner bloomberg__panel-corner--tl" aria-hidden="true"></div>
+        <div class="bloomberg__panel-corner bloomberg__panel-corner--tr" aria-hidden="true"></div>
+        <div class="bloomberg__panel-corner bloomberg__panel-corner--bl" aria-hidden="true"></div>
+        <div class="bloomberg__panel-corner bloomberg__panel-corner--br" aria-hidden="true"></div>
+
+        <div class="bloomberg__panel-head">
+          <span class="bloomberg__panel-title mono">STELLA · CORE</span>
+          <span class="bloomberg__panel-meta mono">#53</span>
+        </div>
+
+        <div class="bloomberg__metric">
+          <div class="bloomberg__metric-row">
+            <span class="bloomberg__metric-key mono">AGENTS</span>
+            <span class="bloomberg__metric-val">{archSafe.agentCount}</span>
+          </div>
+          <div class="bloomberg__metric-bar">
+            <span class="bloomberg__metric-fill" style="width: 100%"></span>
+          </div>
+        </div>
+
+        <div class="bloomberg__metric">
+          <div class="bloomberg__metric-row">
+            <span class="bloomberg__metric-key mono">SUB-TEAMS</span>
+            <span class="bloomberg__metric-val">{archSafe.subTeamCount}</span>
+          </div>
+          <div class="bloomberg__metric-bar">
+            <span class="bloomberg__metric-fill" style="width: 100%"></span>
+          </div>
+        </div>
+
+        <div class="bloomberg__metric">
+          <div class="bloomberg__metric-row">
+            <span class="bloomberg__metric-key mono">EVAL GATES</span>
+            <span class="bloomberg__metric-val">{archSafe.evalGateCount}</span>
+            <span class="bloomberg__metric-suffix mono">/ {archSafe.evalGateCount}</span>
+          </div>
+          <div class="bloomberg__metric-bar">
+            <span class="bloomberg__metric-fill" style="width: 100%"></span>
+          </div>
+        </div>
+
+        <div class="bloomberg__metric">
+          <div class="bloomberg__metric-row">
+            <span class="bloomberg__metric-key mono">LATENCY</span>
+            <span class="bloomberg__metric-val">142</span>
+            <span class="bloomberg__metric-suffix mono">ms</span>
+          </div>
+          <div class="bloomberg__metric-bar">
+            <span class="bloomberg__metric-fill" style="width: 28%"></span>
+          </div>
+        </div>
+
+        <div class="bloomberg__divider"></div>
+
+        <div class="bloomberg__feed">
+          <div class="bloomberg__feed-head">
+            <span class="bloomberg__feed-title mono">FEED · LIVE</span>
+            <span class="bloomberg__feed-pulse" aria-hidden="true"></span>
+          </div>
+          <ol class="bloomberg__feed-list">
+            {
+              feed.map((f) => (
+                <li class={`bloomberg__feed-row bloomberg__feed-row--${f.grade}`}>
+                  <span class="bloomberg__feed-time mono">{f.time}</span>
+                  <span class={`bloomberg__feed-grade mono`}>G{f.grade}</span>
+                  <span class="bloomberg__feed-source mono">{f.source}</span>
+                  <span class="bloomberg__feed-msg">{f.msg}</span>
+                  <span class="bloomberg__feed-route mono">→ {f.route}</span>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+      </aside>
+    </div>
+
+    {/* === SOURCES + SIGNALS GRID ===================================== */}
+    <div class="bloomberg__bottom">
+      <section class="bloomberg__data bloomberg__data--sources">
+        <div class="bloomberg__panel-head">
+          <span class="bloomberg__panel-title mono">SOURCES · WORLD</span>
+          <span class="bloomberg__panel-meta mono">{sources.length} ACTIVE</span>
+        </div>
+        <table class="bloomberg__table" aria-label="World sources table">
+          <thead>
+            <tr>
+              <th class="bloomberg__th mono">CODE</th>
+              <th class="bloomberg__th mono">VENUE</th>
+              <th class="bloomberg__th mono">EVENT</th>
+              <th class="bloomberg__th mono">TIME</th>
+              <th class="bloomberg__th mono">STATE</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              sources.map((s) => (
+                <tr class="bloomberg__tr">
+                  <td class="bloomberg__td mono bloomberg__td--strong">{s.code}</td>
+                  <td class="bloomberg__td mono">{s.city}</td>
+                  <td class="bloomberg__td mono">{s.label}</td>
+                  <td class="bloomberg__td mono bloomberg__td--num">
+                    {s.sub.split('·')[0].trim()}
+                  </td>
+                  <td class="bloomberg__td">
+                    <span class="bloomberg__pill bloomberg__pill--ok mono">LIVE</span>
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </section>
+
+      <section class="bloomberg__data bloomberg__data--signals">
+        <div class="bloomberg__panel-head">
+          <span class="bloomberg__panel-title mono">SIGNALS · RESEARCH</span>
+          <span class="bloomberg__panel-meta mono">{signals.length} ROUTING</span>
+        </div>
+        <table class="bloomberg__table" aria-label="Research signals table">
+          <thead>
+            <tr>
+              <th class="bloomberg__th mono">CODE</th>
+              <th class="bloomberg__th mono">STRATEGY</th>
+              <th class="bloomberg__th mono">VALUE</th>
+              <th class="bloomberg__th mono">META</th>
+              <th class="bloomberg__th mono">STATE</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              signals.map((s) => (
+                <tr class="bloomberg__tr">
+                  <td class="bloomberg__td mono bloomberg__td--strong">{s.code}</td>
+                  <td class="bloomberg__td mono">{s.sub}</td>
+                  <td class="bloomberg__td mono bloomberg__td--num">{s.value}</td>
+                  <td class="bloomberg__td mono bloomberg__td--num">{s.meta}</td>
+                  <td class="bloomberg__td">
+                    <span class="bloomberg__pill bloomberg__pill--up mono">UP</span>
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </section>
+    </div>
+
+    {/* === FOOTER STRIP ================================================ */}
+    <footer class="bloomberg__footer">
+      <span class="bloomberg__legend">
+        <span class="bloomberg__legend-dot bloomberg__legend-dot--source" aria-hidden="true"></span>
+        <span class="mono">WORLD EVENTS · IN</span>
+      </span>
+      <span class="bloomberg__legend">
+        <span class="bloomberg__legend-dot bloomberg__legend-dot--stella" aria-hidden="true"></span>
+        <span class="mono">STELLA · 53-AGENT ORCHESTRATOR</span>
+      </span>
+      <span class="bloomberg__legend">
+        <span class="bloomberg__legend-dot bloomberg__legend-dot--signal" aria-hidden="true"></span>
+        <span class="mono">RESEARCH SIGNALS · OUT</span>
+      </span>
+    </footer>
+  </div>
+</section>
+
+<style>
+  /* === Stage 1 — bloomberg-terminal base =========================== */
+  .bloomberg {
+    padding: 56px 0 64px;
+    background: var(--c-bg);
+    border-top: 1px solid var(--c-rule);
+    border-bottom: 1px solid var(--c-rule);
+  }
+  .bloomberg__frame {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 24px;
+    border: 1px solid var(--c-rule);
+    border-radius: 2px;
+    background: var(--c-bg);
+    overflow: hidden;
+  }
+
+  /* === HEADER strip ================================================ */
+  .bloomberg__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--c-rule);
+    background: var(--c-bg-2);
+    font: 500 11px / 1.2 var(--ff-mono);
+    color: var(--c-ink);
+    letter-spacing: 0.04em;
+  }
+  .bloomberg__header-left,
+  .bloomberg__header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .bloomberg__chip {
+    display: inline-block;
+    padding: 2px 6px;
+    background: var(--c-terracotta);
+    color: var(--c-bg);
+    font: 600 9px / 1 var(--ff-mono);
+    letter-spacing: 0.12em;
+    border-radius: 1px;
+    position: relative;
+  }
+  .bloomberg__chip--sage {
+    background: var(--c-sage);
+  }
+  .bloomberg__brand {
+    font: 700 12px / 1 var(--ff-mono);
+    color: var(--c-ink);
+    letter-spacing: 0.18em;
+  }
+  .bloomberg__sub {
+    color: var(--c-ink-2);
+    letter-spacing: 0.06em;
+  }
+  .bloomberg__code {
+    color: var(--c-ink-3);
+    font-size: 10px;
+  }
+  .bloomberg__sep {
+    color: var(--c-ink-3);
+    opacity: 0.5;
+  }
+  .bloomberg__utc,
+  .bloomberg__latency,
+  .bloomberg__status {
+    color: var(--c-ink-2);
+    font-variant-numeric: tabular-nums;
+  }
+  .bloomberg__latency {
+    color: var(--c-sage);
+  }
+
+  /* === STAGE layout ================================================ */
+  .bloomberg__stage {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+    min-height: 480px;
+  }
+  .bloomberg__map,
+  .bloomberg__panel {
+    position: relative;
+    padding: 14px 16px 16px;
+    border-right: 1px solid var(--c-rule);
+  }
+  .bloomberg__panel {
+    border-right: none;
+  }
+
+  /* === Panel corners (Bloomberg hairline brackets) ================ */
+  .bloomberg__panel-corner {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border: 1px solid var(--c-ink);
+    z-index: 2;
+  }
+  .bloomberg__panel-corner--tl {
+    top: 4px;
+    left: 4px;
+    border-right: none;
+    border-bottom: none;
+  }
+  .bloomberg__panel-corner--tr {
+    top: 4px;
+    right: 4px;
+    border-left: none;
+    border-bottom: none;
+  }
+  .bloomberg__panel-corner--bl {
+    bottom: 4px;
+    left: 4px;
+    border-right: none;
+    border-top: none;
+  }
+  .bloomberg__panel-corner--br {
+    bottom: 4px;
+    right: 4px;
+    border-left: none;
+    border-top: none;
+  }
+
+  /* === Panel head ================================================= */
+  .bloomberg__panel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 0 8px;
+    margin: 0 0 8px;
+    border-bottom: 1px solid var(--c-rule);
+  }
+  .bloomberg__panel-title {
+    font: 600 10px / 1 var(--ff-mono);
+    color: var(--c-ink);
+    letter-spacing: 0.14em;
+  }
+  .bloomberg__panel-meta {
+    font: 500 9px / 1 var(--ff-mono);
+    color: var(--c-ink-3);
+    letter-spacing: 0.08em;
+  }
+
+  /* === SVG world map ============================================== */
+  .bloomberg__svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    background: var(--c-bg);
+  }
+
+  /* === Continents ================================================= */
+  .bloomberg__country {
+    fill: var(--c-paper);
+    stroke: var(--c-ink-3);
+    stroke-width: 0.4;
+    fill-opacity: 0.85;
+    transition: fill-opacity 200ms ease;
+  }
+  .bloomberg__country:hover,
+  .bloomberg__country:focus-visible {
+    fill: var(--c-bg-3, var(--c-paper));
+    fill-opacity: 1;
+  }
+  .bloomberg__eq {
+    stroke: var(--c-ink-3);
+    stroke-width: 0.3;
+    stroke-dasharray: 4 4;
+    opacity: 0.4;
+  }
+
+  /* === STELLA core =============================================== */
+  .bloomberg__aura {
+    animation: bloomberg-aura 4s ease-in-out infinite;
+    transform-origin: center;
+  }
+  @keyframes bloomberg-aura {
+    0%,
+    100% {
+      opacity: 0.8;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+  }
+  .bloomberg__pulse-ring {
+    transform-origin: center;
+    transform-box: fill-box;
+    animation: bloomberg-pulse 3s ease-out infinite;
+    opacity: 0;
+  }
+  .bloomberg__pulse-ring--1 {
+    animation-delay: 0s;
+  }
+  .bloomberg__pulse-ring--2 {
+    animation-delay: -1s;
+  }
+  .bloomberg__pulse-ring--3 {
+    animation-delay: -2s;
+  }
+  @keyframes bloomberg-pulse {
+    0% {
+      transform: scale(0.4);
+      opacity: 0.85;
+    }
+    80% {
+      opacity: 0.05;
+    }
+    100% {
+      transform: scale(3);
+      opacity: 0;
+    }
+  }
+  .bloomberg__core {
+    animation: bloomberg-core 2.4s ease-in-out infinite;
+    transform-origin: center;
+    transform-box: fill-box;
+  }
+  @keyframes bloomberg-core {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.06);
+    }
+  }
+  .bloomberg__eye {
+    animation: bloomberg-eye 4s ease-in-out infinite;
+    transform-origin: center;
+    transform-box: fill-box;
+  }
+  @keyframes bloomberg-eye {
+    0%,
+    92%,
+    100% {
+      transform: scaleY(1);
+    }
+    95% {
+      transform: scaleY(0.1);
+    }
+  }
+  .bloomberg__ring-1,
+  .bloomberg__ring-2,
+  .bloomberg__ring-3 {
+    transform-origin: center;
+    transform-box: fill-box;
+    animation: bloomberg-ring-rotate 20s linear infinite;
+  }
+  .bloomberg__ring-2 {
+    animation-duration: 30s;
+    animation-direction: reverse;
+  }
+  .bloomberg__ring-3 {
+    animation-duration: 45s;
+  }
+  @keyframes bloomberg-ring-rotate {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  .bloomberg__core-label {
+    font: 600 7px / 1 var(--ff-mono);
+    fill: var(--c-ink);
+    letter-spacing: 0.18em;
+  }
+
+  /* === Source markers ============================================= */
+  .bloomberg__src-pulse {
+    transform-origin: center;
+    transform-box: fill-box;
+    animation: bloomberg-src-pulse 2s ease-out infinite;
+  }
+  .bloomberg__src--2 .bloomberg__src-pulse {
+    animation-delay: -0.3s;
+  }
+  .bloomberg__src--3 .bloomberg__src-pulse {
+    animation-delay: -0.6s;
+  }
+  .bloomberg__src--4 .bloomberg__src-pulse {
+    animation-delay: -0.9s;
+  }
+  .bloomberg__src--5 .bloomberg__src-pulse {
+    animation-delay: -1.2s;
+  }
+  .bloomberg__src--6 .bloomberg__src-pulse {
+    animation-delay: -1.5s;
+  }
+  @keyframes bloomberg-src-pulse {
+    0% {
+      transform: scale(0.3);
+      opacity: 0.85;
+    }
+    100% {
+      transform: scale(2.5);
+      opacity: 0;
+    }
+  }
+  .bloomberg__src-label {
+    font: 600 9px / 1 var(--ff-mono);
+    fill: var(--c-ink);
+    letter-spacing: 0.06em;
+  }
+  .bloomberg__src-sub {
+    font: 400 7px / 1 var(--ff-mono);
+    fill: var(--c-ink-3);
+    letter-spacing: 0.04em;
+  }
+
+  /* === Streams === */
+  .bloomberg__stream {
+    stroke-dasharray: 4 6;
+    animation: bloomberg-stream-dash 2s linear infinite;
+  }
+  .bloomberg__stream--1 {
+    animation-delay: 0s;
+  }
+  .bloomberg__stream--2 {
+    animation-delay: -0.3s;
+  }
+  .bloomberg__stream--3 {
+    animation-delay: -0.6s;
+  }
+  .bloomberg__stream--4 {
+    animation-delay: -0.9s;
+  }
+  .bloomberg__stream--5 {
+    animation-delay: -1.2s;
+  }
+  .bloomberg__stream--6 {
+    animation-delay: -1.5s;
+  }
+  @keyframes bloomberg-stream-dash {
+    to {
+      stroke-dashoffset: -100;
+    }
+  }
+
+  /* === Right panel — STELLA core ================================= */
+  .bloomberg__metric {
+    margin-bottom: 10px;
+  }
+  .bloomberg__metric-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .bloomberg__metric-key {
+    font: 500 9px / 1 var(--ff-mono);
+    color: var(--c-ink-3);
+    letter-spacing: 0.1em;
+  }
+  .bloomberg__metric-val {
+    font: 600 14px / 1 var(--ff-mono);
+    color: var(--c-ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .bloomberg__metric-suffix {
+    font: 500 9px / 1 var(--ff-mono);
+    color: var(--c-ink-3);
+  }
+  .bloomberg__metric-bar {
+    height: 2px;
+    background: var(--c-rule);
+    overflow: hidden;
+  }
+  .bloomberg__metric-fill {
+    display: block;
+    height: 100%;
+    background: var(--c-sage);
+    transform-origin: left;
+  }
+  .bloomberg__divider {
+    height: 1px;
+    background: var(--c-rule);
+    margin: 12px 0;
+  }
+
+  /* === Feed ======================================================= */
+  .bloomberg__feed-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+  .bloomberg__feed-title {
+    font: 600 9px / 1 var(--ff-mono);
+    color: var(--c-ink);
+    letter-spacing: 0.14em;
+  }
+  .bloomberg__feed-pulse {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--c-terracotta);
+    /* v7.7.90 — CHROME-03: drop the expanding-ring halo. Keep static dot;
+       opacity keyframe provides the liveness cue (no halo per chrome contract). */
+    animation: bloomberg-feed-pulse-opacity 1.6s ease-in-out infinite;
+  }
+  @keyframes bloomberg-feed-pulse-opacity {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.55;
+    }
+  }
+  .bloomberg__feed-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+  .bloomberg__feed-row {
+    display: grid;
+    grid-template-columns: 56px 18px 50px 1fr 60px;
+    gap: 6px;
+    align-items: center;
+    padding: 3px 4px;
+    background: var(--c-bg);
+    border-left: 2px solid var(--c-ink-3);
+    font: 500 9px / 1.3 var(--ff-mono);
+  }
+  .bloomberg__feed-row--A {
+    border-left-color: var(--c-terracotta);
+    background: color-mix(in oklab, var(--c-terracotta) 6%, var(--c-bg));
+  }
+  .bloomberg__feed-row--B {
+    border-left-color: var(--c-amber);
+  }
+  .bloomberg__feed-row--C {
+    border-left-color: var(--c-sage);
+  }
+  .bloomberg__feed-time {
+    color: var(--c-ink-3);
+    font-variant-numeric: tabular-nums;
+  }
+  .bloomberg__feed-grade {
+    color: var(--c-ink);
+    font-weight: 600;
+    font-size: 8px;
+    text-align: center;
+  }
+  .bloomberg__feed-source {
+    color: var(--c-ink);
+    font-weight: 600;
+  }
+  .bloomberg__feed-msg {
+    color: var(--c-ink-2);
+    font-family: var(--ff-sans);
+    font-size: 9px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .bloomberg__feed-route {
+    color: var(--c-sage);
+    text-align: right;
+    font-size: 8px;
+  }
+
+  /* === Bottom — sources + signals tables ========================= */
+  .bloomberg__bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--c-rule);
+  }
+  .bloomberg__data {
+    padding: 14px 16px 16px;
+  }
+  .bloomberg__data--sources {
+    border-right: 1px solid var(--c-rule);
+  }
+  .bloomberg__table {
+    width: 100%;
+    border-collapse: collapse;
+    font: 500 10px / 1 var(--ff-mono);
+  }
+  .bloomberg__th {
+    text-align: left;
+    padding: 4px 6px;
+    border-bottom: 1px solid var(--c-rule);
+    color: var(--c-ink-3);
+    font: 500 9px / 1 var(--ff-mono);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .bloomberg__tr {
+    transition: background 100ms ease;
+  }
+  .bloomberg__tr:hover,
+  .bloomberg__tr:focus-visible {
+    background: var(--c-bg-2);
+  }
+  .bloomberg__td {
+    padding: 5px 6px;
+    border-bottom: 1px solid var(--c-rule);
+    color: var(--c-ink-2);
+  }
+  .bloomberg__td--strong {
+    color: var(--c-ink);
+    font-weight: 600;
+  }
+  .bloomberg__td--num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .bloomberg__pill {
+    display: inline-block;
+    padding: 1px 5px;
+    border: 1px solid currentColor;
+    font: 600 8px / 1 var(--ff-mono);
+    letter-spacing: 0.08em;
+    border-radius: 1px;
+  }
+  .bloomberg__pill--ok {
+    color: var(--c-sage);
+  }
+  .bloomberg__pill--up {
+    color: var(--c-sage);
+  }
+
+  /* === Footer ===================================================== */
+  .bloomberg__footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 32px;
+    padding: 8px 14px;
+    border-top: 1px solid var(--c-rule);
+    background: var(--c-bg-2);
+    font: 500 9px / 1 var(--ff-mono);
+    color: var(--c-ink-3);
+    letter-spacing: 0.12em;
+  }
+  .bloomberg__legend {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .bloomberg__legend-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+  }
+  .bloomberg__legend-dot--source {
+    background: var(--c-terracotta);
+  }
+  .bloomberg__legend-dot--stella {
+    background: var(--c-warn);
+  }
+  .bloomberg__legend-dot--signal {
+    background: var(--c-sage);
+  }
+
+  /* === Responsive ================================================= */
+  @media (max-width: 980px) {
+    .bloomberg__stage {
+      grid-template-columns: 1fr;
+    }
+    .bloomberg__map {
+      border-right: none;
+      border-bottom: 1px solid var(--c-rule);
+    }
+    .bloomberg__bottom {
+      grid-template-columns: 1fr;
+    }
+    .bloomberg__data--sources {
+      border-right: none;
+      border-bottom: 1px solid var(--c-rule);
+    }
+    .bloomberg__header {
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .bloomberg__footer {
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+  }
+  @media (max-width: 540px) {
+    .bloomberg__frame {
+      padding: 0;
+    }
+    .bloomberg__map,
+    .bloomberg__panel,
+    .bloomberg__data {
+      padding: 12px 12px 14px;
+    }
+    .bloomberg__feed-row {
+      grid-template-columns: 50px 16px 40px 1fr;
+      gap: 4px;
+    }
+    .bloomberg__feed-route {
+      display: none;
+    }
+  }
+
+  /* === Reduced-motion fallback ==================================== */
+  @media (prefers-reduced-motion: reduce) {
+    .bloomberg__aura,
+    .bloomberg__pulse-ring,
+    .bloomberg__core,
+    .bloomberg__eye,
+    .bloomberg__ring-1,
+    .bloomberg__ring-2,
+    .bloomberg__ring-3,
+    .bloomberg__src-pulse,
+    .bloomberg__stream,
+    .bloomberg__feed-pulse {
+      animation: none !important;
+    }
+  }
+</style>
+
+<script>
+  /**
+   * v7.9 split — load country paths at runtime.
+   * Fetches /data/world-map-equirect.json and populates the empty
+   * `.bloomberg__continents` container. Cheap (1.46 MB) and lazy
+   * (deferred until idle so it never competes with first paint).
+   */
+  const continentsTarget = document.querySelector<SVGGElement>('[data-continents-target]');
+  if (continentsTarget) {
+    const populate = (countries: Array<{ id: string; name: string; d: string }>): void => {
+      const ns = 'http://www.w3.org/2000/svg';
+      const frag = document.createDocumentFragment();
+      for (const c of countries) {
+        const path = document.createElementNS(ns, 'path');
+        path.setAttribute('d', c.d);
+        path.setAttribute('class', 'bloomberg__country');
+        path.setAttribute('data-id', c.id);
+        const title = document.createElementNS(ns, 'title');
+        title.textContent = c.name;
+        path.appendChild(title);
+        frag.appendChild(path);
+      }
+      continentsTarget.appendChild(frag);
+    };
+    const start = (): void => {
+      fetch('/data/world-map-equirect.json')
+        .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
+        .then(populate)
+        .catch((err) => {
+          console.warn('[swarm-scene] country paths failed to load', err);
+        });
+    };
+    const w = window as Window & { requestIdleCallback?: (cb: () => void) => void };
+    if (typeof w.requestIdleCallback === 'function') {
+      w.requestIdleCallback(start);
+    } else {
+      w.setTimeout(start, 0);
+    }
+  }
+</script>

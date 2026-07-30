@@ -78,6 +78,11 @@ const RULES: Rule[] = [
     label: 'No proprietary data sources referenced (Polymarket, Kalshi, NOAA, USDA)',
     pattern: /\b(?:Polymarket|Kalshi|NOAA|USDA)\b/g,
     scope: 'content',
+    // v7.7.31 — news headlines (live feed) legitimately mention Kalshi/Polymarket
+    // as named entities in news events. Exempt any match whose surrounding
+    // context contains HTML link markup (live-feed events render as <a> tags
+    // with target/rel/referrerpolicy attributes before the entity name).
+    exceptionPattern: /<a\s+href=|target="_blank"|rel="noopener|Permalink to|aria-label=/i,
     // v6.11 — GDELT 2.0 (Global Database of Events, Language, and Tone)
     // is a public-domain event monitor from Yahoo Research / Georgetown.
     // It's NOT in the proprietary-data-sources ban list. We do not
@@ -206,7 +211,18 @@ async function audit(): Promise<number> {
       const re = new RegExp(rule.pattern.source, rule.pattern.flags);
       let m: RegExpExecArray | null;
       while ((m = re.exec(auditable)) !== null) {
-        if (rule.exceptionPattern && rule.exceptionPattern.test(m[0])) continue;
+        // v7.7.31 — exceptionPattern can match against the matched text OR
+        // a 240-char context window around the match. This lets rules
+        // exempt news-headline mentions (live-feed <a> tag markup often
+        // sits 100-200 chars before the matched entity name).
+        const startCtx = Math.max(0, m.index - 200);
+        const endCtx = Math.min(auditable.length, m.index + m[0].length + 40);
+        const context = auditable.slice(startCtx, endCtx);
+        if (
+          rule.exceptionPattern &&
+          (rule.exceptionPattern.test(m[0]) || rule.exceptionPattern.test(context))
+        )
+          continue;
         const start = Math.max(0, m.index - 40);
         const end = Math.min(auditable.length, m.index + m[0].length + 40);
         const excerpt = auditable.slice(start, end).replace(/\s+/g, ' ');

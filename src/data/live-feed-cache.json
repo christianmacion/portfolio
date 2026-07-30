@@ -1,0 +1,886 @@
+{
+  "generated": "2026-07-30T09:53:35.077Z",
+  "fetchedAt": "2026-07-30T09:53:33.479Z",
+  "cap": 100,
+  "counts": {
+    "arxiv": 20,
+    "macrowire": 30,
+    "gdelt": 1
+  },
+  "total": 51,
+  "events": [
+    {
+      "id": "gdelt-aus yield moruya",
+      "source": "gdelt",
+      "title": "AUS yield · Moruya",
+      "link": null,
+      "timestamp": "2026-07-30T12:00:00Z",
+      "category": "central-bank",
+      "severity": "critical",
+      "city": "Moruya",
+      "publisher": null,
+      "fingerprint": "aus yield moruya",
+      "domain": "",
+      "coords": {
+        "lat": -35.9125,
+        "lon": 150.081
+      },
+      "related": [
+        {
+          "source": "gdelt",
+          "id": "gdelt-irn yield bushehr province"
+        }
+      ]
+    },
+    {
+      "id": "macrowire-poland s tusk says russian missile appears to ha",
+      "source": "macrowire",
+      "title": "Poland's Tusk says Russian missile appears to have come down in country's east - reuters.com",
+      "link": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQTjY4dFJnUXNtdWVUZkJZRVVjRnB1cTBISWJrUFhSc1dRbnpqanF4U3dteloxRHdOcjB5bEJSZ1J4SlFGYTIwR001Qk1XVjJzVnpsQkUteDlrakxYeXYwZHZMTjk5b1pZdHQtcjluZkE0OUFodWRobWcxMm1pYV9hSFlUNFI1YmxmMl9iMF9yeWJtR0Z4RzdJZVFENFdvN2UybWNJWlhma2dWVGtQeVNfWW9BV2dWVmJNVlpvV18zMmlxQQ?oc=5",
+      "timestamp": "2026-07-30T09:32:09.000Z",
+      "category": "REUTERS",
+      "severity": null,
+      "city": "London, UK",
+      "publisher": "REUTERS",
+      "fingerprint": "poland s tusk says russian missile appears to have come down in country s east reuters com",
+      "domain": "news.google.com",
+      "coords": {
+        "lat": 51.5074,
+        "lon": -0.1278
+      }
+    },
+    {
+      "id": "macrowire-live updates bitcoin holds near 64 000 as micros",
+      "source": "macrowire",
+      "title": "Live updates: Bitcoin holds near $64,000 as Microsoft's AI payoff lifts stocks",
+      "link": "https://www.coindesk.com/tech/2026/07/30/live-updates-bitcoin-holds-near-usd64-000-as-microsoft-s-ai-payoff-lifts-stocks",
+      "timestamp": "2026-07-30T09:01:13.000Z",
+      "category": "COINDESK",
+      "severity": null,
+      "city": "New York, NY",
+      "publisher": "COINDESK",
+      "fingerprint": "live updates bitcoin holds near 64 000 as microsoft s ai payoff lifts stocks",
+      "domain": "coindesk.com",
+      "coords": {
+        "lat": 40.7128,
+        "lon": -74.006
+      }
+    },
+    {
+      "id": "macrowire-us 30 year yield hits 2007 high stocks attempt p",
+      "source": "macrowire",
+      "title": "US 30-year yield hits 2007 high, stocks attempt post-earnings recovery - reuters.com",
+      "link": "https://news.google.com/rss/articles/CBMie0FVX3lxTE1tZUpRQXhBTWNiQUpVakxxTnVOaEhBMEFFRHF5Q241a2dseHJ0NHpZQ1NNWnc1V3hrU3dVeThuUEp0RjFCaDlraTB1YldrUUloc3hOMHJKd2h5WlJla2JBQVJEbThYTDV4NEhPX2d6YmRibnoxQ1NaZWFhOA?oc=5",
+      "timestamp": "2026-07-30T09:00:50.000Z",
+      "category": "REUTERS",
+      "severity": null,
+      "city": "London, UK",
+      "publisher": "REUTERS",
+      "fingerprint": "us 30 year yield hits 2007 high stocks attempt post earnings recovery reuters com",
+      "domain": "news.google.com",
+      "coords": {
+        "lat": 51.5074,
+        "lon": -0.1278
+      }
+    },
+    {
+      "id": "macrowire-bitcoin and ether markets are ruled by perps spa",
+      "source": "macrowire",
+      "title": "Bitcoin and ether markets are ruled by perps. SpaceX showed how far their influence can go",
+      "link": "https://www.coindesk.com/markets/2026/07/30/bitcoin-and-ether-markets-are-ruled-by-perps-spacex-showed-how-far-their-influence-can-go",
+      "timestamp": "2026-07-30T09:00:00.000Z",
+      "category": "COINDESK",
+      "severity": null,
+      "city": "New York, NY",
+      "publisher": "COINDESK",
+      "fingerprint": "bitcoin and ether markets are ruled by perps spacex showed how far their influence can go",
+      "domain": "coindesk.com",
+      "coords": {
+        "lat": 40.7128,
+        "lon": -74.006
+      }
+    },
+    {
+      "id": "macrowire-australia sues telegram over alleged failures to",
+      "source": "macrowire",
+      "title": "Australia sues Telegram over alleged failures to remove terror content",
+      "link": "https://cointelegraph.com/news/australia-telegram-alleged-failures-terror-content?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "timestamp": "2026-07-30T08:49:40.000Z",
+      "category": "COINTELEGRAPH",
+      "severity": null,
+      "city": "Zurich, CH",
+      "publisher": "COINTELEGRAPH",
+      "fingerprint": "australia sues telegram over alleged failures to remove terror content",
+      "domain": "cointelegraph.com",
+      "coords": {
+        "lat": 47.3769,
+        "lon": 8.5417
+      }
+    },
+    {
+      "id": "macrowire-cathie wood 8217 s ark invest sells bitmine bull",
+      "source": "macrowire",
+      "title": "Cathie Wood&#8217;s Ark Invest sells Bitmine, Bullish, Block shares as crypto stocks dip",
+      "link": "https://www.theblock.co/post/410131/ark-invest-sells-bitmine-bullish-block?utm_source=rss&utm_medium=rss",
+      "timestamp": "2026-07-30T08:47:00.000Z",
+      "category": "THEBLOCK",
+      "severity": null,
+      "city": "New York, NY",
+      "publisher": "THEBLOCK",
+      "fingerprint": "cathie wood 8217 s ark invest sells bitmine bullish block shares as crypto stocks dip",
+      "domain": "theblock.co",
+      "coords": {
+        "lat": 40.7128,
+        "lon": -74.006
+      }
+    },
+    {
+      "id": "macrowire-aave proposes reserve deprecations affecting 98 ",
+      "source": "macrowire",
+      "title": "Aave proposes reserve deprecations affecting $98 million in supplied assets",
+      "link": "https://www.theblock.co/post/410127/aave-proposes-reserve-deprecations-affecting-98-million-in-supplied-assets?utm_source=rss&utm_medium=rss",
+      "timestamp": "2026-07-30T08:40:10.000Z",
+      "category": "THEBLOCK",
+      "severity": null,
+      "city": "New York, NY",
+      "publisher": "THEBLOCK",
+      "fingerprint": "aave proposes reserve deprecations affecting 98 million in supplied assets",
+      "domain": "theblock.co",
+      "coords": {
+        "lat": 40.7128,
+        "lon": -74.006
+      }
+    },
+    {
+      "id": "macrowire-chinese newspaper warns of bitcoin extortion sca",
+      "source": "macrowire",
+      "title": "Chinese newspaper warns of Bitcoin extortion scam using its name",
+      "link": "https://cointelegraph.com/news/chinese-newspaper-bitcoin-extortion-scam-name?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "timestamp": "2026-07-30T07:28:57.000Z",
+      "category": "COINTELEGRAPH",
+      "severity": null,
+      "city": "Zurich, CH",
+      "publisher": "COINTELEGRAPH",
+      "fingerprint": "chinese newspaper warns of bitcoin extortion scam using its name",
+      "domain": "cointelegraph.com",
+      "coords": {
+        "lat": 47.3769,
+        "lon": 8.5417
+      }
+    },
+    {
+      "id": "macrowire-bitcoin etf inflows return as ether funds slip i",
+      "source": "macrowire",
+      "title": "Bitcoin ETF inflows return as Ether funds slip into outflows",
+      "link": "https://cointelegraph.com/markets/bitcoin-etf-inflows-return-ether-funds-outflows?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "timestamp": "2026-07-30T07:05:23.000Z",
+      "category": "COINTELEGRAPH",
+      "severity": null,
+      "city": "Zurich, CH",
+      "publisher": "COINTELEGRAPH",
+      "fingerprint": "bitcoin etf inflows return as ether funds slip into outflows",
+      "domain": "cointelegraph.com",
+      "coords": {
+        "lat": 47.3769,
+        "lon": 8.5417
+      }
+    },
+    {
+      "id": "macrowire-bitcoin ether whipsaw wipes out 286 million in l",
+      "source": "macrowire",
+      "title": "Bitcoin, ether whipsaw wipes out $286 million in leveraged bets",
+      "link": "https://www.coindesk.com/markets/2026/07/30/bitcoin-ether-whipsaw-wipes-out-usd280-million-even-as-prices-remain-flat-over-24-hours",
+      "timestamp": "2026-07-30T06:59:10.000Z",
+      "category": "COINDESK",
+      "severity": null,
+      "city": "New York, NY",
+      "publisher": "COINDESK",
+      "fingerprint": "bitcoin ether whipsaw wipes out 286 million in leveraged bets",
+      "domain": "coindesk.com",
+      "coords": {
+        "lat": 40.7128,
+        "lon": -74.006
+      }
+    },
+    {
+      "id": "macrowire-us military says it hit dozens of iran s irgc ta",
+      "source": "macrowire",
+      "title": "US military says it hit dozens of Iran's IRGC targets - reuters.com",
+      "link": "https://news.google.com/rss/articles/CBMipgFBVV95cUxNUjlxdTM1SnYtZ3Bzei1qLUpRXzlYanVpb1MwNnRuQjY2NmkzZHNTeEl5cGljWGE5VDQ5ZHF0djVzVnV5OEprZWdlWUpPMV9fanYyN1N5cHdhbkxBZC1fZTlHWmpRMG8zdlRZV0hLSW9nTHU0S3JDZU44WWVHbnhWZVhRTVJ1Z0RaM25nR09fTFNTMUR2SVNkVXdlVHpDZHRmMXlJdDN3?oc=5",
+      "timestamp": "2026-07-30T06:53:58.000Z",
+      "category": "REUTERS",
+      "severity": null,
+      "city": "London, UK",
+      "publisher": "REUTERS",
+      "fingerprint": "us military says it hit dozens of iran s irgc targets reuters com",
+      "domain": "news.google.com",
+      "coords": {
+        "lat": 51.5074,
+        "lon": -0.1278
+      }
+    },
+    {
+      "id": "macrowire-bitcoin analysts agree the fed s hold was hawkis",
+      "source": "macrowire",
+      "title": "Bitcoin analysts agree the Fed's hold was hawkish. They are split on what happens next.",
+      "link": "https://www.coindesk.com/markets/2026/07/30/bitcoin-analysts-agree-the-fed-s-hold-was-hawkish-they-don-t-agree-on-what-happens-next",
+      "timestamp": "2026-07-30T06:28:58.000Z",
+      "category": "COINDESK",
+      "severity": null,
+      "city": "New York, NY",
+      "publisher": "COINDESK",
+      "fingerprint": "bitcoin analysts agree the fed s hold was hawkish they are split on what happens next",
+      "domain": "coindesk.com",
+      "coords": {
+        "lat": 40.7128,
+        "lon": -74.006
+      }
+    },
+    {
+      "id": "macrowire-ostium blames off chain breach for 24 million ex",
+      "source": "macrowire",
+      "title": "Ostium blames off-chain breach for $24 million exploit, rules out smart contract flaw",
+      "link": "https://www.theblock.co/post/410122/ostium-post-mortem-exploit?utm_source=rss&utm_medium=rss",
+      "timestamp": "2026-07-30T06:25:55.000Z",
+      "category": "THEBLOCK",
+      "severity": null,
+      "city": "New York, NY",
+      "publisher": "THEBLOCK",
+      "fingerprint": "ostium blames off chain breach for 24 million exploit rules out smart contract flaw",
+      "domain": "theblock.co",
+      "coords": {
+        "lat": 40.7128,
+        "lon": -74.006
+      }
+    },
+    {
+      "id": "macrowire-the world s 1 8 quadrillion balance sheet has a ",
+      "source": "macrowire",
+      "title": "The world's $1.8 quadrillion balance sheet has a simmering problem - reuters.com",
+      "link": "https://news.google.com/rss/articles/CBMixAFBVV95cUxPeDF6Rk1pTzhWMGNjYW1hVGdMRUc2dk1BdGNGSEF4VXFKVTZ3ZUpXbzRubTJMaThRclNVWmV2NjJUWHdCTjFMMHBOYWVUaWhMSDBZdkJQSHhubWpLUzJnRlBBVk5ON3Etb21sc3ZsRWJBTk1kVnAxV1piVGVJSWU1NWpLR1Nrczl0RWI1SjMwelBubXJNcnFjSkZXZXlKS28tajdnUlEwaF9vYUJNUG8xS0hRZTBtNjVNSjdySFR5OGFxMUN5?oc=5",
+      "timestamp": "2026-07-30T06:01:00.000Z",
+      "category": "REUTERS",
+      "severity": null,
+      "city": "London, UK",
+      "publisher": "REUTERS",
+      "fingerprint": "the world s 1 8 quadrillion balance sheet has a simmering problem reuters com",
+      "domain": "news.google.com",
+      "coords": {
+        "lat": 51.5074,
+        "lon": -0.1278
+      }
+    },
+    {
+      "id": "macrowire-adidas shares slide record 17 as profit miss tai",
+      "source": "macrowire",
+      "title": "Adidas shares slide record 17% as profit miss taints sales upgrade - reuters.com",
+      "link": "https://news.google.com/rss/articles/CBMimAFBVV95cUxPZXdWMDI5LUZWaFRNeXZ3MkYyUFZSeTBkTEVEMEJpS0UxT2U4N1djeHNqTHkyQ3lDNHdXWDBMeWVnaTdvZG54bUhtZDJGMzJESjVXbUwxZGM1RTgxbUJTU1YtUThGMjhCRDFNUzNkNnpQNWdUUFduZHg2TEhDNTFKQzRLcFF4LU1tdkJ5alJMN2dBREFmRUZJdQ?oc=5",
+      "timestamp": "2026-07-30T05:39:00.000Z",
+      "category": "REUTERS",
+      "severity": null,
+      "city": "London, UK",
+      "publisher": "REUTERS",
+      "fingerprint": "adidas shares slide record 17 as profit miss taints sales upgrade reuters com",
+      "domain": "news.google.com",
+      "coords": {
+        "lat": 51.5074,
+        "lon": -0.1278
+      }
+    },
+    {
+      "id": "macrowire-south korea report proposes stablecoin rules bef",
+      "source": "macrowire",
+      "title": "South Korea report proposes stablecoin rules before crypto law",
+      "link": "https://cointelegraph.com/news/south-korea-report-stablecoin-rules-crypto-law?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "timestamp": "2026-07-30T05:33:57.000Z",
+      "category": "COINTELEGRAPH",
+      "severity": null,
+      "city": "Zurich, CH",
+      "publisher": "COINTELEGRAPH",
+      "fingerprint": "south korea report proposes stablecoin rules before crypto law",
+      "domain": "cointelegraph.com",
+      "coords": {
+        "lat": 47.3769,
+        "lon": 8.5417
+      }
+    },
+    {
+      "id": "macrowire-turkey detains another opposition mayor among do",
+      "source": "macrowire",
+      "title": "Turkey detains another opposition mayor among dozens of suspects in crackdown - reuters.com",
+      "link": "https://news.google.com/rss/articles/CBMiswFBVV95cUxNRnpDakRjcjFLbWNNSXE3ZUYwT254cXU1MlpKTEF6OWJUa3JNX0t5aGxjLXNSV3NIZzJQeTEya0k5LUpOUnROMGhXempHb3pnUU5KUlFFcjFjcllwT01nVXNoUktYY2U0YTJjTE53WVN5Zkk4bUlpTUpuWXZZaFdNUFpuVDViNnN2TXFodHFVa3BnMVdIdzBLd05KdU5mRDk3cWFfcTVrSTJVTU40dmN2VVBscw?oc=5",
+      "timestamp": "2026-07-30T05:27:00.000Z",
+      "category": "REUTERS",
+      "severity": null,
+      "city": "London, UK",
+      "publisher": "REUTERS",
+      "fingerprint": "turkey detains another opposition mayor among dozens of suspects in crackdown reuters com",
+      "domain": "news.google.com",
+      "coords": {
+        "lat": 51.5074,
+        "lon": -0.1278
+      }
+    },
+    {
+      "id": "macrowire-us sanctions iranian maritime firm says it accep",
+      "source": "macrowire",
+      "title": "US sanctions Iranian maritime firm, says it accepted Bitcoin to evade restrictions",
+      "link": "https://cointelegraph.com/news/us-sanctions-iran-hormuzsafe-bitcoin?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "timestamp": "2026-07-30T05:23:59.000Z",
+      "category": "COINTELEGRAPH",
+      "severity": null,
+      "city": "Zurich, CH",
+      "publisher": "COINTELEGRAPH",
+      "fingerprint": "us sanctions iranian maritime firm says it accepted bitcoin to evade restrictions",
+      "domain": "cointelegraph.com",
+      "coords": {
+        "lat": 47.3769,
+        "lon": 8.5417
+      }
+    },
+    {
+      "id": "macrowire-ether xrp flat as chip stocks steady on samsung ",
+      "source": "macrowire",
+      "title": "Ether, XRP flat as chip stocks steady on Samsung's 250-fold profit surge",
+      "link": "https://www.coindesk.com/markets/2026/07/30/ether-xrp-flat-as-chip-stocks-steady-on-samsung-s-250-fold-profit-surge",
+      "timestamp": "2026-07-30T05:19:47.000Z",
+      "category": "COINDESK",
+      "severity": null,
+      "city": "New York, NY",
+      "publisher": "COINDESK",
+      "fingerprint": "ether xrp flat as chip stocks steady on samsung s 250 fold profit surge",
+      "domain": "coindesk.com",
+      "coords": {
+        "lat": 40.7128,
+        "lon": -74.006
+      }
+    },
+    {
+      "id": "macrowire-russia detains crypto mining firm bitriver found",
+      "source": "macrowire",
+      "title": "Russia detains crypto mining firm BitRiver founder on fraud charges: report",
+      "link": "https://www.theblock.co/post/410117/russia-detains-bitriver-founder?utm_source=rss&utm_medium=rss",
+      "timestamp": "2026-07-30T05:13:34.000Z",
+      "category": "THEBLOCK",
+      "severity": null,
+      "city": "New York, NY",
+      "publisher": "THEBLOCK",
+      "fingerprint": "russia detains crypto mining firm bitriver founder on fraud charges report",
+      "domain": "theblock.co",
+      "coords": {
+        "lat": 40.7128,
+        "lon": -74.006
+      }
+    },
+    {
+      "id": "macrowire-australia begins legal action against telegram o",
+      "source": "macrowire",
+      "title": "Australia begins legal action against Telegram over alleged pro-terror material - reuters.com",
+      "link": "https://news.google.com/rss/articles/CBMizwFBVV95cUxQUFZRU0p3YlRBMlhhaC0wTkFqUzNMTlZWWGJwNmZnT2lJVGRYLUhrXzJwYWdnY0ZDdFd4clpGYXBCQzZZNU9zWUVSX3FhOUs1MENSWUdPSHZ2MWY2MXhuUTVGWEJVSjJKM0xtUVVoZmFkR0Nvd0VPME4yTnNGQWJSbDctQWdNb1hEMVV3MmtydE1zX0dwZ29ZUVJ2WDZ3UElFUlBwMkZIbjdoRnRXRXJNNW9jWF9DUnVjR1JHb0xJbWdFOUczVWRtWnpnckhGLXc?oc=5",
+      "timestamp": "2026-07-30T05:13:12.000Z",
+      "category": "REUTERS",
+      "severity": null,
+      "city": "London, UK",
+      "publisher": "REUTERS",
+      "fingerprint": "australia begins legal action against telegram over alleged pro terror material reuters com",
+      "domain": "news.google.com",
+      "coords": {
+        "lat": 51.5074,
+        "lon": -0.1278
+      }
+    },
+    {
+      "id": "macrowire-malaysian pm says myanmar agrees to take 5 000 r",
+      "source": "macrowire",
+      "title": "Malaysian PM says Myanmar agrees to take 5,000 Rohingya refugees from Malaysia - reuters.com",
+      "link": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxPRjN6MW9kc0Zpc1NHaHNwbENjM3Mxb0Q4TTlKVHFQVEZnaG9DSkN4bUhHcFNGSHgyNXRfSXI2LVoyNklOQ3dHYjJhWWZWc251RmR3SkJWUHFOenBMd3Zwcl80cGozbFJITFJVSjJubXVBcWdjZXJ4clBsbDJYUU1XSUU1ekVvUnEzMzE0SUtWMWRjZjN4bGJJcG9FSFU3RjhLRmNRMTNWMUMzLVJqOFk3eThXTUNzQWNEQkRiRHN1bVIyZw?oc=5",
+      "timestamp": "2026-07-30T05:11:00.000Z",
+      "category": "REUTERS",
+      "severity": null,
+      "city": "London, UK",
+      "publisher": "REUTERS",
+      "fingerprint": "malaysian pm says myanmar agrees to take 5 000 rohingya refugees from malaysia reuters com",
+      "domain": "news.google.com",
+      "coords": {
+        "lat": 51.5074,
+        "lon": -0.1278
+      }
+    },
+    {
+      "id": "macrowire-exclusive qatarenergy buys 33 us lng cargoes to ",
+      "source": "macrowire",
+      "title": "EXCLUSIVE: QatarEnergy buys 33 US LNG cargoes to offset Hormuz disruption, sources say - reuters.com",
+      "link": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxPT2RNZllsNDBHUFBXYUM5NGZzNnpoRHQ2bW11cDdJczVhX2NObmdGNTlSZGwxdVJBU1JyNGRqMmxGYkVYckFHUGE1bHBhSnQ3Q0p5RVJlOTE2S0EyWFc5NzgycmF1NjdpZG5YdzY0YUdGZG1WNjdwUmtPUW1PZTd0bVZEN2hoRWhnMjJrSjVDa2JJeUIyZDlKVlFGelhpWlpDOVBSclY3TVJqNmdTaEtSamlqUVNyR2lJaENqLTNOUlA?oc=5",
+      "timestamp": "2026-07-30T05:03:00.000Z",
+      "category": "REUTERS",
+      "severity": null,
+      "city": "London, UK",
+      "publisher": "REUTERS",
+      "fingerprint": "exclusive qatarenergy buys 33 us lng cargoes to offset hormuz disruption sources say reuters com",
+      "domain": "news.google.com",
+      "coords": {
+        "lat": 51.5074,
+        "lon": -0.1278
+      }
+    },
+    {
+      "id": "macrowire-two arrested on suspicion of arson as firefighte",
+      "source": "macrowire",
+      "title": "Two arrested on suspicion of arson as firefighters battle blazes near Bordeaux - reuters.com",
+      "link": "https://news.google.com/rss/articles/CBMixAFBVV95cUxNcnBHSGFQWmlOT0JIQkhRMENUbGQwQ0phQ056LUZxUlFBcElISjAzRkY1emlxZFM5dnFNYjVoMDJueWFubEpNcWdaWjJjTWxaZlJlUHk1UU5ucERxdXMyRW1BaG9yNlJhMXprQTN0RXB2Q25KRk1BOFdoUV96MUotYmZfclR2RHNVNmkwMTFHSEJzSzRjcng0bGV6eEZYSVg3aklVenZGaE9hR3ZRbWYtS2NlWVNGMHYyRlNkS3NXbTFwLVJn?oc=5",
+      "timestamp": "2026-07-30T04:55:00.000Z",
+      "category": "REUTERS",
+      "severity": null,
+      "city": "London, UK",
+      "publisher": "REUTERS",
+      "fingerprint": "two arrested on suspicion of arson as firefighters battle blazes near bordeaux reuters com",
+      "domain": "news.google.com",
+      "coords": {
+        "lat": 51.5074,
+        "lon": -0.1278
+      }
+    },
+    {
+      "id": "macrowire-bitcoin s quantum plan assumes some algorithms b",
+      "source": "macrowire",
+      "title": "Bitcoin's quantum plan assumes some algorithms break. AI just weakened one in 60 hours",
+      "link": "https://www.coindesk.com/tech/2026/07/29/bitcoin-s-quantum-plan-assumes-some-algorithms-break-ai-just-weakened-one-in-60-hours",
+      "timestamp": "2026-07-30T04:16:30.000Z",
+      "category": "COINDESK",
+      "severity": null,
+      "city": "New York, NY",
+      "publisher": "COINDESK",
+      "fingerprint": "bitcoin s quantum plan assumes some algorithms break ai just weakened one in 60 hours",
+      "domain": "coindesk.com",
+      "coords": {
+        "lat": 40.7128,
+        "lon": -74.006
+      }
+    },
+    {
+      "id": "macrowire-us military says latest strikes on iran last two",
+      "source": "macrowire",
+      "title": "US military says latest strikes on Iran last two hours, hitting dozens of targets - reuters.com",
+      "link": "https://news.google.com/rss/articles/CBMiogFBVV95cUxNYl9qUHF2eEJlVmxqM2ROX0NFVDE3SHVIeExWXzltdnl5dG1HSmprdzFha3lhWUt4dGRLeWFBSlE0ZlYySkhHdmpLcE51S3c3TV90azg5LTVhWWNNd3IydlAwT1djUmV4Ui1BR3pOUl9PcHBPWllxM1NDSmlnZUQ3RnZSeVd2X3BqSFVBR0U3cE1xaGwxVXpYWmtXanlZVHBNUGc?oc=5",
+      "timestamp": "2026-07-30T04:15:43.000Z",
+      "category": "REUTERS",
+      "severity": null,
+      "city": "London, UK",
+      "publisher": "REUTERS",
+      "fingerprint": "us military says latest strikes on iran last two hours hitting dozens of targets reuters com",
+      "domain": "news.google.com",
+      "coords": {
+        "lat": 51.5074,
+        "lon": -0.1278
+      }
+    },
+    {
+      "id": "macrowire-luno cuts 20 of staff as crypto layoffs spread a",
+      "source": "macrowire",
+      "title": "Luno cuts 20% of staff as crypto layoffs spread across 12 firms in July",
+      "link": "https://cointelegraph.com/news/luno-cuts-staff-crypto-layoffs-july?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "timestamp": "2026-07-30T04:13:34.000Z",
+      "category": "COINTELEGRAPH",
+      "severity": null,
+      "city": "Zurich, CH",
+      "publisher": "COINTELEGRAPH",
+      "fingerprint": "luno cuts 20 of staff as crypto layoffs spread across 12 firms in july",
+      "domain": "cointelegraph.com",
+      "coords": {
+        "lat": 47.3769,
+        "lon": 8.5417
+      }
+    },
+    {
+      "id": "arxiv-the human utility factor a computable welfare me",
+      "source": "arxiv",
+      "title": "The Human Utility Factor: A Computable Welfare Metric That Reframes AI Governance as a Constrained Optimisation Problem",
+      "link": "https://arxiv.org/abs/2607.26068",
+      "timestamp": "2026-07-30T04:00:00.000Z",
+      "category": "econ",
+      "severity": null,
+      "city": "New York, NY",
+      "publisher": "arXiv",
+      "fingerprint": "the human utility factor a computable welfare metric that reframes ai governance as a constrained optimisation problem",
+      "domain": "arxiv.org",
+      "coords": {
+        "lat": 40.7295,
+        "lon": -73.9965
+      }
+    },
+    {
+      "id": "arxiv-bitcoin runs on a clock why every price indicato",
+      "source": "arxiv",
+      "title": "Bitcoin Runs on a Clock: Why Every Price Indicator Dies and the Halving Clock Doesn't",
+      "link": "https://arxiv.org/abs/2607.26188",
+      "timestamp": "2026-07-30T04:00:00.000Z",
+      "category": "q-fin",
+      "severity": null,
+      "city": "Princeton, NJ",
+      "publisher": "arXiv",
+      "fingerprint": "bitcoin runs on a clock why every price indicator dies and the halving clock doesn t",
+      "domain": "arxiv.org",
+      "coords": {
+        "lat": 40.3573,
+        "lon": -74.6672
+      }
+    },
+    {
+      "id": "arxiv-openmarket a synchronized polymarket binance dat",
+      "source": "arxiv",
+      "title": "OpenMarket: A Synchronized Polymarket-Binance Dataset for High-Frequency Prediction-Market Research",
+      "link": "https://arxiv.org/abs/2607.26245",
+      "timestamp": "2026-07-30T04:00:00.000Z",
+      "category": "q-fin",
+      "severity": null,
+      "city": "Zurich, CH",
+      "publisher": "arXiv",
+      "fingerprint": "openmarket a synchronized polymarket binance dataset for high frequency prediction market research",
+      "domain": "arxiv.org",
+      "coords": {
+        "lat": 47.3769,
+        "lon": 8.5417
+      }
+    },
+    {
+      "id": "arxiv-multi currency amms for decentralized forex mark",
+      "source": "arxiv",
+      "title": "Multi-Currency AMMs for Decentralized FOREX Markets: Feasibility & Optimal Design",
+      "link": "https://arxiv.org/abs/2607.26405",
+      "timestamp": "2026-07-30T04:00:00.000Z",
+      "category": "q-fin",
+      "severity": null,
+      "city": "London, UK",
+      "publisher": "arXiv",
+      "fingerprint": "multi currency amms for decentralized forex markets feasibility optimal design",
+      "domain": "arxiv.org",
+      "coords": {
+        "lat": 51.5142,
+        "lon": -0.1345
+      }
+    },
+    {
+      "id": "arxiv-no data is not no risk visibility aware graph ba",
+      "source": "arxiv",
+      "title": "No Data Is Not No Risk: Visibility Aware Graph-Based Inference of Business Conduct Risk",
+      "link": "https://arxiv.org/abs/2607.26859",
+      "timestamp": "2026-07-30T04:00:00.000Z",
+      "category": "q-fin",
+      "severity": null,
+      "city": "Pittsburgh, PA",
+      "publisher": "arXiv",
+      "fingerprint": "no data is not no risk visibility aware graph based inference of business conduct risk",
+      "domain": "arxiv.org",
+      "coords": {
+        "lat": 40.4406,
+        "lon": -79.9959
+      }
+    },
+    {
+      "id": "arxiv-multi asset liquidation in dark pools with adver",
+      "source": "arxiv",
+      "title": "Multi-Asset Liquidation in Dark Pools with Adverse Selection",
+      "link": "https://arxiv.org/abs/2607.27019",
+      "timestamp": "2026-07-30T04:00:00.000Z",
+      "category": "q-fin",
+      "severity": null,
+      "city": "Munich, DE",
+      "publisher": "arXiv",
+      "fingerprint": "multi asset liquidation in dark pools with adverse selection",
+      "domain": "arxiv.org",
+      "coords": {
+        "lat": 48.1507,
+        "lon": 11.568
+      }
+    },
+    {
+      "id": "arxiv-herding momentum and reversal in china s a share",
+      "source": "arxiv",
+      "title": "Herding, Momentum, and Reversal in China's A-Share Market: An Agent-Based Network Model with Information Diffusion",
+      "link": "https://arxiv.org/abs/2607.27063",
+      "timestamp": "2026-07-30T04:00:00.000Z",
+      "category": "q-fin",
+      "severity": null,
+      "city": "Oxford, UK",
+      "publisher": "arXiv",
+      "fingerprint": "herding momentum and reversal in china s a share market an agent based network model with information diffusion",
+      "domain": "arxiv.org",
+      "coords": {
+        "lat": 51.7548,
+        "lon": -1.2544
+      }
+    },
+    {
+      "id": "arxiv-where does the criticality live early warning si",
+      "source": "arxiv",
+      "title": "Where does the criticality live? Early-warning signals are event-heterogeneous across seven crypto-perpetual liquidation cascades",
+      "link": "https://arxiv.org/abs/2607.27070",
+      "timestamp": "2026-07-30T04:00:00.000Z",
+      "category": "q-fin",
+      "severity": null,
+      "city": "Oxford, UK",
+      "publisher": "arXiv",
+      "fingerprint": "where does the criticality live early warning signals are event heterogeneous across seven crypto perpetual liquidation cascades",
+      "domain": "arxiv.org",
+      "coords": {
+        "lat": 51.7548,
+        "lon": -1.2544
+      }
+    },
+    {
+      "id": "arxiv-how divorce reforms induced married couples to s",
+      "source": "arxiv",
+      "title": "How Divorce Reforms Induced Married Couples to Supply More Labor",
+      "link": "https://arxiv.org/abs/2607.27142",
+      "timestamp": "2026-07-30T04:00:00.000Z",
+      "category": "econ",
+      "severity": null,
+      "city": "Tokyo, JP",
+      "publisher": "arXiv",
+      "fingerprint": "how divorce reforms induced married couples to supply more labor",
+      "domain": "arxiv.org",
+      "coords": {
+        "lat": 35.6586,
+        "lon": 139.7454
+      }
+    },
+    {
+      "id": "arxiv-the attention directing ability of teams",
+      "source": "arxiv",
+      "title": "The Attention-Directing Ability of Teams",
+      "link": "https://arxiv.org/abs/2607.26109",
+      "timestamp": "2026-07-30T04:00:00.000Z",
+      "category": "physics",
+      "severity": null,
+      "city": "Berkeley, CA",
+      "publisher": "arXiv",
+      "fingerprint": "the attention directing ability of teams",
+      "domain": "arxiv.org",
+      "coords": {
+        "lat": 37.8716,
+        "lon": -122.2727
+      }
+    },
+    {
+      "id": "arxiv-crossing free probabilistic k line forecasts wit",
+      "source": "arxiv",
+      "title": "Crossing-Free Probabilistic K-Line Forecasts Without Retraining",
+      "link": "https://arxiv.org/abs/2607.26792",
+      "timestamp": "2026-07-30T04:00:00.000Z",
+      "category": "stat",
+      "severity": null,
+      "city": "Seattle, WA",
+      "publisher": "arXiv",
+      "fingerprint": "crossing free probabilistic k line forecasts without retraining",
+      "domain": "arxiv.org",
+      "coords": {
+        "lat": 47.6553,
+        "lon": -122.3035
+      }
+    },
+    {
+      "id": "arxiv-forcing and duality corrected contracts for vola",
+      "source": "arxiv",
+      "title": "Forcing and duality-corrected contracts for volatility control",
+      "link": "https://arxiv.org/abs/2607.27039",
+      "timestamp": "2026-07-30T04:00:00.000Z",
+      "category": "math",
+      "severity": null,
+      "city": "Paris, FR",
+      "publisher": "arXiv",
+      "fingerprint": "forcing and duality corrected contracts for volatility control",
+      "domain": "arxiv.org",
+      "coords": {
+        "lat": 48.7813,
+        "lon": 2.2834
+      }
+    },
+    {
+      "id": "arxiv-rainfall is rough",
+      "source": "arxiv",
+      "title": "Rainfall is rough",
+      "link": "https://arxiv.org/abs/2607.27099",
+      "timestamp": "2026-07-30T04:00:00.000Z",
+      "category": "stat",
+      "severity": null,
+      "city": "Baltimore, MD",
+      "publisher": "arXiv",
+      "fingerprint": "rainfall is rough",
+      "domain": "arxiv.org",
+      "coords": {
+        "lat": 39.3299,
+        "lon": -76.6205
+      }
+    },
+    {
+      "id": "arxiv-inverse learning of latent risk neutral densitie",
+      "source": "arxiv",
+      "title": "Inverse Learning of Latent Risk-Neutral Densities from Irregular Option Quotes",
+      "link": "https://arxiv.org/abs/2607.27188",
+      "timestamp": "2026-07-30T04:00:00.000Z",
+      "category": "cs",
+      "severity": null,
+      "city": "Princeton, NJ",
+      "publisher": "arXiv",
+      "fingerprint": "inverse learning of latent risk neutral densities from irregular option quotes",
+      "domain": "arxiv.org",
+      "coords": {
+        "lat": 40.3573,
+        "lon": -74.6672
+      }
+    },
+    {
+      "id": "arxiv-financial volatility and risk forecasting incorp",
+      "source": "arxiv",
+      "title": "Financial Volatility and Risk Forecasting Incorporating a Larger Number of Realized Measures",
+      "link": "https://arxiv.org/abs/2411.17136",
+      "timestamp": "2026-07-30T04:00:00.000Z",
+      "category": "q-fin",
+      "severity": null,
+      "city": "Berkeley, CA",
+      "publisher": "arXiv",
+      "fingerprint": "financial volatility and risk forecasting incorporating a larger number of realized measures",
+      "domain": "arxiv.org",
+      "coords": {
+        "lat": 37.8716,
+        "lon": -122.2727
+      }
+    },
+    {
+      "id": "arxiv-strategic effort and non linear positional bandw",
+      "source": "arxiv",
+      "title": "Strategic Effort and Non-Linear Positional Bandwagon Drafting Benefits in Multi-Stage Competitive Games: Evidence from Triathlon",
+      "link": "https://arxiv.org/abs/2505.03247",
+      "timestamp": "2026-07-30T04:00:00.000Z",
+      "category": "econ",
+      "severity": null,
+      "city": "Oxford, UK",
+      "publisher": "arXiv",
+      "fingerprint": "strategic effort and non linear positional bandwagon drafting benefits in multi stage competitive games evidence from triathlon",
+      "domain": "arxiv.org",
+      "coords": {
+        "lat": 51.7548,
+        "lon": -1.2544
+      }
+    },
+    {
+      "id": "arxiv-complexity beyond incentives the critical role o",
+      "source": "arxiv",
+      "title": "Complexity Beyond Incentives: The Critical Role of Reporting Language",
+      "link": "https://arxiv.org/abs/2511.22834",
+      "timestamp": "2026-07-30T04:00:00.000Z",
+      "category": "econ",
+      "severity": null,
+      "city": "Munich, DE",
+      "publisher": "arXiv",
+      "fingerprint": "complexity beyond incentives the critical role of reporting language",
+      "domain": "arxiv.org",
+      "coords": {
+        "lat": 48.1507,
+        "lon": 11.568
+      }
+    },
+    {
+      "id": "arxiv-physics informed singular value learning for cro",
+      "source": "arxiv",
+      "title": "Physics-Informed Singular-Value Learning for Cross-Covariances Forecasting in Financial Markets",
+      "link": "https://arxiv.org/abs/2601.07687",
+      "timestamp": "2026-07-30T04:00:00.000Z",
+      "category": "q-fin",
+      "severity": null,
+      "city": "Paris, FR",
+      "publisher": "arXiv",
+      "fingerprint": "physics informed singular value learning for cross covariances forecasting in financial markets",
+      "domain": "arxiv.org",
+      "coords": {
+        "lat": 48.7813,
+        "lon": 2.2834
+      }
+    },
+    {
+      "id": "arxiv-the hidden structure of innovation networks",
+      "source": "arxiv",
+      "title": "The hidden structure of innovation networks",
+      "link": "https://arxiv.org/abs/2601.10224",
+      "timestamp": "2026-07-30T04:00:00.000Z",
+      "category": "econ",
+      "severity": null,
+      "city": "Paris, FR",
+      "publisher": "arXiv",
+      "fingerprint": "the hidden structure of innovation networks",
+      "domain": "arxiv.org",
+      "coords": {
+        "lat": 48.7813,
+        "lon": 2.2834
+      }
+    },
+    {
+      "id": "arxiv-resolution aware perpetual futures on binary pre",
+      "source": "arxiv",
+      "title": "Resolution-Aware Perpetual Futures on Binary Prediction Markets: Failure Modes and Mechanical Stress Tests Using Polymarket Data",
+      "link": "https://arxiv.org/abs/2605.10400",
+      "timestamp": "2026-07-30T04:00:00.000Z",
+      "category": "q-fin",
+      "severity": null,
+      "city": "Stanford, CA",
+      "publisher": "arXiv",
+      "fingerprint": "resolution aware perpetual futures on binary prediction markets failure modes and mechanical stress tests using polymarket data",
+      "domain": "arxiv.org",
+      "coords": {
+        "lat": 37.4275,
+        "lon": -122.1697
+      }
+    },
+    {
+      "id": "macrowire-japanese game developer launches bitcoin altcoin",
+      "source": "macrowire",
+      "title": "Japanese game developer launches Bitcoin, altcoin fund with SBI",
+      "link": "https://cointelegraph.com/news/japanese-game-developer-bitcoin-altcoin-fund?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "timestamp": "2026-07-30T03:19:58.000Z",
+      "category": "COINTELEGRAPH",
+      "severity": null,
+      "city": "Zurich, CH",
+      "publisher": "COINTELEGRAPH",
+      "fingerprint": "japanese game developer launches bitcoin altcoin fund with sbi",
+      "domain": "cointelegraph.com",
+      "coords": {
+        "lat": 47.3769,
+        "lon": 8.5417
+      }
+    },
+    {
+      "id": "macrowire-binance us to apply for cftc license in august f",
+      "source": "macrowire",
+      "title": "Binance.US to apply for CFTC license in August for prediction market platform",
+      "link": "https://www.theblock.co/post/410110/binance-us-cftc-license?utm_source=rss&utm_medium=rss",
+      "timestamp": "2026-07-30T03:17:36.000Z",
+      "category": "THEBLOCK",
+      "severity": null,
+      "city": "New York, NY",
+      "publisher": "THEBLOCK",
+      "fingerprint": "binance us to apply for cftc license in august for prediction market platform",
+      "domain": "theblock.co",
+      "coords": {
+        "lat": 40.7128,
+        "lon": -74.006
+      }
+    },
+    {
+      "id": "macrowire-china warns of retaliation if us sticks with rob",
+      "source": "macrowire",
+      "title": "China warns of retaliation if US sticks with robot ban - reuters.com",
+      "link": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxQMmdhbnhGZW9OcUE5SGUyUmQ2RDdyQkN4N3d0ZVhtT201UTd5MEd1clhZc21YaUxIUVFMRTc2aUU5RzJWZTVQd3RmM19kUVhoVjJ4RElZS2UwbjdfNUhNVnY5NU1kTzNoUGFaX3VrNFZELUJmemg1R084Mm80cjFXd3FEeWhWczZ4MXFvNUo3c2pWLS14WnlqQlh4Y2JYaXlCZnVmeEdQcy1Udw?oc=5",
+      "timestamp": "2026-07-30T02:09:00.000Z",
+      "category": "REUTERS",
+      "severity": null,
+      "city": "London, UK",
+      "publisher": "REUTERS",
+      "fingerprint": "china warns of retaliation if us sticks with robot ban reuters com",
+      "domain": "news.google.com",
+      "coords": {
+        "lat": 51.5074,
+        "lon": -0.1278
+      }
+    }
+  ]
+}

@@ -44,7 +44,7 @@ const shortSha = buildSha ? buildSha.replace(/^.*?([0-9a-f]{7,})$/, '$1').slice(
 
     <a
       class="trust-pill"
-      href={`${path('/proof')}/#code-artifacts`}
+      href={`${path('/proof')}#code`}
       title="All metrics evaluated by a separate harness"
     >
       <svg
@@ -89,7 +89,7 @@ const shortSha = buildSha ? buildSha.replace(/^.*?([0-9a-f]{7,})$/, '$1').slice(
 
     <a
       class="trust-pill"
-      href={`${path('/experience')}/#nda-safe`}
+      href={path('/experience')}
       title="Past engagement disclosed at /experience; PM-verified, NDA-clean by construction"
     >
       <svg
@@ -188,7 +188,7 @@ const shortSha = buildSha ? buildSha.replace(/^.*?([0-9a-f]{7,})$/, '$1').slice(
     color: var(--c-ink);
   }
   .trust-strip__inner {
-    max-width: var(--container);
+    max-width: var(--container-max);
     margin: 0 auto;
     padding: var(--sp-3) var(--sp-4);
     display: flex;
@@ -228,7 +228,8 @@ const shortSha = buildSha ? buildSha.replace(/^.*?([0-9a-f]{7,})$/, '$1').slice(
       background var(--transition),
       transform var(--transition);
   }
-  a.trust-pill:hover {
+  a.trust-pill:hover,
+  a.trust-pill:focus-visible {
     border-color: var(--c-amber-deep);
     /* v6.10.41 — derive hover tint from --c-amber via color-mix so
        palette tweaks propagate. Was rgba(196,138,22,0.06). */

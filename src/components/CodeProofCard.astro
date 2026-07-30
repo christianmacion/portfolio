@@ -62,7 +62,13 @@ const {
     <span class="mono code-card__path">{repoPath}</span>
     {
       href && (
-        <a class="code-card__link" href={href} target="_blank" rel="noopener noreferrer">
+        <a
+          class="code-card__link"
+          href={href}
+          target="_blank"
+          referrerpolicy="strict-origin-when-cross-origin"
+          rel="noopener noreferrer"
+        >
           Source →
         </a>
       )
@@ -84,7 +90,8 @@ const {
       border-color var(--transition),
       box-shadow var(--transition);
   }
-  .code-card:hover {
+  .code-card:hover,
+  .code-card:focus-visible {
     border-color: var(--c-primary);
     border-left-color: var(--c-primary-2-deep);
     box-shadow: var(--shadow-sm);
@@ -182,7 +189,8 @@ const {
     text-underline-offset: 3px;
     white-space: nowrap;
   }
-  .code-card__link:hover {
+  .code-card__link:hover,
+  .code-card__link:focus-visible {
     color: var(--c-primary);
   }
 </style>

@@ -356,7 +356,8 @@ const COL_LABEL: Record<(typeof COLS)[number], { title: string; sub: string }> =
     border-bottom: 1px dotted transparent;
     transition: border-color var(--transition);
   }
-  .acm__link:hover {
+  .acm__link:hover,
+  .acm__link:focus-visible {
     border-bottom-color: var(--c-amber);
   }
   .acm__link-num {

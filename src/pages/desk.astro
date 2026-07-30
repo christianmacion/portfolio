@@ -1,29 +1,51 @@
 ---
 /**
- * desk.astro — v7.5 THE DESK · 24h multi-asset coverage view.
+ * desk.astro — v7.7.0 THE DESK · 24h multi-asset coverage view.
  *
- * NDA-positive by construction. No employer or platform names; this
- * page is the public-facing "iron desk" view of the multi-agent office:
- *   - where coverage sits (venue cities)
- *   - what's scheduled to move (10 curated world events)
- *   - what's moving right now (50 GDELT signals, last 24h)
+ * v7.6.8 polish — owner ask 2026-07-27: "improve the UI/UX of hub. make
+ * stella work on it and make it same quality as the login and main page.
+ * world class. perfection in motion graphics and designs. do full audit
+ * and fix all bugs."
+ *
+ * v7.7.0 — live-world: ArxivRadar (research preprints) + LiveWire (macro
+ * wire headlines) slots added. EarthMap upgraded in place (severity-
+ * weighted Layer C, hairline arcs to venue cities, last-sync chrome).
+ * KPI cell "GDELT SIGNALS" → "GLOBAL SIGNALS" (sum across 3 feeds).
  *
  * Layout (top → bottom):
  *   1. MarketTape — scrolling equity tape
- *   2. Head — eyebrow + headline + lede + dual-path CTA
- *   3. EarthMap — 3-layer equirectangular world map
- *   4. World events table — 10 curated events with category / severity
- *   5. Coverage stats — venue count, event count, GDELT count, latency
- *   6. CTABanner — back to home / open /desk link
+ *   2. Head — eyebrow + headline + voice + sub + dual-path CTA
+ *   3. KPI strip — 4 count-up stats (venues / events / signals / tz)
+ *   4. Marquee — methodology frame loop
+ *   4b. ArxivRadar — 5-category research preprint ticker + grid
+ *   5. EarthMap — 3-layer equirectangular world map (upgraded)
+ *   6. LiveStats — instrument panel (4 cards, perp sparkline animation)
+ *   7. World events table — 10 curated events with row stagger
+ *   7b. LiveWire — 4-source macro wire ticker (Reuters/CoinDesk/Block/CoinTelegraph)
+ *   8. LiveActivity — tail-of-the-loop event log
+ *   9. CTABanner — back to home / open /desk link
+ *
+ * NDA-positive by construction. No employer or platform names; this
+ * page is the public-facing "iron desk" view of the multi-agent office.
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
 import VoiceLine from '@components/VoiceLine.astro';
 import MarketTape from '@components/MarketTape.astro';
+import NewsRibbon from '@components/NewsRibbon.astro';
 import EarthMap from '@components/EarthMap.astro';
+import Marquee from '@components/Marquee.astro';
+import ArxivRadar from '@components/ArxivRadar.astro';
+import LiveWire from '@components/LiveWire.astro';
+import LiveStats from '@components/LiveStats.astro';
+import LiveActivity from '@components/LiveActivity.astro';
 import CTABanner from '@components/CTABanner.astro';
 import { getCollection } from 'astro:content';
 import { profile, archSafe } from '@utils/profile';
 import { path } from '@utils/url';
+import arxivCache from '../data/arxiv-cache.json';
+import macrowireCache from '../data/macrowire-cache.json';
+import gdeltCache from '../data/gdelt-cache.json';
+import { INSTITUTIONS, INSTITUTION_STATS } from '../data/institutions';
 
 // === Pull world events once, server-side, sort by order ===
 interface WorldEventEntry {
@@ -52,13 +74,68 @@ const events: WorldEventEntry[] = eventEntries
   }))
   .sort((a: WorldEventEntry, b: WorldEventEntry) => a.order - b.order);
 
+// === v7.12 — category + severity counts for filter chips =================
+const CATEGORY_LABELS: Record<WorldEventEntry['category'], string> = {
+  'central-bank': 'CB',
+  earnings: 'ERN',
+  geopolitical: 'GEO',
+  'data-release': 'DAT',
+  fx: 'FX',
+};
+const CATEGORY_ORDER: WorldEventEntry['category'][] = [
+  'central-bank',
+  'earnings',
+  'geopolitical',
+  'data-release',
+  'fx',
+];
+const SEVERITY_ORDER: WorldEventEntry['severity'][] = ['critical', 'moderate', 'mild'];
+const categoryCounts: Record<WorldEventEntry['category'], number> = {
+  'central-bank': 0,
+  earnings: 0,
+  geopolitical: 0,
+  'data-release': 0,
+  fx: 0,
+};
+const severityCounts: Record<WorldEventEntry['severity'], number> = {
+  critical: 0,
+  moderate: 0,
+  mild: 0,
+};
+const cityCountsMap: Map<string, number> = new Map();
+for (const e of events) {
+  categoryCounts[e.category]++;
+  severityCounts[e.severity]++;
+  const c = (e.city ?? '').trim();
+  if (c) cityCountsMap.set(c, (cityCountsMap.get(c) ?? 0) + 1);
+}
+const topCities: Array<{ city: string; count: number }> = Array.from(cityCountsMap.entries())
+  .sort((a, b) => b[1] - a[1])
+  .slice(0, 8)
+  .map(([city, count]) => ({ city, count }));
+
+// === v7.7.1 — derive global-signal count from cache JSONs ===
+// Sum across arxiv papers + macrowire headlines + gdelt events. The
+// chrome reads "N+ SIGNALS" — the actual count, never hardcoded.
+const arxivItems = (arxivCache as { items?: unknown[] }).items?.length ?? 0;
+const macrowireItems = (macrowireCache as { items?: unknown[] }).items?.length ?? 0;
+const gdeltItems = (gdeltCache as { events?: unknown[] }).events?.length ?? 0;
+const globalSignals = arxivItems + macrowireItems + gdeltItems;
+
+// === v7.8.0 — research-venue KPI strip ===
+// INSTITUTIONS table now carries 56 venues with researchDomains + tier.
+// Chrome reads the actual count (was hardcoded to "06" before).
+const venueCount = INSTITUTIONS.length;
+const t1Count = INSTITUTION_STATS.byTier.t1;
+const continents = Object.keys(INSTITUTION_STATS.byContinent).length;
+
 const email = profile.contact.email;
 const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hiring%20inquiry`;
 ---
 
 <BaseLayout
   title="The Desk"
-  description={`24h multi-asset coverage — ${events.length} curated world events, ${archSafe.agentCount}-agent office, ${profile.stats.evalGates}-gate eval harness. NDA-positive by construction.`}
+  description={`24h multi-asset coverage — ${events.length} curated world events, ${archSafe.agentCount}-agent office, ${globalSignals}+ live signals across arXiv + macro-wire + GDELT. NDA-positive by construction.`}
   surface="v6-13"
   theme="light"
   breadcrumbs={[
@@ -70,7 +147,7 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
   <MarketTape />
 
   {/* === 2. Head === */}
-  <header class="desk-head">
+  <header class="desk-head" data-reveal>
     <div class="container">
       <p class="desk-head__eyebrow mono">
         <span class="status-dot" aria-hidden="true"></span>
@@ -99,21 +176,311 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     </div>
   </header>
 
-  {/* === 3. EarthMap — 3-layer world viz === */}
-  <section class="desk-map" aria-label="Three-layer world map">
+  {
+    /* === 3. KPI strip — 6 count-up cells (v7.8.0 expanded) ===
+       Was 4 cells with "6 venues" hardcoded. Now reads the live
+       INSTITUTION_STATS aggregator: 56 venues across 6 continents,
+       T1/T2/T3 split, signal count, world events, desk timezone. */
+  }
+  <section class="desk-stats" aria-label="Coverage statistics" data-reveal>
     <div class="container">
-      <p class="desk-map__eyebrow mono">EARTH · VENUES · EVENTS · SIGNALS · 24H</p>
-      <EarthMap width={1080} height={540} />
+      <p class="desk-stats__eyebrow mono">24H COVERAGE · DETERMINISTIC SNAPSHOT</p>
+      <ul class="desk-stats__grid desk-stats__grid--6">
+        <li class="desk-stats__cell" style="--i: 0">
+          <p class="desk-stats__num mono">
+            <span data-counter={venueCount} data-duration="1200">{venueCount}</span>
+          </p>
+          <p class="desk-stats__lbl mono">RESEARCH VENUES</p>
+        </li>
+        <li class="desk-stats__cell" style="--i: 1">
+          <p class="desk-stats__num mono">
+            <span data-counter={t1Count} data-duration="1200">{t1Count}</span>
+          </p>
+          <p class="desk-stats__lbl mono">T1 INSTITUTIONS</p>
+        </li>
+        <li class="desk-stats__cell" style="--i: 2">
+          <p class="desk-stats__num mono">
+            <span data-counter={continents} data-duration="1200">{continents}</span>
+          </p>
+          <p class="desk-stats__lbl mono">CONTINENTS</p>
+        </li>
+        <li class="desk-stats__cell" style="--i: 3">
+          <p class="desk-stats__num mono">
+            <span data-counter={events.length} data-duration="1200">{events.length}</span>
+          </p>
+          <p class="desk-stats__lbl mono">WORLD EVENTS</p>
+        </li>
+        <li class="desk-stats__cell" style="--i: 4">
+          <p class="desk-stats__num mono">
+            <span data-counter={globalSignals} data-duration="1400">{globalSignals}+</span>
+          </p>
+          <p class="desk-stats__lbl mono">GLOBAL SIGNALS</p>
+        </li>
+        <li class="desk-stats__cell" style="--i: 5">
+          <p class="desk-stats__num mono">UTC+8</p>
+          <p class="desk-stats__lbl mono">DESK TIMEZONE</p>
+        </li>
+      </ul>
     </div>
   </section>
 
-  {/* === 4. World events table === */}
+  {/* === 3b. NewsRibbon — desk-specific updates + methodology frames === */}
+  <NewsRibbon />
+
+  {/* === 4. Marquee — methodology frames === */}
+  <Marquee
+    items={[
+      { head: 'PUBLIC-DATA', tail: 'GDPR-CLEAN · REPRODUCIBLE', accent: 'sage' },
+      {
+        head: 'EVAL-FIRST',
+        tail: `${profile.stats.evalGates} GATES · EXIT-0 CONTRACT`,
+        accent: 'warn',
+      },
+      {
+        head: '24H SCAN',
+        tail: `${venueCount} VENUES · ${events.length} EVENTS · ${archSafe.agentCount}-AGENT SCAN`,
+        accent: 'sage',
+      },
+      { head: 'TIMEZONE-AWARE', tail: 'UTC+8 DESK · 3/24 OVERLAP', accent: 'violet' },
+      { head: 'REGIME-TAGGED', tail: 'CALM · NORMAL · STRESS', accent: 'terracotta' },
+      { head: 'PIT STRICT', tail: 'NO LOOKAHEAD · NO SURVIVORSHIP', accent: 'sage' },
+      { head: 'CHAIN-OF-CUSTODY', tail: 'SEED → SIGNAL → CITATION', accent: 'warn' },
+      { head: 'NDA-POSITIVE', tail: 'COUNTS + TAXONOMY ONLY', accent: 'sage' },
+    ]}
+    speedSec={48}
+    trailing="24h coverage · methodology"
+  />
+
+  {/* === 4b. ArxivRadar — research preprint ticker (v7.7.0) === */}
+  <section class="desk-arxiv" aria-label="Latest research preprints" data-reveal>
+    <div class="container">
+      <p class="desk-arxiv__eyebrow mono">ARXIV · 5 CATEGORIES · PREPRINTS · 24H</p>
+      <ArxivRadar speedSec={66} />
+    </div>
+  </section>
+
+  {/* === 5. EarthMap — 3-layer world viz === */}
+  <section class="desk-map" aria-label="Three-layer world map" data-reveal>
+    <div class="container">
+      <p class="desk-map__eyebrow mono">EARTH · VENUES · EVENTS · SIGNALS · 24H</p>
+      <div class="desk-map__frame">
+        <div class="desk-map__corner desk-map__corner--tl" aria-hidden="true"></div>
+        <div class="desk-map__corner desk-map__corner--tr" aria-hidden="true"></div>
+        <div class="desk-map__corner desk-map__corner--bl" aria-hidden="true"></div>
+        <div class="desk-map__corner desk-map__corner--br" aria-hidden="true"></div>
+        <EarthMap width={600} height={600} />
+      </div>
+      {
+        /* v7.8.0 — research-power readout beneath the globe.
+         Tells the viewer: "this is the research capacity anchored to
+         each continent, this is the wire/news floor, this is the
+         signal density coming out of each region." Story-driven. */
+      }
+      <div class="desk-research" aria-label="Research power and signal distribution">
+        <div class="desk-research__col">
+          <p class="desk-research__eyebrow mono">RESEARCH POWER · BY CONTINENT</p>
+          <ul class="desk-research__bars">
+            {
+              Object.entries(INSTITUTION_STATS.byContinent)
+                .sort((a, b) => b[1] - a[1])
+                .map(([continent, count]) => {
+                  const max = Math.max(...Object.values(INSTITUTION_STATS.byContinent));
+                  const pct = Math.round((count / max) * 100);
+                  return (
+                    <li class="desk-research__bar">
+                      <span class="desk-research__bar-lbl mono">{continent}</span>
+                      <span class="desk-research__bar-track" aria-hidden="true">
+                        <span class="desk-research__bar-fill" style={`--pct: ${pct}%`} />
+                      </span>
+                      <span class="desk-research__bar-num mono">{count}</span>
+                    </li>
+                  );
+                })
+            }
+          </ul>
+        </div>
+        <div class="desk-research__col">
+          <p class="desk-research__eyebrow mono">SIGNAL FLOOR · BY DOMAIN</p>
+          <ul class="desk-research__bars">
+            <li class="desk-research__bar">
+              <span class="desk-research__bar-lbl mono">q-fin</span>
+              <span class="desk-research__bar-track" aria-hidden="true">
+                <span class="desk-research__bar-fill" style={`--pct: 100%`}></span>
+              </span>
+              <span class="desk-research__bar-num mono"
+                >{INSTITUTION_STATS.byFocus['q-fin'] || 0}</span
+              >
+            </li>
+            <li class="desk-research__bar">
+              <span class="desk-research__bar-lbl mono">cs-ai</span>
+              <span class="desk-research__bar-track" aria-hidden="true">
+                <span
+                  class="desk-research__bar-fill"
+                  style={`--pct: ${Math.round(((INSTITUTION_STATS.byFocus['cs-ai'] || 0) / (INSTITUTION_STATS.byFocus['q-fin'] || 1)) * 100)}%`}
+                ></span>
+              </span>
+              <span class="desk-research__bar-num mono"
+                >{INSTITUTION_STATS.byFocus['cs-ai'] || 0}</span
+              >
+            </li>
+            <li class="desk-research__bar">
+              <span class="desk-research__bar-lbl mono">cs-lg</span>
+              <span class="desk-research__bar-track" aria-hidden="true">
+                <span
+                  class="desk-research__bar-fill"
+                  style={`--pct: ${Math.round(((INSTITUTION_STATS.byFocus['cs-lg'] || 0) / (INSTITUTION_STATS.byFocus['q-fin'] || 1)) * 100)}%`}
+                ></span>
+              </span>
+              <span class="desk-research__bar-num mono"
+                >{INSTITUTION_STATS.byFocus['cs-lg'] || 0}</span
+              >
+            </li>
+            <li class="desk-research__bar">
+              <span class="desk-research__bar-lbl mono">cs-cl</span>
+              <span class="desk-research__bar-track" aria-hidden="true">
+                <span
+                  class="desk-research__bar-fill"
+                  style={`--pct: ${Math.round(((INSTITUTION_STATS.byFocus['cs-cl'] || 0) / (INSTITUTION_STATS.byFocus['q-fin'] || 1)) * 100)}%`}
+                ></span>
+              </span>
+              <span class="desk-research__bar-num mono"
+                >{INSTITUTION_STATS.byFocus['cs-cl'] || 0}</span
+              >
+            </li>
+            <li class="desk-research__bar">
+              <span class="desk-research__bar-lbl mono">stat</span>
+              <span class="desk-research__bar-track" aria-hidden="true">
+                <span
+                  class="desk-research__bar-fill"
+                  style={`--pct: ${Math.round(((INSTITUTION_STATS.byFocus['stat'] || 0) / (INSTITUTION_STATS.byFocus['q-fin'] || 1)) * 100)}%`}
+                ></span>
+              </span>
+              <span class="desk-research__bar-num mono"
+                >{INSTITUTION_STATS.byFocus['stat'] || 0}</span
+              >
+            </li>
+          </ul>
+        </div>
+        <div class="desk-research__col desk-research__col--story">
+          <p class="desk-research__eyebrow mono">WHAT THIS EARTH SEES</p>
+          <p class="desk-research__story">
+            <strong>{t1Count} T1 institutions</strong> across <strong
+              >{continents} continents</strong
+            >
+            anchor the research-side of the desk. arxiv papers and macro-wire headlines land on these
+            cities via deterministic hash. The {gdeltItems}-point GDELT overlay is the news-side:
+            where things are <em>moving right now</em>, rendered with polarity + severity. Click any
+            country or venue to dive.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* === 6. LiveStats — instrument panel (4 cards) === */}
+  <LiveStats />
+
+  {/* === 7. World events table — row stagger === */}
   <section class="desk-events" aria-label="Curated world events">
     <div class="container">
       <p class="desk-events__eyebrow mono">{events.length} CURATED WORLD EVENTS</p>
       <h2 class="desk-events__title">The calendar that drives every position-book.</h2>
 
+      {/* v7.12 — category + severity filter chips + visible counter */}
+      <details class="desk-events__filters-wrap" open>
+        <summary class="desk-events__filters-summary mono">
+          <span class="desk-events__filters-summary-label">FILTERS</span>
+          <span class="desk-events__filters-summary-count" data-desk-visible-count>
+            {events.length} VISIBLE
+          </span>
+        </summary>
+        <div class="desk-events__filters" role="toolbar" aria-label="Filter desk events">
+          <div class="desk-events__chips" role="group" aria-label="Category filter">
+            <span class="desk-events__chip-label mono">CAT ·</span>
+            <button
+              type="button"
+              class="desk-events__chip-btn desk-events__chip-btn--active"
+              data-desk-cat="all"
+              aria-pressed="true">ALL ({events.length})</button
+            >
+            {
+              CATEGORY_ORDER.map((c) => (
+                <button
+                  type="button"
+                  class="desk-events__chip-btn"
+                  data-desk-cat={c}
+                  disabled={categoryCounts[c] === 0}
+                  aria-pressed="false"
+                >
+                  {CATEGORY_LABELS[c]} ({categoryCounts[c]})
+                </button>
+              ))
+            }
+          </div>
+          <div class="desk-events__chips" role="group" aria-label="Severity filter">
+            <span class="desk-events__chip-label mono">SEV ·</span>
+            <button
+              type="button"
+              class="desk-events__chip-btn desk-events__chip-btn--active"
+              data-desk-sev="all"
+              aria-pressed="true">ALL ({events.length})</button
+            >
+            {
+              SEVERITY_ORDER.map((s) => (
+                <button
+                  type="button"
+                  class="desk-events__chip-btn desk-events__chip-btn--{s}"
+                  data-desk-sev={s}
+                  disabled={severityCounts[s] === 0}
+                  aria-pressed="false"
+                >
+                  {s.toUpperCase()} ({severityCounts[s]})
+                </button>
+              ))
+            }
+          </div>
+          <div class="desk-events__chips" role="group" aria-label="City filter">
+            <span class="desk-events__chip-label mono">CITY ·</span>
+            <button
+              type="button"
+              class="desk-events__chip-btn desk-events__chip-btn--active"
+              data-desk-city="all"
+              aria-pressed="true">ALL ({events.length})</button
+            >
+            {
+              topCities.map(({ city, count }) => (
+                <button
+                  type="button"
+                  class="desk-events__chip-btn"
+                  data-desk-city={city.toLowerCase()}
+                  aria-pressed="false"
+                >
+                  {city.toUpperCase()} ({count})
+                </button>
+              ))
+            }
+          </div>
+          <p class="desk-events__count mono" data-desk-visible-count>
+            {events.length} VISIBLE
+          </p>
+          {/* v7.14 — COPY · LINK button (mirror /live v7.10) */}
+          <button
+            type="button"
+            class="desk-events__share-btn mono"
+            data-desk-share
+            title="Copy link with current filters"
+          >
+            COPY · LINK
+          </button>
+        </div>
+      </details>
+
       <table class="desk-events__table">
+        <caption class="sr-only">
+          Curated world events that the desk tracks on a 24-hour rolling basis — central-bank policy
+          meetings, scheduled data releases, geopolitical windows, and earnings that move the
+          position-book.
+        </caption>
         <colgroup>
           <col class="desk-events__col-num" />
           <col class="desk-events__col-cat" />
@@ -132,18 +499,84 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
         </thead>
         <tbody>
           {
-            events.map((e) => (
-              <tr>
-                <td class="desk-events__num mono">{String(e.order).padStart(2, '0')}</td>
-                <td class="desk-events__cat mono">{e.category}</td>
-                <td class="desk-events__sev mono">
-                  <span class={`desk-events__pill desk-events__pill--${e.severity}`}>
-                    {e.severity.toUpperCase()}
-                  </span>
-                </td>
-                <td class="desk-events__title-cell">{e.title}</td>
-                <td class="desk-events__city mono">{e.city}</td>
-              </tr>
+            events.map((e, i) => (
+              <>
+                <tr
+                  class="desk-events__row"
+                  style={`--i: ${i}`}
+                  id={`event-${e.id}`}
+                  data-desk-cat={e.category}
+                  data-desk-sev={e.severity}
+                  data-desk-city={(e.city ?? '').toLowerCase()}
+                  data-desk-row={e.id}
+                  tabindex="0"
+                >
+                  <td class="desk-events__num mono">
+                    {/* v7.27 — replaced nested <a> permalink with a clipboard-copy
+                        <button>. Previously the <a> nested inside a <tr role="button">
+                        triggered axe-core's nested-interactive rule. The new button
+                        copies the row's deep-link to clipboard (same UX). */}
+                    <button
+                      type="button"
+                      class="desk-events__anchor"
+                      data-copy-link={`#event-${e.id}`}
+                      aria-label={`Copy permalink for event ${e.id}`}
+                      onclick="event.stopPropagation()"
+                    >
+                      #
+                    </button>
+                    {String(e.order).padStart(2, '0')}
+                  </td>
+                  <td class="desk-events__cat mono">{e.category}</td>
+                  <td class="desk-events__sev mono">
+                    <span class={`desk-events__pill desk-events__pill--${e.severity}`}>
+                      {e.severity.toUpperCase()}
+                    </span>
+                  </td>
+                  <td class="desk-events__title-cell">{e.title}</td>
+                  <td class="desk-events__city mono">
+                    {e.city}
+                    <span class="desk-events__expand-hint mono" aria-hidden="true">
+                      ▾
+                    </span>
+                  </td>
+                </tr>
+                <tr
+                  class="desk-events__detail"
+                  id={`event-${e.id}-detail`}
+                  data-desk-detail={e.id}
+                  hidden
+                >
+                  <td colspan="5" class="desk-events__detail-cell">
+                    <dl class="desk-events__detail-meta mono">
+                      <div class="desk-events__detail-row">
+                        <dt>SOURCE</dt>
+                        <dd>{e.source}</dd>
+                      </div>
+                      <div class="desk-events__detail-row">
+                        <dt>LAT/LON</dt>
+                        <dd>
+                          {e.lat.toFixed(2)}°, {e.lon.toFixed(2)}°
+                        </dd>
+                      </div>
+                      <div class="desk-events__detail-row">
+                        <dt>CATEGORY</dt>
+                        <dd>{e.category.toUpperCase()}</dd>
+                      </div>
+                      <div class="desk-events__detail-row">
+                        <dt>SEVERITY</dt>
+                        <dd>{e.severity.toUpperCase()}</dd>
+                      </div>
+                      <div class="desk-events__detail-row">
+                        <dt>ID</dt>
+                        <dd>
+                          <code>{e.id}</code>
+                        </dd>
+                      </div>
+                    </dl>
+                  </td>
+                </tr>
+              </>
             ))
           }
         </tbody>
@@ -151,32 +584,18 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     </div>
   </section>
 
-  {/* === 5. Coverage stats === */}
-  <section class="desk-stats" aria-label="Coverage statistics">
+  {/* === 7b. LiveWire — macro wire ticker (v7.7.0) === */}
+  <section class="desk-wire" aria-label="Macro wire headlines" data-reveal>
     <div class="container">
-      <p class="desk-stats__eyebrow mono">24H COVERAGE · DETERMINISTIC SNAPSHOT</p>
-      <ul class="desk-stats__grid">
-        <li class="desk-stats__cell">
-          <p class="desk-stats__num mono">06</p>
-          <p class="desk-stats__lbl mono">RESEARCH VENUES</p>
-        </li>
-        <li class="desk-stats__cell">
-          <p class="desk-stats__num mono">{events.length}</p>
-          <p class="desk-stats__lbl mono">WORLD EVENTS</p>
-        </li>
-        <li class="desk-stats__cell">
-          <p class="desk-stats__num mono">50+</p>
-          <p class="desk-stats__lbl mono">GDELT SIGNALS</p>
-        </li>
-        <li class="desk-stats__cell">
-          <p class="desk-stats__num mono">UTC+8</p>
-          <p class="desk-stats__lbl mono">DESK TIMEZONE</p>
-        </li>
-      </ul>
+      <p class="desk-wire__eyebrow mono">MACRO WIRE · 4 PUBLISHERS · HEADLINES · 24H</p>
+      <LiveWire speedSec={64} trailing="macro wire · 24h" />
     </div>
   </section>
 
-  {/* === 6. CTA banner === */}
+  {/* === 8. LiveActivity — tail of the loop === */}
+  <LiveActivity />
+
+  {/* === 9. CTA banner === */}
   <CTABanner
     title="Hire the operator, not the dashboard."
     sub={`${archSafe.agentCount}-agent multi-agent office · ${profile.stats.evalGates}-gate eval harness · ${profile.stats.locPython} LOC Python · NDA-clean by construction. Email below — reply within 24h.`}
@@ -206,6 +625,9 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     letter-spacing: 0.14em;
     text-transform: uppercase;
     margin: 0 0 24px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
   }
   .desk-head__title {
     font: 600 48px / 1 var(--serif-display);
@@ -265,7 +687,8 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     color: var(--c-bg);
     border-color: var(--c-warn);
   }
-  .cta--primary:hover {
+  .cta--primary:hover,
+  .cta--primary:focus-visible {
     background: var(--c-amber-deep);
     border-color: var(--c-amber-deep);
   }
@@ -274,16 +697,116 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     color: var(--c-ink);
     border-color: var(--c-rule);
   }
-  .cta--ghost:hover {
+  .cta--ghost:hover,
+  .cta--ghost:focus-visible {
     color: var(--c-warn);
     border-color: var(--c-warn);
+  }
+
+  /* === Stats grid === */
+  .desk-stats {
+    padding: 48px 0 56px;
+    background: var(--c-bg-2);
+    border-bottom: 1px solid var(--c-rule);
+  }
+  .desk-stats__eyebrow {
+    font: 500 11px / 1.4 var(--ff-mono);
+    color: var(--c-warn);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin: 0 0 24px;
+  }
+  .desk-stats__grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+  .desk-stats__grid--6 {
+    grid-template-columns: repeat(6, 1fr);
+    gap: 18px;
+  }
+  .desk-stats__cell {
+    border-top: 1px solid var(--c-rule);
+    padding-top: 16px;
+    position: relative;
+    transition: border-color 0.2s ease;
+    animation: desk-stat-in 0.6s cubic-bezier(0.4, 0.7, 0.3, 1) backwards;
+    animation-delay: calc(var(--i, 0) * 100ms);
+  }
+  .desk-stats__cell:hover,
+  .desk-stats__cell:focus-visible {
+    border-top-color: var(--c-amber);
+  }
+  @keyframes desk-stat-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .desk-stats__num {
+    font: 600 32px / 1 var(--serif-display);
+    color: var(--c-ink);
+    letter-spacing: -0.022em;
+    margin: 0 0 6px;
+    font-variant-numeric: tabular-nums;
+  }
+  .desk-stats__grid--6 .desk-stats__num {
+    font-size: 26px;
+  }
+  .desk-stats__grid--6 .desk-stats__lbl {
+    font-size: 9.5px;
+  }
+  .desk-stats__num span[data-counter] {
+    color: var(--c-phi);
+  }
+  .desk-stats__lbl {
+    font: 500 10px / 1.2 var(--ff-mono);
+    color: var(--c-ink-2);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  /* === v7.7.0 — ArxivRadar section chrome === */
+  .desk-arxiv {
+    padding: 48px 0;
+    border-bottom: 1px solid var(--c-rule);
+    background: var(--c-bg);
+  }
+  .desk-arxiv__eyebrow {
+    font: 500 11px / 1.4 var(--ff-mono);
+    color: var(--c-warn);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  /* === v7.7.0 — LiveWire section chrome === */
+  .desk-wire {
+    padding: 48px 0;
+    border-bottom: 1px solid var(--c-rule);
+    background: var(--c-bg);
+  }
+  .desk-wire__eyebrow {
+    font: 500 11px / 1.4 var(--ff-mono);
+    color: var(--c-warn);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin: 0 0 16px;
   }
 
   /* === Map === */
   .desk-map {
     padding: 48px 0 56px;
     border-bottom: 1px solid var(--c-rule);
-    background: var(--c-bg-2);
+    background: var(--c-bg);
   }
   .desk-map__eyebrow {
     font: 500 11px / 1.4 var(--ff-mono);
@@ -291,6 +814,163 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     letter-spacing: 0.14em;
     text-transform: uppercase;
     margin: 0 0 16px;
+  }
+  .desk-map__frame {
+    overflow: hidden;
+    border-radius: var(--radius-md, 6px);
+    border: 1px solid var(--c-rule);
+    /* v7.7.4 — square frame to match the 600×600 orthographic globe.
+       Prior 2/1 aspect-ratio letterboxed the square globe with empty
+       space left + right; user feedback "the earth is not centered and
+       usable" → frame now hugs the globe. */
+    aspect-ratio: 1 / 1;
+    max-width: 720px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  /* === v7.8.0 — research-power readout beneath the globe ===
+     Two bar charts (continent + domain) + one story paragraph.
+     Each bar is a single CSS line — mono small-caps, hairline
+     track, cobalt fill, hairline numeral at the end. The story
+     paragraph tells the viewer what the globe is actually showing. */
+  .desk-research {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.4fr;
+    gap: 24px;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid var(--c-rule);
+  }
+  .desk-research__col--story {
+    border-left: 1px solid var(--c-rule);
+    padding-left: 24px;
+  }
+  .desk-research__eyebrow {
+    font: 500 10px / 1.4 var(--ff-mono);
+    color: var(--c-warn);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin: 0 0 14px;
+  }
+  .desk-research__bars {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .desk-research__bar {
+    display: grid;
+    grid-template-columns: 48px 1fr 28px;
+    align-items: center;
+    gap: 8px;
+  }
+  .desk-research__bar-lbl {
+    font: 500 9.5px / 1.2 var(--ff-mono);
+    color: var(--c-ink-2);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .desk-research__bar-track {
+    height: 8px;
+    background: var(--c-bg-2);
+    border: 1px solid var(--c-rule);
+    position: relative;
+    overflow: hidden;
+  }
+  .desk-research__bar-fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: var(--pct, 0%);
+    background: linear-gradient(
+      90deg,
+      var(--c-primary-2) 0%,
+      var(--c-primary-2) 70%,
+      var(--c-amber) 100%
+    );
+    transition: width 0.6s cubic-bezier(0.4, 0.7, 0.3, 1);
+  }
+  .desk-research__bar-num {
+    font: 600 10px / 1 var(--ff-mono);
+    color: var(--c-ink);
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .desk-research__story {
+    font: 400 13px / 1.6 var(--ff-sans);
+    color: var(--c-ink-2);
+    margin: 0;
+    max-width: 48ch;
+  }
+  .desk-research__story strong {
+    color: var(--c-ink);
+    font-weight: 600;
+  }
+  .desk-research__story em {
+    color: var(--c-amber);
+    font-family: var(--serif-display);
+    font-style: italic;
+    font-weight: 500;
+  }
+  .desk-map__corner {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border: 1px solid var(--c-ink);
+    z-index: 2;
+  }
+  .desk-map__corner--tl {
+    top: 4px;
+    left: 4px;
+    border-right: none;
+    border-bottom: none;
+  }
+  .desk-map__corner--tr {
+    top: 4px;
+    right: 4px;
+    border-left: none;
+    border-bottom: none;
+  }
+  .desk-map__corner--bl {
+    bottom: 4px;
+    left: 4px;
+    border-right: none;
+    border-top: none;
+  }
+  .desk-map__corner--br {
+    bottom: 4px;
+    right: 4px;
+    border-left: none;
+    border-top: none;
+  }
+  .desk-map__frame::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    pointer-events: none;
+    border: 1px solid color-mix(in oklab, var(--c-amber) 0%, transparent);
+    border-radius: var(--radius-md, 6px);
+    /* v7.7.1 polish — soften the border pulse from 24% → 8% peak.
+       Still keeps a hint of life on the institutional map chrome,
+       but no longer reads as a halo. Reduced-motion guard below. */
+    animation: desk-map-glow 6s ease-in-out infinite;
+    z-index: 2;
+  }
+  @keyframes desk-map-glow {
+    0%,
+    100% {
+      border-color: color-mix(in oklab, var(--c-amber) 0%, transparent);
+    }
+    50% {
+      border-color: color-mix(in oklab, var(--c-amber) 8%, transparent);
+    }
+  }
+  .desk-map__frame :global(svg) {
+    width: 100%;
+    height: 100%;
+    display: block;
   }
 
   /* === Events table === */
@@ -333,6 +1013,92 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     color: var(--c-ink);
     vertical-align: top;
   }
+  .desk-events__row {
+    animation: desk-row-in 0.5s cubic-bezier(0.4, 0.7, 0.3, 1) backwards;
+    animation-delay: calc(var(--i, 0) * 90ms + 200ms);
+    transition: background 0.2s ease;
+    cursor: pointer;
+  }
+  .desk-events__row:hover,
+  .desk-events__row:focus-visible {
+    background: color-mix(in oklab, var(--c-amber) 4%, transparent);
+  }
+  .desk-events__row:focus-visible {
+    outline: 2px solid var(--c-amber);
+    outline-offset: -2px;
+  }
+  .desk-events__row[data-desk-expanded='1'] {
+    background: color-mix(in oklab, var(--c-amber) 6%, transparent);
+  }
+  .desk-events__expand-hint {
+    display: inline-block;
+    margin-left: 8px;
+    font-size: 9px;
+    color: var(--c-ink-4);
+    transition:
+      transform 0.2s ease,
+      color 0.2s ease;
+  }
+  .desk-events__row[data-desk-expanded='1'] .desk-events__expand-hint {
+    transform: rotate(180deg);
+    color: var(--c-ink);
+  }
+  .desk-events__detail {
+    background: color-mix(in oklab, var(--c-amber) 3%, var(--c-bg));
+    animation: desk-detail-in 0.2s ease-out;
+  }
+  .desk-events__detail-cell {
+    padding: 12px 16px 14px;
+    border-bottom: 1px solid var(--c-rule);
+  }
+  .desk-events__detail-meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 8px 24px;
+    margin: 0;
+  }
+  .desk-events__detail-row {
+    display: flex;
+    gap: 8px;
+    margin: 0;
+  }
+  .desk-events__detail-row dt {
+    flex: 0 0 80px;
+    color: var(--c-ink-4);
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .desk-events__detail-row dd {
+    margin: 0;
+    color: var(--c-ink-2);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+  }
+  .desk-events__detail-row code {
+    font-family: var(--ff-mono);
+    color: var(--c-ink);
+  }
+  @keyframes desk-detail-in {
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes desk-row-in {
+    from {
+      opacity: 0;
+      transform: translateX(-12px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
   .desk-events__col-num {
     width: 36px;
   }
@@ -363,13 +1129,23 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     letter-spacing: 0.1em;
   }
   .desk-events__pill--critical {
-    color: var(--c-amber-deep);
+    color: var(--c-terracotta);
+    animation: desk-pill-pulse 2.4s ease-in-out infinite;
   }
   .desk-events__pill--moderate {
     color: var(--c-amber);
   }
   .desk-events__pill--mild {
-    color: var(--c-ink-2);
+    color: var(--c-sage);
+  }
+  @keyframes desk-pill-pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.6;
+    }
   }
   .desk-events__title-cell {
     font: 500 14px / 1.4 var(--ff-sans);
@@ -380,46 +1156,7 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     color: var(--c-ink-2);
   }
 
-  /* === Stats grid === */
-  .desk-stats {
-    padding: 48px 0 56px;
-    background: var(--c-bg-2);
-    border-bottom: 1px solid var(--c-rule);
-  }
-  .desk-stats__eyebrow {
-    font: 500 11px / 1.4 var(--ff-mono);
-    color: var(--c-warn);
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    margin: 0 0 24px;
-  }
-  .desk-stats__grid {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 24px;
-  }
-  .desk-stats__cell {
-    border-top: 1px solid var(--c-rule);
-    padding-top: 16px;
-  }
-  .desk-stats__num {
-    font: 600 32px / 1 var(--serif-display);
-    color: var(--c-ink);
-    letter-spacing: -0.022em;
-    margin: 0 0 6px;
-    font-variant-numeric: tabular-nums;
-  }
-  .desk-stats__lbl {
-    font: 500 10px / 1.2 var(--ff-mono);
-    color: var(--c-ink-2);
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    margin: 0;
-  }
-
+  /* === Responsive === */
   @media (max-width: 900px) {
     .desk-head__title {
       font-size: 36px;
@@ -431,6 +1168,9 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
       grid-template-columns: repeat(2, 1fr);
       gap: 18px;
     }
+    .desk-stats__grid--6 {
+      grid-template-columns: repeat(3, 1fr);
+    }
   }
   @media (max-width: 720px) {
     .desk-head {
@@ -440,4 +1180,396 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
       display: none;
     }
   }
+
+  /* === v7.6.8 — reduced motion guard === */
+  @media (prefers-reduced-motion: reduce) {
+    .desk-stats__cell,
+    .desk-events__row,
+    .desk-events__pill--critical,
+    .desk-map__frame::before {
+      animation: none;
+      opacity: 1;
+    }
+    .desk-events__row:hover,
+    .desk-events__row:focus-visible {
+      background: transparent;
+    }
+  }
+
+  /* === v7.12 — desk events filter chips + anchor + counter ================ */
+  .desk-events__filters-wrap {
+    margin: 24px 0 16px;
+  }
+  .desk-events__filters-summary {
+    display: none;
+    list-style: none;
+    cursor: pointer;
+    padding: 10px 12px;
+    border: 1px solid var(--c-rule);
+    background: var(--c-paper-2);
+    color: var(--c-ink-1);
+    font: 600 11px / 1.4 var(--ff-mono);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    user-select: none;
+  }
+  .desk-events__filters-summary::-webkit-details-marker {
+    display: none;
+  }
+  .desk-events__filters-summary::before {
+    content: '▸ ';
+    display: inline-block;
+    transition: transform 120ms ease;
+  }
+  .desk-events__filters-wrap[open] > .desk-events__filters-summary::before {
+    content: '▾ ';
+  }
+  .desk-events__filters-summary-count {
+    margin-left: auto;
+    color: var(--c-ink-3);
+  }
+  .desk-events__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 18px;
+    margin: 24px 0 16px;
+    padding: 12px 0;
+    border-top: 1px solid var(--c-rule);
+    border-bottom: 1px solid var(--c-rule);
+    align-items: center;
+  }
+  .desk-events__chips {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    align-items: center;
+  }
+  .desk-events__chip-label {
+    color: var(--c-ink-3);
+    font: 600 10px / 1.4 var(--ff-mono);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-right: 2px;
+  }
+  .desk-events__chip-btn {
+    appearance: none;
+    background: transparent;
+    border: 1px solid var(--c-rule);
+    color: var(--c-ink-2);
+    padding: 5px 10px;
+    font: 600 10px / 1.4 var(--ff-mono);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition:
+      background 120ms ease,
+      color 120ms ease,
+      border-color 120ms ease;
+  }
+  .desk-events__chip-btn:hover:not(:disabled) {
+    border-color: var(--c-ink-2);
+    color: var(--c-ink);
+  }
+  .desk-events__chip-btn:focus-visible {
+    outline: 2px solid var(--c-amber);
+    outline-offset: 1px;
+  }
+  .desk-events__chip-btn--active {
+    background: var(--c-ink);
+    color: var(--c-bg);
+    border-color: var(--c-ink);
+  }
+  .desk-events__chip-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .desk-events__chip-btn--critical {
+    /* v7.7.89 — was raw hex #8a1f1f (F14 traffic-light violation; no-f14 gate
+       missed it because the gate scans --c-* tokens, not raw hex).
+       Now tokenized via --c-ink-2 (12.05:1 AAA on --c-bg). */
+    color: var(--c-ink-2);
+    border-color: color-mix(in oklab, var(--c-ink-2) 40%, transparent);
+  }
+  .desk-events__chip-btn--critical:hover:not(:disabled) {
+    background: color-mix(in oklab, var(--c-ink-2) 6%, transparent);
+  }
+  .desk-events__chip-btn--moderate {
+    /* v7.7.58 — was #8a6a2d 4.00:1 (FAIL AA on --c-bg). Now mirrors --j-warn light (4.52:1 PASS).
+       v7.7.89 — tokenized to var(--c-warn-deep) for source-of-truth. */
+    color: var(--c-warn-deep);
+    border-color: color-mix(in oklab, var(--c-warn-deep) 40%, transparent);
+  }
+  .desk-events__chip-btn--moderate:hover:not(:disabled) {
+    background: color-mix(in oklab, var(--c-warn-deep) 6%, transparent);
+  }
+  .desk-events__chip-btn--mild {
+    /* v7.7.89 — was raw hex #2d6b3a (F14 traffic-light violation).
+       Sign lives in intensity (border weight / opacity), not hue. */
+    color: var(--c-ink-3);
+    border-color: color-mix(in oklab, var(--c-ink-3) 40%, transparent);
+  }
+  .desk-events__chip-btn--mild:hover:not(:disabled) {
+    background: color-mix(in oklab, var(--c-ink-3) 6%, transparent);
+  }
+  .desk-events__count {
+    margin-left: auto;
+    color: var(--c-ink-3);
+    font: 600 11px / 1.4 var(--ff-mono);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .desk-events__anchor {
+    display: inline-block;
+    min-width: 24px;
+    min-height: 24px;
+    color: var(--c-ink-3);
+    text-decoration: none;
+    opacity: 0;
+    transition: opacity 120ms ease;
+    margin-right: 4px;
+    /* v7.27 — <button> reset (was <a>). Strip native chrome. */
+    background: transparent;
+    border: 0;
+    padding: 4px 6px;
+    font: inherit;
+    cursor: pointer;
+    text-align: center;
+    line-height: 1;
+  }
+  .desk-events__row:hover .desk-events__anchor,
+  .desk-events__row:focus-within .desk-events__anchor {
+    opacity: 1;
+  }
+  .desk-events__anchor:hover,
+  .desk-events__anchor:focus-visible {
+    color: var(--c-amber);
+  }
+  .desk-events__row[data-desk-filtered='1'] {
+    display: none;
+  }
+  .desk-events__share-btn {
+    appearance: none;
+    background: transparent;
+    border: 1px solid var(--c-ink-3);
+    color: var(--c-ink-2);
+    padding: 5px 10px;
+    font: 600 10px / 1.4 var(--ff-mono);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition:
+      background 120ms ease,
+      color 120ms ease,
+      border-color 120ms ease;
+  }
+  .desk-events__share-btn:hover,
+  .desk-events__share-btn:focus-visible {
+    border-color: var(--c-ink-1);
+    color: var(--c-ink);
+    background: var(--c-paper-2);
+  }
+  .desk-events__share-btn:focus-visible {
+    outline: 2px solid var(--c-amber);
+    outline-offset: 1px;
+  }
+  .desk-events__share-btn[data-copied='1'] {
+    border-color: var(--c-amber);
+    color: var(--c-amber);
+  }
+
+  /* === v7.15 — mobile: collapse filters into <details> on narrow widths == */
+  @media (max-width: 640px) {
+    .desk-events__filters-summary {
+      display: flex;
+      align-items: center;
+    }
+    .desk-events__filters {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 10px;
+    }
+    .desk-events__chips {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .desk-events__chip-btn {
+      width: 100%;
+      text-align: left;
+    }
+  }
 </style>
+
+<script>
+  /* === v7.12 — /desk events filter chips + URL persistence =============== */
+  type CatKey = 'central-bank' | 'earnings' | 'geopolitical' | 'data-release' | 'fx' | 'all';
+  type SevKey = 'critical' | 'moderate' | 'mild' | 'all';
+
+  const catButtons = document.querySelectorAll<HTMLButtonElement>('[data-desk-cat]');
+  const sevButtons = document.querySelectorAll<HTMLButtonElement>('[data-desk-sev]');
+  const cityButtons = document.querySelectorAll<HTMLButtonElement>('[data-desk-city]');
+  const counter = document.querySelector<HTMLElement>('[data-desk-visible-count]');
+  const rows = document.querySelectorAll<HTMLTableRowElement>('.desk-events__row');
+
+  let activeCat: CatKey = 'all';
+  let activeSev: SevKey = 'all';
+  let activeCity = 'all';
+
+  function readFilters(): void {
+    const sp = new URLSearchParams(window.location.search);
+    const c = sp.get('cat') ?? 'all';
+    const s = sp.get('sev') ?? 'all';
+    const city = sp.get('city') ?? 'all';
+    const validCat: CatKey[] = [
+      'all',
+      'central-bank',
+      'earnings',
+      'geopolitical',
+      'data-release',
+      'fx',
+    ];
+    const validSev: SevKey[] = ['all', 'critical', 'moderate', 'mild'];
+    activeCat = (validCat as string[]).includes(c) ? (c as CatKey) : 'all';
+    activeSev = (validSev as string[]).includes(s) ? (s as SevKey) : 'all';
+    activeCity = city;
+  }
+  function writeFilters(): void {
+    const sp = new URLSearchParams(window.location.search);
+    if (activeCat !== 'all') sp.set('cat', activeCat);
+    else sp.delete('cat');
+    if (activeSev !== 'all') sp.set('sev', activeSev);
+    else sp.delete('sev');
+    if (activeCity !== 'all') sp.set('city', activeCity);
+    else sp.delete('city');
+    const qs = sp.toString();
+    const next = `${window.location.pathname}${qs ? '?' + qs : ''}${window.location.hash}`;
+    history.replaceState(null, '', next);
+  }
+  function applyFilters(): void {
+    let visible = 0;
+    for (const row of rows) {
+      const cat = row.dataset.deskCat ?? '';
+      const sev = row.dataset.deskSev ?? '';
+      const city = row.dataset.deskCity ?? '';
+      const ok =
+        (activeCat === 'all' || cat === activeCat) &&
+        (activeSev === 'all' || sev === activeSev) &&
+        (activeCity === 'all' || city === activeCity);
+      if (ok) {
+        row.removeAttribute('data-desk-filtered');
+        visible++;
+      } else {
+        row.setAttribute('data-desk-filtered', '1');
+      }
+    }
+    if (counter) counter.textContent = `${visible} VISIBLE`;
+  }
+  function setActiveButton(
+    group: NodeListOf<HTMLButtonElement>,
+    attr: string,
+    value: string,
+  ): void {
+    for (const btn of group) {
+      if ((btn.getAttribute(attr) ?? 'all') === value) {
+        for (const other of group) other.classList.remove('desk-events__chip-btn--active');
+        btn.classList.add('desk-events__chip-btn--active');
+      }
+    }
+  }
+
+  // Hydrate from URL first.
+  readFilters();
+  setActiveButton(catButtons, 'data-desk-cat', activeCat);
+  setActiveButton(sevButtons, 'data-desk-sev', activeSev);
+  setActiveButton(cityButtons, 'data-desk-city', activeCity);
+  applyFilters();
+
+  for (const btn of catButtons) {
+    btn.addEventListener('click', () => {
+      activeCat = (btn.getAttribute('data-desk-cat') ?? 'all') as CatKey;
+      setActiveButton(catButtons, 'data-desk-cat', activeCat);
+      applyFilters();
+      writeFilters();
+    });
+  }
+  for (const btn of sevButtons) {
+    btn.addEventListener('click', () => {
+      activeSev = (btn.getAttribute('data-desk-sev') ?? 'all') as SevKey;
+      setActiveButton(sevButtons, 'data-desk-sev', activeSev);
+      applyFilters();
+      writeFilters();
+    });
+  }
+  for (const btn of cityButtons) {
+    btn.addEventListener('click', () => {
+      activeCity = btn.getAttribute('data-desk-city') ?? 'all';
+      setActiveButton(cityButtons, 'data-desk-city', activeCity);
+      applyFilters();
+      writeFilters();
+    });
+  }
+
+  /* === v7.14 — share button: copy filtered URL to clipboard =============== */
+  const shareBtn = document.querySelector<HTMLButtonElement>('[data-desk-share]');
+  shareBtn?.addEventListener('click', () => {
+    const url = window.location.href;
+    const flash = (text: string): void => {
+      const orig = shareBtn.textContent ?? '';
+      shareBtn.textContent = text;
+      shareBtn.setAttribute('data-copied', '1');
+      window.setTimeout(() => {
+        shareBtn.textContent = orig;
+        shareBtn.removeAttribute('data-copied');
+      }, 1400);
+    };
+    if (navigator.clipboard?.writeText) {
+      navigator.clipboard
+        .writeText(url)
+        .then(() => flash('COPIED · LINK'))
+        .catch(() => flash('COPY · FAILED'));
+    } else {
+      flash('COPY · UNSUPPORTED');
+    }
+  });
+
+  /* === v7.27 — per-row permalink copy button (replaces nested <a>) ======== */
+  document.querySelectorAll<HTMLButtonElement>('[data-copy-link]').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation(); // don't toggle the row
+      const hash = btn.dataset.copyLink ?? '';
+      const url = window.location.origin + window.location.pathname + hash;
+      if (navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(url).catch(() => {});
+      }
+    });
+  });
+
+  /* === v7.20 — click/keyboard row expand for event detail ================== */
+  function toggleRow(row: HTMLTableRowElement): void {
+    const id = row.dataset.deskRow;
+    if (!id) return;
+    const detail = document.querySelector<HTMLTableRowElement>(`[data-desk-detail="${id}"]`);
+    if (!detail) return;
+    const expanded = row.getAttribute('data-desk-expanded') === '1';
+    if (expanded) {
+      row.removeAttribute('data-desk-expanded');
+      detail.hidden = true;
+    } else {
+      row.setAttribute('data-desk-expanded', '1');
+      detail.hidden = false;
+    }
+  }
+  for (const row of rows) {
+    row.addEventListener('click', (ev) => {
+      // Don't toggle when the click was on the anchor permalink.
+      const target = ev.target as HTMLElement | null;
+      if (target?.closest('a')) return;
+      toggleRow(row);
+    });
+    row.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Enter' || ev.key === ' ') {
+        ev.preventDefault();
+        toggleRow(row);
+      }
+    });
+  }
+</script>

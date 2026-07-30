@@ -25,4 +25,5 @@ proof:
   - 'Pipeline charter documented in editorial-ai engagement'
 tags: [multi-agent, content, eval-gate, slop-scanner]
 lane: 'ai'
+lastUpdated: 2026-07-26
 ---

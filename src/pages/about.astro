@@ -172,7 +172,7 @@ const NGATE = `${profile.stats.evalGates}-gate`;
 
       <p class="section__foot mono">
         Full method at <a href={path('/methodology')}>{path('/methodology')}</a> · live calculator at
-        <a href={path('/methodology')} #calculator>DSR calculator →</a>
+        <a href={`${path('/methodology')}#dsr`}>DSR calculator →</a>
       </p>
     </div>
   </section>
@@ -199,8 +199,10 @@ const NGATE = `${profile.stats.evalGates}-gate`;
         </div>
         <ul class="method-ribbon__list mono">
           <li><strong>{quantProjectCount}</strong> public-data projects shipped</li>
-          <li><strong>5</strong> asset classes covered</li>
-          <li><strong>3</strong> strategy families validated end-to-end</li>
+          <li><strong>{profile.stats.assetClassCount}</strong> asset classes covered</li>
+          <li>
+            <strong>{profile.stats.strategyFamiliesCount}</strong> strategy families validated end-to-end
+          </li>
         </ul>
       </div>
 
@@ -413,7 +415,8 @@ const NGATE = `${profile.stats.evalGates}-gate`;
       border-color var(--transition),
       box-shadow var(--transition);
   }
-  .proof-card:hover {
+  .proof-card:hover,
+  .proof-card:focus-visible {
     border-color: var(--c-primary);
     box-shadow: var(--shadow-md);
   }

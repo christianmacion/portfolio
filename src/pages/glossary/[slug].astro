@@ -136,7 +136,8 @@ const categoryColor = term.category === 'Quant' ? 'pill--accent' : 'pill--brand'
     border-bottom: 1px dotted var(--c-rule);
     transition: border-color var(--transition);
   }
-  .eyebrow a:hover {
+  .eyebrow a:hover,
+  .eyebrow a:focus-visible {
     border-bottom-color: var(--c-amber);
   }
   .hero__title {
@@ -214,7 +215,8 @@ const categoryColor = term.category === 'Quant' ? 'pill--accent' : 'pill--brand'
       border-color var(--transition),
       box-shadow var(--transition);
   }
-  .related__item:hover {
+  .related__item:hover,
+  .related__item:focus-visible {
     border-color: var(--c-amber);
     box-shadow: var(--shadow-sm);
   }

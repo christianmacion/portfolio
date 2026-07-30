@@ -6,7 +6,7 @@ blurb: 'Distinguishing Tier-1 flagships that anchor a memorable profile: NASA Sp
 featuredImg: /proof/bida-meta-aiccelerate-2025-11.jpg
 featuredAlt: 'Certificate of Attendance for BIDA × Bayan Academy × Meta AIccelerate 2025 (Nov 12–21 2025), awarded Dec 17 2025.'
 featuredCaption: 'BIDA × Bayan Academy × Meta AIccelerate 2025 · Nov 12–21 2025 (5-day hybrid training) · awarded Dec 17 2025. Co-signed by BIDA, Bayan Academy, and Meta Philippines.'
-featuredHref: https://bida.gov.ph/
+featuredHref: https://www.bayanacademy.org/events/bida-year-2-meta-aiccelerate-training-2025-program
 items:
   - {
       name: 'Galactic Problem Solver — NASA Space Apps Challenge (Zurich, CH)',
@@ -47,4 +47,5 @@ items:
   - { name: 'Crypto Trading Deep Dive', issuer: 'Binance Academy', year: 2024, tier: 2 }
   - { name: 'Introduction to Cryptocurrency Recovery', issuer: 'AnChain.AI', year: 2025, tier: 2 }
   - { name: 'Fundamentals of Blockchain', issuer: 'AnChain.AI', year: 2025, tier: 2 }
+lastUpdated: 2026-07-26
 ---

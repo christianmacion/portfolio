@@ -25,4 +25,5 @@ proof:
   - 'Implementation available in public quant library'
 tags: [deflated-sharpe, PBO, MinBTL, multiple-testing, scipy-free]
 lane: 'quant'
+lastUpdated: 2026-07-26
 ---

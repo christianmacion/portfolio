@@ -145,7 +145,7 @@ const itemListJsonLd = {
         <a href={`mailto:${email}`}>{email}</a>
       </p>
 
-      <table class="kv">
+      <table class="kv" aria-label="Availability details">
         <tbody>
           <tr>
             <th scope="row">Time zone</th>
@@ -503,7 +503,8 @@ const itemListJsonLd = {
     display: inline-flex;
     align-items: center;
   }
-  .handoff__link:hover {
+  .handoff__link:hover,
+  .handoff__link:focus-visible {
     background: var(--c-bg-2);
   }
 

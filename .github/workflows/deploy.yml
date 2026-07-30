@@ -3,6 +3,14 @@ name: Build & Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  workflow_run:
+    # v7.7.91 — gate-honesty: deploy can only fire after the CI integrity job
+    # finishes successfully on the same push. workflow_run + the
+    # branches/main + types/completed + conclusion=success triple gates the
+    # deploy step so a green-light deploy requires a green-light CI first.
+    workflows: ['CI']
+    branches: [main]
+    types: [completed]
   workflow_dispatch:
 
 permissions:
@@ -43,6 +51,7 @@ jobs:
 
   deploy:
     needs: build
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     environment:
       name: github-pages

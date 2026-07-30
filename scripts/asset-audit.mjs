@@ -34,6 +34,11 @@ function walk(dir, exts) {
   return out;
 }
 
+// v7.7.10 — wrap all top-level await in an async main(). Top-level
+// await is fragile across compile / bundle changes and dead-states in
+// CJS contexts. Async main() is portable + testable.
+async function main() {
+
 // ── Images ───────────────────────────────────────────────────────────────────
 const imageExts = ['.jpg', '.jpeg', '.png', '.webp'];
 const images = walk(publicDir, imageExts);
@@ -96,3 +101,10 @@ if (violations.length) {
 } else {
   console.log(`\n[asset-audit] OK — ${ok.length} asset(s) within budget.`);
 }
+
+} // end main()
+
+main().catch((e) => {
+  console.error('[asset-audit] crashed:', e);
+  process.exit(2);
+});

@@ -27,4 +27,5 @@ proof:
   - 'STA Tier-1 CTA certificate'
 tags: [education, STA, CTA, public-curriculum, open-source]
 lane: 'quant'
+lastUpdated: 2026-07-26
 ---

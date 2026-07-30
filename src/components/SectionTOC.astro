@@ -139,7 +139,8 @@ const items = explicitItems ?? [];
       color var(--transition),
       background var(--transition);
   }
-  .toc__link:hover {
+  .toc__link:hover,
+  .toc__link:focus-visible {
     color: var(--c-primary);
     background: var(--c-bg-2);
   }
@@ -161,7 +162,8 @@ const items = explicitItems ?? [];
     text-underline-offset: 3px;
     font-weight: 600;
   }
-  .toc__link--ext:hover {
+  .toc__link--ext:hover,
+  .toc__link--ext:focus-visible {
     color: var(--c-primary-2-deep);
     text-decoration-color: var(--c-primary-2-deep);
     background: var(--c-warn-soft);

@@ -1,0 +1,86 @@
+name: Feeds Nightly Refresh
+
+# v7.7.0 — refreshes the 3 live-data caches that drive /desk.
+#
+# Every 4h on the off-hour (37 */4 * * * avoids the :00 thundering herd):
+#   1. checkout + npm ci
+#   2. fetch-gdelt (writes src/data/gdelt-cache.json)
+#   3. fetch-arxiv (writes src/data/arxiv-cache.json)
+#   4. fetch-macrowire (writes src/data/macrowire-cache.json)
+#   5. commit caches if changed (so the diff shows on the PR/merge)
+#   6. build:mirror (rebuilds the static site with the fresh caches)
+#   7. wrangler pages deploy → Cloudflare Pages mirror (if CLOUDFLARE_API_TOKEN set)
+#
+# Renamed from gdelt-nightly.yml (v6.11) and extended to all three feeds.
+# Schedule is now active — Owner confirms CLOUDFLARE_API_TOKEN is set.
+#
+# Secrets required:
+#   CLOUDFLARE_API_TOKEN — already used by manual `npm run deploy:mirror`
+#
+# The `workflow_dispatch` block stays active for manual triggering.
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '37 */4 * * *' # off-hour; every 4h, avoids :00 thundering herd
+
+permissions:
+  contents: read
+
+concurrency:
+  group: feeds-nightly
+  cancel-in-progress: false
+
+jobs:
+  refresh-feeds:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Fetch latest GDELT events
+        run: npm run scripts:fetch-gdelt
+
+      - name: Fetch latest arXiv preprints
+        run: npm run scripts:fetch-arxiv
+
+      - name: Fetch latest macro-wire headlines
+        run: npm run scripts:fetch-macrowire
+
+      - name: Commit cache updates if changed
+        run: |
+          if [ -n "$(git status --porcelain src/data/gdelt-cache.json src/data/arxiv-cache.json src/data/macrowire-cache.json src/data/gdelt-cache.fallback.json src/data/arxiv-cache.fallback.json src/data/macrowire-cache.fallback.json)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add src/data/gdelt-cache.json src/data/arxiv-cache.json src/data/macrowire-cache.json src/data/gdelt-cache.fallback.json src/data/arxiv-cache.fallback.json src/data/macrowire-cache.fallback.json
+            git commit -m "feeds-nightly: refresh GDELT + arXiv + macro-wire caches"
+            git push
+          else
+            echo "::notice::No cache changes detected — skipping commit."
+          fi
+
+      - name: Build mirror
+        env:
+          BUILD_DATE: ${{ github.event.head_commit.timestamp }}
+          PUBLIC_SITE_URL: https://christianmacion-portfolio.pages.dev
+        run: npm run build:mirror
+
+      - name: Deploy to Cloudflare Pages
+        if: env.CLOUDFLARE_API_TOKEN != ''
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: npx wrangler pages deploy dist --project-name christianmacion-portfolio --commit-dirty=true --branch main
+
+      - name: Skip deploy (no CF token)
+        if: env.CLOUDFLARE_API_TOKEN == ''
+        run: echo "::notice::CLOUDFLARE_API_TOKEN not set; built dist/ not deployed. Run deploy:mirror locally to ship."

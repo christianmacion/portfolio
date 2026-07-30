@@ -29,7 +29,8 @@ function makeButton(pre: HTMLElement): HTMLButtonElement {
     color: var(--c-ink-2, #5a6473);
     background: var(--c-bg, #fff);
     border: 1px solid var(--c-rule, #c9ced6);
-    border-radius: 4px;
+    /* v7.7.91 — chrome contract: rely on --j-r token (0px). */
+    border-radius: var(--j-r, 0px);
     opacity: 0;
     pointer-events: none;
     min-height: 44px;

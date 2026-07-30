@@ -7,6 +7,7 @@ lon: 103.82
 city: Singapore
 source: central-bank press release
 order: 9
+lastUpdated: 2026-07-26
 ---
 
 Reserve-manager adjustment. The carry-flow counterparties across the FX

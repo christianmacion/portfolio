@@ -25,13 +25,15 @@ import { archSafe } from '@utils/profile';
 interface Props {
   /** Optional CSS class on the outer wrapper. */
   class?: string;
+  /** Optional id override (default `arch-brief`). */
+  id?: string;
 }
-const { class: className } = Astro.props;
+const { class: className, id: idOverride = 'arch-brief' } = Astro.props;
 ---
 
 <section
   class:list={['arch-brief', className]}
-  id="arch-brief"
+  id={idOverride}
   aria-label={`Multi-agent architecture brief — ${archSafe.agentCount}-agent office, ${archSafe.subTeamCount} sub-teams, ${archSafe.mustHaveCount}-must-have compliance`}
 >
   <div class="arch-brief__inner">
@@ -113,7 +115,12 @@ const { class: className } = Astro.props;
   }
   .arch-brief__title .hl {
     font-style: italic;
-    color: var(--c-phi);
+    /* v7.6.2 — was --c-phi (gold). Owner feedback 2026-07-26: "improve the
+       colors to matcha and complement to the main page." The italicized
+       highlight is now terracotta — the warm complement to the new sage
+       2nd accent (was cobalt). Sage body / terracotta callout reads as
+       a deliberate two-accent palette, not a single-color site. */
+    color: var(--c-terracotta);
   }
   .arch-brief__grid {
     display: grid;
@@ -200,7 +207,8 @@ const { class: className } = Astro.props;
     letter-spacing: 0.14em;
     text-transform: uppercase;
   }
-  .arch-brief__cta a:hover {
+  .arch-brief__cta a:hover,
+  .arch-brief__cta a:focus-visible {
     color: var(--c-warn);
     border-bottom-color: var(--c-warn);
   }
@@ -215,6 +223,105 @@ const { class: className } = Astro.props;
     }
     .arch-brief__title {
       font-size: 28px;
+    }
+  }
+
+  /* v7.7.90 — CHROME-06: arch-cell pill was 22px tall (font 11px +
+     padding 6px 10px × 2 ≈ 22px). Below WCAG 2.5.5's 44×44 floor.
+     Bump to 44px via min-height (no vertical layout shift; padding
+     stays the same so the chrome shape is preserved). */
+  @media (max-width: 720px) {
+    .arch-cell__pill {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+    }
+  }
+
+  /* === v7.6.8 — entrance + ambient pulse ===
+     Each arch-cell slides up; sub-team / must-have list rows stagger
+     in. Pills glow softly. Reduced motion safe. */
+  .arch-cell {
+    animation: arch-rise 0.7s cubic-bezier(0.4, 0.7, 0.3, 1) backwards;
+  }
+  .arch-cell--wide:first-of-type {
+    animation-delay: 80ms;
+  }
+  .arch-cell:not(.arch-cell--wide) {
+    animation-delay: 240ms;
+  }
+  .arch-cell--wide:last-of-type {
+    animation-delay: 360ms;
+  }
+  @keyframes arch-rise {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .arch-cell__list li {
+    animation: arch-row-in 0.55s cubic-bezier(0.4, 0.7, 0.3, 1) backwards;
+  }
+  .arch-cell__list li:nth-child(1) {
+    animation-delay: 240ms;
+  }
+  .arch-cell__list li:nth-child(2) {
+    animation-delay: 320ms;
+  }
+  .arch-cell__list li:nth-child(3) {
+    animation-delay: 400ms;
+  }
+  .arch-cell__list li:nth-child(4) {
+    animation-delay: 480ms;
+  }
+  .arch-cell__list li:nth-child(5) {
+    animation-delay: 560ms;
+  }
+  .arch-cell__list li:nth-child(6) {
+    animation-delay: 640ms;
+  }
+  @keyframes arch-row-in {
+    from {
+      opacity: 0;
+      transform: translateX(-6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* Pills glow subtly in sequence */
+  .arch-cell__pill {
+    animation: arch-pill-glow 4.6s ease-in-out infinite;
+  }
+  .arch-cell__pill:nth-child(odd) {
+    animation-delay: 0s;
+  }
+  .arch-cell__pill:nth-child(even) {
+    animation-delay: 2.3s;
+  }
+  @keyframes arch-pill-glow {
+    0%,
+    100% {
+      border-color: var(--c-rule);
+    }
+    50% {
+      border-color: var(--c-amber-deep);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .arch-cell,
+    .arch-cell__list li,
+    .arch-cell__pill {
+      animation: none;
+      opacity: 1;
     }
   }
 </style>

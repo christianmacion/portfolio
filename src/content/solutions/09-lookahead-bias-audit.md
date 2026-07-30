@@ -26,4 +26,5 @@ proof:
   - 'Documented in quant portfolio'
 tags: [lookahead-bias, point-in-time, survivorship, frozen-spec]
 lane: 'quant'
+lastUpdated: 2026-07-26
 ---

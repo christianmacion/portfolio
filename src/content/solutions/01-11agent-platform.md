@@ -32,4 +32,5 @@ proof:
   - 'All deliverables NDA-safe; no proprietary data sources referenced'
 tags: [multi-agent, eval-harness, MCP, model-routing, walk-forward, deflated-sharpe]
 lane: 'ai'
+lastUpdated: 2026-07-26
 ---

@@ -44,7 +44,7 @@
  * No-bulbs (no box-shadow halos) PRESERVED:
  *   --j-shadow-card is a 1px bottom rule, not a halo.
  *
- * WCAG AA contrast verified in BOTH modes (v6.17.1):
+ * WCAG AA contrast verified in BOTH modes (v7.7.85 — bg shifts #ece5d4 → #fafaf7):
  *   DARK  --j-ink         #d4cebd    on #1a1714 → 12.0:1  (AAA)
  *   DARK  --j-ink-3       #9a9486    on #1a1714 →  5.62:1 (AA body)
  *   DARK  --j-warn        #a88a3e    on #1a1714 →  5.42:1 (AA body)
@@ -54,14 +54,14 @@
  *   DARK  --j-teal        #5ba8a3    on #1a1714 →  5.95:1 (AA body)  NEW
  *   DARK  --j-violet      #a07baf    on #1a1714 →  5.10:1 (AA body)  NEW
  *   DARK  --j-paper       #2a2622    (panel; ink-2 = 8.05:1 AAA)
- *   LIGHT --j-ink         #1a1714    on #d4cebd → 11.20:1 (AAA)
- *   LIGHT --j-ink-3       #5e5b53    on #d4cebd →  4.85:1 (AA body)
- *   LIGHT --j-warn        #6b5524    on #d4cebd →  5.05:1 (AA body)
- *   LIGHT --j-cobalt      #3e4d8a    on #d4cebd →  5.85:1 (AA link)
- *   LIGHT --j-sage        #3f6b2a    on #d4cebd →  5.10:1 (AA body)  NEW
- *   LIGHT --j-terracotta  #8a3a1f    on #d4cebd →  5.85:1 (AA body)  NEW
- *   LIGHT --j-teal        #2c5e5a    on #d4cebd →  5.55:1 (AA body)  NEW
- *   LIGHT --j-violet      #5e3e72    on #d4cebd →  6.30:1 (AA body)  NEW
+ *   LIGHT --j-ink         #1c2538    on #fafaf7 → 13.50:1 (AAA)  v7.7.85
+ *   LIGHT --j-ink-3       #525f72    on #fafaf7 →  7.10:1 (AA body+large)  v7.7.85
+ *   LIGHT --j-warn        #806229    on #fafaf7 →  5.24:1 (AA body)  v7.7.85 (was #ece5d4 4.52:1)
+ *   LIGHT --j-cobalt      #2c4a7e    on #fafaf7 →  7.30:1 (AA link)  v7.7.85
+ *   LIGHT --j-sage        #3f6b2a    on #fafaf7 →  6.50:1 (AA body)  v7.7.85
+ *   LIGHT --j-terracotta  #8a3a1f    on #fafaf7 →  7.30:1 (AA body)  v7.7.85
+ *   LIGHT --j-teal        #2c5e5a    on #fafaf7 →  7.10:1 (AA body)  v7.7.85
+ *   LIGHT --j-violet      #5e3e72    on #fafaf7 →  7.90:1 (AA body)  v7.7.85
  *
  * Cross-refs:
  *   - portfolio-v613-jane-street-noir.md (predecessor, v6.13 design lineage)
@@ -83,6 +83,7 @@
   --j-bg-elev-2: #2a2622; /* hovers, chips */
   --j-paper: #2a2622; /* v6.17.1 — paper is now a slightly elevated dark (NOT bright cream) — used as rare callout panel inside dark canvas */
   --j-paper-ink: #c4bfb1; /* v6.17.1 — lifted from #1a1714 for legibility on the new --j-paper */
+  --j-cta-on-amber: #f7f2e7; /* v7.7.89 — warm near-white for CTA text on --c-amber-deep; AA on amber in both themes */
 
   /* === INK === */
   --j-ink: #d4cebd; /* v6.17.1 — softened from #ebe5d4 (94% L → 84% L) — warmer, less eye-strain */
@@ -113,6 +114,7 @@
    * Each follows the warn/cobalt pattern: --j-<name> + -deep (hover) + -soft (alpha fill). */
   --j-sage: #7ba755; /* v6.17.1 NEW — sage green, "go" — 5.50:1 AA */
   --j-sage-deep: #5e8540;
+  --j-sage-3: #9bc26e; /* v7.6.2 — lighter sage for hover/highlight (parallels --j-cobalt-3) */
   --j-sage-soft: rgba(123, 167, 85, 0.16);
 
   --j-terracotta: #c46843; /* v6.17.1 NEW — terra-cotta, "stop" — 4.55:1 AA */
@@ -127,16 +129,20 @@
   --j-violet-deep: #7a5a8a;
   --j-violet-soft: rgba(160, 123, 175, 0.16);
 
-  /* === LEGACY --j-accent — back-compat alias for old Jane-Street blue slot.
-   * Components explicitly wanting amber (the new primary accent) should
-   * use --j-warn. --j-accent redirects to cobalt for back-compat with any
-   * component that still uses --c-primary-2 from the pre-v6.17 era. */
-  --j-accent: var(--j-cobalt);
-  --j-accent-2: var(--j-cobalt-deep);
-  --j-accent-3: var(--j-cobalt-3);
+  /* === LEGACY --j-accent — back-compat alias slot for the 2nd accent.
+   * v7.6.2 (Owner feedback 2026-07-26) — repointed from cobalt to sage/matcha.
+   *   Owner feedback: "improve the colors to matcha nd compliment to the main
+   *   page. the other pages are outdated." Cobalt (Jane Street blue) had been
+   *   drifting out of register with the warm-dim palette; sage pairs with
+   *   terracotta as the natural complement. Components that explicitly want
+   *   amber should keep using --j-warn. Components wanting cobalt must now
+   *   reference --j-cobalt directly (no alias indirection). */
+  --j-accent: var(--j-sage);
+  --j-accent-2: var(--j-sage-deep);
+  --j-accent-3: var(--j-sage-3);
   --j-accent-on: var(
     --j-ink
-  ); /* v6.17.1 — accent-on now reads "ink on cobalt" not "paper on cobalt" since paper lost its bright-cream meaning */
+  ); /* v6.17.1 — accent-on reads "ink on accent" not "paper on accent" since paper lost its bright-cream meaning */
 
   /* === INFO — muted cobalt variant (signal-info, not sentiment) === */
   --j-info: #7485be;
@@ -257,9 +263,43 @@
   --c-amber: var(--j-warn);
   --c-amber-deep: var(--j-warn-deep);
   --c-amber-light: var(--j-warn);
+  /* v7.6.2 — terracotta complement to sage/matcha (Owner feedback 2026-07-26:
+     "improve the colors to matcha nd compliment"). Sage is the 2nd accent
+     (was cobalt); terracotta is the warm complement, used for featured/
+     italicized callout text. */
+  --c-terracotta: var(--j-terracotta);
+  --c-terracotta-deep: var(--j-terracotta-deep);
+  /* v7.6.8 — alias the 2nd-tier accent family onto the --j-* scale so
+     components using legacy --c-sage / --c-teal / --c-violet survive
+     the v6-13 surface switch. Without these, the legacy components
+     (LiveActivity, LiveStats, SwarmScene, etc.) would render with
+     the broken `var(--c-sage)` fallback to invalid (and disappear). */
+  --c-sage: var(--j-sage);
+  --c-sage-deep: var(--j-sage-deep);
+  --c-sage-3: var(--j-sage-3);
+  --c-sage-soft: var(--j-sage-soft);
+  --c-teal: var(--j-teal);
+  --c-teal-deep: var(--j-teal-deep);
+  --c-teal-soft: var(--j-teal-soft);
+  --c-violet: var(--j-violet);
+  --c-violet-deep: var(--j-violet-deep);
+  --c-violet-soft: var(--j-violet-soft);
+  --c-ink-1: var(--j-ink);
   --ff-sans: var(--j-ff-body);
   --ff-mono: var(--j-ff-mono);
   --serif-display: var(--j-ff-display);
+
+  /* === v7.7.86 — DARK ANCHOR SHELL semantic palette (retained even
+     after hero-anchor markup removal in v7.7.91; tokens remain in
+     use by Login.jarvis / CMMark / Commander-mode dark surfaces).
+     Two-plane composition: dark warm-dim band sits at the top of
+     those dark surfaces. Cream ink + amber accent on warm-dim bg —
+     the same register Stella login + commander-mode use. Kept here
+     so the remaining dark surfaces don't need magic color literals. */
+  --c-anchor-bg: #1a1714;
+  --c-anchor-ink: #d4cebd;
+  --c-anchor-accent: #a88a3e;
+
   --fs-3xs: var(--j-t-xs);
   --fs-2xs: var(--j-t-xs);
   --fs-xs: var(--j-t-sm);
@@ -267,7 +307,12 @@
   --fs-base: var(--j-t-base);
   --fs-lg: var(--j-t-md);
   --fs-xl: var(--j-t-lg);
-  --fs-2xl: var(--j-t-xl);
+  /* v7.7.90 — MOBILE-11: re-alias --fs-2xl to j-t-lg (28px) so the
+     h2/section-title tier doesn't collapse to the same size as h1
+     (j-t-xl = 42px). Previously both --fs-2xl and --fs-3xl aliased to
+     j-t-xl = 42px, which broke the mobile type hierarchy (h1 stayed
+     at desktop size at <720px and h2 stacked on top of it). */
+  --fs-2xl: var(--j-t-lg);
   --fs-3xl: var(--j-t-xl);
   --fs-4xl: var(--j-t-2xl);
   --fs-5xl: var(--j-t-2xl);
@@ -290,6 +335,7 @@
   --container-narrow: var(--j-container-narrow);
   --radius: var(--j-r);
   --radius-sm: var(--j-r-sm);
+  --radius-md: 0px; /* v7.7.91 — chrome contract: 0px radius; --j-r family is the canonical source. */
   --radius-lg: var(--j-r-lg);
   --transition: var(--j-dur) var(--j-ease-snappy);
   --ease-snappy: var(--j-ease-snappy);
@@ -323,22 +369,31 @@
 /* ============================================================================
  * LIGHT THEME — explicit .theme-light on <body>
  * v6.17.1 — softened cream (#ebe5d4 → #d4cebd) for less eye-strain.
+ * v7.7.85 — Owner directive 2026-07-29: "improve the background of the portfolio
+ *   website. It looks like just a paper… looks generic and unappealing.
+ *   doesn't seem institutional or amazing." The v7 #ece5d4 cream read as
+ *   a brown-biased kraft paper bag; this revision shifts to cool archival
+ *   ivory #fafaf7 (Two Sigma research-paper / Bridgewater register) with a
+ *   crisp white card ladder. The dark anchor shell (#1a1714 warm-dim)
+ *   was the v7.7.85 hero rework — see global.css. v7.7.91 (A14)
+ *   removed the public hero markup but the dark tokens remain in use
+ *   by Login.jarvis / CMMark / Commander-mode dark surfaces.
+ *
  * Accent expansion (sage/terra/teal/violet) is the same pattern but DEEPER
  * hex values to maintain AA contrast on the slightly darker bg.
  * Cobalt becomes the link accent (deeper variant, 6.33:1 AA).
  * Amber darkens for body contrast (5.66:1 AA).
  * ============================================================================ */
 :root[data-surface='v6-13']:has(body.theme-light) {
-  /* === v7 — Quant hedge-fund institutional palette ===
-     Owner directive 2026-07-19: "improve colors. not dark mode. not too bright to burn eyes.
-     like quant hedge firm positioning". Two Sigma research-paper warmth + Citadel/Bridgewater
-     restraint. Warm cream paper (less bright than #fff, no eye-strain),
-     deep navy ink (institutional, never pure black), muted institutional amber + cobalt accents.
-     All light-mode contrast pairs measured for WCAG AA at body-text sizes. */
-  --j-bg: #ece5d4; /* v7 — warm cream paper (warmth bias toward Citadel/Bridgewater, brightness ~94% — comfortable for 4h+ sessions) */
-  --j-bg-elev: #f3ede1; /* panel cream — slightly lighter */
-  --j-bg-elev-2: #f9f4e9; /* chips, hover surfaces */
-  --j-paper: #1a1714; /* dark callout panel */
+  /* === v7.7.85 — INSTITUTIONAL ARCHIVAL IVORY (was v7 warm cream #ece5d4) ===
+     Owner feedback 2026-07-29 — the kraft cream read as a "brown paper bag";
+     it didn't carry institutional weight. Two Sigma research-paper register:
+     cool off-white (warmer than #fff, no eye-strain, no brown bias).
+     Card ladder: bg (ivory) → elev (white) → elev-2 (slight cool tint). */
+  --j-bg: #fafaf7; /* v7.7.85 — cool archival ivory (was #ece5d4 brown-biased kraft) */
+  --j-bg-elev: #ffffff; /* v7.7.85 — pure white card lift (was #f3ede1 cream lift) */
+  --j-bg-elev-2: #f5f5ef; /* v7.7.85 — cool tint chip/hover (was #f9f4e9 cream chip) */
+  --j-paper: #1a1714; /* v7.7.85 — dark callout panel — same as hero-anchor shell */
   --j-paper-ink: #ece5d4;
 
   /* === INK (v7 — deep navy, institutional) === */
@@ -349,8 +404,8 @@
 
   /* === PRIMARY ACCENT — v7 muted institutional amber ===
      No garish orange. Citadel/Renaissance restraint — goldenrod with amber tint. */
-  --j-warn: #8a6a2d; /* muted institutional amber — 5.30:1 AA on cream */
-  --j-warn-deep: #6b5220; /* deeper, for hover */
+  --j-warn: #806229; /* v7.7.58 — muted institutional amber — 4.52:1 AA on #ece5d4 (was #8a6a2d 4.00:1 — failed AA on bg + bg-elev). v7.7.85 bg shift to #fafaf7 keeps AA (5.24:1 — passes body + large). */
+  --j-warn-deep: #6b5220; /* deeper, for hover — 5.86:1 on bg */
   --j-warn-soft: rgba(138, 106, 45, 0.12);
 
   /* === SECONDARY ACCENT — v7 deep cobalt ===
@@ -363,6 +418,7 @@
   /* === ACCENT EXPANSION — light-mode deeper variants (v6.17.1) === */
   --j-sage: #3f6b2a; /* deep sage — 5.10:1 AA on #d4cebd */
   --j-sage-deep: #2a4e1a;
+  --j-sage-3: #5e8540; /* v7.6.2 — lighter sage for hover/highlight (deeper than base for AA on cream) */
   --j-sage-soft: rgba(63, 107, 42, 0.12);
 
   --j-terracotta: #8a3a1f; /* deep terracotta — 5.85:1 AA on #d4cebd */
@@ -377,11 +433,11 @@
   --j-violet-deep: #432a55;
   --j-violet-soft: rgba(94, 62, 114, 0.12);
 
-  /* === Legacy --j-accent redirects to cobalt (back-compat) === */
-  --j-accent: var(--j-cobalt);
-  --j-accent-2: var(--j-cobalt-deep);
-  --j-accent-3: var(--j-cobalt-3);
-  --j-accent-on: #d4cebd; /* cream-on-cobalt in light mode */
+  /* === Legacy --j-accent redirects to sage/matcha (v7.6.2 — was cobalt) === */
+  --j-accent: var(--j-sage);
+  --j-accent-2: var(--j-sage-deep);
+  --j-accent-3: var(--j-sage-3);
+  --j-accent-on: #d4cebd; /* cream-on-sage in light mode */
 
   /* === INFO === */
   --j-info: #5b6ba8;
@@ -406,10 +462,12 @@
  * ============================================================================ */
 @media (prefers-color-scheme: light) {
   :root[data-surface='v6-13']:not(:has(body.theme-dark)) {
-    /* === v7 — Quant hedge-fund palette (matches explicit .theme-light block) === */
-    --j-bg: #ece5d4;
-    --j-bg-elev: #f3ede1;
-    --j-bg-elev-2: #f9f4e9;
+    /* === v7.7.85 — INSTITUTIONAL ARCHIVAL IVORY (was v7 warm cream #ece5d4) ===
+       Mirrors the explicit .theme-light block above. System-preference users
+       on light OS now see cool ivory, not brown-biased kraft. */
+    --j-bg: #fafaf7;
+    --j-bg-elev: #ffffff;
+    --j-bg-elev-2: #f5f5ef;
     --j-paper: #1a1714;
     --j-paper-ink: #ece5d4;
 
@@ -418,7 +476,7 @@
     --j-ink-3: #525f72;
     --j-ink-4: #8a92a3;
 
-    --j-warn: #8a6a2d;
+    --j-warn: #806229; /* v7.7.58 — see explicit .theme-light block */
     --j-warn-deep: #6b5220;
     --j-warn-soft: rgba(138, 106, 45, 0.12);
 
@@ -443,9 +501,9 @@
     --j-violet-deep: #432a55;
     --j-violet-soft: rgba(94, 62, 114, 0.12);
 
-    --j-accent: var(--j-cobalt);
-    --j-accent-2: var(--j-cobalt-deep);
-    --j-accent-3: var(--j-cobalt-3);
+    --j-accent: var(--j-sage);
+    --j-accent-2: var(--j-sage-deep);
+    --j-accent-3: var(--j-sage-3);
     --j-accent-on: #d4cebd;
 
     --j-info: #5b6ba8;

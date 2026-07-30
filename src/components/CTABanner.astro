@@ -96,9 +96,17 @@ const grid: { day: string; weekday: string; status: CellStatus[] }[] = (() => {
   // the same build.
   const tzOffsetMin = 8 * 60; // UTC+8 (SG / MY / PH)
   // Anchor: parse buildSeed which is an ISO date string ("YYYY-MM-DDTHH:MM:SSZ").
+  // v7.6.8 — Standing Order §9 forbids Date.now() in deterministic output.
+  // Fail loud at build time rather than silently degrading to wall-clock.
   const seedIso = (() => {
     const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(buildSeed());
-    return m ? Date.UTC(+m[1], +m[2] - 1, +m[3]) : Date.now();
+    if (!m) {
+      throw new Error(
+        'CTABanner: buildSeed() returned a non-ISO string — cannot anchor the availability grid deterministically. ' +
+          'Check src/utils/build-stamp.ts BUILD_DATE / BUILD_DATE_FALLBACK.',
+      );
+    }
+    return Date.UTC(+m[1], +m[2] - 1, +m[3]);
   })();
   const startUtcMs = seedIso;
   const MONTHS = [
@@ -283,10 +291,14 @@ const LEGEND_COUNTS = {
   }
   .cta--standard .btn--primary {
     background: var(--c-amber-deep);
-    color: var(--c-primary);
+    /* v7.7.11 — see global.css comment: --c-primary on amber-deep was
+       2.89:1 (fails AA 4.5:1). Use --c-primary-deep (near-black) for
+       AAA pass on the amber button. */
+    color: var(--c-primary-deep);
     border: 1px solid var(--c-amber);
   }
-  .cta--standard .btn--primary:hover {
+  .cta--standard .btn--primary:hover,
+  .cta--standard .btn--primary:focus-visible {
     background: var(--c-amber);
     color: var(--c-primary-deep);
   }
@@ -294,7 +306,8 @@ const LEGEND_COUNTS = {
     border-color: var(--c-white-fade);
     color: var(--c-primary);
   }
-  .cta--standard .btn--ghost:hover {
+  .cta--standard .btn--ghost:hover,
+  .cta--standard .btn--ghost:focus-visible {
     border-color: var(--c-primary);
     background: var(--c-white-haze);
   }
@@ -578,6 +591,18 @@ const LEGEND_COUNTS = {
     .cta__cell,
     .cta__cell--slot {
       --cell: 22px;
+    }
+  }
+
+  /* v7.7.90 — CHROME-11: the 22×22 CTA matrix cells are below the
+     WCAG 2.5.5 44×44 touch-target floor on mobile. Disable pointer
+     events on touch devices so the matrix becomes read-only chrome
+     (the data is decorative; the row labels above are the real CTAs).
+     Hover-capable + fine-pointer devices keep the interactivity. */
+  @media (hover: none) and (pointer: coarse) {
+    .cta__cell,
+    .cta__cell--slot {
+      pointer-events: none;
     }
   }
 </style>

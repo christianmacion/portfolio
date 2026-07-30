@@ -170,7 +170,8 @@ const gradId = `card-grad-${event.id.replace(/[^a-z0-9]/gi, '')}`;
     min-width: 0;
     transition: border-color var(--transition);
   }
-  .card:hover {
+  .card:hover,
+  .card:focus-visible {
     border-color: var(--c-primary-2);
   }
   .card__top {
@@ -185,7 +186,8 @@ const gradId = `card-grad-${event.id.replace(/[^a-z0-9]/gi, '')}`;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     padding: 2px 8px;
-    border-radius: 3px;
+    /* v7.7.91 — chrome contract: 0px radius; rely on --j-r token. */
+    border-radius: var(--j-r);
     border: 1px solid currentColor;
   }
   .card__pill--macro {
@@ -260,7 +262,8 @@ const gradId = `card-grad-${event.id.replace(/[^a-z0-9]/gi, '')}`;
     font-size: 0.78rem;
     font-weight: 600;
     padding: 4px 8px;
-    border-radius: 3px;
+    /* v7.7.91 — chrome contract: rely on --j-r token (0px). */
+    border-radius: var(--j-r);
     white-space: nowrap;
   }
   /* v6.11.10 — F14 amber-only. Positive edge = amber on soft amber;

@@ -26,7 +26,12 @@ const laneLabel = role === 'ai' ? 'AI Engineer' : 'Quantitative Researcher';
 const laneClass = role === 'ai' ? 'pill--brand' : 'pill--accent';
 ---
 
-<BaseLayout title={title} description={summary_long ?? summary} type="article">
+<BaseLayout
+  title={title}
+  description={summary_long ?? summary}
+  ogDescription={summary}
+  type="article"
+>
   <article class="proj">
     <header class="proj__head">
       <div class="container container-narrow">
@@ -38,7 +43,7 @@ const laneClass = role === 'ai' ? 'pill--brand' : 'pill--accent';
 
         {
           hero && (
-            <figure class="proj__hero-figure">
+            <figure class="proj__hero-figure" aria-label={hero.alt}>
               <img
                 src={path(hero.src)}
                 alt={hero.alt}
@@ -47,6 +52,7 @@ const laneClass = role === 'ai' ? 'pill--brand' : 'pill--accent';
                 class={`proj__hero-img proj__hero-img--${hero.fit}`}
                 loading="eager"
                 decoding="async"
+                fetchpriority="high"
               />
             </figure>
           )
@@ -84,7 +90,12 @@ const laneClass = role === 'ai' ? 'pill--brand' : 'pill--accent';
               <div>
                 <div class="proj__meta-label">Repo</div>
                 <div class="proj__meta-value">
-                  <a href={sourceLink} target="_blank" rel="noopener noreferrer">
+                  <a
+                    href={sourceLink}
+                    target="_blank"
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    rel="noopener noreferrer"
+                  >
                     GitHub ↗
                   </a>
                 </div>
@@ -99,10 +110,10 @@ const laneClass = role === 'ai' ? 'pill--brand' : 'pill--accent';
     <Marquee
       items={[
         { head: 'EVAL-FIRST', tail: '31 GATES', accent: 'warn' },
-        { head: 'NDA-CLEAN', tail: 'PUBLIC DATA', accent: 'cobalt' },
+        { head: 'NDA-CLEAN', tail: 'PUBLIC DATA', accent: 'sage' },
         { head: 'ALPHA', tail: 'SIGNAL > NOISE', accent: 'sage' },
         { head: 'REPRODUCIBLE', tail: 'NOTEBOOK-COMMITTED', accent: 'sage' },
-        { head: 'OPEN-SOURCE', tail: 'ON GITHUB', accent: 'cobalt' },
+        { head: 'OPEN-SOURCE', tail: 'ON GITHUB', accent: 'sage' },
       ]}
       speedSec={48}
       trailing={`project · ${title}`}
@@ -263,7 +274,7 @@ const laneClass = role === 'ai' ? 'pill--brand' : 'pill--accent';
   .proj__prose :global(code) {
     background: var(--c-bg-3);
     padding: 0.1em 0.35em;
-    border-radius: 4px;
+    border-radius: var(--radius-md);
     font-size: 0.92em;
   }
   .proj__prose :global(pre) {

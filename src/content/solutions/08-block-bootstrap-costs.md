@@ -26,4 +26,5 @@ proof:
   - 'Methodology documented in project README'
 tags: [txn-costs, slippage, capacity, walk-forward]
 lane: 'quant'
+lastUpdated: 2026-07-26
 ---

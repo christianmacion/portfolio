@@ -157,6 +157,35 @@ const equityPath = buildLinePath(data);
 const equityArea = buildAreaPath(equityPath);
 const ddArea = buildDdArea(drawdown);
 
+// v7.6.8 — animate the equity line on mount. Approximate the path length
+// (sum of segment distances) so we can set `stroke-dasharray` + animate
+// `stroke-dashoffset` from full→0 for a 1.4s draw-in. Same value also
+// used by the perpetual "dash flow" keyframe.
+function polylineLength(d: string): number {
+  // Walk the SVG path commands and accumulate straight-segment length.
+  const tokens = d.split(/\s+/);
+  let total = 0;
+  let cx = 0,
+    cy = 0;
+  for (let i = 0; i < tokens.length; i++) {
+    const t = tokens[i];
+    if (t === 'M' || t === 'L') {
+      const x = parseFloat(tokens[++i]);
+      const y = parseFloat(tokens[++i]);
+      if (t === 'M') {
+        cx = x;
+        cy = y;
+      } else {
+        total += Math.hypot(x - cx, y - cy);
+        cx = x;
+        cy = y;
+      }
+    }
+  }
+  return Math.max(1, Math.round(total));
+}
+const equityPathLen = polylineLength(equityPath);
+
 // === Y-ticks ===
 const yTickCount = 4;
 const yTicks = Array.from(
@@ -217,11 +246,13 @@ const regimeFill: Record<'calm' | 'normal' | 'stress', string> = {
 
     {/* Regime background bands (drawn first, lowest layer) */}
     {
-      regimeBands.map((b) => {
+      regimeBands.map((b, i) => {
         const x = xForIdx(b.startIdx, data.length);
         const w = xForIdx(b.endIdx, data.length) - x;
         return (
           <rect
+            class="eq-chart__band"
+            style={`--band-delay: ${i * 120}ms`}
             x={x.toFixed(2)}
             y={padT}
             width={w.toFixed(2)}
@@ -286,9 +317,11 @@ const regimeFill: Record<'calm' | 'normal' | 'stress', string> = {
     <text x={padL - 32} y={ddTop + 10} class="eq-chart__panel mono">DD</text>
 
     {/* Equity area + line */}
-    <path d={equityArea} fill={`url(#${gradId})`}></path>
+    <path d={equityArea} class="eq-chart__area" fill={`url(#${gradId})`}></path>
     <path
       d={equityPath}
+      class="eq-chart__line"
+      style={`--eq-len: ${equityPathLen}`}
       fill="none"
       stroke="var(--c-primary-2)"
       stroke-width="1.75"
@@ -296,7 +329,7 @@ const regimeFill: Record<'calm' | 'normal' | 'stress', string> = {
       stroke-linecap="round"></path>
 
     {/* v6.11.10 — F14 amber-only. Drawdown area now ink-2 (no red). */}
-    <path d={ddArea} fill="var(--c-ink-2)" fill-opacity="0.18"></path>
+    <path d={ddArea} class="eq-chart__dd-area" fill="var(--c-ink-2)" fill-opacity="0.18"></path>
 
     {/* Drawdown zero line (subtle) */}
     <line x1={padL} y1={ddBottom} x2={padL + innerW} y2={ddBottom} class="eq-chart__axis"></line>
@@ -323,6 +356,31 @@ const regimeFill: Record<'calm' | 'normal' | 'stress', string> = {
     <li><span class="eq-chart__swatch eq-chart__swatch--stress"></span>stress (high vol)</li>
     <li class="eq-chart__legend-note">regime from rolling {volWindow}d vol of the series itself</li>
   </ul>
+  {
+    /* v7.6.8 — moving dot traveling along the equity line after the
+       initial draw-in completes (1.6s delay). Pure CSS, deterministic. */
+  }
+  <svg
+    class="eq-chart__head-svg"
+    viewBox={`0 0 ${width} ${height}`}
+    preserveAspectRatio="xMidYMid meet"
+    aria-hidden="true"
+  >
+    <defs>
+      <radialGradient id="eq-head-glow" cx="0.5" cy="0.5" r="0.5">
+        <stop offset="0%" stop-color="var(--c-primary-2)" stop-opacity="0.9"></stop>
+        <stop offset="100%" stop-color="var(--c-primary-2)" stop-opacity="0"></stop>
+      </radialGradient>
+    </defs>
+    <circle r="6" fill="url(#eq-head-glow)">
+      <animateMotion dur="8s" repeatCount="indefinite" begin="1.6s" path={equityPath}
+      ></animateMotion>
+    </circle>
+    <circle r="2.5" fill="var(--c-primary-2)">
+      <animateMotion dur="8s" repeatCount="indefinite" begin="1.6s" path={equityPath}
+      ></animateMotion>
+    </circle>
+  </svg>
 
   {caption && <figcaption class="eq-chart__caption">{caption}</figcaption>}
 </figure>
@@ -405,6 +463,16 @@ const regimeFill: Record<'calm' | 'normal' | 'stress', string> = {
     height: 10px;
     /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade (was 2px) */
     border: 1px solid var(--c-rule-soft);
+    animation: eq-swatch-pulse 3.2s ease-in-out infinite;
+  }
+  @keyframes eq-swatch-pulse {
+    0%,
+    100% {
+      opacity: 0.7;
+    }
+    50% {
+      opacity: 1;
+    }
   }
   /* v6.11.18 — F14 amber-only migration. Was rgba(63,185,80,0.18) green
      for calm + rgba(248,81,73,0.22) red for stress. Now amber-soft for
@@ -414,15 +482,117 @@ const regimeFill: Record<'calm' | 'normal' | 'stress', string> = {
   }
   .eq-chart__swatch--normal {
     background: rgba(212, 160, 23, 0.16);
+    animation-delay: 0.4s;
   }
   .eq-chart__swatch--stress {
     background: rgba(173, 186, 199, 0.2);
+    animation-delay: 0.8s;
   }
   .eq-chart__caption {
     font-size: var(--fs-xs);
     color: var(--c-ink-2);
     margin-top: var(--sp-2);
     line-height: var(--lh-loose);
+  }
+
+  /* === v7.6.8 — animations === */
+  /* Regime bands fade in sequentially */
+  .eq-chart__band {
+    opacity: 0;
+    animation: eq-band-fade 0.5s ease-out forwards;
+    animation-delay: var(--band-delay, 0ms);
+  }
+  @keyframes eq-band-fade {
+    from {
+      opacity: 0;
+      transform: translateY(2px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  /* Equity area fades in after bands land */
+  .eq-chart__area {
+    opacity: 0;
+    animation: eq-area-fade 0.7s ease-out 0.6s forwards;
+  }
+  @keyframes eq-area-fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  /* Equity line: drawn on then a perpetual dash-flow underneath */
+  .eq-chart__line {
+    stroke-dasharray: var(--eq-len);
+    stroke-dashoffset: var(--eq-len);
+    animation:
+      eq-line-draw 1.4s cubic-bezier(0.6, 0.2, 0.3, 1) 0.6s forwards,
+      eq-line-flow 8s linear 2s infinite;
+    /* v7.7.91 — chrome contract: kill the drop-shadow halo. Use a hairline
+     border instead so the line reads without a glow. */
+    stroke: var(--c-primary-2);
+  }
+  @keyframes eq-line-draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  @keyframes eq-line-flow {
+    /* After draw, layer a slow moving dash to give perpetual life.
+       Offset the dash by exactly --eq-len so the visible line stays solid. */
+    from {
+      stroke-dashoffset: 0;
+    }
+    to {
+      stroke-dashoffset: -100;
+    }
+  }
+  /* Drawdown area fades in last */
+  .eq-chart__dd-area {
+    opacity: 0;
+    animation: eq-dd-fade 0.6s ease-out 1.6s forwards;
+  }
+  @keyframes eq-dd-fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 0.18;
+    }
+  }
+  /* Head SVG overlays the original chart area. It animates a
+     traveling dot via SVG animateMotion. */
+  .eq-chart__head-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+  .eq-chart__svg {
+    position: relative;
+  }
+  .eq-chart {
+    position: relative;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .eq-chart__band,
+    .eq-chart__area,
+    .eq-chart__line,
+    .eq-chart__dd-area,
+    .eq-chart__swatch,
+    .eq-chart__head-svg {
+      animation: none !important;
+      opacity: 1;
+    }
+    .eq-chart__line {
+      stroke-dashoffset: 0;
+    }
   }
 
   @media (max-width: 720px) {

@@ -26,6 +26,9 @@ import Odometer from '@components/Odometer.astro';
 import EquityCurveChart from '@components/EquityCurveChart.astro';
 import AgentGraph from '@components/AgentGraph.astro';
 import ArchitectureBrief from '@components/ArchitectureBrief.astro';
+import SwarmScene from '@components/SwarmScene.astro';
+import LiveStats from '@components/LiveStats.astro';
+import LiveActivity from '@components/LiveActivity.astro';
 
 // === HERO KPIs (v7.5 — sourced from profile.stats; correct numbers)
 // 9 quant strategies + 6 AI projects + 76.5k LOC Python + 31 eval gates
@@ -55,8 +58,20 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
   breadcrumbs={[{ name: 'Home', href: '/' }]}
 >
   <!-- ============================================================
+       v7.7.91 — A14 BLACK STRAP REMOVAL.
+       The v7.7.85 dark version-stamp + KPI band ate 22% of mobile
+       above-the-fold and read as "loud, institutional chrome should
+       whisper". The version stamp DATA is preserved in
+       src/utils/build-stamp.ts; the visual band is gone. The version
+       stamp is now rendered in the Footer as a small footnote.
+       ============================================================ -->
+
+  <!-- ============================================================
        1. NEWS-RIBBON — first chrome, "this site is updated" signal
        v7.4 motion layer (Lane 1 = updates, Lane 2 = methodology frames).
+       v7.7.85 — sits on the new cool archival ivory (#fafaf7, was
+       #ece5d4 brown-biased kraft). The two-lane institutional feed
+       reads stronger against the cooler, brighter surface.
        ============================================================ -->
   <NewsRibbon />
 
@@ -87,9 +102,11 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
 
           <p class="hero__lede" data-stagger="4">
             <em>I build research systems where the evals prove the work.</em>
-            Senior practitioner across quant trading desks, AI engineering teams, and multi-agent build
-            systems. I ship the eval harness, the backtest manifest, and the audit gate — so the work
-            can be defended in interview.
+            {profile.stats.aiAgentCount}-agent <b>STELLA</b> swarm watches the world — every central-bank
+            decision, every earnings call, every GDELT signal — and turns it into a research signal the
+            trading desk can defend. Senior practitioner across quant, AI engineering, and multi-agent
+            build. I ship the eval harness, the backtest manifest, and the audit gate — so the work holds
+            up in interview.
           </p>
 
           <ul class="hero__kpis" aria-label="Key metrics" data-stagger="5">
@@ -120,22 +137,40 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
             <a class="cta cta--primary" href={mailto}>EMAIL — HIRING INQUIRY</a>
             <a class="cta cta--ghost" href={path('/desk')}>OPEN DESK →</a>
             <a class="cta cta--ghost" href={path('/ai')}>READ LOOP →</a>
+            <a class="cta cta--ghost" href={path('/for-recruiters')}>HR SKIM →</a>
           </div>
         </div>
 
         <aside class="hero__portrait" data-stagger="3">
-          <img
-            src={profile.headshot.src}
-            alt={profile.headshot.alt}
-            width="280"
-            height="320"
-            loading="eager"
-          />
+          <picture>
+            <source type="image/webp" srcset="/headshot.webp" />
+            <img
+              src={profile.headshot.src}
+              alt={profile.headshot.alt}
+              width="280"
+              height="320"
+              loading="eager"
+              decoding="async"
+              fetchpriority="high"
+            />
+          </picture>
           <p class="hero__portrait-credit mono">{profile.headshot.credit}</p>
         </aside>
       </div>
     </div>
   </section>
+
+  <!-- ============================================================
+       2b. STELLA LIVE LOOP — world-class animated demonstration.
+       Owner feedback 2026-07-26: "make like an animated video of
+       stella- AI assistant working with us with world class data
+       and add it to the site. vide one loop that keeps playing to
+       show amazing visual. world class presentation visual. make
+       stella look amazing." Pure SVG + CSS keyframes; loops forever.
+       ============================================================ -->
+  <SwarmScene />
+  <LiveStats />
+  <LiveActivity />
 
   <!-- ============================================================
        3. TWO-PILLAR ROW — 1fr 1fr above 900px, stacks mobile.
@@ -169,12 +204,36 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
             />
           </div>
           <ul class="pillar__stats mono">
-            <li><b class="tnum">0.39</b><span>SHARPE · ANN.</span></li>
-            <li><b class="tnum">−3.6%</b><span>MAX DRAWDOWN</span></li>
-            <li><b class="tnum">+12%</b><span>NET RETURN</span></li>
+            <li>
+              <b class="tnum"
+                ><span class="pillar__count" data-counter="0.39" data-decimals="2">0.00</span></b
+              ><span>SHARPE · ANN.</span>
+            </li>
+            <li>
+              <b class="tnum"
+                ><span
+                  class="pillar__count"
+                  data-counter="-3.6"
+                  data-decimals="1"
+                  data-suffix="%"
+                  data-prefix="−">−0.0%</span
+                ></b
+              ><span>MAX DRAWDOWN</span>
+            </li>
+            <li>
+              <b class="tnum"
+                ><span
+                  class="pillar__count"
+                  data-counter="12"
+                  data-decimals="0"
+                  data-suffix="%"
+                  data-prefix="+">+0%</span
+                ></b
+              ><span>NET RETURN</span>
+            </li>
           </ul>
           <p class="pillar__cta">
-            <a href={path('/projects/quant/')}>READ QUANT PILLAR →</a>
+            <a href={`${path('/projects')}?tag=quant`}>READ QUANT PILLAR →</a>
           </p>
         </article>
 
@@ -186,9 +245,29 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
             <AgentGraph compact />
           </div>
           <ul class="pillar__stats mono">
-            <li><b class="tnum">{profile.stats.aiAgentCount}</b><span>DAG AGENTS</span></li>
-            <li><b class="tnum">{archSafe.subTeamCount}</b><span>SUB-TEAMS</span></li>
-            <li><b class="tnum">{archSafe.mustHaveCount}</b><span>MUST-HAVES</span></li>
+            <li>
+              <b class="tnum"
+                ><span
+                  class="pillar__count"
+                  data-counter={profile.stats.aiAgentCount}
+                  data-decimals="0">0</span
+                ></b
+              ><span>DAG AGENTS</span>
+            </li>
+            <li>
+              <b class="tnum"
+                ><span class="pillar__count" data-counter={archSafe.subTeamCount} data-decimals="0"
+                  >0</span
+                ></b
+              ><span>SUB-TEAMS</span>
+            </li>
+            <li>
+              <b class="tnum"
+                ><span class="pillar__count" data-counter={archSafe.mustHaveCount} data-decimals="0"
+                  >0</span
+                ></b
+              ><span>MUST-HAVES</span>
+            </li>
           </ul>
           <p class="pillar__cta">
             <a href={path('/ai')}>READ AI PILLAR →</a>
@@ -210,7 +289,7 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
         tail: `${profile.stats.evalGates} GATES · ZERO ROLLBACKS`,
         accent: 'warn',
       },
-      { head: 'NDA-CLEAN', tail: 'PUBLIC-DATA REPRODUCIBLE', accent: 'cobalt' },
+      { head: 'NDA-CLEAN', tail: 'PUBLIC-DATA REPRODUCIBLE', accent: 'sage' },
       {
         head: 'ALPHA-DRIVEN',
         tail: `${profile.stats.strategyCount} STRATEGIES · SAME METHOD`,
@@ -223,7 +302,7 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
         tail: `${profile.stats.aiAgentCount} AGENTS · 1 ORCHESTRATOR`,
         accent: 'violet',
       },
-      { head: 'COINTEGRATION', tail: 'PAIRS · 5Y HALF-LIFE', accent: 'cobalt' },
+      { head: 'COINTEGRATION', tail: 'PAIRS · 5Y HALF-LIFE', accent: 'sage' },
       { head: 'VARIANCE RISK', tail: 'PREMIUM HARVEST · DELTA-HEDGED', accent: 'warn' },
       { head: 'REGIME OVERLAY', tail: 'VOL-TARGETED · DEFENSIVE', accent: 'terracotta' },
       { head: 'CRYPTO NATIVE', tail: 'BTC · ETH · FUNDING-RATE CARRY', accent: 'warn' },
@@ -255,49 +334,66 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
         AI ENGINEERING · 2022 → 2026 · THE FIVE-RUNG SPINE
       </p>
       <h2 class="ai-history__title" data-words data-reveal>
-        Prompt <span class="hl">→</span> skills <span class="hl">→</span> agents <span class="hl">→</span> loops <span class="hl">→</span> graphs.
+        Prompt <span class="hl">→</span> skills <span class="hl">→</span> agents <span class="hl"
+          >→</span
+        > loops <span class="hl">→</span> graphs.
       </h2>
       <p class="ai-history__lede" data-reveal>
-        Five compounding layers. Most teams plateau at the loop rung.
-        The graph rung is the productivity unlock — and it's where I live.
+        Five compounding layers — adapted every AI era, including agent swarms. Most teams plateau
+        at the loop rung. The graph rung is the productivity unlock — and it's where I live.
       </p>
 
       <ol class="ai-history__rail" data-reveal>
         <li class="ai-rung ai-rung--prompt">
           <span class="ai-rung__year mono">2022</span>
           <h3 class="ai-rung__name">Prompt engineering</h3>
-          <p class="ai-rung__sub">GPT-3 + instruction tuning. One prompt, one output. ~5 layers (system · context · instruction · output schema · evidence).</p>
+          <p class="ai-rung__sub">
+            GPT-3 + instruction tuning. One prompt, one output. ~5 layers (system · context ·
+            instruction · output schema · evidence).
+          </p>
           <p class="ai-rung__line mono">/ everyone</p>
         </li>
         <li class="ai-rung ai-rung--chatgpt">
           <span class="ai-rung__year mono">2023</span>
           <h3 class="ai-rung__name">ChatGPT + RAG</h3>
-          <p class="ai-rung__sub">ChatGPT public (Nov 2022). Retrieval-Augmented Generation goes mainstream. Vector databases, LangChain. Knowledge cutoff is the wall.</p>
+          <p class="ai-rung__sub">
+            ChatGPT public (Nov 2022). Retrieval-Augmented Generation goes mainstream. Vector
+            databases, LangChain. Knowledge cutoff is the wall.
+          </p>
           <p class="ai-rung__line mono">/ builder</p>
         </li>
         <li class="ai-rung ai-rung--agent">
           <span class="ai-rung__year mono">2024</span>
           <h3 class="ai-rung__name">Agents + tools</h3>
-          <p class="ai-rung__sub">Function calling. Auto-GPT. LangGraph. The agent loop becomes a thing. Context windows are still the wall — agents die mid-task.</p>
+          <p class="ai-rung__sub">
+            Function calling. Auto-GPT. LangGraph. The agent loop becomes a thing. Context windows
+            are still the wall — agents die mid-task.
+          </p>
           <p class="ai-rung__line mono">/ researcher</p>
         </li>
         <li class="ai-rung ai-rung--skill">
           <span class="ai-rung__year mono">2025</span>
           <h3 class="ai-rung__name">Skills + loops</h3>
-          <p class="ai-rung__sub">Anthropic's Agent Skills (progressive disclosure). Karpathy's autoresearch loop (700 experiments). The 5-must-have contract. Eval-gate enforcement.</p>
+          <p class="ai-rung__sub">
+            Anthropic's Agent Skills (progressive disclosure). Karpathy's autoresearch loop (700
+            experiments). The 5-must-have contract. Eval-gate enforcement.
+          </p>
           <p class="ai-rung__line mono">/ engineer</p>
         </li>
         <li class="ai-rung ai-rung--graph">
           <span class="ai-rung__year mono">2026</span>
           <h3 class="ai-rung__name">Graphs · STELLA</h3>
-          <p class="ai-rung__sub">Typed entities + relations + provenance. Shared memory across agents. Routing files. Karpathy's LLM Wiki. The graph rung — where 53-agent offices live.</p>
+          <p class="ai-rung__sub">
+            Typed entities + relations + provenance. Shared memory across agents. Routing files.
+            Karpathy's LLM Wiki. The graph rung — where 53-agent offices live.
+          </p>
           <p class="ai-rung__line mono">/ architect · STELLA</p>
         </li>
       </ol>
 
       <p class="ai-history__closer" data-reveal>
         <b>You are here.</b> The spine is what I build on — and what I publish in the
-        <a href={path('/workbooks')}>workbook trilogy</a>.
+        {' '}<a href={path('/workbooks')}>workbook trilogy</a>{' '}.
       </p>
     </div>
   </section>
@@ -333,15 +429,110 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
         <a class="cta cta--ghost" href={path('/ai')}>READ LOOP →</a>
       </div>
       <p class="contact__secondary mono" data-reveal="fade">
-        <a href="https://github.com/christianmacion">GitHub</a>
+        <a href="https://github.com/christianmacion26">GitHub</a>
         <span class="fit__sep">·</span>
         <a href="https://linkedin.com/in/christianmacion">LinkedIn</a>
         <span class="fit__sep">·</span>
         <a href={`mailto:${email}`}>{email}</a>
       </p>
+
+      {/* v7.22 — signature line + "what I'm working on next" closes the page */}
+      <div class="contact__closer" data-reveal="lift-sm">
+        <p class="contact__signature">
+          <span class="contact__signature-name">— Christian T. Macion</span>
+          <span class="contact__signature-meta">
+            Quant Researcher · AI Engineer · Digos City, PH
+          </span>
+        </p>
+        <p class="contact__next mono">
+          <span class="contact__next-tag">NEXT</span>
+          Shipping graph engineering as the integrating layer + a recruiter-grade summary stack. Reply
+          lands within 24h.
+        </p>
+      </div>
     </div>
   </section>
 </BaseLayout>
+
+<script>
+  /* v7.6.8 — pillar count-up. Reads target value + format from data-*
+     attributes on `.pillar__count` so the markup stays readable.
+     Fires once on first scroll-in via IntersectionObserver. No
+     Math.random / Date.now — deterministic easing curve. */
+  (() => {
+    const counters = document.querySelectorAll<HTMLElement>('.pillar__count');
+    if (!counters.length) return;
+
+    const prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduce) {
+      // Just write the final value; skip animation.
+      counters.forEach((el) => {
+        const target = parseFloat(el.dataset.count ?? '0');
+        const decimals = parseInt(el.dataset.decimals ?? '0', 10);
+        const suffix = el.dataset.suffix ?? '';
+        const prefix = el.dataset.prefix ?? '';
+        el.textContent = `${prefix}${target.toFixed(decimals)}${suffix}`;
+      });
+      return;
+    }
+
+    const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+
+    function format(value: number, decimals: number, prefix: string, suffix: string) {
+      return `${prefix}${value.toFixed(decimals)}${suffix}`;
+    }
+
+    function animate(el: HTMLElement) {
+      const target = parseFloat(el.dataset.count ?? '0');
+      const decimals = parseInt(el.dataset.decimals ?? '0', 10);
+      const suffix = el.dataset.suffix ?? '';
+      const prefix = el.dataset.prefix ?? '';
+
+      const duration = 1400;
+      const start = performance.now();
+      const initial = 0;
+      function step(now: number) {
+        const elapsed = now - start;
+        const t = Math.min(1, elapsed / duration);
+        const v = initial + (target - initial) * easeOutCubic(t);
+        el.textContent = format(v, decimals, prefix, suffix);
+        if (t < 1) requestAnimationFrame(step);
+        else el.textContent = format(target, decimals, prefix, suffix);
+      }
+      requestAnimationFrame(step);
+    }
+
+    const grid = document.querySelector('.pillars__grid');
+    const seen = new WeakSet<HTMLElement>();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (!e.isIntersecting) continue;
+          const el = e.target as HTMLElement;
+          if (seen.has(el)) continue;
+          seen.add(el);
+          animate(el);
+        }
+      },
+      { threshold: 0.4, rootMargin: '0px 0px -10% 0px' },
+    );
+    counters.forEach((el) => observer.observe(el));
+    // mark grid once any counter has fired (for the amber glow)
+    const gridObserver = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            (e.target as HTMLElement).classList.add('is-counted');
+            gridObserver.disconnect();
+            break;
+          }
+        }
+      },
+      { threshold: 0.4 },
+    );
+    if (grid) gridObserver.observe(grid);
+  })();
+</script>
 
 <style>
   /* ============================================================
@@ -398,8 +589,12 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
   }
   .hero__name .word:nth-child(2),
   .hero__name .word:nth-child(3) {
+    /* v7.6.1 — Owner feedback 2026-07-26: "make it same color the entire
+       Christian T. Macion — black because it is my name." Dropped the
+       gold --c-phi override; T. Macion now inherits the default ink
+       color from .hero__name (var(--c-ink) = #1c2538 light / #d4cebd
+       dark). Italic + 500 weight retained for the serif distinction. */
     font-style: italic;
-    color: var(--c-phi);
     font-weight: 500;
   }
 
@@ -511,7 +706,8 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     color: var(--c-bg);
     border-color: var(--c-warn);
   }
-  .cta--primary:hover {
+  .cta--primary:hover,
+  .cta--primary:focus-visible {
     background: var(--c-amber-deep);
     border-color: var(--c-amber-deep);
   }
@@ -520,7 +716,8 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     color: var(--c-ink);
     border-color: var(--c-rule);
   }
-  .cta--ghost:hover {
+  .cta--ghost:hover,
+  .cta--ghost:focus-visible {
     color: var(--c-warn);
     border-color: var(--c-warn);
   }
@@ -530,6 +727,23 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     padding: 56px 0 64px;
     border-bottom: 1px solid var(--c-rule);
     background: var(--c-bg-2);
+  }
+  /* v7.6.8 — count-up. Tabular-num already on .tnum; we add a
+     subtle flip on the <b> wrapper so the digit locks into place. */
+  .pillar__count {
+    display: inline-block;
+    min-width: 1ch;
+    /* v7.7.90 — CHROME-01: drop the drop-shadow halo (textbook halo
+       violation per chrome contract: mono + 1 accent, no halo). */
+    transition: opacity 0.4s ease;
+  }
+  .pillars__grid.is-counted .pillar__count {
+    opacity: 1;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pillar__count {
+      transition: none;
+    }
   }
   .pillars__eyebrow {
     font: 500 11px / 1.4 var(--ff-mono);
@@ -608,7 +822,8 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
       color 200ms ease,
       border-color 200ms ease;
   }
-  .pillar__cta a:hover {
+  .pillar__cta a:hover,
+  .pillar__cta a:focus-visible {
     color: var(--c-warn);
     border-bottom-color: var(--c-warn);
   }
@@ -683,22 +898,65 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     color: var(--c-ink);
     text-decoration: none;
   }
-  .contact__secondary a:hover {
+  .contact__secondary a:hover,
+  .contact__secondary a:focus-visible {
     color: var(--c-warn);
   }
 
+  /* === v7.22 — signature + "what's next" closer ============================= */
+  .contact__closer {
+    margin: 32px 0 0;
+    padding: 16px 0 0;
+    border-top: 1px dashed var(--c-rule);
+  }
+  .contact__signature {
+    margin: 0 0 8px;
+    font-family: var(--serif-display);
+    font-size: 1.05rem;
+    font-style: italic;
+    color: var(--c-ink);
+    line-height: 1.4;
+  }
+  .contact__signature-name {
+    color: var(--c-amber);
+    font-weight: 500;
+    margin-right: 12px;
+  }
+  .contact__signature-meta {
+    color: var(--c-ink-3);
+    font-size: 0.85rem;
+    font-style: normal;
+    letter-spacing: 0.02em;
+  }
+  .contact__next {
+    margin: 0;
+    font: 500 11px / 1.6 var(--ff-mono);
+    color: var(--c-ink-2);
+    letter-spacing: 0.06em;
+    text-transform: none;
+  }
+  .contact__next-tag {
+    display: inline-block;
+    margin-right: 8px;
+    padding: 2px 6px;
+    font: 600 9px / 1 var(--ff-mono);
+    letter-spacing: 0.14em;
+    color: var(--c-amber);
+    border: 1px solid var(--c-amber);
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+
   /* ====== Responsive ====== */
-  @media (max-width: 900px) {
+  /* v7.7.90 — MOBILE-13: hero-anchor 2-pillar grid was cramped at
+     768-979px (the 2-col 32px-gap was tight inside the container).
+     Push the collapse to <980px so it falls in line with the nav
+     burger breakpoint; at 980-1280px the pillars keep 2-col but with
+     tighter gap. */
+  @media (max-width: 980px) {
     .pillars__grid {
       grid-template-columns: 1fr;
       gap: 24px;
-    }
-    .arch-brief__grid {
-      grid-template-columns: 1fr;
-      gap: 24px;
-    }
-    .arch-brief__title {
-      font-size: 28px;
     }
   }
 
@@ -721,6 +979,18 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     .hero__name .word:nth-child(2),
     .hero__name .word:nth-child(3) {
       font-size: 32px;
+    }
+    /* v7.7.90 — CHROME-02: tighter clamp at iPhone-SE (320px) so hero H1
+       doesn't wrap awkwardly. 36px was set at <720px but didn't shrink
+       further for the floor viewport. */
+  }
+  @media (max-width: 480px) {
+    .hero__name {
+      font-size: 28px;
+    }
+    .hero__name .word:nth-child(2),
+    .hero__name .word:nth-child(3) {
+      font-size: 24px;
     }
     .hero__kpis {
       grid-template-columns: repeat(2, 1fr);
@@ -822,7 +1092,8 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
       border-right: none;
     }
   }
-  .ai-rung:hover {
+  .ai-rung:hover,
+  .ai-rung:focus-visible {
     background: var(--c-bg-elev, rgba(255, 255, 255, 0.02));
   }
   .ai-rung__year {

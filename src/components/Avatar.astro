@@ -22,7 +22,7 @@ const { alt, size = 200, loading = 'eager', fetchpriority = 'high' } = Astro.pro
 const widths = [size, Math.round(size * 1.5), size * 2];
 ---
 
-<figure class="avatar" style={`--avatar-size: ${size}px;`}>
+<figure class="avatar" style={`--avatar-size: ${size}px;`} aria-label="Profile avatar">
   <Image
     src={headshot}
     alt={alt}

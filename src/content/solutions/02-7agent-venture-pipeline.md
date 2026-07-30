@@ -27,4 +27,5 @@ proof:
   - 'Reuse pattern documented in systematic-strategy desk engagement methodology'
 tags: [multi-agent, governance, venture, prompts, separation-of-duties]
 lane: 'ai'
+lastUpdated: 2026-07-26
 ---

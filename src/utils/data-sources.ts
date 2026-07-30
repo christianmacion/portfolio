@@ -10,7 +10,8 @@
  * The shape mirrors DataSourceList.astro's `Source` interface. The
  * component imports from here so the registry has exactly one writer.
  * Length is the canonical "12 sources" chrome on /research — derived
- * via `.length`, never hardcoded.
+ * via `.length`, never hardcoded. (v7.7.0 — extended with `news` and
+ * `research` categories for the new live-world feeds.)
  */
 
 export interface DataSource {
@@ -23,7 +24,9 @@ export interface DataSource {
     | 'rates'
     | 'commodities'
     | 'fx'
-    | 'cftc';
+    | 'cftc'
+    | 'news'
+    | 'research';
   urlPattern: string;
   license: string;
   note?: string;
@@ -115,7 +118,29 @@ export const dataSources: DataSource[] = [
     license: 'Public (Bank for International Settlements, re-use permitted)',
     note: 'FX basket reference for any carry / FX-overlay discussion.',
   },
+  // === v7.7.0 — live-world feeds ===
+  {
+    name: 'GDELT 2.0 Global Knowledge Graph (event overlay)',
+    category: 'news',
+    urlPattern: 'https://data.gdeltproject.org/gdeltv2/masterfilelist.txt — 15-minute resolution',
+    license: 'CC-BY 4.0 (CAMEO event taxonomy, open redistribution)',
+    note: 'Layer C of EarthMap — 24h signal overlay from the global event monitor.',
+  },
+  {
+    name: 'arXiv preprint server (quantitative research)',
+    category: 'research',
+    urlPattern: 'https://export.arxiv.org/rss/{q-fin,stat.AP,cs.LG,cs.AI,cs.CL}',
+    license: 'CC-BY 4.0 (arXiv non-exclusive redistribution)',
+    note: 'Feeds ArxivRadar — 5 categories, 20 most-recent papers each build.',
+  },
+  {
+    name: 'Binance public announcements',
+    category: 'news',
+    urlPattern: 'https://www.binance.com/en/support/announcement — public listing/delisting feed',
+    license: 'Public disclosure (no API key required)',
+    note: 'LiveWire source — exchange-level delisting / listing signals.',
+  },
 ];
 
-/** Canonical count — single source of truth for "12 sources" chrome. */
+/** Canonical count — single source of truth for "N sources" chrome. (v7.7.0 → 15) */
 export const dataSourceCount = dataSources.length;

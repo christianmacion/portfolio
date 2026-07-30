@@ -69,7 +69,7 @@ const codeArtifacts = [
       'PASS · deterministic from symbol seed',
     ],
     repoPath: '~/portfolio_v2/mcp-backtest-server/',
-    href: 'https://github.com/christianmacion26/portfolio_v2/tree/master/mcp-backtest-server',
+    // public repo not yet published — link intentionally omitted; repoPath is on disk per proof claim
   },
   {
     title: 'qfin-rag-harness',
@@ -89,7 +89,7 @@ const codeArtifacts = [
       'NO network calls',
     ],
     repoPath: '~/portfolio_v2/qfin-rag-harness/',
-    href: 'https://github.com/christianmacion26/portfolio_v2/tree/master/qfin-rag-harness',
+    // public repo not yet published — link intentionally omitted; repoPath is on disk per proof claim
   },
   {
     title: 'numerical-faithfulness-eval',
@@ -109,7 +109,7 @@ const codeArtifacts = [
       'exit code = number of failed claims',
     ],
     repoPath: '~/portfolio_v2/numerical-faithfulness-eval/',
-    href: 'https://github.com/christianmacion26/portfolio_v2/tree/master/numerical-faithfulness-eval',
+    // public repo not yet published — link intentionally omitted; repoPath is on disk per proof claim
   },
   {
     title: 'eval-mcp-server',
@@ -225,6 +225,7 @@ const paginate = (items: any[]) => {
 <BaseLayout
   title="Proof"
   description={`Decision-grade artefacts that back the claims on /experience, /certifications, and /now. Tier-1 credentials, ${codeArtifacts.length} open-source artifacts, ${quantProjects.length} quant projects, ${aiProjects.length} AI projects, ${solutions.length} case studies — all NDA-clean by construction.`}
+  ogDescription={`Tier-1 credentials, ${codeArtifacts.length} open-source artifacts, ${quantProjects.length} quant projects, ${aiProjects.length} AI projects, ${solutions.length} case studies — NDA-clean by construction.`}
   type="profile"
   breadcrumbs={[
     { name: 'Home', href: '/' },
@@ -769,7 +770,7 @@ const paginate = (items: any[]) => {
                   )}
                   {dateIso && <span class="pill pill--mute mono">{dateIso}</span>}
                 </div>
-                <a class="proof-list__title" href={path(`/solutions#${s.data.slug}`)}>
+                <a class="proof-list__title" href={path(`/solutions#${s.data.lane ?? 'ai'}`)}>
                   <span class="proof-list__kind proof-list__kind--sol mono">
                     {s.data.lane.toUpperCase()}
                   </span>
@@ -878,7 +879,12 @@ const paginate = (items: any[]) => {
         </p>
       </header>
 
-      <div class="ptr">
+      {
+        /* v7.27 — ARIA table structure: role=table > role=rowgroup > role=row > role=cell.
+          Previously the <div class="ptr"> had no role and the rows had role=row, which
+          violated aria-required-parent ("row" must be inside a "rowgroup" inside a "table"). */
+      }
+      <div class="ptr" role="table" aria-label="Public track record — external accounts">
         <div class="ptr__row" role="row">
           <div class="ptr__cell ptr__cell--platform" role="cell">Numerai</div>
           <div class="ptr__cell ptr__cell--handle mono ptr__cell--empty" role="cell">
@@ -1103,7 +1109,8 @@ const paginate = (items: any[]) => {
        stays exactly under the visible glyph; only the hit rect grows). */
     padding-inline: 0.25rem;
   }
-  .proof-head__sub a:hover {
+  .proof-head__sub a:hover,
+  .proof-head__sub a:focus-visible {
     text-decoration-color: var(--c-amber-deep);
     color: var(--c-amber-deep);
   }
@@ -1150,7 +1157,8 @@ const paginate = (items: any[]) => {
     border-bottom: 1px solid var(--c-rule-soft);
     transition: background var(--transition);
   }
-  .proof-list__row:hover {
+  .proof-list__row:hover,
+  .proof-list__row:focus-visible {
     background: var(--c-paper);
   }
   .proof-list__title {
@@ -1162,7 +1170,8 @@ const paginate = (items: any[]) => {
     color: var(--c-ink);
     text-decoration: none;
   }
-  .proof-list__title:hover {
+  .proof-list__title:hover,
+  .proof-list__title:focus-visible {
     color: var(--c-primary);
   }
   .proof-list__kind {
@@ -1333,7 +1342,8 @@ const paginate = (items: any[]) => {
       border-color var(--transition),
       background var(--transition);
   }
-  .filter-chip:hover {
+  .filter-chip:hover,
+  .filter-chip:focus-visible {
     color: var(--c-primary);
     border-color: var(--c-ink-3);
   }
@@ -1343,14 +1353,17 @@ const paginate = (items: any[]) => {
     background: var(--c-warn-soft);
   }
   @media (prefers-color-scheme: dark) {
-    :root:not([data-theme='light']) .filter-chip.is-active {
+    /* v7.6.3 — was :root:not([data-theme='light']). BaseLayout now writes
+       body.theme-light / body.theme-dark; the root-attribute selector
+       never matched and the dark chip styling silently dropped. */
+    :root body:not(.theme-light) .filter-chip.is-active {
       color: var(--c-amber);
       border-color: var(--c-amber);
       /* v6.10.36 — token alias for F13 amber family. */
       background: var(--c-amber-soft);
     }
   }
-  :root[data-theme='dark'] .filter-chip.is-active {
+  :root body.theme-dark .filter-chip.is-active {
     color: var(--c-amber);
     border-color: var(--c-amber);
     background: var(--c-amber-soft);
@@ -1428,7 +1441,8 @@ const paginate = (items: any[]) => {
       border-color var(--transition),
       background var(--transition);
   }
-  .proof-pager__chip:hover {
+  .proof-pager__chip:hover,
+  .proof-pager__chip:focus-visible {
     color: var(--c-primary);
     border-color: var(--c-ink-3);
   }
@@ -1439,14 +1453,15 @@ const paginate = (items: any[]) => {
     font-weight: 600;
   }
   @media (prefers-color-scheme: dark) {
-    :root:not([data-theme='light']) .proof-pager__chip.is-active {
+    /* v7.6.3 — was :root:not([data-theme='light']). See filter-chip note. */
+    :root body:not(.theme-light) .proof-pager__chip.is-active {
       color: var(--c-amber);
       border-color: var(--c-amber);
       /* v6.10.36 — token alias for F13 amber family. */
       background: var(--c-amber-soft);
     }
   }
-  :root[data-theme='dark'] .proof-pager__chip.is-active {
+  :root body.theme-dark .proof-pager__chip.is-active {
     color: var(--c-amber);
     border-color: var(--c-amber);
     background: var(--c-amber-soft);
@@ -1469,7 +1484,8 @@ const paginate = (items: any[]) => {
     align-items: baseline;
     transition: background var(--transition);
   }
-  .ptr__row:hover {
+  .ptr__row:hover,
+  .ptr__row:focus-visible {
     background: var(--c-bg-2);
   }
   .ptr__cell--platform {
@@ -1506,7 +1522,8 @@ const paginate = (items: any[]) => {
     text-decoration-color: var(--c-rule-strong);
     text-underline-offset: 3px;
   }
-  .ptr__link:hover {
+  .ptr__link:hover,
+  .ptr__link:focus-visible {
     color: var(--c-amber-deep);
     text-decoration-color: var(--c-amber-deep);
   }

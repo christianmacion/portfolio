@@ -108,7 +108,7 @@ for (let lat = -60; lat <= 75; lat += bgStep) {
 const cityPositions = cities.map((c) => {
   const { x, y } = project(c.lat, c.lon);
   // Dot radius scales 4..9 with weight 0..1.
-  const r = 4 + c.weight * 5;
+  const r = 3 + c.weight * 4; // v7.7.0 — align with EarthMap
   return { ...c, x, y, r };
 });
 
@@ -228,6 +228,7 @@ const primeX = project(0, 0).x;
     stroke: var(--c-primary-2-light);
     stroke-width: 1;
     cursor: default;
+    transition: r 0.2s ease;
   }
   a .globe__dot {
     cursor: pointer;
@@ -242,6 +243,28 @@ const primeX = project(0, 0).x;
     stroke: var(--c-primary-2);
     stroke-width: 1;
     opacity: 0.4;
+    transform-origin: center;
+    transform-box: fill-box;
+    animation: globe-pulse 3.6s ease-out infinite;
+  }
+  @keyframes globe-pulse {
+    0% {
+      opacity: 0.55;
+      transform: scale(0.6);
+    }
+    80% {
+      opacity: 0;
+      transform: scale(2.4);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(2.4);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .globe__pulse {
+      animation: none;
+    }
   }
   .globe__label {
     font-size: 10px;
@@ -279,5 +302,19 @@ const primeX = project(0, 0).x;
   }
   .globe__legend-cap {
     color: var(--c-ink-3);
+  }
+
+  /* v7.7.90 — MOBILE-07: hide the SVG text labels below 540px (the
+     10px labels were rendering at 2.7px effective at 320px viewport
+     because the viewBox scales down). Rely on the legend <ul> below
+     for the data — semantic, screen-reader-friendly, scale-free. */
+  @media (max-width: 540px) {
+    .globe__label {
+      display: none;
+    }
+    .globe__legend {
+      font-size: 0.85rem;
+      gap: var(--sp-2);
+    }
   }
 </style>
