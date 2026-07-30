@@ -67,6 +67,14 @@ const PATHS_ALLOWLIST = [
   //   false-negatives elsewhere — allowlist is the safer fix.
   /styles\/back-to-top\.css$/,
 
+  // styles/global.css — 1 rgba literal (Bloomberg-tape grain background)
+  //   v6.18 hairline-grid: `rgba(235, 229, 212, 0.025)` is the literal
+  //   paper-noise grain on the body bg (24px radial dot, 1px stroke).
+  //   By-design: this IS the chrome definition source — the literal
+  //   can't be tokenized without losing the design intent. Add to the
+  //   PATHS_ALLOWLIST as design-system authoritative file.
+  /styles\/global\.css$/,
+
   // components/HeroCursor.astro — 3 legacy-chrome defensive var() fallbacks
   //   `.hero-cursor--cobalt/sage/terracotta` use `var(--c-X, #hex)` to
   //   survive on pages that don't load the v6-13 surface alias block.

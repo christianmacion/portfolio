@@ -20,7 +20,23 @@
  */
 
 :root {
-  /* === BRAND (v6.1.1 — full dark, unified palette) === */
+  /* v9.1 — token additions for nav, projects, research, workbooks */
+:root {
+  --c-bg-light: #f7f2e7;        /* light bg for institutional-tape nav fallback */
+  --c-bg-elev: rgba(255, 255, 255, 0.02);  /* elevated surface */
+  --c-teal: #5ba8a3;             /* ai-page accent */
+  --c-violet: #a07baf;           /* ai-page accent */
+  --c-purple: #7e57c2;           /* workbook accent */
+  --c-green: #2e7d32;            /* workbook accent */
+}
+:root {
+  --c-shadow-card: rgba(0, 0, 0, 0.06);  /* workbooks card hover shadow */
+  --c-green-tint: rgba(46, 125, 50, 0.1); /* workbook badge bg */
+  --c-green-tint-border: rgba(46, 125, 50, 0.25); /* workbook badge border */
+}
+
+
+/* === BRAND (v6.1.1 — full dark, unified palette) === */
   --c-primary: #e6edf3; /* off-white ink — primary text on dark */
   --c-primary-deep: #0a0e14; /* near-black — preserved for code blocks / deep backgrounds */
   --c-ink-dark: #0a0e14; /* alias kept for old code that wants near-black */

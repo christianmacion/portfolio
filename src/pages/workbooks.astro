@@ -253,10 +253,10 @@ const workbooks = [
     background: var(--c-teal);
   }
   .spine__item:nth-child(3)::before {
-    background: var(--c-purple, #7e57c2);
+    background: var(--c-purple);
   }
   .spine__item:nth-child(4)::before {
-    background: var(--c-green, #2e7d32);
+    background: var(--c-green);
   }
   .spine__item:nth-child(5)::before {
     background: var(--c-ink-1);
@@ -331,7 +331,7 @@ const workbooks = [
   .workbook-card:hover {
     transform: translateY(-2px);
     border-color: var(--c-amber);
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 6px 24px var(--c-shadow-card);
   }
   .workbook-card--teal:hover {
     border-color: var(--c-teal);
@@ -348,9 +348,9 @@ const workbooks = [
     letter-spacing: 0.12em;
     padding: 4px 8px;
     border-radius: 3px;
-    background: rgba(46, 125, 50, 0.1);
-    color: var(--c-green, #2e7d32);
-    border: 1px solid rgba(46, 125, 50, 0.25);
+    background: var(--c-green-tint);
+    color: var(--c-green);
+    border: 1px solid var(--c-green-tint-border);
   }
   .workbook-card__id {
     font-size: 0.7rem;

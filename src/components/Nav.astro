@@ -315,7 +315,7 @@ const secondary = [
     /* v7.2 — was --c-primary (--j-ink), which is dark navy on theme-light →
        dark-on-dark against the amber-deep chip (fails WCAG AA). Warm near-white
        text is legible on --c-amber-deep in both themes. */
-    color: #f7f2e7;
+    color: var(--c-bg-light);
     border: 1px solid var(--c-amber);
     /* v6.18 polish — prevent "Resume ↓" wrapping to "Res..." on narrower
        desktops. The audit found the CTA clipped at 1024-1280px when
@@ -325,7 +325,7 @@ const secondary = [
   }
   .nav__cta:hover {
     background: var(--c-amber);
-    color: #f7f2e7;
+    color: var(--c-bg-light);
   }
 
   /* === v6.1.0 — theme toggle CSS removed (the button is gone) === */
