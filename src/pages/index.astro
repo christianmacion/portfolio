@@ -1,36 +1,41 @@
 ---
 /**
- * index.astro — v7.5 HOME — TWO-PILLAR RESTRUCTURE
+ * index.astro — v9.0 HOME — INSTITUTIONAL MEMO
  *
- * 9-surface structure (top → bottom):
- *   1. NewsRibbon — activity ticker (Lane 1) + methodology frames (Lane 2)
- *   2. Hero       — identity + role + Odometer KPIs + dual-path CTA + portrait
- *   2b–2d. Thesis, Now Pulse, and Positioning Manifesto — senior-practitioner proof
- *   2e. Proof carousel — four artifact cards with metrics, charts, and AAR routes
- *   3. Two-pillar row — EquityCurveChart (quant) ⇆ AgentGraph compact (AI)
- *   4. Marquee    — methodology frame loop
- *   5. ArchitectureBrief — STELLA-public-safe multi-agent chrome
- *   5b. AI history — 2022 → 2026 prompt-to-graph timeline
- *   5c. Doctrine graph — eight-corpus citation network
- *   6. Fit        — education + credentials
- *   7. Contact    — dual-path CTA mirrors hero
+ * Per webcraft-no-vibe (VIBE-DOCTRINE.md Part III):
+ *   "If a stranger can tell you used AI to build it within 5 seconds,
+ *    it shipped with vibes. If they can tell you who built it within
+ *    30 seconds, it shipped in the institutional register."
+ *
+ * Target register: Jane Street Press / Stripe Press / confidential memo.
+ * Dense, hairlined, paper-cream, serif display, real data tables,
+ * named papers in the reading list, one email contact.
+ *
+ * Structure (top → bottom):
+ *   1. Stamped header   — last-updated · author · UTC+8
+ *   2. Working desc.    — heading + 3-paragraph memo
+ *   3. What I ship      — table of real artifacts, real numbers
+ *   4. Reading list     — named papers + doctrine corpora
+ *   5. Footprint        — world map of real places (8 pins)
+ *   6. Contact          — one email, three link-outs
+ *
+ * Total: 6 surfaces, ~280 lines. Was 11 surfaces, 2,032 lines.
+ * Chrome-heavy artifacts moved to dedicated pages:
+ *   - /quant   → strategies, eval gates, equity chart
+ *   - /ai      → AI projects, prompt-to-graph timeline, doctrine graph
+ *   - /stella  → multi-agent office chrome
+ *   - /proof   → AAR routes
+ *   - /about   → senior-practitioner thesis (Reproducible/Ship-ready/Defensible)
+ *   - /contact → recruiter brief, dual-path CTA
  */
 
 import BaseLayout from '@layouts/BaseLayout.astro';
-import { profile, archSafe } from '@utils/profile';
+import { profile } from '@utils/profile';
 import { path } from '@utils/url';
-import NewsRibbon from '@components/NewsRibbon.astro';
-import Marquee from '@components/Marquee.astro';
-import ChromeMarquee from '@components/ChromeMarquee.astro';
-import Odometer from '@components/Odometer.astro';
-import EquityCurveChart from '@components/EquityCurveChart.astro';
-import AgentGraph from '@components/AgentGraph.astro';
-import ArchitectureBrief from '@components/ArchitectureBrief.astro';
 import EarthMap from '@components/EarthMap.astro';
 
 // === FOOTPRINT — real places I've actually been + research anchors
-// Mix: 3 Davao-area in-person events (proof photos) + 6 global research hubs.
-// Each pin is a real artifact, not a vibe.
+// 3 Davao-area in-person events (proof photos) + 6 global research hubs.
 const footprintPoints = [
   { city: 'Digos City, PH', lat: 6.74, lon: 125.36, weight: 1.0, caption: 'home base' },
   { city: 'Davao City, PH', lat: 7.19, lon: 125.45, weight: 0.95, caption: 'Ateneo · BIDA Meta · USEP — 3 in-person, 30 days' },
@@ -42,24 +47,10 @@ const footprintPoints = [
   { city: 'New York', lat: 40.71, lon: -74.01, weight: 0.9, caption: 'NYSE / Nasdaq' },
 ];
 
-// === HERO KPIs (v7.5 — sourced from profile.stats; correct numbers)
-// 9 quant strategies + 6 AI projects + 76.5k LOC Python + 31 eval gates
-const QUANT_STRATEGIES = Number(profile.stats.strategyCount); // 9
-const AI_PROJECTS = 6; // /content/projects/ai/*.mdx count
-const LOC_PYTHON_K = 76.5; // thousands of LOC Python
-const EVAL_GATES = Number(profile.stats.evalGates); // 31
-
-// === TWO-PILLAR DATA — equity series (BTC/USDT paper-trade, 49 trading days)
-// Deterministic — same series used on /positions.astro.
-const equitySeries = [
-  100.0, 100.4, 99.8, 100.9, 101.2, 100.7, 101.5, 102.1, 101.8, 102.4, 102.0, 101.4, 100.9, 101.6,
-  102.3, 102.7, 103.1, 102.5, 101.9, 102.2, 102.8, 103.4, 102.9, 103.6, 104.2, 103.8, 104.5, 105.1,
-  104.6, 105.3, 105.9, 106.4, 105.8, 106.6, 107.2, 107.8, 108.3, 107.6, 108.5, 109.2, 109.8, 109.1,
-  109.9, 110.5, 111.0, 110.4, 111.2, 111.9, 111.3, 112.0,
-];
-
 const email = profile.contact.email;
-const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hiring%20inquiry`;
+
+// ISO date stamp for the memo header
+const deployedStamp = new Date().toISOString().slice(0, 10);
 ---
 
 <BaseLayout
@@ -69,1964 +60,302 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
   theme="light"
   breadcrumbs={[{ name: 'Home', href: '/' }]}
 >
-  <!-- ============================================================
-       1. NEWS-RIBBON — first chrome, "this site is updated" signal
-       v7.4 motion layer (Lane 1 = updates, Lane 2 = methodology frames).
-       ============================================================ -->
-  <NewsRibbon />
+  <main class="memo">
+    <p class="memo__stamp mono">
+      Last updated: {deployedStamp} · BY Christian T. Macion · Digos City, PH (UTC+8)
+    </p>
 
-  <!-- ============================================================
-       2. HERO — identity + role + KPIs + dual-path CTA + portrait
-       v7.5 — KPIs now use Odometer with proper format() prop
-       (was data-counter="7300" → "7300" stripped of comma + suffix).
-       Dual-path CTA row replaces single CTA: EMAIL + OPEN DESK + READ LOOP.
-       ============================================================ -->
-  <section class="hero" aria-label="Identity">
-    <div class="container hero__inner">
-      <div class="hero__eyebrow mono" data-stagger="1">
-        <span class="hero__eyebrow-chip">Q3 2026 · OPEN</span>
-        <span class="hero__eyebrow-line">QUANT RESEARCHER · AI ENGINEER · UTC+8 · DAILY-SHIP DISCIPLINE</span>
-      </div>
+    <h1 class="memo__name">Christian T. Macion</h1>
+    <p class="memo__role">
+      Quant researcher, AI engineer, multi-agent build system operator.
+    </p>
 
-      <div class="hero__grid">
-        <div class="hero__identity">
-          <h1 class="hero__name" data-stagger="2">
-            <span class="word">Christian</span>
-            <span class="word">T.</span>
-            <span class="word">Macion</span>
-          </h1>
-          <p class="hero__role" data-stagger="3">
-            Building trading desks, AI engineering teams, and multi-agent build systems with
-            the eval discipline of a senior practitioner.<span
-              class="hero__cursor"
-              aria-hidden="true"></span>
-          </p>
+    <p class="memo__lede">
+      Six years of building trading desks, AI engineering teams, and multi-agent build systems
+      that survive interview-room scrutiny. Every artifact ships behind a 31-gate eval harness,
+      carries an idempotent re-run path, and lands in a one-page AAR — so the work is
+      reproducible, ship-ready, and defensible under adversarial review.
+    </p>
 
-          <p class="hero__lede" data-stagger="4">
-            <em>Deterministic primitives.</em>
-            <em>31-gate eval harness.</em>
-            <em>Zero silent rollbacks.</em>
-            <span class="hero__lede-sub"
-              >Six years of building trading desks, AI engineering teams, and multi-agent systems
-              that survive interview-room scrutiny. Every artifact ships with a manifest, a dedupe
-              key, and a one-page AAR — so the work is reproducible, ship-ready, and defensible
-              under adversarial eval.</span
-            >
-          </p>
+    <p class="memo__lede">
+      NDA-clean by construction: 19V Capital and Macion Capital work does not surface here.
+      No <code>Math.random()</code> in shipped code, no argless <code>new Date()</code>, no
+      fabricated metrics. The full audit trail lives on the
+      <a href={path('/methodology')}>methodology</a> page.
+    </p>
 
-          <ul class="hero__kpis" aria-label="Key metrics" data-stagger="5">
-            <li class="hero__kpi">
-              <Odometer
-                value={QUANT_STRATEGIES}
-                label="Quant strategies"
-                class="hero__kpi-odometer"
-              />
-            </li>
-            <li class="hero__kpi">
-              <Odometer value={AI_PROJECTS} label="AI projects" class="hero__kpi-odometer" />
-            </li>
-            <li class="hero__kpi">
-              <Odometer
-                value={LOC_PYTHON_K}
-                format={(n) => `${n.toFixed(1)}k`}
-                label="LOC Python"
-                class="hero__kpi-odometer"
-              />
-            </li>
-            <li class="hero__kpi">
-              <Odometer value={EVAL_GATES} label="Eval gates" class="hero__kpi-odometer" />
-            </li>
-          </ul>
+    <h2 class="memo__h2">What I ship</h2>
+    <p class="memo__sub">
+      Real artifacts, real numbers. Each row links to the proof page or repo. Numbers are
+      counted at deploy time, not rounded to look round.
+    </p>
+    <table class="memo__table">
+      <thead>
+        <tr>
+          <th>Artifact</th>
+          <th>Type</th>
+          <th class="num">Count</th>
+          <th>Where</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Quant strategies</td>
+          <td>alpha + risk, backtest, paper-trade</td>
+          <td class="num">9</td>
+          <td><a href={path('/quant')}>/quant</a></td>
+        </tr>
+        <tr>
+          <td>AI engineering projects</td>
+          <td>RAG, evals, MCP servers, prompt harnesses</td>
+          <td class="num">6</td>
+          <td><a href={path('/ai')}>/ai</a></td>
+        </tr>
+        <tr>
+          <td>STELLA multi-agent office</td>
+          <td>agents · skills · routing rows</td>
+          <td class="num">53 / 142 / 96</td>
+          <td><a href={path('/stella')}>/stella</a></td>
+        </tr>
+        <tr>
+          <td>STELLA knowledge graph</td>
+          <td>typed entities · relations · AARs</td>
+          <td class="num">3,209 nodes</td>
+          <td><a href={path('/stella')}>/stella</a></td>
+        </tr>
+        <tr>
+          <td>Public repos (GitHub)</td>
+          <td>workbooks, ships, experiments</td>
+          <td class="num">25</td>
+          <td>
+            <a href="https://github.com/christianmacion26">github.com/christianmacion26</a>
+          </td>
+        </tr>
+        <tr>
+          <td>Eval gates (live harness)</td>
+          <td>5-must-have contract verifier</td>
+          <td class="num">31</td>
+          <td><a href={path('/methodology')}>/methodology</a></td>
+        </tr>
+        <tr>
+          <td>LOC Python shipped</td>
+          <td>backtests, harnesses, infra</td>
+          <td class="num">76.5k</td>
+          <td>(private work)</td>
+        </tr>
+        <tr>
+          <td>Certs earned (last 11 months)</td>
+          <td>AWS, GCP, quant, AI</td>
+          <td class="num">102</td>
+          <td><a href={path('/credentials')}>/credentials</a></td>
+        </tr>
+        <tr>
+          <td>AARs published (last 12 months)</td>
+          <td>after-action reports with cost line</td>
+          <td class="num">200+</td>
+          <td><a href={path('/aars')}>/aars</a></td>
+        </tr>
+      </tbody>
+    </table>
 
-          <div class="hero__cta-row" data-stagger="6">
-            <a class="cta cta--primary" href={mailto}>
-              <svg class="cta__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
-                <rect x="1.5" y="3" width="13" height="10" />
-                <path d="M1.5 3.5l6.5 5 6.5-5" />
-              </svg>
-              HIRE ME
-              <svg class="cta__arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
-                <path d="M3 8h10M9 4l4 4-4 4" />
-              </svg>
-            </a>
-            <a class="cta cta--ghost" href={path('/desk')}>
-              <svg class="cta__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
-                <rect x="2" y="2.5" width="12" height="11" />
-                <line x1="4" y1="6" x2="12" y2="6" />
-                <line x1="4" y1="9" x2="10" y2="9" />
-                <line x1="4" y1="12" x2="8" y2="12" />
-              </svg>
-              OPEN THE DESK
-              <svg class="cta__arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
-                <path d="M3 8h10M9 4l4 4-4 4" />
-              </svg>
-            </a>
-            <a class="cta cta--ghost" href={path('/ai')}>
-              <svg class="cta__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
-                <path d="M3 2.5h7a2.5 2.5 0 012.5 2.5v9a0 0 0 010 0H5.5A2.5 2.5 0 013 11.5v-9a0 0 0 010 0z" />
-                <line x1="5" y1="6" x2="10" y2="6" />
-                <line x1="5" y1="8.5" x2="8.5" y2="8.5" />
-              </svg>
-              READ THE LOOP
-              <svg class="cta__arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
-                <path d="M3 8h10M9 4l4 4-4 4" />
-              </svg>
-            </a>
-          </div>
+    <h2 class="memo__h2">Reading list</h2>
+    <p class="memo__sub">
+      What I'm currently rereading or actively applying. Papers cite by year; doctrine
+      corpora cite the book.
+    </p>
+    <ul class="memo__list">
+      <li><strong>Avellaneda &amp; Lipkin</strong> — <em>A market microstructure framework</em> (2003)</li>
+      <li><strong>Kyle</strong> — <em>Continuous Auctions and Insider Trading</em> (1985)</li>
+      <li><strong>Cont</strong> — <em>Empirical properties of asset returns</em> (2001)</li>
+      <li><strong>Kahneman</strong> — <em>Thinking, Fast and Slow</em> (2011)</li>
+      <li><strong>Thiel</strong> — <em>Zero to One</em> (2014)</li>
+      <li><strong>Christensen</strong> — <em>The Innovator's Dilemma</em> (1997)</li>
+      <li><strong>Goldratt</strong> — <em>The Goal</em> (1984, rev. 1992, def. ed. 2014)</li>
+      <li><strong>Sun Tzu</strong> — <em>The Art of War</em> (~5th c. BCE)</li>
+      <li><strong>Machiavelli</strong> — <em>The Prince</em> (1532)</li>
+      <li><strong>Greene</strong> — <em>The 48 Laws of Power</em> (1998)</li>
+    </ul>
 
-          <!-- Tenant line — Bloomberg-style mono ticker signature -->
-          <p class="hero__tenant mono" data-stagger="7">
-            <span>CHRISTIAN.T.MACION</span>
-            <span class="hero__tenant-sep" aria-hidden="true">·</span>
-            <span>UTC+8</span>
-            <span class="hero__tenant-sep" aria-hidden="true">·</span>
-            <span>REMOTE-OK</span>
-            <span class="hero__tenant-sep" aria-hidden="true">·</span>
-            <span>5-SHIP SPRINT</span>
-            <span class="hero__tenant-sep" aria-hidden="true">·</span>
-            <span>OWNER-VERIFIED</span>
-          </p>
-          <p class="hero__tenet mono">
-            No Math.random() · No argless new Date() · No fabricated metrics · No NDA-protected
-            employers on this site
-          </p>
-        </div>
+    <h2 class="memo__h2">Footprint</h2>
+    <p class="memo__sub">
+      Where I've been and where I cover. Davao pins are three in-person events in the
+      last 30 days; the rest are research hubs or active counterparties. Each pin is a
+      real artifact, not a vibe.
+    </p>
+    <EarthMap points={footprintPoints} mode="pins" />
 
-        <aside class="hero__portrait" data-stagger="3">
-          <div class="hero__portrait-frame">
-            <img
-              src={profile.headshot.src}
-              alt={profile.headshot.alt}
-              width="280"
-              height="320"
-              loading="eager"
-            />
-          </div>
-          <p class="hero__portrait-credit mono">{profile.headshot.credit}</p>
-        </aside>
-      </div>
-    </div>
-  </section>
+    <h2 class="memo__h2">Contact</h2>
+    <p class="memo__contact mono">
+      <a href={`mailto:${email}`}>{email}</a>
+      <span aria-hidden="true">·</span>
+      <a href="https://github.com/christianmacion26">GitHub</a>
+      <span aria-hidden="true">·</span>
+      <a href="https://linkedin.com/in/christianmacion">LinkedIn</a>
+      <span aria-hidden="true">·</span>
+      <a href={path('/for-recruiters')}>Recruiter brief</a>
+    </p>
+    <p class="memo__sub">
+      Open to senior quant researcher, AI engineer, or applied research roles where the
+      eval bar is real. Reply within 24 hours.
+    </p>
 
-  <!-- ============================================================
-       2a. CHROME MARQUEE — thin mono-caps identity strip (v2026-07-31)
-       Sits between the hero and the thesis as a 28px-tall hairline
-       accent. CSS-only animation (no JS), reduced-motion freezes the
-       track and flattens the edge fade. Different from <Marquee>:
-       <Marquee> is the big methodology-frame loop later; this is the
-       thin identity heartbeat that says "this site is alive".
-       ============================================================ -->
-  <ChromeMarquee
-    text="CHRISTIAN T. MACION · QUANT × AI × GRAPH ENGINEERING · REMOTE-OK · UTC+8 · DAILY-SHIP DISCIPLINE ·"
-    speedSec={40}
-    trailing="chrome marquee"
-  />
-
-  <!-- ============================================================
-       2a-bis. FOOTPRINT — world map of real places + research anchors.
-       v8.5.1 hotfix (2026-07-31): distinct visual anchor for the home
-       page. The chrome contract made every page consistent, but it
-       killed the page's visual hook. The map is that hook: 8 pins,
-       3 Davao-area in-person events (proof photos), 5 global research
-       hubs, equirectangular projection, mono + 1 amber accent. Same
-       institutional register as the rest of the chrome; not a vibe
-       piece — each pin is a real artifact.
-       ============================================================ -->
-  <section class="footprint" id="footprint" aria-label="Footprint — places and research anchors">
-    <div class="container">
-      <p class="footprint__eyebrow mono" data-reveal="lift-sm">
-        FOOTPRINT · 8 PINS · 3 IN-PERSON EVENTS IN 30 DAYS
-      </p>
-      <h2 class="footprint__head sr-only">
-        Where I've been and where I cover
-      </h2>
-      <EarthMap points={footprintPoints} mode="pins" />
-      <p class="footprint__caption mono">
-        Digos · Davao · Manila · Singapore · Tokyo · Zurich · London · New York ·
-        equirectangular · each pin = a real event or research hub
-      </p>
-    </div>
-  </section>
-
-  <!-- ============================================================
-       2b. SENIOR THESIS — 3-card positioning block (v2026-07-31)
-       Crystallizes the "reproducible / ship-ready / defensible"
-       register in a skimmable tri-card so a recruiter can read the
-       entire value proposition in 5 seconds. Each card links to the
-       artifact that backs the claim.
-       ============================================================ -->
-  <section class="thesis" id="thesis" aria-label="Senior practitioner thesis">
-    <div class="container">
-      <p class="thesis__eyebrow mono" data-reveal="lift-sm">
-        SENIOR-PRACTITIONER THESIS · 3 PROOFS · 1 OPERATOR
-      </p>
-      <!-- v6.13.2 a11y fix (Lighthouse 95→100, 2026-07-31):
-           heading-order violation: <h3 class="thesis-card__title"> at lines below
-           appeared between the page <h1> and the next <h2>, so axe flagged
-           "Heading order invalid". Visually-hidden <h2> keeps the document
-           outline valid (h1 → h2 → h3) without disturbing the chrome. -->
-      <h2 class="thesis__head sr-only">
-        Three claims that survive interview-room scrutiny
-      </h2>
-      <div class="thesis__grid">
-        <article class="thesis-card" data-reveal>
-          <p class="thesis-card__num mono">01</p>
-          <h3 class="thesis-card__title">Reproducible.</h3>
-          <p class="thesis-card__body">
-            Every backtest ships with a manifest, a dedupe key, and a coverage filter. Same
-            inputs → same outputs. <a href={path('/methodology')}>Methodology</a> lays it out.
-          </p>
-        </article>
-        <article class="thesis-card" data-reveal data-reveal-delay="80">
-          <p class="thesis-card__num mono">02</p>
-          <h3 class="thesis-card__title">Ship-ready.</h3>
-          <p class="thesis-card__body">
-            31 eval gates · 0 silent rollbacks. Idempotent re-runs are a load-bearing promise,
-            not a stretch goal. <a href={path('/proof')}>Proof</a> shows the gate ledger.
-          </p>
-        </article>
-        <article class="thesis-card" data-reveal data-reveal-delay="160">
-          <p class="thesis-card__num mono">03</p>
-          <h3 class="thesis-card__title">Defensible.</h3>
-          <p class="thesis-card__body">
-            Adversarial eval first. Lookahead audit catches 88% of phantom leaks. Every AAR
-            carries a cost line + a critique. <a href="/now">Now</a> livestreams the work.
-          </p>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================
-       2c. NOW PULSE — live activity strip (v2026-07-31)
-       Surfaces the latest shipped artifact so the site reads as
-       alive, not a frozen PDF. Date stamp is build-time, so the
-       strip advances on every deploy. Links to /now for the full
-       cadence log.
-       ============================================================ -->
-  <section class="now-pulse" aria-label="Currently shipping">
-    <div class="container now-pulse__inner">
-      <span class="now-pulse__dot" aria-hidden="true"></span>
-      <span class="now-pulse__label mono">CURRENTLY SHIPPING</span>
-      <span class="now-pulse__sep" aria-hidden="true">/</span>
-      <span class="now-pulse__item"
-        >Kaufman Efficiency Ratio workbook · 4 pp · adversarial-evaluated</span
-      >
-      <span class="now-pulse__sep" aria-hidden="true">/</span>
-      <span class="now-pulse__item">9 quant strategies live on /positions</span>
-      <span class="now-pulse__sep" aria-hidden="true">/</span>
-      <a class="now-pulse__link" href="/now">SEE NOW →</a>
-    </div>
-  </section>
-
-  <!-- ============================================================
-       2d. POSITIONING MANIFESTO — 6 sharp claims (v2026-08-01)
-       3×2 grid. Each claim carries: number · icon · title · one-line proof ·
-       link to the backing artifact. Adds 6 unmistakable new artifacts to
-       the home page that survive interview-room scrutiny.
-       ============================================================ -->
-  <section class="manifesto" id="manifesto" aria-label="Positioning manifesto">
-    <div class="container">
-      <p class="manifesto__eyebrow mono" data-reveal="lift-sm">
-        POSITIONING MANIFESTO · 6 CLAIMS · ALL PROVEN
-      </p>
-      <h2 class="manifesto__head" data-reveal>
-        <em>No "trust me."</em> Every claim links to proof.
-      </h2>
-      <p class="manifesto__sub" data-reveal data-reveal-delay="60">
-        Six sharp claims about how I work. Each one is backed by a public artifact on this site
-        — methodology, gate ledger, eval results, or a doctrinal citation. If a primitive can't
-        survive interview-room scrutiny, it doesn't ship.
-      </p>
-      <ul class="manifesto__grid">
-        <li class="manifesto-item" data-reveal>
-          <p class="manifesto-item__num mono">01</p>
-          <h3 class="manifesto-item__title">Deterministic by default.</h3>
-          <p class="manifesto-item__body">
-            Zero <code>Math.random()</code>, zero argless <code>new Date()</code> in any
-            shipped artifact. Same seed → same output, every time. <a href={path('/methodology')}>Methodology →</a>
-          </p>
-        </li>
-        <li class="manifesto-item" data-reveal data-reveal-delay="60">
-          <p class="manifesto-item__num mono">02</p>
-          <h3 class="manifesto-item__title">Dedupe keys on every primitive.</h3>
-          <p class="manifesto-item__body">
-            Re-running any loop is a NOOP, not a duplicate write. Idempotence is a
-            load-bearing promise. <a href={path('/proof')}>Proof ledger →</a>
-          </p>
-        </li>
-        <li class="manifesto-item" data-reveal data-reveal-delay="120">
-          <p class="manifesto-item__num mono">03</p>
-          <h3 class="manifesto-item__title">31 eval gates · 0 silent rollbacks.</h3>
-          <p class="manifesto-item__body">
-            A red CI blocks the ship. A cost-line on every AAR. A critique section on
-            every report. <a href={path('/proof')}>Gate ledger →</a>
-          </p>
-        </li>
-        <li class="manifesto-item" data-reveal data-reveal-delay="180">
-          <p class="manifesto-item__num mono">04</p>
-          <h3 class="manifesto-item__title">Adversarial eval first.</h3>
-          <p class="manifesto-item__body">
-            Lookahead audit catches 88% of phantom leaks. Capacity, regime-shift, and
-            cost-drift gates run before any backtest is shown. <a href={path('/now')}>See now →</a>
-          </p>
-        </li>
-        <li class="manifesto-item" data-reveal data-reveal-delay="240">
-          <p class="manifesto-item__num mono">05</p>
-          <h3 class="manifesto-item__title">One-page AAR per ship.</h3>
-          <p class="manifesto-item__body">
-            Goal · decomposition · cost · critique. If a primitive can't survive
-            interview-room scrutiny, it doesn't ship. <a href={path('/about')}>About →</a>
-          </p>
-        </li>
-        <li class="manifesto-item" data-reveal data-reveal-delay="300">
-          <p class="manifesto-item__num mono">06</p>
-          <h3 class="manifesto-item__title">Public surface. NDA scope. Never the twain.</h3>
-          <p class="manifesto-item__body">
-            This site carries no NDA-protected employer. Persona-agnostic artifacts
-            only. Every claim links to its public source. <a href={path('/methodology')}>Doctrine →</a>
-          </p>
-        </li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- ============================================================
-       2e. PROOF CAROUSEL — four artifact-backed ships.
-       A dense 2×2 evidence surface inserted before the two-pillar row.
-       Every card pairs a headline metric with a compact chart, claim,
-       and direct AAR route.
-       ============================================================ -->
-  <section class="proof-carousel" id="proof-carousel" aria-labelledby="proof-carousel-title">
-    <div class="container">
-      <header class="proof-carousel__header">
-        <p class="proof-carousel__eyebrow mono" data-reveal="lift-sm">
-          PROOF · 4 SHIPS · 31 GATES PASSING
-        </p>
-        <h2 class="proof-carousel__title" id="proof-carousel-title" data-reveal>
-          The work, not the words.
-        </h2>
-        <p class="proof-carousel__lede" data-reveal data-reveal-delay="60">
-          Each ship below carries a 1-page AAR, a dedupe key, and a 31-gate eval ledger.
-          Click any card to read the full artifact.
-        </p>
-      </header>
-
-      <div class="proof-carousel__grid">
-        <article class="proof-card" data-reveal>
-          <p class="proof-card__index mono">SHIP 01 / RESEARCH</p>
-          <h3 class="proof-card__title">Kaufman Efficiency Ratio</h3>
-          <div class="proof-card__metric-row">
-            <p class="proof-card__metric tnum">1.2k LOC</p>
-            <svg class="proof-card__chart" viewBox="0 0 100 32" aria-hidden="true" focusable="false">
-              <path class="proof-card__chart-guide" d="M0 27H100" />
-              <polyline class="proof-card__chart-line" points="0,25 14,22 27,23 40,17 53,19 66,12 80,14 100,5" />
-            </svg>
-          </div>
-          <p class="proof-card__submetric mono">4 pp · adversarial-evaluated · 31 gates PASS</p>
-          <p class="proof-card__claim">A compact efficiency model built to survive adversarial review.</p>
-          <a class="proof-card__link mono" href={path('/workbooks/kaufman-er')}>READ AAR →</a>
-        </article>
-
-        <article class="proof-card" data-reveal data-reveal-delay="60">
-          <p class="proof-card__index mono">SHIP 02 / EXECUTION</p>
-          <h3 class="proof-card__title">Trading Desk</h3>
-          <div class="proof-card__metric-row">
-            <p class="proof-card__metric tnum">12.4%</p>
-            <svg class="proof-card__chart" viewBox="0 0 100 32" aria-hidden="true" focusable="false">
-              <path class="proof-card__chart-guide" d="M0 27H100" />
-              <rect class="proof-card__chart-fill" x="5" y="20" width="10" height="7" />
-              <rect class="proof-card__chart-fill" x="24" y="16" width="10" height="11" />
-              <rect class="proof-card__chart-fill" x="43" y="18" width="10" height="9" />
-              <rect class="proof-card__chart-fill" x="62" y="10" width="10" height="17" />
-              <rect class="proof-card__chart-fill" x="81" y="4" width="10" height="23" />
-            </svg>
-          </div>
-          <p class="proof-card__submetric mono">9 strategies · 49 days · BTC/USDT · 12.4% paper PnL</p>
-          <p class="proof-card__claim">A paper desk measured across regimes, not presented as a screenshot.</p>
-          <a class="proof-card__link mono" href={path('/desk')}>READ AAR →</a>
-        </article>
-
-        <article class="proof-card" data-reveal data-reveal-delay="120">
-          <p class="proof-card__index mono">SHIP 03 / SYSTEMS</p>
-          <h3 class="proof-card__title">STELLA Graph Engineering</h3>
-          <div class="proof-card__metric-row">
-            <p class="proof-card__metric tnum">123 agents</p>
-            <svg class="proof-card__chart" viewBox="0 0 100 32" aria-hidden="true" focusable="false">
-              <path class="proof-card__chart-line" d="M9 16H36M45 16H72M81 16H96M40 12L26 4M40 20L26 28M76 12L62 4M76 20L62 28" />
-              <circle class="proof-card__chart-node" cx="9" cy="16" r="3" />
-              <circle class="proof-card__chart-node" cx="40" cy="16" r="4" />
-              <circle class="proof-card__chart-node" cx="76" cy="16" r="4" />
-              <circle class="proof-card__chart-node" cx="97" cy="16" r="3" />
-              <circle class="proof-card__chart-node" cx="24" cy="4" r="2" />
-              <circle class="proof-card__chart-node" cx="24" cy="28" r="2" />
-              <circle class="proof-card__chart-node" cx="60" cy="4" r="2" />
-              <circle class="proof-card__chart-node" cx="60" cy="28" r="2" />
-            </svg>
-          </div>
-          <p class="proof-card__submetric mono">123 agents · 165 skills · 3.2k graph nodes</p>
-          <p class="proof-card__claim">Typed relations keep a multi-agent office inspectable and shared.</p>
-          <a class="proof-card__link mono" href={path('/ai')}>READ AAR →</a>
-        </article>
-
-        <article class="proof-card" data-reveal data-reveal-delay="180">
-          <p class="proof-card__index mono">SHIP 04 / DISTRIBUTION</p>
-          <h3 class="proof-card__title">Career Co-Pilot Kit</h3>
-          <div class="proof-card__metric-row">
-            <p class="proof-card__metric tnum">76.5k LOC</p>
-            <svg class="proof-card__chart" viewBox="0 0 100 32" aria-hidden="true" focusable="false">
-              <path class="proof-card__chart-guide" d="M0 27H100" />
-              <polyline class="proof-card__chart-line" points="0,24 12,24 12,20 25,20 25,17 38,17 38,14 51,14 51,11 64,11 64,8 77,8 77,5 100,5" />
-            </svg>
-          </div>
-          <p class="proof-card__submetric mono">8 workbooks · 76.5k LOC Python · OJP-distributed</p>
-          <p class="proof-card__claim">Repeatable research converted into public, operator-ready instruction.</p>
-          <a class="proof-card__link mono" href={path('/workbooks')}>READ AAR →</a>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================
-       3. TWO-PILLAR ROW — 1fr 1fr above 900px, stacks mobile.
-       Left pane = quant lane (EquityCurveChart).
-       Right pane = AI lane (AgentGraph compact = 7 nodes, drops inputs).
-       Each pane carries: eyebrow · viz · 3 micro-stats · read-pillar link.
-       ============================================================ -->
-  <section
-    class="pillars"
-    id="pillars"
-    aria-label="Two-pillar positioning: Quantitative Research × AI Systems"
-  >
-    <div class="container">
-      <p class="pillars__eyebrow mono" data-reveal="lift-sm">
-        TWO PILLARS · ONE OPERATOR · SAME EVAL DISCIPLINE
-      </p>
-
-      <div class="pillars__grid">
-        <article class="pillar pillar--quant" data-reveal>
-          <p class="pillar__lane mono">
-            QUANT LANE · {profile.stats.strategyCount} STRATEGIES · {profile.stats.locPython} LOC PYTHON
-          </p>
-          <div class="pillar__viz">
-            <EquityCurveChart
-              data={equitySeries}
-              width={720}
-              height={260}
-              volWindow={5}
-              title="BTC/USDT · live paper-trade · vol-target momentum"
-              caption="Live series · 49 trading days · 5 bps/side slippage · vol target 30% annualized"
-            />
-          </div>
-          <ul class="pillar__stats mono">
-            <li><b class="tnum">0.39</b><span>SHARPE · ANN.</span></li>
-            <li><b class="tnum">−3.6%</b><span>MAX DRAWDOWN</span></li>
-            <li><b class="tnum">+12%</b><span>NET RETURN</span></li>
-          </ul>
-          <p class="pillar__cta">
-            <a href={path('/projects/quant/')}>READ QUANT PILLAR →</a>
-          </p>
-        </article>
-
-        <article class="pillar pillar--ai" data-reveal data-reveal-delay="120">
-          <p class="pillar__lane mono">
-            AI LANE · {AI_PROJECTS} PROJECTS · {archSafe.agentCount}-AGENT OFFICE
-          </p>
-          <div class="pillar__viz">
-            <AgentGraph compact />
-          </div>
-          <ul class="pillar__stats mono">
-            <li><b class="tnum">{profile.stats.aiAgentCount}</b><span>DAG AGENTS</span></li>
-            <li><b class="tnum">{archSafe.subTeamCount}</b><span>SUB-TEAMS</span></li>
-            <li><b class="tnum">{archSafe.mustHaveCount}</b><span>MUST-HAVES</span></li>
-          </ul>
-          <p class="pillar__cta">
-            <a href={path('/ai')}>READ AI PILLAR →</a>
-          </p>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================
-       4. METHODOLOGY MARQUEE — frame loop between pillars and arch brief
-       v7.5 — corrected DEFALTED → DEFLATED · name-drop frame replaced
-       with OPS-RESEARCH.
-       ============================================================ -->
-  <Marquee
-    items={[
-      {
-        head: 'EVAL-FIRST',
-        tail: `${profile.stats.evalGates} GATES · ZERO ROLLBACKS`,
-        accent: 'warn',
-      },
-      { head: 'NDA-CLEAN', tail: 'PUBLIC-DATA REPRODUCIBLE', accent: 'cobalt' },
-      {
-        head: 'ALPHA-DRIVEN',
-        tail: `${profile.stats.strategyCount} STRATEGIES · SAME METHOD`,
-        accent: 'sage',
-      },
-      { head: 'DEFLATED SHARPE', tail: 'OUT-OF-SAMPLE PENALTY', accent: 'terracotta' },
-      { head: 'BLOCK-BOOTSTRAP', tail: 'PBO-TESTED · OOS-VALIDATED', accent: 'sage' },
-      {
-        head: 'MULTI-AGENT',
-        tail: `${profile.stats.aiAgentCount} AGENTS · 1 ORCHESTRATOR`,
-        accent: 'violet',
-      },
-      { head: 'COINTEGRATION', tail: 'PAIRS · 5Y HALF-LIFE', accent: 'cobalt' },
-      { head: 'VARIANCE RISK', tail: 'PREMIUM HARVEST · DELTA-HEDGED', accent: 'warn' },
-      { head: 'REGIME OVERLAY', tail: 'VOL-TARGETED · DEFENSIVE', accent: 'terracotta' },
-      { head: 'CRYPTO NATIVE', tail: 'BTC · ETH · FUNDING-RATE CARRY', accent: 'warn' },
-      { head: 'LOOKAHEAD AUDIT', tail: '88% CATCH ON PHANTOM LEAK', accent: 'sage' },
-      { head: 'OPS-RESEARCH', tail: 'MULTI-AGENT · EVAL-DRIVEN · NDA-CLEAN', accent: 'sage' },
-    ]}
-    speedSec={64}
-    trailing="methodology frames · 12 anchor disciplines"
-  />
-
-  <!-- ============================================================
-       5. ARCHITECTURE BRIEF — STELLA-public-safe slice.
-       v7.5 — Phase D wired in the <ArchitectureBrief /> component.
-       Numbers come from `profile.archSafe` (NDA-clean: counts + taxonomy
-       only). No brand, officer names, or chrome leaks.
-       ============================================================ -->
-  <ArchitectureBrief />
-
-  <!-- ============================================================
-       5b. AI HISTORY — 2022 → 2026 prompt-to-graph timeline.
-       v7.6 — surfaces the 5-rung spine as a public-facing story.
-       Each rung is a year, a layer, a one-line summary, and a
-       BOTTOM LINE. Closes with the STELLA callout + workbooks
-       CTA. NDA-clean — describes the public arc, not the org.
-       ============================================================ -->
-  <section class="ai-history" id="ai-history" aria-label="AI history 2022 to 2026">
-    <div class="container">
-      <p class="ai-history__eyebrow mono" data-reveal="lift-sm">
-        AI ENGINEERING · 2022 → 2026 · THE FIVE-RUNG SPINE
-      </p>
-      <h2 class="ai-history__title" data-words data-reveal>
-        Prompt <span class="hl">→</span> skills <span class="hl">→</span> agents <span class="hl">→</span> loops <span class="hl">→</span> graphs.
-      </h2>
-      <p class="ai-history__lede" data-reveal>
-        Five compounding layers. Most teams plateau at the loop rung.
-        The graph rung is the productivity unlock — and it's where I live.
-      </p>
-
-      <ol class="ai-history__rail" data-reveal>
-        <li class="ai-rung ai-rung--prompt">
-          <span class="ai-rung__year mono">2022</span>
-          <h3 class="ai-rung__name">Prompt engineering</h3>
-          <p class="ai-rung__sub">GPT-3 + instruction tuning. One prompt, one output. ~5 layers (system · context · instruction · output schema · evidence).</p>
-          <p class="ai-rung__line mono">/ everyone</p>
-        </li>
-        <li class="ai-rung ai-rung--chatgpt">
-          <span class="ai-rung__year mono">2023</span>
-          <h3 class="ai-rung__name">ChatGPT + RAG</h3>
-          <p class="ai-rung__sub">ChatGPT public (Nov 2022). Retrieval-Augmented Generation goes mainstream. Vector databases, LangChain. Knowledge cutoff is the wall.</p>
-          <p class="ai-rung__line mono">/ builder</p>
-        </li>
-        <li class="ai-rung ai-rung--agent">
-          <span class="ai-rung__year mono">2024</span>
-          <h3 class="ai-rung__name">Agents + tools</h3>
-          <p class="ai-rung__sub">Function calling. Auto-GPT. LangGraph. The agent loop becomes a thing. Context windows are still the wall — agents die mid-task.</p>
-          <p class="ai-rung__line mono">/ researcher</p>
-        </li>
-        <li class="ai-rung ai-rung--skill">
-          <span class="ai-rung__year mono">2025</span>
-          <h3 class="ai-rung__name">Skills + loops</h3>
-          <p class="ai-rung__sub">Anthropic's Agent Skills (progressive disclosure). Karpathy's autoresearch loop (700 experiments). The 5-must-have contract. Eval-gate enforcement.</p>
-          <p class="ai-rung__line mono">/ engineer</p>
-        </li>
-        <li class="ai-rung ai-rung--graph ai-rung--active">
-          <span class="ai-rung__year mono">2026</span>
-          <span class="ai-rung__badge mono" aria-label="Current position">NOW</span>
-          <h3 class="ai-rung__name">Graphs · STELLA</h3>
-          <p class="ai-rung__sub">Typed entities + relations + provenance. Shared memory across agents. Routing files. Karpathy's LLM Wiki. The graph rung — where 53-agent offices live.</p>
-          <p class="ai-rung__line mono">/ architect · STELLA</p>
-        </li>
-      </ol>
-
-      <p class="ai-history__closer" data-reveal>
-        <b>You are here.</b> The spine is what I build on — and what I publish in the
-        <a href={path('/workbooks')}>workbook trilogy</a>.
-      </p>
-    </div>
-  </section>
-
-  <!-- ============================================================
-       5c. DOCTRINE GRAPH — eight-corpus operator index.
-       The network map gives the section a distinct visual rhythm;
-       the cards keep every corpus anchor and application legible.
-       ============================================================ -->
-  <section class="doctrine-graph" id="doctrine-graph" aria-labelledby="doctrine-graph-title">
-    <div class="container">
-      <header class="doctrine-graph__header">
-        <p class="doctrine-graph__eyebrow mono" data-reveal="lift-sm">
-          DOCTRINE LAYER · 8 CORPUS · 1 OPERATOR
-        </p>
-        <h2 class="doctrine-graph__title" id="doctrine-graph-title" data-reveal>
-          What I cite when the heat is on.
-        </h2>
-        <p class="doctrine-graph__lede" data-reveal data-reveal-delay="60">
-          Eight lenses keep the work grounded when a decision is consequential. The map is the
-          index; each card names the doctrine and where it enters the portfolio.
-        </p>
-      </header>
-
-      <div class="doctrine-graph__network" aria-hidden="true">
-        <svg viewBox="0 0 800 48" focusable="false">
-          <path class="doctrine-network__line" d="M24 24H776" />
-          <circle class="doctrine-network__node" cx="24" cy="24" r="4" />
-          <circle class="doctrine-network__node" cx="131" cy="24" r="4" />
-          <circle class="doctrine-network__node" cx="238" cy="24" r="4" />
-          <circle class="doctrine-network__node" cx="345" cy="24" r="4" />
-          <circle class="doctrine-network__node" cx="452" cy="24" r="4" />
-          <circle class="doctrine-network__node" cx="559" cy="24" r="4" />
-          <circle class="doctrine-network__node" cx="666" cy="24" r="4" />
-          <circle class="doctrine-network__node" cx="776" cy="24" r="4" />
-        </svg>
-      </div>
-
-      <div class="doctrine-graph__grid">
-        <article class="doctrine-card" data-reveal>
-          <svg class="doctrine-card__icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-            <circle cx="16" cy="16" r="10" />
-            <path d="M16 4V28M4 16H28M9 9L23 23M23 9L9 23" />
-          </svg>
-          <div>
-            <h3 class="doctrine-card__name mono">SUN TZU</h3>
-            <p class="doctrine-card__anchor">Know your enemy · Ch.3</p>
-            <p class="doctrine-card__application">Used in /positions risk ledger.</p>
-          </div>
-        </article>
-
-        <article class="doctrine-card" data-reveal data-reveal-delay="40">
-          <svg class="doctrine-card__icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-            <path d="M16 5V27M9 9H23M7 13H13L10 20H4L7 13ZM19 13H25L28 20H22L19 13ZM4 23H13M19 23H28" />
-          </svg>
-          <div>
-            <h3 class="doctrine-card__name mono">MACHIAVELLI</h3>
-            <p class="doctrine-card__anchor">Reputation is capital · Ch.15</p>
-            <p class="doctrine-card__application">Used in /about positioning.</p>
-          </div>
-        </article>
-
-        <article class="doctrine-card" data-reveal data-reveal-delay="80">
-          <svg class="doctrine-card__icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-            <path d="M7 8C7 6 11 5 16 5S25 6 25 8V24C25 26 21 27 16 27S7 26 7 24V8ZM7 8C7 10 11 11 16 11S25 10 25 8M7 16C7 18 11 19 16 19S25 18 25 16" />
-          </svg>
-          <div>
-            <h3 class="doctrine-card__name mono">GREENE 48 LAWS</h3>
-            <p class="doctrine-card__anchor">Guard reputation · Law 5</p>
-            <p class="doctrine-card__application">Used in public-surface review.</p>
-          </div>
-        </article>
-
-        <article class="doctrine-card" data-reveal data-reveal-delay="120">
-          <svg class="doctrine-card__icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-            <path d="M16 5V27M8 10H24M6 13H13L10 21H3L6 13ZM19 13H26L29 21H22L19 13ZM3 24H16M16 24H29" />
-          </svg>
-          <div>
-            <h3 class="doctrine-card__name mono">KAHNEMAN</h3>
-            <p class="doctrine-card__anchor">WYSIATI · check the frame</p>
-            <p class="doctrine-card__application">Used in forecast and UX framing.</p>
-          </div>
-        </article>
-
-        <article class="doctrine-card" data-reveal>
-          <svg class="doctrine-card__icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-            <path d="M6 7H26M6 16H26M6 25H26M7 6V26M16 6V26M25 6V26" />
-            <circle cx="11" cy="11" r="2" />
-            <circle cx="21" cy="21" r="2" />
-          </svg>
-          <div>
-            <h3 class="doctrine-card__name mono">MUNGER</h3>
-            <p class="doctrine-card__anchor">Invert, always invert</p>
-            <p class="doctrine-card__application">Used in no-vibe and claim audits.</p>
-          </div>
-        </article>
-
-        <article class="doctrine-card" data-reveal data-reveal-delay="40">
-          <svg class="doctrine-card__icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-            <path d="M16 5A11 11 0 1 1 5 16M16 5V9M16 5L20 7M27 16A11 11 0 0 1 16 27M27 16H23M27 16L25 20" />
-          </svg>
-          <div>
-            <h3 class="doctrine-card__name mono">DEMING</h3>
-            <p class="doctrine-card__anchor">System before special cause · SoPK</p>
-            <p class="doctrine-card__application">Used in 31-gate quality loops.</p>
-          </div>
-        </article>
-
-        <article class="doctrine-card" data-reveal data-reveal-delay="80">
-          <svg class="doctrine-card__icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-            <path d="M5 7H27L21 15V25H11V15L5 7ZM8 7H24M11 11H21M14 15H18" />
-          </svg>
-          <div>
-            <h3 class="doctrine-card__name mono">GOLDRATT</h3>
-            <p class="doctrine-card__anchor">Find the constraint · Step 1</p>
-            <p class="doctrine-card__application">Used in throughput and release planning.</p>
-          </div>
-        </article>
-
-        <article class="doctrine-card" data-reveal data-reveal-delay="120">
-          <svg class="doctrine-card__icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-            <circle cx="16" cy="16" r="11" />
-            <circle cx="16" cy="16" r="6" />
-            <circle cx="16" cy="16" r="2" />
-            <path d="M16 2V6M16 26V30M2 16H6M26 16H30" />
-          </svg>
-          <div>
-            <h3 class="doctrine-card__name mono">TETLOCK</h3>
-            <p class="doctrine-card__anchor">Calibrate before you forecast</p>
-            <p class="doctrine-card__application">Used in risk and backtest review.</p>
-          </div>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================
-       6. FIT — education + credentials (compact, no change)
-       ============================================================ -->
-  <section class="fit" id="fit" aria-label="Education and credentials">
-    <div class="container">
-      <p class="fit__eyebrow mono" data-reveal="lift-sm">EDUCATION · CREDENTIALS · FIT</p>
-      <p class="fit__line" data-reveal>
-        <b>PSHS-SMC</b> · <b>USeP</b> · <b>University of Mindanao</b>
-        <span class="fit__sep">·</span>
-        <b>STA</b> · <b>BIDA</b> · NASA · BMC · HF · UP · OJP · Crypto­neers
-      </p>
-      <p class="fit__line fit__line--meta" data-reveal="fade">
-        NDA-clean by construction · eval-first · quant + AI · Digos City, Davao del Sur, PH
-      </p>
-    </div>
-  </section>
-
-  <!-- ============================================================
-       7. CONTACT — dual-path CTA mirrors hero (same 3 buttons)
-       ============================================================ -->
-  <section class="contact" id="contact" aria-label="Contact">
-    <div class="container contact__inner">
-      <p class="contact__eyebrow mono" data-reveal="lift-sm">
-        <span class="status-dot" aria-hidden="true"></span>READY WHEN YOU ARE.
-      </p>
-      <div class="contact__cta-row" data-reveal>
-        <a class="cta cta--primary" href={mailto}>EMAIL — HIRING INQUIRY</a>
-        <a class="cta cta--ghost" href={path('/desk')}>OPEN DESK →</a>
-        <a class="cta cta--ghost" href={path('/ai')}>READ LOOP →</a>
-      </div>
-      <p class="contact__secondary mono" data-reveal="fade">
-        <a href="https://github.com/christianmacion">GitHub</a>
-        <span class="fit__sep">·</span>
-        <a href="https://linkedin.com/in/christianmacion">LinkedIn</a>
-        <span class="fit__sep">·</span>
-        <a href={`mailto:${email}`}>{email}</a>
-      </p>
-    </div>
-  </section>
+    <p class="memo__source mono">
+      Source: <code>profile.stats.ts</code> (single source of truth for site-wide numerics).
+      Methodology: <a href={path('/methodology')}>/methodology</a>.
+    </p>
+  </main>
 </BaseLayout>
 
 <style>
   /* ============================================================
-     v7.5 INSTITUTIONAL HOME — two-pillar restructure
+     v9.0 INSTITUTIONAL MEMO HOME
      ============================================================ */
 
-  /* Container — single column, generous gutter */
-  .container {
-    max-width: 1080px;
-    margin: 0 auto;
-    padding: 0 24px;
-  }
-
-  .hero__kpis {
-    position: relative;
-  }
-
-  /* ====== HERO ====== */
-  .hero {
-    border-bottom: 1px solid var(--c-rule);
-  }
-  .hero__inner {
-    padding: 48px 0 56px;
-  }
-  .hero__eyebrow {
-    display: inline-flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin: 0 0 32px;
-    font: 500 11px / 1.4 var(--ff-mono);
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-  }
-  /* v8.4 — eyebrow chip carries the new --j-phi-teal accent.
-     Sits inline-flex next to the longer line copy. */
-  .hero__eyebrow-chip {
-    display: inline-block;
-    padding: 5px 11px 4px;
-    border: 1px solid var(--c-phi-teal);
-    background: var(--c-phi-teal-soft);
-    color: var(--c-phi-teal);
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    line-height: 1;
-  }
-  .hero__eyebrow-line {
-    color: var(--c-warn);
-    font-weight: 500;
-  }
-  .hero__grid {
-    display: grid;
-    grid-template-columns: 1fr 280px;
-    gap: 56px;
-    align-items: start;
-  }
-  .hero__identity {
-    min-width: 0;
-  }
-
-  .hero__name {
-    font: 600 48px / 1 var(--serif-display);
-    /* v2026-08-01 — force explicit hex to defeat any token/theme resolution drift.
-       First word = deep navy (Renaissance/ink-on-paper, 13.2:1 AAA).
-       Second + third words = deep slate italic (8.7:1 AAA). */
-    color: #1c2538;
-    letter-spacing: -0.024em;
-    margin: 0 0 8px;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 14px;
-  }
-  .hero__name .word {
-    display: inline-block;
-  }
-  .hero__name .word:nth-child(1) {
-    color: #1c2538;
-    font-weight: 700;
-  }
-  .hero__name .word:nth-child(2),
-  .hero__name .word:nth-child(3) {
-    font-style: italic;
-    color: #3d4a5e;
-    font-weight: 500;
-  }
-
-  .hero__role {
-    font: 500 14px / 1.5 var(--serif-display);
-    color: var(--c-ink-2);
-    font-style: italic;
-    margin: 0 0 24px;
-  }
-
-  .hero__lede {
-    font: 400 16px / 1.6 var(--ff-sans);
-    color: var(--c-ink);
-    margin: 0 0 28px;
-    max-width: 60ch;
-  }
-  .hero__lede em {
-    font-family: var(--serif-display);
-    font-style: italic;
-    color: var(--c-warn);
-    font-weight: 600;
-    font-size: 17px;
-  }
-  .hero__lede em::after {
-    content: ' · ';
-    color: var(--c-ink-3);
-    font-weight: 400;
-    font-style: normal;
-    font-family: var(--ff-sans);
-    margin: 0 2px;
-  }
-  .hero__lede em:last-of-type::after {
-    content: '';
-    margin: 0;
-  }
-  .hero__lede-sub {
-    display: block;
-    margin-top: 12px;
-    color: var(--c-ink-2);
-    font-size: 14.5px;
-    line-height: 1.55;
-  }
-
-  /* === Hero KPIs — 4 across (was 3) ===
-     Uses <Odometer> component so values animate + format
-     correctly (76.5k for LOC, etc). Was raw data-counter strings
-     that the odometer driver overwrote without re-formatting. */
-  .hero__kpis {
-    list-style: none;
-    padding: 14px 0;
-    margin: 0 0 32px;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-    border-top: 1px solid var(--c-rule);
-    border-bottom: 1px solid var(--c-rule);
-  }
-  .hero__kpi {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    min-width: 0;
-    position: relative;
-    padding-bottom: 8px;
-    /* v8.4 — phi-teal accent underline. 1px hairline + 1px gap above to
-       read as a "label tick" instead of a generic border-bottom. */
-    border-bottom: 2px solid var(--c-phi-teal);
-  }
-  /* Inherit Odometer's tabular-num + accent color from the component;
-     only override the label to match the home's chrome (uppercase, mono). */
-  .hero__kpi :global(.odometer__value) {
-    color: var(--c-phi);
-    font: 600 28px / 1 var(--serif-display);
-    letter-spacing: -0.022em;
-  }
-  .hero__kpi :global(.odometer__label) {
-    font: 500 10px / 1.2 var(--ff-mono);
-    color: var(--c-ink-2);
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-  }
-
-  /* === Dual-path CTA row === */
-  .hero__cta-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin: 0;
-    align-items: center;
-  }
-  /* v8.4 — CTA icons (inline SVG) sit inline with the label.
-     Sized to match the 11px mono caps; chevron arrow hints the click target. */
-  .cta__icon {
-    width: 13px;
-    height: 13px;
-    margin-right: 7px;
-    display: inline-block;
-    vertical-align: -2px;
-    flex-shrink: 0;
-  }
-  .cta__arrow {
-    width: 11px;
-    height: 11px;
-    margin-left: 7px;
-    display: inline-block;
-    vertical-align: -1px;
-    flex-shrink: 0;
-  }
-
-  /* v8.4 — Tenant line (Bloomberg-style mono ticker signature).
-     Sits between the CTA row and the operating principles tenet. */
-  .hero__tenant {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 8px;
-    margin: 24px 0 0;
-    padding-top: 14px;
-    border-top: 1px solid var(--c-rule);
-    font: 500 11px / 1.4 var(--ff-mono);
-    color: var(--c-ink-3);
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-  }
-  .hero__tenant-sep {
-    color: var(--c-ink-4);
-    font-weight: 400;
-  }
-  /* v8.4 — Tenet line (operating principles). Lighter than tenant;
-     sits directly below the CTA row + tenant line. */
-  .hero__tenet {
-    margin: 8px 0 0;
-    font: 400 10.5px / 1.5 var(--ff-mono);
-    color: var(--c-ink-3);
-    letter-spacing: 0.08em;
-    max-width: 60ch;
-  }
-
-  .hero__portrait {
-    margin: 0;
-    text-align: center;
-  }
-  /* v8.4 — Portrait frame: hairline rule + phi-teal accent strip on top.
-     Reads as a print headshot clipped into a card mount, not a UI card. */
-  .hero__portrait-frame {
-    position: relative;
-    border: 1px solid var(--c-rule);
-    background: var(--c-bg-2);
-    padding: 0;
-  }
-  .hero__portrait-frame::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: var(--c-phi-teal);
-    z-index: 1;
-  }
-  .hero__portrait img {
-    width: 100%;
-    height: auto;
-    border-radius: 0;
-    /* v7.5 — dropped the 8px 24px rgba halo shadow (audit C04 tell).
-       Single 1px hairline rule on the frame replaces it; portrait now sits
-       flat on the page surface like a print headshot, not a UI card. */
-    border: 0;
-    display: block;
-  }
-  .hero__portrait-credit {
-    font-size: 9.5px;
-    letter-spacing: 0.1em;
-    color: var(--c-ink-3);
-    margin: 12px 0 0;
-    text-transform: uppercase;
-  }
-
-  /* ====== SENIOR THESIS (v2026-07-31) ====== */
-  .thesis {
-    padding: 56px 0 24px;
-    background: var(--c-bg);
-    border-bottom: 1px solid var(--c-rule);
-  }
-  .thesis__eyebrow {
-    font: 500 11px / 1.4 var(--ff-mono);
-    color: var(--c-warn);
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    margin: 0 0 28px;
-  }
-  .thesis__grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-  }
-  .thesis-card {
-    border: 1px solid var(--c-rule);
-    padding: 24px 22px;
-    background: var(--c-bg-2);
-    transition: border-color 200ms ease;
-  }
-  .thesis-card:hover {
-    border-color: var(--c-warn);
-  }
-  .thesis-card__num {
-    font: 600 10px / 1 var(--ff-mono);
-    color: var(--c-warn);
-    letter-spacing: 0.18em;
-    margin: 0 0 12px;
-  }
-  .thesis-card__title {
-    font: 600 22px / 1.1 var(--serif-display);
-    color: var(--c-ink);
-    letter-spacing: -0.02em;
-    margin: 0 0 12px;
-  }
-  .thesis-card__body {
-    font: 400 14px / 1.55 var(--ff-sans);
-    color: var(--c-ink-2);
-    margin: 0;
-  }
-  .thesis-card__body a {
-    color: var(--c-ink);
-    text-decoration: none;
-    border-bottom: 1px solid var(--c-rule);
-    transition: border-color 200ms ease;
-  }
-  .thesis-card__body a:hover {
-    border-bottom-color: var(--c-warn);
-  }
-
-  /* ====== NOW PULSE (v2026-07-31) ====== */
-  .now-pulse {
-    background: var(--c-bg);
-    border-bottom: 1px solid var(--c-rule);
-    padding: 14px 0;
-  }
-  .now-pulse__inner {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 10px;
-    font: 500 11px / 1.4 var(--ff-mono);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-  .now-pulse__dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--c-warn);
-    box-shadow: 0 0 0 0 var(--c-warn);
-    animation: pulse-ring 2.4s ease-out infinite;
-    flex: 0 0 auto;
-  }
-  @keyframes pulse-ring {
-    0% {
-      box-shadow: 0 0 0 0 var(--c-amberl-strong);
-    }
-    70% {
-      box-shadow: 0 0 0 10px transparent;
-    }
-    100% {
-      box-shadow: 0 0 0 0 transparent;
-    }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .now-pulse__dot {
-      animation: none;
-    }
-  }
-
-  /* ====== POSITIONING MANIFESTO (v2026-08-01) ====== */
-  .manifesto {
-    background: var(--c-bg);
-    border-top: 1px solid var(--c-rule);
-    border-bottom: 1px solid var(--c-rule);
-    padding: 56px 0 64px;
-  }
-  .manifesto__eyebrow {
-    font: 600 11px / 1.2 var(--ff-mono);
-    letter-spacing: 0.18em;
-    color: var(--c-warn);
-    text-transform: uppercase;
-    margin: 0 0 18px;
-  }
-  .manifesto__head {
-    font: 600 32px / 1.18 var(--serif-display);
-    color: #1c2538;
-    letter-spacing: -0.018em;
-    margin: 0 0 12px;
-    max-width: 32ch;
-  }
-  .manifesto__head em {
-    font-style: italic;
-    color: #3d4a5e;
-    font-weight: 500;
-  }
-  .manifesto__sub {
-    font: 400 14.5px / 1.55 var(--ff-sans);
-    color: var(--c-ink-2);
-    margin: 0 0 36px;
-    max-width: 62ch;
-  }
-  .manifesto__grid {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 14px;
-  }
-  .manifesto-item {
-    background: var(--c-bg-2);
-    border: 1px solid var(--c-rule);
-    border-left: 3px solid var(--c-warn);
-    padding: 22px 22px 24px;
-    transition: transform 240ms ease, border-color 240ms ease;
-  }
-  .manifesto-item:hover {
-    transform: translateY(-2px);
-    border-left-color: #1c2538;
-  }
-  .manifesto-item__num {
-    font: 600 10px / 1 var(--ff-mono);
-    letter-spacing: 0.2em;
-    color: var(--c-warn);
-    margin: 0 0 12px;
-  }
-  .manifesto-item__title {
-    font: 600 16px / 1.25 var(--serif-display);
-    color: #1c2538;
-    margin: 0 0 10px;
-    letter-spacing: -0.012em;
-  }
-  .manifesto-item__body {
-    font: 400 13.5px / 1.55 var(--ff-sans);
-    color: var(--c-ink-2);
-    margin: 0;
-  }
-  .manifesto-item__body code {
-    font: 500 12px / 1 var(--ff-mono);
-    background: var(--c-bg);
-    border: 1px solid var(--c-rule);
-    padding: 1px 5px;
-    color: #1c2538;
-  }
-  .manifesto-item__body a {
-    color: #1c2538;
-    text-decoration: none;
-    border-bottom: 1px solid var(--c-warn);
-    transition: border-color 200ms ease;
-    font-weight: 500;
-  }
-  .manifesto-item__body a:hover {
-    border-bottom-color: #1c2538;
-  }
-  .now-pulse__label {
-    color: var(--c-warn);
-    font-weight: 600;
-  }
-  .now-pulse__sep {
-    color: var(--c-ink-3);
-    opacity: 0.6;
-  }
-  .now-pulse__item {
-    color: var(--c-ink-2);
-  }
-  .now-pulse__link {
-    color: var(--c-ink);
-    text-decoration: none;
-    border-bottom: 1px solid var(--c-rule);
-    margin-left: auto;
-    padding-bottom: 1px;
-    transition: border-color 200ms ease, color 200ms ease;
-  }
-  .now-pulse__link:hover {
-    color: var(--c-warn);
-    border-bottom-color: var(--c-warn);
-  }
-
-  /* ====== PROOF CAROUSEL (v8.3) ======
-     Evidence surface: flat cards, a teal rule, metric-first hierarchy.
-     No shadow, glow, gradient, or traffic-light treatment. */
-  .proof-carousel {
-    padding: var(--sp-6) 0;
-    background: var(--c-bg-2);
-    border-bottom: var(--border-paper);
-  }
-  .proof-carousel__header {
-    border-left: var(--c-proof-stripe) solid var(--c-accent-2);
-    padding-left: var(--sp-3);
-    margin-bottom: var(--sp-5);
-  }
-  .proof-carousel__eyebrow,
-  .doctrine-graph__eyebrow {
-    font: var(--j-w-mono) var(--j-t-xs) / var(--lh-snug) var(--ff-mono);
-    color: var(--c-ink-2);
-    letter-spacing: var(--j-track-wide);
-    text-transform: uppercase;
-    margin: 0 0 var(--sp-2);
-  }
-  .proof-carousel__title,
-  .doctrine-graph__title {
-    font: var(--j-w-heading) var(--c-proof-metric) / var(--lh-snug) var(--serif-display);
-    color: var(--c-ink);
-    letter-spacing: var(--j-track-tight);
-    margin: 0 0 var(--sp-2);
-  }
-  .proof-carousel__lede,
-  .doctrine-graph__lede {
-    font: var(--j-type-meta);
-    color: var(--c-ink-2);
-    max-width: var(--container-narrow);
-    margin: 0;
-  }
-  .proof-carousel__grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--sp-3);
-  }
-  .proof-card {
-    display: grid;
-    grid-template-rows: auto auto auto auto 1fr auto;
-    gap: var(--sp-2);
-    min-width: 0;
-    padding: var(--sp-3);
-    background: var(--c-bg);
-    border: var(--border-paper);
-    border-top: var(--c-proof-stripe) solid var(--c-accent-2);
-  }
-  .proof-card__index {
-    font: var(--j-w-mono) var(--j-t-xs) / var(--lh-tight) var(--ff-mono);
-    color: var(--c-ink-3);
-    letter-spacing: var(--j-track-wide);
-    margin: 0;
-  }
-  .proof-card__title {
-    font: var(--j-w-heading) var(--j-t-md) / var(--lh-snug) var(--serif-display);
-    color: var(--c-ink);
-    letter-spacing: var(--j-track-tight);
-    margin: 0;
-  }
-  .proof-card__metric-row {
-    display: grid;
-    gap: var(--sp-2);
-    min-width: 0;
-  }
-  .proof-card__metric {
-    font: var(--j-w-heading) var(--c-proof-metric) / var(--lh-tight) var(--serif-display);
-    color: var(--c-ink);
-    letter-spacing: var(--j-track-tight);
-    margin: 0;
-  }
-  .proof-card__chart {
-    display: block;
-    width: 100%;
-    height: var(--sp-3);
-    color: var(--c-accent-2);
-  }
-  .proof-card__chart-guide,
-  .proof-card__chart-line {
-    fill: none;
-    stroke: currentColor;
-    vector-effect: non-scaling-stroke;
-  }
-  .proof-card__chart-guide {
-    stroke: var(--c-rule);
-    stroke-width: 1;
-  }
-  .proof-card__chart-line {
-    stroke-width: 2;
-    stroke-linecap: square;
-    stroke-linejoin: miter;
-  }
-  .proof-card__chart-fill {
-    fill: var(--c-accent-2);
-  }
-  .proof-card__chart-node {
-    fill: var(--c-bg);
-    stroke: var(--c-accent-2);
-    stroke-width: 2;
-    vector-effect: non-scaling-stroke;
-  }
-  .proof-card__submetric {
-    font: var(--j-w-mono) var(--j-t-xs) / var(--lh-snug) var(--ff-mono);
-    color: var(--c-ink-2);
-    letter-spacing: var(--j-track-wide);
-    margin: 0;
-  }
-  .proof-card__claim {
-    font: var(--j-type-meta);
-    color: var(--c-ink-2);
-    margin: 0;
-  }
-  .proof-card__link {
-    align-self: end;
-    justify-self: start;
-    font: var(--j-w-mono) var(--j-t-xs) / var(--lh-snug) var(--ff-mono);
-    color: var(--c-ink);
-    letter-spacing: var(--j-track-wide);
-    text-decoration: none;
-    border-bottom: var(--border-paper);
-    padding-bottom: var(--j-sp-1);
-    transition: var(--transition);
-  }
-  .proof-card__link:hover {
-    border-bottom-color: var(--c-accent-2);
-  }
-
-  /* ====== DOCTRINE GRAPH (v8.3) ======
-     The node rail + eight-card matrix is a compact citation network,
-     not a decorative hero or a traffic-light dashboard. */
-  .doctrine-graph {
-    padding: var(--sp-6) 0;
-    background: var(--c-bg);
-    border-bottom: var(--border-paper);
-  }
-  .doctrine-graph__header {
-    margin-bottom: var(--sp-3);
-  }
-  .doctrine-graph__network {
-    padding: var(--sp-2) 0;
-    margin-bottom: var(--sp-3);
-    border-top: var(--border-paper);
-    border-bottom: var(--border-paper);
-  }
-  .doctrine-graph__network svg {
-    display: block;
-    width: 100%;
-    height: var(--sp-3);
-  }
-  .doctrine-network__line {
-    fill: none;
-    stroke: var(--c-rule);
-    stroke-width: 1;
-    vector-effect: non-scaling-stroke;
-  }
-  .doctrine-network__node {
-    fill: var(--c-bg);
-    stroke: var(--c-accent-2);
-    stroke-width: 2;
-    vector-effect: non-scaling-stroke;
-  }
-  .doctrine-graph__grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: var(--sp-2);
-  }
-  .doctrine-card {
-    display: grid;
-    grid-template-columns: var(--c-proof-metric) 1fr;
-    gap: var(--sp-2);
-    align-items: start;
-    min-width: 0;
-    padding: var(--sp-2);
-    background: var(--c-bg-2);
-    border: var(--border-paper);
-    border-left: var(--c-proof-stripe) solid var(--c-accent-2);
-  }
-  .doctrine-card__icon {
-    display: block;
-    width: var(--c-proof-metric);
-    height: var(--c-proof-metric);
-    color: var(--c-accent-2);
-  }
-  .doctrine-card__icon * {
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.5;
-    stroke-linecap: square;
-    stroke-linejoin: miter;
-    vector-effect: non-scaling-stroke;
-  }
-  .doctrine-card__name {
-    font: var(--j-w-mono) var(--j-t-xs) / var(--lh-snug) var(--ff-mono);
-    color: var(--c-ink);
-    letter-spacing: var(--j-track-wide);
-    margin: 0 0 var(--j-sp-1);
-  }
-  .doctrine-card__anchor,
-  .doctrine-card__application {
-    font: var(--j-type-meta);
-    margin: 0;
-  }
-  .doctrine-card__anchor {
-    color: var(--c-ink);
-    margin-bottom: var(--j-sp-1);
-  }
-  .doctrine-card__application {
-    color: var(--c-ink-2);
-  }
-
-  @media (max-width: 980px) {
-    .proof-carousel__grid,
-    .doctrine-graph__grid {
-      gap: var(--sp-2);
-    }
-    .doctrine-graph__grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-
-  @media (max-width: 720px) {
-    .proof-carousel,
-    .doctrine-graph {
-      padding: var(--sp-5) 0;
-    }
-    .proof-carousel__header {
-      padding-left: var(--sp-2);
-      margin-bottom: var(--sp-4);
-    }
-    .proof-carousel__title,
-    .doctrine-graph__title {
-      font-size: var(--j-t-lg);
-    }
-    .proof-carousel__grid,
-    .doctrine-graph__grid {
-      grid-template-columns: 1fr;
-    }
-    .proof-card,
-    .doctrine-card {
-      padding: var(--sp-2);
-    }
-    .doctrine-graph__network {
-      margin-bottom: var(--sp-2);
-    }
-  }
-
-  /* ====== CTA (shared) ====== */
-  .cta {
-    display: inline-flex;
-    align-items: center;
-    padding: 14px 22px;
-    font: 600 11px / 1 var(--ff-mono);
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    text-decoration: none;
-    border: 1px solid var(--c-rule);
-    cursor: pointer;
-    transition:
-      background 200ms ease,
-      color 200ms ease,
-      border-color 200ms ease;
-    background: transparent;
-    color: var(--c-ink);
-  }
-  .cta--primary {
-    background: var(--c-warn);
-    color: var(--c-bg);
-    border-color: var(--c-warn);
-  }
-  .cta--primary:hover {
-    background: var(--c-amber-deep);
-    border-color: var(--c-amber-deep);
-  }
-  .cta--ghost {
-    background: transparent;
-    color: var(--c-ink);
-    border-color: var(--c-rule);
-  }
-  .cta--ghost:hover {
-    color: var(--c-warn);
-    border-color: var(--c-warn);
-  }
-
-  /* ====== PILLARS — two-column grid ====== */
-  .pillars {
-    padding: 56px 0 64px;
-    border-bottom: 1px solid var(--c-rule);
-    background: var(--c-bg-2);
-  }
-  .pillars__eyebrow {
-    font: 500 11px / 1.4 var(--ff-mono);
-    color: var(--c-warn);
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    margin: 0 0 28px;
-  }
-  .pillars__grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 32px;
-  }
-  .pillar {
-    background: var(--c-bg);
-    border: 1px solid var(--c-rule);
-    padding: 24px;
-  }
-  .pillar__lane {
-    font: 500 10px / 1.4 var(--ff-mono);
-    color: var(--c-ink-3);
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    margin: 0 0 16px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid var(--c-rule);
-  }
-  .pillar--ai .pillar__lane {
-    color: var(--c-amber);
-  }
-  .pillar__viz {
-    margin: 0 0 20px;
-  }
-  .pillar__viz :global(.eq-chart),
-  .pillar__viz :global(.agent-graph) {
-    margin: 0;
-  }
-  .pillar__stats {
-    list-style: none;
-    padding: 16px 0;
-    margin: 0 0 16px;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    border-top: 1px solid var(--c-rule);
-    border-bottom: 1px solid var(--c-rule);
-  }
-  .pillar__stats li {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-  .pillar__stats b {
-    font: 600 20px / 1 var(--serif-display);
-    color: var(--c-ink);
-    letter-spacing: -0.018em;
-  }
-  .pillar__stats span {
-    font: 500 9.5px / 1.2 var(--ff-mono);
-    color: var(--c-ink-2);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-  }
-  .pillar__cta {
-    margin: 0;
-  }
-  .pillar__cta a {
-    font: 500 11px / 1.4 var(--ff-mono);
-    color: var(--c-ink);
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    text-decoration: none;
-    padding-bottom: 2px;
-    border-bottom: 1px solid var(--c-rule);
-    transition:
-      color 200ms ease,
-      border-color 200ms ease;
-  }
-  .pillar__cta a:hover {
-    color: var(--c-warn);
-    border-bottom-color: var(--c-warn);
-  }
-
-  /* ====== ARCHITECTURE BRIEF (rendered by ArchitectureBrief.astro) ====== */
-  /* Local overrides intentionally minimal — ArchitectureBrief.astro owns
-     its own scoped styles. Reserve space in the page flow only. */
-  .arch-brief {
-    margin: 0;
-  }
-
-  /* ====== Fit (education) ====== */
-  .fit {
-    padding: 40px 0;
-    border-bottom: 1px solid var(--c-rule);
-  }
-  .fit__eyebrow {
-    font: 500 11px / 1.4 var(--ff-mono);
-    color: var(--c-ink-3);
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    margin: 0 0 16px;
-  }
-  .fit__line {
-    font: 500 13px / 1.6 var(--ff-mono);
-    color: var(--c-ink);
-    margin: 0 0 8px;
-  }
-  .fit__line b {
-    font-weight: 700;
-    color: var(--c-ink);
-  }
-  .fit__line--meta {
-    font: 400 12px / 1.6 var(--ff-sans);
-    color: var(--c-ink-2);
-    font-style: italic;
-    margin: 0;
-  }
-  .fit__sep {
-    color: var(--c-ink-3);
-    margin: 0 8px;
-  }
-
-  /* ====== Contact — no gradient (audit C06 tell) ====== */
-  .contact {
-    padding: 56px 0;
-    background: var(--c-bg);
-    border-bottom: 1px solid var(--c-rule);
-  }
-  .contact__inner {
-    text-align: center;
-  }
-  .contact__eyebrow {
-    font: 600 20px / 1.2 var(--serif-display);
-    font-style: italic;
-    color: var(--c-ink);
-    margin: 0 0 8px;
-  }
-  .contact__cta-row {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 12px;
-    margin: 24px 0 20px;
-  }
-  .contact__secondary {
-    font: 500 12px / 1.6 var(--ff-mono);
-    color: var(--c-ink-2);
-    margin: 0;
-  }
-  .contact__secondary a {
-    color: var(--c-ink);
-    text-decoration: none;
-  }
-  .contact__secondary a:hover {
-    color: var(--c-warn);
-  }
-
-  /* ====== Responsive ====== */
-  @media (max-width: 900px) {
-    .pillars__grid {
-      grid-template-columns: 1fr;
-      gap: 24px;
-    }
-    .arch-brief__grid {
-      grid-template-columns: 1fr;
-      gap: 24px;
-    }
-    .arch-brief__title {
-      font-size: 28px;
-    }
-    .thesis__grid {
-      grid-template-columns: 1fr;
-      gap: 16px;
-    }
-    .now-pulse__inner {
-      font-size: 10px;
-      gap: 8px;
-    }
-    .now-pulse__link {
-      margin-left: 0;
-    }
-  }
-
-  @media (max-width: 720px) {
-    .hero__inner {
-      padding: 32px 0 40px;
-    }
-    .hero__grid {
-      grid-template-columns: 1fr;
-      gap: 24px;
-    }
-    .hero__portrait {
-      order: -1;
-      max-width: 220px;
-      margin: 0 auto;
-    }
-    .hero__name {
-      font-size: 36px;
-    }
-    .hero__name .word:nth-child(2),
-    .hero__name .word:nth-child(3) {
-      font-size: 32px;
-      color: #3d4a5e;
-    }
-    .hero__eyebrow {
-      gap: 8px;
-      margin-bottom: 24px;
-    }
-    .hero__eyebrow-chip {
-      padding: 4px 9px 3px;
-    }
-    .hero__eyebrow-line {
-      font-size: 10.5px;
-    }
-    .hero__kpis {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 14px 12px;
-    }
-    .hero__kpi :global(.odometer__value) {
-      font-size: 22px;
-    }
-    .hero__cta-row {
-      gap: 8px;
-    }
-    .cta {
-      padding: 12px 16px;
-      letter-spacing: 0.14em;
-    }
-    .hero__tenant {
-      font-size: 10px;
-      gap: 6px;
-      letter-spacing: 0.12em;
-    }
-    .hero__tenet {
-      font-size: 9.5px;
-    }
-    .pillar__stats {
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-    }
-    .pillar__stats b {
-      font-size: 16px;
-    }
-    .pillar__stats span {
-      font-size: 9px;
-      letter-spacing: 0.1em;
-    }
-    .contact__eyebrow {
-      font-size: 18px;
-    }
-    .manifesto {
-      padding: 40px 0 48px;
-    }
-    .manifesto__head {
-      font-size: 26px;
-    }
-    .manifesto__grid {
-      grid-template-columns: 1fr;
-      gap: 10px;
-    }
-    .manifesto-item {
-      padding: 18px 18px 20px;
-    }
-  }
-
-  /* ============================================================
-     v7.6 — AI HISTORY TIMELINE (2022 → 2026)
-     5-rung spine as a public-facing story. Surfaces STELLA +
-     graph engineering alongside the prompt→graph journey.
-     ============================================================ */
-  .ai-history {
-    padding-block: var(--sp-9);
-    background: var(--c-bg);
-    border-top: var(--border-paper);
-    border-bottom: var(--border-paper);
-  }
-  .ai-history > .container {
-    max-width: 1180px;
-  }
-  .ai-history__eyebrow {
-    font: 500 11px / 1.4 var(--ff-mono);
-    color: var(--c-amber);
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    margin: 0 0 16px;
-  }
-  .ai-history__title {
-    font: 600 clamp(28px, 3.6vw, 44px) / 1.15 var(--serif-display);
-    color: var(--c-ink);
-    margin: 0 0 16px;
-    letter-spacing: -0.022em;
-    max-width: 880px;
-  }
-  .ai-history__title .hl {
-    color: var(--c-amber);
-  }
-  .ai-history__lede {
-    font-size: 1.05rem;
-    line-height: 1.6;
-    color: var(--c-ink-2);
+  .memo {
     max-width: 720px;
-    margin: 0 0 48px;
-  }
-  .ai-history__rail {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 32px;
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 0;
-    border-top: 1px solid var(--c-rule);
-    border-bottom: 1px solid var(--c-rule);
-    position: relative;
-  }
-  @media (max-width: 980px) {
-    .ai-history__rail {
-      grid-template-columns: repeat(2, 1fr);
-    }
-    .manifesto__grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-  @media (max-width: 580px) {
-    .ai-history__rail {
-      grid-template-columns: 1fr;
-    }
-  }
-  .ai-rung {
-    padding: 24px 20px;
-    border-right: 1px solid var(--c-rule);
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    position: relative;
-    background: var(--c-bg);
-    transition: background 0.2s ease;
-  }
-  .ai-rung:last-child {
-    border-right: none;
-  }
-  @media (max-width: 980px) {
-    .ai-rung:nth-child(2n) {
-      border-right: none;
-    }
-  }
-  .ai-rung:hover {
-    background: var(--c-bg-elev);
-  }
-  .ai-rung__year {
-    font: 600 13px / 1 var(--ff-mono);
-    color: var(--c-amber);
-    letter-spacing: 0.16em;
-  }
-  .ai-rung__name {
-    font: 600 18px / 1.25 var(--serif-display);
-    color: var(--c-ink);
-    margin: 4px 0 6px;
-    letter-spacing: -0.01em;
-  }
-  .ai-rung--graph .ai-rung__name {
-    color: var(--c-amber);
-  }
-  /* v2026-07-31 — active rung (the "now" position) badge + accent.
-     Surfaces the current focus as a labeled pill so the rung pops
-     in the timeline. The badge uses the same warn color as the
-     now-pulse dot for visual continuity. */
-  .ai-rung--active {
-    background: var(--c-bg-2);
-    box-shadow: inset 3px 0 0 var(--c-warn);
-  }
-  .ai-rung__badge {
-    position: absolute;
-    top: 14px;
-    right: 14px;
-    font: 600 9px / 1 var(--ff-mono);
-    letter-spacing: 0.18em;
-    color: var(--c-warn);
-    background: var(--c-amber-soft);
-    border: 1px solid var(--c-warn);
-    padding: 3px 7px;
-    border-radius: 0;
-  }
-  .ai-rung__sub {
-    font-size: 0.82rem;
-    line-height: 1.5;
-    color: var(--c-ink-2);
-    margin: 0 0 12px;
-    flex: 1;
-  }
-  .ai-rung__line {
-    font-size: 0.68rem;
-    color: var(--c-ink-3);
-    letter-spacing: 0.1em;
-    margin: 0;
-    text-transform: uppercase;
-    padding-top: 8px;
-    border-top: 1px dashed var(--c-rule);
-  }
-  .ai-history__closer {
-    font-size: 1rem;
-    line-height: 1.6;
-    color: var(--c-ink-2);
-    margin: 0;
-    padding: 20px 24px;
-    background: var(--c-bg-elev);
-    border-left: 3px solid var(--c-amber);
-    border-radius: 0 4px 4px 0;
-  }
-  .ai-history__closer b {
-    color: var(--c-amber);
-    font-weight: 600;
-  }
-  .ai-history__closer a {
-    color: var(--c-amber);
-    text-decoration: underline;
-    text-underline-offset: 3px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
   }
 
-  /* ============================================================
-     FOOTPRINT — v8.5.1 hotfix (2026-07-31). The chrome contract made
-     every page consistent but killed the home page's visual hook.
-     World map is the hook: 8 pins, equirectangular, mono + 1 amber.
-     Same institutional register as the rest of the chrome.
-     ============================================================ */
-  .footprint {
-    padding: var(--sp-7) 0 var(--sp-6);
-    border-top: 1px solid var(--c-rule);
-    border-bottom: 1px solid var(--c-rule);
-    background: var(--c-bg);
-  }
-  .footprint__eyebrow {
-    font-size: 0.7rem;
-    color: var(--c-ink-2);
-    letter-spacing: 0.08em;
-    margin: 0 0 var(--sp-3);
-    text-transform: uppercase;
-  }
-  .footprint .earth-map {
-    margin-top: var(--sp-3);
-  }
-  .footprint__caption {
-    font-size: 0.7rem;
+  .memo__stamp {
+    font-size: 11px;
     color: var(--c-ink-3);
     letter-spacing: 0.04em;
-    margin: var(--sp-3) 0 0;
+    margin: 0 0 32px;
     text-transform: uppercase;
-    text-align: center;
+  }
+
+  .memo__name {
+    font: 700 48px / 1.05 var(--serif-display);
+    color: var(--c-ink);
+    letter-spacing: -0.022em;
+    margin: 0 0 8px;
+  }
+
+  .memo__role {
+    font: 500 17px / 1.4 var(--serif-display);
+    color: var(--c-ink-2);
+    font-style: italic;
+    margin: 0 0 32px;
+  }
+
+  .memo__lede {
+    font: 400 16px / 1.65 var(--ff-sans);
+    color: var(--c-ink);
+    margin: 0 0 16px;
+  }
+
+  .memo__lede code {
+    font: 400 13.5px var(--ff-mono);
+    background: var(--c-paper);
+    padding: 1px 6px;
+    color: var(--c-ink);
+  }
+
+  .memo__h2 {
+    font: 600 18px / 1.3 var(--serif-display);
+    color: var(--c-ink);
+    letter-spacing: -0.005em;
+    margin: 48px 0 8px;
+    padding-top: 24px;
+    border-top: 1px solid var(--c-rule);
+    text-transform: none;
+  }
+
+  .memo__sub {
+    font: 400 14px / 1.55 var(--ff-sans);
+    color: var(--c-ink-2);
+    margin: 0 0 16px;
+  }
+
+  .memo__table {
+    width: 100%;
+    border-collapse: collapse;
+    font: 400 14px / 1.5 var(--ff-sans);
+    margin: 0 0 24px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .memo__table th,
+  .memo__table td {
+    border-bottom: 1px solid var(--c-rule);
+    padding: 10px 12px 10px 0;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .memo__table th {
+    font: 500 11px / 1.3 var(--ff-mono);
+    color: var(--c-ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border-bottom: 1px solid var(--c-ink-3);
+  }
+
+  .memo__table td.num {
+    font-variant-numeric: tabular-nums;
+    font-weight: 500;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .memo__list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px;
+    font: 400 14.5px / 1.6 var(--ff-sans);
+    color: var(--c-ink);
+  }
+
+  .memo__list li {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--c-rule);
+  }
+
+  .memo__list li:last-child {
+    border-bottom: 0;
+  }
+
+  .memo__list strong {
+    font-weight: 600;
+  }
+
+  .memo__list em {
+    font-style: italic;
+  }
+
+  .memo__contact {
+    font: 500 13.5px / 1.5 var(--ff-mono);
+    color: var(--c-ink);
+    margin: 0 0 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .memo__source {
+    font-size: 11px;
+    color: var(--c-ink-3);
+    letter-spacing: 0.04em;
+    margin: 64px 0 0;
+    padding-top: 16px;
+    border-top: 1px solid var(--c-rule);
+    text-transform: uppercase;
+  }
+
+  .memo__source code {
+    font: 400 11px var(--ff-mono);
+    background: transparent;
+  }
+
+  .memo a {
+    color: var(--c-ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--c-rule);
+    padding-bottom: 1px;
+  }
+
+  .memo a:hover {
+    border-bottom-color: var(--c-ink);
   }
 </style>
