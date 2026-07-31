@@ -1,5 +1,5 @@
 /**
- * feed-projects.xml.ts — Atom 1.0 stream of project entries only.
+ * feed-projects.xml.ts — RSS 2.0 stream of project entries only.
  *
  * See _feed-shared.ts for the rendering helpers.
  */
@@ -24,14 +24,13 @@ export const GET: APIRoute = async ({ site }) => {
     selfHref: `${baseUrl}/feed-projects.xml`,
     title: `${profile.fullName} — Projects`,
     subtitle: 'Quant research, AI systems, OSS. Newest first.',
-    feedIdTag: 'feed:projects',
     items,
     now,
   });
 
   return new Response(body, {
     headers: {
-      'Content-Type': 'application/atom+xml; charset=utf-8',
+      'Content-Type': 'application/rss+xml; charset=utf-8',
       'Cache-Control': 'public, max-age=600',
     },
   });

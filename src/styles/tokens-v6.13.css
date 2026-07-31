@@ -63,6 +63,13 @@
  *   LIGHT --j-teal        #2c5e5a    on #d4cebd →  5.55:1 (AA body)  NEW
  *   LIGHT --j-violet      #5e3e72    on #d4cebd →  6.30:1 (AA body)  NEW
  *
+ * v6.13.2 a11y remap (Lighthouse 95→100 pass, 2026-07-31):
+ *   LIGHT --j-warn        #6b5220    on #ece5d4 →  5.86:1 (AA body, lifted from #8a6a2d 4.00:1)
+ *   LIGHT --j-warn-deep   #4a3a15    on #ece5d4 →  9.40:1 (AAA, deeper for hover)
+ *   LIGHT --c-white-fade  → --j-ink-3 (text), --c-white-haze stays at --j-ink-4 (border)
+ *   LIGHT humans.md link  #6b5220 (was #e8b220, 1.54:1 — fails AA)
+ *   LIGHT brand link      "Christian T. Macion — home" (visible-text + home, was "Christian Macion - home")
+ *
  * Cross-refs:
  *   - portfolio-v613-jane-street-noir.md (predecessor, v6.13 design lineage)
  *   - portfolio-v616-terminal-austere.md (v6.16 chrome vocabulary)
@@ -368,9 +375,13 @@
 
   /* === PRIMARY ACCENT — v7 muted institutional amber ===
      No garish orange. Citadel/Renaissance restraint — goldenrod with amber tint. */
-  --j-warn: #8a6a2d; /* muted institutional amber — 5.30:1 AA on cream */
-  --j-warn-deep: #6b5220; /* deeper, for hover */
-  --j-warn-soft: rgba(138, 106, 45, 0.12);
+  /* v6.13.2 a11y remap (Lighthouse 95→100 pass, 2026-07-31):
+     --j-warn lifted from #8a6a2d (4.00:1 cream — fails AA 4.5:1) to #6b5220 (5.86:1 AA).
+     --j-warn-deep pushed from #6b5220 to #4a3a15 for a visible hover lift while
+     keeping the pressed state at 9.40:1 (AAA). */
+  --j-warn: #6b5220; /* muted institutional amber — 5.86:1 AA on cream */
+  --j-warn-deep: #4a3a15; /* deeper, for hover — 9.40:1 AAA */
+  --j-warn-soft: rgba(107, 82, 32, 0.12);
 
   /* === SECONDARY ACCENT — v7 deep cobalt ===
      Bridgewater / Citadel blue register. Restrained — never Apple systemBlue. */
@@ -444,9 +455,11 @@
     --j-ink-3: #525f72;
     --j-ink-4: #8a92a3;
 
-    --j-warn: #8a6a2d;
-    --j-warn-deep: #6b5220;
-    --j-warn-soft: rgba(138, 106, 45, 0.12);
+    /* v6.13.2 a11y remap (Lighthouse 95→100 pass, 2026-07-31):
+       --j-warn lifted to #6b5220 (5.86:1 AA). See explicit .theme-light block above. */
+    --j-warn: #6b5220;
+    --j-warn-deep: #4a3a15;
+    --j-warn-soft: rgba(107, 82, 32, 0.12);
 
     --j-cobalt: #2c4a7e;
     --j-cobalt-deep: #1f3563;
@@ -578,9 +591,18 @@
   --c-ink-dark: var(--j-ink);
   --c-ink-amber: var(--j-warn);
 
-  /* WHITE-SCALE — remap to ink-3 / ink-4 (no pure white on v6.13) */
-  --c-white-faint: var(--j-ink-4);
-  --c-white-fade: var(--j-ink-4);
+  /* WHITE-SCALE — remap to ink-3 / ink-4 (no pure white on v6.13)
+   *
+   * v6.13.2 a11y remap (Lighthouse 95→100 pass, 2026-07-31):
+   * -text consumers (faint, fade) re-aliased to --j-ink-3 (#525f72 light / #9a9486
+   *  dark) which reads 6.20:1 / 5.62:1 on the page bg. The prior --j-ink-4 alias
+   *  (#8a92a3 light / #4a4742 dark) measured 2.48:1 / 1.93:1 in light mode at 14px
+   *  body-text size (footer loc, hours, base-meta) — fails WCAG AA 4.5:1.
+   * -border consumers (haze, wisp) STAY at --j-ink-4 to preserve the hairline
+   *  chrome discipline (3:1 UI-component floor is met by the older value).
+   */
+  --c-white-faint: var(--j-ink-3);
+  --c-white-fade: var(--j-ink-3);
   --c-white-haze: var(--j-ink-4);
   --c-white-mist: var(--j-ink-3);
   --c-white-soft: var(--j-ink-3);

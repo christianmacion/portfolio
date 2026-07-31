@@ -145,7 +145,10 @@ function statusPill(s: ShelfItem['status']): string {
 >
   <section class="section">
     <div class="container container-narrow">
-      <p class="section__eyebrow mono">reading · shelf · v6.0</p>
+      <p class="reading-head__eyebrow mono">
+        <span class="reading-head__eyebrow-chip">READING · SHELF · v6.0</span>
+        <span class="reading-head__eyebrow-line">CURRENTLY · QUEUE · REFERENCE SHELF</span>
+      </p>
       <h1 data-words>Reading. Re-reading. Reference shelf.</h1>
       <VoiceLine class="hero__voice"> The re-reads matter more than the first reads. </VoiceLine>
       <p class="lede">
@@ -155,6 +158,17 @@ function statusPill(s: ShelfItem['status']): string {
         >'s
         <span class="mono">/book</span> shelf and the institutional library conventions at AQR / Jane
         Street.
+      </p>
+      <p class="reading-head__tenant mono">
+        <span>CHRISTIAN.T.MACION</span>
+        <span aria-hidden="true">·</span>
+        <span>UTC+8</span>
+        <span aria-hidden="true">·</span>
+        <span>SHELF · v6.0</span>
+        <span aria-hidden="true">·</span>
+        <span>PUBLIC DATA</span>
+        <span aria-hidden="true">·</span>
+        <span>OWNER-VERIFIED</span>
       </p>
     </div>
   </section>

@@ -36,7 +36,10 @@ const eduSolutions: SolutionEntry[] = solutions.filter(
 >
   <header class="solutions-head">
     <div class="container">
-      <p class="section__eyebrow"><span class="mono">solutions/</span> · case studies</p>
+      <p class="solutions-head__eyebrow mono">
+        <span class="solutions-head__eyebrow-chip">SOLUTIONS · CASE STUDIES · PROBLEM → PROOF</span>
+        <span class="solutions-head__eyebrow-line">FALSIFIABLE · PUBLIC DATA · NDA-SAFE</span>
+      </p>
       <h1 class="solutions-head__title" data-words>
         I do <span class="hl">solutions</span>.
       </h1>
@@ -78,6 +81,17 @@ const eduSolutions: SolutionEntry[] = solutions.filter(
           <div>Every solution ships with at least one falsifiable claim and a proof pointer.</div>
         </div>
       </div>
+      <p class="solutions-head__tenant mono">
+        <span>CHRISTIAN.T.MACION</span>
+        <span aria-hidden="true">·</span>
+        <span>UTC+8</span>
+        <span aria-hidden="true">·</span>
+        <span>{solutions.length} SOLUTIONS</span>
+        <span aria-hidden="true">·</span>
+        <span>NDA-SAFE</span>
+        <span aria-hidden="true">·</span>
+        <span>OWNER-VERIFIED</span>
+      </p>
 
       <div class="solutions-head__stats">
         <Stat value={String(solutions.length)} label="solutions shipped" size="md" />

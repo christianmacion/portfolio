@@ -59,8 +59,9 @@ const levelLabel: Record<1 | 2 | 3 | 4 | 5, string> = {
 >
   <header class="page-head">
     <div class="container">
-      <p class="section__eyebrow">
-        <span class="mono">skills/</span> · {groups.length} domains, one stack
+      <p class="page-head__eyebrow mono">
+        <span class="page-head__eyebrow-chip">SKILLS · {groups.length} DOMAINS · ONE STACK</span>
+        <span class="page-head__eyebrow-line">SELF-RATED · LADDER 1–5 · YEARS OF PRACTICE</span>
       </p>
       <h1 class="page-head__title" data-words>
         {groups.length} domains. <span class="hl">One stack</span>.
@@ -140,6 +141,17 @@ const levelLabel: Record<1 | 2 | 3 | 4 | 5, string> = {
           <span class="muted">practice (self-reported)</span>
         </span>
       </div>
+      <p class="page-head__tenant mono">
+        <span>CHRISTIAN.T.MACION</span>
+        <span aria-hidden="true">·</span>
+        <span>UTC+8</span>
+        <span aria-hidden="true">·</span>
+        <span>{groups.length} DOMAINS</span>
+        <span aria-hidden="true">·</span>
+        <span>SELF-RATED</span>
+        <span aria-hidden="true">·</span>
+        <span>OWNER-VERIFIED</span>
+      </p>
     </div>
   </header>
 

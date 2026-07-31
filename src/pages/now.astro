@@ -34,7 +34,10 @@ const updatedHuman = new Date(updated).toLocaleDateString('en-GB', {
 >
   <header class="now-head">
     <div class="container container-narrow">
-      <p class="section__eyebrow"><span class="mono">now/</span> · last updated {updated}</p>
+      <p class="now-head__eyebrow mono">
+        <span class="now-head__eyebrow-chip">NOW · LAST UPDATED {updated}</span>
+        <span class="now-head__eyebrow-line">WHAT I'M SHIPPING · OPEN-TO · NOT-OPEN-TO</span>
+      </p>
       <h1 class="now-head__title" data-words>
         What I'm doing <span class="hl">right now</span>.
       </h1>
@@ -53,6 +56,17 @@ const updatedHuman = new Date(updated).toLocaleDateString('en-GB', {
         <span class="dot dot--amber"></span>
         <span><strong>Status:</strong> open to conversations · remote · UTC+8</span>
       </div>
+      <p class="now-head__tenant mono">
+        <span>CHRISTIAN.T.MACION</span>
+        <span aria-hidden="true">·</span>
+        <span>UTC+8</span>
+        <span aria-hidden="true">·</span>
+        <span>REMOTE-OK</span>
+        <span aria-hidden="true">·</span>
+        <span>{profile.availability.hours.toUpperCase()}</span>
+        <span aria-hidden="true">·</span>
+        <span>OWNER-VERIFIED</span>
+      </p>
     </div>
   </header>
 
@@ -202,6 +216,44 @@ const updatedHuman = new Date(updated).toLocaleDateString('en-GB', {
     padding-block: var(--sp-9) var(--sp-7);
     background: var(--c-bg);
     border-bottom: var(--border);
+  }
+  .now-head__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-3);
+    margin: 0 0 var(--sp-4);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    flex-wrap: wrap;
+  }
+  .now-head__eyebrow-chip {
+    display: inline-block;
+    padding: 4px 10px;
+    color: var(--c-phi-teal);
+    border: 1px solid var(--c-phi-teal);
+    background: var(--c-phi-teal-soft);
+    font-weight: 600;
+  }
+  .now-head__eyebrow-line {
+    color: var(--c-warn);
+    font-weight: 600;
+  }
+  .now-head__tenant {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+    margin: var(--sp-4) 0 0;
+    padding: var(--sp-2) var(--sp-3);
+    background: var(--c-bg-2);
+    border: 1px solid var(--c-rule);
+    font-size: 0.78rem;
+    color: var(--c-ink-2);
+    letter-spacing: 0.06em;
+  }
+  .now-head__tenant span:nth-child(odd) {
+    color: var(--c-warn);
+    font-weight: 600;
   }
   .now-head__title {
     font-size: clamp(2.25rem, 5vw, 4rem);

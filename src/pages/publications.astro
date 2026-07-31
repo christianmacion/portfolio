@@ -226,8 +226,9 @@ const totalCount = quantPubs.length + aiPubs.length + workbooks.length + press.l
   <input type="radio" name="topic" id="topic-press" class="topic-input topic-input--press" />
   <header class="pub-head">
     <div class="container">
-      <p class="section__eyebrow">
-        <span class="mono">publications/</span> · {totalCount} artifacts
+      <p class="pub-head__eyebrow mono">
+        <span class="pub-head__eyebrow-chip">PUBLICATIONS · {totalCount} ARTIFACTS</span>
+        <span class="pub-head__eyebrow-line">DATED · LINKABLE · PROOF-IN-ROW</span>
       </p>
       <h1 class="pub-head__title" data-words>
         Things I have <span class="hl">written, built, and said</span> in public.
@@ -260,6 +261,17 @@ const totalCount = quantPubs.length + aiPubs.length + workbooks.length + press.l
           ><span class="mono">press</span> <span class="topic-count">{press.length}</span></label
         >
       </nav>
+      <p class="pub-head__tenant mono">
+        <span>CHRISTIAN.T.MACION</span>
+        <span aria-hidden="true">·</span>
+        <span>UTC+8</span>
+        <span aria-hidden="true">·</span>
+        <span>{totalCount} ARTIFACTS</span>
+        <span aria-hidden="true">·</span>
+        <span>NDA-SAFE</span>
+        <span aria-hidden="true">·</span>
+        <span>OWNER-VERIFIED</span>
+      </p>
     </div>
   </header>
 

@@ -1,5 +1,5 @@
 /**
- * feed-solutions.xml.ts — Atom 1.0 stream of solution entries only.
+ * feed-solutions.xml.ts — RSS 2.0 stream of solution entries only.
  *
  * See _feed-shared.ts for the rendering helpers.
  */
@@ -24,14 +24,13 @@ export const GET: APIRoute = async ({ site }) => {
     selfHref: `${baseUrl}/feed-solutions.xml`,
     title: `${profile.fullName} — Solutions`,
     subtitle: 'Client engagements and shipped deliverables. Newest first.',
-    feedIdTag: 'feed:solutions',
     items,
     now,
   });
 
   return new Response(body, {
     headers: {
-      'Content-Type': 'application/atom+xml; charset=utf-8',
+      'Content-Type': 'application/rss+xml; charset=utf-8',
       'Cache-Control': 'public, max-age=600',
     },
   });

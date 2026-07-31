@@ -14,6 +14,7 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import Stat from '@components/Stat.astro';
 import Equation from '@components/Equation.astro';
 import CTABanner from '@components/CTABanner.astro';
+import ChromeHeader from '@components/ChromeHeader.astro';
 import { profile } from '@utils/profile';
 import { path } from '@utils/url';
 import { getCollection, type CollectionEntry } from 'astro:content';
@@ -49,12 +50,15 @@ const NGATE = `${profile.stats.evalGates}-gate`;
 >
   <header class="page-head">
     <div class="container container-narrow">
-      <p class="section__eyebrow"><span class="mono">about/</span> · operator + researcher</p>
+      <p class="page-head__eyebrow mono">
+        <span class="page-head__eyebrow-chip">ABOUT · OPERATOR + RESEARCHER</span>
+        <span class="page-head__eyebrow-line">ONE METHOD · TWO HATS · {profile.stats.evalGates}-GATE DISCIPLINE</span>
+      </p>
       <h1 class="page-head__title" data-words>
-        One method. <span class="hl">Two hats</span>.
+        One method. <span class="hl">Two hats.</span>
       </h1>
       <VoiceLine class="page-head__voice">
-        I build the eval harness first. Then I build the work that has to pass it.
+        Build the eval harness first. Build the work that has to pass it second. Ship the third.
       </VoiceLine>
 
       <div class="head-eq">
@@ -80,6 +84,20 @@ const NGATE = `${profile.stats.evalGates}-gate`;
         <Stat value={profile.stats.aiAgentCount} label="agents" sub="orch + workers" />
         <Stat value={profile.stats.locPython} label="LOC" sub="light-dep" />
       </div>
+
+      <p class="page-head__tenant mono">
+        <span>CHRISTIAN.T.MACION</span>
+        <span aria-hidden="true">·</span>
+        <span>UTC+8</span>
+        <span aria-hidden="true">·</span>
+        <span>REMOTE-OK</span>
+        <span aria-hidden="true">·</span>
+        <span>DAILY-SHIP</span>
+        <span aria-hidden="true">·</span>
+        <span>OWNER-VERIFIED</span>
+      </p>
+      {/* v8.4 — tenet line is now injected by BaseLayout at the bottom of <main>; */}
+      {/* the page-level duplicate is removed to avoid double-display. */}
     </div>
   </header>
 
@@ -228,42 +246,37 @@ const NGATE = `${profile.stats.evalGates}-gate`;
       <div class="bio-prose">
         <p class="bio-prose__lead">
           I work at the intersection of <strong>multi-agent LLM systems</strong> and
-          <strong>systematic trading research</strong>. The through-line is a single engineering
+          <strong>systematic trading research</strong>. The through-line is one engineering
           principle: <strong>don't ship what hasn't passed a measurable quality gate.</strong>
           {profile.stats.aiAgentCount} agents in an orchestrator-worker topology. A {NGATE} statistical
-          evaluation harness. Pre-registered research windows. Public-data reproducibility. Headline metrics
-          you can verify.
+          evaluation harness. Pre-registered research windows. Public-data reproducibility. Headline
+          metrics you can verify.
         </p>
 
         <p>
-          I was previously the AI Systems Engineer / Quantitative Researcher on the
-          <strong
-            >systematic-strategy desk (NDA-protected; closed past contract 03/2026 – 06/2026)</strong
-          >
-          under a PM with publicly attributable initials (closed past contract), where the same eval harness
-          served both LLM outputs and systematic trading strategies. Before that I shipped a 7-agent venture-incubation
-          pipeline under Macion Ventures, an 8-agent content-production pipeline for editorial automation,
-          and a portfolio of runnable AI projects (RAG scorecard, ReAct tool-calling agent, MCP eval server,
-          LLM-as-judge harness, reflection agent, AI-slop evaluation gate).
+          Most recently I shipped the same {NGATE} harness against LLM outputs and systematic
+          strategies on a closed past contract (systematic-strategy desk, 03/2026 – 06/2026,
+          NDA-protected). Before that: a 7-agent venture-incubation pipeline under Macion Ventures,
+          an 8-agent content-production pipeline for editorial automation, and a portfolio of
+          runnable AI projects — RAG scorecard, ReAct tool-calling agent, MCP eval server,
+          LLM-as-judge harness, reflection agent, AI-slop evaluation gate.
         </p>
 
         <p>
-          On the quant side I design and backtest systematic strategies on crypto and equities — {
-            quantProjectCount
-          } reproducible public-data projects spanning multiple-testing (Deflated Sharpe), cross-sectional
-          and time-series alpha, volatility carry, cointegration, funding-carry, regime overlays, transaction-cost
-          realism, and look-ahead-bias audits. Every project ships with the standard senior-research discipline:
-          locked OOS windows, block-bootstrap CIs, and the methodology stated up-front, not bolted on
-          at the end.
+          On the quant side I design and backtest systematic strategies on crypto and equities —
+          {quantProjectCount} reproducible public-data projects spanning multiple-testing (Deflated
+          Sharpe), cross-sectional and time-series alpha, volatility carry, cointegration,
+          funding-carry, regime overlays, transaction-cost realism, and look-ahead-bias audits.
+          Every project ships with the senior-research discipline: locked OOS windows,
+          block-bootstrap CIs, methodology declared up-front, not bolted on at the end.
         </p>
 
         <p>
-          I'm based in Digos City, Davao del Sur, Philippines (UTC+8), available {
-            profile.availability.hours
-          }
-          remote. I hold {profile.stats.certCount} professional certifications across AI, finance, math/statistics,
-          and event flagships, built up in {profile.stats.ageMonths} months. I write about what I'm learning
-          and ship the things I'm building.
+          Based in {profile.location.display} (UTC+8). {profile.availability.hours} remote,
+          APAC + US-premarket overlap. {profile.stats.certCount} professional certifications
+          across AI, finance, math/statistics, and event flagships — built up in {
+            profile.stats.ageMonths
+          } months. I write about what I'm learning and ship the things I'm building.
         </p>
       </div>
     </div>
@@ -348,6 +361,28 @@ const NGATE = `${profile.stats.evalGates}-gate`;
     background: var(--c-paper);
     border-bottom: var(--border);
   }
+  .page-head__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-3);
+    margin: 0 0 var(--sp-4);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    flex-wrap: wrap;
+  }
+  .page-head__eyebrow-chip {
+    display: inline-block;
+    padding: 4px 10px;
+    color: var(--c-phi-teal);
+    border: 1px solid var(--c-phi-teal);
+    background: var(--c-phi-teal-soft);
+    font-weight: 600;
+  }
+  .page-head__eyebrow-line {
+    color: var(--c-warn);
+    font-weight: 600;
+  }
   .page-head__title {
     font-size: clamp(2rem, 4vw, 3rem);
     letter-spacing: -0.02em;
@@ -356,6 +391,31 @@ const NGATE = `${profile.stats.evalGates}-gate`;
   .page-head__voice {
     margin: 0 0 var(--sp-5);
     max-width: 60ch;
+  }
+  .page-head__tenant {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+    margin: var(--sp-4) 0 0;
+    padding: var(--sp-2) var(--sp-3);
+    background: var(--c-bg);
+    border: 1px solid var(--c-rule);
+    font-size: 0.78rem;
+    color: var(--c-ink-2);
+    letter-spacing: 0.06em;
+  }
+  .page-head__tenant span:nth-child(odd) {
+    color: var(--c-warn);
+    font-weight: 600;
+  }
+  .page-head__tenet {
+    margin: var(--sp-2) 0 0;
+    padding: 6px var(--sp-3);
+    font-size: 0.66rem;
+    color: var(--c-ink-3);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-top: 1px solid var(--c-rule-soft);
   }
   .head-eq {
     padding: var(--sp-4) var(--sp-5);

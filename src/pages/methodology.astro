@@ -89,11 +89,16 @@ const charter = [
 >
   <header class="method-head">
     <div class="container">
-      <p class="section__eyebrow"><span class="mono">methodology/</span> · eval-first discipline</p>
+      <p class="method-head__eyebrow mono">
+        <span class="method-head__eyebrow-chip">METHODOLOGY · EVAL-FIRST DISCIPLINE</span>
+        <span class="method-head__eyebrow-line">{GATE_RANGE} GATE STACK · MODEL-ROUTING · AGENT CHARTER</span>
+      </p>
       <h1 class="method-head__title" data-words>
         Don’t ship what hasn’t passed a <span class="hl">measurable gate</span>.
       </h1>
-      <VoiceLine class="method-head__voice"> If it isn't measured, it isn't built. </VoiceLine>
+      <VoiceLine class="method-head__voice">
+        If it isn’t measured, it isn’t built. Five-rule discipline, six gate families.
+      </VoiceLine>
 
       <div class="method-head__carousel">
         <StatementCarousel
@@ -153,6 +158,17 @@ const charter = [
           <span class="method-head__stat-lbl">rollbacks on shipped work</span>
         </div>
       </div>
+      <p class="method-head__tenant mono">
+        <span>CHRISTIAN.T.MACION</span>
+        <span aria-hidden="true">·</span>
+        <span>UTC+8</span>
+        <span aria-hidden="true">·</span>
+        <span>{GATE_RANGE}</span>
+        <span aria-hidden="true">·</span>
+        <span>{gates.length} FAMILIES</span>
+        <span aria-hidden="true">·</span>
+        <span>OWNER-VERIFIED</span>
+      </p>
     </div>
   </header>
 
@@ -481,6 +497,44 @@ const charter = [
     padding-block: var(--sp-9) var(--sp-7);
     background: var(--c-bg);
     border-bottom: var(--border);
+  }
+  .method-head__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-3);
+    margin: 0 0 var(--sp-4);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    flex-wrap: wrap;
+  }
+  .method-head__eyebrow-chip {
+    display: inline-block;
+    padding: 4px 10px;
+    color: var(--c-phi-teal);
+    border: 1px solid var(--c-phi-teal);
+    background: var(--c-phi-teal-soft);
+    font-weight: 600;
+  }
+  .method-head__eyebrow-line {
+    color: var(--c-warn);
+    font-weight: 600;
+  }
+  .method-head__tenant {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+    margin: var(--sp-4) 0 0;
+    padding: var(--sp-2) var(--sp-3);
+    background: var(--c-bg-2);
+    border: 1px solid var(--c-rule);
+    font-size: 0.78rem;
+    color: var(--c-ink-2);
+    letter-spacing: 0.06em;
+  }
+  .method-head__tenant span:nth-child(odd) {
+    color: var(--c-warn);
+    font-weight: 600;
   }
   .method-head__title {
     font-size: clamp(2rem, 4.5vw, 3.5rem);

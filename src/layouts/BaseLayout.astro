@@ -142,11 +142,12 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
        per WebKit spec). Point to the 180×180 PNG Apple actually renders. */
     }
     <link rel="apple-touch-icon" sizes="180x180" href={path('/apple-touch-icon-180x180.png')} />
+    <link rel="manifest" href={path('/site.webmanifest')} />
     <link rel="mask-icon" href={path('/cm-mark.svg')} color="#1a1714" />
     <link rel="sitemap" href={path('/sitemap-index.xml')} />
     <link
       rel="alternate"
-      type="application/atom+xml"
+      type="application/rss+xml"
       title={`${profile.fullName} — Portfolio Updates`}
       href={path('/feed.xml')}
     />
@@ -204,13 +205,25 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
     <slot name="head" />
   </head>
   <body class={bodyClass}>
-    <a href="#main" class="skip-link">Skip to content</a>
+    <!-- v6.13.2 a11y fix (Lighthouse 95→100, 2026-07-31):
+         aria-label="Skip to main content" + visible-text match the WCAG 2.4.1
+         bypass-blocks convention. Visible text is identical to aria-label so
+         screen-reader and sighted users get the same anchor name. -->
+    <a href="#main" class="skip-link" aria-label="Skip to main content">Skip to main content</a>
     {/* v7.3 — top hairline scroll progress (1px amber, driven by scroll-progress.ts). */}
     <div class="scroll-progress" aria-hidden="true"><i></i></div>
     {surface === 'v6-13' && <V613Fonts />}
     <Nav />
     <main id="main">
       <slot />
+      {/* v8.4 — tenet line chrome contract. Injected by BaseLayout so
+        every page inherits the operating-principles footer without
+        duplication. The page__tenet selector is single-source (defined
+        in src/styles/global.css). */}
+      <p class="page__tenet mono" aria-label="Operating principles">
+        No Math.random() · No argless new Date() · No fabricated metrics · No NDA-protected
+        employers on this site
+      </p>
     </main>
     <Footer />
 

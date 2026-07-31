@@ -131,18 +131,25 @@ const itemListJsonLd = {
 >
   <section class="hero">
     <div class="container container--narrow">
-      <p class="eyebrow mono">
-        <span>FOR HIRING MANAGERS</span>
-        <span aria-hidden="true">·</span>
-        <span>30-MIN AGENDA</span>
-        <span aria-hidden="true">·</span>
-        <span>NDA-CLEAN</span>
+      <p class="hero__eyebrow mono">
+        <span class="hero__eyebrow-chip">FOR HIRING MANAGERS · 30-MIN AGENDA · NDA-CLEAN</span>
+        <span class="hero__eyebrow-line">{agendaVersion} · TUE/WED/THU · 18:00–22:00 PHT (10:00–14:00 UTC)</span>
       </p>
       <h1 class="hero__title" data-words>Screening call — what the 30 minutes look like.</h1>
-      <VoiceLine class="hero__voice"> Thirty minutes. Five phases. The agenda. </VoiceLine>
+      <VoiceLine class="hero__voice">
+        Thirty minutes. Five phases. Bring a JD; bring the eval-harness map.
+      </VoiceLine>
       <p class="hero__sub">
         Tue / Wed / Thu · 18:00–22:00 PHT (10:00–14:00 UTC) · 30 minutes ·
         <a href={`mailto:${email}`}>{email}</a>
+      </p>
+
+      <p class="hero__tenant mono">
+        <span>CHRISTIAN.T.MACION</span>
+        <span aria-hidden="true">·</span>
+        <span>30-MIN HARD CAP</span>
+        <span aria-hidden="true">·</span>
+        <span>5 PHASES · 5 PROMPTS · 5 ARTIFACTS</span>
       </p>
 
       <table class="kv">
@@ -286,16 +293,46 @@ const itemListJsonLd = {
     background: var(--c-paper);
     border-bottom: var(--border);
   }
-  .eyebrow {
+  .hero__eyebrow {
     display: flex;
-    flex-wrap: wrap;
-    gap: var(--sp-2);
+    align-items: center;
+    gap: var(--sp-3);
+    margin: 0 0 var(--sp-4);
     font-size: var(--fs-xs);
     text-transform: uppercase;
     letter-spacing: 0.12em;
-    color: var(--c-amber-deep);
+    flex-wrap: wrap;
+  }
+  .hero__eyebrow-chip {
+    display: inline-block;
+    padding: 4px 10px;
+    color: var(--c-phi-teal);
+    border: 1px solid var(--c-phi-teal);
+    background: var(--c-phi-teal-soft);
     font-weight: 600;
-    margin-bottom: var(--sp-5);
+  }
+  .hero__eyebrow-line {
+    color: var(--c-warn);
+    font-weight: 600;
+  }
+  .hero__tenant {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+    margin: var(--sp-4) 0 0;
+    padding: var(--sp-2) var(--sp-3);
+    background: var(--c-bg);
+    border: 1px solid var(--c-rule);
+    font-size: 0.78rem;
+    color: var(--c-ink-2);
+    letter-spacing: 0.06em;
+  }
+  .hero__tenant span:nth-child(odd) {
+    color: var(--c-warn);
+    font-weight: 600;
+  }
+  .eyebrow {
+    display: none;
   }
   .hero__title {
     font-size: clamp(2rem, 5vw, 3.5rem);

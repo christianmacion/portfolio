@@ -119,8 +119,9 @@ const appearances: Appearance[] = [
 >
   <header class="talks-head">
     <div class="container">
-      <p class="section__eyebrow">
-        <span class="mono">talks/</span> · public-facing speaking record
+      <p class="talks-head__eyebrow mono">
+        <span class="talks-head__eyebrow-chip">TALKS · PUBLIC SPEAKING RECORD</span>
+        <span class="talks-head__eyebrow-line">ON-DISK · EVENT-NAMED · ORGANIZER-LINKABLE</span>
       </p>
       <h1 class="talks-head__title" data-words>Talks, lectures, and recorded walkthroughs.</h1>
       <VoiceLine class="talks-head__voice">
@@ -130,6 +131,17 @@ const appearances: Appearance[] = [
         Every entry below is a public artifact — a video on disk, a named event with an
         institutional record, or a co-signed certificate. The {lectures.length} video lectures are surfaced
         from <a href={path('/proof')}>/proof</a>; the conference and meetup list names the rest.
+      </p>
+      <p class="talks-head__tenant mono">
+        <span>CHRISTIAN.T.MACION</span>
+        <span aria-hidden="true">·</span>
+        <span>UTC+8</span>
+        <span aria-hidden="true">·</span>
+        <span>{lectures.length} LECTURES</span>
+        <span aria-hidden="true">·</span>
+        <span>PUBLIC</span>
+        <span aria-hidden="true">·</span>
+        <span>OWNER-VERIFIED</span>
       </p>
     </div>
   </header>

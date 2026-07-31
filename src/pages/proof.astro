@@ -283,12 +283,15 @@ const paginate = (items: any[]) => {
     data-reveal
   >
     <div class="container container-narrow">
-      <p class="section__eyebrow"><span class="mono">proof/</span> · show your work</p>
+      <p class="proof-head__eyebrow mono">
+        <span class="proof-head__eyebrow-chip">PROOF · SHOW YOUR WORK</span>
+        <span class="proof-head__eyebrow-line">{heroArtifactCount} ARTIFACTS · {flagshipCerts.length + 1} FLAGSHIP CERTS · NDA-CLEAN</span>
+      </p>
       <h1 class="proof-head__title" data-words>
         Proof. <span class="hl">Public or self-owned only</span>.
       </h1>
       <VoiceLine class="proof-head__voice">
-        If it isn't reproducible from public data, it isn't here.
+        If it isn’t reproducible from public data, it isn’t here.
       </VoiceLine>
 
       {
@@ -377,6 +380,16 @@ const paginate = (items: any[]) => {
       </p>
 
       <p class="proof-head__ver mono">{proofVersion} · {buildStampUtc8()}</p>
+
+      <p class="proof-head__tenant mono">
+        <span>CHRISTIAN.T.MACION</span>
+        <span aria-hidden="true">·</span>
+        <span>{profile.stats.evalGates}-GATE EVAL</span>
+        <span aria-hidden="true">·</span>
+        <span>{flagshipCerts.length + 1} TIER-1 CERTS</span>
+        <span aria-hidden="true">·</span>
+        <span>{codeArtifacts.length} RUNNABLE ARTIFACTS</span>
+      </p>
     </div>
   </header>
 
@@ -992,6 +1005,44 @@ const paginate = (items: any[]) => {
     padding-block: var(--sp-9) var(--sp-7);
     background: var(--c-paper);
     border-bottom: var(--border);
+  }
+  .proof-head__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-3);
+    margin: 0 0 var(--sp-4);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    flex-wrap: wrap;
+  }
+  .proof-head__eyebrow-chip {
+    display: inline-block;
+    padding: 4px 10px;
+    color: var(--c-phi-teal);
+    border: 1px solid var(--c-phi-teal);
+    background: var(--c-phi-teal-soft);
+    font-weight: 600;
+  }
+  .proof-head__eyebrow-line {
+    color: var(--c-warn);
+    font-weight: 600;
+  }
+  .proof-head__tenant {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+    margin: var(--sp-4) 0 0;
+    padding: var(--sp-2) var(--sp-3);
+    background: var(--c-bg);
+    border: 1px solid var(--c-rule);
+    font-size: 0.78rem;
+    color: var(--c-ink-2);
+    letter-spacing: 0.06em;
+  }
+  .proof-head__tenant span:nth-child(odd) {
+    color: var(--c-warn);
+    font-weight: 600;
   }
   .proof-head__title {
     font-size: clamp(1.75rem, 5vw, 3.5rem);

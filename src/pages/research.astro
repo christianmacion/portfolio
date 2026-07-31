@@ -178,12 +178,9 @@ statsRow[3].spark = sparkFor(2, 14, 0.5, 24);
         background. Pure dead DOM. */
     }
     <div class="container">
-      <p class="r-hero__eyebrow mono">
-        <span>{profile.fullName}</span>
-        <span aria-hidden="true">·</span>
-        <span>Research warehouse</span>
-        <span aria-hidden="true">·</span>
-        <span>public data only</span>
+      <p class="research-head__eyebrow mono">
+        <span class="research-head__eyebrow-chip">RESEARCH · WAREHOUSE · OPEN</span>
+        <span class="research-head__eyebrow-line">{quantProjects.length} STRATEGIES · FOUR FACTORS · {dataSourceCount} SOURCES</span>
       </p>
       <h1 class="r-hero__title">
         {`${quantProjects.length} strategies. Four factors. ${dataSourceCount} sources.`}
@@ -195,6 +192,17 @@ statsRow[3].spark = sparkFor(2, 14, 0.5, 24);
       <VoiceLine class="r-hero__voice" ruled={false} size="md">
         Statistics that survive discipline are statistics that didn't need to lie.
       </VoiceLine>
+      <p class="research-head__tenant mono">
+        <span>CHRISTIAN.T.MACION</span>
+        <span aria-hidden="true">·</span>
+        <span>UTC+8</span>
+        <span aria-hidden="true">·</span>
+        <span>{quantProjects.length} STRATEGIES</span>
+        <span aria-hidden="true">·</span>
+        <span>{dataSourceCount} DATA SOURCES</span>
+        <span aria-hidden="true">·</span>
+        <span>OWNER-VERIFIED</span>
+      </p>
     </div>
   </section>
 

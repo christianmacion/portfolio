@@ -34,5 +34,6 @@ Allow: /
 Sitemap: https://christianmacion-portfolio.pages.dev/sitemap-index.xml
 
 # AI-agent surface
-# llms.txt — Markdown index per llmstxt.org
-# llms-full.txt — concatenated content for LLM ingestion
+# RSS feeds are linked from the HTML head and are intentionally crawlable.
+# llms.txt and llms-full.txt are public Markdown alternates; no private
+# paths are exposed by this static site.

@@ -120,8 +120,9 @@ const motionCount = motion.length;
 >
   <header class="col-head">
     <div class="container">
-      <p class="section__eyebrow">
-        <span class="mono">colophon/</span> · the design system
+      <p class="col-head__eyebrow mono">
+        <span class="col-head__eyebrow-chip">COLOPHON · THE DESIGN SYSTEM</span>
+        <span class="col-head__eyebrow-line">TYPE · COLOR · SPACING · MOTION · A11Y</span>
       </p>
       <h1 class="col-head__title" data-words>Colophon.</h1>
       <VoiceLine class="col-head__voice">
@@ -131,6 +132,16 @@ const motionCount = motion.length;
         Type, color, spacing, motion, and accessibility — every design decision on this site, in one
         page. The full source is in
         <code class="mono">src/styles/tokens.css</code>.
+      </p>
+
+      <p class="col-head__tenant mono">
+        <span>SRC/STYLES/TOKENS.CSS</span>
+        <span aria-hidden="true">·</span>
+        <span>{typeFaces.length} FACES · 4 ROLES</span>
+        <span aria-hidden="true">·</span>
+        <span>{paletteCount} SWATCHES</span>
+        <span aria-hidden="true">·</span>
+        <span>{motionCount} EFFECTS</span>
       </p>
     </div>
   </header>
@@ -380,6 +391,44 @@ const motionCount = motion.length;
     padding-block: var(--sp-9) var(--sp-7);
     background: var(--c-paper);
     border-bottom: var(--border);
+  }
+  .col-head__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-3);
+    margin: 0 0 var(--sp-4);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    flex-wrap: wrap;
+  }
+  .col-head__eyebrow-chip {
+    display: inline-block;
+    padding: 4px 10px;
+    color: var(--c-phi-teal);
+    border: 1px solid var(--c-phi-teal);
+    background: var(--c-phi-teal-soft);
+    font-weight: 600;
+  }
+  .col-head__eyebrow-line {
+    color: var(--c-warn);
+    font-weight: 600;
+  }
+  .col-head__tenant {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+    margin: var(--sp-4) 0 0;
+    padding: var(--sp-2) var(--sp-3);
+    background: var(--c-bg);
+    border: 1px solid var(--c-rule);
+    font-size: 0.78rem;
+    color: var(--c-ink-2);
+    letter-spacing: 0.06em;
+  }
+  .col-head__tenant span:nth-child(odd) {
+    color: var(--c-warn);
+    font-weight: 600;
   }
   .col-head__title {
     font-size: clamp(2.5rem, 6vw, 4.5rem);

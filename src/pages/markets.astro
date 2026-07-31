@@ -109,10 +109,9 @@ const secondarySymbol = 'BTC-USD';
   }
   <section class="mk-hero">
     <div class="container mk-hero__inner">
-      <p class="mk-hero__eyebrow mono">
-        <span>Markets</span>
-        <span aria-hidden="true">·</span>
-        <span>terminal view</span>
+      <p class="markets-head__eyebrow mono">
+        <span class="markets-head__eyebrow-chip">MARKETS · TERMINAL VIEW · OPEN</span>
+        <span class="markets-head__eyebrow-line">DETERMINISTIC SNAPSHOT · SAME SEED · EVERY RENDER</span>
       </p>
       <h1 class="mk-hero__title" data-words>
         An institutional terminal for a portfolio that ships systems, not screenshots.
@@ -127,6 +126,15 @@ const secondarySymbol = 'BTC-USD';
         components — they ship on <a href={path('/research')}>research</a>,
         <a href={path('/positions')}>positions</a>, and the
         <a href={path('/prediction-markets')}>prediction page</a> too.
+      </p>
+      <p class="markets-head__tenant mono">
+        <span>CHRISTIAN.T.MACION</span>
+        <span aria-hidden="true">·</span>
+        <span>UTC+8</span>
+        <span aria-hidden="true">·</span>
+        <span>BUILD_DATE DETERMINISTIC</span>
+        <span aria-hidden="true">·</span>
+        <span>OWNER-VERIFIED</span>
       </p>
     </div>
   </section>
@@ -293,17 +301,45 @@ const secondarySymbol = 'BTC-USD';
     max-width: 1080px;
   }
   .mk-hero__eyebrow {
+    display: none;
+  }
+  .markets-head__eyebrow {
     display: inline-flex;
-    gap: var(--sp-2);
+    align-items: center;
+    gap: var(--sp-3);
+    margin: 0 0 var(--sp-4);
     font-size: var(--fs-xs);
     text-transform: uppercase;
     letter-spacing: 0.12em;
-    color: var(--c-amber);
-    font-weight: 600;
-    margin-bottom: var(--sp-4);
+    flex-wrap: wrap;
   }
-  .mk-hero__eyebrow span:nth-child(2) {
-    color: var(--c-white-fade);
+  .markets-head__eyebrow-chip {
+    display: inline-block;
+    padding: 4px 10px;
+    color: var(--c-phi-teal);
+    border: 1px solid var(--c-phi-teal);
+    background: var(--c-phi-teal-soft);
+    font-weight: 600;
+  }
+  .markets-head__eyebrow-line {
+    color: var(--c-warn);
+    font-weight: 600;
+  }
+  .markets-head__tenant {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+    margin: var(--sp-4) 0 0;
+    padding: var(--sp-2) var(--sp-3);
+    background: var(--c-tape-2);
+    border: 1px solid var(--c-rule);
+    font-size: 0.78rem;
+    color: var(--c-ink-2);
+    letter-spacing: 0.06em;
+  }
+  .markets-head__tenant span:nth-child(odd) {
+    color: var(--c-warn);
+    font-weight: 600;
   }
   .mk-hero__title {
     font-size: clamp(1.85rem, 4.4vw, 3.4rem);

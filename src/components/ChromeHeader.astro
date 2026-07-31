@@ -1,0 +1,111 @@
+---
+/**
+ * ChromeHeader.astro — v8.4 SITE-WIDE CHROME CONTRACT HEADER.
+ *
+ * Renders the institutional eyebrow chip + tenant line + tenet trio that
+ * every page in the portfolio must carry. Pages wrap their H1 section
+ * with <ChromeHeader> to inherit the institutional register without
+ * duplicating markup. The chip uses --c-phi-teal so it reads as the
+ * same accent vocabulary across the site (home, subpages, recruiter
+ * brief, contact, etc.).
+ *
+ * Variants:
+ *   <ChromeHeader />                          → defaults
+ *   <ChromeHeader chip="QUANT · AI · OPS" />  → custom chip copy
+ *   <ChromeHeader tenant="REMOTE · UTC+8 · ..." />
+ *   <ChromeHeader tenet="..." />               → override tenet
+ *   <ChromeHeader variant="compact" />        → no chip, lighter typography
+ *
+ * The eyebrow + tenant lines collapse on mobile (< 720px) into a single
+ * mono ticker so the chrome doesn't crowd narrow viewports.
+ */
+
+interface Props {
+  /** Short-caps chip copy (1–3 words). */
+  chip?: string;
+  /** Eyebrow line copy (longer phrase). */
+  eyebrow?: string;
+  /** Tenant ticker copy (slash/dot-separated mono caps). */
+  tenant?: string;
+  /** Tenet line copy. Defaults to the operating-principles tenet. */
+  tenet?: string;
+  /** Compact variant — drops the chip, shrinks typography. */
+  variant?: 'default' | 'compact';
+  /** Hide the tenant line (useful when the page already has its own ticker). */
+  hideTenant?: boolean;
+  /** Hide the tenet line (the global tenet line is already injected by BaseLayout). */
+  hideTenet?: boolean;
+}
+
+const DEFAULT_CHIP = 'QUANT · AI · OPS';
+const DEFAULT_EYEBROW = 'OPERATOR + RESEARCHER';
+const DEFAULT_TENANT = 'CHRISTIAN.T.MACION · UTC+8 · REMOTE-OK · 5-SHIP SPRINT · OWNER-VERIFIED';
+const DEFAULT_TENET =
+  'No Math.random() · No argless new Date() · No fabricated metrics · No NDA-protected employers on this site';
+
+const {
+  chip = DEFAULT_CHIP,
+  eyebrow = DEFAULT_EYEBROW,
+  tenant = DEFAULT_TENANT,
+  tenet = DEFAULT_TENET,
+  variant = 'default',
+  hideTenant = false,
+  hideTenet = false,
+} = Astro.props;
+---
+
+<div class:list={['chrome-header', `chrome-header--${variant}`]}>
+  {
+    variant !== 'compact' && (
+      <p class="page__eyebrow mono">
+        <span class="hero__eyebrow-chip">{chip}</span>
+        <span class="chrome-header__eyebrow-line">· {eyebrow}</span>
+      </p>
+    )
+  }
+
+  {!hideTenant && (
+    <p class="page__tenant mono" aria-label="Identity ticker">
+      {tenant.split(' · ').map((segment, i, arr) => (
+        <>
+          <span>{segment}</span>
+          {i < arr.length - 1 && (
+            <span class="page__tenant-sep" aria-hidden="true">·</span>
+          )}
+        </>
+      ))}
+    </p>
+  )}
+
+  {!hideTenet && <p class="chrome-header__tenet mono">{tenet}</p>}
+</div>
+
+<style>
+  .chrome-header {
+    margin: 0 0 var(--sp-4);
+  }
+  .chrome-header--compact {
+    margin: 0 0 var(--sp-3);
+  }
+  .chrome-header__eyebrow-line {
+    color: var(--c-warn);
+    font-weight: 500;
+  }
+  .chrome-header__tenet {
+    margin: var(--sp-3) 0 0;
+    font: 400 10.5px / 1.55 var(--ff-mono);
+    color: var(--c-ink-3);
+    letter-spacing: 0.06em;
+  }
+
+  @media (max-width: 720px) {
+    .page__tenant {
+      font-size: 10px;
+      gap: 6px;
+      letter-spacing: 0.12em;
+    }
+    .page__eyebrow {
+      gap: 8px;
+    }
+  }
+</style>

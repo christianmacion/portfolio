@@ -88,7 +88,10 @@ const expWindow = `${expWindowEarliest} → ${expWindowLatest}`;
 >
   <header class="page-head">
     <div class="container">
-      <p class="section__eyebrow"><span class="mono">experience/</span> · engagements + proofs</p>
+      <p class="page-head__eyebrow mono">
+        <span class="page-head__eyebrow-chip">EXPERIENCE · ENGAGEMENTS + PROOFS</span>
+        <span class="page-head__eyebrow-line">{entries.length} ENGAGEMENTS · NDA-SAFE · {totalMonths}-MONTH ARC</span>
+      </p>
       <h1 class="page-head__title" data-words>
         Where the work happened — and how to <span class="hl">verify</span> it.
       </h1>
@@ -96,8 +99,9 @@ const expWindow = `${expWindowEarliest} → ${expWindowLatest}`;
         Each engagement ships with proof. If the proof isn't public, the entry isn't here.
       </VoiceLine>
       <p class="page-head__sub">
-        {entries.length} engagements. Each entry lists the contributions made and points to public artifacts
-        that prove them. The systematic-strategy desk role is a <strong>closed past contract</strong
+        {entries.length} engagements. Each entry lists the contributions made and points to
+        public artifacts that prove them. The systematic-strategy desk role is a <strong
+          >closed past contract</strong
         >
         (03/2026 – 06/2026); all references are NDA-safe and free of proprietary data sources.
       </p>
@@ -145,6 +149,16 @@ const expWindow = `${expWindowEarliest} → ${expWindowLatest}`;
         />
         <Stat value={`${totalMonths}`} label="months" sub={expWindow} formula="\Delta t" />
       </div>
+
+      <p class="page-head__tenant mono">
+        <span>CHRISTIAN.T.MACION</span>
+        <span aria-hidden="true">·</span>
+        <span>UTC+8</span>
+        <span aria-hidden="true">·</span>
+        <span>NDA-CLEAN</span>
+        <span aria-hidden="true">·</span>
+        <span>PROOF-PER-ROW</span>
+      </p>
     </div>
   </header>
 
@@ -189,6 +203,44 @@ const expWindow = `${expWindowEarliest} → ${expWindowLatest}`;
     padding-block: var(--sp-9) var(--sp-7);
     background: var(--c-paper);
     border-bottom: var(--border);
+  }
+  .page-head__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-3);
+    margin: 0 0 var(--sp-4);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    flex-wrap: wrap;
+  }
+  .page-head__eyebrow-chip {
+    display: inline-block;
+    padding: 4px 10px;
+    color: var(--c-phi-teal);
+    border: 1px solid var(--c-phi-teal);
+    background: var(--c-phi-teal-soft);
+    font-weight: 600;
+  }
+  .page-head__eyebrow-line {
+    color: var(--c-warn);
+    font-weight: 600;
+  }
+  .page-head__tenant {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+    margin: var(--sp-4) 0 0;
+    padding: var(--sp-2) var(--sp-3);
+    background: var(--c-bg);
+    border: 1px solid var(--c-rule);
+    font-size: 0.78rem;
+    color: var(--c-ink-2);
+    letter-spacing: 0.06em;
+  }
+  .page-head__tenant span:nth-child(odd) {
+    color: var(--c-warn);
+    font-weight: 600;
   }
   .page-head__title {
     font-size: clamp(2rem, 4vw, 3rem);

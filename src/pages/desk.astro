@@ -73,8 +73,8 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
   <header class="desk-head">
     <div class="container">
       <p class="desk-head__eyebrow mono">
-        <span class="status-dot" aria-hidden="true"></span>
-        THE DESK · {archSafe.agentCount}-AGENT OFFICE · {events.length} WORLD EVENTS · OPEN
+        <span class="desk-head__eyebrow-chip">THE DESK · 24H COVERAGE · OPEN</span>
+        <span class="desk-head__eyebrow-line">{archSafe.agentCount}-AGENT OFFICE · {events.length} WORLD EVENTS · UTC+8</span>
       </p>
       <h1 class="desk-head__title" data-words>
         The world, in <span class="hl">24 hours</span>.
@@ -86,16 +86,28 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
       <p class="desk-head__sub">
         A backtest is what a strategy <em>would have done</em>. A paper-trade is what it <em
           >actually does</em
-        >. The desk is what the multi-agent office
-        <em>actually watches</em> — six research venues spanning APAC and the western exchanges, ten curated
-        world events pinned to the calendar, and a rolling 24-hour signal overlay so the office sees what
-        is moving before the position-book reacts.
+        >. The desk is what the multi-agent office <em>actually watches</em> — six research venues
+        spanning APAC and the western exchanges, ten curated world events pinned to the calendar,
+        and a rolling 24-hour signal overlay so the office sees what is moving before the
+        position-book reacts.
       </p>
 
       <div class="desk-head__cta">
         <a class="cta cta--primary" href={mailto}>EMAIL — HIRING INQUIRY</a>
         <a class="cta cta--ghost" href={path('/ai')}>READ THE LOOP →</a>
       </div>
+
+      <p class="desk-head__tenant mono">
+        <span>CHRISTIAN.T.MACION</span>
+        <span aria-hidden="true">·</span>
+        <span>UTC+8</span>
+        <span aria-hidden="true">·</span>
+        <span>{events.length} WORLD EVENTS</span>
+        <span aria-hidden="true">·</span>
+        <span>50+ GDELT SIGNALS</span>
+        <span aria-hidden="true">·</span>
+        <span>OWNER-VERIFIED</span>
+      </p>
     </div>
   </header>
 
@@ -201,11 +213,42 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     border-bottom: 1px solid var(--c-rule);
   }
   .desk-head__eyebrow {
-    font: 500 11px / 1.4 var(--ff-mono);
-    color: var(--c-warn);
-    letter-spacing: 0.14em;
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+    margin: 0 0 var(--sp-4);
+    font-size: var(--fs-xs);
     text-transform: uppercase;
-    margin: 0 0 24px;
+    letter-spacing: 0.12em;
+    flex-wrap: wrap;
+  }
+  .desk-head__eyebrow-chip {
+    display: inline-block;
+    padding: 4px 10px;
+    color: var(--c-phi-teal);
+    border: 1px solid var(--c-phi-teal);
+    background: var(--c-phi-teal-soft);
+    font-weight: 600;
+  }
+  .desk-head__eyebrow-line {
+    color: var(--c-warn);
+    font-weight: 600;
+  }
+  .desk-head__tenant {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+    margin: var(--sp-4) 0 0;
+    padding: var(--sp-2) var(--sp-3);
+    background: var(--c-bg);
+    border: 1px solid var(--c-rule);
+    font-size: 0.78rem;
+    color: var(--c-ink-2);
+    letter-spacing: 0.06em;
+  }
+  .desk-head__tenant span:nth-child(odd) {
+    color: var(--c-warn);
+    font-weight: 600;
   }
   .desk-head__title {
     font: 600 48px / 1 var(--serif-display);

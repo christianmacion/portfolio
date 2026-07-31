@@ -1,5 +1,5 @@
 /**
- * _feed-shared.ts — shared helpers for the three Atom 1.0 feed streams.
+ * _feed-shared.ts — shared helpers for the three RSS 2.0 streams.
  *
  * Used by:
  *   - /feed.xml            (merged)
@@ -28,9 +28,8 @@ export interface FeedItem {
 // tag: URI per RFC 4151 — stable, persistent, unique.
 // Format: tag:<authority>,<date>:<specific>.
 // Use the deployment host (PUBLIC_SITE_URL on mirror builds, GH Pages default
-// otherwise) so feed `<id>` stays consistent with `<link rel="self">`. The
-// year comes from `buildYear()` (BUILD_DATE env var, fixed fallback) per
-// Standing Order §9 — `new Date().getFullYear()` would be non-deterministic.
+// otherwise) so feed <guid> values stay stable across builds. The year comes
+// from buildYear() (BUILD_DATE env var, fixed fallback) per Standing Order §9.
 const _host = (() => {
   try {
     return new URL(import.meta.env.PUBLIC_SITE_URL ?? 'https://christianmacion26.github.io').host;
@@ -45,6 +44,11 @@ function toIsoDate(d: Date | string | undefined, fallback: string): string {
   const date = typeof d === 'string' ? new Date(d) : d;
   if (isNaN(date.getTime())) return fallback;
   return date.toISOString();
+}
+
+function toRssDate(isoDate: string): string {
+  const date = new Date(isoDate);
+  return isNaN(date.getTime()) ? new Date(0).toUTCString() : date.toUTCString();
 }
 
 export function escapeXml(s: string): string {
@@ -74,7 +78,7 @@ export async function buildItems(baseUrl: string, now: string): Promise<FeedItem
 
   const solutions = await getCollection('solution');
   for (const s of solutions) {
-    // Solutions schema has no `date` field; emit at build time.
+    // Solutions schema has no date field; emit the deterministic build stamp.
     items.push({
       id: `tag:${PORTFOLIO_TAG_AUTHORITY}:solution:${s.data.slug}`,
       title: s.data.title,
@@ -86,7 +90,7 @@ export async function buildItems(baseUrl: string, now: string): Promise<FeedItem
     });
   }
 
-  // Order newest-first
+  // Order newest-first and cap each stream at 50 items.
   items.sort((a, b) => b.updated.localeCompare(a.updated));
   return items.slice(0, 50);
 }
@@ -97,45 +101,42 @@ export interface RenderOpts {
   selfHref: string;
   title: string;
   subtitle: string;
-  feedIdTag: string;
   items: FeedItem[];
   now: string;
 }
 
 export function renderFeed(opts: RenderOpts): string {
-  const { baseUrl, stream, selfHref, title, subtitle, feedIdTag, items, now } = opts;
+  const { baseUrl, stream, selfHref, title, subtitle, items, now } = opts;
 
   const entries = items
     .filter((it) => stream === 'all' || it.kind === stream)
     .map(
-      (it) => `  <entry>
-    <id>${it.id}</id>
-    <title>${escapeXml(it.title)}</title>
-    <link href="${it.url}" rel="alternate" type="text/html" />
-    <updated>${it.updated}</updated>
-    <summary type="text">${escapeXml(it.summary)}</summary>${
-      it.tags.length
-        ? `\n    ${it.tags.map((t) => `<category term="${escapeXml(t)}" />`).join('\n    ')}`
-        : ''
-    }
-  </entry>`,
+      (it) => `    <item>
+      <title>${escapeXml(it.title)}</title>
+      <link>${escapeXml(it.url)}</link>
+      <guid isPermaLink="false">${escapeXml(it.id)}</guid>
+      <pubDate>${toRssDate(it.updated)}</pubDate>
+      <description>${escapeXml(it.summary)}</description>${
+        it.tags.length
+          ? `\n      ${it.tags.map((t) => `<category>${escapeXml(t)}</category>`).join('\n      ')}`
+          : ''
+      }
+    </item>`,
     )
     .join('\n');
 
   return `<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-  <id>tag:${PORTFOLIO_TAG_AUTHORITY}:${feedIdTag}</id>
-  <title>${escapeXml(title)}</title>
-  <subtitle>${escapeXml(subtitle)}</subtitle>
-  <link href="${selfHref}" rel="self" type="application/atom+xml" />
-  <link href="${baseUrl}/" rel="alternate" type="text/html" />
-  <updated>${now}</updated>
-  <author>
-    <name>${escapeXml(profile.fullName)}</name>
-    <email>${escapeXml(profile.contact.email)}</email>
-    <uri>${baseUrl}/</uri>
-  </author>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>${escapeXml(title)}</title>
+    <link>${escapeXml(`${baseUrl}/`)}</link>
+    <atom:link href="${escapeXml(selfHref)}" rel="self" type="application/rss+xml" />
+    <description>${escapeXml(subtitle)}</description>
+    <language>en</language>
+    <lastBuildDate>${toRssDate(now)}</lastBuildDate>
+    <managingEditor>${escapeXml(profile.contact.email)} (${escapeXml(profile.fullName)})</managingEditor>
 ${entries}
-</feed>
+  </channel>
+</rss>
 `;
 }

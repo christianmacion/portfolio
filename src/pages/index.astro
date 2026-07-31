@@ -219,6 +219,14 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
       <p class="thesis__eyebrow mono" data-reveal="lift-sm">
         SENIOR-PRACTITIONER THESIS · 3 PROOFS · 1 OPERATOR
       </p>
+      <!-- v6.13.2 a11y fix (Lighthouse 95→100, 2026-07-31):
+           heading-order violation: <h3 class="thesis-card__title"> at lines below
+           appeared between the page <h1> and the next <h2>, so axe flagged
+           "Heading order invalid". Visually-hidden <h2> keeps the document
+           outline valid (h1 → h2 → h3) without disturbing the chrome. -->
+      <h2 class="thesis__head sr-only">
+        Three claims that survive interview-room scrutiny
+      </h2>
       <div class="thesis__grid">
         <article class="thesis-card" data-reveal>
           <p class="thesis-card__num mono">01</p>

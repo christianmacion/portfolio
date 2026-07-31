@@ -69,8 +69,9 @@ const certSpanMonths =
 >
   <header class="page-head">
     <div class="container">
-      <p class="section__eyebrow">
-        <span class="mono">certs/</span> · {claimedTotal} total, curated below
+      <p class="page-head__eyebrow mono">
+        <span class="page-head__eyebrow-chip">CERTIFICATIONS · {claimedTotal} TOTAL · {groups.length} DOMAINS</span>
+        <span class="page-head__eyebrow-line">ISSUER-VERIFIED · TIER-1 FLAGGED · CURATED BELOW</span>
       </p>
       <h1 class="page-head__title" data-words>
         <span class="mono">{totalCount}+ of {claimedTotal}</span> certifications, {groups.length} domains.
@@ -98,6 +99,17 @@ const certSpanMonths =
         <Stat value={String(flagshipCount)} label="flagships" sub="NASA · Meta · IBM · IMC" />
         <Stat value={String(tier1Count)} label="tier-1" sub="STA · SEC · BSP" />
       </div>
+      <p class="page-head__tenant mono">
+        <span>CHRISTIAN.T.MACION</span>
+        <span aria-hidden="true">·</span>
+        <span>UTC+8</span>
+        <span aria-hidden="true">·</span>
+        <span>{claimedTotal} CERTS</span>
+        <span aria-hidden="true">·</span>
+        <span>{groups.length} DOMAINS</span>
+        <span aria-hidden="true">·</span>
+        <span>OWNER-VERIFIED</span>
+      </p>
     </div>
   </header>
 

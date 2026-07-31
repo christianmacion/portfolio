@@ -131,8 +131,9 @@ const shelf: Book[] = [
 >
   <header class="papers-head">
     <div class="container">
-      <p class="section__eyebrow">
-        <span class="mono">papers/</span> · memos + bookshelf
+      <p class="papers-head__eyebrow mono">
+        <span class="papers-head__eyebrow-chip">PAPERS · MEMOS + BOOKSHELF</span>
+        <span class="papers-head__eyebrow-line">WORKING MEMOS · PUBLIC PDFS · NDA-SAFE</span>
       </p>
       <h1 class="papers-head__title" data-words>Papers, memos, and long-form notes.</h1>
       <VoiceLine class="papers-head__voice">
@@ -142,6 +143,17 @@ const shelf: Book[] = [
         Section A is the working-memo queue — drafts in flight, no public PDF links yet. Section B
         is the bookshelf: the {shelf.length} references that
         <a href={path('/methodology')}>/methodology</a> is downstream of. All public sources.
+      </p>
+      <p class="papers-head__tenant mono">
+        <span>CHRISTIAN.T.MACION</span>
+        <span aria-hidden="true">·</span>
+        <span>UTC+8</span>
+        <span aria-hidden="true">·</span>
+        <span>{shelf.length} REFERENCES</span>
+        <span aria-hidden="true">·</span>
+        <span>PUBLIC</span>
+        <span aria-hidden="true">·</span>
+        <span>OWNER-VERIFIED</span>
       </p>
     </div>
   </header>

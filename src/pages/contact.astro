@@ -81,17 +81,29 @@ const platforms = [
     <div class="container">
       <div class="contact-head__top">
         <div class="contact-head__copy">
-          <p class="section__eyebrow"><span class="mono">contact/</span> · 24h reply · NDA-safe</p>
+          <p class="contact-head__eyebrow mono">
+            <span class="contact-head__eyebrow-chip">CONTACT · 24H REPLY · NDA-SAFE</span>
+            <span class="contact-head__eyebrow-line">{channels.length} CHANNELS · JD-WITH-EMAIL GETS THE RICHEST REPLY</span>
+          </p>
           <h1 class="contact-head__title" data-words>
-            {channels.length} channels. Pick the one that fits.
+            {channels.length} channels. <span class="hl">Pick the one that fits.</span>
           </h1>
           <VoiceLine class="contact-head__voice">
-            Email-with-JD gets the richest reply. LinkedIn DM is fine for casual. Phone after email
-            — never first.
+            Email-with-JD gets the richest reply. LinkedIn DM for casual. Phone after email — never first.
           </VoiceLine>
           <p class="contact-head__sub">
             Each tile names the job it does, not the platform. For open roles, the email-with-JD
             path gets the richest reply (problem → approach → evidence → outcome → proof).
+          </p>
+
+          <p class="contact-head__tenant mono">
+            <span>CHRISTIAN.T.MACION</span>
+            <span aria-hidden="true">·</span>
+            <span>UTC+8</span>
+            <span aria-hidden="true">·</span>
+            <span>REMOTE-OK</span>
+            <span aria-hidden="true">·</span>
+            <span>4-BUSINESS-HOUR SLA</span>
           </p>
         </div>
       </div>
@@ -294,6 +306,44 @@ const platforms = [
   .contact-head__copy {
     flex: 1 1 auto;
     min-width: 0;
+  }
+  .contact-head__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-3);
+    margin: 0 0 var(--sp-4);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    flex-wrap: wrap;
+  }
+  .contact-head__eyebrow-chip {
+    display: inline-block;
+    padding: 4px 10px;
+    color: var(--c-phi-teal);
+    border: 1px solid var(--c-phi-teal);
+    background: var(--c-phi-teal-soft);
+    font-weight: 600;
+  }
+  .contact-head__eyebrow-line {
+    color: var(--c-warn);
+    font-weight: 600;
+  }
+  .contact-head__tenant {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+    margin: var(--sp-4) 0 0;
+    padding: var(--sp-2) var(--sp-3);
+    background: var(--c-bg);
+    border: 1px solid var(--c-rule);
+    font-size: 0.78rem;
+    color: var(--c-ink-2);
+    letter-spacing: 0.06em;
+  }
+  .contact-head__tenant span:nth-child(odd) {
+    color: var(--c-warn);
+    font-weight: 600;
   }
 
   /* === Booking widget (Cal.com iframe embed) ===

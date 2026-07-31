@@ -254,6 +254,410 @@ li {
   line-height: var(--lh-loose);
 }
 
+/* === v8.4 · CHROME CONTRACT — SITE-WIDE EYEBROW CHIP + TENANT + TENET ===
+   These primitives are the single source of truth for the chrome contract.
+   Pages consume them via:
+     <p class="page__eyebrow mono"><span class="hero__eyebrow-chip">…</span> · …</p>
+     <p class="page__tenant mono">… <span class="page__tenant-sep">·</span> …</p>
+     <p class="page__tenet mono">No Math.random() · …</p>
+   The .hero__eyebrow-chip class is reused from the home (index.astro) so
+   both surfaces read identically without redefining palette tokens. */
+.page__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0 0 var(--sp-3);
+  font: 500 11px / 1.4 var(--ff-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--c-warn);
+}
+.page__eyebrow .hero__eyebrow-chip {
+  display: inline-block;
+  padding: 5px 11px 4px;
+  border: 1px solid var(--c-phi-teal);
+  background: var(--c-phi-teal-soft);
+  color: var(--c-phi-teal);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  line-height: 1;
+}
+.page__tenant {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: var(--sp-3) 0 0;
+  padding-top: var(--sp-2);
+  border-top: 1px solid var(--c-rule);
+  font: 500 11px / 1.4 var(--ff-mono);
+  color: var(--c-ink-3);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.page__tenant-sep {
+  color: var(--c-ink-4);
+  font-weight: 400;
+}
+.page__tenet {
+  margin: var(--sp-6) 0 0;
+  padding: var(--sp-3) 0 0;
+  border-top: 1px solid var(--c-rule);
+  font: 400 10.5px / 1.55 var(--ff-mono);
+  color: var(--c-ink-3);
+  letter-spacing: 0.06em;
+  text-align: center;
+}
+.page__tenet--block-end {
+  display: block;
+  text-align: left;
+  border-top: 1px solid var(--c-rule);
+  border-bottom: 1px solid var(--c-rule);
+  padding: var(--sp-3) var(--sp-4);
+  margin: var(--sp-7) 0 0;
+}
+
+/* v8.4 — page-head chrome variants used by pages that wrap the
+   eyebrow/tenant/tenet inside .page-head instead of at top-level.
+   Same phi-teal accent + mono typography as the global page__* rules.
+   The chip carries the eyebrow tagline; the line copy lives next to it. */
+.page-head__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0 0 var(--sp-3);
+  font: 500 11px / 1.4 var(--ff-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--c-warn);
+}
+.page-head__eyebrow-chip {
+  display: inline-block;
+  padding: 5px 11px 4px;
+  border: 1px solid var(--c-phi-teal);
+  background: var(--c-phi-teal-soft);
+  color: var(--c-phi-teal);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  line-height: 1;
+}
+.page-head__eyebrow-line {
+  color: var(--c-warn);
+  font-weight: 500;
+}
+.page-head__tenant {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: var(--sp-3) 0 0;
+  padding-top: var(--sp-2);
+  border-top: 1px solid var(--c-rule);
+  font: 500 11px / 1.4 var(--ff-mono);
+  color: var(--c-ink-3);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.page-head__tenet {
+  margin: var(--sp-2) 0 0;
+  font: 400 10.5px / 1.55 var(--ff-mono);
+  color: var(--c-ink-3);
+  letter-spacing: 0.06em;
+  max-width: 70ch;
+}
+
+/* v8.4 — page-name-specific chrome variants (contact-head, desk-head, etc.)
+   Same phi-teal accent + mono typography as the canonical page-head set. */
+.contact-head__eyebrow,
+.desk-head__eyebrow,
+.now-head__eyebrow,
+.markets-head__eyebrow,
+.method-head__eyebrow,
+.ai-head__eyebrow,
+.proof-head__eyebrow,
+.research-head__eyebrow,
+.experience-head__eyebrow,
+.for-recruiters__eyebrow,
+.certifications__eyebrow,
+.colophon__eyebrow,
+.about-this-site__eyebrow,
+.resume__eyebrow,
+.skills__eyebrow,
+.workbooks__eyebrow,
+.mistakes__eyebrow,
+.solutions__eyebrow,
+.papers__eyebrow,
+.positions__eyebrow,
+.publications__eyebrow,
+.search__eyebrow,
+.talks__eyebrow,
+.uses__eyebrow,
+.papers-head__eyebrow,
+.positions-head__eyebrow,
+.skills-head__eyebrow,
+.workbooks-head__eyebrow,
+.certifications-head__eyebrow,
+.about-this-site-head__eyebrow,
+.colophon-head__eyebrow,
+.mistakes-head__eyebrow,
+.solutions-head__eyebrow,
+.publications-head__eyebrow,
+.search-head__eyebrow,
+.talks-head__eyebrow,
+.uses-head__eyebrow,
+.resume-head__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0 0 var(--sp-3);
+  font: 500 11px / 1.4 var(--ff-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--c-warn);
+}
+.contact-head__eyebrow-chip,
+.desk-head__eyebrow-chip,
+.now-head__eyebrow-chip,
+.markets-head__eyebrow-chip,
+.method-head__eyebrow-chip,
+.ai-head__eyebrow-chip,
+.proof-head__eyebrow-chip,
+.research-head__eyebrow-chip,
+.experience-head__eyebrow-chip,
+.for-recruiters__eyebrow-chip,
+.certifications__eyebrow-chip,
+.colophon__eyebrow-chip,
+.about-this-site__eyebrow-chip,
+.resume__eyebrow-chip,
+.skills__eyebrow-chip,
+.workbooks__eyebrow-chip,
+.mistakes__eyebrow-chip,
+.solutions__eyebrow-chip,
+.papers__eyebrow-chip,
+.positions__eyebrow-chip,
+.publications__eyebrow-chip,
+.search__eyebrow-chip,
+.talks__eyebrow-chip,
+.uses__eyebrow-chip,
+.papers-head__eyebrow-chip,
+.positions-head__eyebrow-chip,
+.skills-head__eyebrow-chip,
+.workbooks-head__eyebrow-chip,
+.certifications-head__eyebrow-chip,
+.about-this-site-head__eyebrow-chip,
+.colophon-head__eyebrow-chip,
+.mistakes-head__eyebrow-chip,
+.solutions-head__eyebrow-chip,
+.publications-head__eyebrow-chip,
+.search-head__eyebrow-chip,
+.talks-head__eyebrow-chip,
+.uses-head__eyebrow-chip,
+.resume-head__eyebrow-chip {
+  display: inline-block;
+  padding: 5px 11px 4px;
+  border: 1px solid var(--c-phi-teal);
+  background: var(--c-phi-teal-soft);
+  color: var(--c-phi-teal);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  line-height: 1;
+}
+.contact-head__eyebrow-line,
+.desk-head__eyebrow-line,
+.now-head__eyebrow-line,
+.markets-head__eyebrow-line,
+.method-head__eyebrow-line,
+.ai-head__eyebrow-line,
+.proof-head__eyebrow-line,
+.research-head__eyebrow-line,
+.experience-head__eyebrow-line,
+.for-recruiters__eyebrow-line,
+.certifications__eyebrow-line,
+.colophon__eyebrow-line,
+.about-this-site__eyebrow-line,
+.resume__eyebrow-line,
+.skills__eyebrow-line,
+.workbooks__eyebrow-line,
+.mistakes__eyebrow-line,
+.solutions__eyebrow-line,
+.papers__eyebrow-line,
+.positions__eyebrow-line,
+.publications__eyebrow-line,
+.search__eyebrow-line,
+.talks__eyebrow-line,
+.uses__eyebrow-line,
+.papers-head__eyebrow-line,
+.positions-head__eyebrow-line,
+.skills-head__eyebrow-line,
+.workbooks-head__eyebrow-line,
+.certifications-head__eyebrow-line,
+.about-this-site-head__eyebrow-line,
+.colophon-head__eyebrow-line,
+.mistakes-head__eyebrow-line,
+.solutions-head__eyebrow-line,
+.publications-head__eyebrow-line,
+.search-head__eyebrow-line,
+.talks-head__eyebrow-line,
+.uses-head__eyebrow-line,
+.resume-head__eyebrow-line {
+  color: var(--c-warn);
+  font-weight: 500;
+}
+.contact-head__tenant,
+.desk-head__tenant,
+.now-head__tenant,
+.markets-head__tenant,
+.method-head__tenant,
+.ai-head__tenant,
+.proof-head__tenant,
+.research-head__tenant,
+.experience-head__tenant,
+.for-recruiters__tenant,
+.certifications__tenant,
+.colophon__tenant,
+.about-this-site__tenant,
+.resume__tenant,
+.skills__tenant,
+.workbooks__tenant,
+.mistakes__tenant,
+.solutions__tenant,
+.papers__tenant,
+.positions__tenant,
+.publications__tenant,
+.search__tenant,
+.talks__tenant,
+.uses__tenant,
+.papers-head__tenant,
+.positions-head__tenant,
+.skills-head__tenant,
+.workbooks-head__tenant,
+.certifications-head__tenant,
+.about-this-site-head__tenant,
+.colophon-head__tenant,
+.mistakes-head__tenant,
+.solutions-head__tenant,
+.publications-head__tenant,
+.search-head__tenant,
+.talks-head__tenant,
+.uses-head__tenant,
+.resume-head__tenant {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: var(--sp-3) 0 0;
+  padding-top: var(--sp-2);
+  border-top: 1px solid var(--c-rule);
+  font: 500 11px / 1.4 var(--ff-mono);
+  color: var(--c-ink-3);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.contact-head__tenet,
+.desk-head__tenet,
+.now-head__tenet,
+.markets-head__tenet,
+.method-head__tenet,
+.ai-head__tenet,
+.proof-head__tenet,
+.research-head__tenet,
+.experience-head__tenet,
+.for-recruiters__tenet,
+.certifications__tenet,
+.colophon__tenet,
+.about-this-site__tenet,
+.resume__tenet,
+.skills__tenet,
+.workbooks__tenet,
+.mistakes__tenet,
+.solutions__tenet,
+.papers__tenet,
+.positions__tenet,
+.publications__tenet,
+.search__tenet,
+.talks__tenet,
+.uses__tenet,
+.papers-head__tenet,
+.positions-head__tenet,
+.skills-head__tenet,
+.workbooks-head__tenet,
+.certifications-head__tenet,
+.about-this-site-head__tenet,
+.colophon-head__tenet,
+.mistakes-head__tenet,
+.solutions-head__tenet,
+.publications-head__tenet,
+.search-head__tenet,
+.talks-head__tenet,
+.uses-head__tenet,
+.resume-head__tenet {
+  margin: var(--sp-2) 0 0;
+  font: 400 10.5px / 1.55 var(--ff-mono);
+  color: var(--c-ink-3);
+  letter-spacing: 0.06em;
+  max-width: 70ch;
+}
+
+/* === v8.4 · KPI 2px phi-teal underline (universal across every stat-bearing surface) ===
+   Triggered by any element that carries a metric/stat/kpi class. Keeps the
+   institutional chrome (mono + 1 accent) consistent across the site. The
+   2px height matches the eyebrow chip border so they read as the same
+   accent vocabulary. */
+[class*='stat']:not([class*='state']):not([class*='status']),
+[class*='kpi'],
+[class*='metric'] {
+  position: relative;
+}
+[class*='stat']:not([class*='state']):not([class*='status'])::after,
+[class*='kpi']::after,
+[class*='metric']::after {
+  /* v8.4 — KPI underline. Only fires on leaf cells, not on containers.
+     :not([class*='state']) excludes .stat--trend-* etc., so the underline
+     fires on the metric cell, not on a row wrapper that happens to
+     contain "stat" in its class name. */
+}
+
+/* KPI underline — applied to leaf metric cells via a single rule. We
+   scope to specific known leaf classes rather than every element with
+   "stat" in its name (which would over-fire on grid containers). */
+.stat,
+.stat-cell,
+.hero__kpi,
+.kpi-cell,
+.metric-cell,
+.metric-tile,
+.stat-tile,
+.head-stats > *,
+.desk-stats__cell,
+.pillar__stats li,
+.proof-card__metric-row,
+.r-card,
+.ai-hero__stat,
+.pillar__stats b,
+.r-stats__cell,
+.entry-grid__cell,
+.pillar__stat,
+.pillar__metric,
+.pillar__num,
+.stats-cell {
+  border-bottom: 2px solid var(--c-phi-teal);
+  padding-bottom: 6px;
+}
+.head-stats,
+.desk-stats__grid,
+.hero__kpis,
+.pillar__stats {
+  border-bottom: 0 !important;
+}
+.head-stats > *,
+.desk-stats__cell,
+.pillar__stats li {
+  border-bottom: 2px solid var(--c-phi-teal);
+}
+
 /* === v6.0.7 · INSTITUTIONAL UTILITIES === */
 
 /* Tabular numerals — apply to any number display so digit columns align.
