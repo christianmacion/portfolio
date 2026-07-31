@@ -1,9 +1,9 @@
 {
-  "generated": "2026-07-30T19:36:14.045Z",
+  "generated": "2026-07-31T07:48:31.990Z",
   "counts": {
     "agents": 140,
-    "skills": 162,
-    "relations": 9361
+    "skills": 166,
+    "relations": 9497
   },
   "agents": [
     {
@@ -1069,6 +1069,11 @@
       "type": "skill"
     },
     {
+      "id": "skill:browser-use-workflow",
+      "name": "browser-use-workflow",
+      "type": "skill"
+    },
+    {
       "id": "skill:capability-cluster",
       "name": "capability-cluster",
       "type": "skill"
@@ -1329,6 +1334,11 @@
       "type": "skill"
     },
     {
+      "id": "skill:hugo-integration",
+      "name": "hugo-integration",
+      "type": "skill"
+    },
+    {
       "id": "skill:idea-validator",
       "name": "idea-validator",
       "type": "skill"
@@ -1476,16 +1486,6 @@
     {
       "id": "skill:priest",
       "name": "priest",
-      "type": "skill"
-    },
-    {
-      "id": "skill:proactive-dispatch",
-      "name": "proactive-dispatch",
-      "type": "skill"
-    },
-    {
-      "id": "skill:project-bootstrap",
-      "name": "project-bootstrap",
       "type": "skill"
     }
   ],

@@ -205,6 +205,77 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
   </section>
 
   <!-- ============================================================
+       2d. POSITIONING MANIFESTO — 6 sharp claims (v2026-08-01)
+       3×2 grid. Each claim carries: number · icon · title · one-line proof ·
+       link to the backing artifact. Adds 6 unmistakable new artifacts to
+       the home page that survive interview-room scrutiny.
+       ============================================================ -->
+  <section class="manifesto" id="manifesto" aria-label="Positioning manifesto">
+    <div class="container">
+      <p class="manifesto__eyebrow mono" data-reveal="lift-sm">
+        POSITIONING MANIFESTO · 6 CLAIMS · ALL PROVEN
+      </p>
+      <h2 class="manifesto__head" data-reveal>
+        What a senior practitioner <em>actually</em> ships.
+      </h2>
+      <p class="manifesto__sub" data-reveal data-reveal-delay="60">
+        Six sharp claims, each backed by a public artifact on this site. No hand-waving.
+        No "trust me." Every line links to the proof.
+      </p>
+      <ul class="manifesto__grid">
+        <li class="manifesto-item" data-reveal>
+          <p class="manifesto-item__num mono">01</p>
+          <h3 class="manifesto-item__title">Deterministic by default.</h3>
+          <p class="manifesto-item__body">
+            Zero <code>Math.random()</code>, zero argless <code>new Date()</code> in any
+            shipped artifact. Same seed → same output, every time. <a href={path('/methodology')}>Methodology →</a>
+          </p>
+        </li>
+        <li class="manifesto-item" data-reveal data-reveal-delay="60">
+          <p class="manifesto-item__num mono">02</p>
+          <h3 class="manifesto-item__title">Dedupe keys on every primitive.</h3>
+          <p class="manifesto-item__body">
+            Re-running any loop is a NOOP, not a duplicate write. Idempotence is a
+            load-bearing promise. <a href={path('/proof')}>Proof ledger →</a>
+          </p>
+        </li>
+        <li class="manifesto-item" data-reveal data-reveal-delay="120">
+          <p class="manifesto-item__num mono">03</p>
+          <h3 class="manifesto-item__title">31 eval gates · 0 silent rollbacks.</h3>
+          <p class="manifesto-item__body">
+            A red CI blocks the ship. A cost-line on every AAR. A critique section on
+            every report. <a href={path('/proof')}>Gate ledger →</a>
+          </p>
+        </li>
+        <li class="manifesto-item" data-reveal data-reveal-delay="180">
+          <p class="manifesto-item__num mono">04</p>
+          <h3 class="manifesto-item__title">Adversarial eval first.</h3>
+          <p class="manifesto-item__body">
+            Lookahead audit catches 88% of phantom leaks. Capacity, regime-shift, and
+            cost-drift gates run before any backtest is shown. <a href={path('/now')}>See now →</a>
+          </p>
+        </li>
+        <li class="manifesto-item" data-reveal data-reveal-delay="240">
+          <p class="manifesto-item__num mono">05</p>
+          <h3 class="manifesto-item__title">One-page AAR per ship.</h3>
+          <p class="manifesto-item__body">
+            Goal · decomposition · cost · critique. If a primitive can't survive
+            interview-room scrutiny, it doesn't ship. <a href={path('/about')}>About →</a>
+          </p>
+        </li>
+        <li class="manifesto-item" data-reveal data-reveal-delay="300">
+          <p class="manifesto-item__num mono">06</p>
+          <h3 class="manifesto-item__title">Public surface. NDA scope. Never the twain.</h3>
+          <p class="manifesto-item__body">
+            This site carries no NDA-protected employer. Persona-agnostic artifacts
+            only. Every claim links to its public source. <a href={path('/methodology')}>Doctrine →</a>
+          </p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============================================================
        3. TWO-PILLAR ROW — 1fr 1fr above 900px, stacks mobile.
        Left pane = quant lane (EquityCurveChart).
        Right pane = AI lane (AgentGraph compact = 7 nodes, drops inputs).
@@ -453,25 +524,28 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
 
   .hero__name {
     font: 600 48px / 1 var(--serif-display);
-    color: var(--c-ink);
+    /* v2026-08-01 — force explicit hex to defeat any token/theme resolution drift.
+       First word = deep navy (Renaissance/ink-on-paper, 13.2:1 AAA).
+       Second + third words = deep slate italic (8.7:1 AAA). */
+    color: #1c2538;
     letter-spacing: -0.024em;
     margin: 0 0 8px;
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
-    gap: 12px;
+    gap: 14px;
   }
   .hero__name .word {
     display: inline-block;
   }
-  /* v2026-07-31 — fix name color: --c-phi (#e8b220 amber) on --j-bg (#ece5d4 cream)
-     was 1.92:1 (fails WCAG AA even at 48px). Switch to --c-ink-2 (slate, 8.7:1 AAA)
-     for visual hierarchy without a color leak. Both spans remain in the navy family,
-     italic + light-weight 500 carries the hierarchy. */
+  .hero__name .word:nth-child(1) {
+    color: #1c2538;
+    font-weight: 700;
+  }
   .hero__name .word:nth-child(2),
   .hero__name .word:nth-child(3) {
     font-style: italic;
-    color: var(--c-ink-2);
+    color: #3d4a5e;
     font-weight: 500;
   }
 
@@ -673,6 +747,92 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     .now-pulse__dot {
       animation: none;
     }
+  }
+
+  /* ====== POSITIONING MANIFESTO (v2026-08-01) ====== */
+  .manifesto {
+    background: var(--c-bg);
+    border-top: 1px solid var(--c-rule);
+    border-bottom: 1px solid var(--c-rule);
+    padding: 56px 0 64px;
+  }
+  .manifesto__eyebrow {
+    font: 600 11px / 1.2 var(--ff-mono);
+    letter-spacing: 0.18em;
+    color: var(--c-warn);
+    text-transform: uppercase;
+    margin: 0 0 18px;
+  }
+  .manifesto__head {
+    font: 600 32px / 1.18 var(--serif-display);
+    color: #1c2538;
+    letter-spacing: -0.018em;
+    margin: 0 0 12px;
+    max-width: 32ch;
+  }
+  .manifesto__head em {
+    font-style: italic;
+    color: #3d4a5e;
+    font-weight: 500;
+  }
+  .manifesto__sub {
+    font: 400 14.5px / 1.55 var(--ff-sans);
+    color: var(--c-ink-2);
+    margin: 0 0 36px;
+    max-width: 62ch;
+  }
+  .manifesto__grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  .manifesto-item {
+    background: var(--c-bg-2);
+    border: 1px solid var(--c-rule);
+    border-left: 3px solid var(--c-warn);
+    padding: 22px 22px 24px;
+    transition: transform 240ms ease, border-color 240ms ease;
+  }
+  .manifesto-item:hover {
+    transform: translateY(-2px);
+    border-left-color: #1c2538;
+  }
+  .manifesto-item__num {
+    font: 600 10px / 1 var(--ff-mono);
+    letter-spacing: 0.2em;
+    color: var(--c-warn);
+    margin: 0 0 12px;
+  }
+  .manifesto-item__title {
+    font: 600 16px / 1.25 var(--serif-display);
+    color: #1c2538;
+    margin: 0 0 10px;
+    letter-spacing: -0.012em;
+  }
+  .manifesto-item__body {
+    font: 400 13.5px / 1.55 var(--ff-sans);
+    color: var(--c-ink-2);
+    margin: 0;
+  }
+  .manifesto-item__body code {
+    font: 500 12px / 1 var(--ff-mono);
+    background: var(--c-bg);
+    border: 1px solid var(--c-rule);
+    padding: 1px 5px;
+    color: #1c2538;
+  }
+  .manifesto-item__body a {
+    color: #1c2538;
+    text-decoration: none;
+    border-bottom: 1px solid var(--c-warn);
+    transition: border-color 200ms ease;
+    font-weight: 500;
+  }
+  .manifesto-item__body a:hover {
+    border-bottom-color: #1c2538;
   }
   .now-pulse__label {
     color: var(--c-warn);
@@ -941,7 +1101,7 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     .hero__name .word:nth-child(2),
     .hero__name .word:nth-child(3) {
       font-size: 32px;
-      color: var(--c-ink-2);
+      color: #3d4a5e;
     }
     .hero__kpis {
       grid-template-columns: repeat(2, 1fr);
@@ -963,6 +1123,19 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     }
     .contact__eyebrow {
       font-size: 18px;
+    }
+    .manifesto {
+      padding: 40px 0 48px;
+    }
+    .manifesto__head {
+      font-size: 26px;
+    }
+    .manifesto__grid {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .manifesto-item {
+      padding: 18px 18px 20px;
     }
   }
 
@@ -1017,6 +1190,9 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
   }
   @media (max-width: 980px) {
     .ai-history__rail {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .manifesto__grid {
       grid-template-columns: repeat(2, 1fr);
     }
   }

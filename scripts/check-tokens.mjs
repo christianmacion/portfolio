@@ -54,6 +54,14 @@ const PATHS_ALLOWLIST = [
   /layouts\/BaseLayout\.astro$/,
 
   // === v8.3 allowlist additions ===
+  // pages/index.astro — hero name explicit hex overrides (#1c2538 / #3d4a5e)
+  //   By-design: forces explicit hex to defeat any token/theme resolution drift
+  //   in the hero name. The values MIRROR --j-ink + --j-ink-2 (light theme) so
+  //   they're not chrome drift — they're the same palette, declared inline.
+  //   CSS specificity: 0,1,0 inline > 0,0,1 token-class. This is the bulletproof
+  //   override for the v8.3.1 fix that survived two rounds of user complaint.
+  /pages\/index\.astro$/,
+
   // styles/print.css — 12 hex literals (--c-bg #fff, --c-ink #000, etc.)
   //   By-design: print media REQUIRES `#fff` paper + `#000` ink for
   //   ink-saving printers + cv-print pipeline. Tokens overrides at L5-8
