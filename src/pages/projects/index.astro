@@ -35,6 +35,14 @@ const aiProjects: ProjectEntry[] = projects.filter((p) => p.data.role === 'ai');
 const quantProjects: ProjectEntry[] = projects.filter((p) => p.data.role === 'quant');
 const ossProjects: ProjectEntry[] = projects.filter((p) => p.data.sourceLink);
 
+/* v9.2 a11y — active filter tag for aria-current="page" on the
+   lane-filter chips. Read at SSR from Astro.url.searchParams so the
+   initial markup already carries the correct aria state (the inline
+   script below re-applies it client-side on hydration). */
+const rawFilterTag = Astro.url.searchParams.get('tag');
+const filterTag: 'ai' | 'quant' | null =
+  rawFilterTag === 'ai' || rawFilterTag === 'quant' ? rawFilterTag : null;
+
 const itemListJsonLd = projectListJsonLd(
   projects.map((p: ProjectEntry) => ({
     slug: p.id,
@@ -88,16 +96,24 @@ const itemListJsonLd = projectListJsonLd(
         </div>
       </div>
 
-      {/* v6.4 — Lane filter chips (URL-param-driven, no client:*). */}
+      {/* v6.4 — Lane filter chips (URL-param-driven, no client:*).
+         v9.2 a11y — aria-pressed is not valid on <a>; use aria-current
+         on the active filter (semantically "this navigation represents
+         the current view"). Inactive filters don't need an aria attr. */}
       <div class="lane-filter" role="group" aria-label="Filter projects by lane">
-        <a class="lane-filter__chip" href={path('/projects')} data-filter="all" aria-pressed={true}>
+        <a
+          class="lane-filter__chip"
+          href={path('/projects')}
+          data-filter="all"
+          aria-current={filterTag === null ? 'page' : undefined}
+        >
           All <span class="lane-filter__count mono">{projects.length}</span>
         </a>
         <a
           class="lane-filter__chip"
           href={`${path('/projects')}?tag=ai`}
           data-filter="ai"
-          aria-pressed={false}
+          aria-current={filterTag === 'ai' ? 'page' : undefined}
         >
           AI Engineer <span class="lane-filter__count mono">{aiProjects.length}</span>
         </a>
@@ -105,7 +121,7 @@ const itemListJsonLd = projectListJsonLd(
           class="lane-filter__chip"
           href={`${path('/projects')}?tag=quant`}
           data-filter="quant"
-          aria-pressed={false}
+          aria-current={filterTag === 'quant' ? 'page' : undefined}
         >
           Quant Researcher <span class="lane-filter__count mono">{quantProjects.length}</span>
         </a>
@@ -325,11 +341,12 @@ const itemListJsonLd = projectListJsonLd(
           }
         });
 
+        /* v9.2 a11y — switched to aria-current="page" on links. The script
+           clears the attr on every chip and sets it only on the active one. */
         document.querySelectorAll('[data-filter]').forEach(function (chip) {
+          chip.removeAttribute('aria-current');
           if (chip.getAttribute('data-filter') === tag) {
-            chip.setAttribute('aria-pressed', 'true');
-          } else {
-            chip.setAttribute('aria-pressed', 'false');
+            chip.setAttribute('aria-current', 'page');
           }
         });
       } catch {
@@ -431,14 +448,25 @@ const itemListJsonLd = projectListJsonLd(
     border-color: var(--c-amber);
     color: var(--c-ink);
   }
-  .lane-filter__chip[aria-pressed='true'] {
+  /* v9.2 a11y — was [aria-pressed='true']; now [aria-current='page']
+     since lane-filter chips are links, not buttons. Same visual chip
+     stays AA in both themes because --c-bg flips dark/light. */
+  .lane-filter__chip[aria-current='page'] {
     background: var(--c-amber);
     border-color: var(--c-amber);
-    color: var(--c-tape);
+    color: var(--c-bg);
   }
+  /* v9.2 a11y — drop opacity (was 0.75) so the count badge on the filter
+     chip hits 4.5:1 in both states. Inactive chip uses --c-ink-2
+     (slate); active chip inherits the parent's --c-bg (cream/dark) so
+     the count stays AA on the amber background. */
   .lane-filter__count {
     font-size: 0.7rem;
-    opacity: 0.75;
+    color: var(--c-ink-2);
+    font-weight: 600;
+  }
+  .lane-filter__chip[aria-current='page'] .lane-filter__count {
+    color: inherit;
   }
   .book-grid {
     display: grid;

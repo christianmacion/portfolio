@@ -87,11 +87,11 @@ const liveCounters = [
         <span class="tape__utc mono tape__utc--hide">DEPLOYED&nbsp;{deployedStamp}&nbsp;{buildTime}Z</span>
       </div>
       <div class="tape__row tape__row--bottom mono">
-        <a class="tape__nav" href={path('/quant')}>QUANT</a>
+        <a class="tape__nav" href={path('/projects/quant')}>QUANT</a>
         <span class="tape__sep" aria-hidden="true">·</span>
         <a class="tape__nav" href={path('/ai')}>AI</a>
         <span class="tape__sep" aria-hidden="true">·</span>
-        <a class="tape__nav" href={path('/stella')}>STELLA</a>
+        <a class="tape__nav" href={path('/workbooks')}>STELLA</a>
         <span class="tape__sep" aria-hidden="true">·</span>
         <a class="tape__nav" href={path('/methodology')}>METHOD</a>
         <span class="tape__sep" aria-hidden="true">·</span>
@@ -166,7 +166,7 @@ const liveCounters = [
             <td>Quant strategies</td>
             <td>alpha + risk, backtest, paper-trade</td>
             <td class="num">{profile.stats.strategyCount}</td>
-            <td><a href={path('/quant')}>/quant</a></td>
+            <td><a href={path('/projects/quant')}>/projects/quant</a></td>
           </tr>
           <tr>
             <td>AI engineering projects</td>
@@ -178,13 +178,13 @@ const liveCounters = [
             <td>STELLA multi-agent office</td>
             <td>agents · skills · routing rows</td>
             <td class="num">53 / 142 / 96</td>
-            <td><a href={path('/stella')}>/stella</a></td>
+            <td><a href={path('/workbooks')}>/workbooks</a></td>
           </tr>
           <tr>
             <td>STELLA knowledge graph</td>
             <td>typed entities · relations · AARs</td>
             <td class="num">3,209 nodes</td>
-            <td><a href={path('/stella')}>/stella</a></td>
+            <td><a href={path('/workbooks')}>/workbooks</a></td>
           </tr>
           <tr>
             <td>Public repos (GitHub)</td>
@@ -210,13 +210,13 @@ const liveCounters = [
             <td>Certs earned (last 11 months)</td>
             <td>AWS, GCP, quant, AI</td>
             <td class="num">{profile.stats.certCount}</td>
-            <td><a href={path('/credentials')}>/credentials</a></td>
+            <td><a href={path('/certifications')}>/certifications</a></td>
           </tr>
           <tr>
             <td>Pages built (live)</td>
             <td>Astro static · 90 routes</td>
             <td class="num">{profile.stats.pagesBuilt}</td>
-            <td><a href="/sitemap.xml">sitemap.xml</a></td>
+            <td><a href="/sitemap-index.xml">sitemap-index.xml</a></td>
           </tr>
         </tbody>
       </table>

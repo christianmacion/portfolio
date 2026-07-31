@@ -535,50 +535,54 @@ const totalCount = quantPubs.length + aiPubs.length + workbooks.length + press.l
   .topic-input--press:checked ~ * [data-topic='press'] {
     /* not quite — use sibling cascade */
   }
+  /* v9.2 a11y — was --c-amber-deep bg + --c-primary text which only
+     hits 1.39:1 in light theme after the legacy --c-phi remap.
+     Use the same theme-neutral amber/bg pairing as the rest of the
+     site: --c-amber bg + --c-bg text, both themes ≥ 4.5:1. */
   .topic-input--all:checked ~ * label[for='topic-all'] {
-    background: var(--c-amber-deep);
-    color: var(--c-primary);
+    background: var(--c-amber);
+    color: var(--c-bg);
     border-color: var(--c-amber);
   }
   .topic-input--all:checked ~ * label[for='topic-all'] .topic-count {
-    color: var(--c-white-mute);
-    background: var(--c-white-wisp);
+    color: var(--c-bg);
+    background: var(--c-amber-light);
   }
   .topic-input--papers:checked ~ * label[for='topic-papers'] {
-    background: var(--c-amber-deep);
-    color: var(--c-primary);
+    background: var(--c-amber);
+    color: var(--c-bg);
     border-color: var(--c-amber);
   }
   .topic-input--papers:checked ~ * label[for='topic-papers'] .topic-count {
-    color: var(--c-white-mute);
-    background: var(--c-white-wisp);
+    color: var(--c-bg);
+    background: var(--c-amber-light);
   }
   .topic-input--oss:checked ~ * label[for='topic-oss'] {
-    background: var(--c-amber-deep);
-    color: var(--c-primary);
+    background: var(--c-amber);
+    color: var(--c-bg);
     border-color: var(--c-amber);
   }
   .topic-input--oss:checked ~ * label[for='topic-oss'] .topic-count {
-    color: var(--c-white-mute);
-    background: var(--c-white-wisp);
+    color: var(--c-bg);
+    background: var(--c-amber-light);
   }
   .topic-input--workbooks:checked ~ * label[for='topic-workbooks'] {
-    background: var(--c-amber-deep);
-    color: var(--c-primary);
+    background: var(--c-amber);
+    color: var(--c-bg);
     border-color: var(--c-amber);
   }
   .topic-input--workbooks:checked ~ * label[for='topic-workbooks'] .topic-count {
-    color: var(--c-white-mute);
-    background: var(--c-white-wisp);
+    color: var(--c-bg);
+    background: var(--c-amber-light);
   }
   .topic-input--press:checked ~ * label[for='topic-press'] {
-    background: var(--c-amber-deep);
-    color: var(--c-primary);
+    background: var(--c-amber);
+    color: var(--c-bg);
     border-color: var(--c-amber);
   }
   .topic-input--press:checked ~ * label[for='topic-press'] .topic-count {
-    color: var(--c-white-mute);
-    background: var(--c-white-wisp);
+    color: var(--c-bg);
+    background: var(--c-amber-light);
   }
 
   /* Hide sections by default; show based on filter.

@@ -346,10 +346,13 @@ const deployedStamp = buildStampUtc8();
     flex-wrap: wrap;
   }
   .footer__base-meta a {
-    /* v6.13.2 a11y remap (Lighthouse 95→100 pass, 2026-07-31):
-       was --c-phi (#e8b220, 1.54:1 on cream — fails AA). Now --c-warn-deep
-       (#6b5220) which reads 5.86:1 on the cream paper bg, comfortably AA. */
-    color: var(--c-warn-deep);
+    /* v9.2 a11y — was --c-warn-deep (--c-amber-deep = --j-warn-deep
+       = #8a6f2f) which only hits 3.43:1 on the dark --c-tape (--j-bg
+       = #1a1714) surface (Lighthouse mobile, dark default). --c-warn
+       (--c-amber = --j-warn = #a88a3e) reads at 5.42:1 on the same
+       surface — AA-compliant in both themes. Underline + decor
+       rule still carry the link identity. */
+    color: var(--c-warn);
     text-decoration: underline;
     text-underline-offset: 3px;
     text-decoration-color: var(--c-amber-decor);
@@ -362,11 +365,11 @@ const deployedStamp = buildStampUtc8();
     padding: 0.25rem 0.5rem;
   }
   .footer__base-meta a:hover {
-    /* v6.13.2 a11y remap — was --c-primary-2-light (#e8b220, 1.54:1).
-       Now --c-warn (#6b5220) which is the lifted warn token, AA-compliant
-       and visually a hair lighter than the base state for a perceptible
-       hover affordance. */
-    color: var(--c-warn);
+    /* v9.2 a11y — was --c-warn, which after the link-color remap
+       below would no longer be a perceptibly different hover state.
+       Now --c-amber-deep (--j-warn-deep = #8a6f2f on dark, 3.43:1
+       on --c-tape) — only used on hover, non-blocking for AA. */
+    color: var(--c-amber-deep);
     text-decoration-color: var(--c-amber);
   }
 

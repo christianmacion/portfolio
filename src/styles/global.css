@@ -870,18 +870,23 @@ li {
 }
 
 .btn--primary {
-  background: var(--c-amber-deep);
-  color: var(--c-primary);
+  background: var(--c-amber);
+  color: var(--c-bg);
   border-color: var(--c-amber);
 }
 .btn--primary:hover {
   background: var(--c-amber);
-  color: var(--c-primary-deep);
+  color: var(--c-bg);
+  border-color: var(--c-amber-light);
 }
 
 .btn--ghost {
   background: transparent;
-  color: var(--c-amber-deep);
+  /* v9.2 a11y — was var(--c-amber-deep) which hits 3.43:1 on dark
+     bg-2 (Lighthouse mobile, dark default). --c-amber-light (#d4a849)
+     reads at ≥4.5:1 on the same surface. Border ink + amber text +
+     underline still carry the link/button identity. */
+  color: var(--c-amber-light);
   border-color: var(--c-rule);
 }
 .btn--ghost:hover {

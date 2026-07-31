@@ -350,12 +350,15 @@ const jsonLd = {
     letter-spacing: 0.12em;
     flex-wrap: wrap;
   }
+  /* v9.2 a11y — was --c-phi-teal. Dark theme --j-phi-teal = #2d5f5a
+     only hits 2.14:1 on the dark page-head surface. Same fix as
+     about.astro: solid amber chip + --c-bg text, ≥5.6:1 both themes. */
   .hero__eyebrow-chip {
     display: inline-block;
     padding: 4px 10px;
-    color: var(--c-phi-teal);
-    border: 1px solid var(--c-phi-teal);
-    background: var(--c-phi-teal-soft);
+    color: var(--c-bg);
+    border: 1px solid var(--c-amber);
+    background: var(--c-amber);
     font-weight: 600;
   }
   .hero__eyebrow-line {

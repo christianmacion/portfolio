@@ -133,8 +133,9 @@ const shortcuts: Shortcut[] = (() => {
     position: fixed;
     right: var(--sp-5);
     bottom: var(--sp-5);
-    width: 528px; /* 240 × 2 tiles + 16 gap + 32 padding */
-    max-width: calc(100vw - var(--sp-7));
+    width: auto;
+    max-width: calc(100vw - 2 * var(--sp-5));
+    max-width: min(528px, calc(100vw - 2 * var(--sp-5)));
     background: var(--c-tape);
     color: var(--ink-on-tape);
     border: 1px solid var(--c-rule);
@@ -225,8 +226,18 @@ const shortcuts: Shortcut[] = (() => {
     justify-content: center;
   }
   @media (max-width: 560px) {
+    .keyhint {
+      right: var(--sp-3);
+      bottom: var(--sp-3);
+      max-width: calc(100vw - 2 * var(--sp-3));
+      padding: var(--sp-3);
+    }
     .keyhint__grid {
-      grid-template-columns: 240px;
+      grid-template-columns: 1fr;
+    }
+    .keyhint__tile {
+      width: 100%;
+      min-width: 0;
     }
   }
 

@@ -77,12 +77,6 @@ const companions = [
     note: `${PDF_PAGES} pp · ${PDF_SIZE_KB} KB · letter format`,
     kind: 'pdf',
   },
-  {
-    label: 'Frontier-models brief — source markdown',
-    href: '/research/frontier-models-source.md',
-    note: 'public-shareable MD with figures and footnotes',
-    kind: 'md',
-  },
 ];
 ---
 
@@ -592,23 +586,27 @@ const companions = [
     font-family: var(--ff-mono);
     scrollbar-width: thin;
   }
+  /* v9.2 a11y — copy BibTeX button. Was --c-amber-deep bg + --c-primary
+     text. Use theme-neutral amber/bg pairing: --c-amber bg + --c-bg text
+     gives ≥4.5:1 in both themes. */
   .cite-copy {
     position: absolute;
     top: var(--sp-3);
     right: var(--sp-3);
-    background: var(--c-amber-deep);
-    color: var(--c-primary);
+    background: var(--c-amber);
+    color: var(--c-bg);
     border: 1px solid var(--c-amber);
     padding: 0.4rem 0.75rem;
     border-radius: var(--radius-sm);
     font-size: var(--fs-xs);
     font-family: var(--ff-mono);
     cursor: pointer;
-    transition: background var(--transition);
+    transition: background var(--transition), border-color var(--transition);
   }
   .cite-copy:hover {
     background: var(--c-amber);
-    color: var(--c-primary-deep);
+    color: var(--c-bg);
+    border-color: var(--c-amber-light);
   }
   .cite-copy__label {
     color: inherit;

@@ -1,9 +1,9 @@
 {
-  "generated": "2026-07-31T13:11:40.145Z",
+  "generated": "2026-07-31T16:14:29.659Z",
   "counts": {
-    "agents": 140,
-    "skills": 166,
-    "relations": 9750
+    "agents": 148,
+    "skills": 169,
+    "relations": 10095
   },
   "agents": [
     {
@@ -665,6 +665,62 @@
       "mark": ""
     },
     {
+      "id": "agent:quant-backtester",
+      "name": "quant-backtester",
+      "tier": "T3",
+      "squad": "other",
+      "mark": ""
+    },
+    {
+      "id": "agent:quant-data-integrity",
+      "name": "quant-data-integrity",
+      "tier": "T3",
+      "squad": "other",
+      "mark": ""
+    },
+    {
+      "id": "agent:quant-idea-miner",
+      "name": "quant-idea-miner",
+      "tier": "T3",
+      "squad": "other",
+      "mark": ""
+    },
+    {
+      "id": "agent:quant-methodology-librarian",
+      "name": "quant-methodology-librarian",
+      "tier": "T3",
+      "squad": "other",
+      "mark": ""
+    },
+    {
+      "id": "agent:quant-preflight-triage",
+      "name": "quant-preflight-triage",
+      "tier": "T3",
+      "squad": "other",
+      "mark": ""
+    },
+    {
+      "id": "agent:quant-regime",
+      "name": "quant-regime",
+      "tier": "T3",
+      "squad": "other",
+      "mark": ""
+    },
+    {
+      "id": "agent:quant-researcher",
+      "name": "quant-researcher",
+      "tier": "T3",
+      "squad": "other",
+      "mark": ""
+    },
+    {
+      "id": "agent:quant-strategy-scribe",
+      "name": "quant-strategy-scribe",
+      "tier": "T3",
+      "squad": "other",
+      "mark": ""
+    },
+    {
       "id": "agent:rag-architect",
       "name": "rag_architect",
       "tier": "T3",
@@ -1054,6 +1110,11 @@
       "type": "skill"
     },
     {
+      "id": "skill:awesome-quant-corpus",
+      "name": "awesome-quant-corpus",
+      "type": "skill"
+    },
+    {
       "id": "skill:banner-design",
       "name": "banner-design",
       "type": "skill"
@@ -1191,6 +1252,11 @@
     {
       "id": "skill:drift-reconcile",
       "name": "drift-reconcile",
+      "type": "skill"
+    },
+    {
+      "id": "skill:event-driven-backtesters",
+      "name": "event-driven-backtesters",
       "type": "skill"
     },
     {
@@ -1476,16 +1542,6 @@
     {
       "id": "skill:portfolio-motion",
       "name": "portfolio-motion",
-      "type": "skill"
-    },
-    {
-      "id": "skill:portfolio-positioning-check",
-      "name": "portfolio-positioning-check",
-      "type": "skill"
-    },
-    {
-      "id": "skill:priest",
-      "name": "priest",
       "type": "skill"
     }
   ],

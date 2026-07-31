@@ -1,15 +1,44 @@
-# .github/workflows/lighthouse.yml — weekly Lighthouse CI run on the deployed site.
+# .github/workflows/lighthouse.yml — HARD gate Lighthouse CI for portfolio.
 #
-# Why: This portfolio targets WFH QR/AI hiring managers. Lighthouse perf and SEO
-# scores are a load-bearing trust signal (they appear in the trust-strip). A
-# weekly run catches regressions before a hiring manager does.
+# v9.2.2 (Gate 12) — Phase 5a hardening. Was a weekly cron + workflow_dispatch
+# that produced a report artifact (advisory). Now a real PR gate that BLOCKS
+# merges on any Lighthouse score below the binding thresholds:
 #
-# Strategy: a minimal lighthouse-ci run against the GitHub Pages URL using
-# @lhci/cli's `autorun`. Threshold assertions are kept loose (warn-only) to
-# avoid noise from a 3rd-party hosted image CDN; the report is the artifact.
-name: Lighthouse
+#   Mobile  (--form-factor=mobile, --throttling-method=simulate):
+#     performance      ≥ 0.95  (binding gate per webcraft + portfolio posture)
+#     accessibility    = 1.00  (WCAG 2.2 AA 100% is non-negotiable)
+#     best-practices   = 1.00  (CSP, no console errors, no deprecated APIs)
+#     seo              = 1.00  (recruiter-search surface)
+#
+#   Desktop (--preset=desktop):
+#     performance      ≥ 0.98  (same gate; desktop ceiling is higher)
+#     accessibility    = 1.00
+#     best-practices   = 1.00
+#     seo              = 1.00
+#
+# Targets: the 5 critical-path routes. Visual-regression coverage is enforced
+# separately (see Phase 4 visual-regression test plan, ported from STELLA
+# native patterns 1-7).
+#
+# Why hard-block: Lighthouse is a load-bearing trust signal — the trust-strip
+# on the portfolio shows the score, and a sub-95 regression on a route that
+# ships a hiring-manager-facing surface is a real credibility hit. Better to
+# fail PR than to ship and have to roll back.
+#
+# Strategy:
+#   1. Build the site (`npm run build:mirror` → writes to `dist/`).
+#   2. Serve `dist/` via `http-server` with brotli compression (Cloudflare's
+#      CDN applies brotli at the edge — local CI must match).
+#   3. Run Lighthouse against the served routes with `--throttling-method=simulate`
+#      (mobile + desktop). Mobile uses the simulated 4× CPU + 1.6Mbps network.
+#   4. Hard-fail the job on any threshold breach.
+name: Lighthouse (Gate 12)
 
 on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
   schedule:
     # Mondays 07:00 UTC (~15:00 PHT) — after a quiet weekend of content edits.
     - cron: '0 7 * * 1'
@@ -17,11 +46,14 @@ on:
 
 permissions:
   contents: read
-  pages: read
-  id-token: none
+
+concurrency:
+  group: lhci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  lighthouse:
+  build:
+    name: Build site
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -29,41 +61,133 @@ jobs:
         with:
           node-version: 22
           cache: npm
+      - run: npm ci
+      # Build for the CF Pages mirror (BASE_PATH=/) so the served URLs match
+      # the production canonical host structure.
+      - run: npm run build:mirror
+
+  lighthouse-mobile:
+    name: Lighthouse — Mobile (gate)
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
       - name: Install
-        run: npm install --no-save @lhci/cli
-      - name: Authorise against GitHub Pages
-        env:
-          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+        run: npm install --no-save @lhci/cli http-server
+      - name: Serve dist/ with brotli compression
         run: |
-          cat > lighthouserc.json <<'EOF'
+          # CF CDN applies brotli at the edge; CI must match.
+          mkdir -p /tmp/dist && cp -r dist/* /tmp/dist/
+          # http-server auto-applies brotli if the request advertises br; we use
+          # --brotli to enable brotli encoding for text/* and application/json.
+          npx http-server /tmp/dist --brotli --port 4323 --silent &
+          echo $! > /tmp/http-server.pid
+          sleep 2
+          curl -sf -H "Accept-Encoding: br" -o /dev/null http://localhost:4323/ || (echo "server not ready" && exit 1)
+      - name: Authorise against local build
+        run: |
+          cat > lighthouserc.mobile.json <<'EOF'
           {
             "ci": {
               "collect": {
                 "url": [
-                  "https://christianmacion26.github.io/portfolio/",
-                  "https://christianmacion26.github.io/portfolio/projects/",
-                  "https://christianmacion26.github.io/portfolio/chat/"
+                  "http://localhost:4323/",
+                  "http://localhost:4323/about/",
+                  "http://localhost:4323/projects/quant/",
+                  "http://localhost:4323/ai/",
+                  "http://localhost:4323/for-recruiters/"
                 ],
-                "numberOfRuns": 1
+                "numberOfRuns": 3,
+                "settings": {
+                  "preset": "perf",
+                  "formFactor": "mobile",
+                  "throttlingMethod": "simulate",
+                  "screenEmulation": {
+                    "mobile": true,
+                    "width": 412,
+                    "height": 823,
+                    "deviceScaleFactor": 1.75,
+                    "disabled": false
+                  },
+                  "emulatedUserAgent": "Mozilla/5.0 (Linux; Android 11; moto g power (2022)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Mobile Safari/537.36 Chrome-Lighthouse"
+                }
               },
               "assert": {
                 "preset": "lighthouse:no-pwa",
                 "assertions": {
-                  "categories:performance": ["error", { "minScore": 0.95 }],
-                  "categories:accessibility": ["error", { "minScore": 0.95 }],
-                  "categories:best-practices": ["error", { "minScore": 0.90 }],
-                  "categories:seo": ["error", { "minScore": 0.95 }]
+                  "categories:performance":   ["error", { "minScore": 0.95 }],
+                  "categories:accessibility": ["error", { "minScore": 1.00 }],
+                  "categories:best-practices": ["error", { "minScore": 1.00 }],
+                  "categories:seo":            ["error", { "minScore": 1.00 }]
+                }
+              },
+              "upload": {
+                "target": "temporary-public-storage"
+              }
+            }
+          }
+          EOF
+      - name: Run Lighthouse CI (mobile)
+        run: npx -y @lhci/cli@0.14.x autorun --config=./lighthouserc.mobile.json
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-mobile-report
+          path: .lighthouseci
+          retention-days: 30
+
+  lighthouse-desktop:
+    name: Lighthouse — Desktop (gate)
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install
+        run: npm install --no-save @lhci/cli http-server
+      - name: Serve dist/ with brotli compression
+        run: |
+          mkdir -p /tmp/dist && cp -r dist/* /tmp/dist/
+          npx http-server /tmp/dist --brotli --port 4324 --silent &
+          echo $! > /tmp/http-server.pid
+          sleep 2
+          curl -sf -H "Accept-Encoding: br" -o /dev/null http://localhost:4324/ || (echo "server not ready" && exit 1)
+      - name: Authorise against local build
+        run: |
+          cat > lighthouserc.desktop.json <<'EOF'
+          {
+            "ci": {
+              "collect": {
+                "url": [
+                  "http://localhost:4324/",
+                  "http://localhost:4324/about/",
+                  "http://localhost:4324/projects/quant/",
+                  "http://localhost:4324/ai/",
+                  "http://localhost:4324/for-recruiters/"
+                ],
+                "numberOfRuns": 3,
+                "settings": {
+                  "preset": "desktop"
+                }
+              },
+              "assert": {
+                "preset": "lighthouse:no-pwa",
+                "assertions": {
+                  "categories:performance":   ["error", { "minScore": 0.98 }],
+                  "categories:accessibility": ["error", { "minScore": 1.00 }],
+                  "categories:best-practices": ["error", { "minScore": 1.00 }],
+                  "categories:seo":            ["error", { "minScore": 1.00 }]
                 }
               }
             }
           }
           EOF
-      - name: Run Lighthouse CI
-        run: npx -y @lhci/cli@0.14.x autorun
+      - name: Run Lighthouse CI (desktop)
+        run: npx -y @lhci/cli@0.14.x autorun --config=./lighthouserc.desktop.json
       - name: Upload report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: lighthouse-report
+          name: lighthouse-desktop-report
           path: .lighthouseci
           retention-days: 30

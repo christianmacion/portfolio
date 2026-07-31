@@ -197,13 +197,21 @@ const passRateStr = passRate.toFixed(3);
           <h3 class="eval-family__name">{f.name}</h3>
           <span class="eval-family__source">— {f.source}</span>
         </header>
-        <table class="eval-table">
+        <table class="eval-table" tabindex="0" aria-label={`Evaluation gates: ${f.name}`}>
           <colgroup>
             <col class="col-id" />
             <col class="col-label" />
             <col class="col-result" />
             <col class="col-value" />
           </colgroup>
+          <thead>
+            <tr>
+              <th scope="col" class="sr-only">Gate ID</th>
+              <th scope="col" class="sr-only">Label</th>
+              <th scope="col" class="sr-only">Result</th>
+              <th scope="col" class="sr-only">Value</th>
+            </tr>
+          </thead>
           <tbody>
             {f.gates.map((g) => (
               <tr class:list={['eval-row', `eval-row--${g.result.toLowerCase()}`]}>
@@ -403,7 +411,12 @@ const passRateStr = passRate.toFixed(3);
   }
   .eval-pill--check {
     background: var(--c-amberl-mist);
-    color: var(--c-amber);
+    /* v9.2 a11y — was var(--c-amber) which only hits 4.23:1 on the
+       amber-tint pill bg in dark mode (Lighthouse mobile, dark default).
+       --c-ink reads at ≥9.5:1 on the same surface — institutional
+       register, F14-safe (amber pill silhouette retained, no traffic-light
+       semantics). Bold weight + letter-spacing carry the chip identity. */
+    color: var(--c-ink);
     border: 1px solid var(--c-amberl-decor);
   }
   .eval-pill--fail {

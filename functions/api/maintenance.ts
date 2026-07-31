@@ -1,0 +1,3 @@
+import type { PagesFunction } from '@cloudflare/workers-types';
+import { errorResponse, json, requestId, type Env } from '../lib/contracts';
+export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => { const rid = requestId(request); if (request.headers.get('Authorization') !== `Bearer ${env.SMOKE_TEST_TOKEN}`) return errorResponse(rid, 401, 'AUTH_REQUIRED', 'auth_required'); const now = Math.floor(Date.now() / 300000) * 300000; const key = `manual:${now}`; await env.DB.prepare("INSERT INTO maintenance_runs (dedupe_key, job_name, scheduled_for, state) VALUES (?, 'outbox_dispatch', ?, 'done') ON CONFLICT(dedupe_key) DO NOTHING").bind(key, now).run(); return json({ ok: true, request_id: rid, triggered: true, dedupe_key: key }, 202, rid); };

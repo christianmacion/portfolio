@@ -101,3 +101,30 @@ jobs:
       - uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # v9.2 a11y — axe-core route audit. Hard-blocks PRs on any WCAG 2.2 AA
+  # violation across all 91 generated routes. Installs Playwright Chromium
+  # headless shell (mirrors scripts/a11y-audit.mjs), runs after the full
+  # site build, and uploads the JSON evidence as a CI artifact. The
+  # npm script exits 1 on any violation, which fails the job.
+  a11y:
+    name: a11y (axe-core route audit)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Build site
+        run: npm run build:mirror
+      - name: axe-core route audit (WCAG 2.2 AA)
+        run: npm run test:a11y
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: a11y-evidence
+          path: .audit/a11y/axe-report.json
+          if-no-files-found: ignore

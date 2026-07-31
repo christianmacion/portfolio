@@ -769,3 +769,91 @@
     transform: none !important;
   }
 }
+
+/* ============================================================
+ * 24. SET-PIECE / AMBIENT / UTILITY STRATIFICATION (v2026-07-31) —
+ *     the motion-library contract from the v9.2 RFC. Three
+ *     classes, three roles:
+ *       .stl-set-piece — paint-time entrance with choreography.
+ *                        Bounded duration. Use for: hero entrance,
+ *                        page transition, brand mark first appearance.
+ *       .stl-ambient   — perpetual motion (max 1 per viewport per
+ *                        hard-stop rule T1-3). Pauses off-screen via
+ *                        IntersectionObserver in ambient-pause.ts.
+ *                        Use for: subtle drift, ambient ticker,
+ *                        candle-flame-style loops.
+ *       .stl-utility   — hover/state, max 200ms. NO lift on hover
+ *                        (T1-5 hard-stop). Token-color shifts only.
+ * ============================================================ */
+.stl-set-piece {
+  animation-duration: var(--dur-4, 480ms);
+  animation-timing-function: var(--ease-out);
+  animation-fill-mode: both;
+}
+
+.stl-ambient {
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-timing-function: ease-in-out;
+  /* Off-screen pause via IntersectionObserver in ambient-pause.ts */
+}
+
+.stl-utility {
+  transition: color var(--dur-1, 120ms) var(--ease-snappy),
+              border-color var(--dur-1, 120ms) var(--ease-snappy),
+              background-color var(--dur-1, 120ms) var(--ease-snappy),
+              opacity var(--dur-1, 120ms) var(--ease-snappy);
+}
+
+/* ============================================================
+ * 25. HERO ENTRANCE TIMELINE (v2026-07-31) — T3-M1 binding rule.
+ *     Brand mark T=0 → ambient T=200ms → h1 self-draw T=400ms →
+ *     ticker T=1200ms → body T=1500ms (stagger). Total arc ≤ 2s.
+ *     Each marker is a paint-time delay applied via class; the
+ *     component sets only the class. motion.ts reads [data-stagger]
+ *     and adds .is-revealed to fire the transition.
+ * ============================================================ */
+.stl-hero-mark    { animation-delay: 0ms; }
+.stl-hero-ambient { animation-delay: 200ms; }
+.stl-hero-h1      { animation-delay: 400ms; }
+.stl-hero-ticker  { animation-delay: 1200ms; }
+.stl-hero-body    { animation-delay: 1500ms; }
+
+/* ============================================================
+ * 26. MODULAR-ARITHMETIC STAGGER (v2026-07-31) — T3-M2 binding
+ *     rule. Stagger delay wraps on a 1280ms cycle so a long list
+ *     of cards never lands two cards on the same frame (the eye
+ *     reads it as a system, not a single loop).
+ *
+ *     4 cards (i=0..3)  step=320ms → 0/320/640/960ms
+ *     8 cards (i=0..7)  step=160ms → 0/160/320/480/640/800/960/1120ms
+ *
+ *     Apply: style="--stl-stagger-i: <index>" on each child.
+ * ============================================================ */
+.stl-stagger-card {
+  animation-delay: calc((var(--stl-stagger-i, 0) * var(--stl-stagger-step, 320ms)) % 1280ms);
+}
+
+/* ============================================================
+ * 27. STRATIFICATION + HERO + STAGGER REDUCED-MOTION OVERRIDE
+ *     (v2026-07-31) — every class added in §§24-26 collapses
+ *     under prefers-reduced-motion to the resting state. The
+ *     reduced-motion state must be byte-identical to the
+ *     post-animation state (Pattern 20, STELLA-NATIVE-NOTE).
+ * ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .stl-set-piece,
+  .stl-ambient,
+  .stl-utility,
+  .stl-hero-mark,
+  .stl-hero-ambient,
+  .stl-hero-h1,
+  .stl-hero-ticker,
+  .stl-hero-body,
+  .stl-stagger-card {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}

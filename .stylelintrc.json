@@ -1,0 +1,13 @@
+{
+  "plugins": ["stylelint-no-restricted-syntax"],
+  "rules": {
+    "plugin/no-restricted-syntax": [
+      [
+        {
+          "selector": "rule[selector*='.binding-stripe--doctrine'][selector*='.c-bg-3']",
+          "message": "WCAG 2.2 SC 1.4.11: .binding-stripe--doctrine is restricted to --c-bg and --c-bg-2; use handoff or iterate on .c-bg-3."
+        }
+      ]
+    ]
+  }
+}

@@ -1,0 +1,61 @@
+/* utilities.css — Portfolio v9.2 visual uplift
+ * Drop-in extension classes for paint-time motion.
+ * Applied via class — never via inline style or per-element JS setup.
+ * Reduced-motion contract: every utility collapses under prefers-reduced-motion.
+ *
+ * Token references:
+ *   --dur-3 (320ms), --dur-4 (480ms)         [Phase 3a — front_end_engineer]
+ *   --ease-out                               [exists in tokens.css]
+ *   --ease-overshoot-constrained             [Phase 3a — front_end_engineer]
+ *
+ * Bind rules:
+ *   - No gradient / halo / glow (institutional design contract).
+ *   - Each utility ends on its resting state (opacity:1 / transform:none / stroke-dashoffset:0).
+ *   - Reduced-motion override collapses to the resting state byte-identically.
+ */
+
+/* === .stl-fade-in === */
+.stl-fade-in {
+  opacity: 0;
+  animation: stl-fade-in var(--dur-3, 320ms) var(--ease-out) forwards;
+  animation-delay: var(--stl-delay, 0ms);
+}
+@keyframes stl-fade-in {
+  to { opacity: 1; }
+}
+
+/* === .stl-pop === */
+.stl-pop {
+  opacity: 0;
+  transform: scale(0.96);
+  transform-origin: var(--stl-origin, center);
+  animation: stl-pop var(--dur-3, 320ms) var(--ease-overshoot-constrained) forwards;
+  animation-delay: var(--stl-delay, 0ms);
+}
+@keyframes stl-pop {
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* === .stl-draw (SVG line-draw) === */
+.stl-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  pathLength: 1;
+  animation: stl-draw var(--dur-4, 480ms) var(--ease-out) forwards;
+  animation-delay: var(--stl-delay, 0ms);
+}
+@keyframes stl-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+/* === Reduced-motion contract === */
+@media (prefers-reduced-motion: reduce) {
+  .stl-fade-in,
+  .stl-pop,
+  .stl-draw {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    stroke-dashoffset: 0;
+  }
+}

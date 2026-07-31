@@ -1,0 +1,133 @@
+---
+/**
+ * 500.astro — v9.2: institutional 500 fallback.
+ *
+ * Static sites rarely hit a true 5xx, but the institutional register
+ * ships one anyway. Mirrors the 404.astro chrome: eyebrow + H1 +
+ * Equation + CTABanner + explicit recover links. Marked noindex so
+ * search engines don't index the error page.
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Equation from '@components/Equation.astro';
+import CTABanner from '@components/CTABanner.astro';
+import { path } from '@utils/url';
+
+const links = [
+  { href: path('/'), label: 'Home' },
+  { href: path('/projects'), label: 'Projects' },
+  { href: path('/contact'), label: 'Contact' },
+];
+---
+<BaseLayout
+  title="Server error"
+  description="The portfolio failed to render this page. The build is static; please retry or return home."
+  type="error"
+  noindex
+  breadcrumbs={[
+    { name: 'Home', href: '/' },
+    { name: '500', href: '/500' },
+  ]}
+>
+  <main class="container container-narrow">
+    <header class="page-head">
+      <p class="eyebrow mono">500 · SERVER ERROR</p>
+      <h1 class="page-head__title">The render failed.</h1>
+      <p class="page-head__sub">
+        Static sites nearly never hit a 500. If you are seeing this, it is either a
+        mirror-deploy issue or a stray client-side error. The underlying HTML, RSS,
+        sitemap, and asset bundles are still served — retry, or pick a known-good route.
+      </p>
+      <div class="page-head__eq">
+        <Equation
+          block
+          latex={`\\text{status}(t) = \\begin{cases} 200 & t \\in \\text{healthy routes} \\\\ 500 & t \\in \\text{(none — this is a static site)} \\end{cases}`}
+          size="md"
+        />
+      </div>
+    </header>
+
+    <section class="section">
+      <h2 class="section__title">Recovery routes</h2>
+      <ul class="links">
+        {links.map((l) => (
+          <li><a href={l.href}>{l.label}</a></li>
+        ))}
+      </ul>
+    </section>
+
+    <CTABanner
+      title="Still broken?"
+      sub="If the error persists across two reloads, the mirror is misconfigured. The source repo + commit hash are at the bottom of the home page; the build is reproducible from scratch."
+      primaryLabel="Open an issue"
+      primaryHref="https://github.com/christianmacion26/christianmacion.github.io/issues"
+      secondaryLabel="Back to home"
+      secondaryHref={path('/')}
+    />
+  </main>
+</BaseLayout>
+
+<style>
+  .page-head {
+    padding-block: var(--sp-9) var(--sp-6);
+    border-bottom: var(--border);
+  }
+  .eyebrow {
+    font-size: var(--fs-xs);
+    color: var(--c-amber-deep);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-weight: 600;
+    margin-bottom: var(--sp-4);
+  }
+  .page-head__title {
+    font-size: clamp(1.75rem, 4vw, var(--fs-3xl));
+    line-height: 1.18;
+    margin-bottom: var(--sp-4);
+    color: var(--c-ink);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  .page-head__sub {
+    font-size: var(--fs-base);
+    color: var(--c-ink-2);
+    line-height: var(--lh-loose);
+    max-width: 64ch;
+    margin-bottom: var(--sp-5);
+  }
+  .page-head__eq {
+    padding: var(--sp-4) var(--sp-5);
+    background: var(--c-bg);
+    border: 1px solid var(--c-rule);
+    border-radius: var(--radius);
+    overflow-x: auto;
+    margin-bottom: var(--sp-5);
+  }
+  .section {
+    padding-block: var(--sp-7);
+  }
+  .section__title {
+    font-size: var(--fs-xl);
+    color: var(--c-ink);
+    font-weight: 600;
+    margin-bottom: var(--sp-4);
+    letter-spacing: -0.01em;
+  }
+  .links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-3) var(--sp-5);
+  }
+  .links a {
+    color: var(--c-ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--c-rule);
+    padding-bottom: 2px;
+    transition: border-color var(--transition);
+  }
+  .links a:hover {
+    border-bottom-color: var(--c-amber-deep);
+  }
+</style>

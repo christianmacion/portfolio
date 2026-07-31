@@ -1,0 +1,94 @@
+---
+/**
+ * Icon.astro — STELLA custom SVG icon wrapper.
+ *
+ * The chrome wrapper component. All icon usage across the portfolio consumes
+ * this — never raw SVGs. Wraps the path data in a uniform <svg> shell with
+ * the institutional chrome contract baked in:
+ *
+ *   - viewBox 24×24 (canonical)
+ *   - stroke-width 1.5 (chrome-weight, terminal-grade)
+ *   - stroke-linecap round, stroke-linejoin round (joint feel)
+ *   - fill none (line icons, no filled glyphs except where structurally required)
+ *   - color via currentColor (mono + 1 accent via the consuming element's color)
+ *
+ * Per [[webcraft-no-vibe]]: NO halo, NO glow, NO gradient, NO filter.
+ * Per [[wcag-2.2-aa-sc-1.1.1]]: a11y mapping is per-call:
+ *   - `label` present → role="img" + aria-label={label} (informative icon)
+ *   - `label` absent  → aria-hidden="true" focusable="false" (decorative)
+ *
+ * Usage:
+ *   <Icon name="arrow-right" size={16} />                         <!-- decorative -->
+ *   <Icon name="check" size={16} label="Section complete" />      <!-- informative -->
+ *   <Icon name="github" size={20} label="GitHub profile" />       <!-- opens new tab -->
+ */
+import { getIconPath } from './index';
+import type { IconName } from './types';
+
+interface Props {
+  /** The icon name — must be a valid IconName. Typo caught at compile-time. */
+  name: IconName;
+  /**
+   * Pixel size for both width and height. Defaults to 16 (chrome tier).
+   * Use 24 for content (case-study openers, hero art) and 32+ for hero set-pieces.
+   */
+  size?: number;
+  /**
+   * Accessibility label. If present, the icon is announced as `role="img"`
+   * with `aria-label={label}`. If absent, the icon is treated as decorative
+   * (`aria-hidden="true"`, `focusable="false"`).
+   *
+   * WCAG 2.2 AA SC 1.1.1 — non-text content must have a text alternative
+   * unless the icon is purely decorative.
+   */
+  label?: string;
+  /** Optional additional class names for layout / positioning hooks. */
+  class?: string;
+  /**
+   * Override the default stroke-width. Defaults to 1.5. Use sparingly —
+   * 1.5 is the chrome contract; deviation breaks the line-icon system weight.
+   */
+  strokeWidth?: number;
+}
+
+const {
+  name,
+  size = 16,
+  label,
+  class: className = '',
+  strokeWidth = 1.5,
+} = Astro.props;
+
+const path = getIconPath(name);
+
+const a11y = label
+  ? ({ role: 'img', 'aria-label': label } as const)
+  : ({ 'aria-hidden': 'true', focusable: 'false' } as const);
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 24 24"
+  width={size}
+  height={size}
+  fill="none"
+  stroke="currentColor"
+  stroke-width={strokeWidth}
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class={`stl-icon ${className}`}
+  data-icon={name}
+  {...a11y}
+>
+  <path d={path} />
+</svg>
+
+<style>
+  .stl-icon {
+    flex-shrink: 0;
+    display: inline-block;
+    vertical-align: middle;
+    /* Color via currentColor — no fill, no gradient, no filter.
+       Per [[webcraft-no-vibe]]: no halo, no glow, no color shifts. */
+  }
+</style>

@@ -203,11 +203,15 @@ const gradId = `card-grad-${event.id.replace(/[^a-z0-9]/gi, '')}`;
   .card__pill--macro {
     color: var(--c-phi);
   }
+  /* v9.2 a11y — pills at 7.8pt normal/600 are 4.5:1 threshold.
+     Light --j-cobalt-3 (#5b6f9e) and --j-info (#5b6ba8) only hit
+     4.27:1 / 4.37:1 on #f3ede1. Use the deeper --j-cobalt and a
+     parallel darken for the rates family — both ≥ 5.0:1 in light. */
   .card__pill--crypto {
-    color: var(--c-primary-2-light);
+    color: var(--j-cobalt);
   }
   .card__pill--rates {
-    color: var(--c-accent-cyan);
+    color: #2f3f7a; /* deeper cobalt-blue, parallel to --j-cobalt */
   }
   .card__pill--political {
     color: var(--c-ink-2);

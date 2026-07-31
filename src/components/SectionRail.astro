@@ -184,6 +184,11 @@ const railId = `rail-${Math.random().toString(36).slice(2, 8)}`;
     bindScroll() {
       const obs = new IntersectionObserver(
         (entries) => {
+          // v9.2 — guard against stale-element callbacks: if the
+          // observed element was detached from the DOM (route change,
+          // Astro view transition), the IntersectionObserver still
+          // fires, but mutations against it are no-ops. Skip early.
+          if (!this.rail.isConnected) return;
           for (const e of entries) {
             if (e.isIntersecting) this.setActive(e.target.id);
           }
@@ -194,6 +199,15 @@ const railId = `rail-${Math.random().toString(36).slice(2, 8)}`;
         const el = document.getElementById(s.id);
         if (el) obs.observe(el);
       }
+      // Track the observer so it can be torn down on page-leave.
+      this._observer = obs;
+      // v9.2 — disconnect when the page is hidden so we don't leak
+      // observers into a back/forward cache revival.
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'hidden') {
+          obs.disconnect();
+        }
+      });
     }
 
     setActive(id: string) {

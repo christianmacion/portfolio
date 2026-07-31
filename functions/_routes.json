@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "description": "Cloudflare Pages Functions route config. Controls which routes go through functions/_middleware.js for nonce-based CSP injection. Architecture AAR §14 line 643: HTML routes through middleware (per-request nonce), immutable assets bypass (1-year cache).",
+  "include": ["/*"],
+  "exclude": [
+    "/_astro/*",
+    "/favicon.ico",
+    "/favicon-*.png",
+    "/apple-touch-icon*.png",
+    "/og-image*.jpg",
+    "/maskable-icon-512x512.png",
+    "/sw.js",
+    "/site.webmanifest",
+    "/llms*.txt",
+    "/humans.md",
+    "/proof/*",
+    "/cm-mark*.svg",
+    "/headshot.*",
+    "/graph-stream.json",
+    "/data/*"
+  ]
+}

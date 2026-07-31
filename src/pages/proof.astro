@@ -891,7 +891,7 @@ const paginate = (items: any[]) => {
         </p>
       </header>
 
-      <div class="ptr">
+      <div class="ptr" role="grid" aria-label="Proof ticker roster">
         <div class="ptr__row" role="row">
           <div class="ptr__cell ptr__cell--platform" role="cell">Numerai</div>
           <div class="ptr__cell ptr__cell--handle mono ptr__cell--empty" role="cell">
@@ -1019,9 +1019,13 @@ const paginate = (items: any[]) => {
   .proof-head__eyebrow-chip {
     display: inline-block;
     padding: 4px 10px;
-    color: var(--c-phi-teal);
-    border: 1px solid var(--c-phi-teal);
-    background: var(--c-phi-teal-soft);
+    /* v9.2 a11y — was --c-phi-teal. Dark theme --j-phi-teal = #2d5f5a
+     only hits 2.14:1 on dark page-head surface. Solid amber chip +
+     --c-bg text reads at ≥5.6:1 in both themes — institutional
+     register, F14-safe (no traffic-light). */
+    color: var(--c-bg);
+    border: 1px solid var(--c-amber);
+    background: var(--c-amber);
     font-weight: 600;
   }
   .proof-head__eyebrow-line {
@@ -1460,13 +1464,25 @@ const paginate = (items: any[]) => {
   .proof-pager[hidden] {
     display: none;
   }
-  .proof-pager__chip {
+  /* v9.2 a11y — WCAG 2.2 SC 2.5.8 Target Size. Was 2rem square but
+     `inline-flex` + `0 0.55rem` padding + parent `display:flex`
+     default `flex-shrink:1` let single-char chips (› ‹) shrink to
+     ~9.6px wide — fails AAA 24×24 floor. Force min-width via
+     `flex: 0 0 auto` so the chip never collapses inside the
+     `.proof-pager` flex parent, even on a 412px mobile viewport.
+
+     IMPORTANT: chips are built by the inline `<script>` via
+     document.createElement('button'). Astro's scoped CSS adds
+     [data-astro-cid-*] selectors which those JS-created buttons
+     don't carry — so we MUST declare these rules as :global(...). */
+  :global(.proof-pager__chip) {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 2rem;
-    height: 2rem;
-    padding: 0 0.55rem;
+    flex: 0 0 auto;
+    min-width: 2.75rem;
+    height: 2.25rem;
+    padding: 0 0.65rem;
     font-family: var(--ff-mono);
     font-size: var(--fs-xs);
     color: var(--c-ink-2);
@@ -1479,30 +1495,30 @@ const paginate = (items: any[]) => {
       border-color var(--transition),
       background var(--transition);
   }
-  .proof-pager__chip:hover {
+  :global(.proof-pager__chip:hover) {
     color: var(--c-primary);
     border-color: var(--c-ink-3);
   }
-  .proof-pager__chip.is-active {
+  :global(.proof-pager__chip.is-active) {
     color: var(--c-amber-deep);
     border-color: var(--c-amber-deep);
     background: var(--c-warn-soft);
     font-weight: 600;
   }
   @media (prefers-color-scheme: dark) {
-    :root:not([data-theme='light']) .proof-pager__chip.is-active {
+    :global(:root:not([data-theme='light']) .proof-pager__chip.is-active) {
       color: var(--c-amber);
       border-color: var(--c-amber);
       /* v6.10.36 — token alias for F13 amber family. */
       background: var(--c-amber-soft);
     }
   }
-  :root[data-theme='dark'] .proof-pager__chip.is-active {
+  :global(:root[data-theme='dark'] .proof-pager__chip.is-active) {
     color: var(--c-amber);
     border-color: var(--c-amber);
     background: var(--c-amber-soft);
   }
-  .proof-pager__chip[disabled] {
+  :global(.proof-pager__chip[disabled]) {
     opacity: 0.4;
     cursor: not-allowed;
   }

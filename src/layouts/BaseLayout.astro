@@ -18,11 +18,10 @@ import '@fontsource/inter/latin-600.css';
 import '@fontsource/inter/latin-700.css';
 import '@styles/tokens.css';
 import '@styles/tokens-v6.13.css';
+import '@styles/status-binding-color.css';
 import '@styles/global.css';
-import '@styles/motion.css';
 import '@styles/back-to-top.css';
 import '@styles/print.css';
-import 'katex/dist/katex.min.css';
 
 import Nav from '@components/Nav.astro';
 import Footer from '@components/Footer.astro';
@@ -30,6 +29,29 @@ import V613Fonts from '@components/V613Fonts.astro';
 import { profile } from '@utils/profile';
 import { buildMeta, personJsonLd, websiteJsonLd, breadcrumbJsonLd } from '@utils/seo';
 import { path } from '@utils/url';
+
+// v9.2.2 (Gate 12) — LCP font preloading. The v6-13 surface renders
+// the LCP element (`.hero__name`, `.hero__role`) in Source Serif 4,
+// with Inter as the body font. Preloading the woff2 of the 400
+// weights of both families cuts the LCP element's font-swap time.
+// `font-display: swap` is preserved on the @font-face rules (see
+// tokens.css) so non-preloaded weights still render with the system
+// font and swap in without a visible reload. We preload only on the
+// v6-13 surface where the serif display is the LCP font; legacy
+// surfaces use Inter only and are already covered by the body
+// stylesheet.
+import inter400Url from '@fontsource/inter/files/inter-latin-400-normal.woff2?url';
+import sourceSerif400Url from '@fontsource/source-serif-4/files/source-serif-4-latin-400-normal.woff2?url';
+// v9.2.3 (Gate 12) — Phase 5a fix. motion.css (27 KB, 6 @keyframes, 13 animation
+// rules, 44 transition rules, reduced-motion overrides) is referenced by ZERO
+// `.stl-*` or `.bind-*` classes on slim-chrome pages (home, /for-recruiters,
+// /screening-call). Astro's CSS hoisting bundled it into the BaseLayout inline
+// stylesheet anyway, costing ~27 KB of inline-CSS parse + 472 ms styleLayout on
+// every page. We import it via `?url` so Vite emits a hashed CSS asset (NOT
+// inlined) and we preload + apply it via the `media="print" onload="swap"`
+// pattern only on chrome === 'full' pages. Result: full-chrome pages get the
+// motion layer (non-blocking), slim-chrome pages pay zero bytes.
+import motionCssUrl from '@styles/motion.css?url';
 
 interface Props {
   title: string;
@@ -110,17 +132,56 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
     <title>{meta.title}</title>
     <meta name="description" content={meta.description} />
     <link rel="canonical" href={meta.canonical} />
+    {
+      /* v9.2.2 (Gate 12) — LCP font preload. Source Serif 4 400 is the
+         display font on the v6-13 surface; Inter 400 is the body font.
+         Preload both woff2 files. `crossorigin` is required because
+         font requests are always CORS. Reduced-motion + per-component
+         contract are unaffected (these are preloads, not content). */
+    }
+    {surface === 'v6-13' && (
+      <>
+        <link
+          rel="preload"
+          as="font"
+          type="font/woff2"
+          href={sourceSerif400Url}
+          crossorigin="anonymous"
+        />
+        <link
+          rel="preload"
+          as="font"
+          type="font/woff2"
+          href={inter400Url}
+          crossorigin="anonymous"
+        />
+      </>
+    )}
 
     {
-      /* === v6.0 · security meta baseline ===
-        Defense in depth alongside CF Pages CDN headers.
-        JSON-LD <script type="application/ld+json"> is exempt from
-        `script-src` by every modern browser (CSP3 spec, also Chromium
-        exempts it for compatibility). The CSP still blocks inline JS. */
+      /* === v9.2 · security meta baseline (CSP defense in depth)
+         The HTTP CSP from `functions/_middleware.js` is the AUTHORITATIVE
+         policy for production (architecture AAR §14 lines 599-644). This
+         meta CSP is the static-fallback when the HTTP CSP is not applied
+         (e.g., local `astro preview`, or before Pages Functions compile).
+         Both policies are kept consistent — the meta must NOT be stricter
+         than the HTTP CSP, or the browser enforces the intersection
+         (most-restrictive) and breaks inline scripts.
+
+         v9.2 deltas vs v6.0:
+           + script-src 'unsafe-inline' (HTTP CSP uses nonce; meta can't mint
+             per-request nonce, so meta allows inline as the static fallback)
+           + frame-src https://challenges.cloudflare.com https://cal.com https://*.cal.com
+           + worker-src 'self' (for /sw.js)
+           + object-src 'none'
+           + upgrade-insecure-requests
+           - form-action 'none' → 'self' (architecture AAR §14 line 613)
+           + font-src: kept 'self' + https://fonts.gstatic.com (self-hosted
+             @fontsource/inter + @fontsource/jetbrains-mono per vite ssr config) */
     }
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com data:; script-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'none'"
+      content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline'; style-src-attr 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com data:; script-src 'self' 'unsafe-inline'; script-src-attr 'unsafe-inline'; connect-src 'self' https://challenges.cloudflare.com; frame-src 'self' https://challenges.cloudflare.com https://cal.com https://*.cal.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests"
     />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
 
@@ -220,21 +281,53 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
     {/* v7.3 — top hairline scroll progress (1px amber, driven by scroll-progress.ts). */}
     <div class="scroll-progress" aria-hidden="true"><i></i></div>
     {surface === 'v6-13' && <V613Fonts />}
+    {
+      /* v9.2.3 (Gate 12) — opt-in motion CSS via deferred-load link. The
+         `media="print"; onload="this.media='all'"` pattern downloads the
+         CSS file without blocking first paint, then swaps media so the
+         rules apply once the file is parsed. This is the standard
+         non-blocking-CSS technique (filamentgroup/async-css, also used by
+         loadCSS). Slim-chrome pages (home, /for-recruiters, /screening-call)
+         pay zero motion.css bytes. Full-chrome pages get the motion layer
+         but the CSS does not block render — FCP/LCP happen on the
+         BaseLayout inline CSS first. */
+    }
+    {
+      chrome === 'full' && (
+        <link
+          rel="preload"
+          href={motionCssUrl}
+          as="style"
+          onload="this.onload=null;this.rel='stylesheet'"
+        />
+      )
+    }
+    {
+      chrome === 'full' && (
+        <noscript>
+          <link rel="stylesheet" href={motionCssUrl} />
+        </noscript>
+      )
+    }
     {chrome === 'full' && <Nav />}
     <main id="main">
       <slot />
-      {/* v8.4 — tenet line chrome contract. Injected by BaseLayout so
+      {
+        /* v8.4 — tenet line chrome contract. Injected by BaseLayout so
         every page inherits the operating-principles footer without
         duplication. The page__tenet selector is single-source (defined
         in src/styles/global.css). v9.2: suppressed on slim chrome —
         the page's own § 05 / contact section owns the operating-principles
-        statement, doubling them is the AI-builder tell. */}
-      {chrome === 'full' && (
-        <p class="page__tenet mono" aria-label="Operating principles">
-          No Math.random() · No argless new Date() · No fabricated metrics · No NDA-protected
-          employers on this site
-        </p>
-      )}
+        statement, doubling them is the AI-builder tell. */
+      }
+      {
+        chrome === 'full' && (
+          <p class="page__tenet mono" aria-label="Operating principles">
+            No Math.random() · No argless new Date() · No fabricated metrics · No NDA-protected
+            employers on this site
+          </p>
+        )
+      }
     </main>
     {chrome === 'full' && <Footer />}
 
@@ -263,6 +356,39 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
         window.addEventListener('scroll', onScroll, { passive: true });
         onScroll();
         btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+      })();
+    </script>
+
+    {
+      /* === v9.2 a11y — scrollable-region-focusable bridge ===
+         axe-core flags elements with `overflow:auto|scroll` that have
+         scrollable content but no keyboard focus. The canonical fix is
+         to add `tabindex="0"`. CSS cannot add tabindex, so this inline
+         enhancer runs before axe ever sees the DOM. It only tags
+         elements that ACTUALLY overflow (scrollWidth > clientWidth),
+         so non-overflowing blocks are not promoted to focusable.
+         Target selectors cover the institutional scrollable regions:
+         katex math blocks, .table-wrap tables, pre/code, ribbons. */
+    }
+    <script is:inline>
+      (() => {
+        const tagScrollables = () => {
+          const sel = '.katex-display, .table-wrap > table, .table-wrap > pre, pre.scroll, .ribbon__track, .prob-decay__table, .card__table, .desk-table, .colophon__table, .solutions-ribbon, .solutions-head__ribbon, .scroll-x, .motion-wrap > table, .desk-events__table';
+          const els = document.querySelectorAll(sel);
+          els.forEach((el) => {
+            if (el.scrollWidth > el.clientWidth + 1 || el.scrollHeight > el.clientHeight + 1) {
+              if (!el.hasAttribute('tabindex')) {
+                el.setAttribute('tabindex', '0');
+              }
+              el.setAttribute('role', el.getAttribute('role') || 'group');
+            }
+          });
+        };
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', tagScrollables, { once: true });
+        } else {
+          tagScrollables();
+        }
       })();
     </script>
 

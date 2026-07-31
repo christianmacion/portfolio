@@ -397,9 +397,15 @@ const levelLabel: Record<1 | 2 | 3 | 4 | 5, string> = {
   .skill__chip .mono {
     font-weight: 600;
   }
+  /* v9.2 a11y — drop opacity (was 0.7) so the muted "/5" suffix reads at
+     WCAG 2.2 AA. opacity-stacked grays collapse to ~#6c727a on the chip
+     background which only hit 3.17:1. --c-ink-3 (#525f72 light / #9a9486
+     dark) hit 4.23:1 on light page bg — still failing. Use --c-ink-2
+     (#3d4a5e light / #c4bfb1 dark) which gives ≥6.0:1 in both themes. */
   .skill__chip .muted {
     font-size: 0.8em;
-    opacity: 0.7;
+    color: var(--c-ink-2);
+    font-weight: 500;
   }
   .skill__chip--lvl-5 {
     /* v6.10.41 — derive mastery chip tint from --c-amber via color-mix.

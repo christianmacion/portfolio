@@ -24,9 +24,32 @@
  * so the build never fails; live pins disappear but the static 10-event
  * collection still renders.
  *
+ * v9.2 fix-wave — hard total-runtime ceiling + --skip-gdelt CLI flag.
+ * The devops fix-wave AAR (2026-07-31-portfolio-v9-2-devops-fix-wave §12)
+ * captured a build hang: `npm run build` stalled indefinitely inside
+ * this script while the upstream GDELT server accepted the TCP
+ * connection but never returned bytes. The per-fetch AbortControllers
+ * (MANIFEST_TIMEOUT_MS / ZIP_TIMEOUT_MS) only guard a single HTTP
+ * round-trip — they don't bound the *total* script lifetime if the
+ * upstream is half-open or the connection silently never resolves.
+ *
+ * Two changes here:
+ *   1. Top-level AbortController with `SCRIPT_TIMEOUT_MS` (default 60s)
+ *      that aborts ALL in-flight fetches if the script overruns. Hard
+ *      ceiling so `npm run build` cannot hang past the 10-min Bash
+ *      budget per CLAUDE.md §4.
+ *   2. CLI flag `--skip-gdelt` (and `SKIP_GDELT=1` env var) that
+ *      bypasses the fetch entirely, writes a stable fallback cache
+ *      with the existing snapshot events, and exits 0 in <500ms.
+ *      `npm --skip-gdelt run build` and CI runners that don't need
+ *      live pins can opt out. Non-mutating: the script reads the
+ *      same flags whether invoked standalone or via `prebuild`.
+ *
  * Run order:
  *   1. `npm run scripts:fetch-gdelt` (this script, standalone)
+ *      → add `--skip-gdelt` or `SKIP_GDELT=1` to bypass the fetch
  *   2. `npm run build` (prebuild chain runs this automatically)
+ *      → respects `SKIP_GDELT=1` env var
  *   3. `npm run deploy:mirror` (ships dist/ to Cloudflare Pages)
  */
 
@@ -46,6 +69,12 @@ const MANIFEST_URL = 'http://data.gdeltproject.org/gdeltv2/masterfilelist.txt';
 const MAX_EVENTS = 50;
 const MANIFEST_TIMEOUT_MS = 30_000;
 const ZIP_TIMEOUT_MS = 120_000;
+// v9.2 fix-wave — total-script ceiling. Bounded so a half-open upstream
+// cannot stall `npm run build` past the 10-min Bash budget per CLAUDE.md
+// §4. Per-fetch AbortControllers (above) guard each round-trip; this one
+// guards the *whole* script lifetime. Override with --gdelt-timeout=N
+// (in milliseconds) or GDELT_SCRIPT_TIMEOUT_MS env var.
+const DEFAULT_SCRIPT_TIMEOUT_MS = 60_000;
 const MAX_MANIFEST_LINES = 200; // ~3 days of exports @ 15min cadence
 
 const BUILD_DATE_FALLBACK = '2026-07-10T00:00:00Z';
@@ -57,11 +86,24 @@ function log(level, msg) {
 }
 
 // --- HTTP wrapper with timeout -------------------------------------
+/**
+ * Per-request timeout. Uses Promise.race against a timeout promise
+ * (in addition to AbortController) so a half-open upstream connection
+ * that swallows the abort signal still respects the deadline — the
+ * .race is the load-bearing timeout; the AbortController is the
+ * cooperative cleanup signal.
+ */
 async function fetchWithTimeout(url, ms, label) {
   const ac = new AbortController();
-  const timer = setTimeout(() => ac.abort(), ms);
+  const timer = setTimeout(() => ac.abort(new Error(`timeout after ${ms}ms`)), ms);
+  const timeoutPromise = new Promise((_, reject) => {
+    setTimeout(
+      () => reject(new Error(`fetch-with-timeout: ${label || url} exceeded ${ms}ms`)),
+      ms,
+    );
+  });
   try {
-    const res = await fetch(url, { signal: ac.signal });
+    const res = await Promise.race([fetch(url, { signal: ac.signal }), timeoutPromise]);
     if (!res.ok) {
       throw new Error(`HTTP ${res.status} for ${label || url}`);
     }
@@ -438,28 +480,89 @@ function readFallbackEvents() {
 }
 
 // --- Main ---------------------------------------------------------
+/**
+ * Parse CLI flags. Supports:
+ *   --skip-gdelt           : bypass fetch; write fallback + exit 0
+ *   --gdelt-timeout=<ms>   : override DEFAULT_SCRIPT_TIMEOUT_MS
+ * Also honors:
+ *   SKIP_GDELT=1           : env-var equivalent of --skip-gdelt
+ *   GDELT_SCRIPT_TIMEOUT_MS: env-var equivalent of --gdelt-timeout
+ *
+ * Minimal hand-rolled parser — Node's `util.parseArgs` requires
+ * `allowPosition: false` and a different shape; the surface here is
+ * small enough that a hand-rolled scan is clearer than the wrapper.
+ */
+function parseCli(argv) {
+  const out = { skip: false, timeoutMs: DEFAULT_SCRIPT_TIMEOUT_MS };
+  if (process.env.SKIP_GDELT === '1' || process.env.SKIP_GDELT === 'true') {
+    out.skip = true;
+  }
+  const envTimeout = Number(process.env.GDELT_SCRIPT_TIMEOUT_MS);
+  if (Number.isFinite(envTimeout) && envTimeout > 0) {
+    out.timeoutMs = envTimeout;
+  }
+  for (const arg of argv.slice(2)) {
+    if (arg === '--skip-gdelt') out.skip = true;
+    else if (arg.startsWith('--gdelt-timeout=')) {
+      const n = Number(arg.split('=')[1]);
+      if (Number.isFinite(n) && n > 0) out.timeoutMs = n;
+    }
+  }
+  return out;
+}
+
 async function main() {
   const startedAt = Date.now();
-  log('INFO', `GDELT fetch starting (max=${MAX_EVENTS})`);
+  const { skip, timeoutMs } = parseCli(process.argv);
+  log('INFO', `GDELT fetch starting (max=${MAX_EVENTS}, timeout=${timeoutMs}ms, skip=${skip})`);
+
+  // --skip-gdelt: write fallback cache and exit 0 in <500ms. Used by
+  // CI runners that don't need live pins, and as a hard opt-out for
+  // any operator who just wants the build to ship without GDELT.
+  if (skip) {
+    const fallback = readFallbackEvents();
+    writeCache(fallback, fallback.length > 0 ? 'gdelt' : 'fallback', fallback.length === 0);
+    log('OK', `--skip-gdelt honored; wrote ${fallback.length} fallback events`);
+    process.exit(0);
+  }
+
+  // Script-wide ceiling via Promise.race. This is the load-bearing
+  // timeout — even if a half-open upstream connection swallows the
+  // per-fetch AbortController, the .race guarantee kicks in. The
+  // per-fetch timeouts inside `fetchWithTimeout` are the cooperative
+  // cleanup layer; this one is the hard wall.
+  const scriptTimeoutPromise = new Promise((_, reject) => {
+    setTimeout(
+      () => reject(new Error(`script timeout after ${timeoutMs}ms (no half-open upstream)`)),
+      timeoutMs,
+    );
+  });
+
   try {
-    const exportUrl = await pickLatestExportUrl();
-    log('INFO', `latest export → ${exportUrl}`);
-    const tsv = await downloadAndExtract(exportUrl);
-    const rawRows = parseGdeltTsv(tsv);
-    log('INFO', `parsed ${rawRows.length} raw rows`);
-    const events = bucketAndRank(rawRows);
-    if (events.length === 0) {
-      log('WARN', 'bucket yielded 0 events; falling back to last good snapshot');
-      const fallback = readFallbackEvents();
-      writeCache(fallback, fallback.length > 0 ? 'gdelt' : 'fallback', fallback.length === 0);
-    } else {
-      writeCache(events, 'gdelt');
-    }
+    await Promise.race([
+      (async () => {
+        const exportUrl = await pickLatestExportUrl();
+        log('INFO', `latest export → ${exportUrl}`);
+        const tsv = await downloadAndExtract(exportUrl);
+        const rawRows = parseGdeltTsv(tsv);
+        log('INFO', `parsed ${rawRows.length} raw rows`);
+        const events = bucketAndRank(rawRows);
+        if (events.length === 0) {
+          log('WARN', 'bucket yielded 0 events; falling back to last good snapshot');
+          const fallback = readFallbackEvents();
+          writeCache(fallback, fallback.length > 0 ? 'gdelt' : 'fallback', fallback.length === 0);
+        } else {
+          writeCache(events, 'gdelt');
+        }
+      })(),
+      scriptTimeoutPromise,
+    ]);
     const elapsed = ((Date.now() - startedAt) / 1000).toFixed(1);
     log('OK', `done in ${elapsed}s`);
     process.exit(0);
   } catch (err) {
-    log('ERROR', `fetch failed: ${err.message}`);
+    const isTimeout = /timeout/i.test(String(err?.message));
+    log('ERROR', `fetch failed (${isTimeout ? 'TIMEOUT' : 'FETCH'}): ${err.message}`);
     log('WARN', 'writing empty cache (source=fallback); live pins will be hidden');
     const fallback = readFallbackEvents();
     writeCache(fallback, 'fallback', true);

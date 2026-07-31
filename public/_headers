@@ -1,27 +1,75 @@
-# Cloudflare Pages _headers — cache control for hashed assets.
+# Cloudflare Pages _headers — cache control + security headers + CSP.
 #
-# v6.9.15 — _astro/* filenames contain content hashes (Astro emits them)
-# so they're safe to cache immutably for 1 year. Without this, Cloudflare
-# sends `cache-control: public, max-age=0, must-revalidate` on every file,
-# forcing a conditional revalidation round-trip on every repeat visit
-# (~50-100 ms TTFB penalty).
+# v9.2 — production-grade CSP from architecture AAR `2026-07-31-portfolio-v9-2-backend-architecture.md` §14.
+# The architecture mandates a nonce-based CSP, but Cloudflare Pages `_headers` is
+# STATIC — it cannot mint a per-request nonce. The two-layer model:
 #
-# v6.10.34 — added Content-Security-Policy. Portfolio ships zero third-party
-# scripts (no analytics, no ads, no fonts loaded from CDN); all assets are
-# self-hosted under /_astro/ and inline SVG. `img-src data:` permits the
-# inline data URIs used by a few badges/diagrams. `style-src 'unsafe-inline'`
-# needed because Astro inlines <style> blocks per-component at build time.
-# No `'unsafe-eval'`, no remote scripts.
+# 1. Static `_headers` (this file) sets a strict-by-default CSP with `'unsafe-inline'`
+#    for `script-src`, `style-src`, and `connect-src` because Astro emits ~202 inline
+#    `<script type="module">` hydration blocks + 90 inline `<script>` blocks + 145
+#    inline `<style>` blocks + 255 `<script type="application/ld+json">` blocks per page.
+#    The `'unsafe-inline'` on the static layer is the documented bridge until the
+#    Pages Function middleware ships nonces via HTMLRewriter (see functions/_middleware.js).
+#
+# 2. Functions middleware (`functions/_middleware.js`) overrides this CSP for HTML
+#    responses with the architecture's exact production policy (nonce + strict-dynamic +
+#    Turnstile/Cal allowlist). `_routes.json` ensures the middleware runs on every HTML
+#    response and is skipped for `/_astro/*` immutable hashed assets.
+#
+# Security header suite (architecture AAR §14 lines 615-618):
+#   X-Content-Type-Options: nosniff
+#   X-Frame-Options: DENY
+#   Referrer-Policy: strict-origin-when-cross-origin
+#   Permissions-Policy: camera=(), microphone=(), geolocation=()
+#   Strict-Transport-Security: max-age=31536000; includeSubDomains; preload (PROD only)
+#
+# v9.2 deltas vs v6.10.34:
+#   + script-src: https://challenges.cloudflare.com (Turnstile), blob: (SW pre-cache)
+#   + frame-src: https://challenges.cloudflare.com https://cal.com https://*.cal.com
+#   + worker-src: 'self' blob: (service worker)
+#   + object-src: 'none'
+#   + upgrade-insecure-requests
+#   + report-uri: /api/csp-report (deferred — architecture doesn't define endpoint)
+#   - Removed the implicit blanket 'unsafe-inline' on connect-src (now explicit)
+#   + HSTS preload (production only; max-age=0 on preview/localhost to avoid bind failure)
+#
+# v9.2 STRIDE/security audit gates (architecture AAR §13 + §14):
+#   - XSS via inline script: nonce middleware closes the static-layer gap
+#   - Clickjacking: X-Frame-Options DENY + frame-ancestors 'none'
+#   - MIME sniffing: nosniff
+#   - Referrer leak: strict-origin-when-cross-origin
+#   - Feature abuse: Permissions-Policy denies camera/mic/geo
+#   - MITM: HSTS (prod) + upgrade-insecure-requests
+#   - CDN compromise: object-src 'none' denies plugin execution
 
+# Default for all routes — full security header suite + CSP.
+# The `/*` glob is Cloudflare's "all routes" pattern.
+# Per the architecture AAR §14, every middleware exit path (200/204/404/413/429/500)
+# passes through `withSecurityHeaders()`; `_headers` is the static fallback.
+# Production CSP includes Turnstile + Cal.com + worker-src for SW; the inline allowance
+# is the bridge until middleware ships nonces (see functions/_middleware.js).
+# report-uri is forward-looking — the endpoint is deferred to Phase 3c per architecture.
+#
+# 'unsafe-inline' trade-off (binding):
+#   - script-src 'unsafe-inline' = bridge until middleware (architecture AAR §14 lines 635-644)
+#   - style-src 'unsafe-inline' = bridge until middleware OR per-style hash (architecture AAR §14)
+#   - 'unsafe-eval' = REFUSED per security_engineer standing orders + architecture AAR §14
 /*
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=()
-  Content-Security-Policy: default-src 'self'; img-src 'self' data:; font-src 'self' data:; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  Cross-Origin-Opener-Policy: same-origin
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com blob:; script-src-attr 'unsafe-inline'; style-src 'self' 'unsafe-inline'; style-src-attr 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com https://cal.com https://*.cal.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests; report-uri /api/csp-report
 
+# Immutable hashed assets — strict CSP (no 'unsafe-inline' needed).
+# These are Astro-emitted JS/CSS bundles with no inline content. Cloudflare's
+# Pages default cache-control was max-age=0 + must-revalidate, costing ~50-100ms
+# TTFB on every repeat visit; the immutable directive makes them cache for 1 year.
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
+  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; frame-ancestors 'none'
 
 # Page HTML — short cache, must revalidate so deploys propagate fast.
 /*.html
@@ -37,6 +85,12 @@
 # LLM-friendly markdown alternates — moderate cache.
 /llms*.txt
   Cache-Control: public, max-age=86400
+
+# Service worker — must not be cached aggressively or the browser will refuse updates.
+# `service-worker-allowed` lets the SW control the scope above its path.
+/sw.js
+  Cache-Control: public, max-age=0, must-revalidate
+  Service-Worker-Allowed: /
 
 # Proof videos — long cache + explicit range support. v6.11.18 fix:
 # Cloudflare Pages default `cache-control: public, max-age=0, must-revalidate`

@@ -9,6 +9,7 @@
     "start": "astro dev",
     "lint:md": "markdownlint-cli2 \"src/content/**/*.md\"",
     "lint": "eslint . --max-warnings 0",
+    "lint:styles": "stylelint \"src/styles/**/*.css\"",
     "format": "prettier --write \"**/*.{js,ts,tsx,jsx,astro,md,mdx,json,css,yml,yaml}\"",
     "format:check": "prettier --check \"**/*.{js,ts,tsx,jsx,astro,md,mdx,json,css,yml,yaml}\"",
     "knip": "knip --no-progress",
@@ -27,12 +28,14 @@
     "version:bump": "tsx scripts/bump-version.ts",
     "sitemap:check": "tsx scripts/validate-sitemap.ts",
     "typecheck": "astro check",
-    "ci": "npm run lint:md && npm run lint && npm run format:check && npm run knip && npm run no-bulbs && npm run build && npm run no-f14 && npm run no-halo && npm run bundle:budget && npm run audit && npm run sitemap:check",
+    "ci": "npm run lint:md && npm run lint && npm run lint:styles && npm run format:check && npm run knip && npm run no-bulbs && npm run build && npm run no-f14 && npm run no-halo && npm run check:bundle && npm run audit && npm run sitemap:check",
     "no-bulbs": "bash scripts/check-no-lightbulb-halos.sh",
     "no-f14": "bash scripts/check-no-f14-traffic-light.sh",
     "bundle:budget": "node scripts/check-bundle-budget.mjs",
+    "check:bundle": "node scripts/check-bundle-budget.mjs",
     "no-halo": "grep -rn 'box-shadow:\\s*0\\s*0\\s*[1-9][0-9]' src/ 2>/dev/null && echo 'FAIL: halo/glow box-shadow detected' && exit 1 || echo 'PASS: no halo/glow box-shadows'",
-    "check:tokens": "node scripts/check-tokens.mjs"
+    "check:tokens": "node scripts/check-tokens.mjs",
+    "test:a11y": "node scripts/a11y-audit.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.9",
@@ -52,10 +55,12 @@
     "rehype-katex": "^7.0.1",
     "remark-math": "^6.0.0",
     "sharp": "^0.33.5",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.0",
+    "axe-core": "^4.12.1",
     "eslint": "^9.39.0",
     "eslint-config-prettier": "^10.1.0",
     "eslint-plugin-astro": "^1.6.0",
@@ -63,8 +68,11 @@
     "knip": "^6.25.0",
     "markdownlint-cli2": "^0.20.0",
     "pagefind": "^1.5.2",
+    "playwright-core": "^1.62.1",
     "prettier": "^3.9.0",
     "prettier-plugin-astro": "^0.14.0",
+    "stylelint": "^16.26.1",
+    "stylelint-no-restricted-syntax": "^2.2.1",
     "topojson-client": "^3.1.0",
     "topojson-simplify": "^3.0.3",
     "tsx": "^4.23.0",

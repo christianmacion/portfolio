@@ -1,0 +1,22 @@
+---
+/**
+ * MotionStyles.astro — opt-in motion CSS bundle.
+ *
+ * v9.2.2 (Gate 12) — Phase 5a fix. motion.css is 27 KB and contains
+ *   - 6 @keyframes (cta-breathe, hero-cursor-blink, kpi-trace, live,
+ *     status-pulse, status-ring)
+ *   - 13 animation: rules
+ *   - 42 transition: rules
+ *   - reduced-motion overrides for the above
+ * The home page (chrome="slim") and other flagship surfaces (e.g.
+ * /for-recruiters, /screening-call) ship without ANY `.stl-*` or
+ * `.bind-*` classes — they are broadside-style layouts, not
+ * set-piece / choreographed surfaces. Lazy-loading this CSS keeps
+ * the BaseLayout bundle lean on those pages. Pages that DO use
+ * motion import this component (or BaseLayout passes the
+ * `motion` prop and the layout renders it).
+ */
+import '@styles/motion.css';
+---
+
+{/* No DOM. */}

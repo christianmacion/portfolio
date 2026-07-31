@@ -21,22 +21,21 @@
 
 :root {
   /* v9.1 — token additions for nav, projects, research, workbooks */
-:root {
-  --c-bg-light: #f7f2e7;        /* light bg for institutional-tape nav fallback */
-  --c-bg-elev: rgba(255, 255, 255, 0.02);  /* elevated surface */
-  --c-teal: #5ba8a3;             /* ai-page accent */
-  --c-violet: #a07baf;           /* ai-page accent */
-  --c-purple: #7e57c2;           /* workbook accent */
-  --c-green: #2e7d32;            /* workbook accent */
-}
-:root {
-  --c-shadow-card: rgba(0, 0, 0, 0.06);  /* workbooks card hover shadow */
-  --c-green-tint: rgba(46, 125, 50, 0.1); /* workbook badge bg */
-  --c-green-tint-border: rgba(46, 125, 50, 0.25); /* workbook badge border */
-}
+  :root {
+    --c-bg-light: #f7f2e7; /* light bg for institutional-tape nav fallback */
+    --c-bg-elev: rgba(255, 255, 255, 0.02); /* elevated surface */
+    --c-teal: #5ba8a3; /* ai-page accent */
+    --c-violet: #a07baf; /* ai-page accent */
+    --c-purple: #7e57c2; /* workbook accent */
+    --c-green: #2e7d32; /* workbook accent */
+  }
+  :root {
+    --c-shadow-card: rgba(0, 0, 0, 0.06); /* workbooks card hover shadow */
+    --c-green-tint: rgba(46, 125, 50, 0.1); /* workbook badge bg */
+    --c-green-tint-border: rgba(46, 125, 50, 0.25); /* workbook badge border */
+  }
 
-
-/* === BRAND (v6.1.1 — full dark, unified palette) === */
+  /* === BRAND (v6.1.1 — full dark, unified palette) === */
   --c-primary: #e6edf3; /* off-white ink — primary text on dark */
   --c-primary-deep: #0a0e14; /* near-black — preserved for code blocks / deep backgrounds */
   --c-ink-dark: #0a0e14; /* alias kept for old code that wants near-black */
@@ -380,4 +379,43 @@
   background: linear-gradient(90deg, var(--c-primary-2), var(--c-gold));
   opacity: 0.55;
   border-radius: 1px;
+}
+
+/* === Motion vocabulary (3 cubic-beziers, per T3-M5) === */
+:root {
+  --ease-snappy: cubic-bezier(0.4, 0, 0.2, 1); /* standard UI / hover / state */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1); /* smooth landing / ambient fade-in */
+  --ease-overshoot-constrained: cubic-bezier(0.34, 1.2, 0.5, 1); /* overshoot, capped to 800ms */
+  /* Drop 3 reserved easings — ship 3 curves only. */
+}
+
+/* === Shadow hierarchy (4 steps, no lift on hover per T1-5) === */
+:root {
+  --shadow-xs: 0 1px 2px -1px rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 4px 12px -6px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 12px 32px -16px rgba(0, 0, 0, 0.7);
+  --shadow-xl: 0 30px 72px -34px rgba(0, 0, 0, 0.9);
+  /* All shadows: negative-spread, large-blur, low-alpha. NEVER positive-spread bloom. */
+}
+
+/* === Reduced-motion-aware transition durations === */
+:root {
+  --dur-1: 120ms; /* hover / state */
+  --dur-2: 200ms; /* small component enter */
+  --dur-3: 320ms; /* hero entrance step */
+  --dur-4: 480ms; /* hero entrance arc */
+  --dur-5: 800ms; /* overshoot cap (per T3-M5) */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-1: 0ms;
+    --dur-2: 0ms;
+    --dur-3: 0ms;
+    --dur-4: 0ms;
+    --dur-5: 0ms;
+    --ease-snappy: linear;
+    --ease-out: linear;
+    --ease-overshoot-constrained: linear;
+  }
 }

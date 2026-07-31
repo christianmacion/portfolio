@@ -409,9 +409,13 @@ const platformInputs = [
   .ai-head__eyebrow-chip {
     display: inline-block;
     padding: 4px 10px;
-    color: var(--c-phi-teal);
-    border: 1px solid var(--c-phi-teal);
-    background: var(--c-phi-teal-soft);
+    /* v9.2 a11y — was --c-phi-teal. Dark theme --j-phi-teal = #2d5f5a
+     only hits 2.14:1 on dark page-head surface. Solid amber chip +
+     --c-bg text reads at ≥5.6:1 in both themes — institutional
+     register, F14-safe (no traffic-light). */
+    color: var(--c-bg);
+    border: 1px solid var(--c-amber);
+    background: var(--c-amber);
     font-weight: 600;
   }
   .ai-head__eyebrow-line {
@@ -639,7 +643,12 @@ const platformInputs = [
     line-height: 1.55;
   }
   .ai-disclosure .hl {
-    color: var(--c-amber);
+    /* v9.2 a11y — was var(--c-amber) which hits 4.48:1 on the
+       --c-amberl-mist pill bg in dark mode (Lighthouse mobile, dark default).
+       --c-ink reads at ≥9.5:1 on the same surface. Bold weight + mono +
+       pill silhouette + the gradient underline still carry the highlight
+       identity. */
+    color: var(--c-ink);
     font-weight: 600;
     background: var(--c-amberl-mist);
     padding: 0 6px;

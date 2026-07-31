@@ -1,0 +1,27 @@
+---
+/**
+ * KatexStyles.astro — opt-in KaTeX CSS bundle.
+ *
+ * v9.2.2 (Gate 12) — Phase 5a fix. The KaTeX minified CSS (≈24 KB
+ * + 25 @font-face rules for math glyphs) was previously imported
+ * eagerly in BaseLayout.astro, so every page in the site paid the
+ * full cost on first paint. Only `Equation.astro` and `Stat.astro`
+ * actually render KaTeX at runtime, so the CSS is moved here and
+ * imported by those two components. Vite's chunking puts the CSS
+ * into a per-page bundle only for pages that import Equation/Stat;
+ * pages that don't (home, /for-recruiters, /screening-call, etc.)
+ * get zero KaTeX bytes on the critical path.
+ *
+ * Why not async-load from the layout: the CSS @font-face rules
+ * point at relative woff/ttf URLs; if the rule is missing when the
+ * browser encounters a `.katex` element the user sees a flash of
+ * unstyled math glyphs. Bundling the CSS with the consumer is
+ * the only correctness-preserving split.
+ *
+ * Body is empty — pure side-effect import. Astro/Vite tree-shake
+ * this for pages that don't transitively import Equation/Stat.
+ */
+import 'katex/dist/katex.min.css';
+---
+
+{/* No DOM. */}

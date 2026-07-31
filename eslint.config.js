@@ -24,6 +24,16 @@ export default [
       'node_modules/**',
       'public/**',
       '.wrangler/**',
+      // v9.2 fix-wave — exclude .claude/** entirely. Concurrent agents
+      // (notably the v9.2 devops fix-wave + the v9.2 front-end fix-wave)
+      // leave behind worktrees in .claude/worktrees/** with their own
+      // src/, dist/, and node_modules/. ESLint was traversing those,
+      // picking up 930+ phantom errors that broke `npm run ci`. The
+      // worktrees belong to other agents — never delete them; only
+      // suppress lint coverage here. Confirmed: 936 problems → 6 after
+      // this ignore (the remaining 6 are pre-existing canonical errors
+      // in src/, out-of-scope for this wave per the AAR scope).
+      '.claude/**',
       // v6.10.55 — astro-eslint-parser reports spurious "Parsing error:
       //  Declaration or statement expected" on the first line inside the
       //  <style> block when the JSX template closes with `)}` (ternary)
