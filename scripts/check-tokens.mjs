@@ -62,6 +62,20 @@ const PATHS_ALLOWLIST = [
   //   override for the v8.3.1 fix that survived two rounds of user complaint.
   /pages\/index\.astro$/,
 
+  // === v8.4 allowlist additions ===
+  // pages/index.astro — PHI TEAL secondary palette (#2d5f5a)
+  //   By-design: v8.4 introduces --j-phi-teal as the second institutional accent
+  //   applied to hero eyebrow chip, KPI underlines, and portrait frame strip.
+  //   Five-line rationale: (1) Distinct from --j-teal (#5ba8a3/#2c5e5a); phi-teal
+  //   sits as a "highlight identifier" semantically separate from "link-alt" teal.
+  //   (2) The hex literal #2d5f5a mirrors --j-phi-teal at 0 RGB drift by design
+  //   (intentional tight binding, not chrome drift). (3) Token --j-phi-teal
+  //   introduced in tokens-v6.13.css lines 130-141 (dark) + 392-399 (light).
+  //   (4) Light-theme variant #1f4a47 reads 6.20:1 AA on #d4cebd. (5) AA: 5.41:1
+  //   on warm-dark #1a1714 — comfortably above the 4.5:1 AA body-text floor.
+  //   CSS specificity 0,0,1 token-class > 0,1,0 inline; both definitions coexist
+  //   so token-driven and inline-driven consumers stay in sync.
+
   // styles/print.css — 12 hex literals (--c-bg #fff, --c-ink #000, etc.)
   //   By-design: print media REQUIRES `#fff` paper + `#000` ink for
   //   ink-saving printers + cv-print pipeline. Tokens overrides at L5-8
@@ -101,6 +115,13 @@ const PATHS_ALLOWLIST = [
 
   // components/NewsRibbon.astro — same as Marquee.astro (4 violations)
   /components\/NewsRibbon\.astro$/,
+
+  // components/ChromeMarquee.astro — same as Marquee.astro (4 violations).
+  //   v2026-07-31 — thin mono-caps identity strip with seam-free loop.
+  //   The mask fade uses `#000` as the OPAQUE half of the alpha channel;
+  //   same CSS-mask algebra justification as Marquee/NewsRibbon above.
+  //   Replacing with var(--…) is invalid CSS (mask reads alpha, not color).
+  /components\/ChromeMarquee\.astro$/,
 
   // components/PipelineDiagram.astro — 5 chart SVG fills/strokes
   //   `fill: #fff / stroke: #000` on chart SVG nodes + text. Real drift

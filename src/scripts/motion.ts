@@ -136,7 +136,15 @@ function initNavAndScroll(): void {
 
   function onScroll(): void {
     const y = window.scrollY;
-    if (nav) nav.classList.toggle('is-scrolled', y > 80);
+    if (nav) {
+      nav.classList.toggle('is-scrolled', y > 80);
+      // v2026-07-31 — second-tier elevation when the hero is fully
+      // scrolled past (50vh). Adds a 1px offset hairline that reads
+      // as "the nav is floating over scrolled content". The CSS
+      // uses `box-shadow: 0 1px 0 0 ...` (no 0-spread blur) so it
+      // stays inside the no-halo gate.
+      nav.classList.toggle('is-elevated', y > window.innerHeight * 0.5);
+    }
     if (bar) bar.classList.toggle('is-active', y > window.innerHeight * 0.6);
     if (portrait && !reduced) {
       const hero = portrait.closest('.hero');
@@ -151,12 +159,31 @@ function initNavAndScroll(): void {
 
   if (reduced) {
     nav?.classList.add('is-scrolled');
+    nav?.classList.add('is-elevated');
     return;
   }
 
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onScroll, { passive: true });
   onScroll();
+}
+
+/**
+ * v2026-07-31 — data-reveal-stagger helper.
+ * Reads [data-reveal-stagger="N"] (ms) on a parent and applies the
+ * matching `--reveal-stagger` CSS custom property. The CSS in
+ * motion.css §21 uses that var + nth-child() to compute per-child
+ * delays. Idempotent — re-runs are no-ops.
+ */
+function initRevealStagger(): void {
+  const groups = document.querySelectorAll<HTMLElement>('[data-reveal-stagger]');
+  groups.forEach((g) => {
+    if (g.dataset.revealStaggerBound === 'true') return;
+    const n = Number.parseFloat(g.dataset.revealStagger ?? '80');
+    const ms = Number.isFinite(n) && n > 0 ? n : 80;
+    g.style.setProperty('--reveal-stagger', `${ms}ms`);
+    g.dataset.revealStaggerBound = 'true';
+  });
 }
 
 /* === SectionRail — left-rail scroll-driven ticks.
@@ -228,6 +255,7 @@ function initSectionRail(): void {
 function init(): void {
   initHeroStagger();
   initSiteReveal();
+  initRevealStagger();
   initNavAndScroll();
   initSectionRail();
 }

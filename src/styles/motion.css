@@ -636,7 +636,114 @@
 }
 
 /* ============================================================
- * 19. REDUCED-MOTION OVERRIDE — belt-and-suspenders. The token
+ * 19. CARD LIFT (v2026-07-31) — consistent hover-lift across every
+ *     card class on the home page. The brief calls for:
+ *       translateY(-3px) + border-color → --c-warn + 200ms ease.
+ *     Applied to .thesis-card (was border-only), .pillar (was
+ *     static), and .ai-rung (was bg-shift only). Manifesto-item
+ *     already shipped its own variant at -2px; kept as-is for
+ *     lineage. NEVER exceeds the 8px translate cap (motion doctrine
+ *     §1 — translateY hard-stop at 8px).
+ * ============================================================ */
+.thesis-card,
+.pillar,
+.ai-rung {
+  transition:
+    transform 200ms var(--j-ease-out),
+    border-color 200ms var(--j-ease-out),
+    background-color 200ms var(--j-ease-out);
+}
+.thesis-card:hover,
+.pillar:hover {
+  transform: translateY(-3px);
+  border-color: var(--c-warn);
+}
+.ai-rung:hover {
+  transform: translateY(-2px);
+  border-color: var(--c-warn);
+  background: var(--c-bg-elev);
+}
+/* Reduced-motion neutralizes the lift */
+@media (prefers-reduced-motion: reduce) {
+  .thesis-card,
+  .pillar,
+  .ai-rung {
+    transition: none;
+  }
+  .thesis-card:hover,
+  .pillar:hover,
+  .ai-rung:hover {
+    transform: none;
+  }
+}
+
+/* ============================================================
+ * 20. NAV ELEVATION (v2026-07-31) — second-tier nav state.
+ *     .is-scrolled fires at 80px (was the only nav state) and
+ *     darkens the bottom border. .is-elevated fires at 50vh and
+ *     adds a 1px offset shadow — reads as "the nav is now floating
+ *     over scrolled content" without a heavy halo. The shadow is
+ *     a 1px solid rule (no 0-spread blur), so it stays inside the
+ *     no-halo gate (no `0 0 [1-9][0-9]` pattern).
+ * ============================================================ */
+.nav.is-elevated {
+  border-bottom-color: var(--j-ink-3);
+  box-shadow: 0 1px 0 0 var(--j-ink-4);
+}
+@media (prefers-reduced-motion: reduce) {
+  .nav.is-elevated {
+    box-shadow: none;
+  }
+}
+
+/* ============================================================
+ * 21. STAGGER FALLBACK (v2026-07-31) — when a parent has
+ *     [data-reveal-stagger="N"], CSS auto-applies a calc() delay
+ *     to each direct child up to 10 deep. JS (motion.ts) reads
+ *     the same attribute and animates `--reveal-i` as a backup.
+ *     Belt + suspenders: if JS is delayed, the CSS still fires.
+ * ============================================================ */
+[data-reveal-stagger] > :nth-child(1) {
+  transition-delay: calc(var(--reveal-stagger, 80ms) * 0);
+}
+[data-reveal-stagger] > :nth-child(2) {
+  transition-delay: calc(var(--reveal-stagger, 80ms) * 1);
+}
+[data-reveal-stagger] > :nth-child(3) {
+  transition-delay: calc(var(--reveal-stagger, 80ms) * 2);
+}
+[data-reveal-stagger] > :nth-child(4) {
+  transition-delay: calc(var(--reveal-stagger, 80ms) * 3);
+}
+[data-reveal-stagger] > :nth-child(5) {
+  transition-delay: calc(var(--reveal-stagger, 80ms) * 4);
+}
+[data-reveal-stagger] > :nth-child(6) {
+  transition-delay: calc(var(--reveal-stagger, 80ms) * 5);
+}
+[data-reveal-stagger] > :nth-child(7) {
+  transition-delay: calc(var(--reveal-stagger, 80ms) * 6);
+}
+[data-reveal-stagger] > :nth-child(8) {
+  transition-delay: calc(var(--reveal-stagger, 80ms) * 7);
+}
+[data-reveal-stagger] > :nth-child(9) {
+  transition-delay: calc(var(--reveal-stagger, 80ms) * 8);
+}
+[data-reveal-stagger] > :nth-child(10) {
+  transition-delay: calc(var(--reveal-stagger, 80ms) * 9);
+}
+
+/* ============================================================
+ * 22. CHROME MARQUEE (v2026-07-31) — thin mono-caps identity
+ *     strip. The marquee track + keyframes live in
+ *     src/components/ChromeMarquee.astro (scoped <style>). This
+ *     comment is a registry marker so the site-wide motion audit
+ *     can locate the primitive. Speed defaults to 40s.
+ * ============================================================ */
+
+/* ============================================================
+ * 23. REDUCED-MOTION OVERRIDE — belt-and-suspenders. The token
  *     file already sets animation: none globally; this layer
  *     also neutralizes filter/transform on [data-reveal] so the
  *     page renders correctly even if the global rule is scoped

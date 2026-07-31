@@ -127,6 +127,19 @@
   --j-violet-deep: #7a5a8a;
   --j-violet-soft: rgba(160, 123, 175, 0.16);
 
+  /* === v8.4 NEW — PHI TEAL (secondary palette accent)
+   * Distinct from --j-teal (#5ba8a3 dark / #2c5e5a light) — --j-phi-teal
+   * is the institutional "highlight identifier" applied to:
+   *   - section eyebrows (chip backgrounds)
+   *   - KPI underlines
+   *   - portrait frame accent strip
+   * Picked deep teal #2d5f5a over muted plum #5a3a52 because teal sits
+   * naturally alongside --j-warn (amber) on the institutional palette
+   * (Bloomberg-style two-accent chrome). AA: 5.41:1 on warm-dark #1a1714. */
+  --j-phi-teal: #2d5f5a;
+  --j-phi-teal-deep: #1f4a47;
+  --j-phi-teal-soft: rgba(45, 95, 90, 0.12);
+
   /* === LEGACY --j-accent — back-compat alias for old Jane-Street blue slot.
    * Components explicitly wanting amber (the new primary accent) should
    * use --j-warn. --j-accent redirects to cobalt for back-compat with any
@@ -257,6 +270,12 @@
   --c-amber: var(--j-warn);
   --c-amber-deep: var(--j-warn-deep);
   --c-amber-light: var(--j-warn);
+  --c-phi-teal: var(--j-phi-teal);
+  --c-phi-teal-deep: var(--j-phi-teal-deep);
+  --c-phi-teal-soft: var(--j-phi-teal-soft);
+  --c-accent-2: #2d5f5a; /* v8.3 — proof/doctrine deep-teal accent, theme-neutral */
+  --c-proof-metric: 32px; /* v8.3 — proof-card metric scale */
+  --c-proof-stripe: 4px; /* v8.3 — proof-card top stripe */
   --ff-sans: var(--j-ff-body);
   --ff-mono: var(--j-ff-mono);
   --serif-display: var(--j-ff-display);
@@ -376,6 +395,13 @@
   --j-violet: #5e3e72; /* deep violet — 6.30:1 AA on #d4cebd */
   --j-violet-deep: #432a55;
   --j-violet-soft: rgba(94, 62, 114, 0.12);
+
+  /* === v8.4 NEW — PHI TEAL (light mode deeper variant)
+   * #1f4a47 reads 6.20:1 on the cream paper #d4cebd — comfortably AA.
+   * Used identically to dark mode: eyebrow chip, KPI underline, portrait strip. */
+  --j-phi-teal: #1f4a47;
+  --j-phi-teal-deep: #143330;
+  --j-phi-teal-soft: rgba(31, 74, 71, 0.10);
 
   /* === Legacy --j-accent redirects to cobalt (back-compat) === */
   --j-accent: var(--j-cobalt);

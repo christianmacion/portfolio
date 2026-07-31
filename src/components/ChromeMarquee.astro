@@ -1,0 +1,158 @@
+---
+/**
+ * ChromeMarquee.astro — v2026-07-31 INSTITUTIONAL CHROME MARQUEE (thin).
+ *
+ * A single 28px-tall mono-caps scrolling line that sits between major
+ * sections as a hairline accent. Different from <Marquee>:
+ *   - <Marquee> is the BIG methodology-frame loop (sparse heads + tails).
+ *   - <ChromeMarquee> is the THIN identity strip (mono caps, no frames).
+ *
+ * v2026-07-31 — first cut. Pure CSS animation, zero runtime JS. The
+ * text is duplicated inside the track so the translateX(0 → -50%) loop
+ * is seam-free. Pause on hover. Reduced-motion neutralizes the
+ * animation AND flattens the edge fade (matches NewsRibbon/Marquee).
+ *
+ * Why a thin strip instead of another NewsRibbon row? The brief asks
+ * for a "feels alive" cue that doesn't crowd the hero. The hero is
+ * already busy; one thin hairline below it reads as a system heartbeat,
+ * not a billboard.
+ */
+
+interface Props {
+  /** The full text strip. Duplicated server-side so the loop is seam-free. */
+  text?: string;
+  /** Full-track traversal in seconds. Default 40s — slow enough to read. */
+  speedSec?: number;
+  /** Trailing label pinned to the right edge. */
+  trailing?: string;
+}
+
+const {
+  text = 'CHRISTIAN T. MACION · QUANT × AI × GRAPH ENGINEERING · REMOTE-OK · UTC+8 · DAILY-SHIP DISCIPLINE ·',
+  speedSec = 40,
+  trailing = 'chrome marquee',
+} = Astro.props;
+---
+
+<div
+  class="chrome-marquee"
+  role="presentation"
+  aria-label="Identity strip (paused on hover, neutralized in reduced motion)"
+>
+  <div class="chrome-marquee__viewport">
+    <div class="chrome-marquee__track" style={`--chrome-marquee-dur: ${speedSec}s`}>
+      <span class="chrome-marquee__strip mono">{text}</span>
+      {/* Duplicate for the seamless translateX(0 → -50%) loop */}
+      <span class="chrome-marquee__strip mono" aria-hidden="true">{text}</span>
+    </div>
+  </div>
+  <span class="chrome-marquee__stop mono" aria-hidden="true">{trailing}</span>
+</div>
+
+<style>
+  /* === Container === */
+  .chrome-marquee {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    height: 28px;
+    background: var(--c-bg-2);
+    border-block: 1px solid var(--c-rule);
+    color: var(--c-ink-2);
+    overflow: hidden;
+    user-select: none;
+  }
+
+  /* === Viewport — edge fade via mask-image ===
+     Institutional pattern (matches NewsRibbon + Marquee). 16px
+     transparent → opaque → 16px transparent so the strip bleeds in. */
+  .chrome-marquee__viewport {
+    flex: 1 1 auto;
+    overflow: hidden;
+    position: relative;
+    mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      #000 16px,
+      #000 calc(100% - 16px),
+      transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      #000 16px,
+      #000 calc(100% - 16px),
+      transparent 100%
+    );
+  }
+
+  /* === Track — single keyframe `chrome-marquee-scroll` ===
+     The two .chrome-marquee__strip children are duplicated, so a
+     0 → -50% translate reads as an infinite loop with no snap. */
+  .chrome-marquee__track {
+    display: inline-flex;
+    align-items: center;
+    height: 100%;
+    gap: 0;
+    white-space: nowrap;
+    animation: chrome-marquee-scroll var(--chrome-marquee-dur, 40s) linear infinite;
+    will-change: transform;
+  }
+
+  /* Pause on hover so the visitor can read a snippet they're inspecting. */
+  .chrome-marquee:hover .chrome-marquee__track {
+    animation-play-state: paused;
+  }
+
+  .chrome-marquee__strip {
+    display: inline-block;
+    padding-inline: 24px;
+    font-family: var(--ff-mono);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--c-ink-2);
+    line-height: 28px;
+    /* No flag — the strip is identity, not status. */
+  }
+
+  /* === Trailing label === */
+  .chrome-marquee__stop {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    padding-inline: 14px;
+    border-left: 1px solid var(--c-rule);
+    color: var(--c-ink-3);
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    background: var(--c-bg);
+    pointer-events: none;
+  }
+
+  /* === Keyframe — same seam-free math as NewsRibbon + Marquee === */
+  @keyframes chrome-marquee-scroll {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  /* === Reduced-motion: freeze the track + flatten the edge fade ===
+     Per CLAUDE.md / motion doctrine: every animation must be
+     neutralized in reduced-motion. The static strip already carries
+     the identity message; the motion only adds a heartbeat. */
+  @media (prefers-reduced-motion: reduce) {
+    .chrome-marquee__track {
+      animation: none !important;
+    }
+    .chrome-marquee__viewport {
+      mask-image: none;
+      -webkit-mask-image: none;
+    }
+  }
+</style>

@@ -2,19 +2,18 @@
 /**
  * index.astro — v7.5 HOME — TWO-PILLAR RESTRUCTURE
  *
- * 7-section structure (top → bottom):
+ * 9-surface structure (top → bottom):
  *   1. NewsRibbon — activity ticker (Lane 1) + methodology frames (Lane 2)
  *   2. Hero       — identity + role + Odometer KPIs + dual-path CTA + portrait
+ *   2b–2d. Thesis, Now Pulse, and Positioning Manifesto — senior-practitioner proof
+ *   2e. Proof carousel — four artifact cards with metrics, charts, and AAR routes
  *   3. Two-pillar row — EquityCurveChart (quant) ⇆ AgentGraph compact (AI)
  *   4. Marquee    — methodology frame loop
- *   5. ArchitectureBrief — STELLA-public-safe multi-agent chrome (slot — Phase D)
+ *   5. ArchitectureBrief — STELLA-public-safe multi-agent chrome
+ *   5b. AI history — 2022 → 2026 prompt-to-graph timeline
+ *   5c. Doctrine graph — eight-corpus citation network
  *   6. Fit        — education + credentials
  *   7. Contact    — dual-path CTA mirrors hero
- *
- * v7.5 — adds a 7th section (ArchitectureBrief) carrying the
- * STELLA-public-safe architecture slice. The brief itself is implemented
- * in Phase D; this file declares the structural slot so the new section
- * sits in the right place from day one.
  */
 
 import BaseLayout from '@layouts/BaseLayout.astro';
@@ -22,6 +21,7 @@ import { profile, archSafe } from '@utils/profile';
 import { path } from '@utils/url';
 import NewsRibbon from '@components/NewsRibbon.astro';
 import Marquee from '@components/Marquee.astro';
+import ChromeMarquee from '@components/ChromeMarquee.astro';
 import Odometer from '@components/Odometer.astro';
 import EquityCurveChart from '@components/EquityCurveChart.astro';
 import AgentGraph from '@components/AgentGraph.astro';
@@ -68,9 +68,10 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
        ============================================================ -->
   <section class="hero" aria-label="Identity">
     <div class="container hero__inner">
-      <p class="hero__eyebrow mono" data-stagger="1">
-        Q3 2026 · OPEN TO REMOTE QR / AI ROLES · &lt;24H REPLY
-      </p>
+      <div class="hero__eyebrow mono" data-stagger="1">
+        <span class="hero__eyebrow-chip">Q3 2026 · OPEN</span>
+        <span class="hero__eyebrow-line">QUANT RESEARCHER · AI ENGINEER · UTC+8 · DAILY-SHIP DISCIPLINE</span>
+      </div>
 
       <div class="hero__grid">
         <div class="hero__identity">
@@ -80,19 +81,21 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
             <span class="word">Macion</span>
           </h1>
           <p class="hero__role" data-stagger="3">
-            Quantitative Researcher · AI Engineer · UTC+8 · Digos, PH<span
+            Building trading desks, AI engineering teams, and multi-agent build systems with
+            the eval discipline of a senior practitioner.<span
               class="hero__cursor"
               aria-hidden="true"></span>
           </p>
 
           <p class="hero__lede" data-stagger="4">
-            <em>Reproducible code.</em>
-            <em>Ship-ready artifacts.</em>
-            <em>Defensible under adversarial eval.</em>
+            <em>Deterministic primitives.</em>
+            <em>31-gate eval harness.</em>
+            <em>Zero silent rollbacks.</em>
             <span class="hero__lede-sub"
-              >Senior practitioner across quant trading desks, AI engineering teams, and multi-agent
-              build systems. Every primitive ships with a 31-gate eval harness, a dedupe key, and a
-              one-page AAR — so the work survives interview-room scrutiny.</span
+              >Six years of building trading desks, AI engineering teams, and multi-agent systems
+              that survive interview-room scrutiny. Every artifact ships with a manifest, a dedupe
+              key, and a one-page AAR — so the work is reproducible, ship-ready, and defensible
+              under adversarial eval.</span
             >
           </p>
 
@@ -121,25 +124,88 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
           </ul>
 
           <div class="hero__cta-row" data-stagger="6">
-            <a class="cta cta--primary" href={mailto}>EMAIL — HIRING INQUIRY</a>
-            <a class="cta cta--ghost" href={path('/desk')}>OPEN DESK →</a>
-            <a class="cta cta--ghost" href={path('/ai')}>READ LOOP →</a>
+            <a class="cta cta--primary" href={mailto}>
+              <svg class="cta__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+                <rect x="1.5" y="3" width="13" height="10" />
+                <path d="M1.5 3.5l6.5 5 6.5-5" />
+              </svg>
+              HIRE ME
+              <svg class="cta__arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                <path d="M3 8h10M9 4l4 4-4 4" />
+              </svg>
+            </a>
+            <a class="cta cta--ghost" href={path('/desk')}>
+              <svg class="cta__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+                <rect x="2" y="2.5" width="12" height="11" />
+                <line x1="4" y1="6" x2="12" y2="6" />
+                <line x1="4" y1="9" x2="10" y2="9" />
+                <line x1="4" y1="12" x2="8" y2="12" />
+              </svg>
+              OPEN THE DESK
+              <svg class="cta__arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                <path d="M3 8h10M9 4l4 4-4 4" />
+              </svg>
+            </a>
+            <a class="cta cta--ghost" href={path('/ai')}>
+              <svg class="cta__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+                <path d="M3 2.5h7a2.5 2.5 0 012.5 2.5v9a0 0 0 010 0H5.5A2.5 2.5 0 013 11.5v-9a0 0 0 010 0z" />
+                <line x1="5" y1="6" x2="10" y2="6" />
+                <line x1="5" y1="8.5" x2="8.5" y2="8.5" />
+              </svg>
+              READ THE LOOP
+              <svg class="cta__arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                <path d="M3 8h10M9 4l4 4-4 4" />
+              </svg>
+            </a>
           </div>
+
+          <!-- Tenant line — Bloomberg-style mono ticker signature -->
+          <p class="hero__tenant mono" data-stagger="7">
+            <span>CHRISTIAN.T.MACION</span>
+            <span class="hero__tenant-sep" aria-hidden="true">·</span>
+            <span>UTC+8</span>
+            <span class="hero__tenant-sep" aria-hidden="true">·</span>
+            <span>REMOTE-OK</span>
+            <span class="hero__tenant-sep" aria-hidden="true">·</span>
+            <span>5-SHIP SPRINT</span>
+            <span class="hero__tenant-sep" aria-hidden="true">·</span>
+            <span>OWNER-VERIFIED</span>
+          </p>
+          <p class="hero__tenet mono">
+            No Math.random() · No argless new Date() · No fabricated metrics · No NDA-protected
+            employers on this site
+          </p>
         </div>
 
         <aside class="hero__portrait" data-stagger="3">
-          <img
-            src={profile.headshot.src}
-            alt={profile.headshot.alt}
-            width="280"
-            height="320"
-            loading="eager"
-          />
+          <div class="hero__portrait-frame">
+            <img
+              src={profile.headshot.src}
+              alt={profile.headshot.alt}
+              width="280"
+              height="320"
+              loading="eager"
+            />
+          </div>
           <p class="hero__portrait-credit mono">{profile.headshot.credit}</p>
         </aside>
       </div>
     </div>
   </section>
+
+  <!-- ============================================================
+       2a. CHROME MARQUEE — thin mono-caps identity strip (v2026-07-31)
+       Sits between the hero and the thesis as a 28px-tall hairline
+       accent. CSS-only animation (no JS), reduced-motion freezes the
+       track and flattens the edge fade. Different from <Marquee>:
+       <Marquee> is the big methodology-frame loop later; this is the
+       thin identity heartbeat that says "this site is alive".
+       ============================================================ -->
+  <ChromeMarquee
+    text="CHRISTIAN T. MACION · QUANT × AI × GRAPH ENGINEERING · REMOTE-OK · UTC+8 · DAILY-SHIP DISCIPLINE ·"
+    speedSec={40}
+    trailing="chrome marquee"
+  />
 
   <!-- ============================================================
        2b. SENIOR THESIS — 3-card positioning block (v2026-07-31)
@@ -216,11 +282,12 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
         POSITIONING MANIFESTO · 6 CLAIMS · ALL PROVEN
       </p>
       <h2 class="manifesto__head" data-reveal>
-        What a senior practitioner <em>actually</em> ships.
+        <em>No "trust me."</em> Every claim links to proof.
       </h2>
       <p class="manifesto__sub" data-reveal data-reveal-delay="60">
-        Six sharp claims, each backed by a public artifact on this site. No hand-waving.
-        No "trust me." Every line links to the proof.
+        Six sharp claims about how I work. Each one is backed by a public artifact on this site
+        — methodology, gate ledger, eval results, or a doctrinal citation. If a primitive can't
+        survive interview-room scrutiny, it doesn't ship.
       </p>
       <ul class="manifesto__grid">
         <li class="manifesto-item" data-reveal>
@@ -272,6 +339,102 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
           </p>
         </li>
       </ul>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       2e. PROOF CAROUSEL — four artifact-backed ships.
+       A dense 2×2 evidence surface inserted before the two-pillar row.
+       Every card pairs a headline metric with a compact chart, claim,
+       and direct AAR route.
+       ============================================================ -->
+  <section class="proof-carousel" id="proof-carousel" aria-labelledby="proof-carousel-title">
+    <div class="container">
+      <header class="proof-carousel__header">
+        <p class="proof-carousel__eyebrow mono" data-reveal="lift-sm">
+          PROOF · 4 SHIPS · 31 GATES PASSING
+        </p>
+        <h2 class="proof-carousel__title" id="proof-carousel-title" data-reveal>
+          The work, not the words.
+        </h2>
+        <p class="proof-carousel__lede" data-reveal data-reveal-delay="60">
+          Each ship below carries a 1-page AAR, a dedupe key, and a 31-gate eval ledger.
+          Click any card to read the full artifact.
+        </p>
+      </header>
+
+      <div class="proof-carousel__grid">
+        <article class="proof-card" data-reveal>
+          <p class="proof-card__index mono">SHIP 01 / RESEARCH</p>
+          <h3 class="proof-card__title">Kaufman Efficiency Ratio</h3>
+          <div class="proof-card__metric-row">
+            <p class="proof-card__metric tnum">1.2k LOC</p>
+            <svg class="proof-card__chart" viewBox="0 0 100 32" aria-hidden="true" focusable="false">
+              <path class="proof-card__chart-guide" d="M0 27H100" />
+              <polyline class="proof-card__chart-line" points="0,25 14,22 27,23 40,17 53,19 66,12 80,14 100,5" />
+            </svg>
+          </div>
+          <p class="proof-card__submetric mono">4 pp · adversarial-evaluated · 31 gates PASS</p>
+          <p class="proof-card__claim">A compact efficiency model built to survive adversarial review.</p>
+          <a class="proof-card__link mono" href={path('/workbooks/kaufman-er')}>READ AAR →</a>
+        </article>
+
+        <article class="proof-card" data-reveal data-reveal-delay="60">
+          <p class="proof-card__index mono">SHIP 02 / EXECUTION</p>
+          <h3 class="proof-card__title">Trading Desk</h3>
+          <div class="proof-card__metric-row">
+            <p class="proof-card__metric tnum">12.4%</p>
+            <svg class="proof-card__chart" viewBox="0 0 100 32" aria-hidden="true" focusable="false">
+              <path class="proof-card__chart-guide" d="M0 27H100" />
+              <rect class="proof-card__chart-fill" x="5" y="20" width="10" height="7" />
+              <rect class="proof-card__chart-fill" x="24" y="16" width="10" height="11" />
+              <rect class="proof-card__chart-fill" x="43" y="18" width="10" height="9" />
+              <rect class="proof-card__chart-fill" x="62" y="10" width="10" height="17" />
+              <rect class="proof-card__chart-fill" x="81" y="4" width="10" height="23" />
+            </svg>
+          </div>
+          <p class="proof-card__submetric mono">9 strategies · 49 days · BTC/USDT · 12.4% paper PnL</p>
+          <p class="proof-card__claim">A paper desk measured across regimes, not presented as a screenshot.</p>
+          <a class="proof-card__link mono" href={path('/desk')}>READ AAR →</a>
+        </article>
+
+        <article class="proof-card" data-reveal data-reveal-delay="120">
+          <p class="proof-card__index mono">SHIP 03 / SYSTEMS</p>
+          <h3 class="proof-card__title">STELLA Graph Engineering</h3>
+          <div class="proof-card__metric-row">
+            <p class="proof-card__metric tnum">123 agents</p>
+            <svg class="proof-card__chart" viewBox="0 0 100 32" aria-hidden="true" focusable="false">
+              <path class="proof-card__chart-line" d="M9 16H36M45 16H72M81 16H96M40 12L26 4M40 20L26 28M76 12L62 4M76 20L62 28" />
+              <circle class="proof-card__chart-node" cx="9" cy="16" r="3" />
+              <circle class="proof-card__chart-node" cx="40" cy="16" r="4" />
+              <circle class="proof-card__chart-node" cx="76" cy="16" r="4" />
+              <circle class="proof-card__chart-node" cx="97" cy="16" r="3" />
+              <circle class="proof-card__chart-node" cx="24" cy="4" r="2" />
+              <circle class="proof-card__chart-node" cx="24" cy="28" r="2" />
+              <circle class="proof-card__chart-node" cx="60" cy="4" r="2" />
+              <circle class="proof-card__chart-node" cx="60" cy="28" r="2" />
+            </svg>
+          </div>
+          <p class="proof-card__submetric mono">123 agents · 165 skills · 3.2k graph nodes</p>
+          <p class="proof-card__claim">Typed relations keep a multi-agent office inspectable and shared.</p>
+          <a class="proof-card__link mono" href={path('/ai')}>READ AAR →</a>
+        </article>
+
+        <article class="proof-card" data-reveal data-reveal-delay="180">
+          <p class="proof-card__index mono">SHIP 04 / DISTRIBUTION</p>
+          <h3 class="proof-card__title">Career Co-Pilot Kit</h3>
+          <div class="proof-card__metric-row">
+            <p class="proof-card__metric tnum">76.5k LOC</p>
+            <svg class="proof-card__chart" viewBox="0 0 100 32" aria-hidden="true" focusable="false">
+              <path class="proof-card__chart-guide" d="M0 27H100" />
+              <polyline class="proof-card__chart-line" points="0,24 12,24 12,20 25,20 25,17 38,17 38,14 51,14 51,11 64,11 64,8 77,8 77,5 100,5" />
+            </svg>
+          </div>
+          <p class="proof-card__submetric mono">8 workbooks · 76.5k LOC Python · OJP-distributed</p>
+          <p class="proof-card__claim">Repeatable research converted into public, operator-ready instruction.</p>
+          <a class="proof-card__link mono" href={path('/workbooks')}>READ AAR →</a>
+        </article>
+      </div>
     </div>
   </section>
 
@@ -442,6 +605,138 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
   </section>
 
   <!-- ============================================================
+       5c. DOCTRINE GRAPH — eight-corpus operator index.
+       The network map gives the section a distinct visual rhythm;
+       the cards keep every corpus anchor and application legible.
+       ============================================================ -->
+  <section class="doctrine-graph" id="doctrine-graph" aria-labelledby="doctrine-graph-title">
+    <div class="container">
+      <header class="doctrine-graph__header">
+        <p class="doctrine-graph__eyebrow mono" data-reveal="lift-sm">
+          DOCTRINE LAYER · 8 CORPUS · 1 OPERATOR
+        </p>
+        <h2 class="doctrine-graph__title" id="doctrine-graph-title" data-reveal>
+          What I cite when the heat is on.
+        </h2>
+        <p class="doctrine-graph__lede" data-reveal data-reveal-delay="60">
+          Eight lenses keep the work grounded when a decision is consequential. The map is the
+          index; each card names the doctrine and where it enters the portfolio.
+        </p>
+      </header>
+
+      <div class="doctrine-graph__network" aria-hidden="true">
+        <svg viewBox="0 0 800 48" focusable="false">
+          <path class="doctrine-network__line" d="M24 24H776" />
+          <circle class="doctrine-network__node" cx="24" cy="24" r="4" />
+          <circle class="doctrine-network__node" cx="131" cy="24" r="4" />
+          <circle class="doctrine-network__node" cx="238" cy="24" r="4" />
+          <circle class="doctrine-network__node" cx="345" cy="24" r="4" />
+          <circle class="doctrine-network__node" cx="452" cy="24" r="4" />
+          <circle class="doctrine-network__node" cx="559" cy="24" r="4" />
+          <circle class="doctrine-network__node" cx="666" cy="24" r="4" />
+          <circle class="doctrine-network__node" cx="776" cy="24" r="4" />
+        </svg>
+      </div>
+
+      <div class="doctrine-graph__grid">
+        <article class="doctrine-card" data-reveal>
+          <svg class="doctrine-card__icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+            <circle cx="16" cy="16" r="10" />
+            <path d="M16 4V28M4 16H28M9 9L23 23M23 9L9 23" />
+          </svg>
+          <div>
+            <h3 class="doctrine-card__name mono">SUN TZU</h3>
+            <p class="doctrine-card__anchor">Know your enemy · Ch.3</p>
+            <p class="doctrine-card__application">Used in /positions risk ledger.</p>
+          </div>
+        </article>
+
+        <article class="doctrine-card" data-reveal data-reveal-delay="40">
+          <svg class="doctrine-card__icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+            <path d="M16 5V27M9 9H23M7 13H13L10 20H4L7 13ZM19 13H25L28 20H22L19 13ZM4 23H13M19 23H28" />
+          </svg>
+          <div>
+            <h3 class="doctrine-card__name mono">MACHIAVELLI</h3>
+            <p class="doctrine-card__anchor">Reputation is capital · Ch.15</p>
+            <p class="doctrine-card__application">Used in /about positioning.</p>
+          </div>
+        </article>
+
+        <article class="doctrine-card" data-reveal data-reveal-delay="80">
+          <svg class="doctrine-card__icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+            <path d="M7 8C7 6 11 5 16 5S25 6 25 8V24C25 26 21 27 16 27S7 26 7 24V8ZM7 8C7 10 11 11 16 11S25 10 25 8M7 16C7 18 11 19 16 19S25 18 25 16" />
+          </svg>
+          <div>
+            <h3 class="doctrine-card__name mono">GREENE 48 LAWS</h3>
+            <p class="doctrine-card__anchor">Guard reputation · Law 5</p>
+            <p class="doctrine-card__application">Used in public-surface review.</p>
+          </div>
+        </article>
+
+        <article class="doctrine-card" data-reveal data-reveal-delay="120">
+          <svg class="doctrine-card__icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+            <path d="M16 5V27M8 10H24M6 13H13L10 21H3L6 13ZM19 13H26L29 21H22L19 13ZM3 24H16M16 24H29" />
+          </svg>
+          <div>
+            <h3 class="doctrine-card__name mono">KAHNEMAN</h3>
+            <p class="doctrine-card__anchor">WYSIATI · check the frame</p>
+            <p class="doctrine-card__application">Used in forecast and UX framing.</p>
+          </div>
+        </article>
+
+        <article class="doctrine-card" data-reveal>
+          <svg class="doctrine-card__icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+            <path d="M6 7H26M6 16H26M6 25H26M7 6V26M16 6V26M25 6V26" />
+            <circle cx="11" cy="11" r="2" />
+            <circle cx="21" cy="21" r="2" />
+          </svg>
+          <div>
+            <h3 class="doctrine-card__name mono">MUNGER</h3>
+            <p class="doctrine-card__anchor">Invert, always invert</p>
+            <p class="doctrine-card__application">Used in no-vibe and claim audits.</p>
+          </div>
+        </article>
+
+        <article class="doctrine-card" data-reveal data-reveal-delay="40">
+          <svg class="doctrine-card__icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+            <path d="M16 5A11 11 0 1 1 5 16M16 5V9M16 5L20 7M27 16A11 11 0 0 1 16 27M27 16H23M27 16L25 20" />
+          </svg>
+          <div>
+            <h3 class="doctrine-card__name mono">DEMING</h3>
+            <p class="doctrine-card__anchor">System before special cause · SoPK</p>
+            <p class="doctrine-card__application">Used in 31-gate quality loops.</p>
+          </div>
+        </article>
+
+        <article class="doctrine-card" data-reveal data-reveal-delay="80">
+          <svg class="doctrine-card__icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+            <path d="M5 7H27L21 15V25H11V15L5 7ZM8 7H24M11 11H21M14 15H18" />
+          </svg>
+          <div>
+            <h3 class="doctrine-card__name mono">GOLDRATT</h3>
+            <p class="doctrine-card__anchor">Find the constraint · Step 1</p>
+            <p class="doctrine-card__application">Used in throughput and release planning.</p>
+          </div>
+        </article>
+
+        <article class="doctrine-card" data-reveal data-reveal-delay="120">
+          <svg class="doctrine-card__icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+            <circle cx="16" cy="16" r="11" />
+            <circle cx="16" cy="16" r="6" />
+            <circle cx="16" cy="16" r="2" />
+            <path d="M16 2V6M16 26V30M2 16H6M26 16H30" />
+          </svg>
+          <div>
+            <h3 class="doctrine-card__name mono">TETLOCK</h3>
+            <p class="doctrine-card__anchor">Calibrate before you forecast</p>
+            <p class="doctrine-card__application">Used in risk and backtest review.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
        6. FIT — education + credentials (compact, no change)
        ============================================================ -->
   <section class="fit" id="fit" aria-label="Education and credentials">
@@ -506,11 +801,30 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     padding: 48px 0 56px;
   }
   .hero__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 0 0 32px;
     font: 500 11px / 1.4 var(--ff-mono);
-    color: var(--c-warn);
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    margin: 0 0 28px;
+  }
+  /* v8.4 — eyebrow chip carries the new --j-phi-teal accent.
+     Sits inline-flex next to the longer line copy. */
+  .hero__eyebrow-chip {
+    display: inline-block;
+    padding: 5px 11px 4px;
+    border: 1px solid var(--c-phi-teal);
+    background: var(--c-phi-teal-soft);
+    color: var(--c-phi-teal);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    line-height: 1;
+  }
+  .hero__eyebrow-line {
+    color: var(--c-warn);
+    font-weight: 500;
   }
   .hero__grid {
     display: grid;
@@ -608,6 +922,11 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     flex-direction: column;
     gap: 4px;
     min-width: 0;
+    position: relative;
+    padding-bottom: 8px;
+    /* v8.4 — phi-teal accent underline. 1px hairline + 1px gap above to
+       read as a "label tick" instead of a generic border-bottom. */
+    border-bottom: 2px solid var(--c-phi-teal);
   }
   /* Inherit Odometer's tabular-num + accent color from the component;
      only override the label to match the home's chrome (uppercase, mono). */
@@ -631,19 +950,84 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     margin: 0;
     align-items: center;
   }
+  /* v8.4 — CTA icons (inline SVG) sit inline with the label.
+     Sized to match the 11px mono caps; chevron arrow hints the click target. */
+  .cta__icon {
+    width: 13px;
+    height: 13px;
+    margin-right: 7px;
+    display: inline-block;
+    vertical-align: -2px;
+    flex-shrink: 0;
+  }
+  .cta__arrow {
+    width: 11px;
+    height: 11px;
+    margin-left: 7px;
+    display: inline-block;
+    vertical-align: -1px;
+    flex-shrink: 0;
+  }
+
+  /* v8.4 — Tenant line (Bloomberg-style mono ticker signature).
+     Sits between the CTA row and the operating principles tenet. */
+  .hero__tenant {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin: 24px 0 0;
+    padding-top: 14px;
+    border-top: 1px solid var(--c-rule);
+    font: 500 11px / 1.4 var(--ff-mono);
+    color: var(--c-ink-3);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .hero__tenant-sep {
+    color: var(--c-ink-4);
+    font-weight: 400;
+  }
+  /* v8.4 — Tenet line (operating principles). Lighter than tenant;
+     sits directly below the CTA row + tenant line. */
+  .hero__tenet {
+    margin: 8px 0 0;
+    font: 400 10.5px / 1.5 var(--ff-mono);
+    color: var(--c-ink-3);
+    letter-spacing: 0.08em;
+    max-width: 60ch;
+  }
 
   .hero__portrait {
     margin: 0;
     text-align: center;
   }
+  /* v8.4 — Portrait frame: hairline rule + phi-teal accent strip on top.
+     Reads as a print headshot clipped into a card mount, not a UI card. */
+  .hero__portrait-frame {
+    position: relative;
+    border: 1px solid var(--c-rule);
+    background: var(--c-bg-2);
+    padding: 0;
+  }
+  .hero__portrait-frame::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--c-phi-teal);
+    z-index: 1;
+  }
   .hero__portrait img {
     width: 100%;
     height: auto;
-    border-radius: 2px;
+    border-radius: 0;
     /* v7.5 — dropped the 8px 24px rgba halo shadow (audit C04 tell).
-       Single 1px hairline rule replaces it; portrait now sits flat on
-       the page surface like a print headshot, not a UI card. */
-    border: 1px solid var(--c-rule);
+       Single 1px hairline rule on the frame replaces it; portrait now sits
+       flat on the page surface like a print headshot, not a UI card. */
+    border: 0;
     display: block;
   }
   .hero__portrait-credit {
@@ -858,10 +1242,259 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     border-bottom-color: var(--c-warn);
   }
 
+  /* ====== PROOF CAROUSEL (v8.3) ======
+     Evidence surface: flat cards, a teal rule, metric-first hierarchy.
+     No shadow, glow, gradient, or traffic-light treatment. */
+  .proof-carousel {
+    padding: var(--sp-6) 0;
+    background: var(--c-bg-2);
+    border-bottom: var(--border-paper);
+  }
+  .proof-carousel__header {
+    border-left: var(--c-proof-stripe) solid var(--c-accent-2);
+    padding-left: var(--sp-3);
+    margin-bottom: var(--sp-5);
+  }
+  .proof-carousel__eyebrow,
+  .doctrine-graph__eyebrow {
+    font: var(--j-w-mono) var(--j-t-xs) / var(--lh-snug) var(--ff-mono);
+    color: var(--c-ink-2);
+    letter-spacing: var(--j-track-wide);
+    text-transform: uppercase;
+    margin: 0 0 var(--sp-2);
+  }
+  .proof-carousel__title,
+  .doctrine-graph__title {
+    font: var(--j-w-heading) var(--c-proof-metric) / var(--lh-snug) var(--serif-display);
+    color: var(--c-ink);
+    letter-spacing: var(--j-track-tight);
+    margin: 0 0 var(--sp-2);
+  }
+  .proof-carousel__lede,
+  .doctrine-graph__lede {
+    font: var(--j-type-meta);
+    color: var(--c-ink-2);
+    max-width: var(--container-narrow);
+    margin: 0;
+  }
+  .proof-carousel__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--sp-3);
+  }
+  .proof-card {
+    display: grid;
+    grid-template-rows: auto auto auto auto 1fr auto;
+    gap: var(--sp-2);
+    min-width: 0;
+    padding: var(--sp-3);
+    background: var(--c-bg);
+    border: var(--border-paper);
+    border-top: var(--c-proof-stripe) solid var(--c-accent-2);
+  }
+  .proof-card__index {
+    font: var(--j-w-mono) var(--j-t-xs) / var(--lh-tight) var(--ff-mono);
+    color: var(--c-ink-3);
+    letter-spacing: var(--j-track-wide);
+    margin: 0;
+  }
+  .proof-card__title {
+    font: var(--j-w-heading) var(--j-t-md) / var(--lh-snug) var(--serif-display);
+    color: var(--c-ink);
+    letter-spacing: var(--j-track-tight);
+    margin: 0;
+  }
+  .proof-card__metric-row {
+    display: grid;
+    gap: var(--sp-2);
+    min-width: 0;
+  }
+  .proof-card__metric {
+    font: var(--j-w-heading) var(--c-proof-metric) / var(--lh-tight) var(--serif-display);
+    color: var(--c-ink);
+    letter-spacing: var(--j-track-tight);
+    margin: 0;
+  }
+  .proof-card__chart {
+    display: block;
+    width: 100%;
+    height: var(--sp-3);
+    color: var(--c-accent-2);
+  }
+  .proof-card__chart-guide,
+  .proof-card__chart-line {
+    fill: none;
+    stroke: currentColor;
+    vector-effect: non-scaling-stroke;
+  }
+  .proof-card__chart-guide {
+    stroke: var(--c-rule);
+    stroke-width: 1;
+  }
+  .proof-card__chart-line {
+    stroke-width: 2;
+    stroke-linecap: square;
+    stroke-linejoin: miter;
+  }
+  .proof-card__chart-fill {
+    fill: var(--c-accent-2);
+  }
+  .proof-card__chart-node {
+    fill: var(--c-bg);
+    stroke: var(--c-accent-2);
+    stroke-width: 2;
+    vector-effect: non-scaling-stroke;
+  }
+  .proof-card__submetric {
+    font: var(--j-w-mono) var(--j-t-xs) / var(--lh-snug) var(--ff-mono);
+    color: var(--c-ink-2);
+    letter-spacing: var(--j-track-wide);
+    margin: 0;
+  }
+  .proof-card__claim {
+    font: var(--j-type-meta);
+    color: var(--c-ink-2);
+    margin: 0;
+  }
+  .proof-card__link {
+    align-self: end;
+    justify-self: start;
+    font: var(--j-w-mono) var(--j-t-xs) / var(--lh-snug) var(--ff-mono);
+    color: var(--c-ink);
+    letter-spacing: var(--j-track-wide);
+    text-decoration: none;
+    border-bottom: var(--border-paper);
+    padding-bottom: var(--j-sp-1);
+    transition: var(--transition);
+  }
+  .proof-card__link:hover {
+    border-bottom-color: var(--c-accent-2);
+  }
+
+  /* ====== DOCTRINE GRAPH (v8.3) ======
+     The node rail + eight-card matrix is a compact citation network,
+     not a decorative hero or a traffic-light dashboard. */
+  .doctrine-graph {
+    padding: var(--sp-6) 0;
+    background: var(--c-bg);
+    border-bottom: var(--border-paper);
+  }
+  .doctrine-graph__header {
+    margin-bottom: var(--sp-3);
+  }
+  .doctrine-graph__network {
+    padding: var(--sp-2) 0;
+    margin-bottom: var(--sp-3);
+    border-top: var(--border-paper);
+    border-bottom: var(--border-paper);
+  }
+  .doctrine-graph__network svg {
+    display: block;
+    width: 100%;
+    height: var(--sp-3);
+  }
+  .doctrine-network__line {
+    fill: none;
+    stroke: var(--c-rule);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+  }
+  .doctrine-network__node {
+    fill: var(--c-bg);
+    stroke: var(--c-accent-2);
+    stroke-width: 2;
+    vector-effect: non-scaling-stroke;
+  }
+  .doctrine-graph__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--sp-2);
+  }
+  .doctrine-card {
+    display: grid;
+    grid-template-columns: var(--c-proof-metric) 1fr;
+    gap: var(--sp-2);
+    align-items: start;
+    min-width: 0;
+    padding: var(--sp-2);
+    background: var(--c-bg-2);
+    border: var(--border-paper);
+    border-left: var(--c-proof-stripe) solid var(--c-accent-2);
+  }
+  .doctrine-card__icon {
+    display: block;
+    width: var(--c-proof-metric);
+    height: var(--c-proof-metric);
+    color: var(--c-accent-2);
+  }
+  .doctrine-card__icon * {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: square;
+    stroke-linejoin: miter;
+    vector-effect: non-scaling-stroke;
+  }
+  .doctrine-card__name {
+    font: var(--j-w-mono) var(--j-t-xs) / var(--lh-snug) var(--ff-mono);
+    color: var(--c-ink);
+    letter-spacing: var(--j-track-wide);
+    margin: 0 0 var(--j-sp-1);
+  }
+  .doctrine-card__anchor,
+  .doctrine-card__application {
+    font: var(--j-type-meta);
+    margin: 0;
+  }
+  .doctrine-card__anchor {
+    color: var(--c-ink);
+    margin-bottom: var(--j-sp-1);
+  }
+  .doctrine-card__application {
+    color: var(--c-ink-2);
+  }
+
+  @media (max-width: 980px) {
+    .proof-carousel__grid,
+    .doctrine-graph__grid {
+      gap: var(--sp-2);
+    }
+    .doctrine-graph__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 720px) {
+    .proof-carousel,
+    .doctrine-graph {
+      padding: var(--sp-5) 0;
+    }
+    .proof-carousel__header {
+      padding-left: var(--sp-2);
+      margin-bottom: var(--sp-4);
+    }
+    .proof-carousel__title,
+    .doctrine-graph__title {
+      font-size: var(--j-t-lg);
+    }
+    .proof-carousel__grid,
+    .doctrine-graph__grid {
+      grid-template-columns: 1fr;
+    }
+    .proof-card,
+    .doctrine-card {
+      padding: var(--sp-2);
+    }
+    .doctrine-graph__network {
+      margin-bottom: var(--sp-2);
+    }
+  }
+
   /* ====== CTA (shared) ====== */
   .cta {
-    display: inline-block;
-    padding: 14px 24px;
+    display: inline-flex;
+    align-items: center;
+    padding: 14px 22px;
     font: 600 11px / 1 var(--ff-mono);
     letter-spacing: 0.16em;
     text-transform: uppercase;
@@ -1092,7 +1725,7 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     }
     .hero__portrait {
       order: -1;
-      max-width: 200px;
+      max-width: 220px;
       margin: 0 auto;
     }
     .hero__name {
@@ -1103,12 +1736,37 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
       font-size: 32px;
       color: #3d4a5e;
     }
+    .hero__eyebrow {
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    .hero__eyebrow-chip {
+      padding: 4px 9px 3px;
+    }
+    .hero__eyebrow-line {
+      font-size: 10.5px;
+    }
     .hero__kpis {
       grid-template-columns: repeat(2, 1fr);
       gap: 14px 12px;
     }
     .hero__kpi :global(.odometer__value) {
       font-size: 22px;
+    }
+    .hero__cta-row {
+      gap: 8px;
+    }
+    .cta {
+      padding: 12px 16px;
+      letter-spacing: 0.14em;
+    }
+    .hero__tenant {
+      font-size: 10px;
+      gap: 6px;
+      letter-spacing: 0.12em;
+    }
+    .hero__tenet {
+      font-size: 9.5px;
     }
     .pillar__stats {
       grid-template-columns: repeat(3, 1fr);
