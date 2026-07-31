@@ -396,10 +396,14 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
   .hero__name .word {
     display: inline-block;
   }
+  /* v2026-07-31 — fix name color: --c-phi (#e8b220 amber) on --j-bg (#ece5d4 cream)
+     was 1.92:1 (fails WCAG AA even at 48px). Switch to --c-ink-2 (slate, 8.7:1 AAA)
+     for visual hierarchy without a color leak. Both spans remain in the navy family,
+     italic + light-weight 500 carries the hierarchy. */
   .hero__name .word:nth-child(2),
   .hero__name .word:nth-child(3) {
     font-style: italic;
-    color: var(--c-phi);
+    color: var(--c-ink-2);
     font-weight: 500;
   }
 
@@ -721,6 +725,7 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     .hero__name .word:nth-child(2),
     .hero__name .word:nth-child(3) {
       font-size: 32px;
+      color: var(--c-ink-2);
     }
     .hero__kpis {
       grid-template-columns: repeat(2, 1fr);
