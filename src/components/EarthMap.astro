@@ -33,8 +33,28 @@ interface Props {
   bgStep?: number;
   /** Optional CSS class on the outer wrapper. */
   class?: string;
+  /**
+   * Optional venue points override (Layer A). Defaults to the 6-city
+   * research-hub set. v8.5.1 — caller passes custom footprint pins
+   * (real places + research hubs) instead of the abstract venues.
+   */
+  points?: Venue[];
+  /**
+   * Layer mode:
+   *   - 'full'      — venues + world-events + GDELT overlay (markets.astro)
+   *   - 'pins'      — venues only (home footprint; cleaner for identity)
+   * Default: 'full'.
+   */
+  mode?: 'full' | 'pins';
 }
-const { width = 720, height = 360, bgStep = 18, class: className } = Astro.props;
+const {
+  width = 720,
+  height = 360,
+  bgStep = 18,
+  class: className,
+  points: pointsProp,
+  mode = 'full',
+} = Astro.props;
 
 // === Equirectangular projection ===
 function project(lat: number, lon: number): { x: number; y: number } {
@@ -57,7 +77,7 @@ interface VenuePosition extends Venue {
   y: number;
   r: number;
 }
-const venues: Venue[] = [
+const defaultVenues: Venue[] = [
   { city: 'Digos City', lat: 6.74, lon: 125.36, weight: 1.0, caption: 'home base' },
   { city: 'Singapore', lat: 1.35, lon: 103.82, weight: 0.8, caption: 'APAC ops' },
   { city: 'Tokyo', lat: 35.68, lon: 139.69, weight: 0.7, caption: 'JPX' },
@@ -65,6 +85,7 @@ const venues: Venue[] = [
   { city: 'London', lat: 51.51, lon: -0.13, weight: 0.95, caption: 'LSE' },
   { city: 'New York', lat: 40.71, lon: -74.01, weight: 0.9, caption: 'NYSE / Nasdaq' },
 ];
+const venues: Venue[] = pointsProp ?? defaultVenues;
 const venuePositions: VenuePosition[] = venues.map((c: Venue): VenuePosition => {
   const { x, y } = project(c.lat, c.lon);
   const r = 3 + c.weight * 4;
@@ -219,82 +240,94 @@ const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circ
       ))
     }
 
-    {/* === Layer B — world events (shape-coded by category) === */}
-    {
-      eventPositions.map((e) => {
-        const shape = eventShape(e.category);
-        return (
-          <g
-            class={`earth-map__event earth-map__event--${e.category} earth-map__event--${e.severity}`}
-          >
-            {shape === 'triangle' && (
-              <polygon
-                points={`${e.x},${e.y - 4} ${e.x + 4},${e.y + 3} ${e.x - 4},${e.y + 3}`}
-                class="earth-map__event-shape"
+    {/* === Layer B — world events (shape-coded by category) ===
+        Only rendered in `full` mode (markets.astro). The home-page
+        footprint wants pin clarity, not random event dots. */}
+    {mode === 'full' && (
+      <>
+        {
+          eventPositions.map((e) => {
+            const shape = eventShape(e.category);
+            return (
+              <g
+                class={`earth-map__event earth-map__event--${e.category} earth-map__event--${e.severity}`}
               >
-                <title>
-                  {e.title} — {e.city}
-                </title>
-              </polygon>
-            )}
-            {shape === 'square' && (
-              <rect x={e.x - 3.5} y={e.y - 3.5} width="7" height="7" class="earth-map__event-shape">
-                <title>
-                  {e.title} — {e.city}
-                </title>
-              </rect>
-            )}
-            {shape === 'diamond' && (
-              <polygon
-                points={`${e.x},${e.y - 4} ${e.x + 4},${e.y} ${e.x},${e.y + 4} ${e.x - 4},${e.y}`}
-                class="earth-map__event-shape"
-              >
-                <title>
-                  {e.title} — {e.city}
-                </title>
-              </polygon>
-            )}
-            {shape === 'circle' && (
-              <circle cx={e.x} cy={e.y} r="3.5" class="earth-map__event-shape">
-                <title>
-                  {e.title} — {e.city}
-                </title>
-              </circle>
-            )}
-          </g>
-        );
-      })
-    }
+                {shape === 'triangle' && (
+                  <polygon
+                    points={`${e.x},${e.y - 4} ${e.x + 4},${e.y + 3} ${e.x - 4},${e.y + 3}`}
+                    class="earth-map__event-shape"
+                  >
+                    <title>
+                      {e.title} — {e.city}
+                    </title>
+                  </polygon>
+                )}
+                {shape === 'square' && (
+                  <rect x={e.x - 3.5} y={e.y - 3.5} width="7" height="7" class="earth-map__event-shape">
+                    <title>
+                      {e.title} — {e.city}
+                    </title>
+                  </rect>
+                )}
+                {shape === 'diamond' && (
+                  <polygon
+                    points={`${e.x},${e.y - 4} ${e.x + 4},${e.y} ${e.x},${e.y + 4} ${e.x - 4},${e.y}`}
+                    class="earth-map__event-shape"
+                  >
+                    <title>
+                      {e.title} — {e.city}
+                    </title>
+                  </polygon>
+                )}
+                {shape === 'circle' && (
+                  <circle cx={e.x} cy={e.y} r="3.5" class="earth-map__event-shape">
+                    <title>
+                      {e.title} — {e.city}
+                    </title>
+                  </circle>
+                )}
+              </g>
+            );
+          })
+        }
 
-    {/* === Layer C — GDELT overlay (polarity-tinted, low alpha) === */}
-    {
-      gdeltPositions.map((e) => (
-        <circle cx={e.x} cy={e.y} r="2" class={`earth-map__gdelt earth-map__gdelt--${e.polarity}`}>
-          <title>
-            {e.title} — {e.city}
-          </title>
-        </circle>
-      ))
-    }
+        {/* === Layer C — GDELT overlay (polarity-tinted, low alpha) === */}
+        {
+          gdeltPositions.map((e) => (
+            <circle cx={e.x} cy={e.y} r="2" class={`earth-map__gdelt earth-map__gdelt--${e.polarity}`}>
+              <title>
+                {e.title} — {e.city}
+              </title>
+            </circle>
+          ))
+        }
+      </>
+    )}
   </svg>
 
   <figcaption class="earth-map__caption mono">
     <span class="earth-map__cap-section">
       <span class="earth-map__cap-swatch earth-map__cap-swatch--venue" aria-hidden="true"></span>
-      {venues.length} venues
+      {venues.length} {mode === 'pins' ? 'pins' : 'venues'}
     </span>
-    <span class="earth-map__cap-sep">·</span>
-    <span class="earth-map__cap-section">
-      <span class="earth-map__cap-swatch earth-map__cap-swatch--event" aria-hidden="true"></span>
-      {worldEvents.length} world events
+    {mode === 'full' && (
+      <>
+        <span class="earth-map__cap-sep">·</span>
+        <span class="earth-map__cap-section">
+          <span class="earth-map__cap-swatch earth-map__cap-swatch--event" aria-hidden="true"></span>
+          {worldEvents.length} world events
+        </span>
+        <span class="earth-map__cap-sep">·</span>
+        <span class="earth-map__cap-section">
+          <span class="earth-map__cap-swatch earth-map__cap-swatch--gdelt-pos" aria-hidden="true"
+          ></span>
+          {dedupGdelt.length} GDELT 24h
+        </span>
+      </>
+    )}
+    <span class="earth-map__cap-note">
+      {mode === 'pins' ? 'equirectangular · footprint' : 'equirectangular · 24h desk coverage'}
     </span>
-    <span class="earth-map__cap-sep">·</span>
-    <span class="earth-map__cap-section">
-      <span class="earth-map__cap-swatch earth-map__cap-swatch--gdelt-pos" aria-hidden="true"
-      ></span>
-      {dedupGdelt.length} GDELT 24h
-    </span>
-    <span class="earth-map__cap-note">equirectangular · 24h desk coverage</span>
   </figcaption>
 </figure>
 

@@ -26,6 +26,21 @@ import Odometer from '@components/Odometer.astro';
 import EquityCurveChart from '@components/EquityCurveChart.astro';
 import AgentGraph from '@components/AgentGraph.astro';
 import ArchitectureBrief from '@components/ArchitectureBrief.astro';
+import EarthMap from '@components/EarthMap.astro';
+
+// === FOOTPRINT — real places I've actually been + research anchors
+// Mix: 3 Davao-area in-person events (proof photos) + 6 global research hubs.
+// Each pin is a real artifact, not a vibe.
+const footprintPoints = [
+  { city: 'Digos City, PH', lat: 6.74, lon: 125.36, weight: 1.0, caption: 'home base' },
+  { city: 'Davao City, PH', lat: 7.19, lon: 125.45, weight: 0.95, caption: 'Ateneo · BIDA Meta · USEP — 3 in-person, 30 days' },
+  { city: 'Manila, PH', lat: 14.60, lon: 120.98, weight: 0.7, caption: 'UP School of Statistics' },
+  { city: 'Singapore', lat: 1.35, lon: 103.82, weight: 0.8, caption: 'APAC ops' },
+  { city: 'Tokyo', lat: 35.68, lon: 139.69, weight: 0.7, caption: 'JPX' },
+  { city: 'Zurich', lat: 47.38, lon: 8.54, weight: 0.85, caption: 'CTA' },
+  { city: 'London', lat: 51.51, lon: -0.13, weight: 0.95, caption: 'LSE' },
+  { city: 'New York', lat: 40.71, lon: -74.01, weight: 0.9, caption: 'NYSE / Nasdaq' },
+];
 
 // === HERO KPIs (v7.5 — sourced from profile.stats; correct numbers)
 // 9 quant strategies + 6 AI projects + 76.5k LOC Python + 31 eval gates
@@ -206,6 +221,32 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     speedSec={40}
     trailing="chrome marquee"
   />
+
+  <!-- ============================================================
+       2a-bis. FOOTPRINT — world map of real places + research anchors.
+       v8.5.1 hotfix (2026-07-31): distinct visual anchor for the home
+       page. The chrome contract made every page consistent, but it
+       killed the page's visual hook. The map is that hook: 8 pins,
+       3 Davao-area in-person events (proof photos), 5 global research
+       hubs, equirectangular projection, mono + 1 amber accent. Same
+       institutional register as the rest of the chrome; not a vibe
+       piece — each pin is a real artifact.
+       ============================================================ -->
+  <section class="footprint" id="footprint" aria-label="Footprint — places and research anchors">
+    <div class="container">
+      <p class="footprint__eyebrow mono" data-reveal="lift-sm">
+        FOOTPRINT · 8 PINS · 3 IN-PERSON EVENTS IN 30 DAYS
+      </p>
+      <h2 class="footprint__head sr-only">
+        Where I've been and where I cover
+      </h2>
+      <EarthMap points={footprintPoints} mode="pins" />
+      <p class="footprint__caption mono">
+        Digos · Davao · Manila · Singapore · Tokyo · Zurich · London · New York ·
+        equirectangular · each pin = a real event or research hub
+      </p>
+    </div>
+  </section>
 
   <!-- ============================================================
        2b. SENIOR THESIS — 3-card positioning block (v2026-07-31)
@@ -1956,5 +1997,36 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     color: var(--c-amber);
     text-decoration: underline;
     text-underline-offset: 3px;
+  }
+
+  /* ============================================================
+     FOOTPRINT — v8.5.1 hotfix (2026-07-31). The chrome contract made
+     every page consistent but killed the home page's visual hook.
+     World map is the hook: 8 pins, equirectangular, mono + 1 amber.
+     Same institutional register as the rest of the chrome.
+     ============================================================ */
+  .footprint {
+    padding: var(--sp-7) 0 var(--sp-6);
+    border-top: 1px solid var(--c-rule);
+    border-bottom: 1px solid var(--c-rule);
+    background: var(--c-bg);
+  }
+  .footprint__eyebrow {
+    font-size: 0.7rem;
+    color: var(--c-ink-2);
+    letter-spacing: 0.08em;
+    margin: 0 0 var(--sp-3);
+    text-transform: uppercase;
+  }
+  .footprint .earth-map {
+    margin-top: var(--sp-3);
+  }
+  .footprint__caption {
+    font-size: 0.7rem;
+    color: var(--c-ink-3);
+    letter-spacing: 0.04em;
+    margin: var(--sp-3) 0 0;
+    text-transform: uppercase;
+    text-align: center;
   }
 </style>
