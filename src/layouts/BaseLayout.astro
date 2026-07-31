@@ -44,6 +44,12 @@ interface Props {
   // 'light' / 'dark' forces the theme via body.theme-light / body.theme-dark.
   // Note: tokens-v6.13.css uses :has() to detect these body classes.
   theme?: 'auto' | 'light' | 'dark';
+  // v9.2 — chrome opt-out for flagship surfaces (home, /for-recruiters,
+  // /screening-call). When 'slim', skip the global Nav + Footer CTA
+  // strip + 4-column footer grid + page__tenet line — the page IS the
+  // chrome. Per webcraft-no-vibe §signature-layer: confidence = no
+  // duplicate nav/CTA on pages that have their own running tape.
+  chrome?: 'full' | 'slim' | 'none';
 }
 
 // v6.18 — `surface` now defaults to `'v6-13'` (warm-dim #1a1714) so EVERY
@@ -62,6 +68,7 @@ const {
   breadcrumbs,
   surface = 'v6-13',
   theme = 'auto',
+  chrome = 'full',
 } = Astro.props;
 
 // v6.17 — resolve theme to a body class. 'auto' yields no class (CSS
@@ -213,19 +220,23 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
     {/* v7.3 — top hairline scroll progress (1px amber, driven by scroll-progress.ts). */}
     <div class="scroll-progress" aria-hidden="true"><i></i></div>
     {surface === 'v6-13' && <V613Fonts />}
-    <Nav />
+    {chrome === 'full' && <Nav />}
     <main id="main">
       <slot />
       {/* v8.4 — tenet line chrome contract. Injected by BaseLayout so
         every page inherits the operating-principles footer without
         duplication. The page__tenet selector is single-source (defined
-        in src/styles/global.css). */}
-      <p class="page__tenet mono" aria-label="Operating principles">
-        No Math.random() · No argless new Date() · No fabricated metrics · No NDA-protected
-        employers on this site
-      </p>
+        in src/styles/global.css). v9.2: suppressed on slim chrome —
+        the page's own § 05 / contact section owns the operating-principles
+        statement, doubling them is the AI-builder tell. */}
+      {chrome === 'full' && (
+        <p class="page__tenet mono" aria-label="Operating principles">
+          No Math.random() · No argless new Date() · No fabricated metrics · No NDA-protected
+          employers on this site
+        </p>
+      )}
     </main>
-    <Footer />
+    {chrome === 'full' && <Footer />}
 
     <button id="back-to-top" type="button" aria-label="Back to top" hidden>
       <svg
