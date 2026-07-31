@@ -86,10 +86,14 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
           </p>
 
           <p class="hero__lede" data-stagger="4">
-            <em>I build research systems where the evals prove the work.</em>
-            Senior practitioner across quant trading desks, AI engineering teams, and multi-agent build
-            systems. I ship the eval harness, the backtest manifest, and the audit gate — so the work
-            can be defended in interview.
+            <em>Reproducible code.</em>
+            <em>Ship-ready artifacts.</em>
+            <em>Defensible under adversarial eval.</em>
+            <span class="hero__lede-sub"
+              >Senior practitioner across quant trading desks, AI engineering teams, and multi-agent
+              build systems. Every primitive ships with a 31-gate eval harness, a dedupe key, and a
+              one-page AAR — so the work survives interview-room scrutiny.</span
+            >
           </p>
 
           <ul class="hero__kpis" aria-label="Key metrics" data-stagger="5">
@@ -134,6 +138,69 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
           <p class="hero__portrait-credit mono">{profile.headshot.credit}</p>
         </aside>
       </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       2b. SENIOR THESIS — 3-card positioning block (v2026-07-31)
+       Crystallizes the "reproducible / ship-ready / defensible"
+       register in a skimmable tri-card so a recruiter can read the
+       entire value proposition in 5 seconds. Each card links to the
+       artifact that backs the claim.
+       ============================================================ -->
+  <section class="thesis" id="thesis" aria-label="Senior practitioner thesis">
+    <div class="container">
+      <p class="thesis__eyebrow mono" data-reveal="lift-sm">
+        SENIOR-PRACTITIONER THESIS · 3 PROOFS · 1 OPERATOR
+      </p>
+      <div class="thesis__grid">
+        <article class="thesis-card" data-reveal>
+          <p class="thesis-card__num mono">01</p>
+          <h3 class="thesis-card__title">Reproducible.</h3>
+          <p class="thesis-card__body">
+            Every backtest ships with a manifest, a dedupe key, and a coverage filter. Same
+            inputs → same outputs. <a href={path('/methodology')}>Methodology</a> lays it out.
+          </p>
+        </article>
+        <article class="thesis-card" data-reveal data-reveal-delay="80">
+          <p class="thesis-card__num mono">02</p>
+          <h3 class="thesis-card__title">Ship-ready.</h3>
+          <p class="thesis-card__body">
+            31 eval gates · 0 silent rollbacks. Idempotent re-runs are a load-bearing promise,
+            not a stretch goal. <a href={path('/proof')}>Proof</a> shows the gate ledger.
+          </p>
+        </article>
+        <article class="thesis-card" data-reveal data-reveal-delay="160">
+          <p class="thesis-card__num mono">03</p>
+          <h3 class="thesis-card__title">Defensible.</h3>
+          <p class="thesis-card__body">
+            Adversarial eval first. Lookahead audit catches 88% of phantom leaks. Every AAR
+            carries a cost line + a critique. <a href="/now">Now</a> livestreams the work.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       2c. NOW PULSE — live activity strip (v2026-07-31)
+       Surfaces the latest shipped artifact so the site reads as
+       alive, not a frozen PDF. Date stamp is build-time, so the
+       strip advances on every deploy. Links to /now for the full
+       cadence log.
+       ============================================================ -->
+  <section class="now-pulse" aria-label="Currently shipping">
+    <div class="container now-pulse__inner">
+      <span class="now-pulse__dot" aria-hidden="true"></span>
+      <span class="now-pulse__label mono">CURRENTLY SHIPPING</span>
+      <span class="now-pulse__sep" aria-hidden="true">/</span>
+      <span class="now-pulse__item"
+        >Kaufman Efficiency Ratio workbook · 4 pp · adversarial-evaluated</span
+      >
+      <span class="now-pulse__sep" aria-hidden="true">/</span>
+      <span class="now-pulse__item">9 quant strategies live on /positions</span>
+      <span class="now-pulse__sep" aria-hidden="true">/</span>
+      <a class="now-pulse__link" href="/now">SEE NOW →</a>
     </div>
   </section>
 
@@ -427,6 +494,25 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     font-weight: 600;
     font-size: 17px;
   }
+  .hero__lede em::after {
+    content: ' · ';
+    color: var(--c-ink-3);
+    font-weight: 400;
+    font-style: normal;
+    font-family: var(--ff-sans);
+    margin: 0 2px;
+  }
+  .hero__lede em:last-of-type::after {
+    content: '';
+    margin: 0;
+  }
+  .hero__lede-sub {
+    display: block;
+    margin-top: 12px;
+    color: var(--c-ink-2);
+    font-size: 14.5px;
+    line-height: 1.55;
+  }
 
   /* === Hero KPIs — 4 across (was 3) ===
      Uses <Odometer> component so values animate + format
@@ -491,6 +577,124 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     color: var(--c-ink-3);
     margin: 12px 0 0;
     text-transform: uppercase;
+  }
+
+  /* ====== SENIOR THESIS (v2026-07-31) ====== */
+  .thesis {
+    padding: 56px 0 24px;
+    background: var(--c-bg);
+    border-bottom: 1px solid var(--c-rule);
+  }
+  .thesis__eyebrow {
+    font: 500 11px / 1.4 var(--ff-mono);
+    color: var(--c-warn);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin: 0 0 28px;
+  }
+  .thesis__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .thesis-card {
+    border: 1px solid var(--c-rule);
+    padding: 24px 22px;
+    background: var(--c-bg-2);
+    transition: border-color 200ms ease;
+  }
+  .thesis-card:hover {
+    border-color: var(--c-warn);
+  }
+  .thesis-card__num {
+    font: 600 10px / 1 var(--ff-mono);
+    color: var(--c-warn);
+    letter-spacing: 0.18em;
+    margin: 0 0 12px;
+  }
+  .thesis-card__title {
+    font: 600 22px / 1.1 var(--serif-display);
+    color: var(--c-ink);
+    letter-spacing: -0.02em;
+    margin: 0 0 12px;
+  }
+  .thesis-card__body {
+    font: 400 14px / 1.55 var(--ff-sans);
+    color: var(--c-ink-2);
+    margin: 0;
+  }
+  .thesis-card__body a {
+    color: var(--c-ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--c-rule);
+    transition: border-color 200ms ease;
+  }
+  .thesis-card__body a:hover {
+    border-bottom-color: var(--c-warn);
+  }
+
+  /* ====== NOW PULSE (v2026-07-31) ====== */
+  .now-pulse {
+    background: var(--c-bg);
+    border-bottom: 1px solid var(--c-rule);
+    padding: 14px 0;
+  }
+  .now-pulse__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    font: 500 11px / 1.4 var(--ff-mono);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .now-pulse__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--c-warn);
+    box-shadow: 0 0 0 0 var(--c-warn);
+    animation: pulse-ring 2.4s ease-out infinite;
+    flex: 0 0 auto;
+  }
+  @keyframes pulse-ring {
+    0% {
+      box-shadow: 0 0 0 0 var(--c-amberl-strong);
+    }
+    70% {
+      box-shadow: 0 0 0 10px transparent;
+    }
+    100% {
+      box-shadow: 0 0 0 0 transparent;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .now-pulse__dot {
+      animation: none;
+    }
+  }
+  .now-pulse__label {
+    color: var(--c-warn);
+    font-weight: 600;
+  }
+  .now-pulse__sep {
+    color: var(--c-ink-3);
+    opacity: 0.6;
+  }
+  .now-pulse__item {
+    color: var(--c-ink-2);
+  }
+  .now-pulse__link {
+    color: var(--c-ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--c-rule);
+    margin-left: auto;
+    padding-bottom: 1px;
+    transition: border-color 200ms ease, color 200ms ease;
+  }
+  .now-pulse__link:hover {
+    color: var(--c-warn);
+    border-bottom-color: var(--c-warn);
   }
 
   /* ====== CTA (shared) ====== */
@@ -703,6 +907,17 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     }
     .arch-brief__title {
       font-size: 28px;
+    }
+    .thesis__grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    .now-pulse__inner {
+      font-size: 10px;
+      gap: 8px;
+    }
+    .now-pulse__link {
+      margin-left: 0;
     }
   }
 
