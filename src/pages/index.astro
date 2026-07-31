@@ -354,8 +354,9 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
           <p class="ai-rung__sub">Anthropic's Agent Skills (progressive disclosure). Karpathy's autoresearch loop (700 experiments). The 5-must-have contract. Eval-gate enforcement.</p>
           <p class="ai-rung__line mono">/ engineer</p>
         </li>
-        <li class="ai-rung ai-rung--graph">
+        <li class="ai-rung ai-rung--graph ai-rung--active">
           <span class="ai-rung__year mono">2026</span>
+          <span class="ai-rung__badge mono" aria-label="Current position">NOW</span>
           <h3 class="ai-rung__name">Graphs · STELLA</h3>
           <p class="ai-rung__sub">Typed entities + relations + provenance. Shared memory across agents. Routing files. Karpathy's LLM Wiki. The graph rung — where 53-agent offices live.</p>
           <p class="ai-rung__line mono">/ architect · STELLA</p>
@@ -1058,6 +1059,26 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
   }
   .ai-rung--graph .ai-rung__name {
     color: var(--c-amber);
+  }
+  /* v2026-07-31 — active rung (the "now" position) badge + accent.
+     Surfaces the current focus as a labeled pill so the rung pops
+     in the timeline. The badge uses the same warn color as the
+     now-pulse dot for visual continuity. */
+  .ai-rung--active {
+    background: var(--c-bg-2);
+    box-shadow: inset 3px 0 0 var(--c-warn);
+  }
+  .ai-rung__badge {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    font: 600 9px / 1 var(--ff-mono);
+    letter-spacing: 0.18em;
+    color: var(--c-warn);
+    background: var(--c-amber-soft);
+    border: 1px solid var(--c-warn);
+    padding: 3px 7px;
+    border-radius: 0;
   }
   .ai-rung__sub {
     font-size: 0.82rem;
