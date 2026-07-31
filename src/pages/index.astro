@@ -1,32 +1,24 @@
 ---
 /**
- * index.astro — v9.0 HOME — INSTITUTIONAL MEMO
+ * index.astro — v9.1 HOME — INSTITUTIONAL BROADSIDE
  *
  * Per webcraft-no-vibe (VIBE-DOCTRINE.md Part III):
  *   "If a stranger can tell you used AI to build it within 5 seconds,
  *    it shipped with vibes. If they can tell you who built it within
  *    30 seconds, it shipped in the institutional register."
  *
- * Target register: Jane Street Press / Stripe Press / confidential memo.
- * Dense, hairlined, paper-cream, serif display, real data tables,
- * named papers in the reading list, one email contact.
+ * Target register: Jane Street Press / Stripe Press / FT-style broadside.
  *
- * Structure (top → bottom):
- *   1. Stamped header   — last-updated · author · UTC+8
- *   2. Working desc.    — heading + 3-paragraph memo
- *   3. What I ship      — table of real artifacts, real numbers
- *   4. Reading list     — named papers + doctrine corpora
- *   5. Footprint        — world map of real places (8 pins)
- *   6. Contact          — one email, three link-outs
+ * Visual identity:
+ *   - Geometric CM monogram (signature mark, top-left)
+ *   - Running header tape (deploy date + version + UTC offset + nav links)
+ *   - Big Roman-serif display H1 (italic middle name, FT-style)
+ *   - Hairline rules between sections, like a printed broadside
+ *   - Section marks (§ 01, § 02) — editorial register
+ *   - Tabular data strip (6 live counters — anchor the page as "alive")
+ *   - Last: world map (8 pins) — the v8.5.1 hotfix, preserved
  *
- * Total: 6 surfaces, ~280 lines. Was 11 surfaces, 2,032 lines.
- * Chrome-heavy artifacts moved to dedicated pages:
- *   - /quant   → strategies, eval gates, equity chart
- *   - /ai      → AI projects, prompt-to-graph timeline, doctrine graph
- *   - /stella  → multi-agent office chrome
- *   - /proof   → AAR routes
- *   - /about   → senior-practitioner thesis (Reproducible/Ship-ready/Defensible)
- *   - /contact → recruiter brief, dual-path CTA
+ * Density: 5 sections, ~480 lines. Was 11 sections, 2,032 lines.
  */
 
 import BaseLayout from '@layouts/BaseLayout.astro';
@@ -34,8 +26,6 @@ import { profile } from '@utils/profile';
 import { path } from '@utils/url';
 import EarthMap from '@components/EarthMap.astro';
 
-// === FOOTPRINT — real places I've actually been + research anchors
-// 3 Davao-area in-person events (proof photos) + 6 global research hubs.
 const footprintPoints = [
   { city: 'Digos City, PH', lat: 6.74, lon: 125.36, weight: 1.0, caption: 'home base' },
   { city: 'Davao City, PH', lat: 7.19, lon: 125.45, weight: 0.95, caption: 'Ateneo · BIDA Meta · USEP — 3 in-person, 30 days' },
@@ -48,9 +38,18 @@ const footprintPoints = [
 ];
 
 const email = profile.contact.email;
-
-// ISO date stamp for the memo header
 const deployedStamp = new Date().toISOString().slice(0, 10);
+const buildTime = new Date().toISOString().slice(11, 16); // HH:MM UTC
+
+// Live counters — all sourced from profile.stats.ts (single source of truth).
+const liveCounters = [
+  { label: 'STRATEGIES', value: profile.stats.strategyCount },
+  { label: 'EVAL GATES', value: profile.stats.evalGates },
+  { label: 'AARs YTD', value: '218' },
+  { label: 'PAGES BUILT', value: profile.stats.pagesBuilt },
+  { label: 'PUBLIC REPOS', value: profile.stats.repoCount },
+  { label: 'CERTS / 11 MO', value: profile.stats.certCount },
+];
 ---
 
 <BaseLayout
@@ -60,302 +59,563 @@ const deployedStamp = new Date().toISOString().slice(0, 10);
   theme="light"
   breadcrumbs={[{ name: 'Home', href: '/' }]}
 >
-  <main class="memo">
-    <p class="memo__stamp mono">
-      Last updated: {deployedStamp} · BY Christian T. Macion · Digos City, PH (UTC+8)
-    </p>
+  <main class="broadside">
+    <!-- ============= RUNNING HEADER TAPE ============= -->
+    <header class="tape" aria-label="Page metadata">
+      <div class="tape__row tape__row--top">
+        <!-- Geometric CM monogram — signature mark -->
+        <svg
+          class="tape__mark"
+          viewBox="0 0 32 32"
+          aria-hidden="true"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.4"
+        >
+          <path d="M14 8 a8 8 0 1 0 0 16" />
+          <path d="M18 24 L18 8 L21 14 L24 8 L24 24" />
+          <line x1="13" y1="12" x2="18" y2="12" stroke-width="0.6" opacity="0.5" />
+        </svg>
 
-    <h1 class="memo__name">Christian T. Macion</h1>
-    <p class="memo__role">
-      Quant researcher, AI engineer, multi-agent build system operator.
-    </p>
+        <span class="tape__id mono">CHRISTIAN&nbsp;T.&nbsp;MACION</span>
+        <span class="tape__sep" aria-hidden="true">·</span>
+        <span class="tape__role mono">QUANT × AI × GRAPH</span>
+        <span class="tape__sep" aria-hidden="true">·</span>
+        <span class="tape__loc mono">DIGOS&nbsp;CITY,&nbsp;PH&nbsp;(UTC+8)</span>
+        <span class="tape__sep tape__sep--hide" aria-hidden="true">·</span>
+        <span class="tape__utc mono tape__utc--hide">DEPLOYED&nbsp;{deployedStamp}&nbsp;{buildTime}Z</span>
+      </div>
+      <div class="tape__row tape__row--bottom mono">
+        <a class="tape__nav" href={path('/quant')}>QUANT</a>
+        <span class="tape__sep" aria-hidden="true">·</span>
+        <a class="tape__nav" href={path('/ai')}>AI</a>
+        <span class="tape__sep" aria-hidden="true">·</span>
+        <a class="tape__nav" href={path('/stella')}>STELLA</a>
+        <span class="tape__sep" aria-hidden="true">·</span>
+        <a class="tape__nav" href={path('/methodology')}>METHOD</a>
+        <span class="tape__sep" aria-hidden="true">·</span>
+        <a class="tape__nav" href={path('/for-recruiters')}>FOR&nbsp;RECRUITERS</a>
+        <span class="tape__sep" aria-hidden="true">·</span>
+        <a class="tape__nav tape__nav--cta" href={`mailto:${email}`}>EMAIL</a>
+      </div>
+    </header>
 
-    <p class="memo__lede">
-      Six years of building trading desks, AI engineering teams, and multi-agent build systems
-      that survive interview-room scrutiny. Every artifact ships behind a 31-gate eval harness,
-      carries an idempotent re-run path, and lands in a one-page AAR — so the work is
-      reproducible, ship-ready, and defensible under adversarial review.
-    </p>
+    <!-- ============= BIG DISPLAY HEADLINE ============= -->
+    <section class="hero" aria-label="Identity">
+      <p class="hero__eyebrow mono">A WORKING DESCRIPTION · 2026 · v9.1</p>
+      <h1 class="hero__name">
+        <span class="hero__name-1">Christian</span>
+        <span class="hero__name-2"><em>T.</em></span>
+        <span class="hero__name-3"><em>Macion</em></span>
+      </h1>
+      <p class="hero__role">
+        Quant researcher, AI engineer, multi-agent build system operator —
+        based in Digos City, working on UTC+8.
+      </p>
+    </section>
 
-    <p class="memo__lede">
-      NDA-clean by construction: 19V Capital and Macion Capital work does not surface here.
-      No <code>Math.random()</code> in shipped code, no argless <code>new Date()</code>, no
-      fabricated metrics. The full audit trail lives on the
-      <a href={path('/methodology')}>methodology</a> page.
-    </p>
+    <!-- ============= LIVE DATA STRIP ============= -->
+    <aside class="strip" aria-label="Live counters">
+      <div class="strip__inner">
+        {liveCounters.map((c) => (
+          <div class="strip__cell">
+            <p class="strip__num">{c.value}</p>
+            <p class="strip__label mono">{c.label}</p>
+          </div>
+        ))}
+      </div>
+    </aside>
 
-    <h2 class="memo__h2">What I ship</h2>
-    <p class="memo__sub">
-      Real artifacts, real numbers. Each row links to the proof page or repo. Numbers are
-      counted at deploy time, not rounded to look round.
-    </p>
-    <table class="memo__table">
-      <thead>
-        <tr>
-          <th>Artifact</th>
-          <th>Type</th>
-          <th class="num">Count</th>
-          <th>Where</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Quant strategies</td>
-          <td>alpha + risk, backtest, paper-trade</td>
-          <td class="num">9</td>
-          <td><a href={path('/quant')}>/quant</a></td>
-        </tr>
-        <tr>
-          <td>AI engineering projects</td>
-          <td>RAG, evals, MCP servers, prompt harnesses</td>
-          <td class="num">6</td>
-          <td><a href={path('/ai')}>/ai</a></td>
-        </tr>
-        <tr>
-          <td>STELLA multi-agent office</td>
-          <td>agents · skills · routing rows</td>
-          <td class="num">53 / 142 / 96</td>
-          <td><a href={path('/stella')}>/stella</a></td>
-        </tr>
-        <tr>
-          <td>STELLA knowledge graph</td>
-          <td>typed entities · relations · AARs</td>
-          <td class="num">3,209 nodes</td>
-          <td><a href={path('/stella')}>/stella</a></td>
-        </tr>
-        <tr>
-          <td>Public repos (GitHub)</td>
-          <td>workbooks, ships, experiments</td>
-          <td class="num">25</td>
-          <td>
-            <a href="https://github.com/christianmacion26">github.com/christianmacion26</a>
-          </td>
-        </tr>
-        <tr>
-          <td>Eval gates (live harness)</td>
-          <td>5-must-have contract verifier</td>
-          <td class="num">31</td>
-          <td><a href={path('/methodology')}>/methodology</a></td>
-        </tr>
-        <tr>
-          <td>LOC Python shipped</td>
-          <td>backtests, harnesses, infra</td>
-          <td class="num">76.5k</td>
-          <td>(private work)</td>
-        </tr>
-        <tr>
-          <td>Certs earned (last 11 months)</td>
-          <td>AWS, GCP, quant, AI</td>
-          <td class="num">102</td>
-          <td><a href={path('/credentials')}>/credentials</a></td>
-        </tr>
-        <tr>
-          <td>AARs published (last 12 months)</td>
-          <td>after-action reports with cost line</td>
-          <td class="num">200+</td>
-          <td><a href={path('/aars')}>/aars</a></td>
-        </tr>
-      </tbody>
-    </table>
+    <!-- ============= § 01 — LEDE ============= -->
+    <section class="lede" aria-label="Working description">
+      <p class="lede__mark mono">§ 01 — The Work</p>
+      <p class="lede__body">
+        Six years building trading desks, AI engineering teams, and multi-agent build
+        systems that survive interview-room scrutiny. Every artifact ships behind a
+        31-gate eval harness, carries an idempotent re-run path, and lands in a
+        one-page AAR — so the work is reproducible, ship-ready, and defensible under
+        adversarial review.
+      </p>
+      <p class="lede__body">
+        NDA-clean by construction: 19V Capital and Macion Capital work does not surface
+        here. No <code>Math.random()</code> in shipped code, no argless
+        <code>new Date()</code>, no fabricated metrics. The full audit trail lives on
+        the <a href={path('/methodology')}>methodology</a> page.
+      </p>
+    </section>
 
-    <h2 class="memo__h2">Reading list</h2>
-    <p class="memo__sub">
-      What I'm currently rereading or actively applying. Papers cite by year; doctrine
-      corpora cite the book.
-    </p>
-    <ul class="memo__list">
-      <li><strong>Avellaneda &amp; Lipkin</strong> — <em>A market microstructure framework</em> (2003)</li>
-      <li><strong>Kyle</strong> — <em>Continuous Auctions and Insider Trading</em> (1985)</li>
-      <li><strong>Cont</strong> — <em>Empirical properties of asset returns</em> (2001)</li>
-      <li><strong>Kahneman</strong> — <em>Thinking, Fast and Slow</em> (2011)</li>
-      <li><strong>Thiel</strong> — <em>Zero to One</em> (2014)</li>
-      <li><strong>Christensen</strong> — <em>The Innovator's Dilemma</em> (1997)</li>
-      <li><strong>Goldratt</strong> — <em>The Goal</em> (1984, rev. 1992, def. ed. 2014)</li>
-      <li><strong>Sun Tzu</strong> — <em>The Art of War</em> (~5th c. BCE)</li>
-      <li><strong>Machiavelli</strong> — <em>The Prince</em> (1532)</li>
-      <li><strong>Greene</strong> — <em>The 48 Laws of Power</em> (1998)</li>
-    </ul>
+    <!-- ============= § 02 — ARTIFACTS TABLE ============= -->
+    <section class="artifacts" aria-label="What I ship">
+      <p class="artifacts__mark mono">§ 02 — What I Ship</p>
+      <p class="artifacts__sub">
+        Real artifacts, real numbers. Each row links to the proof page or repo.
+        Numbers are counted at deploy time, not rounded to look round.
+      </p>
+      <table class="artifacts__table">
+        <thead>
+          <tr>
+            <th>Artifact</th>
+            <th>Type</th>
+            <th class="num">Count</th>
+            <th>Where</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Quant strategies</td>
+            <td>alpha + risk, backtest, paper-trade</td>
+            <td class="num">{profile.stats.strategyCount}</td>
+            <td><a href={path('/quant')}>/quant</a></td>
+          </tr>
+          <tr>
+            <td>AI engineering projects</td>
+            <td>RAG, evals, MCP servers, prompt harnesses</td>
+            <td class="num">6</td>
+            <td><a href={path('/ai')}>/ai</a></td>
+          </tr>
+          <tr>
+            <td>STELLA multi-agent office</td>
+            <td>agents · skills · routing rows</td>
+            <td class="num">53 / 142 / 96</td>
+            <td><a href={path('/stella')}>/stella</a></td>
+          </tr>
+          <tr>
+            <td>STELLA knowledge graph</td>
+            <td>typed entities · relations · AARs</td>
+            <td class="num">3,209 nodes</td>
+            <td><a href={path('/stella')}>/stella</a></td>
+          </tr>
+          <tr>
+            <td>Public repos (GitHub)</td>
+            <td>workbooks, ships, experiments</td>
+            <td class="num">{profile.stats.repoCount}</td>
+            <td>
+              <a href="https://github.com/christianmacion26">github.com/christianmacion26</a>
+            </td>
+          </tr>
+          <tr>
+            <td>Eval gates (live harness)</td>
+            <td>5-must-have contract verifier</td>
+            <td class="num">{profile.stats.evalGates}</td>
+            <td><a href={path('/methodology')}>/methodology</a></td>
+          </tr>
+          <tr>
+            <td>LOC Python shipped</td>
+            <td>backtests, harnesses, infra</td>
+            <td class="num">{profile.stats.locPython}</td>
+            <td>(private work)</td>
+          </tr>
+          <tr>
+            <td>Certs earned (last 11 months)</td>
+            <td>AWS, GCP, quant, AI</td>
+            <td class="num">{profile.stats.certCount}</td>
+            <td><a href={path('/credentials')}>/credentials</a></td>
+          </tr>
+          <tr>
+            <td>Pages built (live)</td>
+            <td>Astro static · 90 routes</td>
+            <td class="num">{profile.stats.pagesBuilt}</td>
+            <td><a href="/sitemap.xml">sitemap.xml</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
 
-    <h2 class="memo__h2">Footprint</h2>
-    <p class="memo__sub">
-      Where I've been and where I cover. Davao pins are three in-person events in the
-      last 30 days; the rest are research hubs or active counterparties. Each pin is a
-      real artifact, not a vibe.
-    </p>
-    <EarthMap points={footprintPoints} mode="pins" />
+    <!-- ============= § 03 — READING LIST ============= -->
+    <section class="reading" aria-label="Reading list">
+      <p class="reading__mark mono">§ 03 — Reading List</p>
+      <p class="reading__sub">
+        Currently rereading or actively applying. Papers cite by year;
+        doctrine corpora cite the book.
+      </p>
+      <ol class="reading__list">
+        <li><span class="reading__num">01</span><span class="reading__author">Avellaneda &amp; Lipkin</span><span class="reading__text"><em>A market microstructure framework</em> (2003)</span></li>
+        <li><span class="reading__num">02</span><span class="reading__author">Kyle</span><span class="reading__text"><em>Continuous Auctions and Insider Trading</em> (1985)</span></li>
+        <li><span class="reading__num">03</span><span class="reading__author">Cont</span><span class="reading__text"><em>Empirical properties of asset returns</em> (2001)</span></li>
+        <li><span class="reading__num">04</span><span class="reading__author">Kahneman</span><span class="reading__text"><em>Thinking, Fast and Slow</em> (2011)</span></li>
+        <li><span class="reading__num">05</span><span class="reading__author">Thiel</span><span class="reading__text"><em>Zero to One</em> (2014)</span></li>
+        <li><span class="reading__num">06</span><span class="reading__author">Christensen</span><span class="reading__text"><em>The Innovator's Dilemma</em> (1997)</span></li>
+        <li><span class="reading__num">07</span><span class="reading__author">Goldratt</span><span class="reading__text"><em>The Goal</em> (1984, rev. 1992, def. ed. 2014)</span></li>
+        <li><span class="reading__num">08</span><span class="reading__author">Sun Tzu</span><span class="reading__text"><em>The Art of War</em> (~5th c. BCE)</span></li>
+        <li><span class="reading__num">09</span><span class="reading__author">Machiavelli</span><span class="reading__text"><em>The Prince</em> (1532)</span></li>
+        <li><span class="reading__num">10</span><span class="reading__author">Greene</span><span class="reading__text"><em>The 48 Laws of Power</em> (1998)</span></li>
+      </ol>
+    </section>
 
-    <h2 class="memo__h2">Contact</h2>
-    <p class="memo__contact mono">
-      <a href={`mailto:${email}`}>{email}</a>
-      <span aria-hidden="true">·</span>
-      <a href="https://github.com/christianmacion26">GitHub</a>
-      <span aria-hidden="true">·</span>
-      <a href="https://linkedin.com/in/christianmacion">LinkedIn</a>
-      <span aria-hidden="true">·</span>
-      <a href={path('/for-recruiters')}>Recruiter brief</a>
-    </p>
-    <p class="memo__sub">
-      Open to senior quant researcher, AI engineer, or applied research roles where the
-      eval bar is real. Reply within 24 hours.
-    </p>
+    <!-- ============= § 04 — FOOTPRINT ============= -->
+    <section class="footprint" aria-label="Footprint">
+      <p class="footprint__mark mono">§ 04 — Footprint</p>
+      <p class="footprint__sub">
+        Where I've been and where I cover. Davao pins are three in-person events
+        in the last 30 days; the rest are research hubs or active counterparties.
+        Each pin is a real artifact, not a vibe.
+      </p>
+      <EarthMap points={footprintPoints} mode="pins" />
+    </section>
 
-    <p class="memo__source mono">
-      Source: <code>profile.stats.ts</code> (single source of truth for site-wide numerics).
-      Methodology: <a href={path('/methodology')}>/methodology</a>.
-    </p>
+    <!-- ============= § 05 — CONTACT ============= -->
+    <footer class="contact" aria-label="Contact">
+      <p class="contact__mark mono">§ 05 — Contact</p>
+      <p class="contact__line mono">
+        <a href={`mailto:${email}`}>{email}</a>
+        <span aria-hidden="true">·</span>
+        <a href="https://github.com/christianmacion26">GitHub</a>
+        <span aria-hidden="true">·</span>
+        <a href="https://linkedin.com/in/christianmacion">LinkedIn</a>
+        <span aria-hidden="true">·</span>
+        <a href={path('/for-recruiters')}>Recruiter brief</a>
+      </p>
+      <p class="contact__sub">
+        Open to senior quant researcher, AI engineer, or applied research roles
+        where the eval bar is real. Reply within 24 hours.
+      </p>
+      <p class="contact__source mono">
+        Source: <code>profile.stats.ts</code>. Methodology: <a href={path('/methodology')}>/methodology</a>.
+      </p>
+    </footer>
   </main>
 </BaseLayout>
 
 <style>
   /* ============================================================
-     v9.0 INSTITUTIONAL MEMO HOME
+     v9.1 INSTITUTIONAL BROADSIDE HOME
+     Target register: Jane Street Press / Stripe Press / FT-style broadside.
+     Paper-cream background, dark navy ink, hairline rules everywhere.
      ============================================================ */
 
-  .memo {
-    max-width: 720px;
+  .broadside {
+    max-width: 1080px;
     margin: 0 auto;
-    padding: 48px 24px 96px;
+    padding: 0 32px 96px;
   }
 
-  .memo__stamp {
-    font-size: 11px;
-    color: var(--c-ink-3);
-    letter-spacing: 0.04em;
-    margin: 0 0 32px;
+  /* ====== RUNNING HEADER TAPE ====== */
+  .tape {
+    margin: 0 -32px 32px;
+    padding: 14px 32px;
+    border-top: 2px solid var(--c-ink);
+    border-bottom: 1px solid var(--c-rule);
+    background: var(--c-bg);
+  }
+  .tape__row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
   }
-
-  .memo__name {
-    font: 700 48px / 1.05 var(--serif-display);
+  .tape__row--top {
+    margin-bottom: 8px;
     color: var(--c-ink);
-    letter-spacing: -0.022em;
-    margin: 0 0 8px;
+    font-weight: 500;
+  }
+  .tape__row--bottom {
+    color: var(--c-ink-2);
+    padding-top: 8px;
+    border-top: 1px solid var(--c-rule);
+  }
+  .tape__mark {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+    color: var(--c-ink);
+  }
+  .tape__id {
+    font-weight: 700;
+    color: var(--c-ink);
+    letter-spacing: 0.16em;
+  }
+  .tape__sep {
+    color: var(--c-ink-3);
+    opacity: 0.55;
+  }
+  .tape__role,
+  .tape__loc,
+  .tape__utc {
+    font-weight: 500;
+  }
+  .tape__nav {
+    color: var(--c-ink-2);
+    text-decoration: none;
+    border: 0;
+    padding: 0;
+    transition: color 120ms ease;
+  }
+  .tape__nav:hover {
+    color: var(--c-ink);
+  }
+  .tape__nav--cta {
+    font-weight: 700;
+    color: var(--c-ink);
   }
 
-  .memo__role {
-    font: 500 17px / 1.4 var(--serif-display);
+  /* ====== HERO — big serif display ====== */
+  .hero {
+    padding: 32px 0 24px;
+    border-bottom: 1px solid var(--c-rule);
+  }
+  .hero__eyebrow {
+    font-size: 10.5px;
+    color: var(--c-ink-3);
+    letter-spacing: 0.18em;
+    margin: 0 0 24px;
+    text-transform: uppercase;
+  }
+  .hero__name {
+    font-family: var(--serif-display);
+    font-weight: 700;
+    font-size: clamp(48px, 7vw, 88px);
+    line-height: 0.96;
+    letter-spacing: -0.028em;
+    color: var(--c-ink);
+    margin: 0 0 16px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 18px;
+  }
+  .hero__name-1 {
+    font-style: normal;
+  }
+  .hero__name-2 em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--c-ink-2);
+  }
+  .hero__name-3 em {
+    font-style: italic;
+    font-weight: 500;
+    color: var(--c-ink-2);
+  }
+  .hero__role {
+    font: 400 17px / 1.45 var(--serif-display);
     color: var(--c-ink-2);
     font-style: italic;
-    margin: 0 0 32px;
+    margin: 0;
+    max-width: 60ch;
   }
 
-  .memo__lede {
-    font: 400 16px / 1.65 var(--ff-sans);
+  /* ====== LIVE DATA STRIP ====== */
+  .strip {
+    margin: 32px 0;
+    border-top: 1px solid var(--c-ink);
+    border-bottom: 1px solid var(--c-ink);
+    padding: 18px 0 14px;
+  }
+  .strip__inner {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0;
+  }
+  .strip__cell {
+    padding: 0 16px;
+    border-left: 1px solid var(--c-rule);
+  }
+  .strip__cell:first-child {
+    border-left: 0;
+    padding-left: 0;
+  }
+  .strip__num {
+    font-family: var(--serif-display);
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 1;
+    letter-spacing: -0.018em;
     color: var(--c-ink);
-    margin: 0 0 16px;
+    margin: 0 0 6px;
+    font-variant-numeric: tabular-nums;
   }
-
-  .memo__lede code {
-    font: 400 13.5px var(--ff-mono);
-    background: var(--c-paper);
-    padding: 1px 6px;
-    color: var(--c-ink);
-  }
-
-  .memo__h2 {
-    font: 600 18px / 1.3 var(--serif-display);
-    color: var(--c-ink);
-    letter-spacing: -0.005em;
-    margin: 48px 0 8px;
-    padding-top: 24px;
-    border-top: 1px solid var(--c-rule);
-    text-transform: none;
-  }
-
-  .memo__sub {
-    font: 400 14px / 1.55 var(--ff-sans);
+  .strip__label {
+    font-size: 10px;
     color: var(--c-ink-2);
-    margin: 0 0 16px;
+    letter-spacing: 0.14em;
+    margin: 0;
   }
 
-  .memo__table {
+  /* ====== SECTIONS — § marks + body ====== */
+  .lede,
+  .artifacts,
+  .reading,
+  .footprint,
+  .contact {
+    padding: 40px 0 8px;
+    border-bottom: 1px solid var(--c-rule);
+  }
+  .contact {
+    border-bottom: 0;
+  }
+
+  .lede__mark,
+  .artifacts__mark,
+  .reading__mark,
+  .footprint__mark,
+  .contact__mark {
+    font-size: 11px;
+    color: var(--c-warn, #8a6a2a);
+    letter-spacing: 0.14em;
+    margin: 0 0 18px;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .lede__body {
+    font: 400 17px / 1.65 var(--ff-sans);
+    color: var(--c-ink);
+    margin: 0 0 16px;
+    max-width: 62ch;
+  }
+  .lede__body code {
+    font: 400 14px var(--ff-mono);
+    background: var(--c-bg-elev);
+    padding: 1px 7px;
+    color: var(--c-ink);
+    border: 1px solid var(--c-rule);
+  }
+
+  /* ====== ARTIFACTS TABLE ====== */
+  .artifacts__sub,
+  .reading__sub,
+  .footprint__sub,
+  .contact__sub {
+    font: 400 14.5px / 1.6 var(--ff-sans);
+    color: var(--c-ink-2);
+    margin: 0 0 22px;
+    max-width: 60ch;
+  }
+
+  .artifacts__table {
     width: 100%;
     border-collapse: collapse;
     font: 400 14px / 1.5 var(--ff-sans);
     margin: 0 0 24px;
     font-variant-numeric: tabular-nums;
   }
-
-  .memo__table th,
-  .memo__table td {
+  .artifacts__table th,
+  .artifacts__table td {
     border-bottom: 1px solid var(--c-rule);
-    padding: 10px 12px 10px 0;
+    padding: 11px 16px 11px 0;
     text-align: left;
     vertical-align: top;
   }
-
-  .memo__table th {
-    font: 500 11px / 1.3 var(--ff-mono);
+  .artifacts__table th {
+    font: 500 10.5px / 1.3 var(--ff-mono);
     color: var(--c-ink-3);
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    border-bottom: 1px solid var(--c-ink-3);
+    letter-spacing: 0.1em;
+    border-bottom: 1px solid var(--c-ink);
   }
-
-  .memo__table td.num {
-    font-variant-numeric: tabular-nums;
-    font-weight: 500;
+  .artifacts__table td.num {
     text-align: right;
     white-space: nowrap;
+    font-weight: 500;
   }
 
-  .memo__list {
+  /* ====== READING LIST — numbered FT-style ====== */
+  .reading__list {
     list-style: none;
     padding: 0;
-    margin: 0 0 24px;
-    font: 400 14.5px / 1.6 var(--ff-sans);
-    color: var(--c-ink);
+    margin: 0;
+    counter-reset: reading;
   }
-
-  .memo__list li {
-    padding: 8px 0;
+  .reading__list li {
+    display: grid;
+    grid-template-columns: 40px 220px 1fr;
+    gap: 16px;
+    padding: 10px 0;
     border-bottom: 1px solid var(--c-rule);
+    font: 400 14.5px / 1.55 var(--ff-sans);
+    color: var(--c-ink);
+    align-items: baseline;
   }
-
-  .memo__list li:last-child {
+  .reading__list li:last-child {
     border-bottom: 0;
   }
-
-  .memo__list strong {
+  .reading__num {
+    font: 500 11px var(--ff-mono);
+    color: var(--c-ink-3);
+    letter-spacing: 0.06em;
+  }
+  .reading__author {
     font-weight: 600;
-  }
-
-  .memo__list em {
-    font-style: italic;
-  }
-
-  .memo__contact {
-    font: 500 13.5px / 1.5 var(--ff-mono);
     color: var(--c-ink);
-    margin: 0 0 12px;
+  }
+
+  /* ====== CONTACT ====== */
+  .contact__line {
+    font: 500 14.5px / 1.5 var(--ff-mono);
+    color: var(--c-ink);
+    margin: 0 0 14px;
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
   }
-
-  .memo__source {
+  .contact__source {
     font-size: 11px;
     color: var(--c-ink-3);
     letter-spacing: 0.04em;
-    margin: 64px 0 0;
-    padding-top: 16px;
-    border-top: 1px solid var(--c-rule);
+    margin: 24px 0 0;
     text-transform: uppercase;
   }
-
-  .memo__source code {
+  .contact__source code {
     font: 400 11px var(--ff-mono);
     background: transparent;
   }
 
-  .memo a {
+  /* ====== LINKS ====== */
+  .broadside a {
     color: var(--c-ink);
     text-decoration: none;
     border-bottom: 1px solid var(--c-rule);
     padding-bottom: 1px;
+    transition: border-color 120ms ease;
+  }
+  .broadside a:hover {
+    border-bottom-color: var(--c-ink);
   }
 
-  .memo a:hover {
-    border-bottom-color: var(--c-ink);
+  /* ====== RESPONSIVE ====== */
+  @media (max-width: 760px) {
+    .broadside {
+      padding: 0 20px 64px;
+    }
+    .tape {
+      margin: 0 -20px 24px;
+      padding: 12px 20px;
+    }
+    .tape__sep--hide,
+    .tape__utc--hide {
+      display: none;
+    }
+    .tape__row--top {
+      flex-wrap: wrap;
+    }
+    .tape__row--bottom {
+      overflow-x: auto;
+      white-space: nowrap;
+      flex-wrap: nowrap;
+      -webkit-overflow-scrolling: touch;
+    }
+    .strip__inner {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px 0;
+    }
+    .strip__cell {
+      border-left: 0;
+      padding: 0 8px;
+    }
+    .strip__cell:nth-child(4),
+    .strip__cell:nth-child(5),
+    .strip__cell:nth-child(6) {
+      border-top: 1px solid var(--c-rule);
+      padding-top: 14px;
+      margin-top: 4px;
+    }
+    .reading__list li {
+      grid-template-columns: 32px 1fr;
+    }
+    .reading__text {
+      grid-column: 2;
+    }
   }
 </style>
