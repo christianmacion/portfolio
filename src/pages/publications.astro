@@ -639,6 +639,11 @@ const totalCount = quantPubs.length + aiPubs.length + workbooks.length + press.l
     margin-block: var(--sp-4) var(--sp-5);
     max-width: 22ch;
   }
+  /* v9.3.1 · "written, built, and said" headline underline uses
+     techy-blue gradient (matches /skills/ /ai/ /contact/ accent). */
+  .pub-head__title .hl::after {
+    background: linear-gradient(90deg, var(--c-blue), var(--c-blue-mid));
+  }
   .pub-head__sub {
     font-size: var(--fs-lg);
     color: var(--c-ink-2);
@@ -848,6 +853,45 @@ const totalCount = quantPubs.length + aiPubs.length + workbooks.length + press.l
     .press__row {
       grid-template-columns: 1fr;
       gap: var(--sp-1);
+    }
+  }
+
+  /* v9.3.1 · publication row stagger fade-in (shared broadside-rise).
+     Per-year list of publications — 40ms tight cascade to keep the
+     year-group density readable. */
+  .pub {
+    animation: broadside-rise 480ms ease-out both;
+  }
+  .pub:nth-child(1) {
+    animation-delay: 40ms;
+  }
+  .pub:nth-child(2) {
+    animation-delay: 80ms;
+  }
+  .pub:nth-child(3) {
+    animation-delay: 120ms;
+  }
+  .pub:nth-child(4) {
+    animation-delay: 160ms;
+  }
+  .pub:nth-child(5) {
+    animation-delay: 200ms;
+  }
+  .pub:nth-child(6) {
+    animation-delay: 240ms;
+  }
+  .pub:nth-child(7) {
+    animation-delay: 280ms;
+  }
+  .pub:nth-child(8) {
+    animation-delay: 320ms;
+  }
+  .pub:nth-child(n + 9) {
+    animation-delay: 360ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pub {
+      animation: none;
     }
   }
 </style>

@@ -434,6 +434,11 @@ const tradingDays = equitySeries.length;
     margin-block: var(--sp-4) var(--sp-5);
     max-width: 22ch;
   }
+  /* v9.3.1 · "currently running" headline underline uses techy-blue
+     gradient (matches /skills/ /ai/ /contact/ accent). */
+  .positions-head__title .hl::after {
+    background: linear-gradient(90deg, var(--c-blue), var(--c-blue-mid));
+  }
   .positions-head__voice {
     margin: 0 0 var(--sp-5);
     max-width: 60ch;
@@ -819,5 +824,29 @@ const tradingDays = equitySeries.length;
   .role-card__next {
     margin-top: auto;
     align-self: flex-start;
+  }
+
+  /* v9.3.1 · positions card stagger fade-in (shared broadside-rise).
+     Currently 1-3 positions cards; 80ms cadence keeps the timeline
+     rhythm consistent with /experience/ timeline entries. */
+  .positions-card {
+    animation: broadside-rise 480ms ease-out both;
+  }
+  .positions-card:nth-child(1) {
+    animation-delay: 60ms;
+  }
+  .positions-card:nth-child(2) {
+    animation-delay: 140ms;
+  }
+  .positions-card:nth-child(3) {
+    animation-delay: 220ms;
+  }
+  .positions-card:nth-child(n + 4) {
+    animation-delay: 300ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .positions-card {
+      animation: none;
+    }
   }
 </style>

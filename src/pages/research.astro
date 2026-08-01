@@ -180,7 +180,9 @@ statsRow[3].spark = sparkFor(2, 14, 0.5, 24);
     <div class="container">
       <p class="research-head__eyebrow mono">
         <span class="research-head__eyebrow-chip">RESEARCH · WAREHOUSE · OPEN</span>
-        <span class="research-head__eyebrow-line">{quantProjects.length} STRATEGIES · FOUR FACTORS · {dataSourceCount} SOURCES</span>
+        <span class="research-head__eyebrow-line"
+          >{quantProjects.length} STRATEGIES · FOUR FACTORS · {dataSourceCount} SOURCES</span
+        >
       </p>
       <h1 class="r-hero__title">
         {`${quantProjects.length} strategies. Four factors. ${dataSourceCount} sources.`}
@@ -754,6 +756,45 @@ statsRow[3].spark = sparkFor(2, 14, 0.5, 24);
     .r-card__cta,
     .r-card__ext {
       transition: none;
+    }
+  }
+
+  /* v9.3.1 · research book card stagger fade-in (shared broadside-rise).
+     Up to 9 strategies — 60ms cascade keeps the table-feel rhythm
+     while the cards populate as you scroll. */
+  .r-card {
+    animation: broadside-rise 480ms ease-out both;
+  }
+  .r-card:nth-child(1) {
+    animation-delay: 60ms;
+  }
+  .r-card:nth-child(2) {
+    animation-delay: 120ms;
+  }
+  .r-card:nth-child(3) {
+    animation-delay: 180ms;
+  }
+  .r-card:nth-child(4) {
+    animation-delay: 240ms;
+  }
+  .r-card:nth-child(5) {
+    animation-delay: 300ms;
+  }
+  .r-card:nth-child(6) {
+    animation-delay: 360ms;
+  }
+  .r-card:nth-child(7) {
+    animation-delay: 420ms;
+  }
+  .r-card:nth-child(8) {
+    animation-delay: 480ms;
+  }
+  .r-card:nth-child(n + 9) {
+    animation-delay: 540ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .r-card {
+      animation: none;
     }
   }
 </style>

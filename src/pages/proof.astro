@@ -285,7 +285,9 @@ const paginate = (items: any[]) => {
     <div class="container container-narrow">
       <p class="proof-head__eyebrow mono">
         <span class="proof-head__eyebrow-chip">PROOF · SHOW YOUR WORK</span>
-        <span class="proof-head__eyebrow-line">{heroArtifactCount} ARTIFACTS · {flagshipCerts.length + 1} FLAGSHIP CERTS · NDA-CLEAN</span>
+        <span class="proof-head__eyebrow-line"
+          >{heroArtifactCount} ARTIFACTS · {flagshipCerts.length + 1} FLAGSHIP CERTS · NDA-CLEAN</span
+        >
       </p>
       <h1 class="proof-head__title" data-words>
         Proof. <span class="hl">Public or self-owned only</span>.
@@ -1126,7 +1128,7 @@ const paginate = (items: any[]) => {
     font-weight: 600;
     line-height: 1;
     letter-spacing: -0.02em;
-    color: var(--c-primary);
+    color: var(--c-blue);
     font-variant-numeric: tabular-nums;
   }
   .proof-head__stat-lbl {
@@ -1596,6 +1598,99 @@ const paginate = (items: any[]) => {
     }
     .ptr__cell--link {
       text-align: left;
+    }
+  }
+
+  /* v9.3.1 · "Public or self-owned only" headline underline uses
+     techy-blue gradient (matches /skills/ /ai/ /contact/ accent). */
+  .proof-head__title .hl::after {
+    background: linear-gradient(90deg, var(--c-blue), var(--c-blue-mid));
+  }
+
+  /* v9.3.1 · stat number stagger fade-in (shared broadside-rise).
+     4-stat hero row — 80ms cadence keeps the counter pulse tight. */
+  .proof-head__stat {
+    animation: broadside-rise 480ms ease-out both;
+  }
+  .proof-head__stat:nth-child(1) {
+    animation-delay: 60ms;
+  }
+  .proof-head__stat:nth-child(2) {
+    animation-delay: 140ms;
+  }
+  .proof-head__stat:nth-child(3) {
+    animation-delay: 220ms;
+  }
+  .proof-head__stat:nth-child(4) {
+    animation-delay: 300ms;
+  }
+  .proof-head__stat:nth-child(n + 5) {
+    animation-delay: 380ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .proof-head__stat {
+      animation: none;
+    }
+  }
+
+  /* v9.3.1 · discipline rule stagger fade-in (shared broadside-rise).
+     6 rules — 60ms cascade keeps the scroll-down feel snappy. */
+  .proof-head__discipline li {
+    animation: broadside-rise 480ms ease-out both;
+  }
+  .proof-head__discipline li:nth-child(1) {
+    animation-delay: 60ms;
+  }
+  .proof-head__discipline li:nth-child(2) {
+    animation-delay: 120ms;
+  }
+  .proof-head__discipline li:nth-child(3) {
+    animation-delay: 180ms;
+  }
+  .proof-head__discipline li:nth-child(4) {
+    animation-delay: 240ms;
+  }
+  .proof-head__discipline li:nth-child(5) {
+    animation-delay: 300ms;
+  }
+  .proof-head__discipline li:nth-child(6) {
+    animation-delay: 360ms;
+  }
+  .proof-head__discipline li:nth-child(n + 7) {
+    animation-delay: 420ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .proof-head__discipline li {
+      animation: none;
+    }
+  }
+
+  /* v9.3.1 · proof-grid card stagger fade-in (shared broadside-rise).
+     Applies to flagship cert grid + code grid + video grid. */
+  .proof-grid > * {
+    animation: broadside-rise 480ms ease-out both;
+  }
+  .proof-grid > *:nth-child(1) {
+    animation-delay: 60ms;
+  }
+  .proof-grid > *:nth-child(2) {
+    animation-delay: 140ms;
+  }
+  .proof-grid > *:nth-child(3) {
+    animation-delay: 220ms;
+  }
+  .proof-grid > *:nth-child(4) {
+    animation-delay: 300ms;
+  }
+  .proof-grid > *:nth-child(5) {
+    animation-delay: 380ms;
+  }
+  .proof-grid > *:nth-child(n + 6) {
+    animation-delay: 460ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .proof-grid > * {
+      animation: none;
     }
   }
 </style>
