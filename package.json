@@ -37,7 +37,8 @@
     "check:bundle": "node scripts/check-bundle-budget.mjs",
     "no-halo": "grep -rn 'box-shadow:\\s*0\\s*0\\s*[1-9][0-9]' src/ 2>/dev/null && echo 'FAIL: halo/glow box-shadow detected' && exit 1 || echo 'PASS: no halo/glow box-shadows'",
     "check:tokens": "node scripts/check-tokens.mjs",
-    "test:a11y": "node scripts/a11y-audit.mjs"
+    "test:a11y": "node scripts/a11y-audit.mjs",
+    "nda:guard": "node -e \"const fs=require('fs'),path=require('path');const banned=['19V Capital','Macion Capital','Arclion AI','Quantivo','CallRank','Davao City'];let bad=0;function walk(d){for(const f of fs.readdirSync(d,{withFileTypes:true})){const p=path.join(d,f.name);if(f.isDirectory())walk(p);else if(/\\.(html|txt|md|json|pdf)$/.test(f.name)){try{const buf=fs.readFileSync(p);const c=buf.toString('latin1');for(const b of banned)if(c.includes(b)){console.error('NDA leak:',p,'contains',b);bad++;}}catch(e){}}}}walk('dist');if(bad>0){console.error('NDA:guard FAIL — '+bad+' leak(s) detected');process.exit(1);}else{console.log('NDA:guard PASS — dist/ clean');}\""
   },
   "dependencies": {
     "@astrojs/check": "^0.9.9",

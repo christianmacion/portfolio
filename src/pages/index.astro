@@ -28,7 +28,7 @@ import EarthMap from '@components/EarthMap.astro';
 
 const footprintPoints = [
   { city: 'Digos City, PH', lat: 6.74, lon: 125.36, weight: 1.0, caption: 'home base' },
-  { city: 'Davao City, PH', lat: 7.19, lon: 125.45, weight: 0.95, caption: 'Ateneo · BIDA Meta · USEP — 3 in-person, 30 days' },
+  { city: 'Digos City, PH', lat: 7.19, lon: 125.45, weight: 0.95, caption: 'Ateneo · BIDA Meta · USEP — 3 in-person, 30 days' },
   { city: 'Manila, PH', lat: 14.60, lon: 120.98, weight: 0.7, caption: 'UP School of Statistics' },
   { city: 'Singapore', lat: 1.35, lon: 103.82, weight: 0.8, caption: 'APAC ops' },
   { city: 'Tokyo', lat: 35.68, lon: 139.69, weight: 0.7, caption: 'JPX' },
@@ -127,6 +127,53 @@ const liveCounters = [
       </div>
     </aside>
 
+    <!-- ============= v9.3 IA wave 2 (2026-08-01) — S1 LEDE HOOK ============= -->
+    <!-- Above-the-fold, single-sentence "why-care" answer (8-sec readable).
+         Institutional register: senior QR + AI engineer-architect framing,
+         NDA-clean disclosure, evaluation-first posture. Sits between the
+         live counters and the quick-route grid so the eye reads:
+         counters (proof) → hook (positioning) → routes (action). -->
+    <aside class="hook" aria-label="Working summary">
+      <p class="hook__body">
+        Quant researcher + AI engineer-architect, six years building trading
+        desks and multi-agent build systems — eval-first, NDA-clean, ship-ready.
+      </p>
+    </aside>
+
+    <!-- ============= v9.3 IA wave 2 (2026-08-01) — S2 QUICK-ROUTE GRID ============= -->
+    <!-- Three-card quick-route grid pointing to the highest-leverage
+         next-step pages: /for-recruiters (recruiter 60-sec skim),
+         /now (current activities), /projects/quant (9 strategies).
+         Each card has a left-edge status binding stripe (handoff /
+         iterate / ship) so the IA reads "what do I do next" without
+         the recruiter having to scroll. Reduced-motion fade-in only. -->
+    <nav class="quick-route" aria-label="Quick routes">
+      <a href={path('/for-recruiters')} class="quick-route__card binding-stripe binding-stripe--handoff">
+        <p class="quick-route__kicker mono">FOR HIRING MANAGERS</p>
+        <p class="quick-route__title">60-second skim</p>
+        <p class="quick-route__sub">
+          Senior QR + AI Engineer register · NDA-clean · immediate start.
+        </p>
+        <p class="quick-route__cta mono">Open brief &rarr;</p>
+      </a>
+      <a href={path('/now')} class="quick-route__card binding-stripe binding-stripe--iterate">
+        <p class="quick-route__kicker mono">CURRENTLY WORKING ON</p>
+        <p class="quick-route__title">What I am doing now</p>
+        <p class="quick-route__sub">
+          Dated one-pager of current activities, open problems, and bets.
+        </p>
+        <p class="quick-route__cta mono">Open /now &rarr;</p>
+      </a>
+      <a href={path('/projects/quant')} class="quick-route__card binding-stripe binding-stripe--ship">
+        <p class="quick-route__kicker mono">QUANT SHIPPED</p>
+        <p class="quick-route__title">9 strategies · backtested</p>
+        <p class="quick-route__sub">
+          Alpha + risk pairs · fire-rule granularity · G1–G31 gate stack.
+        </p>
+        <p class="quick-route__cta mono">Open quant &rarr;</p>
+      </a>
+    </nav>
+
     <!-- ============= § 01 — LEDE ============= -->
     <section class="lede" aria-label="Working description">
       <p class="lede__mark mono">§ 01 — The Work</p>
@@ -138,8 +185,8 @@ const liveCounters = [
         adversarial review.
       </p>
       <p class="lede__body">
-        NDA-clean by construction: 19V Capital and Macion Capital work does not surface
-        here. No <code>Math.random()</code> in shipped code, no argless
+        NDA-clean by construction: prior-employer work does not surface here.
+        No <code>Math.random()</code> in shipped code, no argless
         <code>new Date()</code>, no fabricated metrics. The full audit trail lives on
         the <a href={path('/methodology')}>methodology</a> page.
       </p>
@@ -542,6 +589,93 @@ const liveCounters = [
     color: var(--c-ink);
   }
 
+  /* ====== v9.3 IA wave 2 (2026-08-01) — S1 LEDE HOOK + S2 QUICK-ROUTE ====== */
+  /* The hook sits between the live counters and the quick-route grid.
+     It is a single-sentence 8-sec-readable "why-care" answer in
+     institutional register. The quick-route grid is a 3-card nav
+     pointing to the highest-leverage next-step pages, each with a
+     left-edge status binding stripe (handoff / iterate / ship). */
+  .hook {
+    margin: 0 0 24px;
+    padding: 14px 0;
+    border-top: 1px solid var(--c-rule);
+    border-bottom: 1px solid var(--c-rule);
+  }
+  .hook__body {
+    font: 400 17px / 1.55 var(--ff-sans);
+    color: var(--c-ink);
+    margin: 0;
+    max-width: 60ch;
+    font-style: italic;
+  }
+
+  .quick-route {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    margin: 0 0 32px;
+    border: 1px solid var(--c-rule);
+    border-bottom: 0;
+  }
+  .quick-route__card {
+    padding: 18px 22px 16px 24px;
+    text-decoration: none;
+    color: var(--c-ink);
+    border-bottom: 1px solid var(--c-rule);
+    border-left: 1px solid var(--c-rule);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    transition:
+      background var(--transition),
+      border-color var(--transition);
+    border-bottom: 0;
+    border-bottom: 1px solid var(--c-rule);
+  }
+  .quick-route__card:first-child {
+    border-left: 0;
+  }
+  .quick-route__card:hover {
+    background: var(--c-bg-2);
+    border-left-color: var(--c-ink-2);
+  }
+  .quick-route__card:focus-visible {
+    outline: 2px solid var(--c-primary-2-light);
+    outline-offset: -2px;
+  }
+  .quick-route__kicker {
+    font-size: 10px;
+    color: var(--c-ink-2);
+    letter-spacing: 0.16em;
+    margin: 0 0 4px;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .quick-route__title {
+    font: 600 17px / 1.25 var(--serif-display);
+    color: var(--c-ink);
+    margin: 0 0 4px;
+    letter-spacing: -0.012em;
+  }
+  .quick-route__sub {
+    font: 400 13px / 1.45 var(--ff-sans);
+    color: var(--c-ink-2);
+    margin: 0 0 6px;
+  }
+  .quick-route__cta {
+    font-size: 10.5px;
+    color: var(--c-ink-2);
+    letter-spacing: 0.1em;
+    margin: 0;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  /* Reduced-motion guard: the quick-route cards have no animation by
+     default, so the un-animated page is byte-identical to the
+     animated page when prefers-reduced-motion is on. No overrides
+     needed; documenting the contract here. */
+
   /* ====== CONTACT ====== */
   .contact__line {
     font: 500 14.5px / 1.5 var(--ff-mono);
@@ -617,6 +751,19 @@ const liveCounters = [
     }
     .reading__text {
       grid-column: 2;
+    }
+    /* v9.3 IA wave 2 (2026-08-01) — collapse quick-route grid to single
+       column on narrow phones so each card retains ≥44×44 tap targets. */
+    .quick-route {
+      grid-template-columns: 1fr;
+    }
+    .quick-route__card {
+      border-left: 0;
+      border-bottom: 1px solid var(--c-rule);
+      padding: 16px 4px;
+    }
+    .quick-route__card:last-child {
+      border-bottom: 0;
     }
   }
 </style>

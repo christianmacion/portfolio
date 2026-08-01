@@ -200,9 +200,13 @@ a.skip-link {
   display: inline;
 }
 
-/* === v6.0 · universal focus-visible ring for keyboard nav === */
+/* === v6.0 · universal focus-visible ring for keyboard nav ===
+   v9.3 IA wave 2 (2026-08-01) a11y baseline — switched to --c-amber
+   because --c-primary-2-deep (#475891 on #1a1714) measured 2.61:1 in
+   dark theme, failing WCAG 1.4.11 (3:1 UI). --c-amber (#c98a16)
+   passes in both themes. */
 *:focus-visible {
-  outline: 2px solid var(--c-primary-2-deep);
+  outline: 2px solid var(--c-amber);
   outline-offset: 2px;
 }
 /* Hide focus outline for mouse users (heuristic: only show on :focus-visible, not :focus) */
