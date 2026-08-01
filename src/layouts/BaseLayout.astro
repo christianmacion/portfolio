@@ -285,7 +285,7 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
          screen-reader and sighted users get the same anchor name. -->
     <a href="#main" class="skip-link" aria-label="Skip to main content">Skip to main content</a>
     {
-      /* v7.3 — top hairline scroll progress (1px amber, driven by scroll-progress.ts).
+      /* v7.3 — top hairline scroll progress (1px amber, driven by scroll-progress-driver.ts).
         v9.3 a11y follow-up (2026-08-01): role="presentation" + tabindex=-1 wraps the
         progress bar in a landmark so axe-core's region rule passes. Without the
         landmark wrapper, the div sits outside <main> and <header> and axe flags
@@ -416,12 +416,10 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
       import '@scripts/odometer.ts';
       import '@scripts/active-nav.ts';
       import '@scripts/copy-button.ts';
-      import '@scripts/scroll-progress.ts';
       import '@scripts/scroll-progress-driver.ts';
       import '@scripts/motion.ts';
       import '@scripts/carousel.ts';
       import '@scripts/keyboard-shortcuts.ts';
-      import '@scripts/odometer.ts';
     </script>
   </body>
 </html>
