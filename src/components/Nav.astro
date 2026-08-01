@@ -478,7 +478,12 @@ const secondary = [
       border-color var(--transition);
   }
   .nav__link:hover {
-    color: var(--c-primary-2-light);
+    /* v9.3.2 (2026-08-02) — a11y: --c-primary-2-light (#5b6f9e) on
+       --c-bg light (#ece5d4) measured 3.97:1 (sub-AA). Switch to
+       --c-primary-2 which resolves to --j-cobalt = #2c4a7e in light mode
+       → 7.00:1 PASS, dark mode → 4.96:1 PASS. Provides a clear hover
+       cue (color shift toward body-ink family) without sacrificing AA. */
+    color: var(--c-primary-2);
   }
   .nav__link--active {
     color: var(--c-primary-2-light);
@@ -541,8 +546,15 @@ const secondary = [
     flex-shrink: 0;
   }
   .nav__cta:hover {
+    /* v9.3.2 (2026-08-02) — a11y: --c-on-amber-deep (#ffffff) on
+       --c-amber (#a88a3e) measured 3.30:1 (sub-AA on dark theme).
+       Switch hover text to --c-bg (#1a1714) so hover state reads as
+       5.41:1 PASS in both themes. Matches the existing CSS comment
+       intent ("Hover swap: var(--c-bg) on var(--c-amber) for ≥4.5:1").
+       Lighter bg + darker text = "pressed" affordance, distinct from
+       default state (darker bg + white text). */
     background: var(--c-amber);
-    color: var(--c-on-amber-deep);
+    color: var(--c-bg);
   }
 
   /* === v6.1.0 — theme toggle CSS removed (the button is gone) === */
