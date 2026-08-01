@@ -240,13 +240,15 @@ const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circ
       ))
     }
 
-    {/* === Layer B — world events (shape-coded by category) ===
+    {
+      /* === Layer B — world events (shape-coded by category) ===
         Only rendered in `full` mode (markets.astro). The home-page
-        footprint wants pin clarity, not random event dots. */}
-    {mode === 'full' && (
-      <>
-        {
-          eventPositions.map((e) => {
+        footprint wants pin clarity, not random event dots. */
+    }
+    {
+      mode === 'full' && (
+        <>
+          {eventPositions.map((e) => {
             const shape = eventShape(e.category);
             return (
               <g
@@ -263,7 +265,13 @@ const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circ
                   </polygon>
                 )}
                 {shape === 'square' && (
-                  <rect x={e.x - 3.5} y={e.y - 3.5} width="7" height="7" class="earth-map__event-shape">
+                  <rect
+                    x={e.x - 3.5}
+                    y={e.y - 3.5}
+                    width="7"
+                    height="7"
+                    class="earth-map__event-shape"
+                  >
                     <title>
                       {e.title} — {e.city}
                     </title>
@@ -288,43 +296,51 @@ const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circ
                 )}
               </g>
             );
-          })
-        }
+          })}
 
-        {/* === Layer C — GDELT overlay (polarity-tinted, low alpha) === */}
-        {
-          gdeltPositions.map((e) => (
-            <circle cx={e.x} cy={e.y} r="2" class={`earth-map__gdelt earth-map__gdelt--${e.polarity}`}>
+          {/* === Layer C — GDELT overlay (polarity-tinted, low alpha) === */}
+          {gdeltPositions.map((e) => (
+            <circle
+              cx={e.x}
+              cy={e.y}
+              r="2"
+              class={`earth-map__gdelt earth-map__gdelt--${e.polarity}`}
+            >
               <title>
                 {e.title} — {e.city}
               </title>
             </circle>
-          ))
-        }
-      </>
-    )}
+          ))}
+        </>
+      )
+    }
   </svg>
 
   <figcaption class="earth-map__caption mono">
     <span class="earth-map__cap-section">
       <span class="earth-map__cap-swatch earth-map__cap-swatch--venue" aria-hidden="true"></span>
-      {venues.length} {mode === 'pins' ? 'pins' : 'venues'}
+      {venues.length}
+      {mode === 'pins' ? 'pins' : 'venues'}
     </span>
-    {mode === 'full' && (
-      <>
-        <span class="earth-map__cap-sep">·</span>
-        <span class="earth-map__cap-section">
-          <span class="earth-map__cap-swatch earth-map__cap-swatch--event" aria-hidden="true"></span>
-          {worldEvents.length} world events
-        </span>
-        <span class="earth-map__cap-sep">·</span>
-        <span class="earth-map__cap-section">
-          <span class="earth-map__cap-swatch earth-map__cap-swatch--gdelt-pos" aria-hidden="true"
-          ></span>
-          {dedupGdelt.length} GDELT 24h
-        </span>
-      </>
-    )}
+    {
+      mode === 'full' && (
+        <>
+          <span class="earth-map__cap-sep">·</span>
+          <span class="earth-map__cap-section">
+            <span class="earth-map__cap-swatch earth-map__cap-swatch--event" aria-hidden="true" />
+            {worldEvents.length} world events
+          </span>
+          <span class="earth-map__cap-sep">·</span>
+          <span class="earth-map__cap-section">
+            <span
+              class="earth-map__cap-swatch earth-map__cap-swatch--gdelt-pos"
+              aria-hidden="true"
+            />
+            {dedupGdelt.length} GDELT 24h
+          </span>
+        </>
+      )
+    }
     <span class="earth-map__cap-note">
       {mode === 'pins' ? 'equirectangular · footprint' : 'equirectangular · 24h desk coverage'}
     </span>
@@ -357,16 +373,18 @@ const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circ
     opacity: 0.18;
   }
 
-  /* === Layer A — venues (amber, weighted) === */
+  /* === Layer A — venues (v9.3.1 techy-blue, weighted) === */
   .earth-map__pulse {
     fill: none;
-    stroke: var(--c-primary-2);
+    stroke: var(--c-blue);
     stroke-width: 1;
-    opacity: 0.4;
+    opacity: 0.55;
+    animation: earth-pulse 2.4s ease-out infinite;
+    transform-origin: center;
   }
   .earth-map__dot {
-    fill: var(--c-primary-2);
-    stroke: var(--c-primary-2-light);
+    fill: var(--c-blue);
+    stroke: var(--c-blue-deep);
     stroke-width: 1;
   }
   .earth-map__label {
@@ -374,6 +392,26 @@ const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circ
     fill: var(--c-ink);
     font-weight: 600;
     letter-spacing: 0.04em;
+  }
+  @keyframes earth-pulse {
+    0% {
+      r: 4;
+      opacity: 0.7;
+    }
+    70% {
+      r: 14;
+      opacity: 0;
+    }
+    100% {
+      r: 14;
+      opacity: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .earth-map__pulse {
+      animation: none;
+      opacity: 0.35;
+    }
   }
 
   /* === Layer B — world events (shape-coded by category) === */
@@ -411,7 +449,6 @@ const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circ
     fill: var(--c-ink-3);
   }
 
-  /* === Caption / legend === */
   .earth-map__caption {
     font-size: 10px;
     color: var(--c-ink-2);
@@ -435,7 +472,8 @@ const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circ
     height: 10px;
   }
   .earth-map__cap-swatch--venue {
-    background: var(--c-primary-2);
+    background: var(--c-blue);
+    border: 1px solid var(--c-blue-deep);
   }
   .earth-map__cap-swatch--event {
     background: var(--c-amber-deep);

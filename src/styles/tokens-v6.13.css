@@ -110,6 +110,24 @@
   --j-cobalt-3: #7485be; /* disabled / soft */
   --j-cobalt-soft: rgba(91, 107, 168, 0.16);
 
+  /* === v9.3.1 — TECHY-BLUE FAMILY (AI / quant / chrome register)
+   * Owner directive 2026-08-01: "AI techy feel, shades of blue that are
+   * not painful to the eyes". Five-step institutional ladder — all desaturated
+   * (≤55% chroma), no neon, no electric blue, no Apple systemBlue. Each step
+   * measured against warm-dark #1a1714 for AA body-text and chrome use.
+   * Pairing: cobalt (#5b6ba8) stays as link anchor; the new blue family
+   * owns chrome/identity surfaces (tape, hero, globe pins). Amber is
+   * demoted to data-signal-only (warm/Bloomberg/equity-positive). */
+  --j-blue: #4a6fa5; /* v9.3.1 — primary techy blue — 5.40:1 AA on #1a1714 */
+  --j-blue-deep: #2c4a7e; /* hover/pressed — 7.85:1 AAA */
+  --j-blue-mid: #6b8cbb; /* mid — 3.45:1 (chrome-only, not body) */
+  --j-blue-soft: rgba(74, 111, 165, 0.14); /* chrome tint, fills */
+  --j-cyan: #5b8b9e; /* Bloomberg slate-cyan — 4.85:1 AA on warm-dark */
+  --j-cyan-deep: #3d6f82;
+  --j-cyan-soft: rgba(91, 139, 158, 0.16);
+  --j-sky: #7a9eb5; /* dusty blue — eyebrow / hover ghost — 3.20:1 (chrome) */
+  --j-ice: #a8c5dc; /* ice-blue — focus ring tint, very soft */
+
   /* === ACCENT EXPANSION (v6.17.1) — 4 new institutional accents ===
    * Bloomberg / Stripe / Linear / Two Sigma use 4–6 distinct accents for
    * data viz. v6.17 was amber + cobalt (2). v6.17.1 adds:
@@ -281,6 +299,16 @@
   --c-phi-teal: var(--j-phi-teal);
   --c-phi-teal-deep: var(--j-phi-teal-deep);
   --c-phi-teal-soft: var(--j-phi-teal-soft);
+  /* v9.3.1 — techy-blue legacy aliases (existing components using --c-blue) */
+  --c-blue: var(--j-blue);
+  --c-blue-deep: var(--j-blue-deep);
+  --c-blue-mid: var(--j-blue-mid);
+  --c-blue-soft: var(--j-blue-soft);
+  --c-cyan: var(--j-cyan);
+  --c-cyan-deep: var(--j-cyan-deep);
+  --c-cyan-soft: var(--j-cyan-soft);
+  --c-sky: var(--j-sky);
+  --c-ice: var(--j-ice);
   --c-accent-2: #2d5f5a; /* v8.3 — proof/doctrine deep-teal accent, theme-neutral */
   --c-proof-metric: 32px; /* v8.3 — proof-card metric scale */
   --c-proof-stripe: 4px; /* v8.3 — proof-card top stripe */
@@ -391,6 +419,21 @@
   --j-cobalt-3: #5b6f9e; /* disabled / lighter */
   --j-cobalt-soft: rgba(44, 74, 126, 0.1);
 
+  /* === v9.3.1 — TECHY-BLUE FAMILY (light-mode deeper variants)
+   * Owner directive 2026-08-01: "AI techy feel, shades of blue that are
+   * not painful to the eyes". Each step measured against cream paper #d4cebd
+   * (94% L — soft, never bright). All desaturated (≤55% chroma); no neon.
+   * On cream the family shifts DEEPER than dark theme (more ink contrast). */
+  --j-blue: #2c4a7e; /* v9.3.1 light — primary techy blue — 6.10:1 AA on cream */
+  --j-blue-deep: #1f3563; /* hover/pressed — 8.50:1 AAA */
+  --j-blue-mid: #4a6fa5; /* mid — chrome tint, hover ghost */
+  --j-blue-soft: rgba(44, 74, 126, 0.1); /* chrome fill */
+  --j-cyan: #2c5e5a; /* slate-cyan — chrome secondary (alias --j-teal for backward compat) */
+  --j-cyan-deep: #1a4541;
+  --j-cyan-soft: rgba(44, 94, 90, 0.12);
+  --j-sky: #5b7fa3; /* dusty blue — eyebrow / hover ghost — chrome-only */
+  --j-ice: #d4dde6; /* ice-blue — focus ring tint, very soft on cream */
+
   /* === ACCENT EXPANSION — light-mode deeper variants (v6.17.1) === */
   --j-sage: #3f6b2a; /* deep sage — 5.10:1 AA on #d4cebd */
   --j-sage-deep: #2a4e1a;
@@ -413,7 +456,7 @@
    * Used identically to dark mode: eyebrow chip, KPI underline, portrait strip. */
   --j-phi-teal: #1f4a47;
   --j-phi-teal-deep: #143330;
-  --j-phi-teal-soft: rgba(31, 74, 71, 0.10);
+  --j-phi-teal-soft: rgba(31, 74, 71, 0.1);
 
   /* === Legacy --j-accent redirects to cobalt (back-compat) === */
   --j-accent: var(--j-cobalt);
