@@ -74,7 +74,9 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     <div class="container">
       <p class="desk-head__eyebrow mono">
         <span class="desk-head__eyebrow-chip">THE DESK · 24H COVERAGE · OPEN</span>
-        <span class="desk-head__eyebrow-line">{archSafe.agentCount}-AGENT OFFICE · {events.length} WORLD EVENTS · UTC+8</span>
+        <span class="desk-head__eyebrow-line"
+          >{archSafe.agentCount}-AGENT OFFICE · {events.length} WORLD EVENTS · UTC+8</span
+        >
       </p>
       <h1 class="desk-head__title" data-words>
         The world, in <span class="hl">24 hours</span>.
@@ -86,10 +88,9 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
       <p class="desk-head__sub">
         A backtest is what a strategy <em>would have done</em>. A paper-trade is what it <em
           >actually does</em
-        >. The desk is what the multi-agent office <em>actually watches</em> — six research venues
-        spanning APAC and the western exchanges, ten curated world events pinned to the calendar,
-        and a rolling 24-hour signal overlay so the office sees what is moving before the
-        position-book reacts.
+        >. The desk is what the multi-agent office <em>actually watches</em> — six research venues spanning
+        APAC and the western exchanges, ten curated world events pinned to the calendar, and a rolling
+        24-hour signal overlay so the office sees what is moving before the position-book reacts.
       </p>
 
       <div class="desk-head__cta">
@@ -485,6 +486,38 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     }
     .desk-events__col-cat {
       display: none;
+    }
+  }
+
+  /* v9.3.1 · "24 hours" headline underline uses techy-blue gradient.
+     Note: the .hl span in this page is italic amber (--c-amber) by design,
+     so we override the ::after gradient under the italic to keep the
+     techy-blue chrome consistent across the headline. */
+  .desk-head__title .hl::after {
+    background: linear-gradient(90deg, var(--c-blue), var(--c-blue-mid));
+  }
+
+  /* v9.3.1 · desk-stats__cell stagger fade-in (shared broadside-rise).
+     4 coverage-stat cells — 80ms cadence reads as the coverage snapshot
+     populating as the table loads. */
+  .desk-stats__cell {
+    animation: broadside-rise 480ms ease-out both;
+  }
+  .desk-stats__cell:nth-child(1) {
+    animation-delay: 80ms;
+  }
+  .desk-stats__cell:nth-child(2) {
+    animation-delay: 160ms;
+  }
+  .desk-stats__cell:nth-child(3) {
+    animation-delay: 240ms;
+  }
+  .desk-stats__cell:nth-child(n + 4) {
+    animation-delay: 320ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .desk-stats__cell {
+      animation: none;
     }
   }
 </style>

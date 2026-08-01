@@ -502,4 +502,34 @@ const popular = [
       align-items: flex-start;
     }
   }
+
+  /* v9.3.1 · search-card stagger fade-in (shared broadside-rise).
+     6 popular-destination cards in the empty state — 60ms cascade
+     reads as the destination grid populating as the page loads. */
+  .search-card {
+    animation: broadside-rise 480ms ease-out both;
+  }
+  .search-card:nth-child(1) {
+    animation-delay: 60ms;
+  }
+  .search-card:nth-child(2) {
+    animation-delay: 120ms;
+  }
+  .search-card:nth-child(3) {
+    animation-delay: 180ms;
+  }
+  .search-card:nth-child(4) {
+    animation-delay: 240ms;
+  }
+  .search-card:nth-child(5) {
+    animation-delay: 300ms;
+  }
+  .search-card:nth-child(n + 6) {
+    animation-delay: 360ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .search-card {
+      animation: none;
+    }
+  }
 </style>
