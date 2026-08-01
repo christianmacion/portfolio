@@ -2,9 +2,12 @@
 /**
  * certifications.astro — v2: curated certs + math/quant aesthetic.
  *
- * Hero equation: cert density over time → {{claimedTotal}} certs / {{ageMonths}} months.
- * Both inputs read from `profile.certCount` and `profile.ageMonths` so the
- * rendered equation tracks profile updates without manual sync.
+ * Hero equation: cert density over time — claimedTotal certs over certSpanMonths months.
+ * claimedTotal reads from `profile.stats.certCount` (the headline number used
+ * site-wide). certSpanMonths is derived from the earliest/latest cert year
+ * (Jan → Dec), so the rendered equation tracks profile + curated-set
+ * updates without manual sync. v9.3.2 — drop the unfilled template tokens
+ * from the JSDoc per webcraft-no-vibe X02 audit gate.
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
 import Equation from '@components/Equation.astro';
