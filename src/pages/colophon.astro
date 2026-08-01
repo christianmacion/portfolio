@@ -64,7 +64,9 @@ const motion = [
   {
     effect: 'odometer',
     trigger: 'data-counter scrolls into view',
-    duration: '1200ms',
+    // v2026-08-02 — default shortened to 0.6s (was 1.2s) per the
+    // SEV-3 motion sweep; spec row updated to match the live value.
+    duration: '0.6s',
     easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
   },
   {
@@ -82,13 +84,13 @@ const motion = [
   {
     effect: 'shine',
     trigger: 'verified badge / status pill idle',
-    duration: '1500ms',
+    duration: '1.5s',
     easing: 'linear (one-shot on appearance)',
   },
   {
     effect: 'trust-pulse',
     trigger: 'pass / fail status dot',
-    duration: '2400ms',
+    duration: '2.4s',
     easing: 'ease-in-out (infinite, opacity-only)',
   },
 ];

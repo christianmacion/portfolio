@@ -240,8 +240,8 @@
   --j-dur-fast: 120ms;
   --j-dur: 200ms;
   --j-dur-slow: 320ms;
-  --j-dur-slower: 1200ms; /* v7.4 — entrance arc ceiling */
-  --j-dur-cursor: 1100ms; /* v7.4 — hero cursor blink half-cycle */
+  --j-dur-slower: 1.2s; /* v7.4 — entrance arc ceiling */
+  --j-dur-cursor: 1.1s; /* v7.4 — hero cursor blink half-cycle */
   --j-marquee-speed: 24px; /* v7.4 — px/sec reference */
   --j-news-speed: 32px; /* v7.4 — px/sec reference */
   --j-pulse-ring-color: currentColor; /* v7.4 — passes through to .pulse-ring */

@@ -10,12 +10,17 @@
  * Props:
  *   value       — numeric target the odometer animates to
  *   label       — caption beneath the value (optional)
- *   duration    — override of driver default (1200ms). Pass as data-duration.
+ *   duration    — override of driver default (0.6s). Pass as data-duration.
  *   format      — optional formatter; if omitted the raw `value` is shown.
  *
  * Usage:
  *   <Odometer value={31} label="eval gates, G1–G31" />
  *   <Odometer value={1200} duration={1800} label="lines of harness code" />
+ *
+ * v2026-08-02 — default duration shortened to 0.6s (was 1.2s). The
+ * SSR'd final value renders at first paint; the count-up only fires
+ * once the value scrolls into view, so the on-screen "0" window is
+ * the duration of the animation. 0.6s reads as snappy + still legible.
  *
  * NDA-positive: just renders a number and a label — no platform references.
  * Reduced-motion: driver side snaps to final value, no animation.
