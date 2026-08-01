@@ -114,8 +114,8 @@ const liveCounters = [
       <p class="hero__eyebrow mono">A WORKING DESCRIPTION · 2026 · v9.1</p>
       <h1 class="hero__name">
         <span class="hero__name-1">Christian</span>
-        <span class="hero__name-2"><em>T.</em></span>
-        <span class="hero__name-3"><em>Macion</em></span>
+        <span class="hero__name-2">T.</span>
+        <span class="hero__name-3">Macion</span>
       </h1>
       <p class="hero__role">
         Quant researcher, AI engineer, multi-agent build system operator — based in Digos City,
@@ -485,15 +485,11 @@ const liveCounters = [
   .hero__name-1 {
     font-style: normal;
   }
-  .hero__name-2 em {
-    font-style: italic;
-    font-weight: 400;
-    color: var(--c-ink-2);
-  }
-  .hero__name-3 em {
-    font-style: italic;
-    font-weight: 500;
-    color: var(--c-ink-2);
+  .hero__name-2,
+  .hero__name-3 {
+    font-style: normal;
+    font-weight: inherit;
+    color: inherit;
   }
   .hero__role {
     font: 400 17px / 1.45 var(--serif-display);
