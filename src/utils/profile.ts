@@ -111,6 +111,16 @@ export const profile = {
     display: 'Digos City, Davao del Sur, Philippines (UTC+8)',
   },
   contact: {
+    // TODO(macion.ventures-domain): replace Gmail with christian@macion.ventures once domain
+    //   is acquired + MX records resolve. Gmail breaks institutional register — a hedge-fund
+    //   head-of-research hits the Gmail, the chrome deflates. Voice audit 2026-08-02 BLOCKER.
+    //   Verified via `dig macion.ventures MX +short` (empty) + `dig macion.ventures A +short`
+    //   (empty) + `dig macion.ventures NS +short` (empty). Domain is registered at Identity
+    //   Digital (`.ventures` TLD) but has no DNS configured. SWAPPING NOW would break 20+
+    //   mailto: links sitewide (BaseLayout, index, proof, for-recruiters, contact, JSON-LD,
+    //   sitemap, RSS feeds). HARD TODO surfaced to Owner in
+    //   ~/.claude/cache/corporate/aars/2026-08-02-voice-audit-fixes.md with the exact DNS
+    //   verification commands + the deployment sequence once MX resolves.
     email: 'christianmacion26@gmail.com',
     phone: '+63-991-616-2630',
     phoneDisplay: '+63 991 616 2630',
