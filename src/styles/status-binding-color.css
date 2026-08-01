@@ -13,14 +13,9 @@
   --c-bind-ship: #3fb950; /* matcha     — shipped / live / done */
   --c-bind-handoff: #c98a16; /* terracotta — handoff / delegated / pending */
   --c-bind-iterate: #d4a017; /* amber      — iterate / in-progress / wip */
-  --c-bind-doctrine: #7e57c2; /* purple     — doctrine / spec / governance */
+  /* Canonical doctrine purple lives in tokens.css; it is 4.69:1 against c-bg-3 (#1f242c). */
 
-  /* c-bg-3 USAGE RESTRICTION (T1-1 binding fix):
-     --c-bind-doctrine (#7e57c2) FAILS WCAG 2.2 SC 1.4.11 at 2.99:1 against c-bg-3 (#1f242c).
-     Permitted surfaces: --c-bg (page) + --c-bg-2 (panel) ONLY.
-     On c-bg-3 cards, substitute --c-bind-handoff (#c98a16) or --c-bind-iterate (#d4a017).
-     Enforced by CI restricted-syntax guardrail for .binding-stripe--doctrine + .c-bg-3.
-   */
+  /* c-bg-3 USAGE — #9d80c4 clears WCAG 2.2 SC 1.4.11 at 4.69:1 against c-bg-3 (#1f242c). */
 
   /* Stripe geometry */
   --bind-stripe-w: 3px;

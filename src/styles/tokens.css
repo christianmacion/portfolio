@@ -26,7 +26,8 @@
     --c-bg-elev: rgba(255, 255, 255, 0.02); /* elevated surface */
     --c-teal: #5ba8a3; /* ai-page accent */
     --c-violet: #a07baf; /* ai-page accent */
-    --c-purple: #7e57c2; /* workbook accent */
+    --c-bind-doctrine: #9d80c4; /* doctrine binding stripe — WCAG 2.2 SC 1.4.11 safe on dark + paper surfaces */
+    --c-purple: var(--c-bind-doctrine); /* workbook accent */
     --c-green: #2e7d32; /* workbook accent */
   }
   :root {
