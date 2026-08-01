@@ -108,8 +108,7 @@ const licenses = [
       </p>
       <h1 class="site-head__title" data-words>About this site.</h1>
       <VoiceLine class="site-head__voice">
-        Built with public tools. Documented here. Guarded by the same NDA audit the public-facing
-        pages use.
+        Static-first. Public tools. Guarded by the same NDA audit the public-facing pages use.
       </VoiceLine>
       <p class="site-head__sub">
         A static-first portfolio for a Quant Researcher and AI Engineer. This page is the meta: what
@@ -399,7 +398,8 @@ const licenses = [
   .bullet code {
     background: var(--c-bg-2);
     padding: 1px 6px;
-    border-radius: 3px;
+    /* v9.3.1 — F17 institutional: sharp corners (1px) instead of 3px. */
+    border-radius: 1px;
     font-size: 0.9em;
   }
   .bullet a {
@@ -411,7 +411,8 @@ const licenses = [
   .guard {
     border: 1px solid var(--c-rule);
     border-left: 3px solid var(--c-primary);
-    border-radius: var(--radius);
+    /* v9.3.1 — F17 institutional: sharp corners (1px) instead of --radius (10px). */
+    border-radius: 1px;
     background: var(--c-bg);
     padding: var(--sp-4);
     display: flex;
@@ -481,7 +482,8 @@ const licenses = [
     padding: var(--sp-4);
     border: 1px solid var(--c-rule);
     border-left: 3px solid var(--c-primary);
-    border-radius: var(--radius);
+    /* v9.3.1 — F17 institutional: sharp corners (1px) instead of --radius (10px). */
+    border-radius: 1px;
     background: var(--c-bg);
     display: grid;
     grid-template-columns: 140px 1fr;
