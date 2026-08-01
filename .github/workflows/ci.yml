@@ -131,6 +131,15 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx playwright install --with-deps chromium
+      # Generate the favicon set (apple-touch-icon-180x180.png + favicon-* +
+      # maskable-*) from public/cm-mark-amber.svg BEFORE build:mirror. The
+      # build:mirror chain runs `asset-audit.mjs` which hard-requires the 180×180
+      # PNG, but build:mirror does NOT run the full `prebuild` hook (which also
+      # calls fetch-gdelt + build-graph-snapshot — both depend on local state
+      # that doesn't exist in CI runners). optimize-assets.mjs is idempotent
+      # and has no external API calls, so it's safe to call directly here.
+      # v9.3.6 hardening.
+      - run: node scripts/optimize-assets.mjs
       - name: Build site
         run: npm run build:mirror
       - name: axe-core route audit (WCAG 2.2 AA)
