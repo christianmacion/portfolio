@@ -1,0 +1,416 @@
+---
+/**
+ * projects/quant.astro — v9.3.2 QUANT LANE INDEX.
+ *
+ * A focused deep-dive on the 9 quant-research projects. This page is
+ * the canonical target for the home-page quick-route "9 strategies"
+ * card. The aesthetic matches /projects/ (institutional broadside),
+ * but trims down to one lane: no AI filter chip, no combined-book
+ * cross-project analysis (that lives on /projects/).
+ *
+ * Layout:
+ *   - Page head (4-stat strip + 1-line voice)
+ *   - Project news ribbon + marquee (matches /projects/ styling)
+ *   - Grid of 9 quant projects (3-col on desktop, 1-col mobile)
+ *   - Methodology footer — links back to /methodology + /projects
+ *
+ * Same chrome as /projects/ — no halo/glow/gradient, institutional
+ * register, mono + blue accent (v9.3.1 techy-blue applied).
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import ProjectCard from '@components/ProjectCard.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+import { path } from '@utils/url';
+import { projectListJsonLd } from '@utils/seo';
+import VoiceLine from '@components/VoiceLine.astro';
+import NewsRibbon from '@components/NewsRibbon.astro';
+import Marquee from '@components/Marquee.astro';
+
+type ProjectEntry = CollectionEntry<'project'>;
+const allProjects: ProjectEntry[] = await getCollection('project');
+const projects = allProjects
+  .filter((p) => p.data.role === 'quant')
+  .sort((a, b) => a.data.order - b.data.order);
+
+// Headline aggregates — sourced from project frontmatter
+const totalTrials = projects.reduce((acc, p) => {
+  const trialMetric = p.data.metrics.find((m) => /trials|sweep|rules/i.test(m.label));
+  if (trialMetric) {
+    const n = parseInt(trialMetric.value.replace(/[^\d]/g, ''), 10);
+    return acc + (Number.isFinite(n) ? n : 0);
+  }
+  return acc;
+}, 0);
+
+const itemListJsonLd = projectListJsonLd(
+  projects.map((p: ProjectEntry) => ({
+    slug: p.id,
+    title: p.data.title,
+    summary: p.data.summary,
+    role: p.data.role,
+    sourceLink: p.data.sourceLink,
+    date: p.data.date,
+  })),
+);
+---
+
+<BaseLayout
+  title="Quant Research — 9 Strategies"
+  description="Nine quantitative-research projects across multiple-testing, cross-sectional alpha, time-series momentum, volatility-risk premium, cointegration pairs, funding-carry, regime overlays, cost-aware backtesting, and look-ahead audit."
+  extraJsonLd={itemListJsonLd}
+  breadcrumbs={[
+    { name: 'Home', href: '/' },
+    { name: 'Projects', href: '/projects' },
+    { name: 'Quant Researcher', href: '/projects/quant' },
+  ]}
+>
+  <header class="page-head">
+    <div class="container">
+      <p class="section__eyebrow">Lane 2 · Quant Researcher</p>
+      <h1 class="page-head__title" data-words>{projects.length} strategies, one pipeline.</h1>
+      <VoiceLine class="page-head__voice">
+        Every strategy is reproducible. Every headline metric is a real backtest output. Every
+        rejection is shipped as a rejection — the kill log is the proof.
+      </VoiceLine>
+      <p class="page-head__sub">
+        The book is not {projects.length} winning trades. It is one pipeline with three orthogonal layers
+        (signal · risk · validation) and a layered discipline that catches the failure modes that eat
+        naive books alive. A risk manager reading these projects sees the same engineering rigor applied
+        end-to-end.
+      </p>
+
+      {/* === Headline stats — quant lane at a glance === */}
+      <div class="page-head__stats">
+        <div class="page-head__stat">
+          <span class="page-head__stat-num tnum">{projects.length}</span>
+          <span class="page-head__stat-lbl">strategies shipped</span>
+        </div>
+        <div class="page-head__stat">
+          <span class="page-head__stat-num tnum">{totalTrials > 0 ? `${totalTrials}+` : '9'}</span>
+          <span class="page-head__stat-lbl">total trials across sweeps</span>
+        </div>
+        <div class="page-head__stat">
+          <span class="page-head__stat-num tnum">31</span>
+          <span class="page-head__stat-lbl">gates wired (G1–G31)</span>
+        </div>
+        <div class="page-head__stat">
+          <span class="page-head__stat-num tnum">0</span>
+          <span class="page-head__stat-lbl">rollbacks · zero live disasters</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <NewsRibbon
+    news={[
+      {
+        t: '10:32',
+        tag: 'AVAIL',
+        text: 'Q3 2026 · OPEN TO REMOTE QR / AI ROLES · <24H REPLY',
+        accent: 'warn',
+      },
+      {
+        t: '10:28',
+        tag: 'PAPER',
+        text: 'TSM-VT · +0.42% · σ 1.1 · WEEK 27',
+        accent: 'sage',
+      },
+      {
+        t: '10:25',
+        tag: 'PROJ',
+        text: '9 QUANT STRATEGIES · ONE PIPELINE · 31 GATES',
+        accent: 'cobalt',
+      },
+      {
+        t: '10:18',
+        tag: 'GATE',
+        text: 'G31 · LOOKAHEAD AUDIT · 88% CATCH ON PHANTOM LEAK',
+        accent: 'warn',
+      },
+      {
+        t: '10:09',
+        tag: 'ALPHA',
+        text: 'COINTEGRATION PAIRS · 5Y HALF-LIFE · BLOCK-BOOTSTRAP',
+        accent: 'cobalt',
+      },
+      {
+        t: '10:05',
+        tag: 'STATUS',
+        text: 'DUTY · ONLINE · 24H REPLY · NDA-CLEAN',
+        accent: 'sage',
+      },
+    ]}
+    speedNewsSec={48}
+    speedMethodSec={64}
+    trailing="quant desk · seeded from BUILD_DATE"
+  />
+
+  <Marquee
+    items={[
+      { head: 'EVAL-FIRST', tail: '31 GATES · ZERO ROLLBACKS', accent: 'warn' },
+      { head: 'NDA-CLEAN', tail: 'PUBLIC-DATA REPRODUCIBLE', accent: 'cobalt' },
+      { head: 'ALPHA-DRIVEN', tail: '14 SIGNALS · 9 STRATEGIES', accent: 'sage' },
+      { head: 'COINTEGRATION', tail: 'PAIRS · 5Y HALF-LIFE', accent: 'cobalt' },
+      { head: 'VARIANCE RISK', tail: 'PREMIUM HARVEST · DELTA-HEDGED', accent: 'warn' },
+      { head: 'REGIME OVERLAY', tail: 'VOL-TARGETED · DEFENSIVE', accent: 'terracotta' },
+      { head: 'CRYPTO NATIVE', tail: 'BTC · ETH · FUNDING-RATE CARRY', accent: 'warn' },
+      { head: 'LOOKAHEAD AUDIT', tail: '88% CATCH ON PHANTOM LEAK', accent: 'sage' },
+    ]}
+    speedSec={62}
+    trailing="quant discipline · 8 anchor frames"
+  />
+
+  <section class="section section--alt" data-lane="quant" id="lane-quant">
+    <div class="container">
+      <header class="section__head">
+        <p class="section__eyebrow">Lane 2 · Quantitative Researcher</p>
+        <h2 class="section__title">Systematic strategies & statistical validation</h2>
+        <p class="section__sub">
+          {projects.length} projects across multiple-testing, cross-sectional and time-series alpha, volatility,
+          cointegration, funding-carry, and bias control. Public-data reproducible; every headline metric
+          is sourced from a real backtest output.
+        </p>
+      </header>
+      <div class="grid grid-3">
+        {
+          projects.map((p) => (
+            <ProjectCard
+              href={path(`/projects/${p.id}`)}
+              title={p.data.title}
+              summary={p.data.summary}
+              metrics={p.data.metrics}
+              lane="quant"
+              order={p.data.order}
+              status="public-data reproducible"
+            />
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt book-analysis">
+    <div class="container">
+      <header class="section__head">
+        <p class="section__eyebrow">Combined-book analysis · cross-project</p>
+        <h2 class="section__title">
+          What {projects.length} projects tell you about a research book
+        </h2>
+        <p class="section__sub">
+          None of these projects stand alone. The signal, cost, regime, and bias-control layers are
+          designed to compose — a single vol-targeted carry trade (03 + 06) carries different risk
+          than a cointegration pair (05) carrying regime-aware sizing (07). The shared methodology
+          across all {projects.length} is what makes the book interpretable to a risk manager, not just
+          an alpha-hunter.
+        </p>
+      </header>
+
+      <div class="book-grid">
+        <article class="book-card">
+          <div class="book-card__layer">Layer A — Signal</div>
+          <h3 class="book-card__title">Alpha sources</h3>
+          <ul class="book-card__list">
+            <li>
+              <strong>Cross-sectional:</strong> project 02 (failed OOS, as the test predicted)
+            </li>
+            <li><strong>Time-series:</strong> projects 03 (vol-targeted), 04 (VRP)</li>
+            <li><strong>Carry / funding:</strong> project 06 (OOS Sharpe decayed post-2023)</li>
+            <li><strong>Cointegration / stat-arb:</strong> project 05 (rejected by ADF)</li>
+          </ul>
+        </article>
+
+        <article class="book-card">
+          <div class="book-card__layer">Layer B — Risk</div>
+          <h3 class="book-card__title">Risk-management overlays</h3>
+          <ul class="book-card__list">
+            <li><strong>Vol targeting (20-day):</strong> project 03 (Sharpe 0.27 → 0.39)</li>
+            <li><strong>Regime overlay (smoothed VIX):</strong> project 07 (DD −58% → −42%)</li>
+            <li><strong>Cost-aware sizing:</strong> project 08 (break-even turnaround scan)</li>
+            <li>
+              <strong>Look-ahead audit:</strong> project 09 (one-line shift test, every book run)
+            </li>
+          </ul>
+        </article>
+
+        <article class="book-card">
+          <div class="book-card__layer">Layer C — Validation</div>
+          <h3 class="book-card__title">Statistical gating</h3>
+          <ul class="book-card__list">
+            <li><strong>Multiple-testing:</strong> project 01 (Deflated Sharpe, 160-trial null)</li>
+            <li>
+              <strong>Pre-registration:</strong> project 06 (OOS window locked before data touched)
+            </li>
+            <li><strong>HAC inference:</strong> project 04 (Newey-West t = +6.5)</li>
+            <li>
+              <strong>Honest nulls:</strong> projects 02 + 05 (rejected, shipped as rejections)
+            </li>
+          </ul>
+        </article>
+      </div>
+
+      <p class="book-note">
+        The book is not {projects.length} winning trades. It is one pipeline with three orthogonal layers
+        and a layered validation discipline that catches the failure modes that eat naive books alive.
+        A risk manager reading these {projects.length} projects sees the same engineering discipline applied
+        end-to-end — that is what is hireable.
+      </p>
+
+      <div class="cross-link">
+        <a class="cross-link__cta" href={path('/projects')}>
+          ← See all projects (AI + Quant lanes)
+        </a>
+        <a class="cross-link__cta" href={path('/methodology')}> Methodology — gates G1–G31 → </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-head {
+    padding-block: var(--sp-9) var(--sp-6);
+    background: var(--c-bg);
+    border-bottom: var(--border);
+  }
+  .page-head__title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    letter-spacing: -0.02em;
+    margin-bottom: var(--sp-3);
+  }
+  .page-head__voice {
+    margin: 0 0 var(--sp-5);
+    max-width: 60ch;
+  }
+  .page-head__stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--sp-4);
+    margin-block: var(--sp-5) var(--sp-4);
+    padding-block: var(--sp-4);
+    border-top: 1px solid var(--c-rule);
+    border-bottom: 1px solid var(--c-rule);
+  }
+  .page-head__stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .page-head__stat-num {
+    font-size: clamp(2.5rem, 5.5vw, 4.5rem);
+    font-weight: 600;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    /* v9.3.1 techy-blue — apply institutional deep-blue to the headline
+       numbers on the lane index. Same blue as home strip__num and
+       section marks — keeps the chrome consistent across pages. */
+    color: var(--c-blue);
+    font-variant-numeric: tabular-nums;
+  }
+  .page-head__stat-lbl {
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--c-ink-3);
+    line-height: 1.3;
+  }
+  @media (max-width: 640px) {
+    .page-head__stats {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--sp-3);
+    }
+  }
+  .page-head__sub {
+    font-size: var(--fs-lg);
+    color: var(--c-ink-2);
+    max-width: 64ch;
+  }
+
+  .book-analysis {
+    border-top: var(--border);
+  }
+
+  .book-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--sp-4);
+    margin-bottom: var(--sp-6);
+  }
+  @media (max-width: 880px) {
+    .book-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .book-card {
+    background: var(--c-bg-2);
+    border: var(--border);
+    border-radius: var(--radius);
+    padding: var(--sp-5);
+    transition: border-color 120ms ease;
+  }
+  .book-card:hover {
+    border-color: var(--c-blue);
+  }
+  .book-card__layer {
+    font-family: var(--ff-mono);
+    font-size: var(--fs-xs);
+    color: var(--c-blue);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: var(--sp-2);
+  }
+  .book-card__title {
+    font-size: var(--fs-lg);
+    margin-bottom: var(--sp-3);
+    color: var(--c-ink);
+  }
+  .book-card__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: var(--fs-sm);
+    color: var(--c-ink-2);
+    line-height: var(--lh-loose);
+  }
+  .book-card__list li {
+    padding: var(--sp-1) 0;
+    border-bottom: 1px dashed var(--c-rule);
+  }
+  .book-card__list li:last-child {
+    border-bottom: none;
+  }
+  .book-card__list strong {
+    color: var(--c-ink);
+    font-weight: 600;
+  }
+  .book-note {
+    font-size: var(--fs-base);
+    color: var(--c-ink-2);
+    line-height: var(--lh-loose);
+    max-width: 72ch;
+    padding: var(--sp-4) var(--sp-5);
+    background: var(--c-bg);
+    border-left: 3px solid var(--c-blue);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  }
+  .cross-link {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-4);
+    margin-top: var(--sp-5);
+    padding-top: var(--sp-4);
+    border-top: 1px solid var(--c-rule);
+  }
+  .cross-link__cta {
+    font-family: var(--ff-mono);
+    font-size: var(--fs-xs);
+    color: var(--c-blue);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 140ms ease;
+  }
+  .cross-link__cta:hover {
+    color: var(--c-blue-deep);
+  }
+</style>
