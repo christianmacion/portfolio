@@ -32,9 +32,15 @@ interface Props {
    * the caption is the load-bearing context and you want screen readers
    * to reach it. */
   decorative?: boolean;
+  /** v9.3.2 motion contract — `false` disables the ship-cell breathe
+   * animation (the 5.5s opacity pulse on the bright indicator). Default
+   * true. The audit (2026-08-02 M-2) says "let TrustStrip own the
+   * heartbeat on /proof/ and /methodology/" — those pages pass false.
+   * The home page and the footer keep the default pulse. */
+  pulse?: boolean;
 }
 
-const { width = 240, height, caption, decorative = true } = Astro.props;
+const { width = 240, height, caption, decorative = true, pulse = true } = Astro.props;
 
 const N = Number(profile.stats.evalGates); // 31 gates
 const VIEW_W = 240;
@@ -105,6 +111,7 @@ for (const f of families) {
 
 <figure
   class="brand-motif"
+  data-pulse={pulse ? 'true' : 'false'}
   style={`--brand-w:${width}px;${height ? `--brand-h:${height}px;` : ''}`}
 >
   {
@@ -237,9 +244,12 @@ for (const f of families) {
     max-width: 100%;
     height: auto;
   }
-  /* Subtle pulse on the ship indicator — restraint: opacity, no motion. */
+  /* Subtle pulse on the ship indicator — restraint: opacity, no motion.
+     v9.3.2 motion contract — gated by [data-pulse="true"] on the figure
+     so the page can opt out (proof/methodology pass `pulse={false}`).
+     Audit 2026-08-02 M-2: TrustStrip owns the heartbeat on those pages. */
   @media (prefers-reduced-motion: no-preference) {
-    .brand-motif__cell--ship > circle:nth-child(2) {
+    .brand-motif[data-pulse='true'] .brand-motif__cell--ship > circle:nth-child(2) {
       animation: brand-motif-breathe 5.5s ease-in-out infinite;
     }
   }

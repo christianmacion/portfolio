@@ -13,6 +13,18 @@ import Avatar from '@components/Avatar.astro';
 
 const year = buildYear();
 const deployedStamp = buildStampUtc8();
+
+// v9.3.2 motion contract — /proof/ and /methodology/ are "what is this
+// portfolio" surfaces; the TrustStrip pulse is the heartbeat there. The
+// BrandMotif breathe is suppressed on those two pages so the registry
+// reads exactly 1 infinite loop per viewport (the trust-pulse). See
+// 2026-08-02 motion audit M-2. Astro.url.pathname keeps the base path
+// (e.g. `/portfolio/proof/` on GH Pages builds), so we match suffix.
+const pathname = Astro.url.pathname;
+const noPulseSuffixes = ['/proof', '/methodology'];
+const footerPulse = !noPulseSuffixes.some(
+  (s) => pathname === s || pathname === `${s}/` || pathname.endsWith(`${s}/`)
+);
 ---
 
 <footer class="footer">
@@ -34,7 +46,7 @@ const deployedStamp = buildStampUtc8();
   <div class="container footer__inner">
     <div class="footer__brand">
       <div class="footer__mark">
-        <BrandMotif width={140} decorative={true} />
+        <BrandMotif width={140} decorative={true} pulse={footerPulse} />
       </div>
       <div class="footer__identity">
         <div class="footer__avatar">
