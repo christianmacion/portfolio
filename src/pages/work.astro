@@ -19,6 +19,7 @@
 import BaseLayout from '@layouts/BaseLayout.astro';
 import VoiceLine from '@components/VoiceLine.astro';
 import CTABanner from '@components/CTABanner.astro';
+import ChromeHeader from '@components/ChromeHeader.astro';
 import { profile } from '@utils/profile';
 import { path } from '@utils/url';
 import { getCollection, type CollectionEntry } from 'astro:content';
@@ -50,12 +51,13 @@ const buildDate = new Date().toISOString().slice(0, 10);
 >
   <header class="page-head">
     <div class="container container-narrow">
-      <p class="page-head__eyebrow mono">
-        <span class="page-head__eyebrow-chip">WORK · WORKING ARCHIVE</span>
-        <span class="page-head__eyebrow-line"
-          >CASE STUDIES · SHIPPED RECORD · WHAT SURVIVED REVIEW</span
-        >
-      </p>
+      <ChromeHeader
+        chip="WORK · WORKING ARCHIVE"
+        eyebrow="CASE STUDIES · SHIPPED RECORD · WHAT SURVIVED REVIEW"
+        tenant="CHRISTIAN.T.MACION · UTC+8 · CASE STUDIES · OWNER-VERIFIED"
+        noSep
+        hideTenet
+      />
       <h1 class="page-head__title" data-words>
         A working archive <span class="hl">of what shipped</span>.
       </h1>

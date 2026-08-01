@@ -14,6 +14,7 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import Stat from '@components/Stat.astro';
 import Equation from '@components/Equation.astro';
 import CTABanner from '@components/CTABanner.astro';
+import ChromeHeader from '@components/ChromeHeader.astro';
 import { profile } from '@utils/profile';
 import { path } from '@utils/url';
 import { getCollection, type CollectionEntry } from 'astro:content';
@@ -49,12 +50,13 @@ const NGATE = `${profile.stats.evalGates}-gate`;
 >
   <header class="page-head">
     <div class="container container-narrow">
-      <p class="page-head__eyebrow mono">
-        <span class="page-head__eyebrow-chip">ABOUT · OPERATOR + RESEARCHER</span>
-        <span class="page-head__eyebrow-line"
-          >ONE METHOD · TWO HATS · {profile.stats.evalGates}-GATE DISCIPLINE</span
-        >
-      </p>
+      <ChromeHeader
+        chip="ABOUT · OPERATOR + RESEARCHER"
+        eyebrow={`ONE METHOD · TWO HATS · ${profile.stats.evalGates}-GATE DISCIPLINE`}
+        tenant="CHRISTIAN.T.MACION · UTC+8 · REMOTE-OK · DAILY-SHIP · OWNER-VERIFIED"
+        noSep
+        hideTenet
+      />
       <h1 class="page-head__title" data-words>
         One method. <span class="hl">Two hats.</span>
       </h1>
@@ -86,17 +88,6 @@ const NGATE = `${profile.stats.evalGates}-gate`;
         <Stat value={profile.stats.locPython} label="LOC" sub="light-dep" />
       </div>
 
-      <p class="page-head__tenant mono">
-        <span>CHRISTIAN.T.MACION</span>
-        <span aria-hidden="true">·</span>
-        <span>UTC+8</span>
-        <span aria-hidden="true">·</span>
-        <span>REMOTE-OK</span>
-        <span aria-hidden="true">·</span>
-        <span>DAILY-SHIP</span>
-        <span aria-hidden="true">·</span>
-        <span>OWNER-VERIFIED</span>
-      </p>
       {/* v8.4 — tenet line is now injected by BaseLayout at the bottom of <main>; */}
       {/* the page-level duplicate is removed to avoid double-display. */}
     </div>

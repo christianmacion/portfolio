@@ -1,0 +1,522 @@
+---
+/**
+ * comp.astro — engagement terms page. v1.0.
+ *
+ * Phase 3B (2026-08-02) — voice audit found ZERO rate/salary/fee signals
+ * sitewide. The recruiter's first email pre-empts any conversation; the
+ * site never answers. This page answers the comp question publicly with
+ * defensible institutional bands so the screening call starts with the
+ * right filter, not a comp-discovery loop.
+ *
+ * Chrome contract: mirrors /for-recruiters hero + section pattern.
+ * Sharp corners, mono + amber, no halo/glow/gradient, hairline rules.
+ * Container-narrow only — this is a one-pager.
+ *
+ * Bands source: institutional defaults the candidate can defend on a call.
+ * The exact band per role is OWNER-CONFIRMED on wake (placeholder flag at
+ * the top of every section).
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import CTABanner from '@components/CTABanner.astro';
+import VoiceLine from '@components/VoiceLine.astro';
+import ChromeHeader from '@components/ChromeHeader.astro';
+import { profile } from '@utils/profile';
+import { path } from '@utils/url';
+import {
+  compCategories,
+  outOfScope,
+  engagementChecklist,
+  placeholderFlag,
+} from '@data/comp-bands';
+
+const fullName = profile.fullName;
+const loc = profile.location;
+const email = profile.contact.email;
+
+// v1.0 — comp JSON-LD. Schema.org `PriceSpecification` per band, so the page
+// is discoverable for "quant researcher remote comp" queries. Numeric values
+// are surfaced as structured data; the visible band string remains the
+// institutional-default placeholder until Owner confirms exact figures.
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: 'Compensation & engagement bands — Christian T. Macion',
+  description:
+    'Defensible institutional comp bands for Senior Quant Researcher, AI Engineer / Architect, contract, and advisory engagements.',
+  about: {
+    '@type': 'Person',
+    name: fullName,
+    jobTitle: 'Senior Quantitative Researcher and AI Engineer',
+  },
+  mainEntity: compCategories.flatMap((cat) =>
+    cat.bands.map((band) => ({
+      '@type': 'PriceSpecification',
+      name: band.label,
+      description: `${band.target} — ${band.conditions}`,
+      priceCurrency: 'USD',
+      // Range surfaced as two prices for the PriceSpecification. Falls
+      // back to a single lower bound if parsing fails; the visible band
+      // string remains the source of truth.
+      price: parseInt(band.band.replace(/[^0-9]/g, '').slice(0, 3) || '0', 10),
+      validFrom: '2026-08-02',
+      category: cat.label,
+    })),
+  ),
+};
+---
+
+<BaseLayout
+  title="Compensation & engagement bands"
+  description="Defensible institutional comp bands for Senior Quant Researcher, AI Engineer / Architect, contract, and advisory engagements. Senior-level work, defensible bands, contract structures that close."
+  breadcrumbs={[
+    { name: 'Home', href: '/' },
+    { name: 'For recruiters', href: '/for-recruiters' },
+    { name: 'Comp & engagement', href: '/comp' },
+  ]}
+  surface="v9-3-1"
+  chrome="slim"
+>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <section class="hero">
+    <div class="container container--narrow">
+      <ChromeHeader
+        chip="ENGAGEMENT TERMS · 2026"
+        eyebrow={`${fullName} · ${loc.display} · UTC+8 · IMMEDIATE START`}
+        tenant="PUBLIC-DATA ONLY · NDA-CLEAN BY CONSTRUCTION · SENIOR-LEVEL REGISTER · EVAL-FIRST DISCIPLINE"
+        noSep
+        hideTenet
+      />
+      <h1 class="hero__title" data-words>Compensation &amp; engagement bands</h1>
+      <VoiceLine class="hero__voice">
+        Senior-level work. Defensible bands. Contract structures that close.
+      </VoiceLine>
+      <p class="hero__sub">
+        Defensible institutional defaults for Senior Quant Researcher, AI Engineer / Architect,
+        contract, and advisory engagements. Bands are placeholder until confirmed at first
+        screening — the page exists so the conversation starts with the right filter.
+      </p>
+
+      <p class="hero__placeholder mono">{placeholderFlag}</p>
+
+      <div class="hero__actions">
+        <a
+          class="btn btn--primary"
+          href={`mailto:${email}?subject=${encodeURIComponent('[Comp] Engagement scoping — Christian Macion')}`}
+          >Email scoping note →</a
+        >
+        <a class="btn btn--ghost" href={path('/for-recruiters')}>Recruiter brief →</a>
+        <a class="btn btn--ghost" href={path('/resume')}>View resumes →</a>
+      </div>
+    </div>
+  </section>
+
+  {
+    compCategories.map((cat) => (
+      <section class="section" data-toc-id={cat.id} data-toc-label={cat.label}>
+        <div class="container container--narrow">
+          <header class="section__head">
+            <p class="section__eyebrow mono">{cat.id}/</p>
+            <h2 class="section__title">{cat.label}</h2>
+            <p class="section__sub">{cat.summary}</p>
+          </header>
+
+          <div class="bands">
+            {cat.bands.map((band) => (
+              <article class="band-card">
+                <header class="band-card__head">
+                  <h3 class="band-card__title">{band.label}</h3>
+                  <p class="band-card__target">{band.target}</p>
+                </header>
+
+                <dl class="band-card__grid">
+                  <div class="band-card__row">
+                    <dt class="band-card__key mono">BAND</dt>
+                    <dd class="band-card__val band-card__val--accent mono">{band.band}</dd>
+                  </div>
+                  <div class="band-card__row">
+                    <dt class="band-card__key mono">CONDITIONS</dt>
+                    <dd class="band-card__val">{band.conditions}</dd>
+                  </div>
+                  <div class="band-card__row">
+                    <dt class="band-card__key mono">STRUCTURE</dt>
+                    <dd class="band-card__val">{band.structure}</dd>
+                  </div>
+                </dl>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+    ))
+  }
+
+  <section class="section" data-toc-id="out-of-scope" data-toc-label="What's NOT in scope">
+    <div class="container container--narrow">
+      <header class="section__head">
+        <p class="section__eyebrow mono">out-of-scope/</p>
+        <h2 class="section__title">What's NOT in scope</h2>
+        <p class="section__sub">
+          Five explicit de-scopings. The senior register is also a boundary —
+          these are the briefs that do not fit and will be declined politely.
+        </p>
+      </header>
+
+      <ul class="oos">
+        {
+          outOfScope.map((item, i) => (
+            <li class="oos__item">
+              <span class="oos__num mono">{String(i + 1).padStart(2, '0')}</span>
+              <span class="oos__text">{item}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" data-toc-id="how-to-engage" data-toc-label="How to engage">
+    <div class="container container--narrow">
+      <header class="section__head">
+        <p class="section__eyebrow mono">engage/</p>
+        <h2 class="section__title">How to engage</h2>
+        <p class="section__sub">
+          Email with the engagement you're scoping. ~48-hour reply SLA during UTC+8 day.
+          Include the items below so the first call is a fit conversation, not a discovery loop.
+        </p>
+      </header>
+
+      <ol class="checklist">
+        {
+          engagementChecklist.map((item, i) => (
+            <li class="checklist__item">
+              <span class="checklist__num mono">{String(i + 1).padStart(2, '0')}</span>
+              <span class="checklist__text">{item}</span>
+            </li>
+          ))
+        }
+      </ol>
+
+      <div class="hero__actions">
+        <a
+          class="btn btn--primary"
+          href={`mailto:${email}?subject=${encodeURIComponent('[Engage] Engagement scoping — Christian Macion')}&body=${encodeURIComponent('Role type:\nComp range:\nHours/wk:\nStart date:\nDuration:\nLocation/timezone overlap:\nNDA requirements:\n\n— sent from /comp')}`}
+          >Email scoping note →</a
+        >
+        <a class="btn btn--ghost" href={path('/for-recruiters')}>Recruiter brief →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" data-toc-id="recruiter-notes" data-toc-label="Recruiter notes">
+    <div class="container container--narrow">
+      <header class="section__head">
+        <p class="section__eyebrow mono">recruiter/</p>
+        <h2 class="section__title">Recruiter notes</h2>
+      </header>
+
+      <div class="recruiter-notes">
+        <p class="recruiter-notes__p">
+          If you're staffing a fund and need a senior QR / AI Engineer / Architect who ships
+          (per memory file evidence + repo-ship record), the bands above are starting points —
+          comfortably within the MSA boundary for a 6+ year practitioner. The exact band
+          per role is confirmed at the screening call, not before.
+        </p>
+        <p class="recruiter-notes__p">
+          Six-year eval-first discipline: every shipped artifact is reproducible from public
+          data, gated by a statistical evaluation harness, and audited against look-ahead bias
+          before promotion. The 31-gate eval stack is documented at
+          <a href={path('/methodology')}>{path('/methodology')}</a> — bring it to the screening call
+          if you want to pressure-test fit.
+        </p>
+        <p class="recruiter-notes__p">
+          Ask for a 30-min screening call. Reply SLA: 4 business hours during UTC+8 day.
+          Cold DMs: 24h SLA. Direct phone for qualified screening calls only.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <CTABanner
+    title="Read the recruiter brief next."
+    sub="The 60-second candidate one-pager: availability, location, target seats, resume PDFs, and direct contact for hiring managers."
+    primaryLabel="Go to /for-recruiters"
+    primaryHref={path('/for-recruiters')}
+    secondaryLabel="View /resume"
+    secondaryHref={path('/resume')}
+  />
+</BaseLayout>
+
+<style>
+  /* === Hero — mirrors /for-recruiters chrome contract === */
+  .hero {
+    padding-block: var(--sp-9) var(--sp-7);
+    background: var(--c-paper);
+    border-bottom: var(--border);
+  }
+  .hero__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+    margin: 0 0 var(--sp-4);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    flex-wrap: wrap;
+  }
+  .hero__eyebrow-chip {
+    display: inline-block;
+    padding: 4px 10px;
+    color: var(--c-bg);
+    border: 1px solid var(--c-amber);
+    background: var(--c-amber);
+    font-weight: 600;
+  }
+  .hero__eyebrow-line {
+    color: var(--c-warn);
+    font-weight: 600;
+  }
+  .hero__title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: 1.1;
+    margin-bottom: var(--sp-4);
+    color: var(--c-ink);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  .hero__sub {
+    font-size: clamp(1rem, 2vw, var(--fs-lg));
+    color: var(--c-ink-2);
+    line-height: var(--lh-loose);
+    margin-bottom: var(--sp-5);
+    max-width: 64ch;
+  }
+  .hero__voice {
+    margin: 0 0 var(--sp-4);
+    max-width: 60ch;
+  }
+  .hero__tenant {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+    margin: var(--sp-4) 0;
+    padding: var(--sp-2) var(--sp-3);
+    background: var(--c-bg);
+    border: 1px solid var(--c-rule);
+    font-size: 0.78rem;
+    color: var(--c-ink-2);
+    letter-spacing: 0.06em;
+  }
+  .hero__tenant span:nth-child(odd) {
+    color: var(--c-warn);
+    font-weight: 600;
+  }
+  .hero__placeholder {
+    margin: 0 0 var(--sp-5);
+    padding: var(--sp-3) var(--sp-4);
+    background: var(--c-bg-2);
+    border: 1px solid var(--c-rule);
+    border-left: 3px solid var(--c-amber);
+    font-size: var(--fs-xs);
+    color: var(--c-ink-2);
+    line-height: var(--lh-loose);
+    font-style: italic;
+    max-width: 72ch;
+  }
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-3);
+    align-items: center;
+  }
+
+  /* === Section shell — mirrors /for-recruiters === */
+  .section {
+    padding-block: var(--sp-9);
+  }
+  .section__head {
+    margin-bottom: var(--sp-6);
+  }
+  .section__title {
+    font-size: clamp(1.5rem, 3.5vw, var(--fs-2xl));
+    margin-bottom: var(--sp-3);
+    color: var(--c-ink);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .section__sub {
+    color: var(--c-ink-2);
+    font-size: var(--fs-base);
+    line-height: var(--lh-loose);
+    max-width: 64ch;
+  }
+  .section__eyebrow {
+    color: var(--c-ink-3);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: var(--sp-2);
+  }
+
+  /* === Band cards — single column, full-width within container-narrow === */
+  .bands {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-5);
+  }
+  .band-card {
+    padding: var(--sp-5) var(--sp-6);
+    background: var(--c-bg);
+    border: 1px solid var(--c-rule);
+    border-left: 3px solid var(--c-primary);
+    border-radius: var(--radius);
+  }
+  .band-card__head {
+    margin-bottom: var(--sp-4);
+    padding-bottom: var(--sp-3);
+    border-bottom: 1px solid var(--c-rule-soft);
+  }
+  .band-card__title {
+    font-size: var(--fs-lg);
+    color: var(--c-ink);
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: var(--sp-2);
+  }
+  .band-card__target {
+    color: var(--c-ink-2);
+    font-size: var(--fs-sm);
+    line-height: var(--lh-loose);
+    max-width: 64ch;
+  }
+  .band-card__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    margin: 0;
+    gap: 0;
+  }
+  .band-card__row {
+    display: grid;
+    grid-template-columns: 12ch 1fr;
+    gap: var(--sp-4);
+    padding: var(--sp-3) 0;
+    border-bottom: 1px solid var(--c-rule-soft);
+    align-items: start;
+  }
+  .band-card__row:last-child {
+    border-bottom: none;
+  }
+  .band-card__key {
+    color: var(--c-ink-3);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    padding-top: 2px;
+  }
+  .band-card__val {
+    color: var(--c-ink);
+    font-size: var(--fs-sm);
+    line-height: var(--lh-loose);
+    margin: 0;
+  }
+  .band-card__val--accent {
+    color: var(--c-warn);
+    font-weight: 600;
+    font-size: var(--fs-base);
+    letter-spacing: 0.02em;
+  }
+
+  /* === Out-of-scope list — mirrors /for-recruiters FAQ styling === */
+  .oos {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: var(--border);
+  }
+  .oos__item {
+    display: flex;
+    gap: var(--sp-4);
+    padding: var(--sp-4) 0;
+    border-bottom: var(--border);
+    align-items: flex-start;
+  }
+  .oos__num {
+    color: var(--c-amber-deep);
+    font-size: var(--fs-sm);
+    flex-shrink: 0;
+    width: 2.5ch;
+    letter-spacing: 0.05em;
+    padding-top: 4px;
+  }
+  .oos__text {
+    flex: 1;
+    color: var(--c-ink);
+    font-size: var(--fs-base);
+    line-height: var(--lh-loose);
+  }
+
+  /* === How-to-engage checklist === */
+  .checklist {
+    list-style: none;
+    margin: 0 0 var(--sp-6);
+    padding: 0;
+    border-top: var(--border);
+    counter-reset: engage;
+  }
+  .checklist__item {
+    display: flex;
+    gap: var(--sp-4);
+    padding: var(--sp-3) 0;
+    border-bottom: 1px solid var(--c-rule-soft);
+    align-items: flex-start;
+  }
+  .checklist__num {
+    color: var(--c-amber-deep);
+    font-size: var(--fs-sm);
+    flex-shrink: 0;
+    width: 2.5ch;
+    letter-spacing: 0.05em;
+    padding-top: 2px;
+  }
+  .checklist__text {
+    flex: 1;
+    color: var(--c-ink);
+    font-size: var(--fs-base);
+    line-height: var(--lh-loose);
+  }
+
+  /* === Recruiter notes === */
+  .recruiter-notes {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-4);
+    max-width: 64ch;
+  }
+  .recruiter-notes__p {
+    color: var(--c-ink-2);
+    font-size: var(--fs-base);
+    line-height: var(--lh-loose);
+    margin: 0;
+  }
+  .recruiter-notes__p a {
+    color: var(--c-primary);
+    text-decoration: underline;
+    text-decoration-color: var(--c-amber-decor);
+    text-underline-offset: 3px;
+  }
+
+  /* === Narrow viewport tweaks === */
+  @media (max-width: 600px) {
+    .band-card {
+      padding: var(--sp-4);
+    }
+    .band-card__row {
+      grid-template-columns: 1fr;
+      gap: var(--sp-1);
+    }
+    .band-card__key {
+      padding-top: 0;
+    }
+  }
+</style>

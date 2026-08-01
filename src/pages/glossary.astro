@@ -10,6 +10,7 @@
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
 import CTABanner from '@components/CTABanner.astro';
+import ChromeHeader from '@components/ChromeHeader.astro';
 import { path } from '@utils/url';
 import { terms } from '../data/glossary-terms';
 import VoiceLine from '@components/VoiceLine.astro';
@@ -36,10 +37,13 @@ const aiTerms = terms
 >
   <section class="hero">
     <div class="container container--narrow">
-      <p class="glossary-head__eyebrow mono">
-        <span class="glossary-head__eyebrow-chip">GLOSSARY · QUANT & AI · FOR NON-SPECIALISTS</span>
-        <span class="glossary-head__eyebrow-line">25 TERMS · 30-SECOND READS · DEEP-LINKABLE</span>
-      </p>
+      <ChromeHeader
+        chip="GLOSSARY · QUANT & AI · FOR NON-SPECIALISTS"
+        eyebrow={`${terms.length} TERMS · 30-SECOND READS · DEEP-LINKABLE`}
+        tenant={`CHRISTIAN.T.MACION · UTC+8 · ${terms.length} TERMS · DEEP-LINKABLE`}
+        noSep
+        hideTenet
+      />
       <h1 class="hero__title" data-words>A short dictionary of the terms on this site.</h1>
       <VoiceLine class="hero__voice">
         Twenty-five terms, each short enough to read in thirty seconds, each deep-linkable from
@@ -48,17 +52,6 @@ const aiTerms = terms
       <p class="hero__sub">
         Twenty-five canonical definitions. Each one is short enough to read in thirty seconds and
         stable enough to deep-link to from the methodology, proof, or solutions pages.
-      </p>
-      <p class="glossary-head__tenant mono">
-        <span>CHRISTIAN.T.MACION</span>
-        <span aria-hidden="true">·</span>
-        <span>UTC+8</span>
-        <span aria-hidden="true">·</span>
-        <span>25 TERMS</span>
-        <span aria-hidden="true">·</span>
-        <span>DEEP-LINKABLE</span>
-        <span aria-hidden="true">·</span>
-        <span>OWNER-VERIFIED</span>
       </p>
     </div>
   </section>
