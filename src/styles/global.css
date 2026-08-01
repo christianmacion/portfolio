@@ -1184,3 +1184,29 @@ li {
     white-space: nowrap;
   }
 }
+
+/* === v9.3.1 · Shared motion primitives ===
+   Site-wide fade-in + stagger utilities for chrome polish.
+   Used by: home strip + quick-route cards, skills grid, projects
+   stat tiles. Animation: opacity 0 → 1 + translateY 6px → 0,
+   480-540ms ease-out. Stagger via :nth-child(N) animation-delay
+   per surface (caller owns delay values).
+   Reduced-motion: WCAG 2.3.1 — animation: none. */
+@keyframes broadside-rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.broadside-rise {
+  animation: broadside-rise 480ms ease-out both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .broadside-rise {
+    animation: none;
+  }
+}

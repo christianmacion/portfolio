@@ -228,6 +228,12 @@ const levelLabel: Record<1 | 2 | 3 | 4 | 5, string> = {
     letter-spacing: -0.02em;
     margin-bottom: var(--sp-3);
   }
+  /* v9.3.1 · "One stack" highlight underline uses techy-blue
+     gradient instead of the gold primary-2 default — keeps the AI
+     engineering accent consistent with the home page hero name. */
+  .page-head__title .hl::after {
+    background: linear-gradient(90deg, var(--c-blue), var(--c-blue-mid));
+  }
   .page-head__sub {
     font-size: var(--fs-lg);
     color: var(--c-ink-2);
@@ -370,6 +376,53 @@ const levelLabel: Record<1 | 2 | 3 | 4 | 5, string> = {
   }
   .skill:hover {
     border-color: var(--c-ink-3);
+    transform: translateY(-2px);
+  }
+
+  /* v9.3.1 · staggered fade-in on skill cards (shared broadside-rise
+     keyframe defined in global.css). 8-step cascade keeps the visual
+     rhythm consistent with home strip + quick-route cards. WCAG 2.3.1
+     reduced-motion: animation: none via the global guard. */
+  .skill {
+    animation: broadside-rise 480ms ease-out both;
+  }
+  .skill:nth-child(1) {
+    animation-delay: 60ms;
+  }
+  .skill:nth-child(2) {
+    animation-delay: 100ms;
+  }
+  .skill:nth-child(3) {
+    animation-delay: 140ms;
+  }
+  .skill:nth-child(4) {
+    animation-delay: 180ms;
+  }
+  .skill:nth-child(5) {
+    animation-delay: 220ms;
+  }
+  .skill:nth-child(6) {
+    animation-delay: 260ms;
+  }
+  .skill:nth-child(7) {
+    animation-delay: 300ms;
+  }
+  .skill:nth-child(8) {
+    animation-delay: 340ms;
+  }
+  .skill:nth-child(9) {
+    animation-delay: 380ms;
+  }
+  .skill:nth-child(n + 10) {
+    animation-delay: 420ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .skill {
+      animation: none;
+    }
+    .skill:hover {
+      transform: none;
+    }
   }
   .skill__head {
     display: flex;

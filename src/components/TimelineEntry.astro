@@ -106,6 +106,39 @@ const dateRange = `${formatDate(startDate)} — ${formatDate(endDate)}`;
   .tl:last-child {
     border-bottom: none;
   }
+
+  /* v9.3.1 · timeline entry stagger fade-in (shared broadside-rise).
+     Each role entry fades in 80ms after the previous, gives the page
+     the feel of a printed ledger as you scroll down. */
+  .tl {
+    animation: broadside-rise 480ms ease-out both;
+  }
+  .tl:nth-child(1) {
+    animation-delay: 60ms;
+  }
+  .tl:nth-child(2) {
+    animation-delay: 140ms;
+  }
+  .tl:nth-child(3) {
+    animation-delay: 220ms;
+  }
+  .tl:nth-child(4) {
+    animation-delay: 300ms;
+  }
+  .tl:nth-child(5) {
+    animation-delay: 380ms;
+  }
+  .tl:nth-child(6) {
+    animation-delay: 460ms;
+  }
+  .tl:nth-child(n + 7) {
+    animation-delay: 540ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tl {
+      animation: none;
+    }
+  }
   .tl__rail {
     position: relative;
     display: flex;

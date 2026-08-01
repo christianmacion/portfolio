@@ -115,8 +115,8 @@ const jsonLd = {
         60-second skim. NDA-clean. Built so a hiring manager can decide in one read.
       </VoiceLine>
       <p class="hero__sub">
-        Quantitative researcher and AI engineer. {loc.display}. Open to remote QR,
-        QR-rotational, or research-engineer seats with US-premarket or APAC overlap.
+        Quantitative researcher and AI engineer. {loc.display}. Open to remote QR, QR-rotational, or
+        research-engineer seats with US-premarket or APAC overlap.
       </p>
 
       <p class="hero__tenant mono">
@@ -438,6 +438,43 @@ const jsonLd = {
     text-decoration: underline;
     text-decoration-color: var(--c-amber-decor);
     text-underline-offset: 3px;
+  }
+
+  /* v9.3.1 · kv table rows fade-in (shared broadside-rise from global.css) */
+  .kv tr {
+    animation: broadside-rise 480ms ease-out both;
+  }
+  .kv tr:nth-child(1) {
+    animation-delay: 60ms;
+  }
+  .kv tr:nth-child(2) {
+    animation-delay: 110ms;
+  }
+  .kv tr:nth-child(3) {
+    animation-delay: 160ms;
+  }
+  .kv tr:nth-child(4) {
+    animation-delay: 210ms;
+  }
+  .kv tr:nth-child(5) {
+    animation-delay: 260ms;
+  }
+  .kv tr:nth-child(6) {
+    animation-delay: 310ms;
+  }
+  .kv tr:nth-child(7) {
+    animation-delay: 360ms;
+  }
+  .kv tr:nth-child(8) {
+    animation-delay: 410ms;
+  }
+  .kv tr:nth-child(n + 9) {
+    animation-delay: 460ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .kv tr {
+      animation: none;
+    }
   }
 
   .hero__actions {

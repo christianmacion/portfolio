@@ -19,7 +19,7 @@ import CTABanner from '@components/CTABanner.astro';
 import { profile } from '@utils/profile';
 import { path } from '@utils/url';
 
-const NGATE = `${profile.stats.evalGates}-gate`;
+const _NGATE = `${profile.stats.evalGates}-gate`;
 
 // The five-rung spine — the "AI engineering journey" thesis.
 const spine = [
@@ -97,7 +97,9 @@ const workbooks = [
         <span class="page-head__eyebrow-line">PROMPT → SKILLS → AGENTS → LOOPS → GRAPHS</span>
       </p>
       <h1 class="page-head__title" data-words>
-        Prompt <span class="hl">→</span> skills <span class="hl">→</span> agents <span class="hl">→</span> loops <span class="hl">→</span> graphs.
+        Prompt <span class="hl">→</span> skills <span class="hl">→</span> agents <span class="hl"
+          >→</span
+        > loops <span class="hl">→</span> graphs.
       </h1>
       <VoiceLine class="page-head__voice">
         Modern AI systems are built in five compounding layers. Most teams plateau at the loop rung.
@@ -138,8 +140,8 @@ const workbooks = [
           Five compounding layers<span class="muted"> — pick your rung.</span>
         </h2>
         <p class="section__lede">
-          Every layer is a force multiplier on the one below it. Most teams stop at the loop.
-          The graph is where the agents start to share memory instead of re-deriving context.
+          Every layer is a force multiplier on the one below it. Most teams stop at the loop. The
+          graph is where the agents start to share memory instead of re-deriving context.
         </p>
       </header>
 
@@ -171,12 +173,10 @@ const workbooks = [
     <div class="container">
       <header class="section__head">
         <p class="section__eyebrow">Shareable</p>
-        <h2 class="section__title">
-          Two workbooks, one claim.
-        </h2>
+        <h2 class="section__title">Two workbooks, one claim.</h2>
         <p class="section__lede">
-          One big claim — the 5-rung spine. Two levels of audience — beginner, technical.
-          Each one is a self-contained PDF + shareable HTML.
+          One big claim — the 5-rung spine. Two levels of audience — beginner, technical. Each one
+          is a self-contained PDF + shareable HTML.
         </p>
       </header>
 
@@ -199,8 +199,12 @@ const workbooks = [
               <p class="workbook-card__sum">{w.summary}</p>
 
               <footer class="workbook-card__foot">
-                <a href={path(w.href)} class="btn btn--primary btn--sm">Open HTML →</a>
-                <a href={w.pdfHref} class="btn btn--ghost btn--sm" download>PDF ↓</a>
+                <a href={path(w.href)} class="btn btn--primary btn--sm">
+                  Open HTML →
+                </a>
+                <a href={w.pdfHref} class="btn btn--ghost btn--sm" download>
+                  PDF ↓
+                </a>
               </footer>
             </article>
           ))
@@ -353,6 +357,37 @@ const workbooks = [
   }
   .workbook-card--teal:hover {
     border-color: var(--c-teal);
+  }
+
+  /* v9.3.1 · workbook-card stagger fade-in (shared broadside-rise) */
+  .workbook-card {
+    animation: broadside-rise 480ms ease-out both;
+  }
+  .workbook-card:nth-child(1) {
+    animation-delay: 60ms;
+  }
+  .workbook-card:nth-child(2) {
+    animation-delay: 120ms;
+  }
+  .workbook-card:nth-child(3) {
+    animation-delay: 180ms;
+  }
+  .workbook-card:nth-child(4) {
+    animation-delay: 240ms;
+  }
+  .workbook-card:nth-child(5) {
+    animation-delay: 300ms;
+  }
+  .workbook-card:nth-child(6) {
+    animation-delay: 360ms;
+  }
+  .workbook-card:nth-child(n + 7) {
+    animation-delay: 420ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .workbook-card {
+      animation: none;
+    }
   }
   .workbook-card__head {
     display: flex;

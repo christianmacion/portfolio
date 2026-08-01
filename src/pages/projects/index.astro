@@ -96,10 +96,12 @@ const itemListJsonLd = projectListJsonLd(
         </div>
       </div>
 
-      {/* v6.4 — Lane filter chips (URL-param-driven, no client:*).
+      {
+        /* v6.4 — Lane filter chips (URL-param-driven, no client:*).
          v9.2 a11y — aria-pressed is not valid on <a>; use aria-current
          on the active filter (semantically "this navigation represents
-         the current view"). Inactive filters don't need an aria attr. */}
+         the current view"). Inactive filters don't need an aria attr. */
+      }
       <div class="lane-filter" role="group" aria-label="Filter projects by lane">
         <a
           class="lane-filter__chip"
@@ -390,7 +392,7 @@ const itemListJsonLd = projectListJsonLd(
     font-weight: 600;
     line-height: 0.95;
     letter-spacing: -0.04em;
-    color: var(--c-primary);
+    color: var(--c-blue);
     font-variant-numeric: tabular-nums;
   }
   .page-head__stat-lbl {
@@ -410,6 +412,41 @@ const itemListJsonLd = projectListJsonLd(
     font-size: var(--fs-lg);
     color: var(--c-ink-2);
     max-width: 64ch;
+  }
+
+  /* v9.3.1 · stagger fade-in on lane-filter chips + stat cells */
+  .page-head__stat {
+    animation: broadside-rise 480ms ease-out both;
+  }
+  .page-head__stat:nth-child(1) {
+    animation-delay: 60ms;
+  }
+  .page-head__stat:nth-child(2) {
+    animation-delay: 120ms;
+  }
+  .page-head__stat:nth-child(3) {
+    animation-delay: 180ms;
+  }
+  .page-head__stat:nth-child(4) {
+    animation-delay: 240ms;
+  }
+  .lane-filter__chip {
+    animation: broadside-rise 480ms ease-out both;
+  }
+  .lane-filter__chip:nth-child(1) {
+    animation-delay: 80ms;
+  }
+  .lane-filter__chip:nth-child(2) {
+    animation-delay: 140ms;
+  }
+  .lane-filter__chip:nth-child(3) {
+    animation-delay: 200ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .page-head__stat,
+    .lane-filter__chip {
+      animation: none;
+    }
   }
 
   /* Combined-book analysis */
