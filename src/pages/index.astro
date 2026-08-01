@@ -428,7 +428,11 @@ const liveCounters = [
     width: 28px;
     height: 28px;
     flex-shrink: 0;
-    color: var(--c-ink);
+    color: var(--c-blue);
+    transition: color 200ms ease;
+  }
+  .tape__mark:hover {
+    color: var(--c-blue-deep);
   }
   .tape__id {
     font-weight: 700;
@@ -439,24 +443,31 @@ const liveCounters = [
     color: var(--c-ink-3);
     opacity: 0.55;
   }
-  .tape__role,
+  .tape__role {
+    font-weight: 600;
+    color: var(--c-blue);
+  }
   .tape__loc,
   .tape__utc {
     font-weight: 500;
+    color: var(--c-ink-2);
   }
   .tape__nav {
     color: var(--c-ink-2);
     text-decoration: none;
     border: 0;
     padding: 0;
-    transition: color 120ms ease;
+    transition: color 140ms ease;
   }
   .tape__nav:hover {
-    color: var(--c-ink);
+    color: var(--c-blue);
   }
   .tape__nav--cta {
     font-weight: 700;
-    color: var(--c-ink);
+    color: var(--c-blue);
+  }
+  .tape__nav--cta:hover {
+    color: var(--c-blue-deep);
   }
 
   /* ====== HERO — big serif display ====== */
@@ -533,15 +544,57 @@ const liveCounters = [
     font-size: 30px;
     line-height: 1;
     letter-spacing: -0.018em;
-    color: var(--c-ink);
+    color: var(--c-blue);
     margin: 0 0 6px;
     font-variant-numeric: tabular-nums;
+    transition: color 180ms ease;
+  }
+  .strip__cell:hover .strip__num {
+    color: var(--c-blue-deep);
   }
   .strip__label {
     font-size: 10px;
     color: var(--c-ink-2);
     letter-spacing: 0.14em;
     margin: 0;
+  }
+
+  /* Strip cell stagger fade-in — only the 6 counters fade on load */
+  @keyframes broadside-rise {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .strip__cell {
+    animation: broadside-rise 480ms ease-out both;
+  }
+  .strip__cell:nth-child(1) {
+    animation-delay: 60ms;
+  }
+  .strip__cell:nth-child(2) {
+    animation-delay: 120ms;
+  }
+  .strip__cell:nth-child(3) {
+    animation-delay: 180ms;
+  }
+  .strip__cell:nth-child(4) {
+    animation-delay: 240ms;
+  }
+  .strip__cell:nth-child(5) {
+    animation-delay: 300ms;
+  }
+  .strip__cell:nth-child(6) {
+    animation-delay: 360ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .strip__cell {
+      animation: none;
+    }
   }
 
   /* ====== SECTIONS — § marks + body ====== */
@@ -691,7 +744,8 @@ const liveCounters = [
     gap: 4px;
     transition:
       background var(--transition),
-      border-color var(--transition);
+      border-left-color 160ms ease,
+      transform 160ms ease;
     border-bottom: 0;
     border-bottom: 1px solid var(--c-rule);
   }
@@ -700,15 +754,16 @@ const liveCounters = [
   }
   .quick-route__card:hover {
     background: var(--c-bg-2);
-    border-left-color: var(--c-ink-2);
+    border-left-color: var(--c-blue);
+    transform: translateX(2px);
   }
   .quick-route__card:focus-visible {
-    outline: 2px solid var(--c-primary-2-light);
+    outline: 2px solid var(--c-blue);
     outline-offset: -2px;
   }
   .quick-route__kicker {
     font-size: 10px;
-    color: var(--c-ink-2);
+    color: var(--c-blue);
     letter-spacing: 0.16em;
     margin: 0 0 4px;
     text-transform: uppercase;
@@ -727,11 +782,37 @@ const liveCounters = [
   }
   .quick-route__cta {
     font-size: 10.5px;
-    color: var(--c-ink-2);
+    color: var(--c-blue);
     letter-spacing: 0.1em;
     margin: 0;
     text-transform: uppercase;
     font-weight: 600;
+    transition: color 140ms ease;
+  }
+  .quick-route__card:hover .quick-route__cta {
+    color: var(--c-blue-deep);
+  }
+
+  /* Quick-route card stagger — fades in 3 cards on load */
+  .quick-route__card {
+    animation: broadside-rise 540ms ease-out both;
+  }
+  .quick-route__card:nth-child(1) {
+    animation-delay: 80ms;
+  }
+  .quick-route__card:nth-child(2) {
+    animation-delay: 160ms;
+  }
+  .quick-route__card:nth-child(3) {
+    animation-delay: 240ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .quick-route__card {
+      animation: none;
+    }
+    .quick-route__card:hover {
+      transform: none;
+    }
   }
 
   /* Reduced-motion guard: the quick-route cards have no animation by
