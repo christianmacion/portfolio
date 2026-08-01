@@ -1,0 +1,137 @@
+# .github/workflows/vibe-audit.yml — Layer 2 vibe audit CI guard.
+#
+# Runs the same webcraft-no-vibe audit the pre-commit hook (Layer 1) runs,
+# but on the PR diff against `main`. Hard-blocks the PR if any SEV-5 or
+# SEV-4 tell is introduced.
+#
+# Why this exists (and why it's NOT a duplicate of Layer 1)
+# ---------------------------------------------------------
+# Rounds 1-8 chrome polish AARs claimed `broadside-rise` shipped, but the
+# live HTML ships 0 instances. The local pre-commit hook (Layer 1) catches
+# vibe tells before they land in the working tree. This workflow catches
+# tells that arrive via:
+#   1. PR branches pushed directly (bypassing local hooks)
+#   2. Web UI edits (GitHub .com editor)
+#   3. `git commit --no-verify` bypasses
+# The pattern-matcher is read-only — it never mutates source.
+#
+# Pattern after hero-name-color-regression.yml + deploy-gate.yml (the
+# repo's existing post-ship / regression siblings): same `actions/checkout@v7`
+# + `actions/setup-node@v7` setup, same `concurrency` group, same
+# `permissions: contents: read` posture.
+#
+# The webcraft-no-vibe audit tool is path-copied from the user's home into
+# `tools/webcraft-no-vibe/` so the CI runner doesn't depend on a global
+# Python install. Update path when the skill bumps version.
+#
+# 5-must-have (per CLAUDE.md §1):
+#   1. Terminal state     -> exit 0/1 propagated to GH status
+#   2. Idempotent         -> re-running produces same verdict
+#   3. Dedupe key         -> per-PR cache (delegated to apply_vibe_audit)
+#   4. Coverage filter    -> filter on .astro/.css/.ts/.tsx etc.
+#   5. AAR                -> uploads evidence as artifact
+
+name: Vibe audit (webcraft-no-vibe)
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: vibe-audit-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  vibe-audit:
+    name: Vibe audit (SEV-5/4 = block, SEV-3 = warn)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install Python (audit tool is Python)
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: npm ci
+
+      # Stage all files changed against the merge-base so the staged
+      # audit script sees the full PR diff (it normally reads
+      # `git diff --cached` which is empty in CI). This makes Layer 1
+      # and Layer 2 byte-identical in behavior.
+      - name: Stage PR diff (so staged-audit script sees the diff)
+        run: |
+          set -e
+          git fetch origin main --depth=1
+          git diff --binary origin/main...HEAD -- 'src/**' \
+            | git apply --cached --include='src/**' || true
+          # Fallback: stage everything in src/ if the diff-based staging
+          # didn't pick anything up (e.g. first push to main).
+          if [ -z "$(git diff --cached --name-only)" ]; then
+            echo "No diff-based stage; staging all of src/ as fallback"
+            git add -A src/ || true
+          fi
+          git diff --cached --name-only | head -20
+
+      - name: Run vibe audit on staged files
+        id: audit
+        run: |
+          set +e
+          node scripts/vibe-audit-staged.mjs 2>&1 | tee vibe-audit.txt
+          echo "exit=${PIPESTATUS[0]}"
+          exit "${PIPESTATUS[0]}"
+
+      - name: Run broadside-rise trace (Layer 3 — drift guard)
+        if: always() && hashFiles('dist/**') != ''
+        run: |
+          set +e
+          node scripts/vibe-audit-broadside-trace.mjs 2>&1 | tee broadside-trace.txt
+          echo "broadside-trace exit=${PIPESTATUS[0]}"
+          # Don't fail the workflow on broadside-trace; it's informational
+          # for now. Switch to `exit "${PIPESTATUS[0]}"` once the CI is
+          # green-on-green for one full week.
+
+      - name: Upload audit evidence
+        if: always()
+        uses: actions/upload-artifact@v5
+        with:
+          name: vibe-audit-evidence
+          path: |
+            vibe-audit.txt
+            broadside-trace.txt
+          retention-days: 30
+          if-no-files-found: ignore
+
+      - name: Write PR summary
+        if: always()
+        run: |
+          {
+            echo '## Vibe audit (webcraft-no-vibe)'
+            echo ''
+            if [ -f vibe-audit.txt ]; then
+              echo '### Staged audit'
+              echo '```text'
+              cat vibe-audit.txt
+              echo '```'
+            fi
+            if [ -f broadside-trace.txt ]; then
+              echo ''
+              echo '### Broadside-rise trace'
+              echo '```text'
+              cat broadside-trace.txt
+              echo '```'
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"

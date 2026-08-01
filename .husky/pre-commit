@@ -1,0 +1,29 @@
+#!/usr/bin/env sh
+# .husky/pre-commit — Layer 1 vibe audit gate
+#
+# Runs scripts/vibe-audit-staged.mjs against staged files. Blocks the
+# commit if any SEV-5 or SEV-4 tell is introduced; emits SEV-3 warnings
+# but does not block. Bypass with `git commit --no-verify` (NOT
+# recommended — CI Layer 2 will still fail).
+#
+# Why this exists: rounds 1-8 chrome polish AARs claimed
+# `broadside-rise` shipped, but live HTML ships 0 instances — i.e. an
+# AAR-vs-reality drift. This hook closes the local feedback loop so a
+# vibe tell cannot silently enter a commit. Layer 2
+# (.github/workflows/vibe-audit.yml) is the CI sibling. Layer 3
+# (scripts/vibe-audit-broadside-trace.mjs) catches the specific
+# AAR-vs-dist drift pattern post-build.
+#
+# 5-must-have (per CLAUDE.md §1):
+#   1. Terminal state     -> exit 0/1 propagated from script
+#   2. Idempotent         -> reads only
+#   3. Dedupe key         -> per-commit cache (delegated)
+#   4. Coverage filter    -> filter on .astro/.css/.ts/.tsx etc.
+#   5. AAR                -> emit summary line for the commit message
+
+# Quiet by default (CI-friendly); set VIBE_AUDIT_VERBOSE=1 to see summary.
+if [ -n "$VIBE_AUDIT_VERBOSE" ]; then
+  node scripts/vibe-audit-staged.mjs
+else
+  node scripts/vibe-audit-staged.mjs --quiet
+fi
