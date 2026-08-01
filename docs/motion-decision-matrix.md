@@ -135,3 +135,4 @@ The one borderline upgrade candidate was audited and rejected:
 ## Changelog
 
 - **v9.0 (2026-07-31)** — initial matrix shipped. 38 components audited, all KEEP. 0 cuts. 0 mojs upgrades. 4.5 KB total motion JS. 0 hydration islands. Dedupe key: `motion-decision-matrix-v9`.
+# last verified Sat Aug  1 13:03:27 UTC 2026
