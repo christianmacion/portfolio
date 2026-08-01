@@ -26,14 +26,17 @@ export default defineConfig({
   trailingSlash: 'always',
   build: {
     format: 'directory',
-    // v9.2.2 (Gate 12) — Phase 5a fix. BaseLayout CSS is 61KB (render-blocking
-    // on every page) and the home page ships only one extra 7KB chunk. Inlining
-    // the BaseLayout CSS into the HTML eliminates one round-trip per page load
-    // (~1,480ms render-blocking savings per Lighthouse on mobile). The HTML grows
-    // from ~35KB → ~95KB but the network round-trip is eliminated, which is the
-    // correct tradeoff for LCP on a portfolio site where every page loads the
-    // same chrome. Astro inlines per-route CSS automatically when this is set.
-    inlineStylesheets: 'always',
+    // v9.3.2 (architecture audit 2026-08-02) — Phase 2 fix. The 'always' setting
+    // packed every page's CSS into the HTML payload (95–140KB per page) which
+    // defeated HTTP/2 multiplexing and ballooned the first-byte payload beyond
+    // Cloudflare's edge-cache sweet spot. Switching to 'auto' lets Astro decide:
+    // small CSS stays inline (preserves first-paint on the few pages where it
+    // matters), large CSS externalizes to /_astro/*.css (multi-request
+    // parallelism, cacheable across pages). Target: home HTML drops from ~100KB
+    // to <60KB; per-route CSS chunk is cached and reused across visits.
+    // The Phase 5a Gate-12 rationale (eliminates one CSS round-trip) still holds
+    // for the small per-page CSS that Astro decides to inline under 'auto'.
+    inlineStylesheets: 'auto',
   },
   integrations: [
     mdx(),
