@@ -65,7 +65,7 @@ I design with reproducibility and adversarial verification as the first-class co
 
 ### AI Systems Engineer / Quantitative Researcher (contract) — systematic-strategy desk (NDA-protected; closed past contract 03/2026 – 06/2026)
 
-*Remote · 03/2026 – 06/2026*
+_Remote · 03/2026 – 06/2026_
 
 - Evaluated 40+ systematic-strategy families across 5 asset classes (equity-index, crypto, energy, metals, agriculture) under a 31-gate statistical filter; advanced candidates through paper-shadow and live forward out-of-sample testing under pre-registration and frozen-spec evaluation.
 - Implemented modern selection-bias statistics from scratch in numpy — Deflated Sharpe Ratio, PBO via CSCV, Minimum Backtest Length — plus block-bootstrap CIs, random-timing nulls, walk-forward, and Monte-Carlo suites; the methodological spine of every shipped number.
@@ -75,7 +75,7 @@ I design with reproducibility and adversarial verification as the first-class co
 
 ### Independent Quant Researcher — Self-Directed Practice
 
-*Remote · 01/2025 – 05/2026*
+_Remote · 01/2025 – 05/2026_
 
 - Designed, backtested, and statistically-validated systematic strategies on crypto and equity-index universes using Python; evaluated via Sharpe, drawdown, win-rate, and profit factor under pre-registration-aware discipline.
 - Read and summarized 20+ academic and practitioner papers on momentum, mean-reversion, volatility carry, statistical arbitrage, and multi-agent AI architectures into structured one-page research notes.
@@ -83,7 +83,7 @@ I design with reproducibility and adversarial verification as the first-class co
 
 ### Crypto Trading Systems Research Assistant — Ledger51 Trading Community
 
-*Davao Region, Philippines · 10/2025 – 04/2026*
+_Davao Region, Philippines · 10/2025 – 04/2026_
 
 - Supported structured analysis of crypto trading workflows: order-execution systems, trading bots, and platform mechanics — translating operational behavior into research-graded breakdowns.
 - Documented execution friction and platform inconsistencies affecting trading accuracy and consistency; contributed to a structured documentation pass used for research and training purposes.

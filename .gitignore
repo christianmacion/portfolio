@@ -58,3 +58,8 @@ public/resume-*.docx
 # transient audit caches (defense in depth — these dirs may not exist)
 .audit/cache/
 .audit/diff/
+# diagnostic working scripts — never imported, never reached from app code.
+# The committed JSON evidence (lighthouse/, a11y/axe-final-*, incident/<date>/) is the
+# canonical artifact; the .cjs/.mjs scripts are regenerated on demand and never referenced.
+.audit/**/*.cjs
+.audit/**/*.mjs

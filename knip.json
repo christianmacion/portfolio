@@ -66,9 +66,7 @@
     "src/components/EntryStations.astro",
     "src/data/earth-110m-*",
     "src/scripts/**",
-    ".audit/**",
-    ".claude/worktrees/**",
-    ".worktrees/**"
+    ".audit/**"
   ],
   "ignoreDependencies": [
     "astro-expressive-code",
@@ -79,7 +77,6 @@
     "rehype-katex",
     "remark-math",
     "world-atlas",
-    "@mojs/core",
     "@cloudflare/workers-types"
   ],
   "ignoreBinaries": ["pdftotext", "python3"],
