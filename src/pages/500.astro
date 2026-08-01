@@ -18,6 +18,7 @@ const links = [
   { href: path('/contact'), label: 'Contact' },
 ];
 ---
+
 <BaseLayout
   title="Server error"
   description="The portfolio failed to render this page. The build is static; please retry or return home."
@@ -33,9 +34,9 @@ const links = [
       <p class="eyebrow mono">500 · SERVER ERROR</p>
       <h1 class="page-head__title">The render failed.</h1>
       <p class="page-head__sub">
-        Static sites nearly never hit a 500. If you are seeing this, it is either a
-        mirror-deploy issue or a stray client-side error. The underlying HTML, RSS,
-        sitemap, and asset bundles are still served — retry, or pick a known-good route.
+        Static sites nearly never hit a 500. If you are seeing this, it is either a mirror-deploy
+        issue or a stray client-side error. The underlying HTML, RSS, sitemap, and asset bundles are
+        still served — retry, or pick a known-good route.
       </p>
       <div class="page-head__eq">
         <Equation
@@ -49,9 +50,13 @@ const links = [
     <section class="section">
       <h2 class="section__title">Recovery routes</h2>
       <ul class="links">
-        {links.map((l) => (
-          <li><a href={l.href}>{l.label}</a></li>
-        ))}
+        {
+          links.map((l) => (
+            <li>
+              <a href={l.href}>{l.label}</a>
+            </li>
+          ))
+        }
       </ul>
     </section>
 
@@ -129,5 +134,26 @@ const links = [
   }
   .links a:hover {
     border-bottom-color: var(--c-amber-deep);
+  }
+
+  /* v9.3.1 · links stagger fade-in (shared broadside-rise).
+     3 recovery routes — 60ms cascade reads as the rescue list
+     populating as the user lands on the 500. */
+  .links li {
+    animation: broadside-rise 480ms ease-out both;
+  }
+  .links li:nth-child(1) {
+    animation-delay: 60ms;
+  }
+  .links li:nth-child(2) {
+    animation-delay: 120ms;
+  }
+  .links li:nth-child(n + 3) {
+    animation-delay: 180ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .links li {
+      animation: none;
+    }
   }
 </style>

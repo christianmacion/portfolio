@@ -276,4 +276,25 @@ const quickCards = [
     letter-spacing: 0.08em;
     margin-bottom: var(--sp-2);
   }
+
+  /* v9.3.1 · quick-card stagger fade-in (shared broadside-rise).
+     3 quick-link cards — 100ms cadence reads as the rescue routes
+     populating as the user lands on the 404. */
+  .quick-card {
+    animation: broadside-rise 480ms ease-out both;
+  }
+  .quick-card:nth-child(1) {
+    animation-delay: 100ms;
+  }
+  .quick-card:nth-child(2) {
+    animation-delay: 200ms;
+  }
+  .quick-card:nth-child(n + 3) {
+    animation-delay: 300ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .quick-card {
+      animation: none;
+    }
+  }
 </style>
