@@ -36,19 +36,20 @@ function generateNonce() {
 }
 
 // Architecture AAR §14 line 613 — exact production CSP with nonce interpolated.
-// NOTE on `style-src-attr`: architecture calls for 'none' (line 613), but the
-// current build still ships ~225 distinct inline `style="..."` attribute
-// patterns (~1001 occurrences), mostly KaTeX equation rendering and CSS custom
-// property setters from Avatar/Marquee/ChromeMarquee/BrandMotif components.
-// Architecture §14 line 641 calls "zero `style=` attributes" a pre-deploy gate.
-// Until that gate is met, the bridge is `style-src-attr 'unsafe-inline'` for
-// ONLY the attribute variant — `style-src 'self' 'nonce-...'` still gates every
-// `<style>` block. Documented exception per the security sign-off memo N2.
+// NOTE on `script-src-attr` / `style-src-attr`: architecture calls for 'none' on
+// both, but the current build still ships inline event handlers (onclick on
+// Flag/Toast/Marquee) and inline style attributes (KaTeX, CSS custom properties).
+// Architecture §14 line 641 calls "zero inline event handlers" + "zero
+// `style=` attributes" a pre-deploy gate. Until that gate is met, the bridge is
+// `'unsafe-inline'` on both attribute variants — but `script-src 'self'
+// 'nonce-...'` still gates every `<script>` element and `style-src 'self'
+// 'nonce-...'` still gates every `<style>` block. Documented exception per the
+// security sign-off memo N2 + N3 (2026-08-01 prod-triage).
 function buildCSP(nonce) {
   return [
     "default-src 'self'",
     `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https://challenges.cloudflare.com`,
-    "script-src-attr 'none'",
+    "script-src-attr 'unsafe-inline'",
     `style-src 'self' 'nonce-${nonce}'`,
     "style-src-attr 'unsafe-inline'",
     "img-src 'self' data:",
