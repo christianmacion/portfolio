@@ -30,13 +30,15 @@ const { size: _size = 8, accent: _accent = 'warn', lerp: _lerp = 0.18 } = Astro.
 ---
 
 <script>
+  // v9.3.2 — institutional: replace the rAF lerp loop with CSS transitions.
+  // The previous implementation used a JS frame loop to lerp the ring
+  // toward the cursor; the new path writes the cursor position directly on
+  // mousemove and lets CSS `transition: transform 180ms linear` handle the
+  // lag — same visual feel (a hairline ring trailing the cursor) without a
+  // JS frame loop. No scroll listener, no parallax; the cursor is the only
+  // motion source.
   class HeroCursor {
     ring!: HTMLElement;
-    mouseX = 0;
-    mouseY = 0;
-    curX = 0;
-    curY = 0;
-    raf = 0;
     active = false;
 
     constructor(opts: { size: number; accent: string; lerp: number }) {
@@ -51,23 +53,17 @@ const { size: _size = 8, accent: _accent = 'warn', lerp: _lerp = 0.18 } = Astro.
       this.ring.className = `hero-cursor hero-cursor--${opts.accent}`;
       this.ring.style.width = `${opts.size}px`;
       this.ring.style.height = `${opts.size}px`;
+      this.ring.style.transition = `transform ${Math.max(60, Math.round(opts.lerp * 1000))}ms linear`;
       this.ring.setAttribute('aria-hidden', 'true');
       document.body.appendChild(this.ring);
 
-      this.lerp = opts.lerp;
       this.bind();
-      this.tick();
     }
-
-    lerp!: number;
 
     bind() {
       document.addEventListener('mousemove', (e) => {
-        this.mouseX = e.clientX;
-        this.mouseY = e.clientY;
+        this.ring.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
         if (!this.active) {
-          this.curX = this.mouseX;
-          this.curY = this.mouseY;
           this.active = true;
           this.ring.classList.add('is-active');
         }
@@ -76,13 +72,6 @@ const { size: _size = 8, accent: _accent = 'warn', lerp: _lerp = 0.18 } = Astro.
         this.active = false;
         this.ring.classList.remove('is-active');
       });
-    }
-
-    tick() {
-      this.curX += (this.mouseX - this.curX) * this.lerp;
-      this.curY += (this.mouseY - this.curY) * this.lerp;
-      this.ring.style.transform = `translate(${this.curX}px, ${this.curY}px) translate(-50%, -50%)`;
-      this.raf = requestAnimationFrame(() => this.tick());
     }
   }
 
@@ -112,7 +101,10 @@ const { size: _size = 8, accent: _accent = 'warn', lerp: _lerp = 0.18 } = Astro.
     border: 1px solid var(--c-warn);
     border-radius: 50%;
     opacity: 0;
-    transition: opacity 220ms var(--j-ease-out, ease-out);
+    transition:
+      transform 180ms linear,
+      opacity 220ms var(--j-ease-out, ease-out);
+    will-change: transform;
     mix-blend-mode: multiply;
   }
   .hero-cursor--warn {
