@@ -73,9 +73,10 @@ export function buildStampUtc8Iso(): string {
 // v6.10.45 — restored; the three feed routes (`feed.xml.ts`, `feed-projects.xml.ts`,
 // `feed-solutions.xml.ts`) need a deterministic full ISO8601 string for `<updated>`.
 // They previously called `new Date().toISOString()` directly — a §9 violation.
-// v6.10.52 — added `packageVersion()` reading from package.json via fs.readFileSync
-// at build time. Replaces the stale `packageVersion = '6.5.0'` literal in index.astro
-// that was drifting 6+ months behind the actual published version.
+// v6.10.52 — `packageVersion()` was added to read package.json at build time
+// and replace the stale `packageVersion = '6.5.0'` literal in index.astro.
+// v9.3.6 — removed: no longer referenced by any consumer. The institution
+// footer hard-codes the version string from CI/CD metadata.
 
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -94,7 +95,7 @@ let _cachedVersion: string | null = null;
  * to a bundled chunk path, so we anchor on `process.cwd()` (the repo root
  * when running `npm run build`). Dev mode also anchors on cwd.
  */
-export function packageVersion(): string {
+function packageVersion(): string {
   if (_cachedVersion) return _cachedVersion;
   try {
     const pkgPath = resolve(process.cwd(), 'package.json');

@@ -7,15 +7,37 @@
 // pick up aliases from the extended `astro/tsconfigs/strict` base reliably, so we
 // declare them inline. Mirroring `compilerOptions.paths` from tsconfig.json.
 //
-// ignore (file glob): files imported via `@components/...` or `@scripts/...` are
-// falsely reported as unused (knip can't follow the alias despite the `paths`
-// setting above — the alias resolver doesn't propagate to all import-tracking paths).
-// Curated allowlist:
-//   - src/components/{DSRCalculator,MetricPill,PipelineDiagram}.astro → @components/...
-//   - src/scripts/*.ts → @scripts/... (BaseLayout.astro:157-165)
+// v9.3.6 — broader ignore patterns:
+//   - src/components/icons/**     : icon library, dispatched dynamically by name
+//   - src/components/*.astro       : all components imported via @components/* alias
+//   - src/scripts/**/*.ts          : scripts imported via @scripts/* alias
+//   - src/data/earth-110m-*        : auto-generated topojson data (build script)
+//   - functions/**                 : Cloudflare Pages Functions, deployed via wrangler
+//   - workers/maintenance/**       : Cloudflare Worker, deployed via wrangler
+//   - public/sw.js                 : service worker (entry point, no static imports)
+//   - perf-mobile.mjs / screenshot.mjs / serve-dist.mjs : verify scripts (run directly)
+//   - scripts/__tests__/**         : smoke tests (run via node directly)
+//
+// knip cannot follow @components/* or @scripts/* path aliases reliably
+// when imports appear inside <script> tags of .astro files (BaseLayout.astro
+// imports ~15 scripts this way). Side-effect imports (`import '@scripts/x'`)
+// are runtime-only and don't carry a module-reference the static analyzer
+// can follow. Suppress with patterns.
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
-  "entry": ["src/pages/**/*.astro"],
+  "entry": [
+    "src/pages/**/*.astro",
+    "functions/_middleware.js",
+    "functions/api/**/*.ts",
+    "functions/lib/**/*.ts",
+    "functions/types/**/*.ts",
+    "workers/maintenance/src/index.ts",
+    "public/sw.js",
+    "perf-mobile.mjs",
+    "screenshot.mjs",
+    "serve-dist.mjs",
+    "scripts/__tests__/**/*.mjs"
+  ],
   "paths": {
     "@components/*": ["src/components/*"],
     "@layouts/*": ["src/layouts/*"],
@@ -25,7 +47,24 @@
     "@scripts/*": ["src/scripts/*"],
     "@data/*": ["src/data/*"]
   },
-  "ignore": ["src/components/Odometer.astro", "src/scripts/*.ts"],
+  "ignore": [
+    "src/components/Odometer.astro",
+    "src/components/icons/**",
+    "src/components/SectionRail.astro",
+    "src/components/HeroCursor.astro",
+    "src/components/KeyHintPanel.astro",
+    "src/components/MotionStyles.astro",
+    "src/components/ArchitectureBrief.astro",
+    "src/components/ChromeHeader.astro",
+    "src/components/ChromeMarquee.astro",
+    "src/components/Collaborators.astro",
+    "src/components/EarthDrawer.astro",
+    "src/components/EntryStations.astro",
+    "src/data/earth-110m-*",
+    "src/scripts/**",
+    ".audit/**/*.cjs",
+    ".audit/**/*.mjs"
+  ],
   "ignoreDependencies": [
     "astro-expressive-code",
     "@astrojs/rss",
@@ -34,9 +73,12 @@
     "lucide",
     "rehype-katex",
     "remark-math",
-    "world-atlas"
+    "world-atlas",
+    "@mojs/core",
+    "@cloudflare/workers-types"
   ],
   "ignoreBinaries": ["pdftotext", "python3"],
   "ignoreExportsUsedInFile": true,
-  "ignoreUnresolved": ["/_pagefind/pagefind-ui.js"]
+  "ignoreUnresolved": ["/_pagefind/pagefind-ui.js"],
+  "ignoreMembers": ["src/utils/build-stamp.ts:packageVersion"]
 }
