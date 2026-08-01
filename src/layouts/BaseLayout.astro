@@ -367,7 +367,9 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
         };
         window.addEventListener('scroll', onScroll, { passive: true });
         onScroll();
-        btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+        // v9.3.2 — institutional: drop `behavior: 'smooth'`. Native browser
+        // scroll, no JS easing. webcraft-no-vibe M02 (scroll-jacking) gate.
+        btn.addEventListener('click', () => window.scrollTo(0, 0));
       })();
     </script>
 
