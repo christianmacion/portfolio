@@ -11,14 +11,17 @@
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
 import Stat from '@components/Stat.astro';
+// v9.3.2 motion contract — /research/ caps at 1 infinite loop. NewsRibbon
+// is the one (it is the institutional 2-track news line). Marquee lives
+// on /research/frontier-models/ (model-list semantic). MarketTape lives
+// on /markets/ and /desk/ (data-feeds semantic). See 2026-08-02 motion
+// audit M-1.
 import VoiceLine from '@components/VoiceLine.astro';
 import CTABanner from '@components/CTABanner.astro';
-import MarketTape from '@components/MarketTape.astro';
 import FactorTable from '@components/FactorTable.astro';
 import AssetClassMatrix from '@components/AssetClassMatrix.astro';
 import DataSourceList from '@components/DataSourceList.astro';
 import NewsRibbon from '@components/NewsRibbon.astro';
-import Marquee from '@components/Marquee.astro';
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { profile } from '@utils/profile';
 import { path } from '@utils/url';
@@ -233,12 +236,12 @@ statsRow[3].spark = sparkFor(2, 14, 0.5, 24);
   {
     /* ============================================================
        TAPE — institutional mini-tape strip below the stats row.
-       Reuses Mission B's MarketTape primitive. A faster (36s) loop
-       feels like a "mini" status bar without needing a separate
-       variant prop.
+       v9.3.2 motion contract (audit M-1): removed <MarketTape /> here.
+       MarketTape stays on /markets/ and /desk/ where the data-feed
+       semantic belongs. /research/ uses NewsRibbon only as its one
+       infinite loop.
        ============================================================ */
   }
-  <MarketTape durationSec={36} />
 
   {
     /* ============================================================
@@ -349,23 +352,10 @@ statsRow[3].spark = sparkFor(2, 14, 0.5, 24);
     <FactorTable />
   </section>
 
-  {/* v7.4-WIDE — methodology marquee between factor table and data sources. */}
-  <Marquee
-    items={[
-      { head: 'EVAL-FIRST', tail: '31 GATES · ZERO ROLLBACKS', accent: 'warn' },
-      { head: 'NDA-CLEAN', tail: 'PUBLIC-DATA REPRODUCIBLE', accent: 'cobalt' },
-      { head: 'ALPHA-DRIVEN', tail: '14 SIGNALS · 9 STRATEGIES', accent: 'sage' },
-      { head: 'DEFLATED SHARPE', tail: 'OUT-OF-SAMPLE PENALTY', accent: 'terracotta' },
-      { head: 'BLOCK-BOOTSTRAP', tail: 'PBO-TESTED · OOS-VALIDATED', accent: 'sage' },
-      { head: 'COINTEGRATION', tail: 'PAIRS · 5Y HALF-LIFE', accent: 'cobalt' },
-      { head: 'VARIANCE RISK', tail: 'PREMIUM HARVEST · DELTA-HEDGED', accent: 'warn' },
-      { head: 'REGIME OVERLAY', tail: 'VOL-TARGETED · DEFENSIVE', accent: 'terracotta' },
-      { head: 'LOOKAHEAD AUDIT', tail: '88% CATCH ON PHANTOM LEAK', accent: 'sage' },
-      { head: 'SHIP-READY', tail: 'GATES PASS · DEPLOY MIRROR', accent: 'violet' },
-    ]}
-    speedSec={68}
-    trailing="research methodology · 10 anchor disciplines"
-  />
+  {/* v9.3.2 motion contract (audit M-1): removed <Marquee /> here. The
+      method-list semantic is now expressed inline as the FactorTable
+      rows below. The Marquee component still ships on
+      /research/frontier-models/ where the model-list semantic fits. */}
 
   {
     /* ============================================================
