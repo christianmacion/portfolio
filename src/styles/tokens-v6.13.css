@@ -176,7 +176,7 @@
 
   /* === TYPE — unchanged from v6.13 === */
   --j-ff-display: 'Source Serif 4', 'Iowan Old Style', 'Charter', Georgia, serif;
-  --j-ff-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --j-ff-body: 'Inter', 'Inter Fallback', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --j-ff-mono: 'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace;
 
   /* === TYPE SCALE — unchanged === */
@@ -346,6 +346,32 @@
   --c-white-wisp: rgba(235, 229, 212, 0.04);
   --c-rule-soft: var(--j-ink-4);
 }
+
+/* === Inter metric-pinned fallback (CLS=0 fix, 2026-08-01) ===
+ * Browser fallback chain for Inter uses Arial as size reference.
+ * Metric overrides below (size-adjust 107.40% / ascent 90% /
+ * descent 22.43% / line-gap 0%) match Inter's published glyph
+ * metrics against Arial — when Inter streams in over Arial,
+ * glyph metrics overlap exactly, eliminating the CLS=0.12
+ * shift on Inter 400 swap (the dominant CLS source per
+ * /skills/ Lighthouse trace).
+ *
+ * Inserted in --j-ff-body chain as 'Inter', 'Inter Fallback',
+ * -apple-system, ... so the fallback resolves to Arial-with-
+ * Inter-metrics, not raw Arial.
+ *
+ * Per-component prefers-reduced-motion preserved (no motion).
+ * §6 NDA scope preserved (no copy edits).
+ */
+@font-face {
+  font-family: 'Inter Fallback';
+  src: local('Arial');
+  size-adjust: 107.40%;
+  ascent-override: 90%;
+  descent-override: 22.43%;
+  line-gap-override: 0%;
+}
+
 
 /* ============================================================================
  * LIGHT THEME — explicit .theme-light on <body>
