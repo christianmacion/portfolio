@@ -96,3 +96,5 @@ public/
 ## License
 
 Code: MIT. Content (`.mdx` files, copy): © Christian T. Macion.
+
+<!-- ci-retrigger 2026-08-01T13:08:09Z -->
