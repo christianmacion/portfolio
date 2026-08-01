@@ -26,6 +26,7 @@ import StatCell from '@components/StatCell.astro';
 import MiniSpark from '@components/MiniSpark.astro';
 import EquityCurveChart from '@components/EquityCurveChart.astro';
 import CTABanner from '@components/CTABanner.astro';
+import ChromeHeader from '@components/ChromeHeader.astro';
 import { seedFromString, walk, buildSeed } from '@utils/prng';
 import { path } from '@utils/url';
 import { getIndexSnap } from '@utils/markets-data';
@@ -109,12 +110,13 @@ const secondarySymbol = 'BTC-USD';
   }
   <section class="mk-hero">
     <div class="container mk-hero__inner">
-      <p class="markets-head__eyebrow mono">
-        <span class="markets-head__eyebrow-chip">MARKETS · TERMINAL VIEW · OPEN</span>
-        <span class="markets-head__eyebrow-line"
-          >DETERMINISTIC SNAPSHOT · SAME SEED · EVERY RENDER</span
-        >
-      </p>
+      <ChromeHeader
+        chip="MARKETS · TERMINAL VIEW · OPEN"
+        eyebrow="DETERMINISTIC SNAPSHOT · SAME SEED · EVERY RENDER"
+        tenant="CHRISTIAN.T.MACION · UTC+8 · BUILD_DATE DETERMINISTIC · OWNER-VERIFIED"
+        noSep
+        hideTenet
+      />
       <h1 class="mk-hero__title" data-words>
         An institutional terminal for a portfolio that ships systems, not screenshots.
       </h1>
@@ -128,15 +130,6 @@ const secondarySymbol = 'BTC-USD';
         components — they ship on <a href={path('/research')}>research</a>,
         <a href={path('/positions')}>positions</a>, and the
         <a href={path('/prediction-markets')}>prediction page</a> too.
-      </p>
-      <p class="markets-head__tenant mono">
-        <span>CHRISTIAN.T.MACION</span>
-        <span aria-hidden="true">·</span>
-        <span>UTC+8</span>
-        <span aria-hidden="true">·</span>
-        <span>BUILD_DATE DETERMINISTIC</span>
-        <span aria-hidden="true">·</span>
-        <span>OWNER-VERIFIED</span>
       </p>
     </div>
   </section>
@@ -372,7 +365,7 @@ const secondarySymbol = 'BTC-USD';
     color: var(--c-amber);
     background: color-mix(in oklab, var(--c-amber) 8%, transparent);
     padding: 0.05em 0.4em;
-    border-radius: 3px;
+    border-radius: 1px;
   }
   .mk-hero__sub {
     font-size: var(--fs-base);

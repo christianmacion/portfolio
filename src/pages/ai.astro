@@ -21,6 +21,7 @@ import VoiceLine from '@components/VoiceLine.astro';
 import Stat from '@components/Stat.astro';
 import GraphStream from '@components/GraphStream.astro';
 import ScrollReveal from '@components/ScrollReveal.astro';
+import ChromeHeader from '@components/ChromeHeader.astro';
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { path } from '@utils/url';
 import { profile } from '@utils/profile';
@@ -113,12 +114,13 @@ const platformInputs = [
 >
   <header class="section section--hero ai-hero">
     <div class="container">
-      <p class="ai-head__eyebrow mono">
-        <span class="ai-head__eyebrow-chip">AI · MULTI-AGENT · {NGATE}</span>
-        <span class="ai-head__eyebrow-line"
-          >{profile.stats.aiAgentCount} AGENTS · 1 ORCHESTRATOR · 6 PROJECTS</span
-        >
-      </p>
+      <ChromeHeader
+        chip={`AI · MULTI-AGENT · ${NGATE}`}
+        eyebrow={`${profile.stats.aiAgentCount} AGENTS · 1 ORCHESTRATOR · 6 PROJECTS`}
+        tenant={`CHRISTIAN.T.MACION · UTC+8 · ${profile.stats.aiAgentCount} AGENTS · ${NGATE} · OWNER-VERIFIED`}
+        noSep
+        hideTenet
+      />
       <h1 class="section__title" data-words>
         {profile.stats.aiAgentCount} agents. One loop. <span class="hl">{NGATE}.</span>
       </h1>
@@ -156,17 +158,6 @@ const platformInputs = [
           variant="primary"
         />
       </div>
-      <p class="ai-head__tenant mono">
-        <span>CHRISTIAN.T.MACION</span>
-        <span aria-hidden="true">·</span>
-        <span>UTC+8</span>
-        <span aria-hidden="true">·</span>
-        <span>{profile.stats.aiAgentCount} AGENTS</span>
-        <span aria-hidden="true">·</span>
-        <span>{NGATE}</span>
-        <span aria-hidden="true">·</span>
-        <span>OWNER-VERIFIED</span>
-      </p>
     </div>
   </header>
 

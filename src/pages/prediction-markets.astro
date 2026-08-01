@@ -25,6 +25,7 @@ import StatCell from '@components/StatCell.astro';
 import PredictionCard from '@components/PredictionCard.astro';
 import ProbabilityDecay from '@components/ProbabilityDecay.astro';
 import CTABanner from '@components/CTABanner.astro';
+import ChromeHeader from '@components/ChromeHeader.astro';
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { buildStampUtc8 } from '@utils/build-stamp';
 import { path } from '@utils/url';
@@ -137,10 +138,13 @@ const decayPoints = events.map((e) => ({
   }
   <section class="hero">
     <div class="container hero__inner">
-      <p class="hero__eyebrow mono">
-        <span class="hero__eyebrow-chip">V6.1 · BINARY EVENT MARKETS</span>
-        <span class="hero__eyebrow-line">NDA-POSITIVE · 0 PLATFORMS NAMED · DETERMINISTIC</span>
-      </p>
+      <ChromeHeader
+        chip="V6.1 · BINARY EVENT MARKETS"
+        eyebrow="NDA-POSITIVE · 0 PLATFORMS NAMED · DETERMINISTIC"
+        tenant={`CHRISTIAN.T.MACION · UTC+8 · ${n} EVENTS · 0 PLATFORMS NAMED · OWNER-VERIFIED`}
+        noSep
+        hideTenet
+      />
       <h1 class="hero__title" data-words>
         {n} events. One implied-probability model. Zero platforms named.
       </h1>
@@ -155,17 +159,6 @@ const decayPoints = events.map((e) => ({
         <span>build {buildDate}</span>
         <span class="hero__sep" aria-hidden="true">·</span>
         <span>seeded from BUILD_DATE</span>
-      </div>
-      <div class="hero__tenant mono">
-        <span>CHRISTIAN.T.MACION</span>
-        <span class="hero__sep" aria-hidden="true">·</span>
-        <span>UTC+8</span>
-        <span class="hero__sep" aria-hidden="true">·</span>
-        <span>{n} EVENTS</span>
-        <span class="hero__sep" aria-hidden="true">·</span>
-        <span>0 PLATFORMS NAMED</span>
-        <span class="hero__sep" aria-hidden="true">·</span>
-        <span>OWNER-VERIFIED</span>
       </div>
     </div>
   </section>
@@ -550,7 +543,7 @@ const decayPoints = events.map((e) => ({
   .disclosure__list code {
     background: var(--c-bg);
     padding: 1px 6px;
-    border-radius: 3px;
+    border-radius: 1px;
     font-size: 0.85em;
     color: var(--c-amber-light);
   }
