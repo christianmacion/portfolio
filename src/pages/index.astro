@@ -724,12 +724,27 @@ const liveCounters = [
     }
     .tape__row--top {
       flex-wrap: wrap;
+      gap: 6px 10px;
     }
+    /* v9.3 Wave 4 (2026-08-01) — wrap the bottom nav into a 2-column
+       grid on mobile instead of horizontal-scroll. The previous
+       `overflow-x: auto` was clipping "FOR RECRUITERS" → "FOR RECRUITER"
+       on iPhone-13-width viewports and forcing the recruiter to
+       horizontally scroll a one-row nav, which read as a regression.
+       Now the 6 items stack into a 2×3 grid (each row = 3 items) so the
+       entire nav is visible without scroll, with the same institutional
+       mono caps register. */
     .tape__row--bottom {
-      overflow-x: auto;
-      white-space: nowrap;
-      flex-wrap: nowrap;
-      -webkit-overflow-scrolling: touch;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      column-gap: 14px;
+      row-gap: 8px;
+      padding-top: 10px;
+      border-top: 1px solid var(--c-rule);
+      white-space: normal;
+    }
+    .tape__row--bottom .tape__sep {
+      display: none;
     }
     .strip__inner {
       grid-template-columns: repeat(3, 1fr);
