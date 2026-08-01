@@ -20,7 +20,9 @@ const deployedStamp = buildStampUtc8();
     <div class="container footer__cta-inner">
       <p class="footer__cta-eyebrow mono">If you're hiring — 60-second path:</p>
       <div class="footer__cta-row">
-        <a class="footer__cta footer__cta--primary" href={`mailto:${profile.contact.email}?subject=Hiring%20inquiry%20—%20Senior%20QR%20%2F%20AI%20Engineer-Architect`}
+        <a
+          class="footer__cta footer__cta--primary"
+          href={`mailto:${profile.contact.email}?subject=Hiring%20inquiry%20—%20Senior%20QR%20%2F%20AI%20Engineer-Architect`}
           >Email — Hiring Inquiry</a
         >
         <a class="footer__cta" href={path('/for-recruiters')}>Recruiter Brief</a>
@@ -199,7 +201,9 @@ const deployedStamp = buildStampUtc8();
     border: 1px solid var(--c-white-mist);
     border-radius: 0;
     background: transparent;
-    transition: border-color 120ms ease, color 120ms ease;
+    transition:
+      border-color 120ms ease,
+      color 120ms ease;
   }
   .footer__cta:hover {
     border-color: var(--c-amber);

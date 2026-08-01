@@ -115,16 +115,30 @@ const { size = 8, accent = 'warn', lerp = 0.18 } = Astro.props;
     transition: opacity 220ms var(--j-ease-out, ease-out);
     mix-blend-mode: multiply;
   }
-  .hero-cursor--warn { border-color: var(--c-warn); }
-  .hero-cursor--cobalt { border-color: var(--c-cobalt, #1e40af); }
-  .hero-cursor--sage { border-color: var(--c-sage, #7a8b5c); }
-  .hero-cursor--terracotta { border-color: var(--c-terracotta, #b85a3a); }
-  .hero-cursor.is-active { opacity: 0.6; }
+  .hero-cursor--warn {
+    border-color: var(--c-warn);
+  }
+  .hero-cursor--cobalt {
+    border-color: var(--c-cobalt, #1e40af);
+  }
+  .hero-cursor--sage {
+    border-color: var(--c-sage, #7a8b5c);
+  }
+  .hero-cursor--terracotta {
+    border-color: var(--c-terracotta, #b85a3a);
+  }
+  .hero-cursor.is-active {
+    opacity: 0.6;
+  }
 
   @media (prefers-reduced-motion: reduce) {
-    .hero-cursor { display: none; }
+    .hero-cursor {
+      display: none;
+    }
   }
   @media (hover: none) {
-    .hero-cursor { display: none; }
+    .hero-cursor {
+      display: none;
+    }
   }
 </style>

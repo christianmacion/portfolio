@@ -22,8 +22,8 @@ const SUPPORTS_CLIPBOARD = typeof navigator !== 'undefined' && !!navigator.clipb
 // If the v6-13 surface is loaded (the default for /, /desk, /prediction-markets,
 // etc.), the var(--c-*) tokens resolve to current --j-* values and these
 // fallbacks never display.
-const FALLBACK_INK = '#5a6473';   // mirror of legacy --c-ink-2 (slate)
-const FALLBACK_BG = '#fff';      // mirror of legacy --c-bg (paper)
+const FALLBACK_INK = '#5a6473'; // mirror of legacy --c-ink-2 (slate)
+const FALLBACK_BG = '#fff'; // mirror of legacy --c-bg (paper)
 const FALLBACK_RULE = '#c9ced6'; // mirror of legacy --c-rule (hairline)
 const FALLBACK_AMBER = '#e8b220'; // mirror of legacy --c-amber-light
 

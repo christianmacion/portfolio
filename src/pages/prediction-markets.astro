@@ -252,13 +252,15 @@ const decayPoints = events.map((e) => ({
       </header>
 
       <div class="grid">
-        {events.map((ev) => (
-          <PredictionCard
-            event={ev}
-            buildDate={buildDate}
-            sparkline={genSparkline(ev.id, ev.data.impliedPx, ev.data.edge)}
-          />
-        ))}
+        {
+          events.map((ev) => (
+            <PredictionCard
+              event={ev}
+              buildDate={buildDate}
+              sparkline={genSparkline(ev.id, ev.data.impliedPx, ev.data.edge)}
+            />
+          ))
+        }
       </div>
     </div>
   </section>

@@ -799,10 +799,11 @@
 }
 
 .stl-utility {
-  transition: color var(--dur-1, 120ms) var(--ease-snappy),
-              border-color var(--dur-1, 120ms) var(--ease-snappy),
-              background-color var(--dur-1, 120ms) var(--ease-snappy),
-              opacity var(--dur-1, 120ms) var(--ease-snappy);
+  transition:
+    color var(--dur-1, 120ms) var(--ease-snappy),
+    border-color var(--dur-1, 120ms) var(--ease-snappy),
+    background-color var(--dur-1, 120ms) var(--ease-snappy),
+    opacity var(--dur-1, 120ms) var(--ease-snappy);
 }
 
 /* ============================================================
@@ -813,11 +814,21 @@
  *     component sets only the class. motion.ts reads [data-stagger]
  *     and adds .is-revealed to fire the transition.
  * ============================================================ */
-.stl-hero-mark    { animation-delay: 0ms; }
-.stl-hero-ambient { animation-delay: 200ms; }
-.stl-hero-h1      { animation-delay: 400ms; }
-.stl-hero-ticker  { animation-delay: 1200ms; }
-.stl-hero-body    { animation-delay: 1500ms; }
+.stl-hero-mark {
+  animation-delay: 0ms;
+}
+.stl-hero-ambient {
+  animation-delay: 200ms;
+}
+.stl-hero-h1 {
+  animation-delay: 400ms;
+}
+.stl-hero-ticker {
+  animation-delay: 1200ms;
+}
+.stl-hero-body {
+  animation-delay: 1500ms;
+}
 
 /* ============================================================
  * 26. MODULAR-ARITHMETIC STAGGER (v2026-07-31) — T3-M2 binding

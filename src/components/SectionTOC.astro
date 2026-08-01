@@ -40,7 +40,12 @@ const items = explicitItems ?? [];
 
 // v6.13.2 a11y: deterministic id for aria-labelledby reference.
 // Slugify the label so multiple TOCs on the same page don't collide.
-const tocId = `toc-${label.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'default'}`;
+const tocId = `toc-${
+  label
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '') || 'default'
+}`;
 ---
 
 <aside class="toc" aria-label={label}>

@@ -57,8 +57,7 @@ const streamId = `graph-${fnv1a(`${squad}:${limit}:${showLabels}:${height}`)}`;
     aria-hidden="true"
     viewBox="0 0 800 380"
     width="100%"
-    height={height}
-  ></svg>
+    height={height}></svg>
   <noscript>
     <p class="graph-stream__nojs mono">graph renders client-side (JS required)</p>
   </noscript>
@@ -105,9 +104,15 @@ const streamId = `graph-${fnv1a(`${squad}:${limit}:${showLabels}:${height}`)}`;
     animation: pulseDot 1.6s var(--j-ease-out, ease-out) infinite;
   }
   @keyframes pulseDot {
-    0% { box-shadow: 0 0 0 0 var(--j-pulse-peak); }
-    70% { box-shadow: 0 0 0 8px var(--j-pulse-end); }
-    100% { box-shadow: 0 0 0 0 var(--j-pulse-end); }
+    0% {
+      box-shadow: 0 0 0 0 var(--j-pulse-peak);
+    }
+    70% {
+      box-shadow: 0 0 0 8px var(--j-pulse-end);
+    }
+    100% {
+      box-shadow: 0 0 0 0 var(--j-pulse-end);
+    }
   }
   .graph-stream__svg {
     display: block;
@@ -121,14 +126,32 @@ const streamId = `graph-${fnv1a(`${squad}:${limit}:${showLabels}:${height}`)}`;
     padding: 40px 0;
   }
 
-  .gs-node { fill: var(--c-ink); }
-  .gs-node--A { fill: var(--c-warn); }
-  .gs-node--B { fill: var(--gs-node-B); }
-  .gs-node--C { fill: var(--gs-node-C); }
-  .gs-node--D { fill: var(--gs-node-D); }
-  .gs-node--E { fill: var(--gs-node-E); }
-  .gs-node--F { fill: var(--c-ink-2); }
-  .gs-edge { stroke: var(--c-rule); stroke-width: 0.5; opacity: 0.6; }
+  .gs-node {
+    fill: var(--c-ink);
+  }
+  .gs-node--A {
+    fill: var(--c-warn);
+  }
+  .gs-node--B {
+    fill: var(--gs-node-B);
+  }
+  .gs-node--C {
+    fill: var(--gs-node-C);
+  }
+  .gs-node--D {
+    fill: var(--gs-node-D);
+  }
+  .gs-node--E {
+    fill: var(--gs-node-E);
+  }
+  .gs-node--F {
+    fill: var(--c-ink-2);
+  }
+  .gs-edge {
+    stroke: var(--c-rule);
+    stroke-width: 0.5;
+    opacity: 0.6;
+  }
   .gs-label {
     font: 500 9px / 1 var(--ff-mono);
     fill: var(--c-ink-3);
@@ -137,7 +160,9 @@ const streamId = `graph-${fnv1a(`${squad}:${limit}:${showLabels}:${height}`)}`;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .graph-stream__pulse { animation: none; }
+    .graph-stream__pulse {
+      animation: none;
+    }
   }
 </style>
 
@@ -171,7 +196,8 @@ const streamId = `graph-${fnv1a(`${squad}:${limit}:${showLabels}:${height}`)}`;
           ...n,
           x: 400 + Math.cos(i * 2.4) * 200,
           y: (this.svg.viewBox.baseVal.height || 380) / 2 + Math.sin(i * 2.4) * 100,
-          vx: 0, vy: 0,
+          vx: 0,
+          vy: 0,
         }));
         this.edges = edges;
         this.updateCount();
@@ -191,7 +217,8 @@ const streamId = `graph-${fnv1a(`${squad}:${limit}:${showLabels}:${height}`)}`;
     layout() {
       const W = 800;
       const H = this.svg.viewBox.baseVal.height || 380;
-      const cx = W / 2, cy = H / 2;
+      const cx = W / 2,
+        cy = H / 2;
       const nodes = this.nodes;
       const edges = this.edges;
       // Static radial layout — fast, no animation library needed

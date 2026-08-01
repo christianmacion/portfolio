@@ -64,18 +64,22 @@ const {
     )
   }
 
-  {!hideTenant && (
-    <p class="page__tenant mono" aria-label="Identity ticker">
-      {tenant.split(' · ').map((segment: string, i: number, arr: string[]) => (
-        <>
-          <span>{segment}</span>
-          {i < arr.length - 1 && (
-            <span class="page__tenant-sep" aria-hidden="true">·</span>
-          )}
-        </>
-      ))}
-    </p>
-  )}
+  {
+    !hideTenant && (
+      <p class="page__tenant mono" aria-label="Identity ticker">
+        {tenant.split(' · ').map((segment: string, i: number, arr: string[]) => (
+          <>
+            <span>{segment}</span>
+            {i < arr.length - 1 && (
+              <span class="page__tenant-sep" aria-hidden="true">
+                ·
+              </span>
+            )}
+          </>
+        ))}
+      </p>
+    )
+  }
 
   {!hideTenet && <p class="chrome-header__tenet mono">{tenet}</p>}
 </div>

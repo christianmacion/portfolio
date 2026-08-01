@@ -147,8 +147,10 @@ const secondary = [
       <div class="nav__secondary-row">
         <NavMore items={markets} mode="inline" label="Markets" class="nav__more-flat" />
         <NavMore items={secondary} mode="inline" class="nav__more-flat" />
-        {/* v9.3 IA wave 2 (2026-08-01) — Mobile drawer variant: same 3-pill
-           Resume split-button, expanded inline (no dropdown panel). */}
+        {
+          /* v9.3 IA wave 2 (2026-08-01) — Mobile drawer variant: same 3-pill
+           Resume split-button, expanded inline (no dropdown panel). */
+        }
         <details class="nav__resume-split nav__resume-split--mobile">
           <summary
             class="btn btn--primary btn--sm nav__cta nav__cta--resume"
@@ -171,7 +173,11 @@ const secondary = [
               <path d="M2 3.5l3 3 3-3"></path>
             </svg>
           </summary>
-          <div class="nav__resume-pills nav__resume-pills--mobile" id="resume-pills-mobile" role="menu">
+          <div
+            class="nav__resume-pills nav__resume-pills--mobile"
+            id="resume-pills-mobile"
+            role="menu"
+          >
             <a
               href={path('/resume-quant-onepage.pdf')}
               class="nav__resume-pill binding-stripe binding-stripe--handoff"
@@ -201,11 +207,13 @@ const secondary = [
             </a>
           </div>
         </details>
-        {/* v9.3 IA wave 2 (2026-08-01) — Mobile drawer Book-a-call. Full-width
+        {
+          /* v9.3 IA wave 2 (2026-08-01) — Mobile drawer Book-a-call. Full-width
            amber CTA. Mailto fallback per Wave-2 conversion audit (cal.com
            /christianmacion/30min-review returns HTTP 404 as of 2026-08-01).
            Owner-action item to recover the cal.com handle + recreate the
-           30min-review event type; until then, mailto is the binding path. */}
+           30min-review event type; until then, mailto is the binding path. */
+        }
         <a
           href={bookMailto}
           class="btn btn--sm nav__book nav__book--mobile"
@@ -258,9 +266,11 @@ const secondary = [
           <path d="m21 21-4.3-4.3"></path>
         </svg>
       </a>
-      {/* v9.3 IA wave 2 (2026-08-01) — GitHub icon link in nav. Custom
+      {
+        /* v9.3 IA wave 2 (2026-08-01) — GitHub icon link in nav. Custom
          16×16 SVG (mono fill, accent on hover) → external profile.
-         Touch target expanded to 44×44 via nav__icon-link::after. */}
+         Touch target expanded to 44×44 via nav__icon-link::after. */
+      }
       <a
         href="https://github.com/christianmacion26"
         class="nav__icon-link"
@@ -282,11 +292,13 @@ const secondary = [
           ></path>
         </svg>
       </a>
-      {/* v9.3 IA wave 2 (2026-08-01) — Resume split-button disclosure.
+      {
+        /* v9.3 IA wave 2 (2026-08-01) — Resume split-button disclosure.
          Native <details>/<summary> → 3 direct-PDF pills (Quant / AI /
          Unified). Replaces the 2-click "Resume ↓ → /resume → variant →
          PDF" path with a 1-click variant chooser. aria-controls +
-         summary labels wire the disclosure to screen readers. */}
+         summary labels wire the disclosure to screen readers. */
+      }
       <details class="nav__resume-split nav__resume-split--desktop">
         <summary
           class="btn btn--primary btn--sm nav__cta nav__cta--resume"
@@ -339,14 +351,16 @@ const secondary = [
           </a>
         </div>
       </details>
-      {/* v9.3 IA wave 2 (2026-08-01) — Persistent Book-a-call CTA in nav.
+      {
+        /* v9.3 IA wave 2 (2026-08-01) — Persistent Book-a-call CTA in nav.
          Amber-deep on tape → terracotta on hover. Mailto fallback per
          Wave-2 conversion audit (cal.com/christianmacion/30min-review
          returns HTTP 404 as of 2026-08-01; verified via curl HTTP/2 404
          cf-ray a243042e0bad0dc3-HKG). Owner-action item to recover the
          cal.com handle + recreate the 30min-review event type; until
          then, mailto is the binding path per the conversion audit's
-         "mailto + slot times tile" recommended fallback. */}
+         "mailto + slot times tile" recommended fallback. */
+      }
       <a
         href={bookMailto}
         class="btn btn--sm nav__book nav__book--desktop"

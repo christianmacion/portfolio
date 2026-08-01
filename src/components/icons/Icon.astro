@@ -51,13 +51,7 @@ interface Props {
   strokeWidth?: number;
 }
 
-const {
-  name,
-  size = 16,
-  label,
-  class: className = '',
-  strokeWidth = 1.5,
-} = Astro.props;
+const { name, size = 16, label, class: className = '', strokeWidth = 1.5 } = Astro.props;
 
 const path = getIconPath(name);
 
@@ -80,7 +74,7 @@ const a11y = label
   data-icon={name}
   {...a11y}
 >
-  <path d={path} />
+  <path d={path}></path>
 </svg>
 
 <style>

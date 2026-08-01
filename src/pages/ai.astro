@@ -115,7 +115,9 @@ const platformInputs = [
     <div class="container">
       <p class="ai-head__eyebrow mono">
         <span class="ai-head__eyebrow-chip">AI · MULTI-AGENT · {NGATE}</span>
-        <span class="ai-head__eyebrow-line">{profile.stats.aiAgentCount} AGENTS · 1 ORCHESTRATOR · 6 PROJECTS</span>
+        <span class="ai-head__eyebrow-line"
+          >{profile.stats.aiAgentCount} AGENTS · 1 ORCHESTRATOR · 6 PROJECTS</span
+        >
       </p>
       <h1 class="section__title" data-words>
         {profile.stats.aiAgentCount} agents. One loop. <span class="hl">{NGATE}.</span>
@@ -218,9 +220,9 @@ const platformInputs = [
         <p class="section__eyebrow">Live graph · public-safe slice</p>
         <h2 class="section__title">The graph is the spine.</h2>
         <p class="section__sub">
-          Every claim, every artifact, every agent — wired through one knowledge graph
-          that ships at compile time. T1 (5px) > T2 (3.5px) > T3 (2.5px). Squad color
-          marks the channel. NDA-protected entities are filtered out before public.
+          Every claim, every artifact, every agent — wired through one knowledge graph that ships at
+          compile time. T1 (5px) > T2 (3.5px) > T3 (2.5px). Squad color marks the channel.
+          NDA-protected entities are filtered out before public.
         </p>
       </header>
       <ScrollReveal delayMs={120} rise={16}>
@@ -255,20 +257,28 @@ const platformInputs = [
     </div>
   </section>
 
-  {/* === Section 2b — STELLA + graph engineering === v7.6
+  {
+    /* === Section 2b — STELLA + graph engineering === v7.6
        Surfaces the next layer: STELLA Office (53-agent, 6-sub-team)
        + the graph rung. Link out to /workbooks/. NDA-safe: counts
-       and taxonomy only, no officer names. */}
-  <section class="section section--alt" id="stella" data-toc-id="stella" data-toc-label="STELLA · Graph engineering">
+       and taxonomy only, no officer names. */
+  }
+  <section
+    class="section section--alt"
+    id="stella"
+    data-toc-id="stella"
+    data-toc-label="STELLA · Graph engineering"
+  >
     <div class="container">
       <header class="section__head">
         <p class="section__eyebrow">Beyond the loop · STELLA Office</p>
         <h2 class="section__title">The next rung: graphs as shared memory.</h2>
         <p class="section__sub">
-          The 5-rung spine — <b>prompt → skills → agents → loops → graphs</b> — is what
-          STELLA's {profile.stats.aiAgentCount}-agent office runs on. The graph layer is the
-          productivity unlock: typed entities + relations + provenance, queryable, shared
-          across every agent so the corpus isn't re-derived on every dispatch.
+          The 5-rung spine — <b>prompt → skills → agents → loops → graphs</b> — is what STELLA's {
+            profile.stats.aiAgentCount
+          }-agent office runs on. The graph layer is the productivity unlock: typed entities +
+          relations + provenance, queryable, shared across every agent so the corpus isn't
+          re-derived on every dispatch.
         </p>
       </header>
 
@@ -277,9 +287,9 @@ const platformInputs = [
           <p class="stella-cell__num mono">A</p>
           <h3 class="stella-cell__name">Multi-agent office</h3>
           <p class="stella-cell__sub">
-            {profile.stats.aiAgentCount} agents in 6 sub-teams. 4 doctrinal corpora. 5-must-have
-            compliance on every loop primitive. NDA-safe by construction — counts and taxonomy
-            only, never officer names.
+            {profile.stats.aiAgentCount} agents in 6 sub-teams. 4 doctrinal corpora. 5-must-have compliance
+            on every loop primitive. NDA-safe by construction — counts and taxonomy only, never officer
+            names.
           </p>
           <a href={path('/methodology')} class="stella-cell__link">Methodology →</a>
         </div>
@@ -288,9 +298,9 @@ const platformInputs = [
           <p class="stella-cell__num mono">B</p>
           <h3 class="stella-cell__name">Knowledge graph layer</h3>
           <p class="stella-cell__sub">
-            9 entity types. 9 predicates. Four-stage pipeline — Extract · Resolve ·
-            Assemble · Query. The AAR → graph contract: every mission writes its
-            findings, every AAR mutates the graph.
+            9 entity types. 9 predicates. Four-stage pipeline — Extract · Resolve · Assemble ·
+            Query. The AAR → graph contract: every mission writes its findings, every AAR mutates
+            the graph.
           </p>
           <a href={path('/workbooks')} class="stella-cell__link">Workbook trilogy →</a>
         </div>
@@ -299,9 +309,10 @@ const platformInputs = [
           <p class="stella-cell__num mono">C</p>
           <h3 class="stella-cell__name">5-rung spine</h3>
           <p class="stella-cell__sub">
-            Most teams plateau at the loop. STELLA runs at the graph rung — and ships
-            the public-facing narrative via two workbooks
-            (<em>AI Engineering from the Ground Up</em>, <em>Graph Engineering for Everyone</em>).
+            Most teams plateau at the loop. STELLA runs at the graph rung — and ships the
+            public-facing narrative via two workbooks (<em>AI Engineering from the Ground Up</em>, <em
+              >Graph Engineering for Everyone</em
+            >).
           </p>
           <a href={path('/workbooks/ai-engineering/')} class="stella-cell__link">Read W1 →</a>
         </div>
@@ -685,7 +696,9 @@ const platformInputs = [
     display: flex;
     flex-direction: column;
     gap: var(--sp-2);
-    transition: border-color 0.2s ease, transform 0.2s ease;
+    transition:
+      border-color 0.2s ease,
+      transform 0.2s ease;
     position: relative;
   }
   .stella-cell::before {

@@ -96,10 +96,12 @@ const itemListJsonLd = projectListJsonLd(
         </div>
       </div>
 
-      {/* v6.4 — Lane filter chips (URL-param-driven, no client:*).
+      {
+        /* v6.4 — Lane filter chips (URL-param-driven, no client:*).
          v9.2 a11y — aria-pressed is not valid on <a>; use aria-current
          on the active filter (semantically "this navigation represents
-         the current view"). Inactive filters don't need an aria attr. */}
+         the current view"). Inactive filters don't need an aria attr. */
+      }
       <div class="lane-filter" role="group" aria-label="Filter projects by lane">
         <a
           class="lane-filter__chip"

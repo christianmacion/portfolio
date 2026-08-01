@@ -51,7 +51,9 @@ const buildDate = new Date().toISOString().slice(0, 10);
     <div class="container container-narrow">
       <p class="page-head__eyebrow mono">
         <span class="page-head__eyebrow-chip">WORK · WORKING ARCHIVE</span>
-        <span class="page-head__eyebrow-line">CASE STUDIES · SHIPPED RECORD · WHAT SURVIVED REVIEW</span>
+        <span class="page-head__eyebrow-line"
+          >CASE STUDIES · SHIPPED RECORD · WHAT SURVIVED REVIEW</span
+        >
       </p>
       <h1 class="page-head__title" data-words>
         A working archive <span class="hl">of what shipped</span>.
@@ -60,10 +62,9 @@ const buildDate = new Date().toISOString().slice(0, 10);
         Trade-offs, receipts, and the parts that survived review.
       </VoiceLine>
       <p class="page-head__lede">
-        The portfolio index for the work-as-shipped. Quant-research cases across
-        five asset classes; AI-engineering cases with reproducible scorecards;
-        the live production strip; and the frontier — graph engineering,
-        pedagogy, and the doctrine corpus that anchors the voice.
+        The portfolio index for the work-as-shipped. Quant-research cases across five asset classes;
+        AI-engineering cases with reproducible scorecards; the live production strip; and the
+        frontier — graph engineering, pedagogy, and the doctrine corpus that anchors the voice.
       </p>
     </div>
   </header>
@@ -72,33 +73,30 @@ const buildDate = new Date().toISOString().slice(0, 10);
     <!-- § 01 — The Work Loop -->
     <section class="work-section" id="work-loop" aria-labelledby="work-loop-h">
       <p class="work-section__mark mono">§ 01 — THE WORK LOOP</p>
-      <h2 class="work-section__title" id="work-loop-h">Hypothesis → backtest → paper → live → postmortem.</h2>
+      <h2 class="work-section__title" id="work-loop-h">
+        Hypothesis → backtest → paper → live → postmortem.
+      </h2>
       <p class="work-section__body">
-        The work runs on a five-stage loop. A hypothesis is registered with a
-        pre-declared fire rule and a frozen-spec evaluation window. The
-        backtest is run behind the {NGATE} statistical filter — block-bootstrap
-        CIs, deflated Sharpe, CSCV-based PBO, walk-forward stability, and
-        the multiple-testing layer that prevents the funnel from
-        manufacturing fake winners. Survivors move to paper trading with a
-        capped notional and a pre-registered risk overlay. A live leg is
-        opened only after the paper leg produces un-gameable forward
-        out-of-sample evidence. The postmortem is always written — KILLs
-        included — and banked into the methodology as enforced discipline.
+        The work runs on a five-stage loop. A hypothesis is registered with a pre-declared fire rule
+        and a frozen-spec evaluation window. The backtest is run behind the {NGATE} statistical filter
+        — block-bootstrap CIs, deflated Sharpe, CSCV-based PBO, walk-forward stability, and the multiple-testing
+        layer that prevents the funnel from manufacturing fake winners. Survivors move to paper trading
+        with a capped notional and a pre-registered risk overlay. A live leg is opened only after the
+        paper leg produces un-gameable forward out-of-sample evidence. The postmortem is always written
+        — KILLs included — and banked into the methodology as enforced discipline.
       </p>
       <p class="work-section__body">
-        The AI-engineering work follows the same loop with different
-        primitives. A prompt or scaffold is the hypothesis. The eval
-        harness (faithfulness, hallucination flags, retrieval recall@k)
-        is the backtest. A staging deployment with a frozen eval set is
-        the paper leg. Production rollout behind a kill-switch is the live
-        leg. The postmortem captures the failure modes — not the wins —
-        because the wins tend to be self-promoting while the failures
+        The AI-engineering work follows the same loop with different primitives. A prompt or
+        scaffold is the hypothesis. The eval harness (faithfulness, hallucination flags, retrieval
+        recall@k) is the backtest. A staging deployment with a frozen eval set is the paper leg.
+        Production rollout behind a kill-switch is the live leg. The postmortem captures the failure
+        modes — not the wins — because the wins tend to be self-promoting while the failures
         compound.
       </p>
       <p class="work-section__body">
-        The loop is the same on both sides because the failure mode is the
-        same: an unsupervised optimization that drifts toward whatever
-        produces the prettiest scorecard. The loop is the leash.
+        The loop is the same on both sides because the failure mode is the same: an unsupervised
+        optimization that drifts toward whatever produces the prettiest scorecard. The loop is the
+        leash.
       </p>
     </section>
 
@@ -107,32 +105,40 @@ const buildDate = new Date().toISOString().slice(0, 10);
       <p class="work-section__mark mono">§ 02 — QUANT CASE STUDIES</p>
       <h2 class="work-section__title" id="work-quant-h">Five public-data case studies.</h2>
       <p class="work-section__body">
-        Each card links to a public-data project brief. Every project ships
-        with the data source, the frozen-spec note, the {NGATE} gate evidence,
-        and a copy of the methodology it was tested against. None of the
-        projects rely on proprietary data sources. Every line is reproducible
-        on a fresh install.
+        Each card links to a public-data project brief. Every project ships with the data source,
+        the frozen-spec note, the {NGATE} gate evidence, and a copy of the methodology it was tested against.
+        None of the projects rely on proprietary data sources. Every line is reproducible on a fresh install.
       </p>
 
       <div class="work-grid" role="list">
-        {quantProjects.map((p) => (
-          <article class="work-card" role="listitem">
-            <p class="work-card__chip mono">QUANT · {p.data.tags?.[0]?.toUpperCase() ?? 'PUBLIC'}</p>
-            <h3 class="work-card__title">
-              <a href={`/projects/quant/${p.slug}/`}>{p.data.title}</a>
-            </h3>
-            <p class="work-card__sub">{p.data.summary}</p>
-            <div class="work-card__meta">
-              {p.data.metrics?.slice(0, 2).map((m) => (
-                <span class="work-card__metric">
-                  <span class="work-card__metric-label mono">{m.label}</span>
-                  <span class="work-card__metric-value">{m.value}</span>
-                </span>
-              ))}
-            </div>
-            <a class="work-card__link" href={`/projects/quant/${p.slug}/`} aria-label={`Read ${p.data.title}`}>Read the brief →</a>
-          </article>
-        ))}
+        {
+          quantProjects.map((p) => (
+            <article class="work-card" role="listitem">
+              <p class="work-card__chip mono">
+                QUANT · {p.data.tags?.[0]?.toUpperCase() ?? 'PUBLIC'}
+              </p>
+              <h3 class="work-card__title">
+                <a href={`/projects/quant/${p.slug}/`}>{p.data.title}</a>
+              </h3>
+              <p class="work-card__sub">{p.data.summary}</p>
+              <div class="work-card__meta">
+                {p.data.metrics?.slice(0, 2).map((m) => (
+                  <span class="work-card__metric">
+                    <span class="work-card__metric-label mono">{m.label}</span>
+                    <span class="work-card__metric-value">{m.value}</span>
+                  </span>
+                ))}
+              </div>
+              <a
+                class="work-card__link"
+                href={`/projects/quant/${p.slug}/`}
+                aria-label={`Read ${p.data.title}`}
+              >
+                Read the brief →
+              </a>
+            </article>
+          ))
+        }
       </div>
     </section>
 
@@ -141,31 +147,38 @@ const buildDate = new Date().toISOString().slice(0, 10);
       <p class="work-section__mark mono">§ 03 — AI ENGINEERING CASE STUDIES</p>
       <h2 class="work-section__title" id="work-ai-h">Three reproducible eval-first cases.</h2>
       <p class="work-section__body">
-        Every AI case ships with a reproducible scorecard. The eval harness
-        is the headline artifact — not the demo. Each project below commits
-        to an in-repo labeled set, runs the harness, and reports the
-        numbers in a single PDF.
+        Every AI case ships with a reproducible scorecard. The eval harness is the headline artifact
+        — not the demo. Each project below commits to an in-repo labeled set, runs the harness, and
+        reports the numbers in a single PDF.
       </p>
 
       <div class="work-grid" role="list">
-        {aiProjects.map((p) => (
-          <article class="work-card" role="listitem">
-            <p class="work-card__chip mono">AI · {p.data.tags?.[0]?.toUpperCase() ?? 'EVAL'}</p>
-            <h3 class="work-card__title">
-              <a href={`/projects/ai/${p.slug}/`}>{p.data.title}</a>
-            </h3>
-            <p class="work-card__sub">{p.data.summary}</p>
-            <div class="work-card__meta">
-              {p.data.metrics?.slice(0, 2).map((m) => (
-                <span class="work-card__metric">
-                  <span class="work-card__metric-label mono">{m.label}</span>
-                  <span class="work-card__metric-value">{m.value}</span>
-                </span>
-              ))}
-            </div>
-            <a class="work-card__link" href={`/projects/ai/${p.slug}/`} aria-label={`Read ${p.data.title}`}>Read the brief →</a>
-          </article>
-        ))}
+        {
+          aiProjects.map((p) => (
+            <article class="work-card" role="listitem">
+              <p class="work-card__chip mono">AI · {p.data.tags?.[0]?.toUpperCase() ?? 'EVAL'}</p>
+              <h3 class="work-card__title">
+                <a href={`/projects/ai/${p.slug}/`}>{p.data.title}</a>
+              </h3>
+              <p class="work-card__sub">{p.data.summary}</p>
+              <div class="work-card__meta">
+                {p.data.metrics?.slice(0, 2).map((m) => (
+                  <span class="work-card__metric">
+                    <span class="work-card__metric-label mono">{m.label}</span>
+                    <span class="work-card__metric-value">{m.value}</span>
+                  </span>
+                ))}
+              </div>
+              <a
+                class="work-card__link"
+                href={`/projects/ai/${p.slug}/`}
+                aria-label={`Read ${p.data.title}`}
+              >
+                Read the brief →
+              </a>
+            </article>
+          ))
+        }
       </div>
     </section>
 
@@ -174,9 +187,8 @@ const buildDate = new Date().toISOString().slice(0, 10);
       <p class="work-section__mark mono">§ 04 — LIVE IN PRODUCTION</p>
       <h2 class="work-section__title" id="work-live-h">What is running right now.</h2>
       <p class="work-section__body">
-        Production surfaces that survive the omit-this-if-stale rule. Each
-        is byte-deterministic at build time; refresh cadence is on the page
-        itself.
+        Production surfaces that survive the omit-this-if-stale rule. Each is byte-deterministic at
+        build time; refresh cadence is on the page itself.
       </p>
 
       <div class="work-live">
@@ -184,8 +196,8 @@ const buildDate = new Date().toISOString().slice(0, 10);
           <p class="work-live__chip mono">LIVE</p>
           <h3 class="work-live__title">Markets terminal</h3>
           <p class="work-live__sub">
-            Index tape, order-book depth, term structure, coverage globe.
-            BTC-USD, S&amp;P, DXY, VIX. Updated at build.
+            Index tape, order-book depth, term structure, coverage globe. BTC-USD, S&amp;P, DXY,
+            VIX. Updated at build.
           </p>
           <a class="work-live__link" href={path('/markets')}>Open the terminal →</a>
         </div>
@@ -194,8 +206,8 @@ const buildDate = new Date().toISOString().slice(0, 10);
           <p class="work-live__chip mono">LIVE</p>
           <h3 class="work-live__title">Prediction markets</h3>
           <p class="work-live__sub">
-            Eight binary event contracts with implied probability, edge,
-            and a 12-point sparkline. NDA-safe by construction.
+            Eight binary event contracts with implied probability, edge, and a 12-point sparkline.
+            NDA-safe by construction.
           </p>
           <a class="work-live__link" href={path('/prediction-markets')}>Open the book →</a>
         </div>
@@ -204,8 +216,8 @@ const buildDate = new Date().toISOString().slice(0, 10);
           <p class="work-live__chip mono">LIVE</p>
           <h3 class="work-live__title">Now</h3>
           <p class="work-live__sub">
-            Dated one-pager. Open-to / not-open-to / where / how to reach.
-            Updated ~monthly, on job-change or regime-event override.
+            Dated one-pager. Open-to / not-open-to / where / how to reach. Updated ~monthly, on
+            job-change or regime-event override.
           </p>
           <a class="work-live__link" href={path('/now')}>Open the page →</a>
         </div>
@@ -215,33 +227,30 @@ const buildDate = new Date().toISOString().slice(0, 10);
     <!-- § 05 — Where The Work Is Going -->
     <section class="work-section" id="work-frontier" aria-labelledby="work-frontier-h">
       <p class="work-section__mark mono">§ 05 — WHERE THE WORK IS GOING</p>
-      <h2 class="work-section__title" id="work-frontier-h">The frontier: graph engineering, pedagogy, doctrine.</h2>
+      <h2 class="work-section__title" id="work-frontier-h">
+        The frontier: graph engineering, pedagogy, doctrine.
+      </h2>
       <p class="work-section__body">
-        The shipped record is downstream of the build rhythm. Three
-        workstreams are compounding upstream: graph engineering, where the
-        shared-memory graph is the load-bearing primitive across the office
-        (88-agent roster with 142 skills wired through the 9-skill graph
-        family); pedagogy, where the workbook pipeline turns validated
-        doctrine into shareable volumes for the next operator; and the
-        doctrine corpus itself, where eight corpus owners (Sagan, Arendt,
-        Kahneman, Deming, Tetlock, Munger, Goldratt, plus the strategic-
-        posture bench) anchor every public artifact to a citable source.
+        The shipped record is downstream of the build rhythm. Three workstreams are compounding
+        upstream: graph engineering, where the shared-memory graph is the load-bearing primitive
+        across the office (88-agent roster with 142 skills wired through the 9-skill graph family);
+        pedagogy, where the workbook pipeline turns validated doctrine into shareable volumes for
+        the next operator; and the doctrine corpus itself, where eight corpus owners (Sagan, Arendt,
+        Kahneman, Deming, Tetlock, Munger, Goldratt, plus the strategic- posture bench) anchor every
+        public artifact to a citable source.
       </p>
       <p class="work-section__body">
-        The trait the three workstreams share is that they refuse to ship
-        without a reason. Graph engineering ships behind the regression
-        contract (verify_graph + 5-must-have). Pedagogy ships behind the
-        render-pipeline gate (PDF check + page-count + audit-trail).
-        Doctrine ships behind the corpus-owner citation rule (no claim
-        lands without a wikilink to the source). The patterns are boring
-        on purpose. Boring is what survives a regime flip.
+        The trait the three workstreams share is that they refuse to ship without a reason. Graph
+        engineering ships behind the regression contract (verify_graph + 5-must-have). Pedagogy
+        ships behind the render-pipeline gate (PDF check + page-count + audit-trail). Doctrine ships
+        behind the corpus-owner citation rule (no claim lands without a wikilink to the source). The
+        patterns are boring on purpose. Boring is what survives a regime flip.
       </p>
       <p class="work-section__body">
-        The next twelve months sit roughly in three lanes. The work loop
-        stays the same; the surface area grows by adding disciplines rather
-        than by stuffing the existing ones. The pattern is the same one
-        the {NGATE} filter enforces on a backtest: optimize the gate
-        first, widen the funnel second, ship third.
+        The next twelve months sit roughly in three lanes. The work loop stays the same; the surface
+        area grows by adding disciplines rather than by stuffing the existing ones. The pattern is
+        the same one the {NGATE} filter enforces on a backtest: optimize the gate first, widen the funnel
+        second, ship third.
       </p>
     </section>
 
@@ -261,8 +270,14 @@ const buildDate = new Date().toISOString().slice(0, 10);
 
 <style>
   /* Container + narrow — same shape as the rest of the v6-13 surface */
-  .container-narrow { max-width: 70rem; margin: 0 auto; padding: 0 var(--space-md, 1.5rem); }
-  .container { width: 100%; }
+  .container-narrow {
+    max-width: 70rem;
+    margin: 0 auto;
+    padding: 0 var(--space-md, 1.5rem);
+  }
+  .container {
+    width: 100%;
+  }
 
   .page-head__title {
     font-family: var(--ff-source-serif, var(--ff-sans));
@@ -273,10 +288,24 @@ const buildDate = new Date().toISOString().slice(0, 10);
     letter-spacing: -0.01em;
     margin: var(--space-md, 0.75rem) 0;
   }
-  .page-head__title .hl { font-style: italic; color: var(--c-amber-deep); }
-  .page-head__lede { font-size: var(--text-lg, 1.125rem); color: var(--c-ink-2); max-width: 60ch; margin-top: var(--space-md, 0.75rem); }
+  .page-head__title .hl {
+    font-style: italic;
+    color: var(--c-amber-deep);
+  }
+  .page-head__lede {
+    font-size: var(--text-lg, 1.125rem);
+    color: var(--c-ink-2);
+    max-width: 60ch;
+    margin-top: var(--space-md, 0.75rem);
+  }
 
-  .page-head__eyebrow { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin-bottom: var(--space-sm, 0.5rem); }
+  .page-head__eyebrow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    margin-bottom: var(--space-sm, 0.5rem);
+  }
   .page-head__eyebrow-chip {
     background: var(--c-amber-deep);
     color: var(--c-on-amber-deep, #fff);
@@ -285,12 +314,24 @@ const buildDate = new Date().toISOString().slice(0, 10);
     font-size: var(--text-2xs, 0.6875rem);
     letter-spacing: 0.06em;
   }
-  .page-head__eyebrow-line { font-size: var(--text-2xs, 0.6875rem); color: var(--c-ink-3); letter-spacing: 0.06em; }
+  .page-head__eyebrow-line {
+    font-size: var(--text-2xs, 0.6875rem);
+    color: var(--c-ink-3);
+    letter-spacing: 0.06em;
+  }
 
-  .work-body { padding-top: var(--space-2xl, 3rem); padding-bottom: var(--space-2xl, 3rem); }
+  .work-body {
+    padding-top: var(--space-2xl, 3rem);
+    padding-bottom: var(--space-2xl, 3rem);
+  }
 
-  .work-section { padding: var(--space-xl, 2rem) 0; border-top: 1px solid var(--c-rule); }
-  .work-section:first-of-type { border-top: 0; }
+  .work-section {
+    padding: var(--space-xl, 2rem) 0;
+    border-top: 1px solid var(--c-rule);
+  }
+  .work-section:first-of-type {
+    border-top: 0;
+  }
   .work-section__mark {
     font-size: var(--text-2xs, 0.6875rem);
     color: var(--c-amber-deep);
@@ -329,7 +370,9 @@ const buildDate = new Date().toISOString().slice(0, 10);
     gap: var(--space-sm, 0.5rem);
     transition: border-color 200ms ease-out;
   }
-  .work-card:hover { border-color: var(--c-amber-deep); }
+  .work-card:hover {
+    border-color: var(--c-amber-deep);
+  }
   .work-card__chip {
     font-size: var(--text-2xs, 0.6875rem);
     color: var(--c-amber-deep);
@@ -341,15 +384,50 @@ const buildDate = new Date().toISOString().slice(0, 10);
     color: var(--c-ink);
     line-height: var(--line-height-tight, 1.15);
   }
-  .work-card__title a { color: inherit; text-decoration: none; }
-  .work-card__title a:hover { color: var(--c-amber-deep); }
-  .work-card__sub { font-size: var(--text-sm, 0.875rem); color: var(--c-ink-2); line-height: var(--line-height-normal, 1.5); }
-  .work-card__meta { display: flex; gap: var(--space-md, 0.75rem); margin-top: auto; }
-  .work-card__metric { display: flex; flex-direction: column; gap: 0.1rem; }
-  .work-card__metric-label { font-size: var(--text-2xs, 0.6875rem); color: var(--c-ink-3); letter-spacing: 0.06em; text-transform: uppercase; }
-  .work-card__metric-value { font-family: var(--ff-mono); font-size: var(--text-base, 1rem); color: var(--c-ink); font-weight: var(--font-weight-semibold, 600); }
-  .work-card__link { font-family: var(--ff-mono); font-size: var(--text-xs, 0.78rem); color: var(--c-amber-deep); text-decoration: none; margin-top: var(--space-xs, 0.25rem); }
-  .work-card__link:hover { text-decoration: underline; }
+  .work-card__title a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .work-card__title a:hover {
+    color: var(--c-amber-deep);
+  }
+  .work-card__sub {
+    font-size: var(--text-sm, 0.875rem);
+    color: var(--c-ink-2);
+    line-height: var(--line-height-normal, 1.5);
+  }
+  .work-card__meta {
+    display: flex;
+    gap: var(--space-md, 0.75rem);
+    margin-top: auto;
+  }
+  .work-card__metric {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+  .work-card__metric-label {
+    font-size: var(--text-2xs, 0.6875rem);
+    color: var(--c-ink-3);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .work-card__metric-value {
+    font-family: var(--ff-mono);
+    font-size: var(--text-base, 1rem);
+    color: var(--c-ink);
+    font-weight: var(--font-weight-semibold, 600);
+  }
+  .work-card__link {
+    font-family: var(--ff-mono);
+    font-size: var(--text-xs, 0.78rem);
+    color: var(--c-amber-deep);
+    text-decoration: none;
+    margin-top: var(--space-xs, 0.25rem);
+  }
+  .work-card__link:hover {
+    text-decoration: underline;
+  }
 
   .work-live {
     display: grid;
@@ -376,16 +454,49 @@ const buildDate = new Date().toISOString().slice(0, 10);
     align-self: flex-start;
     letter-spacing: 0.08em;
   }
-  .work-live__title { font-size: var(--text-lg, 1.125rem); font-weight: var(--font-weight-bold, 700); color: var(--c-ink); }
-  .work-live__sub { font-size: var(--text-sm, 0.875rem); color: var(--c-ink-2); line-height: var(--line-height-normal, 1.5); }
-  .work-live__link { font-family: var(--ff-mono); font-size: var(--text-xs, 0.78rem); color: var(--c-amber-deep); text-decoration: none; margin-top: auto; }
-  .work-live__link:hover { text-decoration: underline; }
+  .work-live__title {
+    font-size: var(--text-lg, 1.125rem);
+    font-weight: var(--font-weight-bold, 700);
+    color: var(--c-ink);
+  }
+  .work-live__sub {
+    font-size: var(--text-sm, 0.875rem);
+    color: var(--c-ink-2);
+    line-height: var(--line-height-normal, 1.5);
+  }
+  .work-live__link {
+    font-family: var(--ff-mono);
+    font-size: var(--text-xs, 0.78rem);
+    color: var(--c-amber-deep);
+    text-decoration: none;
+    margin-top: auto;
+  }
+  .work-live__link:hover {
+    text-decoration: underline;
+  }
 
-  .work-cta { text-align: center; padding: var(--space-2xl, 3rem) 0; border-top: 1px solid var(--c-rule); margin-top: var(--space-2xl, 3rem); }
-  .work-cta__lede { font-size: var(--text-sm, 0.875rem); color: var(--c-ink-3); margin-bottom: var(--space-md, 0.75rem); }
-  .work-stamp { font-size: var(--text-2xs, 0.6875rem); color: var(--c-ink-3); text-align: center; margin-top: var(--space-xl, 2rem); letter-spacing: 0.06em; }
+  .work-cta {
+    text-align: center;
+    padding: var(--space-2xl, 3rem) 0;
+    border-top: 1px solid var(--c-rule);
+    margin-top: var(--space-2xl, 3rem);
+  }
+  .work-cta__lede {
+    font-size: var(--text-sm, 0.875rem);
+    color: var(--c-ink-3);
+    margin-bottom: var(--space-md, 0.75rem);
+  }
+  .work-stamp {
+    font-size: var(--text-2xs, 0.6875rem);
+    color: var(--c-ink-3);
+    text-align: center;
+    margin-top: var(--space-xl, 2rem);
+    letter-spacing: 0.06em;
+  }
 
   @media (prefers-reduced-motion: reduce) {
-    .work-card { transition: none; }
+    .work-card {
+      transition: none;
+    }
   }
 </style>

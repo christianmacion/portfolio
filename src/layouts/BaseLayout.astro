@@ -143,24 +143,26 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
          font requests are always CORS. Reduced-motion + per-component
          contract are unaffected (these are preloads, not content). */
     }
-    {surface === 'v6-13' && (
-      <>
-        <link
-          rel="preload"
-          as="font"
-          type="font/woff2"
-          href={sourceSerif400Url}
-          crossorigin="anonymous"
-        />
-        <link
-          rel="preload"
-          as="font"
-          type="font/woff2"
-          href={inter400Url}
-          crossorigin="anonymous"
-        />
-      </>
-    )}
+    {
+      surface === 'v6-13' && (
+        <>
+          <link
+            rel="preload"
+            as="font"
+            type="font/woff2"
+            href={sourceSerif400Url}
+            crossorigin="anonymous"
+          />
+          <link
+            rel="preload"
+            as="font"
+            type="font/woff2"
+            href={inter400Url}
+            crossorigin="anonymous"
+          />
+        </>
+      )
+    }
 
     {
       /* === v9.2 · security meta baseline (CSP defense in depth)
@@ -282,11 +284,13 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
          bypass-blocks convention. Visible text is identical to aria-label so
          screen-reader and sighted users get the same anchor name. -->
     <a href="#main" class="skip-link" aria-label="Skip to main content">Skip to main content</a>
-    {/* v7.3 — top hairline scroll progress (1px amber, driven by scroll-progress.ts).
+    {
+      /* v7.3 — top hairline scroll progress (1px amber, driven by scroll-progress.ts).
         v9.3 a11y follow-up (2026-08-01): role="presentation" + tabindex=-1 wraps the
         progress bar in a landmark so axe-core's region rule passes. Without the
         landmark wrapper, the div sits outside <main> and <header> and axe flags
-        it as page content not contained by landmarks. */}
+        it as page content not contained by landmarks. */
+    }
     <div class="scroll-progress" role="presentation" tabindex="-1" aria-hidden="true"><i></i></div>
     {surface === 'v6-13' && <V613Fonts />}
     {
@@ -381,7 +385,8 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
     <script is:inline>
       (() => {
         const tagScrollables = () => {
-          const sel = '.katex-display, .table-wrap > table, .table-wrap > pre, pre.scroll, .ribbon__track, .prob-decay__table, .card__table, .desk-table, .colophon__table, .solutions-ribbon, .solutions-head__ribbon, .scroll-x, .motion-wrap > table, .desk-events__table';
+          const sel =
+            '.katex-display, .table-wrap > table, .table-wrap > pre, pre.scroll, .ribbon__track, .prob-decay__table, .card__table, .desk-table, .colophon__table, .solutions-ribbon, .solutions-head__ribbon, .scroll-x, .motion-wrap > table, .desk-events__table';
           const els = document.querySelectorAll(sel);
           els.forEach((el) => {
             if (el.scrollWidth > el.clientWidth + 1 || el.scrollHeight > el.clientHeight + 1) {

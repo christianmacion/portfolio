@@ -51,8 +51,9 @@ const revealId = `reveal-${fnv1a(`${delayMs}:${rise}:${once}`)}`;
   .scroll-reveal {
     opacity: 0;
     transform: translateY(var(--reveal-rise, 12px));
-    transition: opacity 600ms var(--j-ease-out, ease-out),
-                transform 600ms var(--j-ease-out, ease-out);
+    transition:
+      opacity 600ms var(--j-ease-out, ease-out),
+      transform 600ms var(--j-ease-out, ease-out);
     transition-delay: var(--reveal-delay, 0ms);
     will-change: transform, opacity;
   }

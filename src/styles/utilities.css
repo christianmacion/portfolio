@@ -21,7 +21,9 @@
   animation-delay: var(--stl-delay, 0ms);
 }
 @keyframes stl-fade-in {
-  to { opacity: 1; }
+  to {
+    opacity: 1;
+  }
 }
 
 /* === .stl-pop === */
@@ -33,19 +35,24 @@
   animation-delay: var(--stl-delay, 0ms);
 }
 @keyframes stl-pop {
-  to { opacity: 1; transform: scale(1); }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 /* === .stl-draw (SVG line-draw) === */
 .stl-draw {
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
-  pathLength: 1;
+  pathlength: 1;
   animation: stl-draw var(--dur-4, 480ms) var(--ease-out) forwards;
   animation-delay: var(--stl-delay, 0ms);
 }
 @keyframes stl-draw {
-  to { stroke-dashoffset: 0; }
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 
 /* === Reduced-motion contract === */

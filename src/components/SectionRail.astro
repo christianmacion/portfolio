@@ -50,19 +50,21 @@ const railId = `rail-${fnv1a(sections.map((s) => s.id).join('|'))}`;
   data-rail-sections={JSON.stringify(sections.map((s) => ({ id: s.id, label: s.label })))}
 >
   <ol class="section-rail__list" role="list">
-    {sections.map((s, i) => (
-      <li class="section-rail__item">
-        <a
-          class="section-rail__link"
-          href={`#${s.id}`}
-          data-rail-target={s.id}
-          aria-label={`Jump to ${s.label}`}
-        >
-          <span class="section-rail__marker" aria-hidden="true"></span>
-          <span class="section-rail__label mono">{s.label}</span>
-        </a>
-      </li>
-    ))}
+    {
+      sections.map((s, i) => (
+        <li class="section-rail__item">
+          <a
+            class="section-rail__link"
+            href={`#${s.id}`}
+            data-rail-target={s.id}
+            aria-label={`Jump to ${s.label}`}
+          >
+            <span class="section-rail__marker" aria-hidden="true" />
+            <span class="section-rail__label mono">{s.label}</span>
+          </a>
+        </li>
+      ))
+    }
   </ol>
 </nav>
 
@@ -75,8 +77,12 @@ const railId = `rail-${fnv1a(sections.map((s) => s.id).join('|'))}`;
     padding: 12px 0;
     pointer-events: none;
   }
-  .section-rail--right { right: 16px; }
-  .section-rail--left  { left: 16px;  }
+  .section-rail--right {
+    right: 16px;
+  }
+  .section-rail--left {
+    left: 16px;
+  }
 
   .section-rail__list {
     list-style: none;
@@ -104,10 +110,11 @@ const railId = `rail-${fnv1a(sections.map((s) => s.id).join('|'))}`;
     width: 8px;
     height: 1px;
     background: var(--c-ink-3);
-    transition: width 280ms var(--j-ease-out, ease-out),
-                background-color 280ms var(--j-ease-out, ease-out);
+    transition:
+      width 280ms var(--j-ease-out, ease-out),
+      background-color 280ms var(--j-ease-out, ease-out);
   }
-  .section-rail__link[aria-current="true"] .section-rail__marker {
+  .section-rail__link[aria-current='true'] .section-rail__marker {
     width: 18px;
     background: var(--c-warn);
   }
@@ -125,18 +132,21 @@ const railId = `rail-${fnv1a(sections.map((s) => s.id).join('|'))}`;
     text-transform: uppercase;
     opacity: 0;
     transform: translateX(-4px);
-    transition: opacity 220ms var(--j-ease-out, ease-out),
-                transform 220ms var(--j-ease-out, ease-out);
+    transition:
+      opacity 220ms var(--j-ease-out, ease-out),
+      transform 220ms var(--j-ease-out, ease-out);
     pointer-events: none;
     white-space: nowrap;
   }
-  .section-rail--right .section-rail__label { transform: translateX(4px); }
+  .section-rail--right .section-rail__label {
+    transform: translateX(4px);
+  }
   .section-rail__link:hover .section-rail__label,
-  .section-rail__link[aria-current="true"] .section-rail__label {
+  .section-rail__link[aria-current='true'] .section-rail__label {
     opacity: 1;
     transform: translateX(0);
   }
-  .section-rail__link[aria-current="true"] .section-rail__label {
+  .section-rail__link[aria-current='true'] .section-rail__label {
     color: var(--c-warn);
   }
 

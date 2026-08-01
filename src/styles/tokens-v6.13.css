@@ -366,12 +366,11 @@
 @font-face {
   font-family: 'Inter Fallback';
   src: local('Arial');
-  size-adjust: 107.40%;
+  size-adjust: 107.4%;
   ascent-override: 90%;
   descent-override: 22.43%;
   line-gap-override: 0%;
 }
-
 
 /* ============================================================================
  * LIGHT THEME — explicit .theme-light on <body>
@@ -439,7 +438,7 @@
    * Used identically to dark mode: eyebrow chip, KPI underline, portrait strip. */
   --j-phi-teal: #1f4a47;
   --j-phi-teal-deep: #143330;
-  --j-phi-teal-soft: rgba(31, 74, 71, 0.10);
+  --j-phi-teal-soft: rgba(31, 74, 71, 0.1);
 
   /* === Legacy --j-accent redirects to cobalt (back-compat) === */
   --j-accent: var(--j-cobalt);

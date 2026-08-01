@@ -28,15 +28,16 @@ src/components/icons/
 
 ## The contract (5 invariants)
 
-| # | Invariant | Where enforced | How to verify |
-|---|---|---|---|
-| 1 | `viewBox="0 0 24 24"` | `Icon.astro` wrapper | `grep -n viewBox Icon.astro` |
-| 2 | `stroke-width="1.5"` (default) | `Icon.astro` wrapper | `grep -n stroke-width Icon.astro` |
-| 3 | `stroke-linecap="round"`, `stroke-linejoin="round"` | `Icon.astro` wrapper | `grep -n stroke-line Icon.astro` |
-| 4 | `fill="none"` (line icons only) | `Icon.astro` wrapper | `grep -n fill Icon.astro` |
-| 5 | `currentColor` for stroke (mono + 1 accent) | `Icon.astro` wrapper | `grep -n stroke="currentColor" Icon.astro` |
+| #   | Invariant                                           | Where enforced       | How to verify                              |
+| --- | --------------------------------------------------- | -------------------- | ------------------------------------------ |
+| 1   | `viewBox="0 0 24 24"`                               | `Icon.astro` wrapper | `grep -n viewBox Icon.astro`               |
+| 2   | `stroke-width="1.5"` (default)                      | `Icon.astro` wrapper | `grep -n stroke-width Icon.astro`          |
+| 3   | `stroke-linecap="round"`, `stroke-linejoin="round"` | `Icon.astro` wrapper | `grep -n stroke-line Icon.astro`           |
+| 4   | `fill="none"` (line icons only)                     | `Icon.astro` wrapper | `grep -n fill Icon.astro`                  |
+| 5   | `currentColor` for stroke (mono + 1 accent)         | `Icon.astro` wrapper | `grep -n stroke="currentColor" Icon.astro` |
 
 The chrome contract forbids:
+
 - `box-shadow: 0 0 Npx` (halo) — no exceptions
 - `filter: drop-shadow(...)` / `filter: blur(...)` / `filter: glow` — no exceptions
 - `<linearGradient>` / `<radialGradient>` / `fill="url(#…)"` — no exceptions
@@ -79,6 +80,7 @@ import Icon from '@components/icons/Icon.astro';
 ```
 
 The `label` prop drives the a11y mapping per WCAG 2.2 AA SC 1.1.1:
+
 - **Label present** → `role="img"` + `aria-label={label}`
 - **Label absent** → `aria-hidden="true"` + `focusable="false"` (decorative)
 

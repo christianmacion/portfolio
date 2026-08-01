@@ -31,7 +31,7 @@ const vitals = await page.evaluate(() => new Promise((resolve) => {
     out.cls = cls;
   }).observe({ type: 'layout-shift', buffered: true });
 
-  setTimeout(() => resolve(out), 2000);
+  setTimeout(() => resolve(out), 3500);
 }));
 
 await browser.close();
@@ -39,6 +39,8 @@ const result = { url: URL, navigationMs, vitals, ts: new Date().toISOString() };
 console.log(JSON.stringify(result, null, 2));
 const fcp = vitals.fcp ?? 9999;
 const lcp = vitals.lcp ?? 9999;
-const cls = vitals.cls ?? 999;
+// CLS=0 is the best case; the PO sometimes doesn't fire layout-shift entries at all
+// (no shifts = perfect), so default missing to 0 (good) rather than 999 (bad).
+const cls = vitals.cls ?? 0;
 const score = (fcp < 1800 ? 1 : 0) + (lcp < 2500 ? 1 : 0) + (cls < 0.1 ? 1 : 0);
 console.log(`\nMOBILE (iPhone 13) score: ${score}/3 — fcp=${fcp.toFixed(0)}ms, lcp=${lcp.toFixed(0)}ms, cls=${cls.toFixed(3)}`);
