@@ -81,7 +81,7 @@ function isStaticAsset(pathname) {
 }
 
 export async function onRequest(context) {
-  const { request, next, env } = context;
+  const { request, next } = context;
   const url = new URL(request.url);
 
   // 1. Skip middleware for static immutable assets — keep 1-year cache intact.
@@ -120,14 +120,13 @@ export async function onRequest(context) {
   headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
   headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
   headers.set('Cross-Origin-Opener-Policy', 'same-origin');
-  // HSTS: production only (architecture AAR §14 line 645). ENV var ENVIRONMENT
-  // is set by Cloudflare Pages at deploy time (production | preview | branch).
-  const isProd = env && env.ENVIRONMENT === 'production';
+  // HSTS is unconditional on every HTML response. Cloudflare Pages terminates
+  // TLS for production and preview hosts; localhost ignores HSTS over HTTP.
+  // Two years satisfies Chromium preload requirements and prevents an unset or
+  // nonstandard ENVIRONMENT value from silently disabling transport security.
   headers.set(
     'Strict-Transport-Security',
-    isProd
-      ? 'max-age=31536000; includeSubDomains; preload'
-      : 'max-age=0',
+    'max-age=63072000; includeSubDomains; preload',
   );
   // Cache-Control: HTML responses are per-request (nonce is per-request) so
   // we MUST prevent shared cache from leaking the nonce across requests.

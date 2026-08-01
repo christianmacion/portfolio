@@ -142,8 +142,11 @@ function extractAssets(html) {
 // of parsing stdout (Python 3.14 http.server is silent by default).
 async function startServer() {
   const port = PORT || 8080; // SMOKE_PORT=0 is not honored by python http.server; default 8080
+  // Python logs every request to stderr. Leaving stdout/stderr as unread pipes
+  // deadlocks the full 91-route sweep once the pipe buffer fills. The smoke
+  // runner reports its own route/asset failures, so discard server access logs.
   const proc = spawn('python3', ['-m', 'http.server', String(port), '--bind', HOST, '--directory', DIST], {
-    stdio: ['ignore', 'pipe', 'pipe'],
+    stdio: ['ignore', 'ignore', 'ignore'],
   });
   const url = `http://${HOST}:${port}/`;
   // Poll the server for readiness (up to 10s).
