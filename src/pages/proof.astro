@@ -409,6 +409,7 @@ const paginate = (items: any[]) => {
       { id: 'research', label: 'Research artifacts' },
       { id: 'track', label: 'Track record' },
       { id: 'public-track', label: 'Public track record' },
+      { id: 'testimonials', label: 'Testimonials (pending)' },
       { id: 'disclosure', label: 'NDA disclosure' },
       {
         id: 'live-terminal',
@@ -968,6 +969,55 @@ const paginate = (items: any[]) => {
 
   {
     /* =========================================================
+      P.5c — Testimonials (pending attestation · honest gap)
+      v9.3 voice audit 2026-08-02: discipline rule #05 declares
+      "Every testimonial is an attestable paper trail, not a quote"
+      but no third-party paper trail is on file yet. This block is
+      the explicit, non-fabricated gap. Owner attests on wake.
+      ========================================================= */
+  }
+  <section
+    class="section section--tight"
+    id="testimonials"
+    data-toc-id="testimonials"
+    data-toc-label="Testimonials (pending)"
+    data-reveal
+  >
+    <div class="container container-narrow">
+      <header class="section__head">
+        <p class="section__eyebrow">P.5c · Testimonials</p>
+        <h2 class="section__title">Pending attestation.</h2>
+      </header>
+      <div class="testimonials-pending" role="region" aria-label="Testimonials gap — pending owner attestation">
+        <p class="testimonials-pending__rule mono">
+          <span class="testimonials-pending__rule-n">05</span>Every testimonial is an attestable paper
+          trail, not a quote.
+        </p>
+        <p class="testimonials-pending__note">
+          Quotes below pending Owner attestation. The discipline holds: every quote must trace to a
+          real third-party paper, message, or call — and none is on file yet. No placeholders,
+          initials, or attributed-by-association content ships here.
+        </p>
+        <ol class="testimonials-pending__slots mono" aria-label="Three pending attestee slots">
+          <li>
+            <span class="testimonials-pending__slot-tag">[Owner attestee #1 — rec: portfolio v3 owner]</span>
+            <span class="testimonials-pending__slot-meta">awaiting attestation · paper trail pending</span>
+          </li>
+          <li>
+            <span class="testimonials-pending__slot-tag">[Owner attestee #2 — rec: Upwork client]</span>
+            <span class="testimonials-pending__slot-meta">awaiting attestation · paper trail pending</span>
+          </li>
+          <li>
+            <span class="testimonials-pending__slot-tag">[Owner attestee #3 — rec: OJP/post]</span>
+            <span class="testimonials-pending__slot-meta">awaiting attestation · paper trail pending</span>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  {
+    /* =========================================================
       P.6 — Disclosure + contact
       ========================================================= */
   }
@@ -1316,6 +1366,70 @@ const paginate = (items: any[]) => {
     text-decoration: underline;
     text-decoration-color: var(--c-amber-decor);
     text-underline-offset: 3px;
+  }
+
+  /* === P.5c testimonials (pending attestation) === */
+  .testimonials-pending {
+    padding: var(--sp-5);
+    background: var(--c-bg-2);
+    border-left: 3px solid var(--c-amber);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    display: grid;
+    gap: var(--sp-4);
+  }
+  .testimonials-pending__rule {
+    display: flex;
+    align-items: baseline;
+    gap: var(--sp-3);
+    margin: 0;
+    font-size: var(--fs-xs);
+    color: var(--c-ink-2);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .testimonials-pending__rule-n {
+    flex-shrink: 0;
+    font-weight: 600;
+    color: var(--c-amber-deep);
+    min-width: 1.7em;
+  }
+  .testimonials-pending__note {
+    margin: 0;
+    font-size: var(--fs-sm);
+    color: var(--c-ink-2);
+    line-height: var(--lh-loose);
+  }
+  .testimonials-pending__slots {
+    list-style: none;
+    padding: var(--sp-4);
+    margin: 0;
+    background: var(--c-bg);
+    border: 1px dashed var(--c-rule);
+    border-radius: var(--radius-sm);
+    display: grid;
+    gap: var(--sp-3);
+  }
+  .testimonials-pending__slots li {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--sp-3);
+    padding-block: var(--sp-2);
+    border-bottom: 1px dashed var(--c-rule-soft);
+    flex-wrap: wrap;
+  }
+  .testimonials-pending__slots li:last-child {
+    border-bottom: 0;
+  }
+  .testimonials-pending__slot-tag {
+    color: var(--c-ink-2);
+    font-weight: 600;
+  }
+  .testimonials-pending__slot-meta {
+    color: var(--c-amber-deep);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
   }
 
   /* === P.6 disclosure === */
