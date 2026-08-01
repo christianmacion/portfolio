@@ -59,19 +59,22 @@ const isGallery = mode === 'gallery';
   .video-embed--paper {
     background: var(--c-paper);
     border: 1px solid var(--c-rule);
-    border-radius: var(--radius);
+    /* v9.3.1 — F17 institutional: sharp corners (1px) instead of --radius (10px). */
+    border-radius: 1px;
     padding: var(--sp-3);
   }
   .video-embed--tape {
     background: var(--c-tape);
     border: 1px solid var(--c-tape-2);
-    border-radius: var(--radius);
+    /* v9.3.1 — F17 institutional: sharp corners (1px) instead of --radius (10px). */
+    border-radius: 1px;
     padding: var(--sp-3);
   }
   .video-embed__frame {
     position: relative;
     overflow: hidden;
-    border-radius: var(--radius-sm);
+    /* v9.3.1 — F17 institutional: sharp corners (1px) instead of --radius-sm (6px). */
+    border-radius: 1px;
     background: var(--c-tape);
   }
   .video-embed__video {
@@ -89,7 +92,8 @@ const isGallery = mode === 'gallery';
     background: color-mix(in oklab, var(--c-tape) 0.78%, transparent);
     color: var(--c-primary-2-deep);
     font-size: var(--fs-xs);
-    border-radius: 3px;
+    /* v9.3.1 — F17 institutional: sharp corners (1px) instead of 3px. */
+    border-radius: 1px;
     letter-spacing: 0.06em;
   }
   .video-embed__cap {

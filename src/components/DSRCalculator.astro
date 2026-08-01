@@ -272,7 +272,9 @@
     padding: var(--sp-5) var(--sp-6);
     background: var(--c-bg);
     border: 1px solid var(--c-rule);
-    border-radius: var(--radius-lg);
+    /* v9.3.1 — F17 institutional: sharp corners (1px) instead of --radius-lg (16px).
+       Bloomberg-terminal widget register, not SaaS card. */
+    border-radius: 1px;
     box-shadow: var(--shadow-sm);
   }
   .dsr-calc__eyebrow {
@@ -322,7 +324,7 @@
   .dsr-calc__slider::-webkit-slider-runnable-track {
     height: 4px;
     background: var(--c-rule);
-    border-radius: 2px;
+    border-radius: 1px;
   }
   .dsr-calc__slider::-webkit-slider-thumb {
     appearance: none;
@@ -340,7 +342,7 @@
   .dsr-calc__slider::-moz-range-track {
     height: 4px;
     background: var(--c-rule);
-    border-radius: 2px;
+    border-radius: 1px;
   }
   .dsr-calc__slider::-moz-range-thumb {
     width: 18px;
@@ -364,7 +366,8 @@
     padding: var(--sp-4);
     background: var(--c-tape);
     color: var(--ink-on-tape);
-    border-radius: var(--radius);
+    /* v9.3.1 — F17 institutional: sharp corners (1px) instead of --radius (10px). */
+    border-radius: 1px;
   }
   .dsr-calc__verdict {
     display: flex;
@@ -442,7 +445,8 @@
   .dsr-calc__why {
     margin-top: var(--sp-3);
     border: 1px solid var(--c-rule-soft);
-    border-radius: var(--radius-sm);
+    /* v9.3.1 — F17 institutional: sharp corners (1px) instead of --radius-sm (6px). */
+    border-radius: 1px;
     background: var(--c-bg-2);
   }
   .dsr-calc__why-summary {

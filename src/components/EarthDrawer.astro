@@ -745,7 +745,8 @@ function signalPillColor(sig: string): string {
   .pill {
     display: inline-block;
     padding: 0.1rem 0.4rem;
-    border-radius: 2px;
+    /* v9.3.1 — F17 institutional: sharp corners (1px) instead of 2px pill. */
+    border-radius: 1px;
     font-family: var(--ff-mono, monospace);
     font-size: 0.65rem;
     text-transform: uppercase;

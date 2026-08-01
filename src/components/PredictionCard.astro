@@ -177,7 +177,8 @@ const gradId = `card-grad-${event.id.replace(/[^a-z0-9]/gi, '')}`;
     padding: var(--sp-4);
     background: var(--c-tape-2);
     border: 1px solid var(--c-rule);
-    border-radius: var(--radius);
+    /* v9.3.1 — F17 institutional: sharp corners (1px) instead of --radius (10px). */
+    border-radius: 1px;
     color: var(--c-ink);
     min-width: 0;
     transition: border-color var(--transition);
@@ -197,7 +198,8 @@ const gradId = `card-grad-${event.id.replace(/[^a-z0-9]/gi, '')}`;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     padding: 2px 8px;
-    border-radius: 3px;
+    /* v9.3.1 — F17 institutional: sharp corners (1px) instead of 3px. */
+    border-radius: 1px;
     border: 1px solid currentColor;
   }
   .card__pill--macro {
@@ -285,7 +287,8 @@ const gradId = `card-grad-${event.id.replace(/[^a-z0-9]/gi, '')}`;
     font-size: 0.78rem;
     font-weight: 600;
     padding: 4px 8px;
-    border-radius: 3px;
+    /* v9.3.1 — F17 institutional: sharp corners (1px) instead of 3px. */
+    border-radius: 1px;
     white-space: nowrap;
   }
   /* v6.11.10 — F14 amber-only. Positive edge = amber on soft amber;
@@ -303,7 +306,8 @@ const gradId = `card-grad-${event.id.replace(/[^a-z0-9]/gi, '')}`;
     height: 84px;
     display: block;
     background: var(--c-bg);
-    border-radius: var(--radius-sm);
+    /* v9.3.1 — F17 institutional: sharp corners (1px) instead of --radius-sm (6px). */
+    border-radius: 1px;
   }
   .card__evidence {
     margin: 0;

@@ -471,7 +471,8 @@ const platformInputs = [
     padding: var(--sp-3) var(--sp-4);
     background: var(--c-tape);
     border: 1px solid var(--c-rule);
-    border-radius: var(--radius);
+    /* v9.3.1 — F17 institutional: sharp corners (1px) instead of --radius (10px). */
+    border-radius: 1px;
     font-size: 11px;
   }
   .ai-cap-list__k {
@@ -502,7 +503,8 @@ const platformInputs = [
   .ai-loop__step {
     background: var(--c-tape);
     border: 1px solid var(--c-rule);
-    border-radius: var(--radius);
+    /* v9.3.1 — F17 institutional: sharp corners (1px) instead of --radius (10px). */
+    border-radius: 1px;
     padding: var(--sp-4);
     position: relative;
   }
@@ -558,7 +560,8 @@ const platformInputs = [
   .ai-card {
     background: var(--c-tape);
     border: 1px solid var(--c-rule);
-    border-radius: var(--radius);
+    /* v9.3.1 — F17 institutional: sharp corners (1px) instead of --radius (10px). */
+    border-radius: 1px;
     padding: var(--sp-4);
     display: flex;
     flex-direction: column;
@@ -604,7 +607,8 @@ const platformInputs = [
     padding: var(--sp-3);
     background: var(--c-tape-2);
     border: 1px solid var(--c-rule-soft);
-    border-radius: var(--radius);
+    /* v9.3.1 — F17 institutional: sharp corners (1px) instead of --radius (10px). */
+    border-radius: 1px;
   }
   .ai-card__metric {
     display: flex;
@@ -648,7 +652,8 @@ const platformInputs = [
     background: var(--c-tape);
     border: 1px solid var(--c-rule);
     border-left: 3px solid var(--c-amber);
-    border-radius: var(--radius);
+    /* v9.3.1 — F17 institutional: sharp corners (1px) instead of --radius (10px). */
+    border-radius: 1px;
     font-size: 12px;
     color: var(--c-ink-2);
     line-height: 1.55;
@@ -657,13 +662,13 @@ const platformInputs = [
     /* v9.2 a11y — was var(--c-amber) which hits 4.48:1 on the
        --c-amberl-mist pill bg in dark mode (Lighthouse mobile, dark default).
        --c-ink reads at ≥9.5:1 on the same surface. Bold weight + mono +
-       pill silhouette + the gradient underline still carry the highlight
-       identity. */
+       pill silhouette still carry the highlight identity.
+       v9.3.1 — F17 institutional: sharp corners (1px) instead of 4px. */
     color: var(--c-ink);
     font-weight: 600;
     background: var(--c-amberl-mist);
     padding: 0 6px;
-    border-radius: 4px;
+    border-radius: 1px;
   }
 
   /* Print: simplify the page */
@@ -691,7 +696,8 @@ const platformInputs = [
   .stella-cell {
     padding: var(--sp-5);
     border: 1px solid var(--c-rule);
-    border-radius: 6px;
+    /* v9.3.1 — F17 institutional: sharp corners (1px) instead of 6px. */
+    border-radius: 1px;
     background: var(--c-bg);
     display: flex;
     flex-direction: column;
@@ -709,7 +715,8 @@ const platformInputs = [
     width: 4px;
     height: 100%;
     background: var(--c-amber);
-    border-radius: 4px 0 0 4px;
+    /* v9.3.1 — F17 institutional: sharp rectangle stripe (0) instead of 4px 0 0 4px. */
+    border-radius: 0;
   }
   .stella-cell--graph::before {
     background: var(--c-teal);
