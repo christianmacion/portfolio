@@ -369,7 +369,19 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
         onScroll();
         // v9.3.2 — institutional: drop `behavior: 'smooth'`. Native browser
         // scroll, no JS easing. webcraft-no-vibe M02 (scroll-jacking) gate.
-        btn.addEventListener('click', () => window.scrollTo(0, 0));
+        // v9.3.2 (2026-08-02) — a11y: explicit reduced-motion guard per
+        // WCAG 2.3.3 (Animation from Interactions). Default behavior is
+        // already instant (`scrollTo(0, 0)`), but the guard makes the
+        // intent self-documenting and bullet-proofs against future
+        // regressions that might re-introduce smooth. Use `'instant'` to
+        // override any future global `scroll-behavior: smooth` CSS.
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+        btn.addEventListener('click', () => {
+          window.scrollTo({
+            top: 0,
+            behavior: prefersReducedMotion.matches ? 'instant' : 'auto',
+          });
+        });
       })();
     </script>
 
