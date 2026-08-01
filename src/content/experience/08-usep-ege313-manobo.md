@@ -7,7 +7,7 @@ location: 'Davao Region, Philippines (in-person)'
 startDate: '2024-09'
 endDate: '2024-09'
 isCurrent: false
-summary: 'Delivered the Manobo / ICC / IPs guest lecture for USeP EGE 313, authored with a ChatGPT-assisted drafting pipeline that pre-figures the 31-gate evaluation harness now standard across my work.'
+summary: 'Delivered the Manobo / ICC / IPs guest lecture for USeP EGE 313, authored with a ChatGPT-assisted drafting pipeline that pre-figures the 31-gate evaluation harness now standard across the broader AI engineering work.'
 tags: [education, speaking, ai, methodology, reproducibility]
 contributions:
   - label: 'Lecture delivery'
