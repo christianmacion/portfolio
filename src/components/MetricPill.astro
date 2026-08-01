@@ -12,9 +12,14 @@ interface Props {
   tone?: 'brand' | 'accent' | 'gold' | 'data-pos';
 }
 const { label, value, sub, tone = 'brand' } = Astro.props;
+/* v9.3 a11y 96 follow-up (2026-08-01) — accent tone was
+   --c-primary-2-deep (dark: --j-cobalt-deep #475891) on dark page bg
+   (#1a1714) = 2.61:1, failing WCAG 1.4.3 large-text 3:1. Promoted to
+   --c-primary-2 (dark: --j-cobalt #5b6ba8) = 3.15:1 (pass). Light
+   theme --j-cobalt #2c4a7e on #d4cebd = 6.10:1 (pass). */
 const valueColor =
   tone === 'accent'
-    ? 'var(--c-primary-2-deep)'
+    ? 'var(--c-primary-2)'
     : tone === 'gold'
       ? 'var(--c-gold)'
       : tone === 'data-pos'

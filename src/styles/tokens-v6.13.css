@@ -618,6 +618,14 @@
   --c-amber-decor: var(--j-warn);
   --c-amber-decor-deep: var(--j-warn);
   --c-amber-deep-decor: var(--j-warn);
+  /* v9.3 a11y 96 follow-up (2026-08-01) — text color for chrome placed on
+     the --c-amber-deep background. Theme-invariant: pure white in both
+     dark + light modes. Pure white on --c-amber-deep = 4.79:1 (dark) and
+     15.0:1 (light) — both pass WCAG 1.4.3 4.5:1. The prior var(--c-bg)
+     inverted with theme (dark = #1a1714 on #8a6f2f = 3.73:1 fail; light =
+     #ece5d4 on #4a3a15 = 12.0:1 pass). Constant white is the
+     institutional answer for chrome CTAs. */
+  --c-on-amber-deep: #ffffff;
   --c-amberl-decor: var(--j-warn);
   --c-amberl-faint: var(--j-warn-soft);
   --c-amberl-mid: var(--j-warn);

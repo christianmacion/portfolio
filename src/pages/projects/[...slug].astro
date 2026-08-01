@@ -165,6 +165,14 @@ const laneClass = role === 'ai' ? 'pill--brand' : 'pill--accent';
   .proj__crumb-sep {
     color: var(--c-ink-3);
   }
+  /* v9.3 a11y 96 follow-up (2026-08-01) — global .pill--accent uses
+     --c-phi = --j-warn (dark: #a88a3e) on the amber-tinted breadcrumb
+     pill bg (effective #2e271a) = 4.48:1, just below 4.5:1 threshold
+     on /projects/quant/*. Scope the lift to .proj__crumb only so other
+     .pill--accent surfaces (ProjectCard, etc.) keep their chrome. */
+  .proj__crumb .pill--accent {
+    color: var(--c-ink-2);
+  }
   .proj__hero-figure {
     margin: 0 auto var(--sp-5);
     max-width: 880px;
