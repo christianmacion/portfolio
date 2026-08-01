@@ -73,6 +73,15 @@ jobs:
       # Build for the CF Pages mirror (BASE_PATH=/) so the served URLs match
       # the production canonical host structure.
       - run: npm run build:mirror
+      # Upload the built site so the lighthouse-mobile / lighthouse-desktop jobs
+      # can download it on a fresh runner. Without this, the LH jobs do their
+      # own fresh checkout and `cp dist/*` fails with "No such file or directory"
+      # because build artifacts don't persist across runners. v9.3.6 hardening.
+      - uses: actions/upload-artifact@v5
+        with:
+          name: dist-${{ github.sha }}
+          path: dist/
+          retention-days: 7
 
   lighthouse-mobile:
     name: Lighthouse — Mobile (gate)
@@ -80,6 +89,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+      # Download the dist/ artifact produced by the `build` job. This job runs
+      # on a fresh runner so the build artifacts are NOT present without this
+      # step. v9.3.6 hardening.
+      - uses: actions/download-artifact@v5
+        with:
+          name: dist-${{ github.sha }}
+          path: dist/
       - name: Install
         run: npm install --no-save @lhci/cli http-server
       - name: Serve dist/ with brotli compression
@@ -151,6 +167,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+      # Download the dist/ artifact produced by the `build` job. v9.3.6 hardening.
+      - uses: actions/download-artifact@v5
+        with:
+          name: dist-${{ github.sha }}
+          path: dist/
       - name: Install
         run: npm install --no-save @lhci/cli http-server
       - name: Serve dist/ with brotli compression
