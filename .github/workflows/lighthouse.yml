@@ -117,7 +117,7 @@ jobs:
                 "url": [
                   "http://localhost:4323/",
                   "http://localhost:4323/about/",
-                  "http://localhost:4323/projects/quant/",
+                  "http://localhost:4323/projects/?tag=quant",
                   "http://localhost:4323/ai/",
                   "http://localhost:4323/for-recruiters/"
                 ],
@@ -190,7 +190,7 @@ jobs:
                 "url": [
                   "http://localhost:4324/",
                   "http://localhost:4324/about/",
-                  "http://localhost:4324/projects/quant/",
+                  "http://localhost:4324/projects/?tag=quant",
                   "http://localhost:4324/ai/",
                   "http://localhost:4324/for-recruiters/"
                 ],
