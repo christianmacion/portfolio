@@ -11,7 +11,8 @@ import { buildItems, renderFeed } from './_feed-shared';
 export const prerender = true;
 
 export const GET: APIRoute = async ({ site }) => {
-  const siteStr = site?.toString().replace(/\/$/, '') ?? 'https://christianmacion26.github.io';
+  const siteStr =
+    site?.toString().replace(/\/$/, '') ?? 'https://christianmacion-portfolio.pages.dev';
   const basePath = (import.meta.env.BASE_URL || '').replace(/\/$/, '');
   const baseUrl = `${siteStr}${basePath}`;
   // §9: deterministic feed `<updated>` from BUILD_DATE (env), not `new Date()`.

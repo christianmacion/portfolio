@@ -3,11 +3,11 @@ import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 
-// Site deploy target. Default is the GH Pages canonical site
-// (https://christianmacion26.github.io/portfolio). For the Cloudflare Pages mirror,
-// pass PUBLIC_SITE_URL=https://christianmacion-portfolio.pages.dev at build time.
+// Site deploy target. Default is the live Cloudflare Pages canonical
+// (https://christianmacion-portfolio.pages.dev). For GH Pages builds, set
+// PUBLIC_SITE_URL=https://christianmacion26.github.io at build time.
 // Used by feed.xml / sitemap to set the canonical host in generated XML.
-const SITE = process.env.PUBLIC_SITE_URL ?? 'https://christianmacion26.github.io';
+const SITE = process.env.PUBLIC_SITE_URL ?? 'https://christianmacion-portfolio.pages.dev';
 // BASE_PATH: explicit env var > Cloudflare Pages auto-detect (CF_PAGES=1) > /portfolio.
 // CF_PAGES=1 is set by Cloudflare Pages during `wrangler pages deploy` and during
 // the Pages CI build, so the mirror deploy uses `/` automatically — `npm run build`

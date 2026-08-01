@@ -20,7 +20,10 @@ export const prerender = true;
 export const GET: APIRoute = async ({ site }) => {
   // Combine Astro `site` (origin) with `import.meta.env.BASE_URL` (configured base, "/portfolio")
   // so feed entry URLs match the canonical sitemap URLs which include the base path.
-  const siteStr = site?.toString().replace(/\/$/, '') ?? 'https://christianmacion26.github.io';
+  // Fallback matches the live Cloudflare Pages domain — the GH Pages domain is no
+  // longer the canonical deploy target (see package.json `build` script).
+  const siteStr =
+    site?.toString().replace(/\/$/, '') ?? 'https://christianmacion-portfolio.pages.dev';
   const basePath = (import.meta.env.BASE_URL || '').replace(/\/$/, '');
   const baseUrl = `${siteStr}${basePath}`;
   // §9: deterministic feed `<updated>` from BUILD_DATE (env), not `new Date()`.

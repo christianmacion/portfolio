@@ -30,11 +30,14 @@ export interface FeedItem {
 // Use the deployment host (PUBLIC_SITE_URL on mirror builds, GH Pages default
 // otherwise) so feed <guid> values stay stable across builds. The year comes
 // from buildYear() (BUILD_DATE env var, fixed fallback) per Standing Order §9.
+// Default is the live Cloudflare Pages domain — GH Pages is no longer the
+// canonical deploy target (see package.json `build` script).
 const _host = (() => {
   try {
-    return new URL(import.meta.env.PUBLIC_SITE_URL ?? 'https://christianmacion26.github.io').host;
+    return new URL(import.meta.env.PUBLIC_SITE_URL ?? 'https://christianmacion-portfolio.pages.dev')
+      .host;
   } catch {
-    return 'christianmacion26.github.io';
+    return 'christianmacion-portfolio.pages.dev';
   }
 })();
 export const PORTFOLIO_TAG_AUTHORITY = `${_host},${buildYear()}`;
