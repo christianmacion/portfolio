@@ -1,0 +1,112 @@
+# .github/workflows/deploy-gate.yml — Post-deploy smoke-test invariant (Gate 13).
+#
+# v9.2.3 (Gate 13) — Post-deploy asset HTTP-200 gate.
+#
+# Why this exists: the 2026-08-01 SEV-1 prod-triage shipped a broken site
+# because `npm run build` did not set BASE_PATH=/, so every asset + route
+# was emitted as `/portfolio/...` and Cloudflare Pages served the HTML at
+# root. Every CSS/JS/icon/font/manifest/internal link returned 404. The
+# CI guardrail ran against the PR branch — but the DEPLOYED URL was the
+# broken one. No post-deploy check traced the rendered HTML's asset paths
+# back to actual HTTP responses.
+#
+# This workflow closes that gap. After Cloudflare Pages deploys a push to
+# main, this workflow loads the prod URL via Playwright Chromium, extracts
+# every <link href>, <script src>, <img src>, and <source src>, fetches
+# each one, and fails the workflow on any non-200.
+#
+# Strategy:
+#   1. Trigger on `workflow_run` after the Cloudflare Pages deploy completes
+#      (CF Pages' default GH Actions integration is named `cloudflare/pages-deploy`).
+#   2. Also trigger on `push: main` as a fast-feedback fallback in case the
+#      CF Pages integration is misconfigured.
+#   3. Wait 90s after the upstream workflow to let Cloudflare edge cache warm.
+#   4. Install Playwright + chromium browser.
+#   5. Run scripts/smoke-test-prod.mjs against PROD_URL.
+#
+# Hard rules (per CLAUDE.md §1 + feedback-portfolio-visual-bar-2026-07-31):
+#   - 5-must-have: terminal exit 0/1; idempotent re-run = same result;
+#     dedupe key = `${route}::${asset}`; coverage = every local asset on
+#     every page (not sampled); AAR = failures.json artifact.
+#   - The local build hook (`scripts/smoke-test.mjs` + `npm run smoke:build`)
+#     is the fast-feedback sibling; this GH Actions workflow is the
+#     prod-deployment gate. Per Deming SoPK: the system invariant is "every
+#     prod deploy's asset paths return 200" — enforced at 2 layers.
+#   - The Cloudflare Pages deploy step itself is NOT in this workflow — it
+#     lives in the CF Pages integration. We observe + verify; we do not
+#     redeploy.
+
+name: Deploy Gate (asset 200 sweep)
+
+on:
+  workflow_run:
+    workflows:
+      # Cloudflare Pages' default GH Actions integration publishes a workflow
+      # named "cloudflare/pages-deploy" or "Pages" or "Deploy to Cloudflare Pages".
+      # Trigger on all known names.
+      - "cloudflare/pages-deploy"
+      - "Pages"
+      - "Deploy to Cloudflare Pages"
+    types: [completed]
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      prod_url:
+        description: 'Override prod URL (default: https://christianmacion-portfolio.pages.dev)'
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: deploy-gate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  asset-200-gate:
+    name: Asset 200 gate (Playwright + node fetch)
+    runs-on: ubuntu-latest
+    # Triggered by workflow_run from upstream; only run if upstream succeeded.
+    # For push: main + workflow_dispatch, always run.
+    if: >
+      github.event_name != 'workflow_run' ||
+      github.event.workflow_run.conclusion == 'success'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Wait for Cloudflare Pages edge cache warm
+        if: github.event_name == 'workflow_run'
+        run: sleep 90
+
+      - name: Run prod smoke-test (asset 200 sweep)
+        env:
+          PROD_URL: ${{ github.event.inputs.prod_url || 'https://christianmacion-portfolio.pages.dev' }}
+        run: node scripts/smoke-test-prod.mjs
+
+      - name: Upload failure evidence
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: deploy-gate-failures
+          path: .audit/incident/*-deploy-gate/
+          retention-days: 30
+
+      - name: Upload pass evidence
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: deploy-gate-pass
+          path: .audit/incident/
+          retention-days: 7
+          if-no-files-found: ignore

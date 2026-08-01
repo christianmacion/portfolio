@@ -1,0 +1,101 @@
+{
+  "incident_id": "2026-08-01-clean-pr-smoke-test",
+  "incident_type": "post-deploy-smoke-invariant-verification",
+  "ts": "2026-08-01T05:53:00Z",
+  "verifications": [
+    {
+      "name": "local smoke-test PASS",
+      "script": "scripts/smoke-test.mjs",
+      "fixture": "/Users/christianmacion/Contingency/christianmacion.github.io/dist (built site)",
+      "result": "PASS",
+      "assets_checked": 1263,
+      "routes_checked": 89,
+      "failures": 0,
+      "evidence": "01-local-smoke-test-PASS.txt",
+      "exit_code": 0,
+      "sagan_test": "tested against known-good state; passed"
+    },
+    {
+      "name": "prod smoke-test PASS",
+      "script": "scripts/smoke-test-prod.mjs",
+      "fixture": "https://christianmacion-portfolio.pages.dev",
+      "result": "PASS",
+      "assets_checked": 256,
+      "routes_checked": 19,
+      "failures": 0,
+      "evidence": "02-prod-smoke-test-PASS.txt",
+      "exit_code": 0,
+      "sagan_test": "tested against live URL; passed"
+    },
+    {
+      "name": "local smoke-test FAIL on broken fixture (Sagan verification)",
+      "script": "scripts/smoke-test.mjs",
+      "fixture": "/tmp/broken-dist (synthetic index.html with /missing.{css,js,png,jpg,mp4})",
+      "result": "FAIL (expected)",
+      "assets_checked": 5,
+      "routes_checked": 1,
+      "failures": 5,
+      "failed_paths": [
+        "/missing.css",
+        "/missing.js",
+        "/missing.png",
+        "/missing.mp4",
+        "/missing.jpg"
+      ],
+      "evidence": "03-local-broken-state-FAIL.txt",
+      "exit_code": 1,
+      "sagan_test": "tested against known-broken state; detected 5/5 missing assets"
+    },
+    {
+      "name": "prod smoke-test FAIL on BASE_PATH regression (the SEV-1 mode)",
+      "script": "scripts/smoke-test-prod.mjs",
+      "fixture": "PROD_URL=https://christianmacion-portfolio.pages.dev/portfolio (the GH Pages subpath that triggered SEV-1)",
+      "result": "FAIL (expected — reproduces the 2026-08-01 SEV-1)",
+      "assets_checked": 266,
+      "routes_checked": 19,
+      "failures": 19,
+      "failed_paths": [
+        "/",
+        "/about/",
+        "/ai/",
+        "/for-recruiters/",
+        "/proof/",
+        "/experience/",
+        "/methodology/",
+        "/skills/",
+        "/now/",
+        "/colophon/",
+        "/desk/",
+        "/markets/",
+        "/publications/",
+        "/workbooks/",
+        "/contact/",
+        "/screening-call/",
+        "/projects/",
+        "/resume/",
+        "/sitemap-index.xml"
+      ],
+      "evidence": "04-prod-broken-state-FAIL.txt",
+      "exit_code": 1,
+      "sagan_test": "tested against the exact BASE_PATH regression that shipped to prod; detected 19/19 broken routes"
+    }
+  ],
+  "binding_invariant": "Every prod deploy's asset paths return HTTP 200",
+  "enforcement_layers": [
+    "Local build hook — npm run smoke:build → scripts/smoke-test.mjs (Dist/ via python http.server, 89 routes, 1263 assets)",
+    "GH Actions prod gate — .github/workflows/deploy-gate.yml → scripts/smoke-test-prod.mjs (live URL via Playwright Chromium, 19 critical routes, ~250 assets)"
+  ],
+  "doctrine_anchors": [
+    "Deming SoPK — system invariant at 2 layers (local + prod)",
+    "Sagan extraordinary-claims — 'smoke test passes' only counts when the test is verified against a known-broken state; 4 verifications above all PASS or FAIL correctly",
+    "Goldratt 5 Focusing Steps — fix the ONE constraint (asset HTTP 200); do not let inertia become the new constraint",
+    "Munger inversion — without this invariant, same BASE_PATH bug could ship next time"
+  ],
+  "cross_refs": {
+    "aar_sev1": "~/.claude/cache/corporate/aars/2026-08-01-portfolio-prod-triage.md",
+    "dispatch_brief": "front_end_engineer dispatch 2026-08-01 ~22:30Z",
+    "github_actions_workflow": ".github/workflows/deploy-gate.yml",
+    "local_script": "scripts/smoke-test.mjs",
+    "prod_script": "scripts/smoke-test-prod.mjs"
+  }
+}

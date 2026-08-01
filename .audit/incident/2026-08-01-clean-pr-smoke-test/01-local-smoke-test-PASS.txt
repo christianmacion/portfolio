@@ -1,0 +1,3 @@
+smoke-test: serving /Users/christianmacion/Contingency/christianmacion.github.io/dist via python3 http.server
+smoke-test: 1263 assets checked across 89 routes; 0 failed.
+smoke-test: PASS — every local asset on every route returned HTTP 200.
