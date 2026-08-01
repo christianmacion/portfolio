@@ -207,6 +207,19 @@ const laneClass = role === 'ai' ? 'pill--brand' : 'pill--accent';
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: var(--sp-3);
     margin-bottom: var(--sp-6);
+    /* v9.3.1 · headline metric stagger fade-in (shared broadside-rise).
+       2-4 MetricPill cards — 100ms cadence reads as the scorecard
+       populating one cell at a time on first paint. */
+  }
+  .proj__metrics > * {
+    animation: broadside-rise 480ms ease-out both;
+  }
+  .proj__metrics > *:nth-child(1) { animation-delay: 80ms; }
+  .proj__metrics > *:nth-child(2) { animation-delay: 180ms; }
+  .proj__metrics > *:nth-child(3) { animation-delay: 280ms; }
+  .proj__metrics > *:nth-child(n + 4) { animation-delay: 380ms; }
+  @media (prefers-reduced-motion: reduce) {
+    .proj__metrics > * { animation: none; }
   }
   .proj__meta {
     display: flex;
