@@ -62,6 +62,14 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      # Generate the favicon set (apple-touch-icon-180x180.png + favicon-* + maskable-*)
+      # from public/cm-mark-amber.svg BEFORE build:mirror runs. The build:mirror
+      # chain does NOT run the full `prebuild` hook (which also calls fetch-gdelt +
+      # build-graph-snapshot — both depend on local state that doesn't exist in
+      # CI), but asset-audit hard-requires the 180×180 PNG. optimize-assets.mjs is
+      # idempotent (regenerates the same files on every run) and has no external
+      # API calls, so it's safe to call directly here. v9.3.6 hardening.
+      - run: node scripts/optimize-assets.mjs
       # Build for the CF Pages mirror (BASE_PATH=/) so the served URLs match
       # the production canonical host structure.
       - run: npm run build:mirror
