@@ -1,0 +1,13 @@
+name = "christianmacion-portfolio"
+compatibility_date = "2026-07-31"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = "dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "portfolio-contact"
+database_id = "7b04bef2-3eea-45b3-a2a5-ffa3b50ab1ec"
+
+[[kv_namespaces]]
+binding = "RATELIMIT"
+id = "94b15ec48d9644f99599655618fc7afd"

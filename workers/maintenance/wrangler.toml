@@ -1,0 +1,11 @@
+name = "portfolio-maintenance"
+main = "src/index.ts"
+compatibility_date = "2026-07-31"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "portfolio-contact"
+database_id = "<TBD-via-wrangler-d1-create>"
+
+[triggers]
+crons = ["*/5 * * * *", "7 * * * *", "17 2 * * *"]
