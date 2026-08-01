@@ -137,7 +137,6 @@ jobs:
                 }
               },
               "assert": {
-                "preset": "lighthouse:no-pwa",
                 "assertions": {
                   "categories:performance":   ["error", { "minScore": 0.95 }],
                   "categories:accessibility": ["error", { "minScore": 1.00 }],
@@ -151,6 +150,14 @@ jobs:
             }
           }
           EOF
+      # Note: removed `"preset": "lighthouse:no-pwa"` because it auto-applies
+      # `auditRan` to every default audit (incl. lcp-lazy-loaded,
+      # non-composited-animations, prioritize-lcp-image that return NaN when
+      # the page has no LCP image / no animations). The NaN makes auditRan fail
+      # with `expected: >=1, found: 0`, cascading into categories:accessibility /
+      # best-practices / seo all failing on auditRan. With preset removed, only
+      # the explicit categories:* assertions are checked (LHCI 0.14 default
+      # behavior). v9.3.6 hardening.
       - name: Run Lighthouse CI (mobile)
         run: npx -y @lhci/cli@0.14.x autorun --config=./lighthouserc.mobile.json
       - name: Upload report
@@ -200,7 +207,6 @@ jobs:
                 }
               },
               "assert": {
-                "preset": "lighthouse:no-pwa",
                 "assertions": {
                   "categories:performance":   ["error", { "minScore": 0.98 }],
                   "categories:accessibility": ["error", { "minScore": 1.00 }],
