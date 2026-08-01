@@ -17,6 +17,10 @@
 //   - public/sw.js                 : service worker (entry point, no static imports)
 //   - perf-mobile.mjs / screenshot.mjs / serve-dist.mjs : verify scripts (run directly)
 //   - scripts/__tests__/**         : smoke tests (run via node directly)
+//   - .audit/**                    : diagnostic/audit working scripts, evidence
+//                                   snapshots, and incident reports committed to the
+//                                   repo. They are NEVER reachable as imports — they
+//                                   are referenced from AAR docs only.
 //
 // knip cannot follow @components/* or @scripts/* path aliases reliably
 // when imports appear inside <script> tags of .astro files (BaseLayout.astro
@@ -62,8 +66,9 @@
     "src/components/EntryStations.astro",
     "src/data/earth-110m-*",
     "src/scripts/**",
-    ".audit/**/*.cjs",
-    ".audit/**/*.mjs"
+    ".audit/**",
+    ".claude/worktrees/**",
+    ".worktrees/**"
   ],
   "ignoreDependencies": [
     "astro-expressive-code",
