@@ -95,23 +95,27 @@ const streamId = `graph-${fnv1a(`${squad}:${limit}:${showLabels}:${height}`)}`;
     gap: 6px;
     letter-spacing: 0.04em;
   }
+  /* v9.3.2 — institutional register per feedback-portfolio-visual-bar-2026-07-31.
+     The prior keyframes animated `box-shadow: 0 0 0 8px var(--j-pulse-end)` — a
+     expanding ring that read as a halo/glow banner. Owner directive: NO halo,
+     NO glow, NO `0 0 Npx var(--*)`. Replaced with a pure-fill opacity pulse:
+     the dot stays a flat 7px circle, brightness oscillates 0.45 → 1 → 0.45 over
+     1.6s. The streaming cue is preserved (the dot still "breathes") without the
+     chromatic spread that the institutional design contract forbids. */
   .graph-stream__pulse {
     width: 7px;
     height: 7px;
     border-radius: 50%;
     background: var(--c-warn);
-    box-shadow: 0 0 0 0 var(--j-pulse-end);
     animation: pulseDot 1.6s var(--j-ease-out, ease-out) infinite;
   }
   @keyframes pulseDot {
-    0% {
-      box-shadow: 0 0 0 0 var(--j-pulse-peak);
-    }
-    70% {
-      box-shadow: 0 0 0 8px var(--j-pulse-end);
-    }
+    0%,
     100% {
-      box-shadow: 0 0 0 0 var(--j-pulse-end);
+      opacity: 0.45;
+    }
+    50% {
+      opacity: 1;
     }
   }
   .graph-stream__svg {
