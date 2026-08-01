@@ -69,7 +69,13 @@ const liveCounters = [
   chrome="slim"
   breadcrumbs={[{ name: 'Home', href: '/' }]}
 >
-  <main class="broadside">
+  <!-- v9.3.2 (2026-08-02) — a11y: BaseLayout.astro already wraps the
+       page in <main id="main">; rendering an inner <main> here produced
+       nested <main> landmarks (invalid HTML5; confusing to screen-reader
+       landmark navigation). Replaced with <section> so the broadside is
+       semantically sectioned, not landmarked. The outer BaseLayout
+       <main id="main"> remains the single landmark for AT users. -->
+  <section class="broadside" aria-label="Home broadside">
     <!-- ============= RUNNING HEADER TAPE ============= -->
     <header class="tape" aria-label="Page metadata">
       <div class="tape__row tape__row--top">
@@ -194,7 +200,11 @@ const liveCounters = [
 
     <!-- ============= § 01 — LEDE ============= -->
     <section class="lede" aria-label="Working description">
-      <p class="lede__mark mono">§ 01 — The Work</p>
+      <!-- v9.3.2 (2026-08-02) — a11y: § 01 marker was styled <p>; screen-reader
+           "navigate by headings" returned only the hero h1. Promote to <h2>
+           so AT users can jump between broadside sections. Visual styling
+           unchanged — class retains lede__mark mono treatment. -->
+      <h2 class="lede__mark mono">§ 01 — The Work</h2>
       <p class="lede__body">
         Six years building trading desks, AI engineering teams, and multi-agent build systems that
         survive interview-room scrutiny. Every artifact ships behind a 31-gate eval harness, carries
@@ -213,7 +223,7 @@ const liveCounters = [
 
     <!-- ============= § 02 — ARTIFACTS TABLE ============= -->
     <section class="artifacts" aria-label="What I ship">
-      <p class="artifacts__mark mono">§ 02 — What I Ship</p>
+      <h2 class="artifacts__mark mono">§ 02 — What I Ship</h2>
       <p class="artifacts__sub">
         Real artifacts, real numbers. Each row links to the proof page or repo. Numbers are counted
         at deploy time, not rounded to look round.
@@ -290,7 +300,7 @@ const liveCounters = [
 
     <!-- ============= § 03 — READING LIST ============= -->
     <section class="reading" aria-label="Reading list">
-      <p class="reading__mark mono">§ 03 — Reading List</p>
+      <h2 class="reading__mark mono">§ 03 — Reading List</h2>
       <p class="reading__sub">
         Currently rereading or actively applying. Papers cite by year; doctrine corpora cite the
         book.
@@ -351,7 +361,7 @@ const liveCounters = [
 
     <!-- ============= § 04 — FOOTPRINT ============= -->
     <section class="footprint" aria-label="Footprint">
-      <p class="footprint__mark mono">§ 04 — Footprint</p>
+      <h2 class="footprint__mark mono">§ 04 — Footprint</h2>
       <p class="footprint__sub">
         Where I've been and where I cover. Davao pins are three in-person events in the last 30
         days; the rest are research hubs or active counterparties. Each pin is a real artifact, not
@@ -362,7 +372,7 @@ const liveCounters = [
 
     <!-- ============= § 05 — CONTACT ============= -->
     <footer class="contact" aria-label="Contact">
-      <p class="contact__mark mono">§ 05 — Contact</p>
+      <h2 class="contact__mark mono">§ 05 — Contact</h2>
       <p class="contact__line mono">
         <a href={`mailto:${email}`}>{email}</a>
         <span aria-hidden="true">·</span>
@@ -382,7 +392,7 @@ const liveCounters = [
         >.
       </p>
     </footer>
-  </main>
+  </section>
 </BaseLayout>
 
 <style>
