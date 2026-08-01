@@ -282,8 +282,12 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
          bypass-blocks convention. Visible text is identical to aria-label so
          screen-reader and sighted users get the same anchor name. -->
     <a href="#main" class="skip-link" aria-label="Skip to main content">Skip to main content</a>
-    {/* v7.3 — top hairline scroll progress (1px amber, driven by scroll-progress.ts). */}
-    <div class="scroll-progress" aria-hidden="true"><i></i></div>
+    {/* v7.3 — top hairline scroll progress (1px amber, driven by scroll-progress.ts).
+        v9.3 a11y follow-up (2026-08-01): role="presentation" + tabindex=-1 wraps the
+        progress bar in a landmark so axe-core's region rule passes. Without the
+        landmark wrapper, the div sits outside <main> and <header> and axe flags
+        it as page content not contained by landmarks. */}
+    <div class="scroll-progress" role="presentation" tabindex="-1" aria-hidden="true"><i></i></div>
     {surface === 'v6-13' && <V613Fonts />}
     {
       /* v9.2.3 (Gate 12) — opt-in motion CSS via deferred-load link. The
