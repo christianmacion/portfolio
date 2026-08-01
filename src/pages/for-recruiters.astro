@@ -11,6 +11,7 @@
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
 import CTABanner from '@components/CTABanner.astro';
+import ChromeHeader from '@components/ChromeHeader.astro';
 import { profile } from '@utils/profile';
 import { path } from '@utils/url';
 import VoiceLine from '@components/VoiceLine.astro';
@@ -106,10 +107,14 @@ const jsonLd = {
 
   <section class="hero">
     <div class="container container--narrow">
-      <p class="hero__eyebrow mono">
-        <span class="hero__eyebrow-chip">FOR HIRING MANAGERS · 60-SECOND SKIM · NDA-CLEAN</span>
-        <span class="hero__eyebrow-line">{fullName} · {loc.display} · UTC+8 · IMMEDIATE START</span>
-      </p>
+      <ChromeHeader
+        chip="FOR HIRING MANAGERS · 60-SECOND SKIM · NDA-CLEAN"
+        eyebrow={`${fullName} · ${loc.display} · UTC+8 · IMMEDIATE START`}
+        tenant={`CHRISTIAN.T.MACION · ${profile.stats.evalGates}-GATE EVAL · ${profile.stats.aiAgentCount}-AGENT OFFICE · ${profile.stats.locPython} LOC PYTHON`}
+        chipVariant="amber"
+        noSep
+        hideTenet
+      />
       <h1 class="hero__title" data-words>{fullName}</h1>
       <VoiceLine class="hero__voice">
         60-second skim. NDA-clean. Built so a hiring manager can decide in one read.
@@ -119,14 +124,8 @@ const jsonLd = {
         research-engineer seats with US-premarket or APAC overlap.
       </p>
 
-      <p class="hero__tenant mono">
-        <span>CHRISTIAN.T.MACION</span>
-        <span aria-hidden="true">·</span>
-        <span>{profile.stats.evalGates}-GATE EVAL</span>
-        <span aria-hidden="true">·</span>
-        <span>{profile.stats.aiAgentCount}-AGENT OFFICE</span>
-        <span aria-hidden="true">·</span>
-        <span>{profile.stats.locPython} LOC PYTHON</span>
+      <p class="hero__comp-link mono">
+        Need comp ranges first? <a href={path('/comp')}>See engagement bands →</a>
       </p>
 
       <table class="kv">
@@ -379,6 +378,26 @@ const jsonLd = {
   }
   .hero__tenant span:nth-child(odd) {
     color: var(--c-warn);
+    font-weight: 600;
+  }
+  /* v9.3.1 (Phase 3B) — comp-link under the tenant block. Lets the
+     recruiter jump to /comp without scrolling past the 7-row KV table.
+     Inline mono, amber underline matches the rest of the chrome. */
+  .hero__comp-link {
+    margin: 0 0 var(--sp-3);
+    padding: var(--sp-2) var(--sp-3);
+    background: var(--c-bg);
+    border: 1px solid var(--c-rule);
+    border-left: 3px solid var(--c-amber);
+    font-size: var(--fs-xs);
+    color: var(--c-ink-2);
+    letter-spacing: 0.04em;
+  }
+  .hero__comp-link a {
+    color: var(--c-primary);
+    text-decoration: underline;
+    text-decoration-color: var(--c-amber-decor);
+    text-underline-offset: 3px;
     font-weight: 600;
   }
   .eyebrow {

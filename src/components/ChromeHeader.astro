@@ -38,6 +38,12 @@ interface Props {
   /** Skip the "· " separator between chip and eyebrow line.
    *  Use when the page renders chip + line as standalone phrases (no internal dot). */
   noSep?: boolean;
+  /** Chip color variant.
+   *  `phi-teal` (default) — page__eyebrow .hero__eyebrow-chip base styling.
+   *  `amber` — solid amber chip + --c-bg text (v9.2 a11y baseline for
+   *  pages whose hero sits on a dark page-head surface; hits ≥5.6:1 in
+   *  both themes vs. phi-teal's 2.14:1 on dark). */
+  chipVariant?: 'phi-teal' | 'amber';
 }
 
 const DEFAULT_CHIP = 'QUANT · AI · OPS';
@@ -55,6 +61,7 @@ const {
   hideTenant = false,
   hideTenet = false,
   noSep = false,
+  chipVariant = 'phi-teal',
 } = Astro.props;
 ---
 
@@ -62,7 +69,7 @@ const {
   {
     variant !== 'compact' && (
       <p class="page__eyebrow mono">
-        <span class="hero__eyebrow-chip">{chip}</span>
+        <span class:list={['hero__eyebrow-chip', chipVariant === 'amber' && 'hero__eyebrow-chip--amber']}>{chip}</span>
         <span class="chrome-header__eyebrow-line">{noSep ? '' : '· '}{eyebrow}</span>
       </p>
     )
@@ -98,6 +105,13 @@ const {
   .chrome-header__eyebrow-line {
     color: var(--c-warn);
     font-weight: 500;
+  }
+  /* v9.2 a11y baseline — solid amber chip + --c-bg text reads at
+     ≥5.6:1 in both themes vs. phi-teal's 2.14:1 on dark surfaces. */
+  .hero__eyebrow-chip--amber {
+    border: 1px solid var(--c-amber);
+    background: var(--c-amber);
+    color: var(--c-bg);
   }
   .chrome-header__tenet {
     margin: var(--sp-3) 0 0;

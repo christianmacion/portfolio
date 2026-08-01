@@ -23,6 +23,7 @@
 import BaseLayout from '@layouts/BaseLayout.astro';
 import CTABanner from '@components/CTABanner.astro';
 import VoiceLine from '@components/VoiceLine.astro';
+import ChromeHeader from '@components/ChromeHeader.astro';
 import { profile } from '@utils/profile';
 import { path } from '@utils/url';
 import { buildStampUtc8 } from '@utils/build-stamp';
@@ -132,12 +133,14 @@ const itemListJsonLd = {
 >
   <section class="hero">
     <div class="container container--narrow">
-      <p class="hero__eyebrow mono">
-        <span class="hero__eyebrow-chip">FOR HIRING MANAGERS · 30-MIN AGENDA · NDA-CLEAN</span>
-        <span class="hero__eyebrow-line"
-          >{agendaVersion} · TUE/WED/THU · 18:00–22:00 PHT (10:00–14:00 UTC)</span
-        >
-      </p>
+      <ChromeHeader
+        chip="FOR HIRING MANAGERS · 30-MIN AGENDA · NDA-CLEAN"
+        eyebrow={`${agendaVersion} · TUE/WED/THU · 18:00–22:00 PHT (10:00–14:00 UTC)`}
+        tenant="CHRISTIAN.T.MACION · 30-MIN HARD CAP · 5 PHASES · 5 PROMPTS · 5 ARTIFACTS"
+        chipVariant="amber"
+        noSep
+        hideTenet
+      />
       <h1 class="hero__title" data-words>Screening call — what the 30 minutes look like.</h1>
       <VoiceLine class="hero__voice">
         Thirty minutes. Five phases. Bring a JD; bring the eval-harness map.
@@ -145,14 +148,6 @@ const itemListJsonLd = {
       <p class="hero__sub">
         Tue / Wed / Thu · 18:00–22:00 PHT (10:00–14:00 UTC) · 30 minutes ·
         <a href={`mailto:${email}`}>{email}</a>
-      </p>
-
-      <p class="hero__tenant mono">
-        <span>CHRISTIAN.T.MACION</span>
-        <span aria-hidden="true">·</span>
-        <span>30-MIN HARD CAP</span>
-        <span aria-hidden="true">·</span>
-        <span>5 PHASES · 5 PROMPTS · 5 ARTIFACTS</span>
       </p>
 
       <table class="kv">
