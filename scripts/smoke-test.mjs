@@ -42,8 +42,7 @@
 
 import { spawn } from 'node:child_process';
 import { existsSync, promises as fs } from 'node:fs';
-import { createServer } from 'node:http';
-import { extname, join, relative, resolve, sep } from 'node:path';
+import { join, relative, resolve, sep } from 'node:path';
 import process from 'node:process';
 
 const ROOT = resolve(import.meta.dirname, '..');
@@ -58,7 +57,7 @@ const PORT = Number(process.env.SMOKE_PORT ?? 0); // 0 → OS-assigned ephemeral
 const HOST = '127.0.0.1';
 const DEDUPE_KEY = 'portfolio-smoke-test-v1';
 
-const mime = {
+const _mime = {
   '.css': 'text/css; charset=utf-8',
   '.html': 'text/html; charset=utf-8',
   '.js': 'text/javascript; charset=utf-8',

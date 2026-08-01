@@ -167,12 +167,30 @@ const streamId = `graph-${fnv1a(`${squad}:${limit}:${showLabels}:${height}`)}`;
 </style>
 
 <script>
+  interface GraphNode {
+    id: string;
+    squad: string;
+    x?: number;
+    y?: number;
+    vx?: number;
+    vy?: number;
+    [k: string]: unknown;
+  }
+  interface GraphEdge {
+    from: string;
+    to: string;
+  }
+  interface GraphData {
+    agents: GraphNode[];
+    relations: GraphEdge[];
+  }
+
   class GraphStream {
     root: HTMLElement;
     svg: SVGSVGElement;
-    data: any = null;
-    nodes: any[] = [];
-    edges: any[] = [];
+    data: GraphData | null = null;
+    nodes: GraphNode[] = [];
+    edges: GraphEdge[] = [];
     raf = 0;
     constructor(root: HTMLElement) {
       this.root = root;
@@ -184,15 +202,15 @@ const streamId = `graph-${fnv1a(`${squad}:${limit}:${showLabels}:${height}`)}`;
       try {
         const r = await fetch('/graph-stream.json');
         if (!r.ok) throw new Error(`HTTP ${r.status}`);
-        this.data = await r.json();
+        this.data = (await r.json()) as GraphData;
         const sq = this.root.dataset.squad;
         const limit = parseInt(this.root.dataset.limit || '60');
         let nodes = this.data.agents;
-        if (sq && sq !== 'all') nodes = nodes.filter((n: any) => n.squad === sq);
+        if (sq && sq !== 'all') nodes = nodes.filter((n) => n.squad === sq);
         nodes = nodes.slice(0, limit);
-        const ids = new Set(nodes.map((n: any) => n.id));
-        const edges = this.data.relations.filter((e: any) => ids.has(e.from) && ids.has(e.to));
-        this.nodes = nodes.map((n: any, i: number) => ({
+        const ids = new Set(nodes.map((n) => n.id));
+        const edges = this.data.relations.filter((e) => ids.has(e.from) && ids.has(e.to));
+        this.nodes = nodes.map((n, i) => ({
           ...n,
           x: 400 + Math.cos(i * 2.4) * 200,
           y: (this.svg.viewBox.baseVal.height || 380) / 2 + Math.sin(i * 2.4) * 100,
@@ -223,7 +241,7 @@ const streamId = `graph-${fnv1a(`${squad}:${limit}:${showLabels}:${height}`)}`;
       const edges = this.edges;
       // Static radial layout — fast, no animation library needed
       const rings = 4;
-      nodes.forEach((node: any, i: number) => {
+      nodes.forEach((node, i) => {
         const ring = Math.floor(i / (nodes.length / rings));
         const inRing = i % Math.max(1, Math.floor(nodes.length / rings));
         const r = 80 + ring * 60;
@@ -238,8 +256,8 @@ const streamId = `graph-${fnv1a(`${squad}:${limit}:${showLabels}:${height}`)}`;
       const edgeGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
       edgeGroup.setAttribute('class', 'gs-edges');
       for (const e of edges) {
-        const a = nodes.find((n: any) => n.id === e.from);
-        const b = nodes.find((n: any) => n.id === e.to);
+        const a = nodes.find((n) => n.id === e.from);
+        const b = nodes.find((n) => n.id === e.to);
         if (!a || !b) continue;
         const l = document.createElementNS('http://www.w3.org/2000/svg', 'line');
         l.setAttribute('x1', String(a.x));

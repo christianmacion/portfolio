@@ -51,7 +51,7 @@ const railId = `rail-${fnv1a(sections.map((s) => s.id).join('|'))}`;
 >
   <ol class="section-rail__list" role="list">
     {
-      sections.map((s, i) => (
+      sections.map((s, _i) => (
         <li class="section-rail__item">
           <a
             class="section-rail__link"

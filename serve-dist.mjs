@@ -1,6 +1,6 @@
 import { createServer } from 'http';
 import { readFile } from 'fs/promises';
-import { existsSync, statSync } from 'fs';
+import { existsSync } from 'fs';
 import { extname, join } from 'path';
 
 const ROOT = './dist';

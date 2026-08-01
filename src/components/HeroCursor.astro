@@ -26,7 +26,7 @@ interface Props {
   /** Lerp factor (0-1). Lower = laggier. Default 0.18 ≈ 180ms. */
   lerp?: number;
 }
-const { size = 8, accent = 'warn', lerp = 0.18 } = Astro.props;
+const { size: _size = 8, accent: _accent = 'warn', lerp: _lerp = 0.18 } = Astro.props;
 ---
 
 <script>
