@@ -1,0 +1,567 @@
+{
+  "schemaVersion": 1,
+  "dedupeKey": "portfolio-wcag22-aa-route-audit-v1",
+  "terminalState": "converged",
+  "standard": "WCAG 2.2 AA",
+  "axeVersion": "4.12.1",
+  "coverage": {
+    "included": "Every generated dist/**/*.html document",
+    "excluded": "Non-HTML assets and API endpoints",
+    "routeCount": 91,
+    "routes": [
+      "/404.html",
+      "/500.html",
+      "/about/",
+      "/about-this-site/",
+      "/ai/",
+      "/certifications/",
+      "/colophon/",
+      "/contact/",
+      "/desk/",
+      "/experience/",
+      "/for-recruiters/",
+      "/glossary/agent-charter/",
+      "/glossary/alpha/",
+      "/glossary/block-bootstrap/",
+      "/glossary/bonferroni-holm/",
+      "/glossary/cointegration/",
+      "/glossary/cscv-pbo/",
+      "/glossary/deflated-sharpe/",
+      "/glossary/drawdown/",
+      "/glossary/embargo/",
+      "/glossary/eval-harness/",
+      "/glossary/frozen-spec/",
+      "/glossary/g1-g31/",
+      "/glossary/",
+      "/glossary/json-schema/",
+      "/glossary/llm-as-judge/",
+      "/glossary/mcp/",
+      "/glossary/minbtl/",
+      "/glossary/multi-agent/",
+      "/glossary/oos/",
+      "/glossary/pbo/",
+      "/glossary/rag/",
+      "/glossary/regime/",
+      "/glossary/sharpe/",
+      "/glossary/slippage/",
+      "/glossary/survivorship-bias/",
+      "/glossary/walk-forward/",
+      "/",
+      "/markets/",
+      "/methodology/",
+      "/mistakes/",
+      "/now/",
+      "/papers/",
+      "/positions/",
+      "/prediction-markets/",
+      "/projects/ai/01-rag-recall/",
+      "/projects/ai/02-toolcall-agent/",
+      "/projects/ai/03-judge-harness/",
+      "/projects/ai/04-eval-mcp-server/",
+      "/projects/ai/05-reflect-revise/",
+      "/projects/ai/06-slop-scanner/",
+      "/projects/",
+      "/projects/quant/01-deflated-sharpe/",
+      "/projects/quant/02-cross-sectional-momentum/",
+      "/projects/quant/03-timeseries-momentum-voltarget/",
+      "/projects/quant/04-variance-risk-premium/",
+      "/projects/quant/05-pairs-cointegration/",
+      "/projects/quant/06-funding-carry/",
+      "/projects/quant/07-macro-regime-overlay/",
+      "/projects/quant/08-backtest-engine-costs/",
+      "/projects/quant/09-lookahead-bias-audit/",
+      "/proof/",
+      "/publications/",
+      "/reading/",
+      "/research/ai/01-rag-recall/",
+      "/research/ai/02-toolcall-agent/",
+      "/research/ai/03-judge-harness/",
+      "/research/ai/04-eval-mcp-server/",
+      "/research/ai/05-reflect-revise/",
+      "/research/ai/06-slop-scanner/",
+      "/research/frontier-models/",
+      "/research/",
+      "/research/quant/01-deflated-sharpe/",
+      "/research/quant/02-cross-sectional-momentum/",
+      "/research/quant/03-timeseries-momentum-voltarget/",
+      "/research/quant/04-variance-risk-premium/",
+      "/research/quant/05-pairs-cointegration/",
+      "/research/quant/06-funding-carry/",
+      "/research/quant/07-macro-regime-overlay/",
+      "/research/quant/08-backtest-engine-costs/",
+      "/research/quant/09-lookahead-bias-audit/",
+      "/resume/",
+      "/screening-call/",
+      "/search/",
+      "/skills/",
+      "/solutions/",
+      "/talks/",
+      "/uses/",
+      "/workbooks/ai-engineering/",
+      "/workbooks/graph-engineering/",
+      "/workbooks/"
+    ]
+  },
+  "browser": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+  "prefersReducedMotion": "reduce",
+  "consoleErrors": 5,
+  "violationCount": 0,
+  "nodeCount": 0,
+  "findings": [
+    {
+      "route": "/404.html",
+      "url": "http://127.0.0.1:4178/404.html",
+      "violations": []
+    },
+    {
+      "route": "/500.html",
+      "url": "http://127.0.0.1:4178/500.html",
+      "violations": []
+    },
+    {
+      "route": "/about/",
+      "url": "http://127.0.0.1:4178/about/",
+      "violations": []
+    },
+    {
+      "route": "/about-this-site/",
+      "url": "http://127.0.0.1:4178/about-this-site/",
+      "violations": []
+    },
+    {
+      "route": "/ai/",
+      "url": "http://127.0.0.1:4178/ai/",
+      "violations": []
+    },
+    {
+      "route": "/certifications/",
+      "url": "http://127.0.0.1:4178/certifications/",
+      "violations": []
+    },
+    {
+      "route": "/colophon/",
+      "url": "http://127.0.0.1:4178/colophon/",
+      "violations": []
+    },
+    {
+      "route": "/contact/",
+      "url": "http://127.0.0.1:4178/contact/",
+      "violations": []
+    },
+    {
+      "route": "/desk/",
+      "url": "http://127.0.0.1:4178/desk/",
+      "violations": []
+    },
+    {
+      "route": "/experience/",
+      "url": "http://127.0.0.1:4178/experience/",
+      "violations": []
+    },
+    {
+      "route": "/for-recruiters/",
+      "url": "http://127.0.0.1:4178/for-recruiters/",
+      "violations": []
+    },
+    {
+      "route": "/glossary/agent-charter/",
+      "url": "http://127.0.0.1:4178/glossary/agent-charter/",
+      "violations": []
+    },
+    {
+      "route": "/glossary/alpha/",
+      "url": "http://127.0.0.1:4178/glossary/alpha/",
+      "violations": []
+    },
+    {
+      "route": "/glossary/block-bootstrap/",
+      "url": "http://127.0.0.1:4178/glossary/block-bootstrap/",
+      "violations": []
+    },
+    {
+      "route": "/glossary/bonferroni-holm/",
+      "url": "http://127.0.0.1:4178/glossary/bonferroni-holm/",
+      "violations": []
+    },
+    {
+      "route": "/glossary/cointegration/",
+      "url": "http://127.0.0.1:4178/glossary/cointegration/",
+      "violations": []
+    },
+    {
+      "route": "/glossary/cscv-pbo/",
+      "url": "http://127.0.0.1:4178/glossary/cscv-pbo/",
+      "violations": []
+    },
+    {
+      "route": "/glossary/deflated-sharpe/",
+      "url": "http://127.0.0.1:4178/glossary/deflated-sharpe/",
+      "violations": []
+    },
+    {
+      "route": "/glossary/drawdown/",
+      "url": "http://127.0.0.1:4178/glossary/drawdown/",
+      "violations": []
+    },
+    {
+      "route": "/glossary/embargo/",
+      "url": "http://127.0.0.1:4178/glossary/embargo/",
+      "violations": []
+    },
+    {
+      "route": "/glossary/eval-harness/",
+      "url": "http://127.0.0.1:4178/glossary/eval-harness/",
+      "violations": []
+    },
+    {
+      "route": "/glossary/frozen-spec/",
+      "url": "http://127.0.0.1:4178/glossary/frozen-spec/",
+      "violations": []
+    },
+    {
+      "route": "/glossary/g1-g31/",
+      "url": "http://127.0.0.1:4178/glossary/g1-g31/",
+      "violations": []
+    },
+    {
+      "route": "/glossary/",
+      "url": "http://127.0.0.1:4178/glossary/",
+      "violations": []
+    },
+    {
+      "route": "/glossary/json-schema/",
+      "url": "http://127.0.0.1:4178/glossary/json-schema/",
+      "violations": []
+    },
+    {
+      "route": "/glossary/llm-as-judge/",
+      "url": "http://127.0.0.1:4178/glossary/llm-as-judge/",
+      "violations": []
+    },
+    {
+      "route": "/glossary/mcp/",
+      "url": "http://127.0.0.1:4178/glossary/mcp/",
+      "violations": []
+    },
+    {
+      "route": "/glossary/minbtl/",
+      "url": "http://127.0.0.1:4178/glossary/minbtl/",
+      "violations": []
+    },
+    {
+      "route": "/glossary/multi-agent/",
+      "url": "http://127.0.0.1:4178/glossary/multi-agent/",
+      "violations": []
+    },
+    {
+      "route": "/glossary/oos/",
+      "url": "http://127.0.0.1:4178/glossary/oos/",
+      "violations": []
+    },
+    {
+      "route": "/glossary/pbo/",
+      "url": "http://127.0.0.1:4178/glossary/pbo/",
+      "violations": []
+    },
+    {
+      "route": "/glossary/rag/",
+      "url": "http://127.0.0.1:4178/glossary/rag/",
+      "violations": []
+    },
+    {
+      "route": "/glossary/regime/",
+      "url": "http://127.0.0.1:4178/glossary/regime/",
+      "violations": []
+    },
+    {
+      "route": "/glossary/sharpe/",
+      "url": "http://127.0.0.1:4178/glossary/sharpe/",
+      "violations": []
+    },
+    {
+      "route": "/glossary/slippage/",
+      "url": "http://127.0.0.1:4178/glossary/slippage/",
+      "violations": []
+    },
+    {
+      "route": "/glossary/survivorship-bias/",
+      "url": "http://127.0.0.1:4178/glossary/survivorship-bias/",
+      "violations": []
+    },
+    {
+      "route": "/glossary/walk-forward/",
+      "url": "http://127.0.0.1:4178/glossary/walk-forward/",
+      "violations": []
+    },
+    {
+      "route": "/",
+      "url": "http://127.0.0.1:4178/",
+      "violations": []
+    },
+    {
+      "route": "/markets/",
+      "url": "http://127.0.0.1:4178/markets/",
+      "violations": []
+    },
+    {
+      "route": "/methodology/",
+      "url": "http://127.0.0.1:4178/methodology/",
+      "violations": []
+    },
+    {
+      "route": "/mistakes/",
+      "url": "http://127.0.0.1:4178/mistakes/",
+      "violations": []
+    },
+    {
+      "route": "/now/",
+      "url": "http://127.0.0.1:4178/now/",
+      "violations": []
+    },
+    {
+      "route": "/papers/",
+      "url": "http://127.0.0.1:4178/papers/",
+      "violations": []
+    },
+    {
+      "route": "/positions/",
+      "url": "http://127.0.0.1:4178/positions/",
+      "violations": []
+    },
+    {
+      "route": "/prediction-markets/",
+      "url": "http://127.0.0.1:4178/prediction-markets/",
+      "violations": []
+    },
+    {
+      "route": "/projects/ai/01-rag-recall/",
+      "url": "http://127.0.0.1:4178/projects/ai/01-rag-recall/",
+      "violations": []
+    },
+    {
+      "route": "/projects/ai/02-toolcall-agent/",
+      "url": "http://127.0.0.1:4178/projects/ai/02-toolcall-agent/",
+      "violations": []
+    },
+    {
+      "route": "/projects/ai/03-judge-harness/",
+      "url": "http://127.0.0.1:4178/projects/ai/03-judge-harness/",
+      "violations": []
+    },
+    {
+      "route": "/projects/ai/04-eval-mcp-server/",
+      "url": "http://127.0.0.1:4178/projects/ai/04-eval-mcp-server/",
+      "violations": []
+    },
+    {
+      "route": "/projects/ai/05-reflect-revise/",
+      "url": "http://127.0.0.1:4178/projects/ai/05-reflect-revise/",
+      "violations": []
+    },
+    {
+      "route": "/projects/ai/06-slop-scanner/",
+      "url": "http://127.0.0.1:4178/projects/ai/06-slop-scanner/",
+      "violations": []
+    },
+    {
+      "route": "/projects/",
+      "url": "http://127.0.0.1:4178/projects/",
+      "violations": []
+    },
+    {
+      "route": "/projects/quant/01-deflated-sharpe/",
+      "url": "http://127.0.0.1:4178/projects/quant/01-deflated-sharpe/",
+      "violations": []
+    },
+    {
+      "route": "/projects/quant/02-cross-sectional-momentum/",
+      "url": "http://127.0.0.1:4178/projects/quant/02-cross-sectional-momentum/",
+      "violations": []
+    },
+    {
+      "route": "/projects/quant/03-timeseries-momentum-voltarget/",
+      "url": "http://127.0.0.1:4178/projects/quant/03-timeseries-momentum-voltarget/",
+      "violations": []
+    },
+    {
+      "route": "/projects/quant/04-variance-risk-premium/",
+      "url": "http://127.0.0.1:4178/projects/quant/04-variance-risk-premium/",
+      "violations": []
+    },
+    {
+      "route": "/projects/quant/05-pairs-cointegration/",
+      "url": "http://127.0.0.1:4178/projects/quant/05-pairs-cointegration/",
+      "violations": []
+    },
+    {
+      "route": "/projects/quant/06-funding-carry/",
+      "url": "http://127.0.0.1:4178/projects/quant/06-funding-carry/",
+      "violations": []
+    },
+    {
+      "route": "/projects/quant/07-macro-regime-overlay/",
+      "url": "http://127.0.0.1:4178/projects/quant/07-macro-regime-overlay/",
+      "violations": []
+    },
+    {
+      "route": "/projects/quant/08-backtest-engine-costs/",
+      "url": "http://127.0.0.1:4178/projects/quant/08-backtest-engine-costs/",
+      "violations": []
+    },
+    {
+      "route": "/projects/quant/09-lookahead-bias-audit/",
+      "url": "http://127.0.0.1:4178/projects/quant/09-lookahead-bias-audit/",
+      "violations": []
+    },
+    {
+      "route": "/proof/",
+      "url": "http://127.0.0.1:4178/proof/",
+      "violations": []
+    },
+    {
+      "route": "/publications/",
+      "url": "http://127.0.0.1:4178/publications/",
+      "violations": []
+    },
+    {
+      "route": "/reading/",
+      "url": "http://127.0.0.1:4178/reading/",
+      "violations": []
+    },
+    {
+      "route": "/research/ai/01-rag-recall/",
+      "url": "http://127.0.0.1:4178/research/ai/01-rag-recall/",
+      "violations": []
+    },
+    {
+      "route": "/research/ai/02-toolcall-agent/",
+      "url": "http://127.0.0.1:4178/research/ai/02-toolcall-agent/",
+      "violations": []
+    },
+    {
+      "route": "/research/ai/03-judge-harness/",
+      "url": "http://127.0.0.1:4178/research/ai/03-judge-harness/",
+      "violations": []
+    },
+    {
+      "route": "/research/ai/04-eval-mcp-server/",
+      "url": "http://127.0.0.1:4178/research/ai/04-eval-mcp-server/",
+      "violations": []
+    },
+    {
+      "route": "/research/ai/05-reflect-revise/",
+      "url": "http://127.0.0.1:4178/research/ai/05-reflect-revise/",
+      "violations": []
+    },
+    {
+      "route": "/research/ai/06-slop-scanner/",
+      "url": "http://127.0.0.1:4178/research/ai/06-slop-scanner/",
+      "violations": []
+    },
+    {
+      "route": "/research/frontier-models/",
+      "url": "http://127.0.0.1:4178/research/frontier-models/",
+      "violations": []
+    },
+    {
+      "route": "/research/",
+      "url": "http://127.0.0.1:4178/research/",
+      "violations": []
+    },
+    {
+      "route": "/research/quant/01-deflated-sharpe/",
+      "url": "http://127.0.0.1:4178/research/quant/01-deflated-sharpe/",
+      "violations": []
+    },
+    {
+      "route": "/research/quant/02-cross-sectional-momentum/",
+      "url": "http://127.0.0.1:4178/research/quant/02-cross-sectional-momentum/",
+      "violations": []
+    },
+    {
+      "route": "/research/quant/03-timeseries-momentum-voltarget/",
+      "url": "http://127.0.0.1:4178/research/quant/03-timeseries-momentum-voltarget/",
+      "violations": []
+    },
+    {
+      "route": "/research/quant/04-variance-risk-premium/",
+      "url": "http://127.0.0.1:4178/research/quant/04-variance-risk-premium/",
+      "violations": []
+    },
+    {
+      "route": "/research/quant/05-pairs-cointegration/",
+      "url": "http://127.0.0.1:4178/research/quant/05-pairs-cointegration/",
+      "violations": []
+    },
+    {
+      "route": "/research/quant/06-funding-carry/",
+      "url": "http://127.0.0.1:4178/research/quant/06-funding-carry/",
+      "violations": []
+    },
+    {
+      "route": "/research/quant/07-macro-regime-overlay/",
+      "url": "http://127.0.0.1:4178/research/quant/07-macro-regime-overlay/",
+      "violations": []
+    },
+    {
+      "route": "/research/quant/08-backtest-engine-costs/",
+      "url": "http://127.0.0.1:4178/research/quant/08-backtest-engine-costs/",
+      "violations": []
+    },
+    {
+      "route": "/research/quant/09-lookahead-bias-audit/",
+      "url": "http://127.0.0.1:4178/research/quant/09-lookahead-bias-audit/",
+      "violations": []
+    },
+    {
+      "route": "/resume/",
+      "url": "http://127.0.0.1:4178/resume/",
+      "violations": []
+    },
+    {
+      "route": "/screening-call/",
+      "url": "http://127.0.0.1:4178/screening-call/",
+      "violations": []
+    },
+    {
+      "route": "/search/",
+      "url": "http://127.0.0.1:4178/search/",
+      "violations": []
+    },
+    {
+      "route": "/skills/",
+      "url": "http://127.0.0.1:4178/skills/",
+      "violations": []
+    },
+    {
+      "route": "/solutions/",
+      "url": "http://127.0.0.1:4178/solutions/",
+      "violations": []
+    },
+    {
+      "route": "/talks/",
+      "url": "http://127.0.0.1:4178/talks/",
+      "violations": []
+    },
+    {
+      "route": "/uses/",
+      "url": "http://127.0.0.1:4178/uses/",
+      "violations": []
+    },
+    {
+      "route": "/workbooks/ai-engineering/",
+      "url": "http://127.0.0.1:4178/workbooks/ai-engineering/",
+      "violations": []
+    },
+    {
+      "route": "/workbooks/graph-engineering/",
+      "url": "http://127.0.0.1:4178/workbooks/graph-engineering/",
+      "violations": []
+    },
+    {
+      "route": "/workbooks/",
+      "url": "http://127.0.0.1:4178/workbooks/",
+      "violations": []
+    }
+  ]
+}

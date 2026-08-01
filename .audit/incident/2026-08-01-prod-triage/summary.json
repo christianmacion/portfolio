@@ -1,0 +1,186 @@
+[
+  {
+    "path": "/",
+    "label": "home",
+    "status": 200,
+    "wallMs": 2075,
+    "screenshot": "/Users/christianmacion/Contingency/christianmacion.github.io/.audit/incident/2026-08-01-prod-triage/home.png",
+    "consoleErrors": [],
+    "networkFailures": [],
+    "requestCount": 11
+  },
+  {
+    "path": "/about/",
+    "label": "about",
+    "status": 200,
+    "wallMs": 2562,
+    "screenshot": "/Users/christianmacion/Contingency/christianmacion.github.io/.audit/incident/2026-08-01-prod-triage/about.png",
+    "consoleErrors": [],
+    "networkFailures": [],
+    "requestCount": 16
+  },
+  {
+    "path": "/ai/",
+    "label": "ai",
+    "status": 200,
+    "wallMs": 2600,
+    "screenshot": "/Users/christianmacion/Contingency/christianmacion.github.io/.audit/incident/2026-08-01-prod-triage/ai.png",
+    "consoleErrors": [],
+    "networkFailures": [],
+    "requestCount": 13
+  },
+  {
+    "path": "/for-recruiters/",
+    "label": "for-recruiters",
+    "status": 200,
+    "wallMs": 1191,
+    "screenshot": "/Users/christianmacion/Contingency/christianmacion.github.io/.audit/incident/2026-08-01-prod-triage/for-recruiters.png",
+    "consoleErrors": [],
+    "networkFailures": [],
+    "requestCount": 9
+  },
+  {
+    "path": "/contact/",
+    "label": "contact",
+    "status": 200,
+    "wallMs": 4606,
+    "screenshot": "/Users/christianmacion/Contingency/christianmacion.github.io/.audit/incident/2026-08-01-prod-triage/contact.png",
+    "consoleErrors": [
+      "console: Failed to load resource: the server responded with a status of 404 ()"
+    ],
+    "networkFailures": [
+      "404 https://cal.com/christianmacion/30min-review?embed=true&theme=dark"
+    ],
+    "requestCount": 55
+  },
+  {
+    "path": "/proof/",
+    "label": "proof",
+    "status": 200,
+    "wallMs": 13159,
+    "screenshot": "/Users/christianmacion/Contingency/christianmacion.github.io/.audit/incident/2026-08-01-prod-triage/proof.png",
+    "consoleErrors": [],
+    "networkFailures": [],
+    "requestCount": 19
+  },
+  {
+    "path": "/resume/",
+    "label": "resume",
+    "status": 200,
+    "wallMs": 1146,
+    "screenshot": "/Users/christianmacion/Contingency/christianmacion.github.io/.audit/incident/2026-08-01-prod-triage/resume.png",
+    "consoleErrors": [],
+    "networkFailures": [],
+    "requestCount": 13
+  },
+  {
+    "path": "/experience/",
+    "label": "experience",
+    "status": 200,
+    "wallMs": 1365,
+    "screenshot": "/Users/christianmacion/Contingency/christianmacion.github.io/.audit/incident/2026-08-01-prod-triage/experience.png",
+    "consoleErrors": [],
+    "networkFailures": [],
+    "requestCount": 17
+  },
+  {
+    "path": "/methodology/",
+    "label": "methodology",
+    "status": 200,
+    "wallMs": 1149,
+    "screenshot": "/Users/christianmacion/Contingency/christianmacion.github.io/.audit/incident/2026-08-01-prod-triage/methodology.png",
+    "consoleErrors": [],
+    "networkFailures": [],
+    "requestCount": 15
+  },
+  {
+    "path": "/skills/",
+    "label": "skills",
+    "status": 200,
+    "wallMs": 1125,
+    "screenshot": "/Users/christianmacion/Contingency/christianmacion.github.io/.audit/incident/2026-08-01-prod-triage/skills.png",
+    "consoleErrors": [],
+    "networkFailures": [],
+    "requestCount": 13
+  },
+  {
+    "path": "/now/",
+    "label": "now",
+    "status": 200,
+    "wallMs": 1042,
+    "screenshot": "/Users/christianmacion/Contingency/christianmacion.github.io/.audit/incident/2026-08-01-prod-triage/now.png",
+    "consoleErrors": [],
+    "networkFailures": [],
+    "requestCount": 10
+  },
+  {
+    "path": "/colophon/",
+    "label": "colophon",
+    "status": 200,
+    "wallMs": 1095,
+    "screenshot": "/Users/christianmacion/Contingency/christianmacion.github.io/.audit/incident/2026-08-01-prod-triage/colophon.png",
+    "consoleErrors": [],
+    "networkFailures": [],
+    "requestCount": 11
+  },
+  {
+    "path": "/desk/",
+    "label": "desk",
+    "status": 200,
+    "wallMs": 1118,
+    "screenshot": "/Users/christianmacion/Contingency/christianmacion.github.io/.audit/incident/2026-08-01-prod-triage/desk.png",
+    "consoleErrors": [],
+    "networkFailures": [],
+    "requestCount": 12
+  },
+  {
+    "path": "/markets/",
+    "label": "markets",
+    "status": 200,
+    "wallMs": 1159,
+    "screenshot": "/Users/christianmacion/Contingency/christianmacion.github.io/.audit/incident/2026-08-01-prod-triage/markets.png",
+    "consoleErrors": [],
+    "networkFailures": [],
+    "requestCount": 10
+  },
+  {
+    "path": "/publications/",
+    "label": "publications",
+    "status": 200,
+    "wallMs": 1090,
+    "screenshot": "/Users/christianmacion/Contingency/christianmacion.github.io/.audit/incident/2026-08-01-prod-triage/publications.png",
+    "consoleErrors": [],
+    "networkFailures": [],
+    "requestCount": 10
+  },
+  {
+    "path": "/workbooks/",
+    "label": "workbooks",
+    "status": 200,
+    "wallMs": 1088,
+    "screenshot": "/Users/christianmacion/Contingency/christianmacion.github.io/.audit/incident/2026-08-01-prod-triage/workbooks.png",
+    "consoleErrors": [],
+    "networkFailures": [],
+    "requestCount": 12
+  },
+  {
+    "path": "/screening-call/",
+    "label": "screening-call",
+    "status": 200,
+    "wallMs": 1028,
+    "screenshot": "/Users/christianmacion/Contingency/christianmacion.github.io/.audit/incident/2026-08-01-prod-triage/screening-call.png",
+    "consoleErrors": [],
+    "networkFailures": [],
+    "requestCount": 9
+  },
+  {
+    "path": "/projects/",
+    "label": "projects",
+    "status": 200,
+    "wallMs": 1111,
+    "screenshot": "/Users/christianmacion/Contingency/christianmacion.github.io/.audit/incident/2026-08-01-prod-triage/projects.png",
+    "consoleErrors": [],
+    "networkFailures": [],
+    "requestCount": 11
+  }
+]

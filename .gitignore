@@ -43,3 +43,18 @@ public/maskable-icon-*.png
 public/favicon-*.png
 # resume build intermediates (the .pdf outputs are committed, the .docx are not)
 public/resume-*.docx
+
+# audit working artifacts — kept locally for the working session, NOT committed.
+# The canonical evidence commits to .audit/lighthouse/ + .audit/a11y/axe-final-*.json +
+# .audit/incident/<date>/ (SEV-1 trail). Per feedback-portfolio-visual-bar-2026-07-31
+# (audit-trail matters), canonical is committed; transient working artifacts are not.
+.audit/design-token-inventory.md
+.audit/research-v6.md
+.audit/visual-diff-v6.md
+.audit/a11y/axe-before.json
+.audit/a11y/axe-after-common.json
+.audit/a11y/axe-after-cta-fix.json
+.audit/a11y/axe-report.json
+# transient audit caches (defense in depth — these dirs may not exist)
+.audit/cache/
+.audit/diff/

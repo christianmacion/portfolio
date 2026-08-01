@@ -1,0 +1,20 @@
+HTTP/2 200 
+date: Fri, 31 Jul 2026 17:59:49 GMT
+content-type: text/html; charset=utf-8
+access-control-allow-origin: *
+cache-control: private, no-store
+etag: "2479966d18b5a1cfb9774be2fe7bbb40"
+strict-transport-security: max-age=0
+content-security-policy: default-src 'self'; script-src 'self' 'nonce-L6klk0a8JIFhvFQ7CAGWRA' 'strict-dynamic' https://challenges.cloudflare.com; script-src-attr 'none'; style-src 'self' 'nonce-L6klk0a8JIFhvFQ7CAGWRA'; style-src-attr 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; frame-src https://challenges.cloudflare.com https://cal.com https://*.cal.com; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
+cross-origin-opener-policy: same-origin
+permissions-policy: camera=(), microphone=(), geolocation=()
+referrer-policy: strict-origin-when-cross-origin
+x-content-type-options: nosniff
+x-frame-options: DENY
+x-robots-tag: noindex
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=%2FiHLY7i7TBSKHon3SYx2YbOFKWcJqhHL9Eym0Gl1bZB5%2BFVLVvYMUhHI7KikgbRsLE2EaygnKcHVRsJIjc%2BZc4lYEbL%2F2NZWuRi1pJKvn2NBDiRDVu1%2FB9fZXOQwcV3gENKmMndaxiRJF6oYNz%2FOCZ9Adp%2FfWgjfnHp7T9PqCA%3D%3D"}]}
+nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+server: cloudflare
+cf-ray: a23e7fc94f68e2e0-HKG
+alt-svc: h3=":443"; ma=86400
+
