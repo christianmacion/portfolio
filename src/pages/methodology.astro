@@ -9,6 +9,7 @@ import CTABanner from '@components/CTABanner.astro';
 import DSRCalculator from '@components/DSRCalculator.astro';
 import SectionTOC from '@components/SectionTOC.astro';
 import PipelineDiagram from '@components/PipelineDiagram.astro';
+import ChromeHeader from '@components/ChromeHeader.astro';
 import { path } from '@utils/url';
 import VoiceLine from '@components/VoiceLine.astro';
 import { profile } from '@utils/profile';
@@ -86,12 +87,13 @@ const charter = [
 >
   <header class="method-head">
     <div class="container">
-      <p class="method-head__eyebrow mono">
-        <span class="method-head__eyebrow-chip">METHODOLOGY · EVAL-FIRST DISCIPLINE</span>
-        <span class="method-head__eyebrow-line"
-          >{GATE_RANGE} GATE STACK · MODEL-ROUTING · AGENT CHARTER</span
-        >
-      </p>
+      <ChromeHeader
+        chip="METHODOLOGY · EVAL-FIRST DISCIPLINE"
+        eyebrow={`${GATE_RANGE} GATE STACK · MODEL-ROUTING · AGENT CHARTER`}
+        tenant={`CHRISTIAN.T.MACION · UTC+8 · ${profile.stats.evalGates}-GATE EVAL · OWNER-VERIFIED`}
+        noSep
+        hideTenet
+      />
       <h1 class="method-head__title" data-words>
         Don’t ship what hasn’t passed a <span class="hl">measurable gate</span>.
       </h1>
