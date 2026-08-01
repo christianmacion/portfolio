@@ -285,33 +285,28 @@ const pxDecimals = midPxResolved >= 1000 ? 2 : midPxResolved >= 100 ? 2 : 4;
     position: relative;
     isolation: isolate;
   }
-  /* Size bar — drawn behind the text via a left-to-right gradient
-     whose endpoint is `--bar` (set per-row inline). Bid bar grows
-     from the right (toward mid); ask bar grows from the left.
-     v6.11.10 — amber-only gradients. Bid = amber, ask = ink-3. */
+  /* Size bar — drawn behind the text as a solid block whose width is
+     `--bar` (set per-row inline). Bid bar grows from the right (toward
+     mid); ask bar grows from the left.
+     v9.3.1 — F17 institutional: solid tokenized color blocks (no decorative
+     gradient). Order book is a hard-edge tabular widget — Bloomberg terminal
+     register, not gradient surface. */
   .book__row::before {
     content: '';
     position: absolute;
-    inset: 0;
+    top: 0;
+    bottom: 0;
     z-index: -1;
     pointer-events: none;
     width: var(--bar);
   }
   .book__row--bid::before {
     right: 0;
-    background: linear-gradient(
-      270deg,
-      color-mix(in oklab, var(--c-amber) 14%, transparent),
-      transparent 95%
-    );
+    background: color-mix(in oklab, var(--c-amber) 10%, transparent);
   }
   .book__row--ask::before {
     left: 0;
-    background: linear-gradient(
-      90deg,
-      color-mix(in oklab, var(--c-ink-2) 10%, transparent),
-      transparent 95%
-    );
+    background: color-mix(in oklab, var(--c-ink-2) 7%, transparent);
   }
   .book__cell--size {
     text-align: left;

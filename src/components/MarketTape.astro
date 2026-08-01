@@ -255,7 +255,10 @@ const stop = trailing;
     font-size: 0.66rem;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    background: linear-gradient(90deg, transparent, var(--c-tape) 30%);
+    /* v9.3.1 — F17 institutional: solid tokenized color (no decorative gradient).
+       Hairline left border separates the trailing label from the scrolling tape. */
+    background: var(--c-tape);
+    border-left: 1px solid var(--c-rule);
     pointer-events: none;
   }
 
