@@ -83,13 +83,16 @@ const platforms = [
         <div class="contact-head__copy">
           <p class="contact-head__eyebrow mono">
             <span class="contact-head__eyebrow-chip">CONTACT · 24H REPLY · NDA-SAFE</span>
-            <span class="contact-head__eyebrow-line">{channels.length} CHANNELS · JD-WITH-EMAIL GETS THE RICHEST REPLY</span>
+            <span class="contact-head__eyebrow-line"
+              >{channels.length} CHANNELS · JD-WITH-EMAIL GETS THE RICHEST REPLY</span
+            >
           </p>
           <h1 class="contact-head__title" data-words>
             {channels.length} channels. <span class="hl">Pick the one that fits.</span>
           </h1>
           <VoiceLine class="contact-head__voice">
-            Email-with-JD gets the richest reply. LinkedIn DM for casual. Phone after email — never first.
+            Email-with-JD gets the richest reply. LinkedIn DM for casual. Phone after email — never
+            first.
           </VoiceLine>
           <p class="contact-head__sub">
             Each tile names the job it does, not the platform. For open roles, the email-with-JD
@@ -394,6 +397,11 @@ const platforms = [
     line-height: 1.05;
     margin-block: var(--sp-4) var(--sp-5);
   }
+  /* v9.3.1 · techy-blue underline on "Pick the one that fits."
+     keeps the AI accent consistent with /skills/ + /ai/ headlines. */
+  .contact-head__title .hl::after {
+    background: linear-gradient(90deg, var(--c-blue), var(--c-blue-mid));
+  }
   .contact-head__sub {
     font-size: var(--fs-lg);
     color: var(--c-ink-2);
@@ -586,6 +594,71 @@ const platforms = [
     .how-i-reply li {
       grid-template-columns: 1fr;
       gap: var(--sp-2);
+    }
+  }
+
+  /* v9.3.1 · contact channel card stagger fade-in (shared broadside-rise).
+     Up to 6 channels (Email · LinkedIn · GitHub · Cal.com · X · Telegram). */
+  .contact-card {
+    animation: broadside-rise 480ms ease-out both;
+  }
+  .contact-card:nth-child(1) {
+    animation-delay: 60ms;
+  }
+  .contact-card:nth-child(2) {
+    animation-delay: 140ms;
+  }
+  .contact-card:nth-child(3) {
+    animation-delay: 220ms;
+  }
+  .contact-card:nth-child(4) {
+    animation-delay: 300ms;
+  }
+  .contact-card:nth-child(5) {
+    animation-delay: 380ms;
+  }
+  .contact-card:nth-child(6) {
+    animation-delay: 460ms;
+  }
+  .contact-card:nth-child(n + 7) {
+    animation-delay: 540ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .contact-card {
+      animation: none;
+    }
+  }
+
+  /* v9.3.1 · "How I reply" numbered list stagger fade-in (shared
+     broadside-rise). 6-step reply playbook — keep cadence tight
+     (80ms) so the list reads as one sweep. */
+  .how-i-reply li {
+    animation: broadside-rise 480ms ease-out both;
+  }
+  .how-i-reply li:nth-child(1) {
+    animation-delay: 60ms;
+  }
+  .how-i-reply li:nth-child(2) {
+    animation-delay: 140ms;
+  }
+  .how-i-reply li:nth-child(3) {
+    animation-delay: 220ms;
+  }
+  .how-i-reply li:nth-child(4) {
+    animation-delay: 300ms;
+  }
+  .how-i-reply li:nth-child(5) {
+    animation-delay: 380ms;
+  }
+  .how-i-reply li:nth-child(6) {
+    animation-delay: 460ms;
+  }
+  .how-i-reply li:nth-child(n + 7) {
+    animation-delay: 540ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .how-i-reply li {
+      animation: none;
     }
   }
 </style>

@@ -167,7 +167,17 @@ const updatedHuman = new Date(updated).toLocaleDateString('en-GB', {
           Closest peer work to my <a href={path('/glossary/eval-harness')}>eval-harness</a> + MCP server.
         </li>
         <li><em>Hamlet</em> — Shakespeare. Sometimes you have to step away from the screen.</li>
-        <li><em>Research writing patterns</em> — for technical audiences. <a href="https://github.com/agentipedia/research-writing" target="_blank" rel="noopener noreferrer">GitHub</a> + <em>Karpathy / autoresearch</em> — autonomous research loops. <a href="https://github.com/karpathy/autoresearch" target="_blank" rel="noopener noreferrer">MIT licensed</a>.</li>
+        <li>
+          <em>Research writing patterns</em> — for technical audiences. <a
+            href="https://github.com/agentipedia/research-writing"
+            target="_blank"
+            rel="noopener noreferrer">GitHub</a
+          > + <em>Karpathy / autoresearch</em> — autonomous research loops. <a
+            href="https://github.com/karpathy/autoresearch"
+            target="_blank"
+            rel="noopener noreferrer">MIT licensed</a
+          >.
+        </li>
       </ul>
 
       <h2 class="now-h2">How to reach me</h2>
@@ -367,5 +377,38 @@ const updatedHuman = new Date(updated).toLocaleDateString('en-GB', {
   .now-foot a {
     color: var(--c-amber-deep);
     text-decoration: underline;
+  }
+
+  /* v9.3.1 · section list stagger fade-in (shared broadside-rise).
+     6 sections (Where / Shipping / Open-to / Not-open-to / Reading /
+     Reach) — small enough that 80ms cadence reads as one sweep. */
+  .now-list li {
+    animation: broadside-rise 480ms ease-out both;
+  }
+  .now-list li:nth-child(1) {
+    animation-delay: 60ms;
+  }
+  .now-list li:nth-child(2) {
+    animation-delay: 140ms;
+  }
+  .now-list li:nth-child(3) {
+    animation-delay: 220ms;
+  }
+  .now-list li:nth-child(4) {
+    animation-delay: 300ms;
+  }
+  .now-list li:nth-child(5) {
+    animation-delay: 380ms;
+  }
+  .now-list li:nth-child(6) {
+    animation-delay: 460ms;
+  }
+  .now-list li:nth-child(n + 7) {
+    animation-delay: 540ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .now-list li {
+      animation: none;
+    }
   }
 </style>
