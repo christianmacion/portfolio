@@ -3,7 +3,7 @@
   "type": "module",
   "version": "8.1.0",
   "private": true,
-  "description": "Christian T. Macion — AI Engineer + Quantitative Researcher. Personal portfolio site.",
+  "description": "Christian T. Macion \u2014 AI Engineer + Quantitative Researcher. Personal portfolio site.",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
@@ -30,6 +30,11 @@
     "version:bump": "tsx scripts/bump-version.ts",
     "sitemap:check": "tsx scripts/validate-sitemap.ts",
     "typecheck": "astro check",
+    "vibe:audit": "python3 ~/.claude/skills/webcraft-no-vibe/apply_vibe_audit.py audit src/",
+    "vibe:audit:staged": "node scripts/vibe-audit-staged.mjs",
+    "vibe:audit:staged:verbose": "node scripts/vibe-audit-staged.mjs",
+    "vibe:audit:broadside": "node scripts/vibe-audit-broadside-trace.mjs",
+    "vibe:audit:diff": "python3 ~/.claude/skills/webcraft-no-vibe/apply_vibe_audit.py audit src/",
     "ci": "npm run lint:md && npm run lint && npm run lint:styles && npm run format:check && npm run knip && npm run no-bulbs && npm run build && npm run no-f14 && npm run no-halo && npm run check:bundle && npm run audit && npm run sitemap:check",
     "no-bulbs": "bash scripts/check-no-lightbulb-halos.sh",
     "no-f14": "bash scripts/check-no-f14-traffic-light.sh",
@@ -39,7 +44,9 @@
     "check:tokens": "node scripts/check-tokens.mjs",
     "test:a11y": "node scripts/a11y-audit.mjs",
     "test:hero-name": "node scripts/__tests__/hero-name-color-regression.mjs",
-    "nda:guard": "node -e \"const fs=require('fs'),path=require('path');const banned=['19V Capital','Macion Capital','Arclion AI','Quantivo','CallRank','Davao City'];let bad=0;function walk(d){for(const f of fs.readdirSync(d,{withFileTypes:true})){const p=path.join(d,f.name);if(f.isDirectory())walk(p);else if(/\\.(html|txt|md|json|pdf)$/.test(f.name)){try{const buf=fs.readFileSync(p);const c=buf.toString('latin1');for(const b of banned)if(c.includes(b)){console.error('NDA leak:',p,'contains',b);bad++;}}catch(e){}}}}walk('dist');if(bad>0){console.error('NDA:guard FAIL — '+bad+' leak(s) detected');process.exit(1);}else{console.log('NDA:guard PASS — dist/ clean');}\""
+    "test:functions": "vitest run",
+    "nda:guard": "node -e \"const fs=require('fs'),path=require('path');const banned=['19V Capital','Macion Capital','Arclion AI','Quantivo','CallRank','Davao City'];let bad=0;function walk(d){for(const f of fs.readdirSync(d,{withFileTypes:true})){const p=path.join(d,f.name);if(f.isDirectory())walk(p);else if(/\\.(html|txt|md|json|pdf)$/.test(f.name)){try{const buf=fs.readFileSync(p);const c=buf.toString('latin1');for(const b of banned)if(c.includes(b)){console.error('NDA leak:',p,'contains',b);bad++;}}catch(e){}}}}walk('dist');if(bad>0){console.error('NDA:guard FAIL \u2014 '+bad+' leak(s) detected');process.exit(1);}else{console.log('NDA:guard PASS \u2014 dist/ clean');}\"",
+    "prepare": "husky"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.9",
@@ -52,6 +59,7 @@
     "astro": "^7.1.6",
     "astro-expressive-code": "^0.44.0",
     "astro-icon": "^1.1.5",
+    "jose": "^6.2.7",
     "katex": "^0.17.0",
     "lightweight-charts": "^5.2.0",
     "lucide": "^0.469.0",
@@ -68,6 +76,7 @@
     "eslint-config-prettier": "^10.1.0",
     "eslint-plugin-astro": "^1.6.0",
     "globals": "^15.0.0",
+    "husky": "^9.1.7",
     "knip": "^6.25.0",
     "markdownlint-cli2": "^0.23.2",
     "pagefind": "^1.5.2",
@@ -81,6 +90,7 @@
     "topojson-simplify": "^3.0.3",
     "tsx": "^4.23.0",
     "typescript-eslint": "^8.63.0",
+    "vitest": "^4.1.10",
     "world-atlas": "^2.0.2"
   }
 }
