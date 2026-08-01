@@ -314,6 +314,7 @@ const paginate = (items: any[]) => {
       { id: 'research', label: 'Research artifacts' },
       { id: 'track', label: 'Track record' },
       { id: 'public-track', label: 'Public track record' },
+      { id: 'evidence', label: 'Evidence index' },
       { id: 'testimonials', label: 'Testimonials (pending)' },
       { id: 'disclosure', label: 'NDA disclosure' },
       {
@@ -943,6 +944,160 @@ const paginate = (items: any[]) => {
 
   {
     /* =========================================================
+      P.5d — Evidence index (AARs that back the page)
+      The audit's "wire real AARs as evidence" instruction: each proof
+      entry on this page traces to a public, dated artifact. The AARs
+      below are the After-Action Reports that produced or updated the
+      artifacts surfaced above. They are not promises — they are
+      signed, dated, and on disk in
+      ~/.claude/cache/corporate/aars/.
+
+      Naming: each filename is the (date, slug, optional status) of
+      the AAR. CONVERGED = the mission converged; the date in the
+      filename is the ship date, not the writing date. The link
+      target is the AAR file path; the live portfolio does not route
+      to .md, but a future /aar index page will.
+      ========================================================= */
+  }
+  <section
+    class="section"
+    id="evidence"
+    data-toc-id="evidence"
+    data-toc-label="Evidence index"
+    data-reveal
+  >
+    <div class="container">
+      <header class="section__head">
+        <p class="section__eyebrow">P.5d · Evidence index</p>
+        <h2 class="section__title">The AARs behind the page.</h2>
+        <p class="section__sub">
+          Twelve AARs (After-Action Reports) from the last 30 days that produced, audited, or
+          updated the artifacts surfaced above. Each filename resolves to a markdown file on disk
+          at <code>~/.claude/cache/corporate/aars/</code>. The "CONVERGED" suffix means the
+          mission closed on a single ship; the bare-date names are rolling audit fixes.
+        </p>
+      </header>
+
+      <div class="evidence" role="table" aria-label="AAR evidence index — 12 AARs in last 30 days">
+        <div class="evidence__row evidence__row--head" role="row">
+          <span class="evidence__cell evidence__cell--date mono" role="columnheader">Date</span>
+          <span class="evidence__cell evidence__cell--aar mono" role="columnheader">AAR</span>
+          <span class="evidence__cell evidence__cell--subject" role="columnheader">What it produced</span>
+        </div>
+        <div class="evidence__row" role="row">
+          <span class="evidence__cell evidence__cell--date mono" role="cell">2026-08-01</span>
+          <span class="evidence__cell evidence__cell--aar mono" role="cell"
+            >portfolio-v9-3-wave-2-ship</span
+          >
+          <span class="evidence__cell evidence__cell--subject" role="cell"
+            >Wave-2 ship: chrome, motion, a11y, IA — the v9.3 baseline this page sits on</span
+          >
+        </div>
+        <div class="evidence__row" role="row">
+          <span class="evidence__cell evidence__cell--date mono" role="cell">2026-08-01</span>
+          <span class="evidence__cell evidence__cell--aar mono" role="cell"
+            >portfolio-v9-3-wave-2.5-security-fixes</span
+          >
+          <span class="evidence__cell evidence__cell--subject" role="cell"
+            >Wave-2.5: HSTS + 5 CVE patches + Lighthouse 4/4 97-100, audit 64→88+</span
+          >
+        </div>
+        <div class="evidence__row" role="row">
+          <span class="evidence__cell evidence__cell--date mono" role="cell">2026-08-01</span>
+          <span class="evidence__cell evidence__cell--aar mono" role="cell"
+            >portfolio-v9-3-architecture-audit</span
+          >
+          <span class="evidence__cell evidence__cell--subject" role="cell"
+            >Architecture audit · score 62 · the basis for C-1 ChromeHeader consolidation</span
+          >
+        </div>
+        <div class="evidence__row" role="row">
+          <span class="evidence__cell evidence__cell--date mono" role="cell">2026-08-01</span>
+          <span class="evidence__cell evidence__cell--aar mono" role="cell"
+            >portfolio-v9-3-voice-audit</span
+          >
+          <span class="evidence__cell evidence__cell--subject" role="cell"
+            >Voice audit · score 88 · the basis for P.5c 'pending attestation' rewrite</span
+          >
+        </div>
+        <div class="evidence__row" role="row">
+          <span class="evidence__cell evidence__cell--date mono" role="cell">2026-08-01</span>
+          <span class="evidence__cell evidence__cell--aar mono" role="cell"
+            >portfolio-v9-3-a11y-audit</span
+          >
+          <span class="evidence__cell evidence__cell--subject" role="cell"
+            >A11y audit · score 95 · WCAG 2.2 AA + axe 0/91</span
+          >
+        </div>
+        <div class="evidence__row" role="row">
+          <span class="evidence__cell evidence__cell--date mono" role="cell">2026-08-01</span>
+          <span class="evidence__cell evidence__cell--aar mono" role="cell"
+            >portfolio-v9-3-token-dedupe-atomic</span
+          >
+          <span class="evidence__cell evidence__cell--subject" role="cell"
+            >Token dedupe · 52→0 drift · the basis for the sharp-corner register</span
+          >
+        </div>
+        <div class="evidence__row" role="row">
+          <span class="evidence__cell evidence__cell--date mono" role="cell">2026-08-01</span>
+          <span class="evidence__cell evidence__cell--aar mono" role="cell"
+            >portfolio-v9-3-wave-5-verification</span
+          >
+          <span class="evidence__cell evidence__cell--subject" role="cell"
+            >Wave-5 verify · 9/9 routes 3/3 mobile · 1173/1173 QA baseline</span
+          >
+        </div>
+        <div class="evidence__row" role="row">
+          <span class="evidence__cell evidence__cell--date mono" role="cell">2026-08-02</span>
+          <span class="evidence__cell evidence__cell--aar mono" role="cell"
+            >portfolio-design-audit</span
+          >
+          <span class="evidence__cell evidence__cell--subject" role="cell"
+            >The v9.3.1 design audit this page rebuild closes (50 findings)</span
+          >
+        </div>
+        <div class="evidence__row" role="row">
+          <span class="evidence__cell evidence__cell--date mono" role="cell">2026-08-02</span>
+          <span class="evidence__cell evidence__cell--aar mono" role="cell"
+            >accion-thesis-b-triage</span
+          >
+          <span class="evidence__cell evidence__cell--subject" role="cell"
+            >Quant strategy triage · Lane C gates applied (G40–G45 + K13)</span
+          >
+        </div>
+        <div class="evidence__row" role="row">
+          <span class="evidence__cell evidence__cell--date mono" role="cell">2026-08-02</span>
+          <span class="evidence__cell evidence__cell--aar mono" role="cell"
+            >c2-deep-preflight</span
+          >
+          <span class="evidence__cell evidence__cell--subject" role="cell"
+            >C2 deep pre-flight · READY-FOR-BACKTEST · 6 hard-stop kill triggers</span
+          >
+        </div>
+        <div class="evidence__row" role="row">
+          <span class="evidence__cell evidence__cell--date mono" role="cell">2026-08-02</span>
+          <span class="evidence__cell evidence__cell--aar mono" role="cell"
+            >afk-sweep-v2p6-outcome</span
+          >
+          <span class="evidence__cell evidence__cell--subject" role="cell"
+            >AFK sweep v2.6 · 10/10 KILL · 43 cumulative · real-but-too-thin binding constraint</span
+          >
+        </div>
+        <div class="evidence__row" role="row">
+          <span class="evidence__cell evidence__cell--date mono" role="cell">2026-08-02</span>
+          <span class="evidence__cell evidence__cell--aar mono" role="cell"
+            >methodology-amendments-approved</span
+          >
+          <span class="evidence__cell evidence__cell--subject" role="cell"
+            >G36 + G37 + R-methodology-loop approved · data-coverage + bid-ask-bounce</span
+          >
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {
+    /* =========================================================
       P.6 — Disclosure + contact
       ========================================================= */
   }
@@ -1238,6 +1393,63 @@ const paginate = (items: any[]) => {
     font-size: var(--fs-sm);
     color: var(--c-ink-2);
     line-height: var(--lh-loose);
+  }
+
+  /* === v3C — Evidence index (tabular role=table of real AARs) === */
+  .evidence {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--c-rule);
+  }
+  .evidence__row {
+    display: grid;
+    grid-template-columns: 110px minmax(0, 1fr) minmax(0, 2fr);
+    gap: var(--sp-3);
+    padding: var(--sp-3) var(--sp-4);
+    align-items: baseline;
+    border-bottom: 1px solid var(--c-rule-soft);
+    transition: background var(--transition);
+  }
+  .evidence__row:last-child {
+    border-bottom: 0;
+  }
+  .evidence__row--head {
+    background: var(--c-bg-2);
+    border-bottom: 1px solid var(--c-rule);
+  }
+  .evidence__row:hover:not(.evidence__row--head) {
+    background: var(--c-paper);
+  }
+  .evidence__row--head .evidence__cell {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: var(--fs-xs);
+    color: var(--c-ink-3);
+    font-weight: 600;
+  }
+  .evidence__cell--date {
+    font-size: var(--fs-xs);
+    color: var(--c-amber-deep);
+    font-weight: 600;
+  }
+  .evidence__cell--aar {
+    font-size: var(--fs-xs);
+    color: var(--c-primary);
+    word-break: break-word;
+  }
+  .evidence__cell--subject {
+    font-size: var(--fs-sm);
+    color: var(--c-ink-2);
+    line-height: var(--lh-loose);
+  }
+  @media (max-width: 720px) {
+    .evidence__row {
+      grid-template-columns: 1fr;
+      gap: var(--sp-1);
+    }
+    .evidence__row--head {
+      display: none;
+    }
   }
 
   /* === P.6 disclosure === */
