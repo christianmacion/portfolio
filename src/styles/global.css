@@ -863,7 +863,14 @@ li {
   font-weight: 500;
   border-radius: var(--radius-sm);
   border: 1px solid transparent;
-  transition: all var(--transition);
+  /* v9.3.2 motion contract — explicit properties only. `transition: all`
+     would repaint on every animatable property (incl. layout-triggering
+     width/height). The .btn class only changes background, color, and
+     border-color on its variants (.btn--primary, .btn--ghost). */
+  transition:
+    background var(--transition),
+    color var(--transition),
+    border-color var(--transition);
   text-decoration: none;
   cursor: pointer;
   /* v6.3 polish — every button ≥ 44 px tap target (default size

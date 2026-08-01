@@ -513,7 +513,13 @@ const totalCount = quantPubs.length + aiPubs.length + workbooks.length + press.l
     font-size: var(--fs-sm);
     color: var(--c-ink-2);
     cursor: pointer;
-    transition: all var(--transition);
+    /* v9.3.2 motion contract — explicit properties only. .topic-btn
+       changes border-color, color, and background-color on hover/active.
+       No layout-triggering properties (width/height). */
+    transition:
+      border-color var(--transition),
+      color var(--transition),
+      background-color var(--transition);
     user-select: none;
   }
   .topic-btn:hover {

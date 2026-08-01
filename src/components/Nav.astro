@@ -784,7 +784,14 @@ const secondary = [
     width: 100%;
     background: var(--c-ink);
     border-radius: 1px;
-    transition: all 200ms ease;
+    /* v9.3.2 motion contract — explicit properties only. The hamburger
+       bars only change `background` on the active state (no rotate-to-X
+       transform on this component). transform + opacity added for
+       forward-compat with any future X-state animation. */
+    transition:
+      background 200ms ease,
+      transform 200ms ease,
+      opacity 200ms ease;
   }
 
   @media (max-width: 1080px) {
