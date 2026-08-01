@@ -27,7 +27,14 @@ interface Props {
   once?: boolean;
 }
 const { delayMs = 0, rise = 12, once = true } = Astro.props;
-const revealId = `reveal-${Math.random().toString(36).slice(2, 8)}`;
+// Standing Order §9 — no Math.random() in deterministic outputs.
+// Deterministic ID from the prop signature: same delayMs/rise/once
+// tuple → same ID across SSR + hydration, so the data-reveal-id
+// attribute stays stable. The runtime script selects by attribute
+// presence (querySelectorAll), so identical IDs across instances
+// remain safe.
+import { fnv1a } from '@utils/prng';
+const revealId = `reveal-${fnv1a(`${delayMs}:${rise}:${once}`)}`;
 ---
 
 <div

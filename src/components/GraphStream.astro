@@ -27,7 +27,12 @@ interface Props {
 }
 
 const { height = 380, showLabels = false, squad = 'all', limit = 60 } = Astro.props;
-const streamId = `graph-${Math.random().toString(36).slice(2, 8)}`;
+// Standing Order §9 — no Math.random() in deterministic outputs.
+// Deterministic ID from the prop signature: same squad/limit/height/
+// showLabels tuple → same ID across SSR + hydration, so the
+// data-stream-id attribute stays stable.
+import { fnv1a } from '@utils/prng';
+const streamId = `graph-${fnv1a(`${squad}:${limit}:${showLabels}:${height}`)}`;
 ---
 
 <section
