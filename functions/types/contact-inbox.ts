@@ -36,4 +36,5 @@ export type InboxResponse = z.infer<typeof InboxResponseSchema>;
 
 export const CONTACT_INBOX_DURABLE_EFFECT = 'none' as const;
 export const CONTACT_INBOX_BUDGET = { minute: 60, hour: 600, scope: 'access_subject' } as const;
-export const CONTACT_INBOX_AUTH_GATE = 'verified Cloudflare Access JWT (Cf-Access-Jwt-Assertion) against org JWKS, issuer, audience, expiry' as const;
+export const CONTACT_INBOX_AUTH_GATE =
+  'verified Cloudflare Access JWT (Cf-Access-Jwt-Assertion) against org JWKS, issuer, audience, expiry' as const;

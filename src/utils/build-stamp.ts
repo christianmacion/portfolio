@@ -77,35 +77,3 @@ export function buildStampUtc8Iso(): string {
 // and replace the stale `packageVersion = '6.5.0'` literal in index.astro.
 // v9.3.6 — removed: no longer referenced by any consumer. The institution
 // footer hard-codes the version string from CI/CD metadata.
-
-import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
-
-let _cachedVersion: string | null = null;
-
-/**
- * Returns the `version` field from package.json as a string (e.g. "6.10.52").
- * Cached after first read — cheap, called once per page render.
- *
- * Used by the institutional end-strip footer on home. The previous literal
- * `packageVersion = '6.5.0'` was hand-maintained and drifted 6+ months
- * behind reality; this reads the canonical source at build time.
- *
- * Implementation note: during Astro build, `import.meta.url` may resolve
- * to a bundled chunk path, so we anchor on `process.cwd()` (the repo root
- * when running `npm run build`). Dev mode also anchors on cwd.
- */
-function packageVersion(): string {
-  if (_cachedVersion) return _cachedVersion;
-  try {
-    const pkgPath = resolve(process.cwd(), 'package.json');
-    const raw = readFileSync(pkgPath, 'utf8');
-    const pkg = JSON.parse(raw) as { version?: string };
-    _cachedVersion = pkg.version ?? '0.0.0';
-  } catch {
-    // Defensive: if package.json can't be read, fall back to a literal
-    // so build doesn't fail.
-    _cachedVersion = '0.0.0';
-  }
-  return _cachedVersion;
-}

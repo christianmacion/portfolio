@@ -44,9 +44,9 @@ on:
       # Cloudflare Pages' default GH Actions integration publishes a workflow
       # named "cloudflare/pages-deploy" or "Pages" or "Deploy to Cloudflare Pages".
       # Trigger on all known names.
-      - "cloudflare/pages-deploy"
-      - "Pages"
-      - "Deploy to Cloudflare Pages"
+      - 'cloudflare/pages-deploy'
+      - 'Pages'
+      - 'Deploy to Cloudflare Pages'
     types: [completed]
     branches: [main]
   push:

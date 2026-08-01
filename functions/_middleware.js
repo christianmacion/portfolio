@@ -55,20 +55,21 @@ function buildCSP(nonce) {
     "img-src 'self' data:",
     "font-src 'self' data:",
     "connect-src 'self'",
-    "frame-src https://challenges.cloudflare.com https://cal.com https://*.cal.com",
+    'frame-src https://challenges.cloudflare.com https://cal.com https://*.cal.com',
     "worker-src 'self'",
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",
     "frame-ancestors 'none'",
-    "upgrade-insecure-requests",
+    'upgrade-insecure-requests',
   ].join('; ');
 }
 
 // Static-asset exclusions (architecture AAR §14 line 643):
 // `_routes.json` ALSO excludes these from middleware, but checking here is
 // defense-in-depth and lets the middleware work standalone (e.g., during tests).
-const STATIC_ASSET_RE = /\.(?:png|jpg|jpeg|gif|webp|avif|svg|ico|woff2?|ttf|otf|eot|mp4|webm|m4a|pdf|zip|tar|gz|br|mp3|wasm|map)$/i;
+const STATIC_ASSET_RE =
+  /\.(?:png|jpg|jpeg|gif|webp|avif|svg|ico|woff2?|ttf|otf|eot|mp4|webm|m4a|pdf|zip|tar|gz|br|mp3|wasm|map)$/i;
 function isStaticAsset(pathname) {
   if (pathname.startsWith('/_astro/')) return true;
   if (pathname === '/sw.js') return true;
@@ -124,10 +125,7 @@ export async function onRequest(context) {
   // TLS for production and preview hosts; localhost ignores HSTS over HTTP.
   // Two years satisfies Chromium preload requirements and prevents an unset or
   // nonstandard ENVIRONMENT value from silently disabling transport security.
-  headers.set(
-    'Strict-Transport-Security',
-    'max-age=63072000; includeSubDomains; preload',
-  );
+  headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
   // Cache-Control: HTML responses are per-request (nonce is per-request) so
   // we MUST prevent shared cache from leaking the nonce across requests.
   headers.set('Cache-Control', 'private, no-store');

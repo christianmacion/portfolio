@@ -1,11 +1,55 @@
-export type ApiErrorCode = 'BODY_TOO_LARGE' | 'INVALID_JSON' | 'VALIDATION_ERROR' | 'ORIGIN_DENIED' | 'AUTH_REQUIRED' | 'AUTH_INVALID' | 'CSRF_INVALID' | 'TURNSTILE_FAILED' | 'RATE_LIMIT' | 'IDEMPOTENCY_CONFLICT' | 'WEBHOOK_SIGNATURE_INVALID' | 'NOT_FOUND' | 'UPSTREAM_UNAVAILABLE' | 'INTERNAL_ERROR';
+export type ApiErrorCode =
+  | 'BODY_TOO_LARGE'
+  | 'INVALID_JSON'
+  | 'VALIDATION_ERROR'
+  | 'ORIGIN_DENIED'
+  | 'AUTH_REQUIRED'
+  | 'AUTH_INVALID'
+  | 'CSRF_INVALID'
+  | 'TURNSTILE_FAILED'
+  | 'RATE_LIMIT'
+  | 'IDEMPOTENCY_CONFLICT'
+  | 'WEBHOOK_SIGNATURE_INVALID'
+  | 'NOT_FOUND'
+  | 'UPSTREAM_UNAVAILABLE'
+  | 'INTERNAL_ERROR';
 
-export type ApiError = { ok: false; error: string; code: ApiErrorCode; request_id: string; details?: ReadonlyArray<{ path: string; code: string }> };
-export type ContactRequest = { name: string; email: string; subject: string; message: string; turnstile_token: string };
-export type ContactAccepted = { ok: true; request_id: string; submission_ref: string; notification: 'queued'; duplicate: boolean };
-export type VitalsRequest = { metric: 'LCP' | 'CLS' | 'INP' | 'FCP' | 'TTFB'; value: number; route: string; device: 'mobile' | 'tablet' | 'desktop' | 'unknown'; session_id: string };
+export type ApiError = {
+  ok: false;
+  error: string;
+  code: ApiErrorCode;
+  request_id: string;
+  details?: ReadonlyArray<{ path: string; code: string }>;
+};
+export type ContactRequest = {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+  turnstile_token: string;
+};
+export type ContactAccepted = {
+  ok: true;
+  request_id: string;
+  submission_ref: string;
+  notification: 'queued';
+  duplicate: boolean;
+};
+export type VitalsRequest = {
+  metric: 'LCP' | 'CLS' | 'INP' | 'FCP' | 'TTFB';
+  value: number;
+  route: string;
+  device: 'mobile' | 'tablet' | 'desktop' | 'unknown';
+  session_id: string;
+};
 export type VitalsAccepted = { ok: true; request_id: string; accepted: true };
-export type HealthResponse = { ok: true; request_id: string; service: 'portfolio-api'; release: string; checks: { worker: 'ok'; d1?: 'ok'; kv?: 'ok' } };
+export type HealthResponse = {
+  ok: true;
+  request_id: string;
+  service: 'portfolio-api';
+  release: string;
+  checks: { worker: 'ok'; d1?: 'ok'; kv?: 'ok' };
+};
 
 export type InboxItem = {
   id: string;
@@ -18,10 +62,23 @@ export type InboxItem = {
   archived_at: number | null;
   notification_status: 'pending' | 'sent' | 'delivered' | 'failed' | 'bounced';
 };
-export type InboxResponse = { ok: true; request_id: string; items: ReadonlyArray<InboxItem>; next_cursor: string | null; csrf_token: string };
+export type InboxResponse = {
+  ok: true;
+  request_id: string;
+  items: ReadonlyArray<InboxItem>;
+  next_cursor: string | null;
+  csrf_token: string;
+};
 export type MarkReadRequest = { read: boolean };
 export type MarkReadResponse = { ok: true; request_id: string; id: string; read_at: number | null };
-export type WebhookEventType = 'email.sent' | 'email.delivered' | 'email.delivery_delayed' | 'email.bounced' | 'email.complained' | 'email.failed' | 'email.suppressed';
+export type WebhookEventType =
+  | 'email.sent'
+  | 'email.delivered'
+  | 'email.delivery_delayed'
+  | 'email.bounced'
+  | 'email.complained'
+  | 'email.failed'
+  | 'email.suppressed';
 export type ResendEvent = {
   provider: 'resend';
   provider_event_id: string;
@@ -69,11 +126,20 @@ export function parseContact(value: unknown): ContactRequest | null {
   const fields = ['name', 'email', 'subject', 'message', 'turnstile_token'];
   if (Object.keys(input).some((key) => !fields.includes(key))) return null;
   if (fields.some((key) => typeof input[key] !== 'string')) return null;
-  const result = { name: String(input.name).trim(), email: String(input.email).trim().toLowerCase(), subject: String(input.subject).trim(), message: String(input.message).trim(), turnstile_token: String(input.turnstile_token) };
+  const result = {
+    name: String(input.name).trim(),
+    email: String(input.email).trim().toLowerCase(),
+    subject: String(input.subject).trim(),
+    message: String(input.message).trim(),
+    turnstile_token: String(input.turnstile_token),
+  };
   if (result.name.length < 2 || result.name.length > 100 || control.test(result.name)) return null;
-  if (result.email.length < 3 || result.email.length > 254 || !/^\S+@\S+\.\S+$/.test(result.email)) return null;
-  if (result.subject.length < 3 || result.subject.length > 160 || control.test(result.subject)) return null;
-  if (result.message.length < 20 || result.message.length > 5000 || /[ ]/.test(result.message)) return null;
+  if (result.email.length < 3 || result.email.length > 254 || !/^\S+@\S+\.\S+$/.test(result.email))
+    return null;
+  if (result.subject.length < 3 || result.subject.length > 160 || control.test(result.subject))
+    return null;
+  if (result.message.length < 20 || result.message.length > 5000 || /[ ]/.test(result.message))
+    return null;
   if (result.turnstile_token.length < 1 || result.turnstile_token.length > 2048) return null;
   return result;
 }
@@ -82,19 +148,45 @@ export function parseVitals(value: unknown): VitalsRequest | null {
   const input = value as Record<string, unknown>;
   const metrics = ['LCP', 'CLS', 'INP', 'FCP', 'TTFB'];
   const devices = ['mobile', 'tablet', 'desktop', 'unknown'];
-  if (typeof input.metric !== 'string' || !metrics.includes(input.metric) || typeof input.value !== 'number' || !Number.isFinite(input.value) || input.value < 0 || input.value > 120000 || typeof input.route !== 'string' || !/^\/[A-Za-z0-9/_-]*\/$|^\/$/.test(input.route) || typeof input.device !== 'string' || !devices.includes(input.device) || typeof input.session_id !== 'string' || !uuid.test(input.session_id)) return null;
+  if (
+    typeof input.metric !== 'string' ||
+    !metrics.includes(input.metric) ||
+    typeof input.value !== 'number' ||
+    !Number.isFinite(input.value) ||
+    input.value < 0 ||
+    input.value > 120000 ||
+    typeof input.route !== 'string' ||
+    !/^\/[A-Za-z0-9/_-]*\/$|^\/$/.test(input.route) ||
+    typeof input.device !== 'string' ||
+    !devices.includes(input.device) ||
+    typeof input.session_id !== 'string' ||
+    !uuid.test(input.session_id)
+  )
+    return null;
   if (input.metric === 'CLS' && input.value > 10) return null;
   return input as VitalsRequest;
 }
-export function parseInboxQuery(value: Record<string, string> | URLSearchParams | null): { cursor: string | null; limit: number; state: 'unread' | 'read' | 'archived' | 'all' } | null {
-  const params = value instanceof URLSearchParams ? value : value ? new URLSearchParams(value) : new URLSearchParams();
+export function parseInboxQuery(
+  value: Record<string, string> | URLSearchParams | null,
+): { cursor: string | null; limit: number; state: 'unread' | 'read' | 'archived' | 'all' } | null {
+  const params =
+    value instanceof URLSearchParams
+      ? value
+      : value
+        ? new URLSearchParams(value)
+        : new URLSearchParams();
   const cursorRaw = params.get('cursor');
-  if (cursorRaw !== null && (typeof cursorRaw !== 'string' || cursorRaw.length === 0 || cursorRaw.length > 512)) return null;
+  if (
+    cursorRaw !== null &&
+    (typeof cursorRaw !== 'string' || cursorRaw.length === 0 || cursorRaw.length > 512)
+  )
+    return null;
   const limitRaw = params.get('limit') ?? '20';
   const limit = Number(limitRaw);
   if (!Number.isInteger(limit) || limit < 1 || limit > 25) return null;
   const stateRaw = params.get('state') ?? 'unread';
-  if (stateRaw !== 'unread' && stateRaw !== 'read' && stateRaw !== 'archived' && stateRaw !== 'all') return null;
+  if (stateRaw !== 'unread' && stateRaw !== 'read' && stateRaw !== 'archived' && stateRaw !== 'all')
+    return null;
   return { cursor: cursorRaw, limit, state: stateRaw };
 }
 export function parseMarkRead(value: unknown): MarkReadRequest | null {
@@ -111,13 +203,36 @@ export function parsePublicId(value: string | undefined | null): string | null {
 export function parseResendEvent(value: unknown): ResendEvent | null {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
   const input = value as Record<string, unknown>;
-  if (input.type !== 'email.sent' && input.type !== 'email.delivered' && input.type !== 'email.delivery_delayed' && input.type !== 'email.bounced' && input.type !== 'email.complained' && input.type !== 'email.failed' && input.type !== 'email.suppressed') return null;
-  const data = (input.data && typeof input.data === 'object' && !Array.isArray(input.data)) ? input.data as Record<string, unknown> : null;
-  if (!data || typeof data.email_id !== 'string' || data.email_id.length < 1 || data.email_id.length > 256) return null;
-  const occurred = typeof input.created_at === 'string' ? Math.floor(new Date(input.created_at).getTime() / 1000) : NaN;
+  if (
+    input.type !== 'email.sent' &&
+    input.type !== 'email.delivered' &&
+    input.type !== 'email.delivery_delayed' &&
+    input.type !== 'email.bounced' &&
+    input.type !== 'email.complained' &&
+    input.type !== 'email.failed' &&
+    input.type !== 'email.suppressed'
+  )
+    return null;
+  const data =
+    input.data && typeof input.data === 'object' && !Array.isArray(input.data)
+      ? (input.data as Record<string, unknown>)
+      : null;
+  if (
+    !data ||
+    typeof data.email_id !== 'string' ||
+    data.email_id.length < 1 ||
+    data.email_id.length > 256
+  )
+    return null;
+  const occurred =
+    typeof input.created_at === 'string'
+      ? Math.floor(new Date(input.created_at).getTime() / 1000)
+      : NaN;
   if (!Number.isFinite(occurred) || occurred < 0 || occurred > 4_102_444_800) return null;
-  if (typeof input.svix_id !== 'string' || input.svix_id.length < 1 || input.svix_id.length > 256) return null;
-  if (typeof input.svix_timestamp !== 'string' && typeof input.svix_timestamp !== 'number') return null;
+  if (typeof input.svix_id !== 'string' || input.svix_id.length < 1 || input.svix_id.length > 256)
+    return null;
+  if (typeof input.svix_timestamp !== 'string' && typeof input.svix_timestamp !== 'number')
+    return null;
   const contactHint = typeof data.to === 'string' ? data.to : null;
   return {
     provider: 'resend',
@@ -125,22 +240,149 @@ export function parseResendEvent(value: unknown): ResendEvent | null {
     provider_message_id: data.email_id,
     event_type: input.type,
     occurred_at: occurred,
-    contact_public_id: contactHint && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(contactHint) ? contactHint : null,
+    contact_public_id:
+      contactHint &&
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(contactHint)
+        ? contactHint
+        : null,
     payload_hash: '',
   };
 }
-export function requestId(request: Request): string { return request.headers.get('CF-Ray') ?? crypto.randomUUID(); }
-export function json<T>(body: T, status = 200, requestIdValue?: string, extra: HeadersInit = {}): Response { const headers = new Headers(extra); headers.set('Content-Type', 'application/json; charset=utf-8'); headers.set('Cache-Control', 'no-store'); if (requestIdValue) headers.set('X-Request-Id', requestIdValue); return new Response(JSON.stringify(body), { status, headers }); }
-export function errorResponse(requestIdValue: string, status: number, code: ApiErrorCode, error: string): Response { return json<ApiError>({ ok: false, error, code, request_id: requestIdValue }, status); }
-export function allowedOrigin(request: Request, env: Env): string | null { const origin = request.headers.get('Origin'); const configured = (env.PUBLIC_ORIGINS ?? 'https://christianmacion-portfolio.pages.dev,https://christianmacion26.github.io').split(',').map((item) => item.trim()); return origin && configured.includes(origin) ? origin : null; }
-export async function boundedJson(request: Request, maxBytes: number): Promise<unknown | null> { const length = Number(request.headers.get('Content-Length') ?? '0'); if (length > maxBytes) return null; const reader = request.body?.getReader(); if (!reader) return null; const chunks: Uint8Array[] = []; let total = 0; for (;;) { const part = await reader.read(); if (part.done) break; total += part.value.byteLength; if (total > maxBytes) { await reader.cancel(); return null; } chunks.push(part.value); } const bytes = new Uint8Array(total); let offset = 0; for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.byteLength; } try { return JSON.parse(new TextDecoder().decode(bytes)) as unknown; } catch { return null; } }
-export async function boundedBytes(request: Request, maxBytes: number): Promise<Uint8Array | null> { const length = Number(request.headers.get('Content-Length') ?? '0'); if (length > maxBytes) return null; const reader = request.body?.getReader(); if (!reader) return null; const chunks: Uint8Array[] = []; let total = 0; for (;;) { const part = await reader.read(); if (part.done) break; total += part.value.byteLength; if (total > maxBytes) { await reader.cancel(); return null; } chunks.push(part.value); } const bytes = new Uint8Array(total); let offset = 0; for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.byteLength; } return bytes; }
-export async function sha256(value: string | Uint8Array): Promise<string> { const bytes = typeof value === 'string' ? new TextEncoder().encode(value) : value; const digest = await crypto.subtle.digest('SHA-256', bytes); return Array.from(new Uint8Array(digest)).map((byte) => byte.toString(16).padStart(2, '0')).join(''); }
-export async function hmacSha256(secret: string, payload: string | Uint8Array): Promise<string> { const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']); const bytes = typeof payload === 'string' ? new TextEncoder().encode(payload) : payload; const sig = await crypto.subtle.sign('HMAC', key, bytes); return Array.from(new Uint8Array(sig)).map((byte) => byte.toString(16).padStart(2, '0')).join(''); }
-export function constantTimeEqual(a: string, b: string): boolean { if (a.length !== b.length) return false; let mismatch = 0; for (let i = 0; i < a.length; i += 1) mismatch |= a.charCodeAt(i) ^ b.charCodeAt(i); return mismatch === 0; }
-export function base64UrlEncode(value: string | Uint8Array): string { const bytes = typeof value === 'string' ? new TextEncoder().encode(value) : value; let binary = ''; for (const byte of bytes) binary += String.fromCharCode(byte); return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
-export function base64UrlDecode(value: string): Uint8Array { const padded = value.replace(/-/g, '+').replace(/_/g, '/') + '==='.slice((value.length + 3) % 4); const binary = atob(padded); const bytes = new Uint8Array(binary.length); for (let i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i); return bytes; }
-export type AccessClaims = { sub: string; aud: string | string[]; iss: string; exp: number; iat: number; email?: string };
+export function requestId(request: Request): string {
+  return request.headers.get('CF-Ray') ?? crypto.randomUUID();
+}
+export function json<T>(
+  body: T,
+  status = 200,
+  requestIdValue?: string,
+  extra: HeadersInit = {},
+): Response {
+  const headers = new Headers(extra);
+  headers.set('Content-Type', 'application/json; charset=utf-8');
+  headers.set('Cache-Control', 'no-store');
+  if (requestIdValue) headers.set('X-Request-Id', requestIdValue);
+  return new Response(JSON.stringify(body), { status, headers });
+}
+export function errorResponse(
+  requestIdValue: string,
+  status: number,
+  code: ApiErrorCode,
+  error: string,
+): Response {
+  return json<ApiError>({ ok: false, error, code, request_id: requestIdValue }, status);
+}
+export function allowedOrigin(request: Request, env: Env): string | null {
+  const origin = request.headers.get('Origin');
+  const configured = (
+    env.PUBLIC_ORIGINS ??
+    'https://christianmacion-portfolio.pages.dev,https://christianmacion26.github.io'
+  )
+    .split(',')
+    .map((item) => item.trim());
+  return origin && configured.includes(origin) ? origin : null;
+}
+export async function boundedJson(request: Request, maxBytes: number): Promise<unknown | null> {
+  const length = Number(request.headers.get('Content-Length') ?? '0');
+  if (length > maxBytes) return null;
+  const reader = request.body?.getReader();
+  if (!reader) return null;
+  const chunks: Uint8Array[] = [];
+  let total = 0;
+  for (;;) {
+    const part = await reader.read();
+    if (part.done) break;
+    total += part.value.byteLength;
+    if (total > maxBytes) {
+      await reader.cancel();
+      return null;
+    }
+    chunks.push(part.value);
+  }
+  const bytes = new Uint8Array(total);
+  let offset = 0;
+  for (const chunk of chunks) {
+    bytes.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+  try {
+    return JSON.parse(new TextDecoder().decode(bytes)) as unknown;
+  } catch {
+    return null;
+  }
+}
+export async function boundedBytes(request: Request, maxBytes: number): Promise<Uint8Array | null> {
+  const length = Number(request.headers.get('Content-Length') ?? '0');
+  if (length > maxBytes) return null;
+  const reader = request.body?.getReader();
+  if (!reader) return null;
+  const chunks: Uint8Array[] = [];
+  let total = 0;
+  for (;;) {
+    const part = await reader.read();
+    if (part.done) break;
+    total += part.value.byteLength;
+    if (total > maxBytes) {
+      await reader.cancel();
+      return null;
+    }
+    chunks.push(part.value);
+  }
+  const bytes = new Uint8Array(total);
+  let offset = 0;
+  for (const chunk of chunks) {
+    bytes.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+  return bytes;
+}
+export async function sha256(value: string | Uint8Array): Promise<string> {
+  const bytes = typeof value === 'string' ? new TextEncoder().encode(value) : value;
+  const digest = await crypto.subtle.digest('SHA-256', bytes);
+  return Array.from(new Uint8Array(digest))
+    .map((byte) => byte.toString(16).padStart(2, '0'))
+    .join('');
+}
+export async function hmacSha256(secret: string, payload: string | Uint8Array): Promise<string> {
+  const key = await crypto.subtle.importKey(
+    'raw',
+    new TextEncoder().encode(secret),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign'],
+  );
+  const bytes = typeof payload === 'string' ? new TextEncoder().encode(payload) : payload;
+  const sig = await crypto.subtle.sign('HMAC', key, bytes);
+  return Array.from(new Uint8Array(sig))
+    .map((byte) => byte.toString(16).padStart(2, '0'))
+    .join('');
+}
+export function constantTimeEqual(a: string, b: string): boolean {
+  if (a.length !== b.length) return false;
+  let mismatch = 0;
+  for (let i = 0; i < a.length; i += 1) mismatch |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return mismatch === 0;
+}
+export function base64UrlEncode(value: string | Uint8Array): string {
+  const bytes = typeof value === 'string' ? new TextEncoder().encode(value) : value;
+  let binary = '';
+  for (const byte of bytes) binary += String.fromCharCode(byte);
+  return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+export function base64UrlDecode(value: string): Uint8Array {
+  const padded = value.replace(/-/g, '+').replace(/_/g, '/') + '==='.slice((value.length + 3) % 4);
+  const binary = atob(padded);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i);
+  return bytes;
+}
+export type AccessClaims = {
+  sub: string;
+  aud: string | string[];
+  iss: string;
+  exp: number;
+  iat: number;
+  email?: string;
+};
 export function parseAccessJwt(token: string): AccessClaims | null {
   const parts = token.split('.');
   if (parts.length !== 3) return null;
@@ -161,8 +403,15 @@ export function parseAccessJwt(token: string): AccessClaims | null {
   }
 }
 export type ResendVerifyOk = { ok: true; event_id: string };
-export type ResendVerifyErr = { ok: false; reason: 'missing_header' | 'bad_timestamp' | 'bad_signature' | 'no_secret' };
-export async function verifyResendSignature(request: Request, raw: Uint8Array, env: Env): Promise<ResendVerifyOk | ResendVerifyErr> {
+export type ResendVerifyErr = {
+  ok: false;
+  reason: 'missing_header' | 'bad_timestamp' | 'bad_signature' | 'no_secret';
+};
+export async function verifyResendSignature(
+  request: Request,
+  raw: Uint8Array,
+  env: Env,
+): Promise<ResendVerifyOk | ResendVerifyErr> {
   const id = request.headers.get('svix-id');
   const ts = request.headers.get('svix-timestamp');
   const sig = request.headers.get('svix-signature');
@@ -174,7 +423,10 @@ export async function verifyResendSignature(request: Request, raw: Uint8Array, e
   const expected = await hmacSha256(secret, `${id}.${ts}.${new TextDecoder().decode(raw)}`);
   if (constantTimeEqual(candidate, expected)) return { ok: true, event_id: id };
   if (env.RESEND_WEBHOOK_SECRET_PREVIOUS) {
-    const previous = await hmacSha256(env.RESEND_WEBHOOK_SECRET_PREVIOUS, `${id}.${ts}.${new TextDecoder().decode(raw)}`);
+    const previous = await hmacSha256(
+      env.RESEND_WEBHOOK_SECRET_PREVIOUS,
+      `${id}.${ts}.${new TextDecoder().decode(raw)}`,
+    );
     if (constantTimeEqual(candidate, previous)) return { ok: true, event_id: id };
   }
   return { ok: false, reason: 'bad_signature' };

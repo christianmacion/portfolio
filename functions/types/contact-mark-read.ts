@@ -18,6 +18,8 @@ export const MarkReadResponseSchema = z.object({
 export type MarkReadBody = z.infer<typeof MarkReadBodySchema>;
 export type MarkReadResponse = z.infer<typeof MarkReadResponseSchema>;
 
-export const CONTACT_MARK_READ_DURABLE_EFFECT = 'read timestamp + audit row in one D1 batch' as const;
+export const CONTACT_MARK_READ_DURABLE_EFFECT =
+  'read timestamp + audit row in one D1 batch' as const;
 export const CONTACT_MARK_READ_BUDGET = { minute: 20, hour: 120, scope: 'access_subject' } as const;
-export const CONTACT_MARK_READ_AUTH_GATE = 'Access JWT + same-origin Fetch Metadata (Sec-Fetch-Site: same-origin) + signed CSRF token (HMAC sub + ts, 10-minute TTL)' as const;
+export const CONTACT_MARK_READ_AUTH_GATE =
+  'Access JWT + same-origin Fetch Metadata (Sec-Fetch-Site: same-origin) + signed CSRF token (HMAC sub + ts, 10-minute TTL)' as const;
