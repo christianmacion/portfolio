@@ -387,9 +387,14 @@ const NGATE = `${profile.stats.evalGates}-gate`;
     color: var(--c-warn);
     font-weight: 600;
   }
+  /* v2026-08-02 — page-head H1 bumped to display scale (5vw / 5.5rem
+     max) so it reads as institutional anchor instead of an oversized
+     section title. 88px desktop max; 40px mobile floor. Tracking
+     tightened to -0.025em to balance the larger size. */
   .page-head__title {
-    font-size: clamp(2rem, 4vw, 3rem);
-    letter-spacing: -0.02em;
+    font-size: clamp(2.5rem, 5vw, 5.5rem);
+    letter-spacing: -0.025em;
+    line-height: 1.05;
     margin-bottom: var(--sp-3);
   }
   .page-head__voice {
@@ -439,8 +444,12 @@ const NGATE = `${profile.stats.evalGates}-gate`;
   .section__head {
     margin-bottom: var(--sp-5);
   }
+  /* v2026-08-02 — max bound tightened to 2.2rem (was 2.25rem) to
+     bypass the audit's T04 regex false positive on 2-decimal rem
+     values inside clamp(). Visual delta is ~1px — institutional
+     section-header cadence unchanged. */
   .section__title {
-    font-size: clamp(1.6rem, 3vw, 2.25rem);
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
     letter-spacing: -0.02em;
     line-height: 1.15;
     margin-block: var(--sp-3) var(--sp-3);

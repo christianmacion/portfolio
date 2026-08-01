@@ -330,13 +330,18 @@ const LEGEND_COUNTS = {
     padding-block: var(--sp-3);
   }
 
+  /* v2026-08-02 — bumped to display scale (5vw / 5.5rem max) so the
+     graphic-variant rail headline reads as institutional anchor,
+     not a tiny tagline next to a 44px amber button. italic serif
+     unchanged; line-height tightened to 1.1 to match display
+     cadence. */
   .cta__rail-headline {
     margin: 0;
     font-family: var(--serif-display);
     font-style: italic;
     font-weight: 400;
-    font-size: clamp(1.25rem, 2.5vw, 1.5rem); /* 20..24 */
-    line-height: 1.2;
+    font-size: clamp(2.5rem, 5vw, 5.5rem);
+    line-height: 1.1;
     letter-spacing: -0.005em;
     color: var(--c-ink);
     text-wrap: balance;

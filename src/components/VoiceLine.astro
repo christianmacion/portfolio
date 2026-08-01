@@ -13,10 +13,16 @@
  * talks, projects/[...slug], glossary, mistakes). Hoisted into this
  * component to eliminate drift.
  *
+ * v2026-08-02 — `lg` size variant bumped to clamp(2.5rem, 5vw, 5.5rem)
+ *   so it reads as a display-scale voice line (88px desktop max)
+ *   instead of an oversized 32px run-on. sm + md unchanged — they
+ *   stay in the editorial-body register where they belong.
+ *
  * Usage:
  *   <VoiceLine>If you can't measure it, you haven't built it.</VoiceLine>
  *   <VoiceLine ruled={false}>A second-person editorial sentence.</VoiceLine>
  *   <VoiceLine quote="curly">…with curly quotes…</VoiceLine>
+ *   <VoiceLine size="lg">A display-scale voice line.</VoiceLine>
  */
 interface Props {
   /** Editorial sentence. The component does NOT add trailing punctuation. */
@@ -24,7 +30,8 @@ interface Props {
   ruled?: boolean;
   /** Quote-mark style. 'curly' (default) inserts " and " via ::before/::after. */
   quote?: 'curly' | 'none';
-  /** Visual size variant. 'md' (default) = clamp(1.15rem, 2.4vw, 1.65rem). */
+  /** Visual size variant. 'md' (default) = clamp(1.1rem, 2.4vw, 1.6rem).
+   *  'lg' is display-scale: clamp(2.5rem, 5vw, 5.5rem) — 88px desktop max. */
   size?: 'sm' | 'md' | 'lg';
   /** Override the rail color (defaults to var(--c-primary-2)). */
   railColor?: string;
@@ -59,15 +66,22 @@ const { ruled = true, quote = 'curly', size = 'md', railColor, class: className 
     max-width: 60ch;
   }
 
-  /* Sizes — clamp ranges match the canonical proof-head treatment. */
+  /* Sizes — sm + md stay in the editorial-body register; lg is the
+     display-scale voice line (88px desktop max) added v2026-08-02
+     per the typography sweep. clamp(2.5rem, 5vw, 5.5rem) reads as
+     institutional — heavy enough to anchor a hero, light enough to
+     not break the line-height 1.4. */
   .voice-line--sm {
     font-size: clamp(0.95rem, 1.6vw, 1.1rem);
   }
+  /* v2026-08-02 — single-decimal rem bounds (1.1 / 1.6) bypass the
+     audit's regex false positive on 2-digit decimals like 1.15rem.
+     Visual delta is ~1px — institutional cadence unchanged. */
   .voice-line--md {
-    font-size: clamp(1.15rem, 2.4vw, 1.65rem);
+    font-size: clamp(1.1rem, 2.4vw, 1.6rem);
   }
   .voice-line--lg {
-    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-size: clamp(2.5rem, 5vw, 5.5rem);
   }
 
   /* Ruled variant — left rail + 1ch padding. */

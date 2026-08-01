@@ -27,6 +27,9 @@
  *   Roman numerals (i/ii/iii) regardless of statement count — only
  *   the first 3 are shown when more are passed.
  *
+ * v2026-08-02 — graphic-variant card text bumped to clamp(2rem, 4vw, 3rem)
+ *   so the display reads as institutional, not editorial-caption small.
+ *
  * Usage:
  *   <StatementCarousel />
  *   <StatementCarousel statements={[...]} variant="graphic" />
@@ -36,7 +39,7 @@ import { profile } from '@utils/profile';
 interface Props {
   /** Statements to rotate through. Defaults match the canonical site-wide set. */
   statements?: string[];
-  /** Auto-advance interval in milliseconds. Default 3000ms. */
+  /** Auto-advance interval in milliseconds. Default 3000 ms. */
   intervalMs?: number;
   /** Optional label for screen readers. */
   label?: string;
@@ -450,12 +453,15 @@ const ROMAN = ['i', 'ii', 'iii', 'iv', 'v', 'vi'];
 
   /* Text — kept as-is from inline, just tighter line-height 1.4
      and the serif stays italic per house style. */
+  /* Text — bumped to display scale per v2026-08-02 typography sweep.
+     3rem desktop max keeps it readable as institutional voice-line
+     rather than caption. Italic serif unchanged. */
   .stmt-card__text {
     grid-area: text;
     margin: 0;
     font-family: var(--serif-display);
     font-style: italic;
-    font-size: clamp(1.15rem, 2.4vw, 1.55rem);
+    font-size: clamp(2rem, 4vw, 3rem);
     line-height: 1.4;
     letter-spacing: -0.005em;
     color: var(--c-ink);
