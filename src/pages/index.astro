@@ -27,14 +27,17 @@ import { path } from '@utils/url';
 import EarthMap from '@components/EarthMap.astro';
 
 const footprintPoints = [
+  // Digos City, Davao del Sur, Philippines — CANONICAL coordinates: 6.74°N, 125.36°E.
+  // Do NOT add a second Digos pin here. The 7.19°N, 125.45°E region is Davao City
+  // (~50 km north), NOT Digos. A previous build shipped a rogue pin at that
+  // location labeled 'Digos City, PH — Ateneo · BIDA Meta · USEP' — the events
+  // (Ateneo de Davao, BIDA Meta, USEP) actually happened in Davao City, not Digos.
+  // The architecture audit (2026-08-02) flagged the wrong city-label on the
+  // wrong coordinates; surgical fix is to drop the rogue pin and keep the
+  // single canonical home-base pin. If a future revision needs to surface
+  // in-person events at non-home cities, add them under their actual city
+  // (Davao City, Manila, etc.) — never under Digos.
   { city: 'Digos City, PH', lat: 6.74, lon: 125.36, weight: 1.0, caption: 'home base' },
-  {
-    city: 'Digos City, PH',
-    lat: 7.19,
-    lon: 125.45,
-    weight: 0.95,
-    caption: 'Ateneo · BIDA Meta · USEP — 3 in-person, 30 days',
-  },
   { city: 'Manila, PH', lat: 14.6, lon: 120.98, weight: 0.7, caption: 'UP School of Statistics' },
   { city: 'Singapore', lat: 1.35, lon: 103.82, weight: 0.8, caption: 'APAC ops' },
   { city: 'Tokyo', lat: 35.68, lon: 139.69, weight: 0.7, caption: 'JPX' },
@@ -118,8 +121,7 @@ const liveCounters = [
         <span class="hero__name-3">Macion</span>
       </h1>
       <p class="hero__role">
-        Quant researcher, AI engineer, multi-agent build system operator — based in Digos City,
-        working on UTC+8.
+        Building trading desks and multi-agent systems for six years — eval-first, ship-ready.
       </p>
     </section>
 
