@@ -131,7 +131,7 @@ jobs:
         run: npx -y @lhci/cli@0.14.x autorun --config=./lighthouserc.mobile.json
       - name: Upload report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: lighthouse-mobile-report
           path: .lighthouseci
@@ -186,7 +186,7 @@ jobs:
         run: npx -y @lhci/cli@0.14.x autorun --config=./lighthouserc.desktop.json
       - name: Upload report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: lighthouse-desktop-report
           path: .lighthouseci
