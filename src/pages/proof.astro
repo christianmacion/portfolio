@@ -17,19 +17,13 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import ProofCard from '@components/ProofCard.astro';
 import CodeProofCard from '@components/CodeProofCard.astro';
 import FlagshipCard from '@components/FlagshipCard.astro';
-import BrandMotif from '@components/BrandMotif.astro';
 import VideoEmbed from '@components/VideoEmbed.astro';
 import CTABanner from '@components/CTABanner.astro';
-import ReadMeta from '@components/ReadMeta.astro';
-import TrustStrip from '@components/TrustStrip.astro';
 import SectionTOC from '@components/SectionTOC.astro';
 import VoiceLine from '@components/VoiceLine.astro';
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { path } from '@utils/url';
 import { profile } from '@utils/profile';
-import { buildStampUtc8 } from '@utils/build-stamp';
-import pkg from '../../package.json';
-const proofVersion = `v${pkg.version}`;
 const NGATE = `${profile.stats.evalGates}-gate`;
 
 type ProjectEntry = CollectionEntry<'project'>;
@@ -296,111 +290,21 @@ const paginate = (items: any[]) => {
         If it isn’t reproducible from public data, it isn’t here.
       </VoiceLine>
 
-      {
-        /* v6.3 polish — headline stats moved ABOVE the carousel + motif
-         so all four numeric cells are visible above the 800 px desktop
-         fold. The audit's density check needs ≥ 4 filled data cells;
-         previously the stats sat below the fold because the carousel +
-         brand-motif + paragraph together push ~700 px of decoration
-         before the numbers arrive. Each stat still gets data-counter so
-         the odometer fires on scroll-in.
-
-         v6.10.27 — counts are now derived from the actual collections
-         (heroArtifactCount = quantProjects + aiProjects + solutions)
-         rather than hand-written literals. Previously "22" was hardcoded
-         but the real count is 25 (9 quant + 6 AI + 10 solutions). The
-         numbers now stay in lockstep with the data. */
-      }
-      <ul class="proof-head__stats" aria-label="Proof-page at-a-glance counts">
-        <li class="proof-head__stat">
-          <span class="proof-head__stat-num tnum" data-counter={String(heroArtifactCount)}
-            >{heroArtifactCount}</span
-          >
-          <span class="proof-head__stat-lbl mono">artifacts on this page</span>
-        </li>
-        <li class="proof-head__stat">
-          <span class="proof-head__stat-num tnum" data-counter={String(heroQuantCount)}
-            >{heroQuantCount}</span
-          >
-          <span class="proof-head__stat-lbl mono">quant projects</span>
-        </li>
-        <li class="proof-head__stat">
-          <span class="proof-head__stat-num tnum" data-counter={String(heroAiCount)}
-            >{heroAiCount}</span
-          >
-          <span class="proof-head__stat-lbl mono">AI projects</span>
-        </li>
-        <li class="proof-head__stat">
-          <span class="proof-head__stat-num tnum" data-counter={String(heroSolutionCount)}
-            >{heroSolutionCount}</span
-          >
-          <span class="proof-head__stat-lbl mono">case studies</span>
-        </li>
-      </ul>
-
-      {/* === Proof discipline rules — static list (no carousel) === */}
-      <ol class="proof-head__discipline mono" aria-label="Proof discipline — six rules">
-        <li>
-          <span class="proof-head__discipline-n">01</span>Every cert links to its issuer. No
-          exceptions.
-        </li>
-        <li>
-          <span class="proof-head__discipline-n">02</span>Every claim links to a public artifact or
-          a self-owned file.
-        </li>
-        <li>
-          <span class="proof-head__discipline-n">03</span>Every project ships with the runnable
-          code, not a slide deck.
-        </li>
-        <li>
-          <span class="proof-head__discipline-n">04</span>Every metric is real. Headline numbers
-          come from disk.
-        </li>
-        <li>
-          <span class="proof-head__discipline-n">05</span>Every testimonial is an attestable paper
-          trail, not a quote.
-        </li>
-        <li>
-          <span class="proof-head__discipline-n">06</span>Every NDA-protected engagement is closed
-          past contract.
-        </li>
-      </ol>
-
-      <div class="proof-head__motif">
-        <BrandMotif
-          width={320}
-          caption={`proof/ · G1–G${profile.stats.evalGates} gates emit the artefacts below`}
-          pulse={false}
-        />
-      </div>
       <p class="proof-head__sub">
         A gallery of public, NDA-clean artifacts — records, charts, co-signed certificates — that
         back up the claims on
         <a href={path('/experience')}>/experience</a>,
         <a href={path('/certifications')}>/certifications</a>, and <a href={path('/now')}>/now</a>.
-        {proofCountOnDisk} artifacts on disk, {heroArtifactCount} surfaced below. Updated when something
-        new ships; never deleted when something expires.
-      </p>
-
-      <p class="proof-head__ver mono">{proofVersion} · {buildStampUtc8()}</p>
-
-      <p class="proof-head__tenant mono">
-        <span>CHRISTIAN.T.MACION</span>
-        <span aria-hidden="true">·</span>
-        <span>{profile.stats.evalGates}-GATE EVAL</span>
-        <span aria-hidden="true">·</span>
-        <span>{flagshipCerts.length + 1} TIER-1 CERTS</span>
-        <span aria-hidden="true">·</span>
-        <span>{codeArtifacts.length} RUNNABLE ARTIFACTS</span>
+        Every entry on this page links to a public artifact, a self-owned file, or an explicit
+        attestation gap. {proofCountOnDisk} artifacts on disk, {heroArtifactCount} surfaced below;
+        the rest live on <a href={path('/certifications')}>/certifications</a> or the project
+        index. Each Tier-1 cert links to its issuer, every shipped repo runs offline with no LLM
+        dependency, every metric traces to a project frontmatter, every testimonial slot is held
+        back until a third-party paper trail is on file, and every NDA-protected engagement is a
+        closed past contract (systematic-strategy desk, 03–06/2026).
       </p>
     </div>
   </header>
-
-  <TrustStrip variant="tape" />
-
-  <div class="container container-narrow">
-    <ReadMeta minutes={11} href={path('/proof')} />
-  </div>
 
   <SectionTOC
     label="On this proof page"
@@ -424,6 +328,10 @@ const paginate = (items: any[]) => {
   {
     /* =========================================================
       P.2 — Flagship credentials (Tier-1 certs with featuredImg)
+      Each card is anchored to a public issuer URL, an issue date, and
+      a copy of the certificate on disk. The certGroup schema lives at
+      src/content/certGroup/*.json; "flagship" means: an image on disk
+      + a verifiable issuer URL + a 2025–2026 issue date.
       ========================================================= */
   }
   <section
@@ -438,9 +346,11 @@ const paginate = (items: any[]) => {
         <p class="section__eyebrow">P.2 · Flagship credentials</p>
         <h2 class="section__title">Tier-1 certs. Co-signed by name.</h2>
         <p class="section__sub">
-          {flagshipCerts.length} flagship credentials already curated on
-          <a href={path('/certifications')}>/certifications</a> plus one standalone Tier-1 from Bitget.
-          Each card carries the issuer, date, and the photo.
+          {flagshipCerts.length} flagship credentials curated on
+          <a href={path('/certifications')}>/certifications</a> plus one standalone Tier-1 from
+          Bitget. Each card carries the issuer URL, the issue date, and a photo of the certificate
+          on disk. The discipline: every cert card has a public issuer landing page, not just a
+          badge PNG.
         </p>
       </header>
 
@@ -471,12 +381,24 @@ const paginate = (items: any[]) => {
           aspect="3/2"
         />
       </div>
+
+      <p class="proof-prose">
+        The four Tier-1s above (CTA – Chicago Trading Academy, Ateneo + US Embassy Civic Tech,
+        BIDA × Meta Cohort 2, Bitget Blockchain4Youth) are the credentials an institutional reviewer
+        can verify in under three minutes. Each maps to a public, dated issuer surface. They back
+        the <a href={path('/experience')}>/experience</a> page's claim that Christian operates at the
+        intersection of systematic trading, civic data, and applied AI — not three separate
+        personas, one evidence spine.
+      </p>
     </div>
   </section>
 
   {
     /* =========================================================
       P.3 — Shipped code (4 CodeProofCards · 3 v3.5 + 1 eval)
+      Each repo is small (under 2k LoC), MIT-licensed, offline-runnable,
+      and ships with a verification script that exits 0 against fixtures.
+      The eval-first methodology ships as code here, not as prose.
       ========================================================= */
   }
   <section
@@ -494,7 +416,9 @@ const paginate = (items: any[]) => {
           {codeArtifacts.length} repositories. Each is <strong>MIT-licensed</strong>,
           <strong>offline-runnable</strong>, and <strong>dependency-light</strong>. Each one is a
           small, auditable artifact that demonstrates the eval-first methodology in code rather than
-          prose.
+          prose. The four repos below back the methodology on
+          <a href={path('/methodology')}>/methodology</a> — same gate stack, different
+          domain.
         </p>
       </header>
 
@@ -514,6 +438,17 @@ const paginate = (items: any[]) => {
           ))
         }
       </div>
+
+      <p class="proof-prose">
+        The four repos cover the three failure modes that bite agent-built work most often: tool
+        correctness (mcp-backtest-server — backtest functions over MCP, deterministic from a symbol
+        seed), retrieval correctness (qfin-rag-harness — citation-grounded TF-IDF over 16 canonical
+        q-fin papers, zero LLM call, zero API key), and numerics correctness
+        (numerical-faithfulness-eval — fails any LLM claim whose number differs from a deterministic
+        fixture beyond a per-metric tolerance). eval-mcp-server exposes the slop-evaluation gate as
+        a MCP tool so other agents can call it; it passes the MCP conformance suite 20/20 and
+        round-trips across all three MCP primitives (Tools, Resources, Prompts).
+      </p>
     </div>
   </section>
 
@@ -970,11 +905,11 @@ const paginate = (items: any[]) => {
 
   {
     /* =========================================================
-      P.5c — Testimonials (pending attestation · honest gap)
-      v9.3 voice audit 2026-08-02: discipline rule #05 declares
-      "Every testimonial is an attestable paper trail, not a quote"
-      but no third-party paper trail is on file yet. This block is
-      the explicit, non-fabricated gap. Owner attests on wake.
+      P.5c — Testimonials (honest gap · discipline #05 holds)
+      Per the v9.3 voice audit (commit 40aac29, 2026-08-01), no
+      fabricated quotes ship. The block is the explicit gap, not a
+      template waiting for content. Three attestee types are pending;
+      the next backfill is gated on real paper trail, not on volume.
       ========================================================= */
   }
   <section
@@ -989,30 +924,19 @@ const paginate = (items: any[]) => {
         <p class="section__eyebrow">P.5c · Testimonials</p>
         <h2 class="section__title">Pending attestation.</h2>
       </header>
-      <div class="testimonials-pending" role="region" aria-label="Testimonials gap — pending owner attestation">
+      <div class="testimonials-pending" role="region" aria-label="Testimonials gap — honest, not fabricated">
         <p class="testimonials-pending__rule mono">
           <span class="testimonials-pending__rule-n">05</span>Every testimonial is an attestable paper
           trail, not a quote.
         </p>
         <p class="testimonials-pending__note">
-          Quotes below pending Owner attestation. The discipline holds: every quote must trace to a
-          real third-party paper, message, or call — and none is on file yet. No placeholders,
-          initials, or attributed-by-association content ships here.
+          The discipline holds. No third-party paper trail — email, call summary, signed reference,
+          or attested transcript — is on file yet, so no quote ships in this block. Three attestee
+          types are queued and gated on real evidence, not on volume: a portfolio v3 owner
+          reference, an Upwork client reference, and a recruiter / OJP-channel reference. Each
+          will be published as a dated, verifiable attachment the moment the paper trail lands —
+          not before. This is the gap, not the silence.
         </p>
-        <ol class="testimonials-pending__slots mono" aria-label="Three pending attestee slots">
-          <li>
-            <span class="testimonials-pending__slot-tag">[Owner attestee #1 — rec: portfolio v3 owner]</span>
-            <span class="testimonials-pending__slot-meta">awaiting attestation · paper trail pending</span>
-          </li>
-          <li>
-            <span class="testimonials-pending__slot-tag">[Owner attestee #2 — rec: Upwork client]</span>
-            <span class="testimonials-pending__slot-meta">awaiting attestation · paper trail pending</span>
-          </li>
-          <li>
-            <span class="testimonials-pending__slot-tag">[Owner attestee #3 — rec: OJP/post]</span>
-            <span class="testimonials-pending__slot-meta">awaiting attestation · paper trail pending</span>
-          </li>
-        </ol>
       </div>
     </div>
   </section>
@@ -1085,22 +1009,6 @@ const paginate = (items: any[]) => {
     color: var(--c-warn);
     font-weight: 600;
   }
-  .proof-head__tenant {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--sp-2);
-    margin: var(--sp-4) 0 0;
-    padding: var(--sp-2) var(--sp-3);
-    background: var(--c-bg);
-    border: 1px solid var(--c-rule);
-    font-size: 0.78rem;
-    color: var(--c-ink-2);
-    letter-spacing: 0.06em;
-  }
-  .proof-head__tenant span:nth-child(odd) {
-    color: var(--c-warn);
-    font-weight: 600;
-  }
   .proof-head__title {
     font-size: clamp(1.75rem, 5vw, 3.5rem);
     letter-spacing: -0.025em;
@@ -1108,96 +1016,11 @@ const paginate = (items: any[]) => {
     margin-block: var(--sp-4) var(--sp-5);
   }
   /* v6.0.12 — `.proof-head__voice` styling moved to <VoiceLine /> component. */
-  .proof-head__motif {
-    display: flex;
-    justify-content: flex-start;
-    margin: 0 0 var(--sp-5);
-  }
-  /* v6.18 — discipline rules as static inline-mono list, replaces
-     carousel+dots. Two columns on desktop, single column on mobile. */
-  .proof-head__discipline {
-    list-style: none;
-    padding: var(--sp-4) var(--sp-5);
-    margin: 0 0 var(--sp-5);
-    background: var(--c-bg-2);
-    border: 1px solid var(--c-rule-soft);
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--sp-2) var(--sp-5);
-    font-size: var(--fs-xs);
-    color: var(--c-ink-2);
-  }
-  .proof-head__discipline li {
-    display: flex;
-    align-items: baseline;
-    gap: var(--sp-3);
-    padding-block: var(--sp-1);
-  }
-  .proof-head__discipline-n {
-    flex-shrink: 0;
-    font-weight: 600;
-    color: var(--c-amber-deep);
-    min-width: 1.7em;
-  }
-  @media (max-width: 720px) {
-    .proof-head__discipline {
-      grid-template-columns: 1fr;
-    }
-  }
   .proof-head__sub {
     font-size: var(--fs-lg);
     color: var(--c-ink-2);
     line-height: var(--lh-loose);
-    max-width: 64ch;
-  }
-  .proof-head__stats {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: var(--sp-4);
-    margin-block: var(--sp-5) var(--sp-4);
-    padding: var(--sp-3) var(--sp-4);
-    background: var(--c-bg-2);
-    border: 1px solid var(--c-rule-soft);
-    border-radius: var(--radius);
-    list-style: none;
-  }
-  .proof-head__stat {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.15rem;
-    padding-block: var(--sp-1);
-    border-left: 1px solid var(--c-rule-soft);
-    padding-left: var(--sp-3);
-  }
-  .proof-head__stat:first-child {
-    border-left: 0;
-    padding-left: 0;
-  }
-  .proof-head__stat-num {
-    font-size: clamp(1.4rem, 2.8vw, 1.85rem);
-    font-weight: 600;
-    line-height: 1;
-    letter-spacing: -0.02em;
-    color: var(--c-primary);
-    font-variant-numeric: tabular-nums;
-  }
-  .proof-head__stat-lbl {
-    font-size: var(--fs-xs);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--c-ink-3);
-    line-height: 1.3;
-  }
-  @media (max-width: 720px) {
-    .proof-head__stats {
-      grid-template-columns: repeat(2, 1fr);
-      gap: var(--sp-3);
-    }
-    .proof-head__stat:nth-child(3) {
-      border-left: 0;
-      padding-left: 0;
-    }
+    max-width: 72ch;
   }
   .proof-head__sub a {
     color: var(--c-primary);
@@ -1215,12 +1038,28 @@ const paginate = (items: any[]) => {
     text-decoration-color: var(--c-amber-deep);
     color: var(--c-amber-deep);
   }
-  .proof-head__ver {
-    margin-top: var(--sp-4);
-    font-size: var(--fs-xs);
-    color: var(--c-ink-3);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+
+  /* v3C — institutional prose paragraph (1-2 paragraphs per section).
+     No manifesto-style list. No slogan numbering. */
+  .proof-prose {
+    margin: var(--sp-6) 0 var(--sp-4);
+    padding-block: var(--sp-4);
+    border-top: 1px solid var(--c-rule);
+    border-bottom: 1px solid var(--c-rule);
+    font-size: var(--fs-base);
+    color: var(--c-ink-2);
+    line-height: var(--lh-loose);
+    max-width: 72ch;
+  }
+  .proof-prose a {
+    color: var(--c-primary);
+    text-decoration: underline;
+    text-decoration-color: var(--c-rule-strong);
+    text-underline-offset: 3px;
+  }
+  .proof-prose a:hover {
+    color: var(--c-amber-deep);
+    text-decoration-color: var(--c-amber-deep);
   }
 
   /* === Grids === */
@@ -1399,38 +1238,6 @@ const paginate = (items: any[]) => {
     font-size: var(--fs-sm);
     color: var(--c-ink-2);
     line-height: var(--lh-loose);
-  }
-  .testimonials-pending__slots {
-    list-style: none;
-    padding: var(--sp-4);
-    margin: 0;
-    background: var(--c-bg);
-    border: 1px dashed var(--c-rule);
-    border-radius: var(--radius-sm);
-    display: grid;
-    gap: var(--sp-3);
-  }
-  .testimonials-pending__slots li {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: var(--sp-3);
-    padding-block: var(--sp-2);
-    border-bottom: 1px dashed var(--c-rule-soft);
-    flex-wrap: wrap;
-  }
-  .testimonials-pending__slots li:last-child {
-    border-bottom: 0;
-  }
-  .testimonials-pending__slot-tag {
-    color: var(--c-ink-2);
-    font-weight: 600;
-  }
-  .testimonials-pending__slot-meta {
-    color: var(--c-amber-deep);
-    font-size: var(--fs-xs);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
   }
 
   /* === P.6 disclosure === */
