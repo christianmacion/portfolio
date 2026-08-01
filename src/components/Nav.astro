@@ -114,12 +114,25 @@ const secondary = [
       </span>
     </a>
 
-    <input type="checkbox" id="nav-toggle" class="nav__toggle-input" aria-hidden="true" />
+    <!-- v9.3.2 a11y fix (architecture audit 2026-08-02) — WCAG 2.2 AA 4.1.2:
+         the mobile-menu toggle now carries aria-expanded + aria-controls so
+         screen readers announce the open/closed state. The checkbox is the
+         state-bearing element; the small inline script below flips
+         aria-expanded on input change so the attribute stays in sync with the
+         native checked state that the CSS uses to show/hide the panel. -->
+    <input
+      type="checkbox"
+      id="nav-toggle"
+      class="nav__toggle-input"
+      aria-hidden="false"
+      aria-expanded="false"
+      aria-controls="primary-nav"
+    />
     <label for="nav-toggle" class="nav__toggle" aria-label="Toggle navigation">
       <span></span><span></span><span></span>
     </label>
 
-    <nav class="nav__links" aria-label="Primary">
+    <nav class="nav__links" id="primary-nav" aria-label="Primary">
       <div class="nav__primary">
         {
           /* v6.1.0 (Mission G) — Markets dropdown sits BETWEEN Proof and Projects.
@@ -886,3 +899,22 @@ const secondary = [
     }
   }
 </style>
+
+<script>
+  // v9.3.2 a11y hook — keep aria-expanded in sync with the checkbox state.
+  // The CSS uses :checked ~ .nav__links to toggle the panel; this script
+  // mirrors that state into the aria-expanded attribute so screen readers
+  // announce "expanded" / "collapsed" correctly. Idempotent: only mutates
+  // the attribute when the value would actually change.
+  const toggle = document.getElementById('nav-toggle');
+  if (toggle instanceof HTMLInputElement) {
+    const sync = () => {
+      const next = toggle.checked ? 'true' : 'false';
+      if (toggle.getAttribute('aria-expanded') !== next) {
+        toggle.setAttribute('aria-expanded', next);
+      }
+    };
+    toggle.addEventListener('change', sync);
+    sync();
+  }
+</script>
