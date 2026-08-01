@@ -38,7 +38,24 @@
     "no-halo": "grep -rn 'box-shadow:\\s*0\\s*0\\s*[1-9][0-9]' src/ 2>/dev/null && echo 'FAIL: halo/glow box-shadow detected' && exit 1 || echo 'PASS: no halo/glow box-shadows'",
     "check:tokens": "node scripts/check-tokens.mjs",
     "test:a11y": "node scripts/a11y-audit.mjs",
-    "nda:guard": "node -e \"const fs=require('fs'),path=require('path');const banned=['19V Capital','Macion Capital','Arclion AI','Quantivo','CallRank','Davao City'];let bad=0;function walk(d){for(const f of fs.readdirSync(d,{withFileTypes:true})){const p=path.join(d,f.name);if(f.isDirectory())walk(p);else if(/\\.(html|txt|md|json|pdf)$/.test(f.name)){try{const buf=fs.readFileSync(p);const c=buf.toString('latin1');for(const b of banned)if(c.includes(b)){console.error('NDA leak:',p,'contains',b);bad++;}}catch(e){}}}}walk('dist');if(bad>0){console.error('NDA:guard FAIL — '+bad+' leak(s) detected');process.exit(1);}else{console.log('NDA:guard PASS — dist/ clean');}\""
+    "nda:guard": "node -e \"const fs=require('fs'),path=require('path');const banned=['19V Capital','Macion Capital','Arclion AI','Quantivo','CallRank','Davao City'];let bad=0;function walk(d){for(const f of fs.readdirSync(d,{withFileTypes:true})){const p=path.join(d,f.name);if(f.isDirectory())walk(p);else if(/\\.(html|txt|md|json|pdf)$/.test(f.name)){try{const buf=fs.readFileSync(p);const c=buf.toString('latin1');for(const b of banned)if(c.includes(b)){console.error('NDA leak:',p,'contains',b);bad++;}}catch(e){}}}}walk('dist');if(bad>0){console.error('NDA:guard FAIL — '+bad+' leak(s) detected');process.exit(1);}else{console.log('NDA:guard PASS — dist/ clean');}\"",
+    "prepare": "husky",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:unit": "vitest run",
+    "test:e2e": "playwright test",
+    "test:e2e:chromium": "playwright test --project=chromium",
+    "test:all": "npm run test:unit && npm run test:e2e"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,astro,mjs,js}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{md,mdx,json,css}": [
+      "prettier --write"
+    ]
   },
   "dependencies": {
     "@astrojs/check": "^0.9.9",
@@ -62,13 +79,22 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.12.1",
+    "@commitlint/cli": "^21.2.1",
+    "@commitlint/config-conventional": "^21.2.0",
     "@eslint/js": "^9.39.0",
+    "@playwright/test": "^1.62.1",
+    "@testing-library/dom": "^10.4.1",
+    "@vitest/coverage-v8": "^4.1.10",
     "axe-core": "^4.12.1",
     "eslint": "^9.39.0",
     "eslint-config-prettier": "^10.1.0",
     "eslint-plugin-astro": "^1.6.0",
     "globals": "^15.0.0",
+    "husky": "^9.1.7",
+    "jsdom": "^29.1.1",
     "knip": "^6.25.0",
+    "lint-staged": "^17.3.0",
     "markdownlint-cli2": "^0.20.0",
     "pagefind": "^1.5.2",
     "playwright": "^1.62.1",
@@ -81,6 +107,7 @@
     "topojson-simplify": "^3.0.3",
     "tsx": "^4.23.0",
     "typescript-eslint": "^8.63.0",
+    "vitest": "^4.1.10",
     "world-atlas": "^2.0.2"
   }
 }

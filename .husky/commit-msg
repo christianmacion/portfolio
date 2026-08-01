@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+# commit-msg — Husky hook for the v9.3 test-pyramid-bottom.
+#
+# Validates commit messages follow Conventional Commits via commitlint.
+
+. "$(dirname -- "$0")/_/husky.sh"
+
+npx --no -- commitlint --edit "$1"

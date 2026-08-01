@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+# pre-commit — Husky hook for the v9.3 test-pyramid-bottom.
+#
+# Runs lint-staged (format + lint staged files) and the unit test
+# suite (vitest). The unit suite must pass before any commit; this
+# is the gate that closes the "tests pass = green-on-paper" gap
+# surfaced by the 2026-08-01 audit.
+
+. "$(dirname -- "$0")/_/husky.sh"
+
+npx lint-staged
+npm run test -- --run --reporter=dot
