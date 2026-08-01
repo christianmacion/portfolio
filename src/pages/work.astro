@@ -23,6 +23,8 @@ import { profile } from '@utils/profile';
 import { path } from '@utils/url';
 import { getCollection, type CollectionEntry } from 'astro:content';
 
+const NGATE = `${profile.stats.evalGates}-gate`;
+
 type ProjectEntry = CollectionEntry<'project'>;
 
 const allProjects: ProjectEntry[] = await getCollection('project');
@@ -35,7 +37,6 @@ const aiProjects = allProjects
   .sort((a, b) => a.data.order - b.data.order)
   .slice(0, 3);
 
-const NGATE = `${profile.stats.evalGates}-gate`;
 const buildDate = new Date().toISOString().slice(0, 10);
 ---
 
@@ -122,7 +123,7 @@ const buildDate = new Date().toISOString().slice(0, 10);
               </h3>
               <p class="work-card__sub">{p.data.summary}</p>
               <div class="work-card__meta">
-                {p.data.metrics?.slice(0, 2).map((m) => (
+                {p.data.metrics?.slice(0, 2).map((m: { label: string; value: string }) => (
                   <span class="work-card__metric">
                     <span class="work-card__metric-label mono">{m.label}</span>
                     <span class="work-card__metric-value">{m.value}</span>
@@ -162,7 +163,7 @@ const buildDate = new Date().toISOString().slice(0, 10);
               </h3>
               <p class="work-card__sub">{p.data.summary}</p>
               <div class="work-card__meta">
-                {p.data.metrics?.slice(0, 2).map((m) => (
+                {p.data.metrics?.slice(0, 2).map((m: { label: string; value: string }) => (
                   <span class="work-card__metric">
                     <span class="work-card__metric-label mono">{m.label}</span>
                     <span class="work-card__metric-value">{m.value}</span>
@@ -257,10 +258,9 @@ const buildDate = new Date().toISOString().slice(0, 10);
     <section class="work-cta">
       <p class="work-cta__lede mono">For the eval-first methodology → see the {NGATE} filter.</p>
       <CTABanner
-        lead="The methodology page documents the eval gate."
-        cta="Read the methodology"
-        href={path('/methodology')}
-        variant="secondary"
+        title="The methodology page documents the eval gate."
+        primaryLabel="Read the methodology"
+        primaryHref={path('/methodology')}
       />
     </section>
 

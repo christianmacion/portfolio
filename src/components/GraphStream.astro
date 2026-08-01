@@ -170,6 +170,8 @@ const streamId = `graph-${fnv1a(`${squad}:${limit}:${showLabels}:${height}`)}`;
   interface GraphNode {
     id: string;
     squad: string;
+    name: string;
+    tier?: string;
     x?: number;
     y?: number;
     vx?: number;
@@ -273,16 +275,16 @@ const streamId = `graph-${fnv1a(`${squad}:${limit}:${showLabels}:${height}`)}`;
       nodeGroup.setAttribute('class', 'gs-nodes');
       for (const n of nodes) {
         const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-        c.setAttribute('cx', String(n.x));
-        c.setAttribute('cy', String(n.y));
+        c.setAttribute('cx', String(n.x ?? 0));
+        c.setAttribute('cy', String(n.y ?? 0));
         c.setAttribute('r', n.tier === 'T1' ? '5' : n.tier === 'T2' ? '3.5' : '2.5');
         c.setAttribute('class', `gs-node gs-node--${n.squad || 'A'}`);
         c.setAttribute('data-name', n.name);
         nodeGroup.appendChild(c);
         if (showLabels) {
           const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-          t.setAttribute('x', String(n.x + 6));
-          t.setAttribute('y', String(n.y + 3));
+          t.setAttribute('x', String((n.x ?? 0) + 6));
+          t.setAttribute('y', String((n.y ?? 0) + 3));
           t.setAttribute('class', 'gs-label');
           t.textContent = n.name;
           nodeGroup.appendChild(t);
