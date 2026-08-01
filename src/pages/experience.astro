@@ -12,6 +12,7 @@ import Equation from '@components/Equation.astro';
 import CTABanner from '@components/CTABanner.astro';
 import ReadMeta from '@components/ReadMeta.astro';
 import TrustStrip from '@components/TrustStrip.astro';
+import ChromeHeader from '@components/ChromeHeader.astro';
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import { path } from '@utils/url';
 import { buildStampUtc8 } from '@utils/build-stamp';
@@ -88,12 +89,13 @@ const expWindow = `${expWindowEarliest} → ${expWindowLatest}`;
 >
   <header class="page-head">
     <div class="container">
-      <p class="page-head__eyebrow mono">
-        <span class="page-head__eyebrow-chip">EXPERIENCE · ENGAGEMENTS + PROOFS</span>
-        <span class="page-head__eyebrow-line"
-          >{entries.length} ENGAGEMENTS · NDA-SAFE · {totalMonths}-MONTH ARC</span
-        >
-      </p>
+      <ChromeHeader
+        chip="EXPERIENCE · ENGAGEMENTS + PROOFS"
+        eyebrow={`${entries.length} ENGAGEMENTS · NDA-SAFE · ${totalMonths}-MONTH ARC`}
+        tenant="CHRISTIAN.T.MACION · UTC+8 · NDA-CLEAN · PROOF-PER-ROW"
+        noSep
+        hideTenet
+      />
       <h1 class="page-head__title" data-words>
         Where the work happened — and how to <span class="hl">verify</span> it.
       </h1>
@@ -150,16 +152,6 @@ const expWindow = `${expWindowEarliest} → ${expWindowLatest}`;
         />
         <Stat value={`${totalMonths}`} label="months" sub={expWindow} formula="\Delta t" />
       </div>
-
-      <p class="page-head__tenant mono">
-        <span>CHRISTIAN.T.MACION</span>
-        <span aria-hidden="true">·</span>
-        <span>UTC+8</span>
-        <span aria-hidden="true">·</span>
-        <span>NDA-CLEAN</span>
-        <span aria-hidden="true">·</span>
-        <span>PROOF-PER-ROW</span>
-      </p>
     </div>
   </header>
 

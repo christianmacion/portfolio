@@ -11,6 +11,7 @@
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
 import CTABanner from '@components/CTABanner.astro';
+import ChromeHeader from '@components/ChromeHeader.astro';
 import { profile } from '@utils/profile';
 import { path } from '@utils/url';
 import VoiceLine from '@components/VoiceLine.astro';
@@ -102,10 +103,13 @@ const licenses = [
 >
   <header class="site-head">
     <div class="container container-narrow">
-      <p class="site-head__eyebrow mono">
-        <span class="site-head__eyebrow-chip">ABOUT THIS SITE · META · STATIC-FIRST</span>
-        <span class="site-head__eyebrow-line">PUBLIC TOOLS · NDA GUARDRAIL · OPEN REPO</span>
-      </p>
+      <ChromeHeader
+        chip="ABOUT THIS SITE · META · STATIC-FIRST"
+        eyebrow="PUBLIC TOOLS · NDA GUARDRAIL · OPEN REPO"
+        tenant="CHRISTIAN.T.MACION · UTC+8 · STATIC FIRST · NDA-SAFE · OWNER-VERIFIED"
+        noSep
+        hideTenet
+      />
       <h1 class="site-head__title" data-words>About this site.</h1>
       <VoiceLine class="site-head__voice">
         Static-first. Public tools. Guarded by the same NDA audit the public-facing pages use.
@@ -113,17 +117,6 @@ const licenses = [
       <p class="site-head__sub">
         A static-first portfolio for a Quant Researcher and AI Engineer. This page is the meta: what
         it is built with, what holds it together, and the guardrails that make it safe to publish.
-      </p>
-      <p class="site-head__tenant mono">
-        <span>CHRISTIAN.T.MACION</span>
-        <span aria-hidden="true">·</span>
-        <span>UTC+8</span>
-        <span aria-hidden="true">·</span>
-        <span>STATIC FIRST</span>
-        <span aria-hidden="true">·</span>
-        <span>NDA-SAFE</span>
-        <span aria-hidden="true">·</span>
-        <span>OWNER-VERIFIED</span>
       </p>
     </div>
   </header>

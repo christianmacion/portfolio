@@ -35,6 +35,9 @@ interface Props {
   hideTenant?: boolean;
   /** Hide the tenet line (the global tenet line is already injected by BaseLayout). */
   hideTenet?: boolean;
+  /** Skip the "· " separator between chip and eyebrow line.
+   *  Use when the page renders chip + line as standalone phrases (no internal dot). */
+  noSep?: boolean;
 }
 
 const DEFAULT_CHIP = 'QUANT · AI · OPS';
@@ -51,6 +54,7 @@ const {
   variant = 'default',
   hideTenant = false,
   hideTenet = false,
+  noSep = false,
 } = Astro.props;
 ---
 
@@ -59,7 +63,7 @@ const {
     variant !== 'compact' && (
       <p class="page__eyebrow mono">
         <span class="hero__eyebrow-chip">{chip}</span>
-        <span class="chrome-header__eyebrow-line">· {eyebrow}</span>
+        <span class="chrome-header__eyebrow-line">{noSep ? '' : '· '}{eyebrow}</span>
       </p>
     )
   }

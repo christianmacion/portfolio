@@ -22,6 +22,7 @@ import Equation from '@components/Equation.astro';
 import Stat from '@components/Stat.astro';
 import { path } from '@utils/url';
 import VoiceLine from '@components/VoiceLine.astro';
+import ChromeHeader from '@components/ChromeHeader.astro';
 import { countProjectsByRole } from '@utils/project-helpers';
 
 const quantProjectCount = await countProjectsByRole('quant');
@@ -141,14 +142,13 @@ const formatCount = allFormatKinds.size;
 >
   <header class="page-head">
     <div class="container">
-      <p class="page-head__eyebrow mono">
-        <span class="page-head__eyebrow-chip"
-          >RESUME · {resumeCount} VERSIONS · {downloadCount} DOWNLOADS</span
-        >
-        <span class="page-head__eyebrow-line"
-          >FLAGSIP SENIOR QR + AI ENGINEER · NDA-SAFE · ATS-FRIENDLY</span
-        >
-      </p>
+      <ChromeHeader
+        chip={`RESUME · ${resumeCount} VERSIONS · ${downloadCount} DOWNLOADS`}
+        eyebrow="FLAGSIP SENIOR QR + AI ENGINEER · NDA-SAFE · ATS-FRIENDLY"
+        tenant="CHRISTIAN.T.MACION · HIRED-FLOWCV V4 · 1-PAGE / 4-PAGE · PDF · MD · TXT"
+        noSep
+        hideTenet
+      />
       <h1 class="page-head__title" data-words>
         {resumeCount} tailored resumes. <span class="hl">One unified, two lanes.</span>
       </h1>
@@ -179,16 +179,6 @@ const formatCount = allFormatKinds.size;
         <Stat value="100%" label="NDA-safe" sub="by construction" />
         <Stat value={String(quantProjectCount)} label="quant proj" sub="public-data" />
       </div>
-
-      <p class="page-head__tenant mono">
-        <span>CHRISTIAN.T.MACION</span>
-        <span aria-hidden="true">·</span>
-        <span>HIRED-FLOWCV V4</span>
-        <span aria-hidden="true">·</span>
-        <span>1-PAGE / 4-PAGE</span>
-        <span aria-hidden="true">·</span>
-        <span>PDF · MD · TXT</span>
-      </p>
     </div>
   </header>
 

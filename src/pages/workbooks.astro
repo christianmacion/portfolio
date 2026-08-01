@@ -16,6 +16,7 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import Stat from '@components/Stat.astro';
 import VoiceLine from '@components/VoiceLine.astro';
 import CTABanner from '@components/CTABanner.astro';
+import ChromeHeader from '@components/ChromeHeader.astro';
 import { profile } from '@utils/profile';
 import { path } from '@utils/url';
 
@@ -90,10 +91,13 @@ const workbooks = [
 >
   <header class="page-head">
     <div class="container container-narrow">
-      <p class="page-head__eyebrow mono">
-        <span class="page-head__eyebrow-chip">WORKBOOKS · THE 5-RUNG SPINE</span>
-        <span class="page-head__eyebrow-line">PROMPT → SKILLS → AGENTS → LOOPS → GRAPHS</span>
-      </p>
+      <ChromeHeader
+        chip="WORKBOOKS · THE 5-RUNG SPINE"
+        eyebrow="PROMPT → SKILLS → AGENTS → LOOPS → GRAPHS"
+        tenant="CHRISTIAN.T.MACION · UTC+8 · 5 LAYERS · 2 WORKBOOKS · OWNER-VERIFIED"
+        noSep
+        hideTenet
+      />
       <h1 class="page-head__title" data-words>
         Prompt <span class="hl">→</span> skills <span class="hl">→</span> agents <span class="hl"
           >→</span
@@ -110,17 +114,6 @@ const workbooks = [
         <Stat value={profile.stats.aiAgentCount} label="agents" sub="in STELLA" />
         <Stat value="~62" label="pages" sub="PDF total" />
       </div>
-      <p class="page-head__tenant mono">
-        <span>CHRISTIAN.T.MACION</span>
-        <span aria-hidden="true">·</span>
-        <span>UTC+8</span>
-        <span aria-hidden="true">·</span>
-        <span>5 LAYERS</span>
-        <span aria-hidden="true">·</span>
-        <span>2 WORKBOOKS</span>
-        <span aria-hidden="true">·</span>
-        <span>OWNER-VERIFIED</span>
-      </p>
     </div>
   </header>
 
