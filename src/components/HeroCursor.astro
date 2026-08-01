@@ -31,7 +31,7 @@ const { size = 8, accent = 'warn', lerp = 0.18 } = Astro.props;
 
 <script>
   class HeroCursor {
-    ring: HTMLElement;
+    ring!: HTMLElement;
     mouseX = 0;
     mouseY = 0;
     curX = 0;
@@ -59,7 +59,7 @@ const { size = 8, accent = 'warn', lerp = 0.18 } = Astro.props;
       this.tick();
     }
 
-    lerp: number;
+    lerp!: number;
 
     bind() {
       document.addEventListener('mousemove', (e) => {

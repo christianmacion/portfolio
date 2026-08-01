@@ -27,11 +27,13 @@ concurrency:
 
 jobs:
   typecheck:
-    # `astro check` is strict and surfaces content-collection type drift that
-    # `astro build` tolerates; treat errors here as advisory so a clean build
-    # can still ship while we work through the long tail.
-    name: Type-check (astro check, advisory)
-    continue-on-error: true
+    # v9.3 (2026-08-01) — typecheck is a BLOCKING gate. `astro check` surfaces
+    # content-collection type drift that `astro build` tolerates silently; the
+    # long tail is small enough now (0 errors after this PR) that we block PRs
+    # until any regression is fixed. The job streams the full output to the
+    # PR summary so failures are diagnosable without re-running the job
+    # locally.
+    name: Type-check (astro check)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -40,7 +42,18 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npx astro check
+      - name: Astro typecheck
+        run: |
+          set +e
+          npm run astro check 2>&1 | tee astro-check.txt
+          status=${PIPESTATUS[0]}
+          {
+            echo '## Astro typecheck'
+            echo '```text'
+            cat astro-check.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          exit "$status"
 
   lint:
     name: Lint (ESLint)

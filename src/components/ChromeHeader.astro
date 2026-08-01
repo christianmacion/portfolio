@@ -66,7 +66,7 @@ const {
 
   {!hideTenant && (
     <p class="page__tenant mono" aria-label="Identity ticker">
-      {tenant.split(' · ').map((segment, i, arr) => (
+      {tenant.split(' · ').map((segment: string, i: number, arr: string[]) => (
         <>
           <span>{segment}</span>
           {i < arr.length - 1 && (

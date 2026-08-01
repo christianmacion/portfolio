@@ -72,6 +72,10 @@ interface Props {
   // chrome. Per webcraft-no-vibe §signature-layer: confidence = no
   // duplicate nav/CTA on pages that have their own running tape.
   chrome?: 'full' | 'slim' | 'none';
+  // v9.3 — opt-in noindex signal for error pages (500). When true,
+  // BaseLayout emits `<meta name="robots" content="noindex">` so
+  // search engines skip the error surface.
+  noindex?: boolean;
 }
 
 // v6.18 — `surface` now defaults to `'v6-13'` (warm-dim #1a1714) so EVERY
