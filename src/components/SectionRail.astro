@@ -221,13 +221,22 @@ const railId = `rail-${Math.random().toString(36).slice(2, 8)}`;
     }
 
     bindClicks() {
+      // v9.3 IA wave 2 (2026-08-01) a11y baseline — wrap scrollIntoView
+      // with a reduced-motion check so the H5 finding (SectionRail
+      // smooth-scroll ignored prefers-reduced-motion) is closed. Honors
+      // WCAG 2.3.3 (Animation from Interactions) and 2.2.2 (Pause, Stop,
+      // Hide). Behavior 'auto' jumps instantly — same as default anchor.
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       for (const a of this.links) {
         a.addEventListener('click', (ev) => {
           ev.preventDefault();
           const id = a.dataset.railTarget;
           const target = id ? document.getElementById(id) : null;
           if (target) {
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            target.scrollIntoView({
+              behavior: reduced ? 'auto' : 'smooth',
+              block: 'start',
+            });
             history.replaceState(null, '', `#${id}`);
           }
         });

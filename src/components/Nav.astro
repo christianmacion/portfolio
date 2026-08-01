@@ -6,6 +6,7 @@
  */
 import { path } from '@utils/url';
 import { profile } from '@utils/profile';
+const bookMailto = `mailto:${profile.contact.email}?subject=${encodeURIComponent('Book a 30-min review')}&body=${encodeURIComponent('Suggested slots (next 14 days, PH UTC+8):\\n— Reply with 2-3 windows that work for you and I will confirm within 24 hours.')}`;
 import NavMore from '@components/NavMore.astro';
 const { pathname } = Astro.url;
 const isActive = (href: string) => {
@@ -18,15 +19,20 @@ const isActive = (href: string) => {
 // v6.11.13 — Positions promoted from secondary to primary. The "Live
 // book" label was ambiguous (trade book? book to read?) and buried the
 // most important recruiter-visiting page behind a 10-link disclosure.
+// v9.3 IA wave 2 (2026-08-01) — /now promoted from position #8 to #2.
+// Reasoning: /now is the second-most-current artifact (dated one-pager
+// of current activities); eye-tracking on recruiters first-passes only
+// reads positions 1-4. Promoting to #2 lifts "what does he care about
+// this week?" to the row recruiters actually scan.
 const primary = [
   { href: path('/'), label: 'Home' },
+  { href: path('/now'), label: 'Now' },
   { href: path('/for-recruiters'), label: 'For recruiters' },
   { href: path('/proof'), label: 'Proof' },
   { href: path('/positions'), label: 'Positions' },
   { href: path('/projects'), label: 'Projects' },
   { href: path('/solutions'), label: 'Solutions' },
   { href: path('/methodology'), label: 'Method' },
-  { href: path('/now'), label: 'Now' },
 ];
 
 // v6.1.0 (Mission G) — Markets dropdown sits between Proof and Projects
@@ -196,13 +202,14 @@ const secondary = [
           </div>
         </details>
         {/* v9.3 IA wave 2 (2026-08-01) — Mobile drawer Book-a-call. Full-width
-           amber CTA → verified cal.com URL, opens in new tab. */}
+           amber CTA. Mailto fallback per Wave-2 conversion audit (cal.com
+           /christianmacion/30min-review returns HTTP 404 as of 2026-08-01).
+           Owner-action item to recover the cal.com handle + recreate the
+           30min-review event type; until then, mailto is the binding path. */}
         <a
-          href="https://cal.com/christianmacion/30min-review"
+          href={bookMailto}
           class="btn btn--sm nav__book nav__book--mobile"
-          target="_blank"
-          rel="noopener"
-          aria-label="Book a 30-minute call (opens cal.com in new tab)"
+          aria-label="Book a 30-minute review via email (mailto fallback while cal.com handle is recovered)"
         >
           <span>Book a call</span>
         </a>
@@ -333,15 +340,17 @@ const secondary = [
         </div>
       </details>
       {/* v9.3 IA wave 2 (2026-08-01) — Persistent Book-a-call CTA in nav.
-         Amber-deep on tape → terracotta on hover; verified cal.com URL
-         from contact.astro:183 (REAL + LIVE). External link, opens in
-         new tab. */}
+         Amber-deep on tape → terracotta on hover. Mailto fallback per
+         Wave-2 conversion audit (cal.com/christianmacion/30min-review
+         returns HTTP 404 as of 2026-08-01; verified via curl HTTP/2 404
+         cf-ray a243042e0bad0dc3-HKG). Owner-action item to recover the
+         cal.com handle + recreate the 30min-review event type; until
+         then, mailto is the binding path per the conversion audit's
+         "mailto + slot times tile" recommended fallback. */}
       <a
-        href="https://cal.com/christianmacion/30min-review"
+        href={bookMailto}
         class="btn btn--sm nav__book nav__book--desktop"
-        target="_blank"
-        rel="noopener"
-        aria-label="Book a 30-minute call (opens cal.com in new tab)"
+        aria-label="Book a 30-minute review via email (mailto fallback while cal.com handle is recovered)"
       >
         <span>Book a call</span>
       </a>
