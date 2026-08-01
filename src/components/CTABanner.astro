@@ -98,7 +98,13 @@ const grid: { day: string; weekday: string; status: CellStatus[] }[] = (() => {
   // Anchor: parse buildSeed which is an ISO date string ("YYYY-MM-DDTHH:MM:SSZ").
   const seedIso = (() => {
     const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(buildSeed());
-    return m ? Date.UTC(+m[1], +m[2] - 1, +m[3]) : Date.now();
+    // Standing Order §9 — never use Date.now() in deterministic outputs.
+    // buildSeed() is contractually guaranteed to return an ISO-8601
+    // string (or the 2026-07-10T00:00:00Z fallback), so the regex
+    // above should always match. If it somehow doesn't, fall back to
+    // the same default date that buildSeed() uses internally so the
+    // build remains deterministic across runs.
+    return m ? Date.UTC(+m[1], +m[2] - 1, +m[3]) : Date.UTC(2026, 6, 10);
   })();
   const startUtcMs = seedIso;
   const MONTHS = [

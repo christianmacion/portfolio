@@ -38,6 +38,23 @@
  * Two closures seeded with the same string produce an identical
  * sequence of outputs (verified by hand for 2026-07-11 and 2026-07-12).
  */
+/**
+ * FNV-1a 32-bit hash of a string, returned as an 8-character lowercase
+ * hex string. Deterministic across runtimes — same input always
+ * produces the same output. Used to derive stable element IDs from
+ * prop signatures so component frontmatter can stay SSR/hydration
+ * parity-safe (Standing Order §9 — no Math.random / Date.now in
+ * deterministic outputs).
+ */
+export function fnv1a(str: string): string {
+  let state = 0x811c9dc5;
+  for (let i = 0; i < str.length; i++) {
+    state ^= str.charCodeAt(i);
+    state = Math.imul(state, 0x01000193) >>> 0;
+  }
+  return state.toString(16).padStart(8, '0');
+}
+
 export function seedFromString(str: string): () => number {
   // FNV-1a 32-bit hash; deterministic and stable across runtimes.
   let state = 0x811c9dc5;

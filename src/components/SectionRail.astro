@@ -35,7 +35,12 @@ interface Props {
   position?: 'left' | 'right';
 }
 const { sections, position = 'right' } = Astro.props;
-const railId = `rail-${Math.random().toString(36).slice(2, 8)}`;
+// Standing Order §9 — no Math.random() in deterministic outputs.
+// Deterministic ID from the joined section IDs: same section list →
+// same ID across SSR + hydration, so the data-rail-id attribute stays
+// stable and querySelectorAll('[data-rail-id]') still works.
+import { fnv1a } from '@utils/prng';
+const railId = `rail-${fnv1a(sections.map((s) => s.id).join('|'))}`;
 ---
 
 <nav
@@ -180,6 +185,7 @@ const railId = `rail-${Math.random().toString(36).slice(2, 8)}`;
     }
 
     links: HTMLAnchorElement[];
+    private _observer?: IntersectionObserver;
 
     bindScroll() {
       const obs = new IntersectionObserver(
