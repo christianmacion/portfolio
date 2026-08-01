@@ -188,7 +188,7 @@ a:hover {
 a:focus-visible {
   outline: 2px solid var(--c-primary-2-deep);
   outline-offset: 3px;
-  border-radius: 2px;
+  border-radius: 1px;
 }
 
 /* v6.3 polish — the skip-link lives off-screen until :focus, so the
