@@ -260,6 +260,10 @@ const mistakes = [
     margin-block: var(--sp-4) var(--sp-5);
     max-width: 22ch;
   }
+  /* v9.3.1 · "got wrong" headline underline uses techy-blue gradient. */
+  .mistakes-head__title .hl::after {
+    background: linear-gradient(90deg, var(--c-blue), var(--c-blue-mid));
+  }
   .mistakes-head__sub {
     font-size: var(--fs-lg);
     color: var(--c-ink-2);
@@ -473,6 +477,39 @@ const mistakes = [
     }
     .mistake__head {
       gap: var(--sp-3);
+    }
+  }
+
+  /* v9.3.1 · mistake card stagger fade-in (shared broadside-rise).
+     6+ entries in the "what I got wrong" log — 80ms cadence reads as
+     a confessional ledger populating row by row. */
+  .mistake {
+    animation: broadside-rise 480ms ease-out both;
+  }
+  .mistake:nth-child(1) {
+    animation-delay: 60ms;
+  }
+  .mistake:nth-child(2) {
+    animation-delay: 140ms;
+  }
+  .mistake:nth-child(3) {
+    animation-delay: 220ms;
+  }
+  .mistake:nth-child(4) {
+    animation-delay: 300ms;
+  }
+  .mistake:nth-child(5) {
+    animation-delay: 380ms;
+  }
+  .mistake:nth-child(6) {
+    animation-delay: 460ms;
+  }
+  .mistake:nth-child(n + 7) {
+    animation-delay: 540ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mistake {
+      animation: none;
     }
   }
 </style>

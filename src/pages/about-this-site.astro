@@ -510,4 +510,80 @@ const licenses = [
       gap: var(--sp-1);
     }
   }
+
+  /* v9.3.1 · stack__row stagger fade-in (shared broadside-rise).
+     8-row tech stack list — 50ms cascade reads as the build ledger
+     populating top-to-bottom. */
+  .stack__row {
+    animation: broadside-rise 480ms ease-out both;
+  }
+  .stack__row:nth-child(1) {
+    animation-delay: 50ms;
+  }
+  .stack__row:nth-child(2) {
+    animation-delay: 100ms;
+  }
+  .stack__row:nth-child(3) {
+    animation-delay: 150ms;
+  }
+  .stack__row:nth-child(4) {
+    animation-delay: 200ms;
+  }
+  .stack__row:nth-child(5) {
+    animation-delay: 250ms;
+  }
+  .stack__row:nth-child(6) {
+    animation-delay: 300ms;
+  }
+  .stack__row:nth-child(7) {
+    animation-delay: 350ms;
+  }
+  .stack__row:nth-child(n + 8) {
+    animation-delay: 400ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .stack__row {
+      animation: none;
+    }
+  }
+
+  /* v9.3.1 · repo__row stagger fade-in (shared broadside-rise).
+     4 public repos — 80ms cadence reads as the OSS catalog populating. */
+  .repo__row {
+    animation: broadside-rise 480ms ease-out both;
+  }
+  .repo__row:nth-child(1) {
+    animation-delay: 80ms;
+  }
+  .repo__row:nth-child(2) {
+    animation-delay: 160ms;
+  }
+  .repo__row:nth-child(3) {
+    animation-delay: 240ms;
+  }
+  .repo__row:nth-child(n + 4) {
+    animation-delay: 320ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .repo__row {
+      animation: none;
+    }
+  }
+
+  /* v9.3.1 · lic__row stagger fade-in (shared broadside-rise).
+     2 license rows (CC-BY-SA + MIT) — 60ms cadence is the legal ledger. */
+  .lic__row {
+    animation: broadside-rise 480ms ease-out both;
+  }
+  .lic__row:nth-child(1) {
+    animation-delay: 60ms;
+  }
+  .lic__row:nth-child(n + 2) {
+    animation-delay: 120ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .lic__row {
+      animation: none;
+    }
+  }
 </style>

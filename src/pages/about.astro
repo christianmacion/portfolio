@@ -14,7 +14,6 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import Stat from '@components/Stat.astro';
 import Equation from '@components/Equation.astro';
 import CTABanner from '@components/CTABanner.astro';
-import ChromeHeader from '@components/ChromeHeader.astro';
 import { profile } from '@utils/profile';
 import { path } from '@utils/url';
 import { getCollection, type CollectionEntry } from 'astro:content';
@@ -52,7 +51,9 @@ const NGATE = `${profile.stats.evalGates}-gate`;
     <div class="container container-narrow">
       <p class="page-head__eyebrow mono">
         <span class="page-head__eyebrow-chip">ABOUT · OPERATOR + RESEARCHER</span>
-        <span class="page-head__eyebrow-line">ONE METHOD · TWO HATS · {profile.stats.evalGates}-GATE DISCIPLINE</span>
+        <span class="page-head__eyebrow-line"
+          >ONE METHOD · TWO HATS · {profile.stats.evalGates}-GATE DISCIPLINE</span
+        >
       </p>
       <h1 class="page-head__title" data-words>
         One method. <span class="hl">Two hats.</span>
@@ -249,34 +250,33 @@ const NGATE = `${profile.stats.evalGates}-gate`;
           <strong>systematic trading research</strong>. The through-line is one engineering
           principle: <strong>don't ship what hasn't passed a measurable quality gate.</strong>
           {profile.stats.aiAgentCount} agents in an orchestrator-worker topology. A {NGATE} statistical
-          evaluation harness. Pre-registered research windows. Public-data reproducibility. Headline
-          metrics you can verify.
+          evaluation harness. Pre-registered research windows. Public-data reproducibility. Headline metrics
+          you can verify.
         </p>
 
         <p>
-          Most recently I shipped the same {NGATE} harness against LLM outputs and systematic
-          strategies on a closed past contract (systematic-strategy desk, 03/2026 – 06/2026,
-          NDA-protected). Before that: a 7-agent venture-incubation pipeline under Macion Ventures,
-          an 8-agent content-production pipeline for editorial automation, and a portfolio of
-          runnable AI projects — RAG scorecard, ReAct tool-calling agent, MCP eval server,
-          LLM-as-judge harness, reflection agent, AI-slop evaluation gate.
+          Most recently I shipped the same {NGATE} harness against LLM outputs and systematic strategies
+          on a closed past contract (systematic-strategy desk, 03/2026 – 06/2026, NDA-protected). Before
+          that: a 7-agent venture-incubation pipeline under Macion Ventures, an 8-agent content-production
+          pipeline for editorial automation, and a portfolio of runnable AI projects — RAG scorecard,
+          ReAct tool-calling agent, MCP eval server, LLM-as-judge harness, reflection agent, AI-slop evaluation
+          gate.
         </p>
 
         <p>
           On the quant side I design and backtest systematic strategies on crypto and equities —
-          {quantProjectCount} reproducible public-data projects spanning multiple-testing (Deflated
-          Sharpe), cross-sectional and time-series alpha, volatility carry, cointegration,
-          funding-carry, regime overlays, transaction-cost realism, and look-ahead-bias audits.
-          Every project ships with the senior-research discipline: locked OOS windows,
-          block-bootstrap CIs, methodology declared up-front, not bolted on at the end.
+          {quantProjectCount} reproducible public-data projects spanning multiple-testing (Deflated Sharpe),
+          cross-sectional and time-series alpha, volatility carry, cointegration, funding-carry, regime
+          overlays, transaction-cost realism, and look-ahead-bias audits. Every project ships with the
+          senior-research discipline: locked OOS windows, block-bootstrap CIs, methodology declared up-front,
+          not bolted on at the end.
         </p>
 
         <p>
-          Based in {profile.location.display} (UTC+8). {profile.availability.hours} remote,
-          APAC + US-premarket overlap. {profile.stats.certCount} professional certifications
-          across AI, finance, math/statistics, and event flagships — built up in {
-            profile.stats.ageMonths
-          } months. I write about what I'm learning and ship the things I'm building.
+          Based in {profile.location.display} (UTC+8). {profile.availability.hours} remote, APAC + US-premarket
+          overlap. {profile.stats.certCount} professional certifications across AI, finance, math/statistics,
+          and event flagships — built up in {profile.stats.ageMonths} months. I write about what I'm learning
+          and ship the things I'm building.
         </p>
       </div>
     </div>
@@ -391,6 +391,10 @@ const NGATE = `${profile.stats.evalGates}-gate`;
     font-size: clamp(2rem, 4vw, 3rem);
     letter-spacing: -0.02em;
     margin-bottom: var(--sp-3);
+  }
+  /* v9.3.1 · "Two hats" headline underline uses techy-blue gradient. */
+  .page-head__title .hl::after {
+    background: linear-gradient(90deg, var(--c-blue), var(--c-blue-mid));
   }
   .page-head__voice {
     margin: 0 0 var(--sp-5);
@@ -664,6 +668,36 @@ const NGATE = `${profile.stats.evalGates}-gate`;
   @media (max-width: 720px) {
     .head-stats {
       grid-template-columns: 1fr;
+    }
+  }
+
+  /* v9.3.1 · about page proof-card stagger fade-in (shared broadside-rise).
+     5+ proof cards on this page — 80ms cadence keeps the case-study
+     shelf rhythm consistent with /solutions/. */
+  .proof-card {
+    animation: broadside-rise 480ms ease-out both;
+  }
+  .proof-card:nth-child(1) {
+    animation-delay: 60ms;
+  }
+  .proof-card:nth-child(2) {
+    animation-delay: 140ms;
+  }
+  .proof-card:nth-child(3) {
+    animation-delay: 220ms;
+  }
+  .proof-card:nth-child(4) {
+    animation-delay: 300ms;
+  }
+  .proof-card:nth-child(5) {
+    animation-delay: 380ms;
+  }
+  .proof-card:nth-child(n + 6) {
+    animation-delay: 460ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .proof-card {
+      animation: none;
     }
   }
 </style>

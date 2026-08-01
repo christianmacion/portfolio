@@ -70,8 +70,11 @@ const certSpanMonths =
   <header class="page-head">
     <div class="container">
       <p class="page-head__eyebrow mono">
-        <span class="page-head__eyebrow-chip">CERTIFICATIONS · {claimedTotal} TOTAL · {groups.length} DOMAINS</span>
-        <span class="page-head__eyebrow-line">ISSUER-VERIFIED · TIER-1 FLAGGED · CURATED BELOW</span>
+        <span class="page-head__eyebrow-chip"
+          >CERTIFICATIONS · {claimedTotal} TOTAL · {groups.length} DOMAINS</span
+        >
+        <span class="page-head__eyebrow-line">ISSUER-VERIFIED · TIER-1 FLAGGED · CURATED BELOW</span
+        >
       </p>
       <h1 class="page-head__title" data-words>
         <span class="mono">{totalCount}+ of {claimedTotal}</span> certifications, {groups.length} domains.
@@ -271,6 +274,45 @@ const certSpanMonths =
   @media (max-width: 880px) {
     .head-stats {
       grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  /* v9.3.1 · cert row stagger fade-in (shared broadside-rise).
+     9+ cert cards in the highlight reel — 60ms cascade reads as a
+     credentials list populating down the page. */
+  .certs > li {
+    animation: broadside-rise 480ms ease-out both;
+  }
+  .certs > li:nth-child(1) {
+    animation-delay: 60ms;
+  }
+  .certs > li:nth-child(2) {
+    animation-delay: 120ms;
+  }
+  .certs > li:nth-child(3) {
+    animation-delay: 180ms;
+  }
+  .certs > li:nth-child(4) {
+    animation-delay: 240ms;
+  }
+  .certs > li:nth-child(5) {
+    animation-delay: 300ms;
+  }
+  .certs > li:nth-child(6) {
+    animation-delay: 360ms;
+  }
+  .certs > li:nth-child(7) {
+    animation-delay: 420ms;
+  }
+  .certs > li:nth-child(8) {
+    animation-delay: 480ms;
+  }
+  .certs > li:nth-child(n + 9) {
+    animation-delay: 540ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .certs > li {
+      animation: none;
     }
   }
 </style>

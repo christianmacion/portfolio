@@ -134,7 +134,9 @@ const itemListJsonLd = {
     <div class="container container--narrow">
       <p class="hero__eyebrow mono">
         <span class="hero__eyebrow-chip">FOR HIRING MANAGERS · 30-MIN AGENDA · NDA-CLEAN</span>
-        <span class="hero__eyebrow-line">{agendaVersion} · TUE/WED/THU · 18:00–22:00 PHT (10:00–14:00 UTC)</span>
+        <span class="hero__eyebrow-line"
+          >{agendaVersion} · TUE/WED/THU · 18:00–22:00 PHT (10:00–14:00 UTC)</span
+        >
       </p>
       <h1 class="hero__title" data-words>Screening call — what the 30 minutes look like.</h1>
       <VoiceLine class="hero__voice">
@@ -564,6 +566,87 @@ const itemListJsonLd = {
     }
     .kv th {
       width: 38%;
+    }
+  }
+
+  /* v9.3.1 · agenda__item stagger fade-in (shared broadside-rise).
+     5-phase 30-min timeline — 80ms cadence reads as the clock ticking
+     down from 00:00 → 30:00. */
+  .agenda__item {
+    animation: broadside-rise 480ms ease-out both;
+  }
+  .agenda__item:nth-child(1) {
+    animation-delay: 80ms;
+  }
+  .agenda__item:nth-child(2) {
+    animation-delay: 160ms;
+  }
+  .agenda__item:nth-child(3) {
+    animation-delay: 240ms;
+  }
+  .agenda__item:nth-child(4) {
+    animation-delay: 320ms;
+  }
+  .agenda__item:nth-child(n + 5) {
+    animation-delay: 400ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .agenda__item {
+      animation: none;
+    }
+  }
+
+  /* v9.3.1 · prompts__item stagger fade-in (shared broadside-rise).
+     5 questions worth asking — 40ms tight cascade keeps the prompt
+     ledger rhythm. */
+  .prompts__item {
+    animation: broadside-rise 480ms ease-out both;
+  }
+  .prompts__item:nth-child(1) {
+    animation-delay: 40ms;
+  }
+  .prompts__item:nth-child(2) {
+    animation-delay: 80ms;
+  }
+  .prompts__item:nth-child(3) {
+    animation-delay: 120ms;
+  }
+  .prompts__item:nth-child(4) {
+    animation-delay: 160ms;
+  }
+  .prompts__item:nth-child(n + 5) {
+    animation-delay: 200ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .prompts__item {
+      animation: none;
+    }
+  }
+
+  /* v9.3.1 · handoff__item stagger fade-in (shared broadside-rise).
+     5 artifact surfaces — 60ms cadence reads as the forward-to-HM
+     bundle materializing. */
+  .handoff__item {
+    animation: broadside-rise 480ms ease-out both;
+  }
+  .handoff__item:nth-child(1) {
+    animation-delay: 60ms;
+  }
+  .handoff__item:nth-child(2) {
+    animation-delay: 120ms;
+  }
+  .handoff__item:nth-child(3) {
+    animation-delay: 180ms;
+  }
+  .handoff__item:nth-child(4) {
+    animation-delay: 240ms;
+  }
+  .handoff__item:nth-child(n + 5) {
+    animation-delay: 300ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .handoff__item {
+      animation: none;
     }
   }
 </style>

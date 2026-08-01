@@ -252,13 +252,15 @@ const decayPoints = events.map((e) => ({
       </header>
 
       <div class="grid">
-        {events.map((ev) => (
-          <PredictionCard
-            event={ev}
-            buildDate={buildDate}
-            sparkline={genSparkline(ev.id, ev.data.impliedPx, ev.data.edge)}
-          />
-        ))}
+        {
+          events.map((ev) => (
+            <PredictionCard
+              event={ev}
+              buildDate={buildDate}
+              sparkline={genSparkline(ev.id, ev.data.impliedPx, ev.data.edge)}
+            />
+          ))
+        }
       </div>
     </div>
   </section>
@@ -415,6 +417,32 @@ const decayPoints = events.map((e) => ({
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: var(--sp-3);
+  }
+  /* v9.3.1 · prediction-market stat cell stagger fade-in (shared
+     broadside-rise). 4-cell hero strip — 80ms cadence matches the
+     markets-page terminal pattern. */
+  .pm-stats__grid > * {
+    animation: broadside-rise 480ms ease-out both;
+  }
+  .pm-stats__grid > *:nth-child(1) {
+    animation-delay: 60ms;
+  }
+  .pm-stats__grid > *:nth-child(2) {
+    animation-delay: 140ms;
+  }
+  .pm-stats__grid > *:nth-child(3) {
+    animation-delay: 220ms;
+  }
+  .pm-stats__grid > *:nth-child(4) {
+    animation-delay: 300ms;
+  }
+  .pm-stats__grid > *:nth-child(n + 5) {
+    animation-delay: 380ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pm-stats__grid > * {
+      animation: none;
+    }
   }
   @media (max-width: 880px) {
     .pm-stats__grid {

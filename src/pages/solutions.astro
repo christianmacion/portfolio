@@ -325,6 +325,11 @@ const eduSolutions: SolutionEntry[] = solutions.filter(
     line-height: 1;
     margin-block: var(--sp-4) var(--sp-5);
   }
+  /* v9.3.1 · "solutions" headline underline uses techy-blue gradient
+     (matches /skills/ /ai/ /contact/ /proof/ /positions/ accent). */
+  .solutions-head__title .hl::after {
+    background: linear-gradient(90deg, var(--c-blue), var(--c-blue-mid));
+  }
   .solutions-head__voice {
     margin: 0 0 var(--sp-5);
     max-width: 60ch;
@@ -514,6 +519,39 @@ const eduSolutions: SolutionEntry[] = solutions.filter(
     }
     .sol-grid {
       grid-template-columns: 1fr;
+    }
+  }
+
+  /* v9.3.1 · solutions card stagger fade-in (shared broadside-rise).
+     10+ case studies across AI + quant lanes — 80ms cadence keeps the
+     "case-study shelf" rhythm consistent with /proof/ lists. */
+  .sol-card {
+    animation: broadside-rise 480ms ease-out both;
+  }
+  .sol-card:nth-child(1) {
+    animation-delay: 60ms;
+  }
+  .sol-card:nth-child(2) {
+    animation-delay: 140ms;
+  }
+  .sol-card:nth-child(3) {
+    animation-delay: 220ms;
+  }
+  .sol-card:nth-child(4) {
+    animation-delay: 300ms;
+  }
+  .sol-card:nth-child(5) {
+    animation-delay: 380ms;
+  }
+  .sol-card:nth-child(6) {
+    animation-delay: 460ms;
+  }
+  .sol-card:nth-child(n + 7) {
+    animation-delay: 540ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sol-card {
+      animation: none;
     }
   }
 </style>

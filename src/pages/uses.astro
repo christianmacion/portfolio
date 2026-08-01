@@ -365,6 +365,10 @@ const sections: UseSection[] = [
     margin-block: var(--sp-4) var(--sp-5);
     max-width: 22ch;
   }
+  /* v9.3.1 · "do the work" headline underline uses techy-blue gradient. */
+  .uses-head__title .hl::after {
+    background: linear-gradient(90deg, var(--c-blue), var(--c-blue-mid));
+  }
   .uses-head__sub {
     font-size: var(--fs-lg);
     color: var(--c-ink-2);
@@ -483,6 +487,39 @@ const sections: UseSection[] = [
     .uses-row {
       grid-template-columns: 1fr;
       gap: var(--sp-1);
+    }
+  }
+
+  /* v9.3.1 · uses-row stagger fade-in (shared broadside-rise).
+     Per-section list of stack items — 40ms tight cascade keeps the
+     "this and not that" ledger rhythm consistent. */
+  .uses-row {
+    animation: broadside-rise 480ms ease-out both;
+  }
+  .uses-row:nth-child(1) {
+    animation-delay: 40ms;
+  }
+  .uses-row:nth-child(2) {
+    animation-delay: 80ms;
+  }
+  .uses-row:nth-child(3) {
+    animation-delay: 120ms;
+  }
+  .uses-row:nth-child(4) {
+    animation-delay: 160ms;
+  }
+  .uses-row:nth-child(5) {
+    animation-delay: 200ms;
+  }
+  .uses-row:nth-child(6) {
+    animation-delay: 240ms;
+  }
+  .uses-row:nth-child(n + 7) {
+    animation-delay: 280ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .uses-row {
+      animation: none;
     }
   }
 </style>

@@ -390,4 +390,39 @@ function statusPill(s: ShelfItem['status']): string {
     color: var(--c-primary);
     font-weight: 600;
   }
+
+  /* v9.3.1 · policy-list item stagger fade-in (shared broadside-rise).
+     8 reading-policy rules — 60ms cascade keeps the manifesto rhythm. */
+  .policy-list li {
+    animation: broadside-rise 480ms ease-out both;
+  }
+  .policy-list li:nth-child(1) {
+    animation-delay: 60ms;
+  }
+  .policy-list li:nth-child(2) {
+    animation-delay: 120ms;
+  }
+  .policy-list li:nth-child(3) {
+    animation-delay: 180ms;
+  }
+  .policy-list li:nth-child(4) {
+    animation-delay: 240ms;
+  }
+  .policy-list li:nth-child(5) {
+    animation-delay: 300ms;
+  }
+  .policy-list li:nth-child(6) {
+    animation-delay: 360ms;
+  }
+  .policy-list li:nth-child(7) {
+    animation-delay: 420ms;
+  }
+  .policy-list li:nth-child(n + 8) {
+    animation-delay: 480ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .policy-list li {
+      animation: none;
+    }
+  }
 </style>

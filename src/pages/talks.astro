@@ -384,4 +384,60 @@ const appearances: Appearance[] = [
       gap: var(--sp-1);
     }
   }
+
+  /* v9.3.1 · talks-card stagger fade-in (shared broadside-rise).
+     4-card featured grid — 80ms cadence reads as the public-speaking
+     record populating as you scroll. */
+  .talks-card {
+    animation: broadside-rise 480ms ease-out both;
+  }
+  .talks-card:nth-child(1) {
+    animation-delay: 60ms;
+  }
+  .talks-card:nth-child(2) {
+    animation-delay: 140ms;
+  }
+  .talks-card:nth-child(3) {
+    animation-delay: 220ms;
+  }
+  .talks-card:nth-child(4) {
+    animation-delay: 300ms;
+  }
+  .talks-card:nth-child(n + 5) {
+    animation-delay: 380ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .talks-card {
+      animation: none;
+    }
+  }
+
+  /* v9.3.1 · talks-row stagger fade-in (shared broadside-rise).
+     40ms tight cascade keeps the dense lecture-list rhythm. */
+  .talks-row {
+    animation: broadside-rise 480ms ease-out both;
+  }
+  .talks-row:nth-child(1) {
+    animation-delay: 40ms;
+  }
+  .talks-row:nth-child(2) {
+    animation-delay: 80ms;
+  }
+  .talks-row:nth-child(3) {
+    animation-delay: 120ms;
+  }
+  .talks-row:nth-child(4) {
+    animation-delay: 160ms;
+  }
+  .talks-row:nth-child(5) {
+    animation-delay: 200ms;
+  }
+  .talks-row:nth-child(n + 6) {
+    animation-delay: 240ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .talks-row {
+      animation: none;
+    }
+  }
 </style>
