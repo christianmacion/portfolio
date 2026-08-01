@@ -1,5 +1,5 @@
 import type { PagesFunction } from '@cloudflare/workers-types';
-import { allowedOrigin, boundedJson, errorResponse, json, parseContact, requestId, sha256, type ContactAccepted, type Env } from '../lib/contracts';
+import { allowedOrigin, boundedJson, errorResponse, hmacSha256, json, parseContact, requestId, sha256, type ContactAccepted, type Env } from '../lib/contracts';
 
 export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   const rid = requestId(request);
@@ -11,7 +11,11 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   const payload = parseContact(await boundedJson(request, 16 * 1024));
   if (!payload) return errorResponse(rid, 422, 'VALIDATION_ERROR', 'validation_error');
   const ip = request.headers.get('CF-Connecting-IP') ?? 'local';
-  const ipHash = `v1:${await sha256(ip)}`;
+  const ipHashPepper = env.IP_HASH_PEPPER_PRIMARY;
+  if (!ipHashPepper) return errorResponse(rid, 503, 'UPSTREAM_UNAVAILABLE', 'contact_unavailable');
+  // v2: HMAC-SHA256 keyed on IP_HASH_PEPPER_PRIMARY. v1: (legacy) raw SHA-256 of
+  // CF-Connecting-IP — never migrated, kept distinguishable via the v1: prefix.
+  const ipHash = `v2:${await hmacSha256(ipHashPepper, ip)}`;
   const hour = Math.floor(Date.now() / 3600000);
   const limitKey = `rl:v1:contact:ip:${ipHash}:${hour}`;
   const cached = await env.RATELIMIT.get<{ count: number }>(limitKey, 'json');
