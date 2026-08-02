@@ -49,17 +49,17 @@ export const archSafe = {
   subTeams: [
     { name: 'OSINT cell', tag: '14 specialists · open-source intelligence' },
     {
-      name: 'Strategic-Posture Bench',
-      tag: '12 doctrine-corpus owners · Sun Tzu / Machiavelli / Greene',
+      name: 'Strategy bench',
+      tag: '12 specialists · strategic positioning + market scan',
     },
     {
-      name: 'Consultant Bench',
-      tag: '11 senior advisors · Drucker / Porter / Taleb / Damodaran / Christensen',
+      name: 'Consulting bench',
+      tag: '11 senior advisors · competitive strategy + valuation',
     },
-    { name: 'Commander Org', tag: '12 officers · dispatch · AAR loop · 5-must-have compliance' },
+    { name: 'Commander org', tag: '12 officers · dispatch · AAR loop · 5-must-have compliance' },
     {
-      name: 'Math Doctrine-Owners',
-      tag: '4 v3.1-grade · stochastic / dynamical / numerical PDE / stat-learn',
+      name: 'Math + quant',
+      tag: '4 specialists · stochastic · numerical · stat-learn · dynamics',
     },
     { name: 'Workspace IA', tag: '6 mental spokes · 15 routes · 1 psychological hub' },
   ] as const,

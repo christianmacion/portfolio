@@ -114,13 +114,15 @@ const liveCounters = [
         <span class="tape__sep" aria-hidden="true">·</span>
         <a class="tape__nav" href={path('/for-recruiters')}>FOR&nbsp;RECRUITERS</a>
         <span class="tape__sep" aria-hidden="true">·</span>
+        <a class="tape__nav" href={path('/comp')}>COMP&nbsp;BANDS</a>
+        <span class="tape__sep" aria-hidden="true">·</span>
         <a class="tape__nav tape__nav--cta" href={`mailto:${email}`}>EMAIL</a>
       </div>
     </header>
 
     <!-- ============= BIG DISPLAY HEADLINE ============= -->
     <section class="hero" aria-label="Identity">
-      <p class="hero__eyebrow mono">A WORKING DESCRIPTION · 2026 · v9.1</p>
+      <p class="hero__eyebrow mono">A WORKING DESCRIPTION · CURRENT</p>
       <h1 class="hero__name">
         <span class="hero__name-1">Christian</span>
         <span class="hero__name-2">T.</span>
@@ -299,73 +301,55 @@ const liveCounters = [
     </section>
 
     <!-- ============= § 03 — READING LIST ============= -->
-    <section class="reading" aria-label="Reading list">
-      <h2 class="reading__mark mono">§ 03 — Reading List</h2>
+    <section class="help" aria-label="How I help">
+      <h2 class="help__mark mono">§ 03 — How I help</h2>
       <p class="reading__sub">
-        Currently rereading or actively applying. Papers cite by year; doctrine corpora cite the
-        book.
+        Engagement shapes I've shipped. Not services I list — live systems built, deployed, and
+        kept honest with verifiable evidence.
       </p>
-      <ol class="reading__list">
-        <li>
-          <span class="reading__num">01</span><span class="reading__author"
-            >Avellaneda &amp; Lipkin</span
-          ><span class="reading__text"><em>A market microstructure framework</em> (2003)</span>
-        </li>
-        <li>
-          <span class="reading__num">02</span><span class="reading__author">Kyle</span><span
-            class="reading__text"><em>Continuous Auctions and Insider Trading</em> (1985)</span
-          >
-        </li>
-        <li>
-          <span class="reading__num">03</span><span class="reading__author">Cont</span><span
-            class="reading__text"><em>Empirical properties of asset returns</em> (2001)</span
-          >
-        </li>
-        <li>
-          <span class="reading__num">04</span><span class="reading__author">Kahneman</span><span
-            class="reading__text"><em>Thinking, Fast and Slow</em> (2011)</span
-          >
-        </li>
-        <li>
-          <span class="reading__num">05</span><span class="reading__author">Thiel</span><span
-            class="reading__text"><em>Zero to One</em> (2014)</span
-          >
-        </li>
-        <li>
-          <span class="reading__num">06</span><span class="reading__author">Christensen</span><span
-            class="reading__text"><em>The Innovator's Dilemma</em> (1997)</span
-          >
-        </li>
-        <li>
-          <span class="reading__num">07</span><span class="reading__author">Goldratt</span><span
-            class="reading__text"><em>The Goal</em> (1984, rev. 1992, def. ed. 2014)</span
-          >
-        </li>
-        <li>
-          <span class="reading__num">08</span><span class="reading__author">Sun Tzu</span><span
-            class="reading__text"><em>The Art of War</em> (~5th c. BCE)</span
-          >
-        </li>
-        <li>
-          <span class="reading__num">09</span><span class="reading__author">Machiavelli</span><span
-            class="reading__text"><em>The Prince</em> (1532)</span
-          >
-        </li>
-        <li>
-          <span class="reading__num">10</span><span class="reading__author">Greene</span><span
-            class="reading__text"><em>The 48 Laws of Power</em> (1998)</span
-          >
-        </li>
-      </ol>
+      <div class="help__grid help__grid--inline">
+        <article class="help__card">
+          <p class="help__kicker mono">QUANT RESEARCH</p>
+          <h3 class="help__title">Statistical-arb pipelines that survive live deployment</h3>
+          <p class="help__body">
+            Walk-forward backtests, deflated Sharpe, and a gate stack that filters out the ones
+            that only looked good in-sample. Each pipeline ships with a paper-trade leg and a
+            postmortem — kills included.
+          </p>
+        </article>
+        <article class="help__card">
+          <p class="help__kicker mono">AI ENGINEERING</p>
+          <h3 class="help__title">Multi-agent build systems with eval-first discipline</h3>
+          <p class="help__body">
+            Production agents behind a frozen eval harness and a kill-switch. Failures banked
+            into postmortems; wins banked into the next eval set. Ship behind metrics, not vibes.
+          </p>
+        </article>
+        <article class="help__card">
+          <p class="help__kicker mono">EVAL HARNESS</p>
+          <h3 class="help__title">Statistical gates for AI/ML claims</h3>
+          <p class="help__body">
+            Deflated Sharpe, block-bootstrap CIs, walk-forward stability — same tools you use on
+            backtests, applied to LLM eval scores. Built when the metric is too pretty.
+          </p>
+        </article>
+        <article class="help__card">
+          <p class="help__kicker mono">SHIP DISCIPLINE</p>
+          <h3 class="help__title">Reproducible artifacts with audit trails</h3>
+          <p class="help__body">
+            Frozen-spec eval, idempotent re-run path, one-page AAR. Verifiable by a stranger, not
+            just an insider.
+          </p>
+        </article>
+      </div>
     </section>
 
     <!-- ============= § 04 — FOOTPRINT ============= -->
     <section class="footprint" aria-label="Footprint">
       <h2 class="footprint__mark mono">§ 04 — Footprint</h2>
       <p class="footprint__sub">
-        Where I've been and where I cover. Davao pins are three in-person events in the last 30
-        days; the rest are research hubs or active counterparties. Each pin is a real artifact, not
-        a vibe.
+        Where I cover and where I've shipped. Each pin is a real counterpart, a real venue, or a
+        real engagement — verifiable, not decorative.
       </p>
       <EarthMap points={footprintPoints} mode="pins" />
     </section>
@@ -624,36 +608,6 @@ const liveCounters = [
     text-align: right;
     white-space: nowrap;
     font-weight: 500;
-  }
-
-  /* ====== READING LIST — numbered FT-style ====== */
-  .reading__list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    counter-reset: reading;
-  }
-  .reading__list li {
-    display: grid;
-    grid-template-columns: 40px 220px 1fr;
-    gap: 16px;
-    padding: 10px 0;
-    border-bottom: 1px solid var(--c-rule);
-    font: 400 14.5px / 1.55 var(--ff-sans);
-    color: var(--c-ink);
-    align-items: baseline;
-  }
-  .reading__list li:last-child {
-    border-bottom: 0;
-  }
-  .reading__num {
-    font: 500 11px var(--ff-mono);
-    color: var(--c-ink-3);
-    letter-spacing: 0.06em;
-  }
-  .reading__author {
-    font-weight: 600;
-    color: var(--c-ink);
   }
 
   /* ====== v9.3 IA wave 2 (2026-08-01) — S1 LEDE HOOK + S2 QUICK-ROUTE ====== */
