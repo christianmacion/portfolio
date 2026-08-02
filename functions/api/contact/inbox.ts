@@ -28,7 +28,7 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env, params })
   const token = auth.slice('Bearer '.length).trim();
   if (!token) return errorResponse(rid, 401, 'AUTH_REQUIRED', 'auth_required');
 
-  const claims = parseAccessJwt(token);
+  const claims = await parseAccessJwt(token, env);
   if (!claims) return errorResponse(rid, 401, 'AUTH_INVALID', 'auth_invalid');
   if (claims.exp * 1000 < Date.now())
     return errorResponse(rid, 401, 'AUTH_INVALID', 'auth_invalid');

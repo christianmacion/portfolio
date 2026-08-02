@@ -76,7 +76,7 @@ Recognized for combining analytical thinking, eval-first engineering, structured
 
 ### AI Systems Engineer / Quantitative Researcher (contract) — systematic-strategy desk (NDA-protected; closed past contract 03/2026 – 06/2026)
 
-_Remote · 03/2026 – 06/2026_
+*Remote · 03/2026 – 06/2026*
 
 - Designed and operated an 11-agent orchestrator-worker AI research platform (~27,500 words of role-scoped agent charters) with contracted hand-off packets, few-shot routing, and separation-of-duties between generation, validation, and documentation agents — ~76,500 LOC of light-dependency Python supporting it.
 - Built a 31-gate statistical evaluation harness (G1–G31) — block-bootstrap CIs, random-timing nulls, walk-forward, 5-era stability, plus a multiple-testing layer (Deflated Sharpe, CSCV-based PBO, MinBTL) — implemented scipy-free in numpy and used to validate both LLM outputs and systematic-trading strategies.
@@ -87,7 +87,7 @@ _Remote · 03/2026 – 06/2026_
 
 ### Trading Platform Testing & Execution Research Analyst (contract) — AI-engineering consultancy (closed past contract)
 
-_Remote · 04/2026 – 06/2026_
+*Remote · 04/2026 – 06/2026*
 
 - Conducted structured testing of trading platform onboarding flows to evaluate execution clarity, workflow logic, and system usability from a trader-first perspective.
 - Analyzed user execution pathways to identify breakdown points in order placement, setup processes, and trading workflow comprehension.
@@ -98,7 +98,7 @@ _Remote · 04/2026 – 06/2026_
 
 ### Independent AI Systems Engineer & Quantitative Researcher — Personal Investing & Self-Directed Study
 
-_Remote · 01/2025 – 05/2026_
+*Remote · 01/2025 – 05/2026*
 
 - Designed and shipped multi-agent LLM systems end-to-end: agent charters, eval harnesses, model-routing policy, structured-output contracts, persistent memory, and Python tooling — for content automation, venture incubation, and personal-knowledge workflows.
 - Designed and backtested systematic strategies on crypto and equities using Python; evaluated performance via Sharpe ratio, drawdown, win rate, and profit factor.
@@ -107,7 +107,7 @@ _Remote · 01/2025 – 05/2026_
 
 ### Crypto Trading Systems & Workflow Research Assistant — Ledger51 Trading Community
 
-_Digos City, Philippines · 10/2025 – 04/2026_
+*Digos City, Philippines · 10/2025 – 04/2026*
 
 - Supported structured analysis of crypto trading workflows, including order execution systems, trading bots, and platform mechanics.
 - Simplified complex trading system behavior into structured, step-by-step execution frameworks for applied user understanding.
@@ -117,7 +117,7 @@ _Digos City, Philippines · 10/2025 – 04/2026_
 
 ### Financial Market Educator & AI Integration Specialist (ongoing side) — Independent / Various Universities and Communities
 
-_Remote / Davao Region · 12/2024 – Ongoing_
+*Remote / Davao Region · 12/2024 – Ongoing*
 
 - Delivered workshops, webinars, and presentations on financial markets, trading systems, AI applications, and emerging technologies.
 - Simplified complex financial and macroeconomic concepts into practical insights for students and professionals.

@@ -375,6 +375,8 @@ export function base64UrlDecode(value: string): Uint8Array {
   for (let i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i);
   return bytes;
 }
+import { createRemoteJWKSet, jwtVerify, type JWTVerifyGetKey } from 'jose';
+
 export type AccessClaims = {
   sub: string;
   aud: string | string[];
@@ -383,24 +385,67 @@ export type AccessClaims = {
   iat: number;
   email?: string;
 };
-export function parseAccessJwt(token: string): AccessClaims | null {
-  const parts = token.split('.');
-  if (parts.length !== 3) return null;
+
+// JWKS cache: keyed by URL. The `getKey` factory is reused across requests
+// so we don't refetch the JWKS on every page load. TTL is 10 min — well under
+// the Cloudflare Access key-rotation cadence (1h by default) so a stale key
+// in the cache is fine; `jose` will refetch on cache miss.
+const jwksCache = new Map<string, { getKey: JWTVerifyGetKey; expiresAt: number }>();
+const JWKS_CACHE_TTL_MS = 10 * 60 * 1000;
+
+// Exported for tests so they can pre-populate the cache with a local JWKS
+// (using `jose.createLocalJWKSet(jwks)`) without standing up an HTTP server.
+// Production code should never call this directly — `parseAccessJwt` manages it.
+export function __setCachedJwks(jwksUrl: string, getKey: JWTVerifyGetKey, ttlMs = JWKS_CACHE_TTL_MS): void {
+  jwksCache.set(jwksUrl, { getKey, expiresAt: Date.now() + ttlMs });
+}
+
+// Verifies the JWT signature, `iss`, and `aud` against a caller-supplied
+// `getKey`. This is the pure verification core; production code goes through
+// `parseAccessJwt(token, env)` which loads the JWKS from `env.CF_ACCESS_JWKS_URL`.
+// Tests call this directly with a local JWKS.
+export async function verifyAccessJwtClaims(
+  token: string,
+  env: Pick<Env, 'CF_ACCESS_AUD' | 'CF_ACCESS_TEAM_DOMAIN'>,
+  getKey: JWTVerifyGetKey,
+): Promise<AccessClaims | null> {
+  if (!token || token.split('.').length !== 3) return null;
+  const verifyOptions: Parameters<typeof jwtVerify>[2] = { algorithms: ['RS256', 'ES256'] };
+  if (env.CF_ACCESS_AUD) verifyOptions.audience = env.CF_ACCESS_AUD;
+  if (env.CF_ACCESS_TEAM_DOMAIN) verifyOptions.issuer = `https://${env.CF_ACCESS_TEAM_DOMAIN}`;
   try {
-    const headerBytes = base64UrlDecode(parts[0]);
-    const headerText = new TextDecoder().decode(headerBytes);
-    const header = JSON.parse(headerText) as { alg?: string; kid?: string };
-    if (header.alg !== 'RS256' && header.alg !== 'ES256') return null;
-    const payloadBytes = base64UrlDecode(parts[1]);
-    const payload = JSON.parse(new TextDecoder().decode(payloadBytes)) as AccessClaims;
+    const { payload } = await jwtVerify(token, getKey, verifyOptions);
     if (typeof payload.sub !== 'string' || payload.sub.length < 1) return null;
-    if (typeof payload.iss !== 'string') return null;
-    if (typeof payload.exp !== 'number' || typeof payload.iat !== 'number') return null;
-    if (typeof payload.aud !== 'string' && !Array.isArray(payload.aud)) return null;
-    return payload;
+    return {
+      sub: payload.sub,
+      iss: typeof payload.iss === 'string' ? payload.iss : '',
+      aud: (payload.aud ?? '') as string | string[],
+      exp: typeof payload.exp === 'number' ? payload.exp : 0,
+      iat: typeof payload.iat === 'number' ? payload.iat : 0,
+      ...(typeof payload.email === 'string' ? { email: payload.email } : {}),
+    };
   } catch {
     return null;
   }
+}
+
+// Production entry point. Fetches + caches the JWKS, then verifies. Fail-closed:
+// if `CF_ACCESS_JWKS_URL` is not configured, the function refuses ALL tokens
+// (the prior behaviour of trusting an unverified signature was a critical
+// security defect; see `~/.claude/cache/corporate/aars/2026-08-02-jwt-verify-fix.md`).
+export async function parseAccessJwt(token: string, env: Env): Promise<AccessClaims | null> {
+  if (!env.CF_ACCESS_JWKS_URL) return null;
+  const cached = jwksCache.get(env.CF_ACCESS_JWKS_URL);
+  let getKey: JWTVerifyGetKey;
+  if (cached && cached.expiresAt > Date.now()) {
+    getKey = cached.getKey;
+  } else {
+    getKey = createRemoteJWKSet(new URL(env.CF_ACCESS_JWKS_URL), {
+      cacheMaxAge: JWKS_CACHE_TTL_MS,
+    });
+    jwksCache.set(env.CF_ACCESS_JWKS_URL, { getKey, expiresAt: Date.now() + JWKS_CACHE_TTL_MS });
+  }
+  return verifyAccessJwtClaims(token, env, getKey);
 }
 export type ResendVerifyOk = { ok: true; event_id: string };
 export type ResendVerifyErr = {

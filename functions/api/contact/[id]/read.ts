@@ -41,7 +41,7 @@ export const onRequestPatch: PagesFunction<Env> = async ({ request, env, params 
   const auth = request.headers.get('Authorization') ?? '';
   if (!auth.startsWith('Bearer ')) return errorResponse(rid, 401, 'AUTH_REQUIRED', 'auth_required');
   const token = auth.slice('Bearer '.length).trim();
-  const claims = parseAccessJwt(token);
+  const claims = await parseAccessJwt(token, env);
   if (!claims) return errorResponse(rid, 401, 'AUTH_INVALID', 'auth_invalid');
   if (claims.exp * 1000 < Date.now())
     return errorResponse(rid, 401, 'AUTH_INVALID', 'auth_invalid');

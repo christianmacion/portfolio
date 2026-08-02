@@ -1,9 +1,9 @@
 {
-  "generated": "2026-08-01T06:59:08.879Z",
+  "generated": "2026-08-01T22:50:05.929Z",
   "counts": {
     "agents": 148,
-    "skills": 169,
-    "relations": 10365
+    "skills": 180,
+    "relations": 11026
   },
   "agents": [
     {
@@ -1185,6 +1185,11 @@
       "type": "skill"
     },
     {
+      "id": "skill:convexity-profiler",
+      "name": "convexity-profiler",
+      "type": "skill"
+    },
+    {
       "id": "skill:cross-workspace-merge",
       "name": "cross-workspace-merge",
       "type": "skill"
@@ -1445,6 +1450,11 @@
       "type": "skill"
     },
     {
+      "id": "skill:mechanism-orthogonality-audit",
+      "name": "mechanism-orthogonality-audit",
+      "type": "skill"
+    },
+    {
       "id": "skill:medium-article",
       "name": "medium-article",
       "type": "skill"
@@ -1457,6 +1467,11 @@
     {
       "id": "skill:memory-capture",
       "name": "memory-capture",
+      "type": "skill"
+    },
+    {
+      "id": "skill:mexc-tradeability-scorer",
+      "name": "mexc-tradeability-scorer",
       "type": "skill"
     },
     {
@@ -1527,21 +1542,6 @@
     {
       "id": "skill:pilot-runner",
       "name": "pilot-runner",
-      "type": "skill"
-    },
-    {
-      "id": "skill:pitch-builder",
-      "name": "pitch-builder",
-      "type": "skill"
-    },
-    {
-      "id": "skill:ponytail-integration",
-      "name": "ponytail-integration",
-      "type": "skill"
-    },
-    {
-      "id": "skill:portfolio-motion",
-      "name": "portfolio-motion",
       "type": "skill"
     }
   ],
