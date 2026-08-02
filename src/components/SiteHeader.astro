@@ -1,0 +1,134 @@
+---
+/**
+ * SiteHeader.astro — v9.3.5 SITE-WIDE RUNNING TAPE.
+ *
+ * The signature chrome lifted from the home broadside (geometric CM monogram +
+ * name + role + UTC + deployed stamp) and applied to every page. Sits above
+ * the existing Nav component so the institutional register reads:
+ *   light (running tape) → dark (nav) → cream (content) → dark (footer)
+ *
+ * This is the unifying identity owner was pushing for — every page now opens
+ * with the same 4-line running tape so the site reads as ONE portfolio, not
+ * 36 disconnected pages.
+ *
+ * Previously: 36 pages had 4 different chrome systems (home tape, full Nav,
+ * slim Nav, ChromeHeader eyebrow chip). Now: 1 SiteHeader on top + 1 Nav below
+ * for every page. Slim-chrome pages keep the same tap; they just skip the
+ * second-row Nav via BaseLayout's chrome="slim" prop.
+ *
+ * The tape is NOT sticky — it lives at the top of the document and scrolls
+ * away with the page. The Nav still owns the sticky contract. This keeps
+ * the running tape feeling like a "letterhead" (printed-on-top-and-done),
+ * not a "scratchpad" (always-visible).
+ */
+import { profile } from '@utils/profile';
+
+const deployedStamp = new Date().toISOString().slice(0, 10);
+const buildTime = new Date().toISOString().slice(11, 16); // HH:MM UTC
+---
+
+<header class="site-header" aria-label="Site identity">
+  <div class="site-header__row site-header__row--top">
+    <!-- Geometric CM monogram — signature mark, identical to index.astro tape -->
+    <svg
+      class="site-header__mark"
+      viewBox="0 0 32 32"
+      aria-hidden="true"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.4"
+    >
+      <path d="M14 8 a8 8 0 1 0 0 16"></path>
+      <path d="M18 24 L18 8 L21 14 L24 8 L24 24"></path>
+      <line x1="13" y1="12" x2="18" y2="12" stroke-width="0.6" opacity="0.5"></line>
+    </svg>
+
+    <span class="site-header__id mono">CHRISTIAN&nbsp;T.&nbsp;MACION</span>
+    <span class="site-header__sep" aria-hidden="true">·</span>
+    <span class="site-header__role mono">QUANT × AI × GRAPH</span>
+    <span class="site-header__sep site-header__sep--hide" aria-hidden="true">·</span>
+    <span class="site-header__loc mono">DIGOS&nbsp;CITY,&nbsp;PH&nbsp;(UTC+8)</span>
+    <span class="site-header__utc mono"
+      >DEPLOYED&nbsp;{deployedStamp}&nbsp;{buildTime}Z</span
+    >
+  </div>
+</header>
+
+<style>
+  .site-header {
+    background: var(--c-bg);
+    color: var(--c-ink);
+    border-top: 2px solid var(--c-ink);
+    border-bottom: 1px solid var(--c-rule);
+    padding: 14px 32px;
+    font-family: var(--ff-mono, ui-monospace, 'SFMono-Regular', Menlo, monospace);
+  }
+  .site-header__row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+  .site-header__row--top {
+    color: var(--c-ink);
+    font-weight: 500;
+    flex-wrap: wrap;
+  }
+  .site-header__mark {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+    color: var(--c-ink);
+  }
+  .site-header__id {
+    font-weight: 700;
+    color: var(--c-ink);
+    letter-spacing: 0.16em;
+  }
+  .site-header__sep {
+    color: var(--c-ink-3);
+    opacity: 0.55;
+  }
+  .site-header__role,
+  .site-header__loc,
+  .site-header__utc {
+    font-weight: 500;
+  }
+  .site-header__utc {
+    margin-left: auto;
+    color: var(--c-ink-2);
+  }
+
+  /* Subpage-only inheritance — make sure the running tape doesn't bleed
+     into the dark nav. The Nav lives right below this element and has its
+     own background (--c-tape), so the visual transition is:
+       light cream (tape) → dark warm (nav) → cream (content) → dark (footer). */
+  :global(.site-header + .nav) {
+    border-top: 0;
+  }
+
+  @media (max-width: 720px) {
+    .site-header {
+      padding: 10px 16px;
+    }
+    .site-header__row {
+      font-size: 9.5px;
+      gap: 7px;
+    }
+    .site-header__mark {
+      width: 22px;
+      height: 22px;
+    }
+    .site-header__utc {
+      margin-left: 0;
+      flex-basis: 100%;
+      margin-top: 4px;
+      padding-top: 6px;
+      border-top: 1px solid var(--c-rule);
+    }
+  }
+</style>

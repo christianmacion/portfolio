@@ -47,8 +47,7 @@ const footprintPoints = [
 ];
 
 const email = profile.contact.email;
-const deployedStamp = new Date().toISOString().slice(0, 10);
-const buildTime = new Date().toISOString().slice(11, 16); // HH:MM UTC
+// v9.3.5 — deployedStamp + buildTime moved to SiteHeader.astro (single source of truth).
 
 // Live counters — all sourced from profile.stats.ts (single source of truth).
 const liveCounters = [
@@ -66,7 +65,7 @@ const liveCounters = [
   description={profile.titles.secondary}
   surface="v6-13"
   theme="light"
-  chrome="slim"
+  chrome="full"
   breadcrumbs={[{ name: 'Home', href: '/' }]}
 >
   <!-- v9.3.2 (2026-08-02) — a11y: BaseLayout.astro already wraps the
@@ -76,49 +75,13 @@ const liveCounters = [
        semantically sectioned, not landmarked. The outer BaseLayout
        <main id="main"> remains the single landmark for AT users. -->
   <section class="broadside" aria-label="Home broadside">
-    <!-- ============= RUNNING HEADER TAPE ============= -->
-    <header class="tape" aria-label="Page metadata">
-      <div class="tape__row tape__row--top">
-        <!-- Geometric CM monogram — signature mark -->
-        <svg
-          class="tape__mark"
-          viewBox="0 0 32 32"
-          aria-hidden="true"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.4"
-        >
-          <path d="M14 8 a8 8 0 1 0 0 16"></path>
-          <path d="M18 24 L18 8 L21 14 L24 8 L24 24"></path>
-          <line x1="13" y1="12" x2="18" y2="12" stroke-width="0.6" opacity="0.5"></line>
-        </svg>
-
-        <span class="tape__id mono">CHRISTIAN&nbsp;T.&nbsp;MACION</span>
-        <span class="tape__sep" aria-hidden="true">·</span>
-        <span class="tape__role mono">QUANT × AI × GRAPH</span>
-        <span class="tape__sep" aria-hidden="true">·</span>
-        <span class="tape__loc mono">DIGOS&nbsp;CITY,&nbsp;PH&nbsp;(UTC+8)</span>
-        <span class="tape__sep tape__sep--hide" aria-hidden="true">·</span>
-        <span class="tape__utc mono tape__utc--hide"
-          >DEPLOYED&nbsp;{deployedStamp}&nbsp;{buildTime}Z</span
-        >
-      </div>
-      <div class="tape__row tape__row--bottom mono">
-        <a class="tape__nav" href={path('/projects/quant')}>QUANT</a>
-        <span class="tape__sep" aria-hidden="true">·</span>
-        <a class="tape__nav" href={path('/ai')}>AI</a>
-        <span class="tape__sep" aria-hidden="true">·</span>
-        <a class="tape__nav" href={path('/workbooks')}>STELLA</a>
-        <span class="tape__sep" aria-hidden="true">·</span>
-        <a class="tape__nav" href={path('/methodology')}>METHOD</a>
-        <span class="tape__sep" aria-hidden="true">·</span>
-        <a class="tape__nav" href={path('/for-recruiters')}>FOR&nbsp;RECRUITERS</a>
-        <span class="tape__sep" aria-hidden="true">·</span>
-        <a class="tape__nav" href={path('/comp')}>COMP&nbsp;BANDS</a>
-        <span class="tape__sep" aria-hidden="true">·</span>
-        <a class="tape__nav tape__nav--cta" href={`mailto:${email}`}>EMAIL</a>
-      </div>
-    </header>
+    <!-- v9.3.5 — running header tape REMOVED. The global SiteHeader (above
+         the Nav) now ships the CM monogram + name + role + UTC + deployed
+         stamp on every page, including home. The downstream nav row is
+         covered by the global Nav component. The home page keeps its
+         flagship hero (eyebrow + H1 + role), stats strip, hook, and
+         quick-route grid — the broadside reading still differentiates
+         home from subpages; the chrome is now shared. -->
 
     <!-- ============= BIG DISPLAY HEADLINE ============= -->
     <section class="hero" aria-label="Identity">

@@ -24,6 +24,7 @@ import '@styles/back-to-top.css';
 import '@styles/print.css';
 
 import Nav from '@components/Nav.astro';
+import SiteHeader from '@components/SiteHeader.astro';
 import Footer from '@components/Footer.astro';
 import V613Fonts from '@components/V613Fonts.astro';
 import { profile } from '@utils/profile';
@@ -321,6 +322,14 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
         </noscript>
       )
     }
+    {
+      /* v9.3.5 — SiteHeader. The unifying running tape (geometric CM monogram +
+         name + role + UTC + deployed stamp) renders on every page (full +
+         slim chrome). Lifts the home's signature chrome to site-wide so the
+         identity reads as one portfolio, not 36 disconnected pages. The Nav
+         below still respects chrome="full" / "slim" as before. */
+    }
+    <SiteHeader />
     {chrome === 'full' && <Nav />}
     <main id="main">
       <slot />
