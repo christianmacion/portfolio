@@ -176,7 +176,7 @@ export const profile = {
     // for the rest of the v6.11.x chrome-derivation pattern.
     `${stats.certCount} certificates (2024-12 → 2026-05)`,
     'STA Tier-1 Certified Technical Analyst · cert #260197 · Jan 2026' /* v6.18 — dropped ® and "Society of Technical Analysts" claim; renamed to PH STA Tier-1 (the actual program). UK STA / IFTA CTA® chartered designation is a separate credential not held. */,
-    'Galactic Problem Solver · NASA Space Apps Challenge 2024 (Zurich cohort)',
+    'Galactic Problem Solver · NASA Space Apps Challenge 2025 (Zurich cohort)',
     'AI for the Modern Workforce · Ateneo de Davao + US Embassy · Nov 8 2025',
     'AIccelerate 2025 · BIDA × Bayan Academy × Meta · Nov 12–21 2025',
     'Blockchain4Youth B4Y-2026-000701 · Bitget · 2026',

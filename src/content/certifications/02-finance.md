@@ -16,7 +16,13 @@ items:
       flagship: true,
     }
   - { name: 'Certified Technical Analyst', issuer: 'CertifyMe', year: 2025, tier: 2 }
-  - { name: 'Foundations of Growth Equity', issuer: 'Goldman Sachs', year: 2026, tier: 1 }
+  - {
+      name: 'Completed Goldman Sachs Asset Management educational module: Foundations of Growth Equity (GS Alternatives University, 2025)',
+      issuer: 'Goldman Sachs',
+      year: 2025,
+      tier: 1,
+      note: 'Educational module — not a credential. Public verify URL = the GS AM insights article.',
+    }
   - {
       name: 'JPMorganChase — Investment Banking Job Simulation',
       issuer: 'Forage',

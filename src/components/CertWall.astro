@@ -42,17 +42,56 @@ const top10 = ranked.slice(0, 10);
 const claimedTotal = Number(profile.stats.certCount);
 const remainder = claimedTotal - top10.length;
 
-// Logo + verify URLs are filled in by Owner over time.
-// Empty string = render blank placeholder.
+// Logo paths — populated 2026-08-07 by OSINT Cell v1.0 dispatch
+// (aars/2026-08-07-osint-cell-cert-fill-in.md). 8 of 10 PNGs license-clean
+// from Wikimedia Commons (PD-textlogo / PD-US-gov). 2 require Owner download:
+//   - STA PH: trade-mark, Owner downloads + re-encodes to /logos/stap.png
+//   - Ateneo de Davao: trade-mark, Owner downloads + re-encodes to /logos/ateneo-de-davao.png
 const logoByIssuer: Record<string, string> = {
-  // 'NASA': '/logos/nasa.png',
-  // 'Meta': '/logos/meta.png',
-  // ...populate as Owner provides PNGs
+  NASA: '/logos/nasa.svg',
+  Meta: '/logos/meta.svg',
+  Goldman: '/logos/goldman-sachs.svg',
+  Bitget: '/logos/bitget.svg',
+  'Civil Service Commission (Philippines)': '/logos/csc-philippines.png',
+  IBM: '/logos/ibm.svg',
+  Google: '/logos/google.svg',
+  // 'Society of Technical Analysts of the Philippines (Tier-1)': '/logos/stap.png',  // PENDING: Owner download (trade-mark)
+  // 'Ateneo de Davao University': '/logos/ateneo-de-davao.png',                       // PENDING: Owner download (trade-mark)
+  // Forage: '/logos/forage.png',                                                     // PENDING: Owner download + license check
 };
 
+// Verify URLs — populated 2026-08-07 by OSINT Cell v1.0 dispatch.
+// Confidence tiers per NATO Admiralty:
+//   A2 (program + URL pattern):  Forage/JPMorganChase — subject-specific code requires Owner pull
+//   A2 (issuer portal):          CSC Philippines — portal exists, no per-record permalink
+//   LOW (badge page):            IBM Credly — issuer badge page, no holder-specific URL
+//   N/A (no public verify):      NASA · Meta · Bitget · STA PH · Ateneo · Google —
+//                                render `''` (CertWall shows "verify URL pending")
+//   RED FLAG resolved:           Goldman Sachs reframed as educational module (see 02-finance.md)
 const verifyByKey: Record<string, string> = {
-  // 'NASA::Galactic Problem Solver — NASA Space Apps Challenge (Zurich, CH)': 'https://...',
-  // ...populate as Owner provides verify URLs
+  // Goldman Sachs — reframed 2026-08-07 per Owner decision. Educational module, NOT a credential.
+  'Goldman Sachs::Completed Goldman Sachs Asset Management educational module: Foundations of Growth Equity (GS Alternatives University, 2025)':
+    'https://am.gs.com/en-us/advisors/insights/education/foundations-of-growth-equity',
+
+  // A2 (program + URL pattern) — Forage/JPMorganChase IB Job Simulation
+  'Forage::JPMorganChase — Investment Banking Job Simulation':
+    'https://www.theforage.com/virtual-internships/prototype/YD2kY95RQxQtXxFTS/JPM-IB-Virtual-Experience-Program',
+
+  // A2 (issuer portal) — Philippine Civil Service Commission CoE verification
+  'Civil Service Commission (Philippines)::Career Service Professional Eligibility':
+    'https://verification.csc.gov.ph/coe/coe.asp',
+
+  // LOW (badge page) — IBM Credly badge page (holder-specific URL requires login)
+  'IBM::Artificial Intelligence Fundamentals':
+    'https://www.credly.com/org/ibm/badge/artificial-intelligence-fundamentals',
+
+  // N/A (no public verify) — empty strings; CertWall renders "verify URL pending"
+  // 'NASA::Galactic Problem Solver — NASA Space Apps Challenge (Zurich, CH)': '',
+  // 'Meta::BIDA META AICCELERATE 2025': '',
+  // 'Bitget::Blockchain4Youth (B4Y-2026-000701)': '',
+  // 'Society of Technical Analysts of the Philippines (Tier-1)::Certified Technical Analyst Program': '',
+  // 'Ateneo de Davao University::AI for the Modern Workforce: From Blockchain to the MOVE Language': '',
+  // 'Google::Introduction to AI': '',
 };
 
 const certKey = (c: CertItem) => `${c.issuer}::${c.name}`;
