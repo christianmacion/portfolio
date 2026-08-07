@@ -16,6 +16,12 @@ const stats = {
   locPython: '76.5k', // ~76,500 LOC
   evalGates: '31', // 31-gate evaluation harness
   pagesBuilt: '84', // built pages — update on route add/remove
+  // v9.4.1 — hireability-facing chrome stats. Add `yearsExperience` + `aiProjectCount`
+  // so the home counter strip (and any future recruiter-facing surface) can render
+  // the exact figures a recruiter needs in 5 seconds. Internal-only counters
+  // (AARs, evalGates, pagesBuilt) remain available but are NOT first-viewport.
+  yearsExperience: '6',
+  aiProjectCount: '6',
   // v6.11.13 — derived chrome counts. /positions had hardcoded
   // "15 repos" / "Five seats" / "Three seat types" that contradicted
   // other pages and silently drifted when role-cards were added/removed.
@@ -88,15 +94,19 @@ export const profile = {
   shortName: 'Christian Macion',
   initials: 'CM',
   titles: {
-    primary: 'Quantitative Researcher · AI Engineer',
+    // v9.4.1 — home H1 is now `Senior Quantitative Researcher` (search-keyword
+    // match for Tier-1 quant recruiters). The primary title drives the page
+    // <title> + nav brand + JSON-LD schema.org — all of which should match
+    // the visible H1 to avoid contradicting the recruiter's first impression.
+    primary: 'Senior Quantitative Researcher · AI Engineer-Architect',
     // v6.10.47 — compact form for the Nav brand slot (36px logo). Uses
     // 'Quant' (not 'Quantitative') so the word fits the available width
     // without ellipsis at the smallest desktop breakpoint. Kept distinct
     // from `primary` so the visual hierarchy at H1 size still reads
     // 'Quantitative Researcher' in full.
-    short: 'Quant Researcher · AI Engineer',
-    secondary: `Christian T. Macion — Quant Researcher and AI Engineer. ${stats.aiAgentCount}-agent research platform, ${stats.evalGates}-gate statistical eval harness, ${stats.locPython} LOC Python, ${stats.certCount} professional certifications. NDA-safe by construction.`,
-    tagline: 'I do solutions. Eval-first. NDA-clean.',
+    short: 'Senior Quant Researcher · AI Engineer',
+    secondary: `Christian T. Macion — Senior Quantitative Researcher and AI Engineer-Architect with 6 years building quantitative research systems and production AI applications. 76.5k LOC Python, 25 public repositories, and 102 professional certifications. NDA-safe by construction.`,
+    tagline: 'Quantitative research and production AI engineering.',
   },
   headshot: {
     src: '/headshot.jpg',

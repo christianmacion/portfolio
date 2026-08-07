@@ -1,0 +1,88 @@
+---
+/**
+ * HeroSkills.astro — flagship hero core-expertise matrix.
+ *
+ * v9.4.1 — replaced the animated equity curve (HeroCurve) with a static
+ * "what I actually build" matrix. The curve proved paper performance, not
+ * employability. A skills matrix wins because it answers a recruiter's
+ * first screening questions in 5 seconds:
+ *   1. Is he a quant researcher?
+ *   2. Can he build production AI?
+ *   3. What tools and methods does he use?
+ *   4. Is there evidence of meaningful output?
+ *
+ * Chrome contract: no halo, no glow, no gradient. Mono + 1 amber accent.
+ * Sharp 0-2px corners. Hairline rules. Cream canvas + dark inset panel,
+ * matching the dark-callout-inside-cream-canvas move from HeroCurve.
+ *
+ * All copy is sourced from this file (single source of truth for the hero
+ * expertise proof). Future updates go here.
+ */
+---
+
+<aside class="hero-skills" aria-label="Core quantitative research and AI engineering expertise">
+  <p class="hero-skills__eyebrow mono">CORE EXPERTISE</p>
+
+  <div class="hero-skills__row">
+    <p class="hero-skills__label mono">QUANTITATIVE RESEARCH</p>
+    <p class="hero-skills__value">
+      Walk-forward validation · deflated Sharpe · cointegration · crypto derivatives
+    </p>
+  </div>
+
+  <div class="hero-skills__row">
+    <p class="hero-skills__label mono">AI ENGINEERING</p>
+    <p class="hero-skills__value">
+      LLM evaluation · RAG · MCP · multi-agent systems
+    </p>
+  </div>
+
+  <div class="hero-skills__row">
+    <p class="hero-skills__label mono">PYTHON ENGINEERING</p>
+    <p class="hero-skills__value">
+      76.5K LOC · 25 public GitHub repositories
+    </p>
+  </div>
+</aside>
+
+<style>
+  .hero-skills {
+    margin: 0;
+    width: 100%;
+    background: var(--j-bg);
+    color: var(--j-ink);
+    border: 1px solid var(--j-rule);
+    padding: 22px 24px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    border-radius: 0; /* chrome contract: sharp corners */
+  }
+  .hero-skills__eyebrow {
+    margin: 0;
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    color: var(--j-ink-3);
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--j-rule);
+    padding-bottom: 10px;
+  }
+  .hero-skills__row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .hero-skills__label {
+    margin: 0;
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    color: var(--j-amber);
+    text-transform: uppercase;
+  }
+  .hero-skills__value {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--j-ink);
+  }
+</style>

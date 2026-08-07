@@ -25,6 +25,23 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import { profile } from '@utils/profile';
 import { path } from '@utils/url';
 import EarthMap from '@components/EarthMap.astro';
+import Marquee from '@components/Marquee.astro';
+import HeroSkills from '@components/HeroSkills.astro';
+import CertWall from '@components/CertWall.astro';
+
+// v9.4.1 FLAGSHIP HERO — re-aimed for hireability.
+// Marquee ribbon between hero and counter strip. Reuses Marquee.astro.
+// v9.4.1: removed STELLA / GATE STACK / Acion / workbook chips (internal
+// jargon). Replaced with recruiter-readable proof chips that match the
+// skills matrix on the right side of the hero.
+const heroMarqueeItems = [
+  '6 YEARS · QUANT RESEARCH + AI ENGINEERING',
+  '9 QUANT STRATEGIES',
+  '76.5K PYTHON LOC',
+  '6 AI ENGINEERING PROJECTS',
+  '25 PUBLIC GITHUB REPOSITORIES',
+  'STA TIER-1 CERTIFIED TECHNICAL ANALYST',
+];
 
 const footprintPoints = [
   // Digos City, Davao del Sur, Philippines — CANONICAL coordinates: 6.74°N, 125.36°E.
@@ -49,14 +66,17 @@ const footprintPoints = [
 const email = profile.contact.email;
 // v9.3.5 — deployedStamp + buildTime moved to SiteHeader.astro (single source of truth).
 
-// Live counters — all sourced from profile.stats.ts (single source of truth).
+// Live counters — v9.4.1 hireability-facing. All sourced from profile.stats.ts.
+// Stripped AARs / evalGates / pagesBuilt from first viewport (internal jargon);
+// yearsExperience + aiProjectCount added so the strip answers a recruiter's
+// "how long + how much" question in 5 seconds.
 const liveCounters = [
-  { label: 'STRATEGIES', value: profile.stats.strategyCount },
-  { label: 'EVAL GATES', value: profile.stats.evalGates },
-  { label: 'AARs YTD', value: '218' },
-  { label: 'PAGES BUILT', value: profile.stats.pagesBuilt },
-  { label: 'PUBLIC REPOS', value: profile.stats.repoCount },
-  { label: 'CERTS / 11 MO', value: profile.stats.certCount },
+  { label: 'YEARS EXPERIENCE', value: profile.stats.yearsExperience },
+  { label: 'QUANT STRATEGIES', value: profile.stats.strategyCount },
+  { label: 'PYTHON LOC', value: profile.stats.locPython },
+  { label: 'AI PROJECTS', value: profile.stats.aiProjectCount },
+  { label: 'PUBLIC GITHUB REPOS', value: profile.stats.repoCount },
+  { label: 'CERTIFICATIONS', value: profile.stats.certCount },
 ];
 ---
 
@@ -83,106 +103,82 @@ const liveCounters = [
          quick-route grid — the broadside reading still differentiates
          home from subpages; the chrome is now shared. -->
 
-    <!-- ============= BIG DISPLAY HEADLINE ============= -->
-    <section class="hero" aria-label="Identity">
-      <p class="hero__eyebrow mono">A WORKING DESCRIPTION · CURRENT</p>
-      <h1 class="hero__name">
-        <span class="hero__name-1">Christian</span>
-        <span class="hero__name-2">T.</span>
-        <span class="hero__name-3">Macion</span>
-      </h1>
-      <p class="hero__role">
-        Building trading desks and multi-agent systems for six years — eval-first, ship-ready.
-      </p>
+    <!-- ============= v9.4.1 HIRING HERO =============
+         Left: searchable role title, hybrid value proposition, recruiter CTAs.
+         Right: concise expertise matrix showing quant + AI engineering capability.
+         SiteHeader + Nav above remain unchanged.
+         v9.4.1: H1 is now the role title (the name is in the global SiteHeader).
+         CTAs are now "Download the 1-page resume" + "Book a 30-minute call".
+         v9.4 HeroCurve replaced by HeroSkills (matrix of searchable proof). -->
+    <section class="hero-flagship" aria-label="Senior quantitative researcher and AI engineer">
+      <div class="hero-flagship__copy">
+        <p class="hero-flagship__eyebrow mono">
+          CHRISTIAN T. MACION · DIGOS CITY, DAVAO DEL SUR, PHILIPPINES · REMOTE (UTC+8)
+        </p>
+        <h1 class="hero-flagship__name">
+          Senior Quantitative Researcher
+        </h1>
+        <p class="hero-flagship__role">
+          AI Engineer-Architect · 6 years across quant research and production multi-agent AI.
+        </p>
+        <div class="hero-flagship__cta">
+          <a
+            href={path('/resume-quant-onepage.pdf')}
+            class="hero-flagship__cta-primary"
+            download
+          >
+            Download the 1-page resume
+            <span aria-hidden="true">↓</span>
+          </a>
+          <a href={path('/contact')} class="hero-flagship__cta-secondary">
+            Book a 30-minute call
+          </a>
+        </div>
+      </div>
+      <div class="hero-flagship__viz">
+        <HeroSkills />
+      </div>
     </section>
 
-    <!-- ============= LIVE DATA STRIP ============= -->
+    <!-- ============= LIVE DATA STRIP — moved up (PATCH 7): primary visual proof
+         sits right after the hero. Reading order: H1 → role → CTAs → curve →
+         strip (proof) → marquee (ambient) → § 01. ============= -->
     <aside class="strip" aria-label="Live counters">
       <div class="strip__inner">
         {
           liveCounters.map((c) => (
             <div class="strip__cell">
-              <p class="strip__num">{c.value}</p>
+              <p class="strip__num" data-countup={c.value}>{c.value}</p>
               <p class="strip__label mono">{c.label}</p>
             </div>
           ))
         }
       </div>
-    </aside>
-
-    <!-- ============= v9.3 IA wave 2 (2026-08-01) — S1 LEDE HOOK ============= -->
-    <!-- Above-the-fold, single-sentence "why-care" answer (8-sec readable).
-         Institutional register: senior QR + AI engineer-architect framing,
-         NDA-clean disclosure, evaluation-first posture. Sits between the
-         live counters and the quick-route grid so the eye reads:
-         counters (proof) → hook (positioning) → routes (action). -->
-    <aside class="hook" aria-label="Working summary">
-      <p class="hook__body">
-        Quant researcher + AI engineer-architect, six years building trading desks and multi-agent
-        build systems — eval-first, NDA-clean, ship-ready.
+      <p class="strip__sub mono">
+        {profile.stats.certCount} certs in the last {profile.stats.ageMonths} months — AWS, GCP, quant, AI.
       </p>
     </aside>
 
-    <!-- ============= v9.3 IA wave 2 (2026-08-01) — S2 QUICK-ROUTE GRID ============= -->
-    <!-- Three-card quick-route grid pointing to the highest-leverage
-         next-step pages: /for-recruiters (recruiter 60-sec skim),
-         /now (current activities), /projects/quant (9 strategies).
-         Each card has a left-edge status binding stripe (handoff /
-         iterate / ship) so the IA reads "what do I do next" without
-         the recruiter having to scroll. Reduced-motion fade-in only. -->
-    <nav class="quick-route" aria-label="Quick routes">
-      <a
-        href={path('/for-recruiters')}
-        class="quick-route__card binding-stripe binding-stripe--handoff"
-      >
-        <p class="quick-route__kicker mono">FOR HIRING MANAGERS</p>
-        <p class="quick-route__title">60-second skim</p>
-        <p class="quick-route__sub">
-          Senior QR + AI Engineer register · NDA-clean · immediate start.
-        </p>
-        <p class="quick-route__cta mono">Open brief &rarr;</p>
-      </a>
-      <a href={path('/now')} class="quick-route__card binding-stripe binding-stripe--iterate">
-        <p class="quick-route__kicker mono">CURRENTLY WORKING ON</p>
-        <p class="quick-route__title">What I am doing now</p>
-        <p class="quick-route__sub">
-          Dated one-pager of current activities, open problems, and bets.
-        </p>
-        <p class="quick-route__cta mono">Open /now &rarr;</p>
-      </a>
-      <a
-        href={path('/projects/quant')}
-        class="quick-route__card binding-stripe binding-stripe--ship"
-      >
-        <p class="quick-route__kicker mono">QUANT SHIPPED</p>
-        <p class="quick-route__title">9 strategies · backtested</p>
-        <p class="quick-route__sub">
-          Alpha + risk pairs · fire-rule granularity · G1–G31 gate stack.
-        </p>
-        <p class="quick-route__cta mono">Open quant &rarr;</p>
-      </a>
-    </nav>
+    <!-- ============= RUNNING-TAPE RIBBON — moved down (PATCH 7): ambient
+         ribbon AFTER the proof. Reuses Marquee.astro. 5 items per UI/UX. -->
+    <aside class="hero-ribbon" aria-label="Operating register">
+      <Marquee items={heroMarqueeItems} speedSec={60} />
+    </aside>
 
     <!-- ============= § 01 — LEDE ============= -->
     <section class="lede" aria-label="Working description">
-      <!-- v9.3.2 (2026-08-02) — a11y: § 01 marker was styled <p>; screen-reader
-           "navigate by headings" returned only the hero h1. Promote to <h2>
-           so AT users can jump between broadside sections. Visual styling
-           unchanged — class retains lede__mark mono treatment. -->
+      <!-- v9.4.1 — copy revised for recruiter-facing first read.
+           Stripped 31-gate / AAR / Math.random internal jargon (those live
+           on /methodology for the engineers who care). Replaced with the
+           5-second value prop: what I build + where to see it + NDA note. -->
       <h2 class="lede__mark mono">§ 01 — The Work</h2>
       <p class="lede__body">
-        Six years building trading desks, AI engineering teams, and multi-agent build systems that
-        survive interview-room scrutiny. Every artifact ships behind a 31-gate eval harness, carries
-        an idempotent re-run path, and lands in a one-page AAR — so the work is reproducible,
-        ship-ready, and defensible under adversarial review.
+        I build quantitative research systems and production AI applications. Six years across
+        trading-desk research, statistical validation, and multi-agent software.
       </p>
       <p class="lede__body">
-        NDA-clean by construction: prior-employer work does not surface here. No <code
-          >Math.random()</code
-        > in shipped code, no argless
-        <code>new Date()</code>, no fabricated metrics. The full audit trail lives on the <a
-          href={path('/methodology')}>methodology</a
-        > page.
+        The portfolio shows the work directly: Python code, public repositories, research case
+        studies, and AI engineering projects. Client-confidential work is omitted.
       </p>
     </section>
 
@@ -207,25 +203,13 @@ const liveCounters = [
             <td>Quant strategies</td>
             <td>alpha + risk, backtest, paper-trade</td>
             <td class="num">{profile.stats.strategyCount}</td>
-            <td><a href={path('/projects/quant')}>/projects/quant</a></td>
+            <td><a href={path('/projects')}>/projects</a></td>
           </tr>
           <tr>
             <td>AI engineering projects</td>
-            <td>RAG, evals, MCP servers, prompt harnesses</td>
-            <td class="num">6</td>
+            <td>RAG · LLM evaluation · MCP · multi-agent systems</td>
+            <td class="num">{profile.stats.aiProjectCount}</td>
             <td><a href={path('/ai')}>/ai</a></td>
-          </tr>
-          <tr>
-            <td>STELLA multi-agent office</td>
-            <td>agents · skills · routing rows</td>
-            <td class="num">53 / 142 / 96</td>
-            <td><a href={path('/workbooks')}>/workbooks</a></td>
-          </tr>
-          <tr>
-            <td>STELLA knowledge graph</td>
-            <td>typed entities · relations · AARs</td>
-            <td class="num">3,209 nodes</td>
-            <td><a href={path('/workbooks')}>/workbooks</a></td>
           </tr>
           <tr>
             <td>Public repos (GitHub)</td>
@@ -236,16 +220,16 @@ const liveCounters = [
             </td>
           </tr>
           <tr>
-            <td>Eval gates (live harness)</td>
-            <td>5-must-have contract verifier</td>
-            <td class="num">{profile.stats.evalGates}</td>
+            <td>Research validation methods</td>
+            <td>Walk-forward validation · block bootstrap · deflated Sharpe</td>
+            <td class="num">—</td>
             <td><a href={path('/methodology')}>/methodology</a></td>
           </tr>
           <tr>
-            <td>LOC Python shipped</td>
-            <td>backtests, harnesses, infra</td>
+            <td>Python codebase</td>
+            <td>Backtests · AI tooling · research infrastructure</td>
             <td class="num">{profile.stats.locPython}</td>
-            <td>(private work)</td>
+            <td><a href={path('/proof')}>/proof</a></td>
           </tr>
           <tr>
             <td>Certs earned (last 11 months)</td>
@@ -253,19 +237,16 @@ const liveCounters = [
             <td class="num">{profile.stats.certCount}</td>
             <td><a href={path('/certifications')}>/certifications</a></td>
           </tr>
-          <tr>
-            <td>Pages built (live)</td>
-            <td>Astro static · 90 routes</td>
-            <td class="num">{profile.stats.pagesBuilt}</td>
-            <td><a href="/sitemap-index.xml">sitemap-index.xml</a></td>
-          </tr>
         </tbody>
       </table>
     </section>
 
-    <!-- ============= § 03 — READING LIST ============= -->
+    <!-- ============= § 03 — CERTIFICATIONS WALL ============= -->
+    <CertWall />
+
+    <!-- ============= § 04 — READING LIST ============= -->
     <section class="help" aria-label="How I help">
-      <h2 class="help__mark mono">§ 03 — How I help</h2>
+      <h2 class="help__mark mono">§ 04 — How I help</h2>
       <p class="reading__sub">
         Engagement shapes I've shipped. Not services I list — live systems built, deployed, and
         kept honest with verifiable evidence.
@@ -289,7 +270,7 @@ const liveCounters = [
           </p>
         </article>
         <article class="help__card">
-          <p class="help__kicker mono">EVAL HARNESS</p>
+          <p class="help__kicker mono">AI EVAL</p>
           <h3 class="help__title">Statistical gates for AI/ML claims</h3>
           <p class="help__body">
             Deflated Sharpe, block-bootstrap CIs, walk-forward stability — same tools you use on
@@ -297,7 +278,7 @@ const liveCounters = [
           </p>
         </article>
         <article class="help__card">
-          <p class="help__kicker mono">SHIP DISCIPLINE</p>
+          <p class="help__kicker mono">REPRODUCIBILITY</p>
           <h3 class="help__title">Reproducible artifacts with audit trails</h3>
           <p class="help__body">
             Frozen-spec eval, idempotent re-run path, one-page AAR. Verifiable by a stranger, not
@@ -307,9 +288,9 @@ const liveCounters = [
       </div>
     </section>
 
-    <!-- ============= § 04 — FOOTPRINT ============= -->
+    <!-- ============= § 05 — FOOTPRINT ============= -->
     <section class="footprint" aria-label="Footprint">
-      <h2 class="footprint__mark mono">§ 04 — Footprint</h2>
+      <h2 class="footprint__mark mono">§ 05 — Footprint</h2>
       <p class="footprint__sub">
         Where I cover and where I've shipped. Each pin is a real counterpart, a real venue, or a
         real engagement — verifiable, not decorative.
@@ -317,9 +298,9 @@ const liveCounters = [
       <EarthMap points={footprintPoints} mode="pins" />
     </section>
 
-    <!-- ============= § 05 — CONTACT ============= -->
+    <!-- ============= § 06 — CONTACT ============= -->
     <footer class="contact" aria-label="Contact">
-      <h2 class="contact__mark mono">§ 05 — Contact</h2>
+      <h2 class="contact__mark mono">§ 06 — Contact</h2>
       <p class="contact__line mono">
         <a href={`mailto:${email}`}>{email}</a>
         <span aria-hidden="true">·</span>
@@ -495,6 +476,16 @@ const liveCounters = [
     margin: 0;
   }
 
+  /* v9.4.2 — strip subtitle carries the "/ 11 MO" temporal context
+     that was previously crammed into the 6th counter label. */
+  .strip__sub {
+    font-size: 10px;
+    color: var(--c-ink-3);
+    letter-spacing: 0.12em;
+    margin: 12px 0 0;
+    text-transform: uppercase;
+  }
+
   /* ====== SECTIONS — § marks + body ====== */
   .lede,
   .artifacts,
@@ -573,92 +564,8 @@ const liveCounters = [
     font-weight: 500;
   }
 
-  /* ====== v9.3 IA wave 2 (2026-08-01) — S1 LEDE HOOK + S2 QUICK-ROUTE ====== */
-  /* The hook sits between the live counters and the quick-route grid.
-     It is a single-sentence 8-sec-readable "why-care" answer in
-     institutional register. The quick-route grid is a 3-card nav
-     pointing to the highest-leverage next-step pages, each with a
-     left-edge status binding stripe (handoff / iterate / ship). */
-  .hook {
-    margin: 0 0 24px;
-    padding: 14px 0;
-    border-top: 1px solid var(--c-rule);
-    border-bottom: 1px solid var(--c-rule);
-  }
-  .hook__body {
-    font: 400 17px / 1.55 var(--ff-sans);
-    color: var(--c-ink);
-    margin: 0;
-    max-width: 60ch;
-    font-style: italic;
-  }
-
-  .quick-route {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0;
-    margin: 0 0 32px;
-    border: 1px solid var(--c-rule);
-    border-bottom: 0;
-  }
-  .quick-route__card {
-    padding: 18px 22px 16px 24px;
-    text-decoration: none;
-    color: var(--c-ink);
-    border-bottom: 1px solid var(--c-rule);
-    border-left: 1px solid var(--c-rule);
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    transition:
-      background var(--transition),
-      border-color var(--transition);
-    border-bottom: 0;
-    border-bottom: 1px solid var(--c-rule);
-  }
-  .quick-route__card:first-child {
-    border-left: 0;
-  }
-  .quick-route__card:hover {
-    background: var(--c-bg-2);
-    border-left-color: var(--c-ink-2);
-  }
-  .quick-route__card:focus-visible {
-    outline: 2px solid var(--c-primary-2-light);
-    outline-offset: -2px;
-  }
-  .quick-route__kicker {
-    font-size: 10px;
-    color: var(--c-ink-2);
-    letter-spacing: 0.16em;
-    margin: 0 0 4px;
-    text-transform: uppercase;
-    font-weight: 700;
-  }
-  .quick-route__title {
-    font: 600 17px / 1.25 var(--serif-display);
-    color: var(--c-ink);
-    margin: 0 0 4px;
-    letter-spacing: -0.012em;
-  }
-  .quick-route__sub {
-    font: 400 13px / 1.45 var(--ff-sans);
-    color: var(--c-ink-2);
-    margin: 0 0 6px;
-  }
-  .quick-route__cta {
-    font-size: 10.5px;
-    color: var(--c-ink-2);
-    letter-spacing: 0.1em;
-    margin: 0;
-    text-transform: uppercase;
-    font-weight: 600;
-  }
-
-  /* Reduced-motion guard: the quick-route cards have no animation by
-     default, so the un-animated page is byte-identical to the
-     animated page when prefers-reduced-motion is on. No overrides
-     needed; documenting the contract here. */
+  /* v9.4 — hook + quick-route sections removed (PATCH 3+4) — see
+     portfolio-flagship-hero-v9-4-2026-08-07 for the patch list. */
 
   /* ====== CONTACT ====== */
   .contact__line {
@@ -751,18 +658,145 @@ const liveCounters = [
     .reading__text {
       grid-column: 2;
     }
-    /* v9.3 IA wave 2 (2026-08-01) — collapse quick-route grid to single
-       column on narrow phones so each card retains ≥44×44 tap targets. */
-    .quick-route {
+    /* v9.4 — quick-route mobile rules removed (PATCH 4b). */
+  }
+
+  /* ============================================================
+   * v9.4 FLAGSHIP HERO — 2-column flagship layout
+   * Left: eyebrow + H1 + role + 2 CTAs. Right: animated SVG curve.
+   * Cream surface for the copy column; dark inset panel hosts the
+   * curve. Hairline rule between the two columns; collapses to a
+   * single column ≤ 860px.
+   * ============================================================ */
+  .hero-flagship {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 28px;
+    align-items: stretch;
+    padding: 28px 0 32px;
+    border-bottom: 1px solid var(--c-rule);
+  }
+  .hero-flagship__copy {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    min-width: 0;
+  }
+  .hero-flagship__eyebrow {
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    color: var(--c-ink-3);
+    margin: 0;
+  }
+  .hero-flagship__name {
+    font-family: var(--font-serif, 'Source Serif Pro', 'Iowan Old Style', Georgia, serif);
+    font-size: clamp(28px, 3.4vw, 48px);
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+    color: var(--c-ink);
+    margin: 0;
+    text-wrap: balance;
+    overflow-wrap: break-word;
+  }
+  .hero-flagship__name-1,
+  .hero-flagship__name-3 {
+    font-style: normal;
+  }
+  .hero-flagship__name-2 {
+    font-style: italic;
+    color: var(--c-amber);
+    padding: 0 0.04em;
+  }
+  .hero-flagship__role {
+    font-family: var(--font-serif, 'Source Serif Pro', 'Iowan Old Style', Georgia, serif);
+    font-size: clamp(18px, 1.7vw, 22px);
+    line-height: 1.4;
+    color: var(--c-ink-2);
+    margin: 0;
+    max-width: 36ch;
+    text-wrap: balance;
+  }
+  .hero-flagship__cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 8px;
+  }
+  .hero-flagship__cta-primary,
+  .hero-flagship__cta-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+    font-size: 11.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 0;
+    transition: transform 0.18s ease-out, background-color 0.18s ease-out, color 0.18s ease-out;
+  }
+  .hero-flagship__cta-primary {
+    background: var(--c-amber);
+    color: var(--c-ink-dark);
+    border: 1px solid var(--c-amber);
+  }
+  .hero-flagship__cta-primary:hover,
+  .hero-flagship__cta-primary:focus-visible {
+    background: var(--c-amber-light);
+    border-color: var(--c-amber-light);
+    transform: translateY(-1px);
+  }
+  .hero-flagship__cta-secondary {
+    background: transparent;
+    color: var(--c-ink);
+    border: 1px solid var(--c-rule-strong);
+  }
+  .hero-flagship__cta-secondary:hover,
+  .hero-flagship__cta-secondary:focus-visible {
+    background: var(--c-bg-elev);
+    transform: translateY(-1px);
+  }
+  .hero-flagship__viz {
+    min-width: 0;
+  }
+
+  /* ============================================================
+   * v9.4 HERO RIBBON — Marquee sits between the flagship hero and
+   * the counter strip. Hairline rules top + bottom; tight vertical
+   * padding so it reads as a tape, not a section.
+   * ============================================================ */
+  .hero-ribbon {
+    border-top: 1px solid var(--c-rule);
+    border-bottom: 1px solid var(--c-rule);
+    padding: 8px 0;
+    background: var(--c-bg-elev);
+    margin: 0;
+  }
+
+  @media (max-width: 860px) {
+    .hero-flagship {
       grid-template-columns: 1fr;
+      gap: 28px;
+      padding: 24px 0 28px;
     }
-    .quick-route__card {
-      border-left: 0;
-      border-bottom: 1px solid var(--c-rule);
-      padding: 16px 4px;
-    }
-    .quick-route__card:last-child {
-      border-bottom: 0;
+    .hero-flagship__cta {
+      gap: 10px;
     }
   }
 </style>
+
+<script>
+  // v9.4 — count-up animation for the home page stats strip.
+  // IntersectionObserver fires when the strip enters the viewport.
+  // Honors prefers-reduced-motion: reduce (snap to target).
+  import { initCountUps } from '../utils/countup';
+
+  const start = () => initCountUps();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', start, { once: true });
+  } else {
+    start();
+  }
+</script>

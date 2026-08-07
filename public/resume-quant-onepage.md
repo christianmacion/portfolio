@@ -4,7 +4,7 @@
 
 christianmacion26@gmail.com · +63-991-616-2630 · Digos City, Davao del Sur, Philippines (UTC+8) · LinkedIn
 
-> **FIT FOR: Quant Researcher · Research Engineer · QR-Rotational · Strategy Research · Risk Research**
+> **FIT FOR: Two Sigma · Citadel Securities · Jane Street · Hudson River Trading · Balyasny · Jump Trading — QR / Research Engineer seat**
 
 ## SUMMARY
 
@@ -12,7 +12,7 @@ Quant Researcher who builds, statistically validates, and honestly retires syste
 
 I previously served as an AI Systems Engineer / Quantitative Researcher on the systematic-strategy desk (NDA-protected; closed past contract 03/2026 – 06/2026) (PM with publicly attributable initials, NDA-protected desk), where I evaluated 40+ strategy families across 5 asset classes (equity-index, crypto, energy, metals, agriculture) under a 31-gate statistical filter; built 10+ point-in-time, look-ahead-disciplined data pipelines from scratch on free public sources; and implemented the modern selection-bias stack — Deflated Sharpe Ratio, Probability of Backtest Overfitting via CSCV, Minimum Backtest Length — scipy-free in numpy.
 
-I design with reproducibility and adversarial verification as the first-class concern, not the final step. My strategies carry a cost-routed multi-agent AI research architecture (11 agents) alongside them — used to compress expert time and to keep an honest, versioned audit trail of how the research was actually run. Available 30 hrs/wk for a QR / Research Engineer seat that values bank-the-lesson honesty over headline Sharpe.
+I design with reproducibility and adversarial verification as the first-class concern, not the final step. My strategies carry a cost-routed multi-agent AI research architecture (11 agents) alongside them — used to compress expert time and to keep an honest, versioned audit trail of how the research was actually run. Available 30 hrs/wk for a Tier-1 systematic-strategy desk that values bank-the-lesson honesty over headline Sharpe.
 
 ## Core Skills
 
@@ -96,38 +96,26 @@ I design with reproducibility and adversarial verification as the first-class co
 - Certified Technical Analyst — CertifyMe
 - Financial Trading in Python — DataCamp
 - Math for Finance Professionals — DataCamp
-- Intermediate Python for Finance — DataCamp
-- Excel for Financial Planning and Analysis (FP&A) — LinkedIn
-- Financial Modeling and Forecasting Financial Statements — LinkedIn
 - Foundations of Growth Equity — Goldman Sachs
 - JPMorgan Chase Investment Banking Job Simulation — Forage
 
 ### Mathematics, Statistics & Programming
 
 - Getting Started with Python for Finance — LinkedIn
-- Python Essentials 1 — Cisco Networking Academy
 - SQL for Finance Professionals — LinkedIn
 - Understanding Data Science — DataCamp
-- Data Literacy — DataCamp
-- Introduction to Data Science — Cisco Networking Academy
-- Career Service Professional Eligibility — Civil Service Commission
 
 ### AI, Data Science & Technology
 
 - Introduction to AI Agents — DataCamp
 - AI Fundamentals — DataCamp
 - Artificial Intelligence Fundamentals — IBM
-- AI Fundamentals with IBM SkillsBuild — Cisco
 - Introduction to AI — Google
 - AI for the Modern Workforce — Ateneo de Davao University
-- Software Development and Design Thinking — DICT Philippines
 
 ### Selected Events, Hackathons & Programs
 
 - Galactic Problem Solver — NASA Space Apps Challenge (Zurich) — Oct 2025
 - BIDA META AICCELERATE 2025 — Meta & Bayan Academy — Dec 2025
 - UP Data Science Society — ACLE 2026 — Feb 2026
-- LimitlessBiz: AIM ASEAN Training — Limitless Lab — Mar 2026
-- Sui Builders Program Davao — Sui Foundation — Apr 2026
 - Speedrun Ethereum — ETHPH Mindanao — Aug 2025
-- Base Philippines Community Townhall — Davao — Aug 2025

@@ -1,0 +1,441 @@
+---
+/**
+ * CertWall.astro — bryllim-adapted § 04-style certification wall.
+ *
+ * Renders two tab panels:
+ *   - Top 10 (default): Tier-1 + flagship certs ranked by institutional weight
+ *   - All {claimedTotal}: full list grouped by domain
+ *
+ * Each cert row has:
+ *   - Issuer logo slot (PNG; falls back to a gray monogram tile if blank)
+ *   - Cert name + issuer + year
+ *   - Verify link (real URL or "verify URL pending" placeholder)
+ *
+ * Source data: src/content/certifications/*.md (certGroup collection)
+ * Update: add `logoPath` and `verifyUrl` to a per-cert map below; the rest
+ * pulls from the collection frontmatter.
+ */
+import { getCollection, type CollectionEntry } from 'astro:content';
+import { path } from '@utils/url';
+import { profile } from '@utils/profile';
+
+type CertItem = CollectionEntry<'certGroup'>['data']['items'][number];
+
+const allGroups: CollectionEntry<'certGroup'>[] = await getCollection('certGroup');
+const allCerts: Array<CertItem & { _group: string; _order: number }> = allGroups
+  .flatMap((g) =>
+    g.data.items.map((c) => ({ ...c, _group: g.data.title, _order: g.data.order })),
+  );
+
+// Rank score: flagship (3) > tier 1 (2) > tier 2 (1).
+// Within rank, sort by year DESC, then alphabetical.
+const rankScore = (c: CertItem) => (c.flagship ? 3 : c.tier === 1 ? 2 : 1);
+const ranked = [...allCerts].sort((a, b) => {
+  const dr = rankScore(b) - rankScore(a);
+  if (dr !== 0) return dr;
+  const dy = Number(b.year ?? 0) - Number(a.year ?? 0);
+  if (dy !== 0) return dy;
+  return String(a.issuer).localeCompare(String(b.issuer));
+});
+
+const top10 = ranked.slice(0, 10);
+const claimedTotal = Number(profile.stats.certCount);
+const remainder = claimedTotal - top10.length;
+
+// Logo + verify URLs are filled in by Owner over time.
+// Empty string = render blank placeholder.
+const logoByIssuer: Record<string, string> = {
+  // 'NASA': '/logos/nasa.png',
+  // 'Meta': '/logos/meta.png',
+  // ...populate as Owner provides PNGs
+};
+
+const verifyByKey: Record<string, string> = {
+  // 'NASA::Galactic Problem Solver — NASA Space Apps Challenge (Zurich, CH)': 'https://...',
+  // ...populate as Owner provides verify URLs
+};
+
+const certKey = (c: CertItem) => `${c.issuer}::${c.name}`;
+
+// 2-letter monogram fallback for blank logo slots.
+const monogram = (issuer: string) =>
+  issuer
+    .replace(/[^A-Za-z ]/g, '')
+    .split(/\s+/)
+    .map((w) => w[0] ?? '')
+    .join('')
+    .slice(0, 2)
+    .toUpperCase();
+---
+
+<section class="cert-wall" aria-label="Verified certifications">
+  <p class="cert-wall__mark mono">§ 03 — Certifications</p>
+  <h2 class="cert-wall__title">
+    <span class="mono">{claimedTotal}</span> certifications · top 10 below.
+  </h2>
+  <p class="cert-wall__sub">
+    Tier-1 and flagship issuers only. Each row links to a verifiable issuer registry or credential
+    page where available. The full list — every issuer, every date, every cert ID — lives on the
+    <a href={path('/certifications')}>certifications page</a>.
+  </p>
+
+  <div class="cert-wall__tabs" role="tablist" aria-label="Certification view">
+    <button
+      type="button"
+      role="tab"
+      id="cert-tab-top"
+      aria-selected="true"
+      aria-controls="cert-panel-top"
+      class="cert-wall__tab"
+    >
+      Top {top10.length}
+    </button>
+    <button
+      type="button"
+      role="tab"
+      id="cert-tab-all"
+      aria-selected="false"
+      aria-controls="cert-panel-all"
+      class="cert-wall__tab"
+    >
+      All {claimedTotal}
+    </button>
+  </div>
+
+  <div role="tabpanel" id="cert-panel-top" aria-labelledby="cert-tab-top" class="cert-wall__panel">
+    <ol class="cert-wall__list">
+      {
+        top10.map((c, idx) => {
+          const logo = logoByIssuer[c.issuer] ?? null;
+          const verify = verifyByKey[certKey(c)] ?? null;
+          return (
+            <li class="cert-wall__item">
+              <span class="cert-wall__rank mono">{String(idx + 1).padStart(2, '0')}</span>
+              {logo ? (
+                <img
+                  src={path(logo)}
+                  alt={`${c.issuer} logo`}
+                  width="48"
+                  height="48"
+                  class="cert-wall__logo"
+                  loading="lazy"
+                />
+              ) : (
+                <span
+                  class="cert-wall__logo cert-wall__logo--blank"
+                  aria-label={`${c.issuer} logo (pending)`}
+                >
+                  <span class="mono">{monogram(c.issuer)}</span>
+                </span>
+              )}
+              <div class="cert-wall__body">
+                <p class="cert-wall__name">{c.name}</p>
+                <p class="cert-wall__issuer">
+                  <span class="mono">{c.issuer}</span>
+                  <span aria-hidden="true"> · </span>
+                  <span class="mono">{c.year}</span>
+                  {c.flagship && <span class="cert-wall__chip cert-wall__chip--gold">Flagship</span>}
+                  {!c.flagship && c.tier === 1 && (
+                    <span class="cert-wall__chip">Tier 1</span>
+                  )}
+                </p>
+              </div>
+              {verify ? (
+                <a
+                  href={verify}
+                  target="_blank"
+                  rel="noopener"
+                  class="cert-wall__verify mono"
+                >
+                  Verify ↗
+                </a>
+              ) : (
+                <span class="cert-wall__verify cert-wall__verify--blank mono">
+                  verify URL pending
+                </span>
+              )}
+            </li>
+          );
+        })
+      }
+    </ol>
+
+    <p class="cert-wall__footer">
+      <a href={path('/certifications')} class="cert-wall__see-all mono">
+        + {remainder} more verified certifications →
+      </a>
+    </p>
+  </div>
+
+  <div
+    role="tabpanel"
+    id="cert-panel-all"
+    aria-labelledby="cert-tab-all"
+    class="cert-wall__panel"
+    hidden
+  >
+    <p class="cert-wall__redirect mono">
+      Full list → <a href={path('/certifications')}>{path('/certifications')}</a>
+    </p>
+    <ul class="cert-wall__mini">
+      {
+        allCerts.map((c) => (
+          <li class="cert-wall__mini-item">
+            <span class="mono">{c.issuer}</span>
+            <span aria-hidden="true">·</span>
+            <span>{c.name}</span>
+            <span aria-hidden="true">·</span>
+            <span class="mono">{c.year}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<script>
+  // Tab toggle for CertWall. Vanilla JS; honors prefers-reduced-motion.
+  const wall = document.querySelector('.cert-wall');
+  if (wall) {
+    const tabs = wall.querySelectorAll<HTMLElement>('[role="tab"]');
+    const panels = wall.querySelectorAll<HTMLElement>('[role="tabpanel"]');
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        tabs.forEach((t) => t.setAttribute('aria-selected', 'false'));
+        tab.setAttribute('aria-selected', 'true');
+        panels.forEach((p) => {
+          p.hidden = p.getAttribute('aria-labelledby') !== tab.id;
+        });
+      });
+      tab.addEventListener('keydown', (e: KeyboardEvent) => {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+          e.preventDefault();
+          const idx = Array.from(tabs).indexOf(tab);
+          const next = e.key === 'ArrowRight' ? (idx + 1) % tabs.length : (idx - 1 + tabs.length) % tabs.length;
+          (tabs[next] as HTMLElement)?.focus();
+          (tabs[next] as HTMLElement)?.click();
+        }
+      });
+    });
+  }
+</script>
+
+<style>
+  .cert-wall {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: var(--sp-7) var(--sp-5);
+  }
+  .cert-wall__mark {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: var(--c-ink-3);
+    text-transform: uppercase;
+    margin: 0 0 var(--sp-3);
+  }
+  .cert-wall__title {
+    font-family: var(--font-serif, 'Source Serif Pro', 'Iowan Old Style', Georgia, serif);
+    font-size: clamp(22px, 2.6vw, 32px);
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    font-weight: 600;
+    color: var(--c-ink);
+    margin: 0 0 var(--sp-3);
+    text-wrap: balance;
+  }
+  .cert-wall__sub {
+    font-size: var(--fs-base);
+    color: var(--c-ink-2);
+    line-height: var(--lh-loose);
+    max-width: 64ch;
+    margin: 0 0 var(--sp-5);
+  }
+  .cert-wall__tabs {
+    display: inline-flex;
+    border: 1px solid var(--c-rule);
+    border-radius: 2px;
+    margin-bottom: var(--sp-5);
+    overflow: hidden;
+  }
+  .cert-wall__tab {
+    appearance: none;
+    background: transparent;
+    border: 0;
+    padding: 8px 14px;
+    font-family: inherit;
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--c-ink-2);
+    cursor: pointer;
+    border-right: 1px solid var(--c-rule);
+    transition: color 80ms linear, background 80ms linear;
+  }
+  .cert-wall__tab:last-child {
+    border-right: 0;
+  }
+  .cert-wall__tab[aria-selected='true'] {
+    background: var(--c-ink);
+    color: var(--c-paper);
+  }
+  .cert-wall__tab:focus-visible {
+    outline: 2px solid var(--c-amber);
+    outline-offset: -2px;
+  }
+  .cert-wall__panel {
+    margin-top: 0;
+  }
+  .cert-wall__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .cert-wall__item {
+    display: grid;
+    grid-template-columns: 28px 48px 1fr auto;
+    gap: var(--sp-4);
+    align-items: center;
+    padding: var(--sp-4) 0;
+    border-top: 1px solid var(--c-rule);
+  }
+  .cert-wall__item:last-child {
+    border-bottom: 1px solid var(--c-rule);
+  }
+  .cert-wall__rank {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--c-ink-3);
+    text-align: right;
+  }
+  .cert-wall__logo {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    background: var(--c-paper);
+    border: 1px solid var(--c-rule);
+    border-radius: 2px;
+    object-fit: contain;
+    padding: 6px;
+    display: block;
+  }
+  .cert-wall__logo--blank {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--c-ink-3);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+  }
+  .cert-wall__body {
+    min-width: 0;
+  }
+  .cert-wall__name {
+    font-size: var(--fs-base);
+    font-weight: 600;
+    color: var(--c-ink);
+    line-height: 1.35;
+    margin: 0 0 2px;
+  }
+  .cert-wall__issuer {
+    font-size: var(--fs-sm);
+    color: var(--c-ink-2);
+    line-height: 1.4;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+  }
+  .cert-wall__chip {
+    display: inline-block;
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--c-ink-2);
+    background: var(--c-paper);
+    border: 1px solid var(--c-rule);
+    padding: 1px 6px;
+    border-radius: 1px;
+    margin-left: 4px;
+  }
+  .cert-wall__chip--gold {
+    color: var(--c-amber-deep, #b88500);
+    border-color: var(--c-amber-deep, #b88500);
+    background: transparent;
+  }
+  .cert-wall__verify {
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    color: var(--c-amber);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .cert-wall__verify:hover,
+  .cert-wall__verify:focus-visible {
+    text-decoration: underline;
+  }
+  .cert-wall__verify--blank {
+    color: var(--c-ink-3);
+    font-style: italic;
+    text-decoration: line-through;
+    text-decoration-color: var(--c-rule);
+  }
+  .cert-wall__footer {
+    margin: var(--sp-5) 0 0;
+    padding-top: var(--sp-4);
+    border-top: 1px solid var(--c-rule);
+  }
+  .cert-wall__see-all {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--c-ink);
+    text-decoration: none;
+  }
+  .cert-wall__see-all:hover,
+  .cert-wall__see-all:focus-visible {
+    color: var(--c-amber);
+  }
+  .cert-wall__redirect {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--c-ink-2);
+    margin: 0 0 var(--sp-4);
+  }
+  .cert-wall__mini {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 6px var(--sp-4);
+    font-size: var(--fs-sm);
+    color: var(--c-ink-2);
+  }
+  .cert-wall__mini-item {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    line-height: 1.4;
+  }
+
+  @media (max-width: 720px) {
+    .cert-wall__item {
+      grid-template-columns: 28px 48px 1fr;
+      grid-template-rows: auto auto;
+      gap: var(--sp-3);
+    }
+    .cert-wall__verify {
+      grid-column: 2 / span 2;
+      grid-row: 2;
+      margin-top: 2px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cert-wall__tab {
+      transition: none;
+    }
+  }
+</style>

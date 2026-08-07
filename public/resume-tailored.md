@@ -78,8 +78,8 @@ Recognized for combining analytical thinking, eval-first engineering, structured
 
 *Remote · 03/2026 – 06/2026*
 
-- Designed and operated an 11-agent orchestrator-worker AI research platform (~27,500 words of role-scoped agent charters) with contracted hand-off packets, few-shot routing, and separation-of-duties between generation, validation, and documentation agents — ~76,500 LOC of light-dependency Python supporting it.
 - Built a 31-gate statistical evaluation harness (G1–G31) — block-bootstrap CIs, random-timing nulls, walk-forward, 5-era stability, plus a multiple-testing layer (Deflated Sharpe, CSCV-based PBO, MinBTL) — implemented scipy-free in numpy and used to validate both LLM outputs and systematic-trading strategies.
+- Designed and operated an 11-agent orchestrator-worker AI research platform (~27,500 words of role-scoped agent charters) with contracted hand-off packets, few-shot routing, and separation-of-duties between generation, validation, and documentation agents — ~76,500 LOC of light-dependency Python supporting it.
 - Architected a tiered model-routing policy (Opus = judgment / Sonnet = assembly / Haiku = mechanical / Fable = hardest autonomous) with per-dispatch token budgeting — the cost layer that keeps a multi-agent system (measured at ~15× single-agent token cost) economical to run continuously — plus structured-output contracts gated by a mechanical validator (must exit 0).
 - Researched and validated systematic trading strategies across 5 asset classes (equity-index, crypto, energy, metals, agriculture) on the desk's statistical-filter platform; shipped candidates through paper-shadow and live forward out-of-sample testing under pre-registration and frozen-spec evaluation.
 - Built point-in-time, look-ahead-disciplined data pipelines from scratch on free public sources; implemented byte-range subsetting, completeness guards, gap logging, and idempotent incremental pulls to produce reproducible research-grade datasets.
@@ -131,8 +131,6 @@ Recognized for combining analytical thinking, eval-first engineering, structured
 
 - **[Backtesting Sandbox](available on request)** — Python-based backtesting sandbox that ingests OHLCV data, computes Sharpe / drawdown / win-rate / profit-factor, and outputs markdown research reports. Uses pandas, matplotlib, and SQLite.
 
-- **[Academic-Paper Reading Log](available on request)** — Structured reading log of 20+ papers spanning momentum, mean-reversion, volatility carry, risk premia, multi-agent AI architectures, and eval-harness design; each paper summarized in a one-page structured research note.
-
 - **[AI-Slop Evaluation Gate](available on request)** — 13-metric literature-grounded evaluator for AI-generated content; deployable Streamlit app, stdlib scoring core. Drove a real draft from HEAVY (index 81) to CLEAN (index 3).
 
 ## CERTIFICATIONS
@@ -142,36 +140,23 @@ Recognized for combining analytical thinking, eval-first engineering, structured
 - Certified Technical Analyst Program — Society of Technical Analysts of the Philippines (Tier-1)
 - Certified Technical Analyst — CertifyMe
 - Financial Trading in Python — DataCamp
-- Math for Finance Professionals — DataCamp
-- Intermediate Python for Finance — DataCamp
-- Excel for Financial Planning and Analysis (FP&A) — LinkedIn
-- Financial Modeling and Forecasting Financial Statements — LinkedIn
-- Financial Forecasting with Analytics Essential Training — LinkedIn
-- Using Data in Financial Analysis — LinkedIn
-- JPMorgan Chase Investment Banking Job Simulation — Forage
 - Foundations of Growth Equity — Goldman Sachs
+- JPMorgan Chase Investment Banking Job Simulation — Forage
 
 ### Mathematics, Statistics & Programming
 
 - Getting Started with Python for Finance — LinkedIn
-- Python Essentials 1 — Cisco Networking Academy
 - SQL for Finance Professionals — LinkedIn
 - Understanding Data Science — DataCamp
 - Data Literacy — DataCamp
-- Introduction to Data Science — Cisco Networking Academy
-- Career Service Professional Eligibility — Civil Service Commission
 
 ### AI, Data Science & Technology
 
 - Introduction to AI Agents — DataCamp
 - AI Fundamentals — DataCamp
 - Artificial Intelligence Fundamentals — IBM
-- AI Fundamentals with IBM SkillsBuild — Cisco
 - Introduction to AI — Google
-- AI for the Modern Workforce — Ateneo de Davao University
 - AI for Business Professionals — HP LIFE
-- Software Development and Design Thinking — DICT Philippines
-- Introduction to IT Project Management — University of the Philippines
 
 ### Selected Events, Hackathons & Programs
 
@@ -182,6 +167,4 @@ Recognized for combining analytical thinking, eval-first engineering, structured
 - Sui Builders Program Davao — Sui Foundation — Apr 2026
 - Blockchain4Youth Learning Hub Program — Bitget — Apr 2026
 - Speedrun Ethereum — ETHPH Mindanao — Aug 2025
-- KadaKareer KadaKamp — DICE Davao Interschool Computer Enthusiasts — Nov 2025
-- Base Philippines Community Townhall — Davao — Aug 2025
 - Guest Speaker — USeP CBA Annual Business Expo 2026 — Feb 2026

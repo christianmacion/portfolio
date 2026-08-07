@@ -1,8 +1,10 @@
 # CHRISTIAN MACION
 
-**AI / Agent Engineer — LLM Application Engineer**
+**AI Engineer · Multi-Agent LLM Systems · Eval-Harness & Cost-Aware LLM Deployment**
 
 christianmacion26@gmail.com · +63-991-616-2630 · Digos City, Davao del Sur, Philippines (UTC+8) · LinkedIn
+
+> **FIT FOR: AI Engineer · LLM Application Engineer · Eval Engineer · Agent Reliability · Applied AI — Anthropic · OpenAI · Scale AI · Surge**
 
 ## SUMMARY
 
@@ -122,11 +124,7 @@ Before the AI work, a self-directed quant-trading practice (crypto and futures) 
 
 - **[Multi-Agent AI Architecture (Field Guide)](available on request)** — Curriculum authored from first principles (no framework) covering orchestrator-worker topologies, eval-harness design, model-routing policy, structured-output contracts, persistent agent memory, and cost discipline. Adopted as the teaching reference for a research-desk engagement.
 
-- **[AI-Slop Evaluation Gate](available on request)** — 13-metric literature-grounded evaluator for AI-generated content; deployable Streamlit app, stdlib scoring core. Drove a real draft from HEAVY (index 81) to CLEAN (index 3).
-
 - **[RAG Retrieval Scorecard (rag-recall)](available on request)** — Measured RAG with a retrieval scorecard: recall@3 = 0.886, MRR@3 = 0.805. Supports recall@K / MRR@K evaluation across chunking strategies and vector-store choices.
-
-- **[Tool-Calling Agent with Fault Injection](available on request)** — ReAct tool-calling agent with OTel traces: 100% tool/arg correctness; recovered 6/6 injected faults.
 
 - **[LLM-as-Judge Validated vs Humans](available on request)** — Judge harness validated vs human raters: Cohen's κ = 0.58, 95% bootstrap CI, position-bias measured.
 
@@ -137,13 +135,8 @@ Before the AI work, a self-directed quant-trading practice (crypto and futures) 
 - Introduction to AI Agents — DataCamp
 - AI Fundamentals — DataCamp
 - Artificial Intelligence Fundamentals — IBM
-- AI Fundamentals with IBM SkillsBuild — Cisco
 - Introduction to AI — Google
 - AI for the Modern Workforce — Ateneo de Davao University
-- AI for Business Professionals — HP LIFE
-- Software Development and Design Thinking — DICT Philippines
-- Introduction to IT Project Management — University of the Philippines
-- Data Literacy — DataCamp
 
 ### Finance, Trading & Economics
 
