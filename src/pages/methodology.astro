@@ -84,6 +84,21 @@ const charter = [
     { name: 'Home', href: '/' },
     { name: 'Methodology', href: '/methodology' },
   ]}
+  extraJsonLd={{
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: 'How to ship what has passed a G1–G31 statistical gate',
+    description: 'The eval-first discipline: every shipped primitive passes through 31 statistical gates covering mechanical validity, statistical significance, robustness, and economic validity.',
+    step: [
+      { '@type': 'HowToStep', name: 'Frame the primitive', text: 'Define the loop as a finite-state machine with terminal state, idempotent write, dedupe key, coverage filter, and AAR.' },
+      { '@type': 'HowToStep', name: 'Run G1–G7 pre-flight', text: 'Mechanical-validity checks (fire-unit n, screen unit-of-analysis, joint-set sizing, regime-sign, n-aware t-stat floor, source-shift sanity, live-book overlap).' },
+      { '@type': 'HowToStep', name: 'Run G8–G31 full stack', text: 'Statistical-significance, robustness, and economic-validity gates including walk-forward, block-bootstrap, deflated Sharpe, Monte Carlo ruin probability, and regime-conditional deployment.' },
+      { '@type': 'HowToStep', name: 'Write the AAR', text: 'One-page After-Action Report at ~/.claude/cache/corporate/aars/<id>.md with goal, decomposition, cost, critique, and doctrine reflection.' },
+      { '@type': 'HowToStep', name: 'Ship or kill', text: 'Verdict derives from gates. PASS → ship. FAIL → kill or iterate with documented scope. No in-between.' },
+    ],
+    author: { '@type': 'Person', name: profile.fullName, url: 'https://christianmacion-portfolio.pages.dev/' },
+    publisher: { '@type': 'WebSite', name: 'Christian T. Macion Portfolio', url: 'https://christianmacion-portfolio.pages.dev/' },
+  }}
 >
   <header class="method-head">
     <div class="container">
