@@ -45,17 +45,21 @@
    * backgrounds which the dark theme no longer uses. New value
    * #b8801e clears 5.0:1 on all dark surfaces while remaining
    * visually distinct from --c-amber (#c98a16) — i.e. a "deeper
-   * amber" hierarchy preserved. */
-  --c-primary-2-deep: #b8801e;
-  --c-primary-2: #c98a16;
-  --c-primary-2-light: #e8b220; /* hover/lift for cream backgrounds */
-  --c-gold: #c98a16;
-  --c-amber-deep: #b8801e;
+   * amber" hierarchy preserved.
+   *
+   * v9.4.1 — TOKEN COLLAPSE (chrome-contract rule 1: mono + 1 amber).
+   * The 4 hex aliases (--c-amber / --c-amber /
+   * --c-amber-light / --c-amber / --c-amber) all pointed at the
+   * same amber family. Canonical accent is --c-amber (#c98a16) per
+   * qa_engineer workflow wm0kzqwhf top-fix #1. Deep variant is
+   * collapsed onto --c-amber; hover/lift uses --c-amber-light. The
+   * rgba decor tokens (--c-amber-decor, --c-amber-decor) are kept
+   * because they are alpha-blended, not hex equivalents. */
   --c-amber: #c98a16;
   --c-amber-light: #e8b220;
   /* v6.9.16 — tokenize the 10×-repeated amber underline rgba literal. */
   --c-amber-decor: rgba(212, 160, 23, 0.4);
-  --c-amber-deep-decor: rgba(140, 111, 42, 0.4);
+  --c-amber-decor: rgba(140, 111, 42, 0.4);
   /* v6.10.36 — consolidate the 7 remaining rgba(212,160,23,*) literals
      (5 sites at 0.12, 1 at 0.3, 1 at 0.05) onto token aliases so the
      F13 color family stays consistent. Functional data viz
@@ -211,9 +215,6 @@
   --border-strong: 1px solid var(--c-ink-3);
   --border-paper: 1px solid var(--c-white-haze);
 
-  /* === HERO EQUATION RIBBON === */
-  --eq-bg: linear-gradient(180deg, var(--c-bg) 0%, var(--c-bg-2) 100%);
-
   /* === v6.0.7 · section anchor + nav heights === */
   --nav-h: 56px;
   --section-toc-h: 36px;
@@ -309,16 +310,7 @@
   font-size: 0.92em;
 }
 
-/* === Background motifs === */
-.bg--paper {
-  background:
-    linear-gradient(180deg, var(--c-bg) 0%, var(--c-bg-2) 100%),
-    radial-gradient(circle at 1px 1px, rgba(11, 31, 42, 0.04) 1px, transparent 0);
-  background-blend-mode: multiply, normal;
-  background-size:
-    auto,
-    18px 18px;
-}
+/* Background motifs (gradients) removed per chrome contract — no halo/glow/gradient. */
 
 .bg--tape {
   background: var(--c-tape);
@@ -357,7 +349,7 @@
   background: var(--c-info);
 }
 .dot--amber {
-  background: var(--c-primary-2);
+  background: var(--c-amber);
 }
 .dot--muted {
   background: var(--c-ink-3);
@@ -376,7 +368,7 @@
   right: 0;
   bottom: -2px;
   height: 2px;
-  background: linear-gradient(90deg, var(--c-primary-2), var(--c-gold));
+  background: var(--c-amber);
   opacity: 0.55;
   border-radius: 1px;
 }

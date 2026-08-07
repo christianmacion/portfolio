@@ -9,7 +9,7 @@
  *   - prediction-market probability decay across tenors
  *
  * Visual conventions (notes/v61-patterns.md, Pattern 3):
- *   - 1.5px stroke in `--c-primary-2` for the polyline
+ *   - 1.5px stroke in `--c-amber` for the polyline
  *   - 8% area fill (gradient 12% → 0%) below the curve
  *   - 6% domain padding so the curve breathes
  *   - 11px tabular-nums mono labels, color `--c-ink-2`
@@ -127,8 +127,8 @@ const lastY = yFor(lastPoint.yld);
   >
     <defs>
       <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="var(--c-primary-2)" stop-opacity="0.22"></stop>
-        <stop offset="100%" stop-color="var(--c-primary-2)" stop-opacity="0"></stop>
+        <stop offset="0%" stop-color="var(--c-amber)" stop-opacity="0.22"></stop>
+        <stop offset="100%" stop-color="var(--c-amber)" stop-opacity="0"></stop>
       </linearGradient>
     </defs>
 
@@ -180,13 +180,13 @@ const lastY = yFor(lastPoint.yld);
     <path
       d={linePath}
       fill="none"
-      stroke="var(--c-primary-2)"
+      stroke="var(--c-amber)"
       stroke-width="1.75"
       stroke-linejoin="round"
       stroke-linecap="round"></path>
 
     {/* Per-point markers (faint) */}
-    {points.map((p, i) => <circle cx={xFor(i)} cy={yFor(p.yld)} r="2" fill="var(--c-primary-2)" />)}
+    {points.map((p, i) => <circle cx={xFor(i)} cy={yFor(p.yld)} r="2" fill="var(--c-amber)" />)}
 
     {/* Last-point hairline + close label (Bloomberg treatment) */}
     <line x1={lastX} y1={padT} x2={lastX} y2={padT + innerH} class="term__hairline"></line>
@@ -243,13 +243,13 @@ const lastY = yFor(lastPoint.yld);
     opacity: 0.85;
   }
   .term__hairline {
-    stroke: var(--c-primary-2-light);
+    stroke: var(--c-amber-light);
     stroke-width: 1;
     opacity: 0.7;
   }
   .term__close {
     font-size: 11px;
-    fill: var(--c-primary-2-light);
+    fill: var(--c-amber-light);
     font-weight: 600;
     font-variant-numeric: tabular-nums;
     font-feature-settings: 'tnum' 1;

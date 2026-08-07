@@ -80,7 +80,7 @@ if (formula) {
     {
       spark && (
         <span class="stat__spark">
-          <Sparkline points={spark} stroke={sparkColor ?? 'var(--c-primary-2)'} fill="gradient" />
+          <Sparkline points={spark} stroke={sparkColor ?? 'var(--c-amber)'} fill="gradient" />
         </span>
       )
     }
@@ -120,7 +120,7 @@ if (formula) {
   }
   .stat__formula {
     font-size: var(--fs-sm);
-    color: var(--c-primary-2-deep);
+    color: var(--c-amber);
     opacity: 0.85;
     line-height: 1;
   }
@@ -182,7 +182,7 @@ if (formula) {
   /* === Variants === */
   .stat--primary {
     background: var(--c-tape);
-    border-color: var(--c-amber-deep);
+    border-color: var(--c-amber);
   }
   .stat--primary .stat__label {
     color: var(--c-ink-faint);
@@ -199,7 +199,7 @@ if (formula) {
      via --c-bg-2 + amber-deep border is enough. */
   .stat--accent {
     background: var(--c-bg-2);
-    border-color: var(--c-amber-deep);
+    border-color: var(--c-amber);
   }
 
   .stat--mono {

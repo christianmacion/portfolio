@@ -523,7 +523,7 @@ const totalCount = quantPubs.length + aiPubs.length + workbooks.length + press.l
     user-select: none;
   }
   .topic-btn:hover {
-    border-color: var(--c-amber-deep);
+    border-color: var(--c-amber);
     color: var(--c-primary);
   }
   .topic-count {
@@ -541,7 +541,7 @@ const totalCount = quantPubs.length + aiPubs.length + workbooks.length + press.l
   .topic-input--press:checked ~ * [data-topic='press'] {
     /* not quite — use sibling cascade */
   }
-  /* v9.2 a11y — was --c-amber-deep bg + --c-primary text which only
+  /* v9.2 a11y — was --c-amber bg + --c-primary text which only
      hits 1.39:1 in light theme after the legacy --c-phi remap.
      Use the same theme-neutral amber/bg pairing as the rest of the
      site: --c-amber bg + --c-bg text, both themes ≥ 4.5:1. */
@@ -626,7 +626,7 @@ const totalCount = quantPubs.length + aiPubs.length + workbooks.length + press.l
     font-size: var(--fs-sm);
     text-transform: uppercase;
     letter-spacing: 0.12em;
-    color: var(--c-amber-deep);
+    color: var(--c-amber);
     font-weight: 600;
     margin: 0 0 var(--sp-3);
     padding-bottom: var(--sp-2);

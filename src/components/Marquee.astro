@@ -146,11 +146,14 @@ const strings = isFrameSet ? null : (items as string[]);
     color: var(--c-ink-4);
     font-weight: 600;
   }
+  /* v9.4.1 — chrome-contract rule 6: reserve --c-warn for semantic
+     status only. .is-warn here is a decorative frame tint, not a
+     warning signal; collapse to canonical --c-amber. */
   .marquee__frame.is-warn .marquee__frame-head {
-    color: var(--c-warn);
+    color: var(--c-amber);
   }
   .marquee__frame.is-cobalt .marquee__frame-head {
-    color: var(--c-primary-2);
+    color: var(--c-amber);
   }
   .marquee__frame.is-sage .marquee__frame-head {
     color: var(--j-sage);

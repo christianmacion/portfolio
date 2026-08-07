@@ -389,12 +389,12 @@ const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circ
      target reticle, not a halo. */
   .earth-map__anchor {
     fill: var(--c-tape);
-    stroke: var(--c-primary-2);
+    stroke: var(--c-amber);
     stroke-width: 1;
   }
   .earth-map__dot {
-    fill: var(--c-primary-2);
-    stroke: var(--c-primary-2-light);
+    fill: var(--c-amber);
+    stroke: var(--c-amber-light);
     stroke-width: 1;
   }
   .earth-map__label {
@@ -412,13 +412,13 @@ const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circ
 
   /* === Layer B — world events (shape-coded by category) === */
   .earth-map__event-shape {
-    fill: var(--c-amber-deep);
+    fill: var(--c-amber);
     stroke: var(--c-bg);
     stroke-width: 1;
     opacity: 0.85;
   }
   .earth-map__event--critical .earth-map__event-shape {
-    fill: var(--c-amber-deep);
+    fill: var(--c-amber);
     opacity: 1;
   }
   .earth-map__event--moderate .earth-map__event-shape {
@@ -469,10 +469,10 @@ const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circ
     height: 10px;
   }
   .earth-map__cap-swatch--venue {
-    background: var(--c-primary-2);
+    background: var(--c-amber);
   }
   .earth-map__cap-swatch--event {
-    background: var(--c-amber-deep);
+    background: var(--c-amber);
     transform: rotate(45deg);
   }
   .earth-map__cap-swatch--gdelt-pos {

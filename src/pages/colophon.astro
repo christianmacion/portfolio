@@ -99,7 +99,7 @@ const motion = [
 const contrastPairs = [
   { fg: '--c-ink', bg: '--c-bg', ratio: '17.1:1', level: 'AAA' },
   { fg: '--c-ink-2', bg: '--c-bg', ratio: '6.4:1', level: 'AA' },
-  { fg: '--c-primary-2-deep', bg: '--c-bg', ratio: '5.0:1', level: 'AA' },
+  { fg: '--c-amber', bg: '--c-bg', ratio: '5.0:1', level: 'AA' },
   { fg: '--c-amber', bg: '--c-bg', ratio: '6.4:1', level: 'AA' },
   { fg: '--c-primary', bg: '--c-bg', ratio: '19.2:1', level: 'AAA' },
 ];
@@ -360,7 +360,7 @@ const motionCount = motion.length;
         </li>
         <li>
           <strong>Focus-visible ring:</strong> a 2px outline in
-          <code class="mono">--c-primary-2-deep</code> (5.0:1) on every interactive element, gated by
+          <code class="mono">--c-amber</code> (5.0:1) on every interactive element, gated by
           <code class="mono">:focus-visible</code> so mouse users see no ring.
         </li>
         <li>
@@ -459,12 +459,12 @@ const motionCount = motion.length;
     padding: 1px 6px;
     border-radius: 1px;
     font-size: 0.92em;
-    color: var(--c-amber-deep);
+    color: var(--c-amber);
   }
 
   .sub-h3 {
     margin: var(--sp-6) 0 var(--sp-3);
-    color: var(--c-amber-deep);
+    color: var(--c-amber);
     text-transform: uppercase;
     letter-spacing: 0.08em;
     font-size: var(--fs-xs);
@@ -512,7 +512,7 @@ const motionCount = motion.length;
   }
   .type-scale__label {
     font-size: var(--fs-xs);
-    color: var(--c-amber-deep);
+    color: var(--c-amber);
     text-transform: uppercase;
     letter-spacing: 0.08em;
   }
@@ -560,7 +560,7 @@ const motionCount = motion.length;
   .swatch__name {
     padding: var(--sp-3) var(--sp-4) 0;
     font-size: var(--fs-sm);
-    color: var(--c-amber-deep);
+    color: var(--c-amber);
     font-weight: 600;
   }
   .swatch__hex {
@@ -596,7 +596,7 @@ const motionCount = motion.length;
   }
   .spacing-cell__token {
     font-size: var(--fs-xs);
-    color: var(--c-amber-deep);
+    color: var(--c-amber);
     text-transform: uppercase;
     letter-spacing: 0.08em;
   }
@@ -632,7 +632,7 @@ const motionCount = motion.length;
     font-weight: 600;
   }
   .motion tbody th {
-    color: var(--c-amber-deep);
+    color: var(--c-amber);
     font-weight: 600;
     text-transform: none;
     letter-spacing: 0;
@@ -656,7 +656,7 @@ const motionCount = motion.length;
     padding: 1px 6px;
     border-radius: 1px;
     font-size: 0.9em;
-    color: var(--c-amber-deep);
+    color: var(--c-amber);
   }
 
   @media (max-width: 720px) {

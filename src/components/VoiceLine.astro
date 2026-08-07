@@ -33,7 +33,7 @@ interface Props {
   /** Visual size variant. 'md' (default) = clamp(1.1rem, 2.4vw, 1.6rem).
    *  'lg' is display-scale: clamp(2.5rem, 5vw, 5.5rem) — 88px desktop max. */
   size?: 'sm' | 'md' | 'lg';
-  /** Override the rail color (defaults to var(--c-primary-2)). */
+  /** Override the rail color (defaults to var(--c-amber)). */
   railColor?: string;
   /** Extra class on the outer element (e.g., for layout positioning). */
   class?: string;
@@ -57,7 +57,7 @@ const { ruled = true, quote = 'curly', size = 'md', railColor, class: className 
 <style>
   .voice-line {
     /* The rail color is overridable per-instance via inline `style="--voice-line-rail: …"`. */
-    --voice-line-rail: var(--c-primary-2);
+    --voice-line-rail: var(--c-amber);
     margin: 0 0 var(--sp-5);
     font-style: italic;
     font-family: var(--serif-display);

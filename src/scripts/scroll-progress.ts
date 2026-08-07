@@ -11,12 +11,12 @@
 const PROGRESS_ID = 'scroll-progress-bar';
 
 // === v8.3 — chrome token fallback constant (defensive against missing tokens) ===
-// Mirrors the legacy Jane-Street-era `--c-primary-2` fallback for the
-// scroll-progress bar fill. The `var(--c-primary-2, …)` pattern was used
+// Mirrors the legacy Jane-Street-era `--c-amber` fallback for the
+// scroll-progress bar fill. The `var(--c-amber, …)` pattern was used
 // because this script may fire before the v6-13 surface CSS is parsed.
 // Now consolidated: token is the source of truth, this constant mirrors
 // the legacy value. See `src/styles/tokens-v6.13.css` for current
-// `--j-warn` (the v6-17 successor of --c-primary-2's amber era value).
+// `--j-warn` (the v6-17 successor of --c-amber's amber era value).
 const FALLBACK_AMBER_PROGRESS = '#d4a017';
 
 function build(): void {
@@ -38,7 +38,7 @@ function build(): void {
     'left: 0',
     'height: 2px',
     'width: 0',
-    `background: var(--c-primary-2, ${FALLBACK_AMBER_PROGRESS})`,
+    `background: var(--c-amber, ${FALLBACK_AMBER_PROGRESS})`,
     'z-index: 60',
     'pointer-events: none',
     'transition: opacity 200ms ease',

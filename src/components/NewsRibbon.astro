@@ -310,7 +310,7 @@ const frames = (methodology ?? defaultMethodology).map((it) => ({ ...it }));
     color: var(--c-warn);
   }
   .ribbon__tag--cobalt {
-    color: var(--c-primary-2);
+    color: var(--c-amber);
   }
   .ribbon__tag--sage {
     color: var(--j-sage);
@@ -363,11 +363,14 @@ const frames = (methodology ?? defaultMethodology).map((it) => ({ ...it }));
     color: var(--c-ink-4);
     font-weight: 600;
   }
+  /* v9.4.1 — chrome-contract rule 6: reserve --c-warn for semantic
+     status only. .is-warn here is a decorative frame tint, not a
+     warning signal; collapse to canonical --c-amber. */
   .ribbon__frame.is-warn .ribbon__frame-head {
-    color: var(--c-warn);
+    color: var(--c-amber);
   }
   .ribbon__frame.is-cobalt .ribbon__frame-head {
-    color: var(--c-primary-2);
+    color: var(--c-amber);
   }
   .ribbon__frame.is-sage .ribbon__frame-head {
     color: var(--j-sage);
@@ -395,7 +398,7 @@ const frames = (methodology ?? defaultMethodology).map((it) => ({ ...it }));
     font-size: 9.5px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    background: linear-gradient(90deg, transparent, var(--c-bg-2) 30%);
+    background: var(--c-bg-2);
     pointer-events: none;
   }
 

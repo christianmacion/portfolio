@@ -463,7 +463,7 @@ const NGATE = `${profile.stats.evalGates}-gate`;
     letter-spacing: 0.08em;
   }
   .section__foot a {
-    /* v9.2 a11y — was var(--c-amber-deep) which only hits 3.73:1 on
+    /* v9.2 a11y — was var(--c-amber) which only hits 3.73:1 on
        dark section surface (Lighthouse mobile, dark default). --c-amber
        reads at ≥5.4:1 on the same surface — AA-compliant in both themes.
        Underline + offset still carry the link identity. */
@@ -564,7 +564,7 @@ const NGATE = `${profile.stats.evalGates}-gate`;
     line-height: var(--lh-loose);
     margin: 0;
   }
-  /* v9.2 a11y — was --c-amber-deep. Dark-theme --j-warn-deep is #8a6f2f
+  /* v9.2 a11y — was --c-amber. Dark-theme --j-warn-deep is #8a6f2f
      which only hits 3.66:1 on --c-bg (#1a1714). Use --c-amber (5.42:1
      dark, 5.86:1 light) and underline so the link is still distinct. */
   .proof-card__more {
@@ -585,7 +585,7 @@ const NGATE = `${profile.stats.evalGates}-gate`;
     letter-spacing: 0.08em;
   }
   .proof-strip__foot a {
-    color: var(--c-amber-deep);
+    color: var(--c-amber);
     text-decoration: underline;
     text-underline-offset: 3px;
   }

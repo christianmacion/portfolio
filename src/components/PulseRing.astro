@@ -87,12 +87,16 @@ const colorClass = color ? `is-${color}` : variant === 'live' ? 'is-teal' : 'is-
     inset: -4px;
   }
 
-  /* === Color tints — pass through to the dot via currentColor. === */
+  /* === Color tints — pass through to the dot via currentColor. ===
+     v9.4.1 — chrome-contract rule 6: reserve --c-warn for semantic
+     status only. The .is-warn tint here is decorative chrome
+     (pulse-ring default when no color/variant is set); collapse to
+     canonical --c-amber. */
   .pulse-ring.is-warn {
-    color: var(--c-warn);
+    color: var(--c-amber);
   }
   .pulse-ring.is-cobalt {
-    color: var(--c-primary-2);
+    color: var(--c-amber);
   }
   .pulse-ring.is-sage {
     color: var(--j-sage);

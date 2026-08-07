@@ -438,7 +438,7 @@ const secondary = [
   }
   .nav__brand-name sup {
     font-size: 0.65em;
-    color: var(--c-primary-2-light);
+    color: var(--c-amber-light);
   }
   .nav__brand-sub {
     font-size: var(--fs-xs);
@@ -479,16 +479,16 @@ const secondary = [
       border-color var(--transition);
   }
   .nav__link:hover {
-    /* v9.3.2 (2026-08-02) — a11y: --c-primary-2-light (#5b6f9e) on
+    /* v9.3.2 (2026-08-02) — a11y: --c-amber-light (#5b6f9e) on
        --c-bg light (#ece5d4) measured 3.97:1 (sub-AA). Switch to
-       --c-primary-2 which resolves to --j-cobalt = #2c4a7e in light mode
+       --c-amber which resolves to --j-cobalt = #2c4a7e in light mode
        → 7.00:1 PASS, dark mode → 4.96:1 PASS. Provides a clear hover
        cue (color shift toward body-ink family) without sacrificing AA. */
-    color: var(--c-primary-2);
+    color: var(--c-amber);
   }
   .nav__link--active {
-    color: var(--c-primary-2-light);
-    border-bottom-color: var(--c-primary-2);
+    color: var(--c-amber-light);
+    border-bottom-color: var(--c-amber);
   }
   /* v6.1.0 — Match .nav__link color treatment when NavMore is nested
      in the primary row (Markets dropdown + Resources dropdown).
@@ -509,19 +509,19 @@ const secondary = [
   }
   .nav__primary .nav-more__summary:hover,
   .nav__primary .nav-more[open] .nav-more__summary {
-    color: var(--c-primary-2-light);
+    color: var(--c-amber-light);
     background: transparent;
   }
   .nav__primary .nav-more[open] .nav-more__summary {
-    border-bottom: 2px solid var(--c-primary-2);
+    border-bottom: 2px solid var(--c-amber);
   }
   /* Highlight the Markets summary when any of its children is the
      current page. We can't use NavMore's built-in isActive on the
      summary because that helper is scoped to a single href; mark
      the summary manually via data-active on the <details>. */
   .nav__primary .nav-more[data-active] .nav-more__summary {
-    color: var(--c-primary-2-light);
-    border-bottom: 2px solid var(--c-primary-2);
+    color: var(--c-amber-light);
+    border-bottom: 2px solid var(--c-amber);
   }
   .nav__cta--mobile {
     display: none;
@@ -531,13 +531,13 @@ const secondary = [
      .btn--primary uses var(--c-primary), which flips to a pale ink in
      dark mode → invisible against the dark navbar. Always amber.
      v9.3 IA wave 2 (2026-08-01) a11y baseline — text color
-     var(--c-bg-light) (#f7f2e7) on var(--c-amber-deep) (#8a6f2f)
+     var(--c-bg-light) (#f7f2e7) on var(--c-amber) (#8a6f2f)
      measured 4.28:1 in dark theme, failing WCAG 1.4.3 (4.5:1 body).
      Switched to var(--c-bg) for ≥4.5:1 in both themes. Hover swap:
      var(--c-bg) on var(--c-amber) for ≥4.5:1 contrast in both
      themes (was var(--c-bg-light) on var(--c-amber) = 2.95:1 dark). */
   .nav__cta {
-    background: var(--c-amber-deep);
+    background: var(--c-amber);
     color: var(--c-on-amber-deep);
     border: 1px solid var(--c-amber);
     /* v6.18 polish — prevent "Resume ↓" wrapping to "Res..." on narrower
@@ -591,8 +591,8 @@ const secondary = [
     inset: -6px;
   }
   .nav-search:hover {
-    color: var(--c-primary-2-light);
-    border-color: var(--c-primary-2-light);
+    color: var(--c-amber-light);
+    border-color: var(--c-amber-light);
   }
 
   /* === v9.3 IA wave 2 (2026-08-01) — GitHub icon link ===
@@ -624,11 +624,11 @@ const secondary = [
     inset: -6px;
   }
   .nav__icon-link:hover {
-    color: var(--c-primary-2-light);
-    border-color: var(--c-primary-2-light);
+    color: var(--c-amber-light);
+    border-color: var(--c-amber-light);
   }
   .nav__icon-link:focus-visible {
-    outline: 2px solid var(--c-primary-2-light);
+    outline: 2px solid var(--c-amber-light);
     outline-offset: 2px;
   }
   .nav__icon-link-label {
@@ -674,7 +674,7 @@ const secondary = [
     transform: rotate(180deg);
   }
   .nav__cta--resume:focus-visible {
-    outline: 2px solid var(--c-primary-2-light);
+    outline: 2px solid var(--c-amber-light);
     outline-offset: 2px;
   }
 
@@ -708,7 +708,7 @@ const secondary = [
     border-bottom: 0;
   }
   .nav__resume-pill:focus-visible {
-    outline: 2px solid var(--c-primary-2-light);
+    outline: 2px solid var(--c-amber-light);
     outline-offset: -2px;
   }
   .nav__resume-pill-kicker {
@@ -726,17 +726,17 @@ const secondary = [
   }
 
   /* === v9.3 IA wave 2 (2026-08-01) — Book-a-call CTA ===
-     Amber-deep on tape (--c-amber-deep); terracotta hover. Distinct
+     Amber-deep on tape (--c-amber); terracotta hover. Distinct
      from the Resume chip so the eye reads two affordances, not one.
-     a11y baseline: --c-bg on --c-amber-deep measures ≥4.5:1 in both
-     themes (was --c-bg-light on --c-amber-deep = 4.28:1 dark → fail). */
+     a11y baseline: --c-bg on --c-amber measures ≥4.5:1 in both
+     themes (was --c-bg-light on --c-amber = 4.28:1 dark → fail). */
   .nav__book {
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
     min-height: 44px;
     padding: 0.5rem 0.95rem;
-    background: var(--c-amber-deep);
+    background: var(--c-amber);
     color: var(--c-on-amber-deep);
     border: 1px solid var(--c-amber);
     border-radius: var(--radius-sm);

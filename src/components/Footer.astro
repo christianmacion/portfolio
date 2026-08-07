@@ -229,8 +229,8 @@ const footerPulse = !noPulseSuffixes.some(
     border-color: var(--c-ink);
   }
   .footer__cta--primary:hover {
-    background: var(--c-amber-deep);
-    border-color: var(--c-amber-deep);
+    background: var(--c-amber);
+    border-color: var(--c-amber);
     color: var(--c-paper);
   }
   @media (max-width: 720px) {
@@ -364,7 +364,7 @@ const footerPulse = !noPulseSuffixes.some(
     flex-wrap: wrap;
   }
   .footer__base-meta a {
-    /* v9.2 a11y — was --c-warn-deep (--c-amber-deep = --j-warn-deep
+    /* v9.2 a11y — was --c-warn-deep (--c-amber = --j-warn-deep
        = #8a6f2f) which only hits 3.43:1 on the dark --c-tape (--j-bg
        = #1a1714) surface (Lighthouse mobile, dark default). --c-warn
        (--c-amber = --j-warn = #a88a3e) reads at 5.42:1 on the same
@@ -385,9 +385,9 @@ const footerPulse = !noPulseSuffixes.some(
   .footer__base-meta a:hover {
     /* v9.2 a11y — was --c-warn, which after the link-color remap
        below would no longer be a perceptibly different hover state.
-       Now --c-amber-deep (--j-warn-deep = #8a6f2f on dark, 3.43:1
+       Now --c-amber (--j-warn-deep = #8a6f2f on dark, 3.43:1
        on --c-tape) — only used on hover, non-blocking for AA. */
-    color: var(--c-amber-deep);
+    color: var(--c-amber);
     text-decoration-color: var(--c-amber);
   }
 

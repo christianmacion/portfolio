@@ -290,7 +290,7 @@ const updatedHuman = new Date(updated).toLocaleDateString('en-GB', {
   .now-head__sub a {
     color: var(--c-primary);
     text-decoration: underline;
-    text-decoration-color: var(--c-amber-deep);
+    text-decoration-color: var(--c-amber);
     text-underline-offset: 3px;
   }
   .now-head__stamp {
@@ -338,7 +338,7 @@ const updatedHuman = new Date(updated).toLocaleDateString('en-GB', {
     content: '–';
     position: absolute;
     left: 0;
-    color: var(--c-amber-deep);
+    color: var(--c-amber);
     font-weight: 500;
   }
   .now-list strong {
@@ -352,7 +352,7 @@ const updatedHuman = new Date(updated).toLocaleDateString('en-GB', {
     text-underline-offset: 2px;
   }
   .now-list a:hover {
-    text-decoration-color: var(--c-amber-deep);
+    text-decoration-color: var(--c-amber);
   }
   .now-list--not li::before {
     content: '';
@@ -375,7 +375,7 @@ const updatedHuman = new Date(updated).toLocaleDateString('en-GB', {
     color: var(--c-ink-3);
   }
   .now-foot a {
-    /* v9.3 a11y 96 follow-up (2026-08-01) — was --c-amber-deep
+    /* v9.3 a11y 96 follow-up (2026-08-01) — was --c-amber
        (dark: #8a6f2f) on --c-paper dark (#221f1b) = 3.43:1 fail.
        Promoted to --c-amber (dark: #a88a3e) = 5.25:1 pass. Light
        --c-amber #6b5220 on --c-paper #f3ede1 = 7.39:1 pass. */
