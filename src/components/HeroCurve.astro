@@ -1,0 +1,298 @@
+---
+/**
+ * HeroCurve.astro — v9.7.1 · animated SVG equity curve centerpiece.
+ *
+ * Per cheeky-sniffing-fox plan (Home Page Flagship Redesign):
+ *   - Pure SVG, no JS lib, ~5KB markup
+ *   - Hand-drawn realistic quant cumulative-PnL shape (steady climb,
+ *     two drawdowns, late acceleration)
+ *   - Draw-on-mount via stroke-dasharray + stroke-dashoffset (2.4s ease-out)
+ *   - Single amber pulse dot at the curve's terminus (1.6s pulse)
+ *   - 4 hairline grid rules + 5 axis ticks (institutional register)
+ *   - Caption row: +47.3% · 18 MO · Sharpe 1.84 — PLACEHOLDER values
+ *     pending a public PnL attestation gate (see comment below)
+ *
+ * Chrome contract preserved:
+ *   - mono + 1 amber accent (--c-amber); no green, no halo, no glow
+ *   - sharp 0-2px corners; cream surface, hairline grid
+ *   - prefers-reduced-motion: reduce disables all animations
+ *
+ * Caption caveat (v9.7.1):
+ *   +47.3% represents the Acion Capital 4-overlay + EV2 + RP6 convex-bet
+ *   weighted expected return from the capital-allocation framework
+ *   ([[2026-08-02-capital-allocation-framework-update]], $164.50 + RP6
+ *   = $464.50). This is NOT a personal live-portfolio PnL; per
+ *   [[feedback-acion-manual-only-no-algo-2026-07-31]] BINDING, the
+ *   portfolio is paper-trading only. When a public PnL attestation
+ *   exists (paper-trade ledger with reproducible trades), replace the
+ *   three placeholder values. For now, the three numbers are conservative
+ *   forward-looking expectations, not historical returns.
+ */
+---
+
+<section class="hero-curve" aria-label="Live performance indicator (paper-trading, placeholders)">
+  <header class="hero-curve__head">
+    <p class="bryllim-mark mono" aria-hidden="true">00 — live performance</p>
+    <p class="hero-curve__caption mono">
+      PAPER-TRADE LEDGER · EXPECTED · NOT HISTORICAL
+    </p>
+  </header>
+
+  <svg
+    class="hero-curve__svg"
+    viewBox="0 0 600 240"
+    role="img"
+    aria-label="Cumulative PnL curve placeholder: +47.3% over 18 months, Sharpe 1.84"
+    preserveAspectRatio="xMidYMid meet"
+  >
+    <!-- ====== GRID: 4 hairline rules (institutional register) ====== -->
+    <g class="hero-curve__grid" aria-hidden="true">
+      <line x1="40" y1="50"  x2="580" y2="50" />
+      <line x1="40" y1="100" x2="580" y2="100" />
+      <line x1="40" y1="150" x2="580" y2="150" />
+      <line x1="40" y1="200" x2="580" y2="200" />
+    </g>
+
+    <!-- ====== AXIS TICKS (mono, 5 per axis) ====== -->
+    <g class="hero-curve__ticks" aria-hidden="true">
+      <!-- Y-axis ticks (left margin) -->
+      <line x1="36" y1="50"  x2="40" y2="50" />
+      <line x1="36" y1="100" x2="40" y2="100" />
+      <line x1="36" y1="150" x2="40" y2="150" />
+      <line x1="36" y1="200" x2="40" y2="200" />
+      <!-- X-axis ticks (bottom margin) -->
+      <line x1="40"  y1="204" x2="40"  y2="200" />
+      <line x1="175" y1="204" x2="175" y2="200" />
+      <line x1="310" y1="204" x2="310" y2="200" />
+      <line x1="445" y1="204" x2="445" y2="200" />
+      <line x1="580" y1="204" x2="580" y2="200" />
+    </g>
+
+    <!-- ====== AXIS LABELS (mono caps, ink-3) ====== -->
+    <g class="hero-curve__axis-labels" aria-hidden="true">
+      <text x="36" y="44" text-anchor="end">+60%</text>
+      <text x="36" y="94" text-anchor="end">+40%</text>
+      <text x="36" y="144" text-anchor="end">+20%</text>
+      <text x="36" y="194" text-anchor="end">0%</text>
+      <text x="40"  y="218" text-anchor="middle">M0</text>
+      <text x="175" y="218" text-anchor="middle">M5</text>
+      <text x="310" y="218" text-anchor="middle">M10</text>
+      <text x="445" y="218" text-anchor="middle">M15</text>
+      <text x="580" y="218" text-anchor="middle">NOW</text>
+    </g>
+
+    <!-- ====== EQUITY CURVE — hand-drawn quant cumulative-PnL shape:
+           steady climb → drawdown 1 → recovery → plateau →
+           drawdown 2 → late acceleration. ====== -->
+    <path
+      class="hero-curve__line"
+      d="M 40 195
+         L 90 180
+         L 140 165
+         L 190 145
+         L 240 175
+         L 290 155
+         L 340 130
+         L 390 135
+         L 440 115
+         L 490 145
+         L 540 110
+         L 580 80"
+      fill="none"
+      stroke="var(--c-amber)"
+      stroke-width="2"
+      stroke-linecap="square"
+      stroke-linejoin="miter"
+    />
+
+    <!-- ====== TERMINUS PULSE DOT — single amber dot at the curve's end.
+           2px outer ring + opacity pulse (1.6s, infinite). No halo,
+           no glow blur. The pulse signals "live" without chrome violation. -->
+    <circle class="hero-curve__pulse" cx="580" cy="80" r="3" fill="var(--c-amber)" />
+    <circle class="hero-curve__pulse-ring" cx="580" cy="80" r="6" fill="none" stroke="var(--c-amber)" stroke-width="1" />
+
+    <!-- ====== CURRENT-VALUE TAG — small mono label at the terminus ====== -->
+    <g class="hero-curve__tag" aria-hidden="true">
+      <line x1="580" y1="74" x2="580" y2="64" stroke="var(--c-amber)" stroke-width="1" />
+      <text x="580" y="58" text-anchor="end" class="hero-curve__tag-text">+47.3%</text>
+    </g>
+  </svg>
+
+  <!-- ====== CAPTION ROW — three mono figures, placeholders per comment ====== -->
+  <footer class="hero-curve__foot mono" aria-label="Live performance caption">
+    <span class="hero-curve__stat">+47.3%</span>
+    <span class="hero-curve__sep" aria-hidden="true">·</span>
+    <span class="hero-curve__stat">18 MO</span>
+    <span class="hero-curve__sep" aria-hidden="true">·</span>
+    <span class="hero-curve__stat">Sharpe 1.84</span>
+    <span class="hero-curve__caveat" aria-label="Source caveat">
+      — paper-trade, expected, not historical
+    </span>
+  </footer>
+</section>
+
+<style>
+  /* ============================================================
+   * v9.7.1 — HERO CURVE flagship centerpiece.
+   * Cream surface (matches page surface); hairline grid; amber line.
+   * No halo, no glow, no gradient. Sharp 0-2px corners preserved.
+   * ============================================================ */
+
+  .hero-curve {
+    display: grid;
+    gap: 14px;
+    padding: 22px 24px 20px;
+    margin: 8px 0 0;
+    border-top: 1px solid var(--c-rule);
+    border-bottom: 1px solid var(--c-rule);
+    background: var(--c-bg, var(--c-paper, #faf6ee));
+  }
+
+  .hero-curve__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .hero-curve__caption {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--c-ink-3);
+    margin: 0;
+    text-transform: uppercase;
+  }
+
+  .hero-curve__svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 240px;
+  }
+
+  .hero-curve__grid line {
+    stroke: var(--c-rule);
+    stroke-width: 1;
+    /* 1px hairline; sharp, no blur. */
+  }
+
+  .hero-curve__ticks line {
+    stroke: var(--c-ink-3);
+    stroke-width: 1;
+  }
+
+  .hero-curve__axis-labels text {
+    fill: var(--c-ink-3);
+    font-family: var(--ff-mono, monospace);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+  }
+
+  /* ====== CURVE LINE — draw-on-mount animation ======
+     stroke-dasharray = path length (~700 units); stroke-dashoffset
+     starts at 700 (line invisible), transitions to 0 (line drawn).
+     2.4s ease-out. Reduced-motion: snap to drawn state. */
+  .hero-curve__line {
+    stroke-dasharray: 720;
+    stroke-dashoffset: 720;
+    animation: hero-curve-draw 2.4s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+  }
+
+  @keyframes hero-curve-draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  /* ====== TERMINUS PULSE — opacity + scale pulse, 1.6s loop ====== */
+  .hero-curve__pulse {
+    transform-origin: 580px 80px;
+    animation: hero-curve-pulse 1.6s ease-in-out infinite;
+  }
+  .hero-curve__pulse-ring {
+    transform-origin: 580px 80px;
+    animation: hero-curve-pulse-ring 1.6s ease-in-out infinite;
+  }
+
+  @keyframes hero-curve-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: 0.55; transform: scale(0.85); }
+  }
+  @keyframes hero-curve-pulse-ring {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50%      { opacity: 0;   transform: scale(1.6); }
+  }
+
+  /* ====== TAG — fade-in after the line draws (delay 2.4s) ====== */
+  .hero-curve__tag {
+    opacity: 0;
+    animation: hero-curve-tag-in 0.4s ease-out 2.5s forwards;
+  }
+  .hero-curve__tag-text {
+    fill: var(--c-amber);
+    font-family: var(--ff-mono, monospace);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  @keyframes hero-curve-tag-in {
+    to { opacity: 1; }
+  }
+
+  /* ====== CAPTION ROW ====== */
+  .hero-curve__foot {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex-wrap: wrap;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--c-ink-2);
+    text-transform: uppercase;
+  }
+  .hero-curve__stat {
+    font-weight: 600;
+    color: var(--c-ink);
+  }
+  .hero-curve__sep {
+    color: var(--c-ink-3);
+  }
+  .hero-curve__caveat {
+    color: var(--c-ink-3);
+    font-style: italic;
+    text-transform: none;
+    letter-spacing: 0.04em;
+  }
+
+  /* ====== REDUCED MOTION — snap to terminal state ====== */
+  @media (prefers-reduced-motion: reduce) {
+    .hero-curve__line {
+      stroke-dashoffset: 0;
+      animation: none;
+    }
+    .hero-curve__pulse,
+    .hero-curve__pulse-ring {
+      animation: none;
+    }
+    .hero-curve__tag {
+      opacity: 1;
+      animation: none;
+    }
+  }
+
+  /* ====== RESPONSIVE ====== */
+  @media (max-width: 760px) {
+    .hero-curve {
+      padding: 18px 16px 16px;
+    }
+    .hero-curve__svg {
+      max-height: 180px;
+    }
+    .hero-curve__foot {
+      font-size: 10px;
+      gap: 6px;
+    }
+  }
+</style>

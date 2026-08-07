@@ -72,10 +72,17 @@ const buildDate = new Date().toISOString().slice(0, 10);
     </div>
   </header>
 
-  <main class="work-body container container-narrow">
+  <!-- v9.7.2 BLOCKER FIX — was `<main>` nested inside BaseLayout's `<main id="main">`.
+       HTML5 disallows nested <main>; axe-core landmark-unique fails.
+       Replaced with <div> so BaseLayout remains the single main landmark. -->
+  <div class="work-body container container-narrow">
     <!-- § 01 — The Work Loop -->
     <section class="work-section" id="work-loop" aria-labelledby="work-loop-h">
-      <p class="work-section__mark mono">§ 01 — THE WORK LOOP</p>
+      <!-- v9.7.2 — migrated non-canonical `.work-section__mark` → canonical
+           `.bryllim-mark` (Bryllim design register). Stripped leading `§`
+           glyph + uppercase to match the lowercase 'NN — title' format
+           used on home + 4 v9.6 priority pages. CSS rule updated below. -->
+      <p class="bryllim-mark mono">01 — the work loop</p>
       <h2 class="work-section__title" id="work-loop-h">
         Hypothesis → backtest → paper → live → postmortem.
       </h2>
@@ -105,7 +112,7 @@ const buildDate = new Date().toISOString().slice(0, 10);
 
     <!-- § 02 — Quant Case Studies -->
     <section class="work-section" id="work-quant" aria-labelledby="work-quant-h">
-      <p class="work-section__mark mono">§ 02 — QUANT CASE STUDIES</p>
+      <p class="bryllim-mark mono">02 — quant case studies</p>
       <h2 class="work-section__title" id="work-quant-h">Five public-data case studies.</h2>
       <p class="work-section__body">
         Each card links to a public-data project brief. Every project ships with the data source,
@@ -147,7 +154,7 @@ const buildDate = new Date().toISOString().slice(0, 10);
 
     <!-- § 03 — AI Engineering Case Studies -->
     <section class="work-section" id="work-ai" aria-labelledby="work-ai-h">
-      <p class="work-section__mark mono">§ 03 — AI ENGINEERING CASE STUDIES</p>
+      <p class="bryllim-mark mono">03 — AI engineering case studies</p>
       <h2 class="work-section__title" id="work-ai-h">Three reproducible eval-first cases.</h2>
       <p class="work-section__body">
         Every AI case ships with a reproducible scorecard. The eval harness is the headline artifact
@@ -187,7 +194,7 @@ const buildDate = new Date().toISOString().slice(0, 10);
 
     <!-- § 04 — Live In Production -->
     <section class="work-section" id="work-live" aria-labelledby="work-live-h">
-      <p class="work-section__mark mono">§ 04 — LIVE IN PRODUCTION</p>
+      <p class="bryllim-mark mono">04 — live in production</p>
       <h2 class="work-section__title" id="work-live-h">What is running right now.</h2>
       <p class="work-section__body">
         Production surfaces that survive the omit-this-if-stale rule. Each is byte-deterministic at
@@ -229,7 +236,7 @@ const buildDate = new Date().toISOString().slice(0, 10);
 
     <!-- § 05 — What Ships Next -->
     <section class="work-section" id="work-frontier" aria-labelledby="work-frontier-h">
-      <p class="work-section__mark mono">§ 05 — WHAT SHIPS NEXT</p>
+      <p class="bryllim-mark mono">05 — what ships next</p>
       <h2 class="work-section__title" id="work-frontier-h">
         Three solution tracks compounding right now.
       </h2>
@@ -268,7 +275,7 @@ const buildDate = new Date().toISOString().slice(0, 10);
     </section>
 
     <p class="work-stamp mono">Last build: {buildDate} · Quant Researcher · 31-gate eval-first</p>
-  </main>
+  </div>
 </BaseLayout>
 
 <style>
@@ -335,11 +342,17 @@ const buildDate = new Date().toISOString().slice(0, 10);
   .work-section:first-of-type {
     border-top: 0;
   }
-  .work-section__mark {
-    font-size: var(--text-2xs, 0.6875rem);
-    color: var(--c-amber);
-    letter-spacing: 0.1em;
-    margin-bottom: var(--space-sm, 0.5rem);
+  /* v9.7.2 — `.work-section__mark` renamed → `.bryllim-mark` (canonical
+     Bryllim register). Kept color + spacing identical to v9.4.2 home
+     scoped style so the visual register matches flagship pages. */
+  .bryllim-mark {
+    font-size: 11px;
+    color: var(--c-ink);
+    letter-spacing: 0.04em;
+    margin: 0 0 6px;
+    text-transform: lowercase;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
   }
   .work-section__title {
     font-family: var(--ff-source-serif, var(--ff-sans));

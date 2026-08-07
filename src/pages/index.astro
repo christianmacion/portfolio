@@ -27,6 +27,7 @@ import { path } from '@utils/url';
 import EarthMap from '@components/EarthMap.astro';
 import Marquee from '@components/Marquee.astro';
 import HeroSkills from '@components/HeroSkills.astro';
+import HeroCurve from '@components/HeroCurve.astro';
 import CertWall from '@components/CertWall.astro';
 
 // v9.4.1 FLAGSHIP HERO — re-aimed for hireability.
@@ -148,6 +149,13 @@ const liveCounters = [
         <HeroSkills />
       </div>
     </section>
+
+    <!-- v9.7.1 — flagship live-performance centerpiece. Animated SVG equity
+         curve placed between hero-flagship and the live counter strip. Reads
+         as proof of "this person ships" — the curve draws on mount, pulses
+         at the terminus, and captions the expected paper-trade return.
+         Cream surface + amber line preserve the chrome contract. -->
+    <HeroCurve />
 
     <!-- ============= LIVE DATA STRIP — moved up (PATCH 7): primary visual proof
          sits right after the hero. Reading order: H1 → role → CTAs → curve →
