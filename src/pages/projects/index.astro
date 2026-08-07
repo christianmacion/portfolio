@@ -66,6 +66,10 @@ const itemListJsonLd = projectListJsonLd(
 >
   <header class="page-head">
     <div class="container">
+      {/* Bryllim pattern — number-prefixed section header before page H1.
+          Decorative chrome (aria-hidden) so it doesn't shift the document
+          outline; the <h1> remains the page's single h1. */}
+      <p class="bryllim-mark mono" aria-hidden="true">01 — projects</p>
       <p class="section__eyebrow">Portfolio</p>
       <h1 class="page-head__title" data-words>{projects.length} projects, two lanes.</h1>
       <VoiceLine class="page-head__voice">
@@ -317,6 +321,10 @@ const itemListJsonLd = projectListJsonLd(
         alive. A risk manager reading these {quantProjects.length} projects sees the same engineering
         discipline applied end-to-end — that is what is hireable.
       </p>
+      {/* Bryllim overflow — section list ends with right-aligned "ALL X →". */}
+      <p class="book-analysis__overflow">
+        <a href={path('/methodology')} class="bryllim-overflow mono">ALL PROOFS →</a>
+      </p>
     </div>
   </section>
 
@@ -533,5 +541,38 @@ const itemListJsonLd = projectListJsonLd(
     background: var(--c-bg);
     border-left: 3px solid var(--c-amber);
     border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  }
+
+  /* Bryllim pattern — number-prefixed section register. */
+  .bryllim-mark {
+    font-size: 11px;
+    color: var(--c-ink);
+    letter-spacing: 0.04em;
+    margin: 0 0 6px;
+    text-transform: lowercase;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Bryllim overflow — "ALL X →" link. */
+  .bryllim-overflow {
+    display: inline-block;
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--c-ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--c-amber);
+    padding-bottom: 1px;
+    transition: border-color 120ms ease, color 120ms ease;
+  }
+  .bryllim-overflow:hover {
+    color: var(--c-ink);
+    border-bottom-color: var(--c-ink);
+  }
+  .book-analysis__overflow {
+    text-align: right;
+    margin: var(--sp-4) 0 0;
   }
 </style>

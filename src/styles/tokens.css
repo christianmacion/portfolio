@@ -98,6 +98,25 @@
   --c-ink-veil: color-mix(in oklab, var(--c-ink) 42%, transparent); /* hover ghost */
   --c-ink-shroud: color-mix(in oklab, var(--c-ink) 75%, transparent); /* tertiary copy */
   --c-ink-veil-95: color-mix(in oklab, var(--c-ink) 95%, transparent); /* near-full */
+
+  /* === v9.6 (Bryllim) · HALFTONE DOT FIELD ===
+   * Tiled single-dot texture on <body>. Supersedes the v6.18 24px "grain".
+   *
+   * NOT a chrome-contract violation: `radial-gradient` here paints ONE 0.5px
+   * dot per 16px tile with a half-pixel antialias ramp. It is a repeating
+   * pattern, not a gradient wash — no halo, no glow, no directional fill.
+   *
+   * Derived from --c-ink-faint (theme-reactive) rather than the v6.18 fixed
+   * paper-cream rgba(235,229,212,0.025). That fixed cream was invisible on
+   * theme-light surfaces (home ships theme="light"), so the grain only ever
+   * rendered on dark pages. Ink-derived means dark dots on cream, light dots
+   * on dark — a halftone in both directions.
+   *
+   * 9% of --c-ink-faint (itself 65% ink) => ~5.9% effective alpha. Visible as
+   * texture at reading distance; well under the threshold where it competes
+   * with body copy. Tune here, not at the call site. */
+  --halftone-tile: 16px;
+  --halftone-ink: color-mix(in oklab, var(--c-ink-faint) 9%, transparent);
   /* White-alpha (used for hover/glass overlays on amber panels) */
   --c-white-mute: color-mix(in oklab, #fff 70%, transparent);
   --c-white-soft: color-mix(in oklab, #fff 78%, transparent);

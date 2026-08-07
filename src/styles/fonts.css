@@ -1,0 +1,96 @@
+/* ============================================================================
+ * fonts.css — v9.6 Bryllim pixel-display layer
+ * ----------------------------------------------------------------------------
+ * Design register (mission 2026-08-07-hireability-v9.6-bryllim-chrome) calls
+ * for a pixel/bitmap display face on flagship H1 surfaces:
+ *
+ *     --ff-pixel: 'Departure Mono', 'VT323', monospace
+ *
+ * SUBSTITUTION ON RECORD (verified 2026-08-07):
+ *   Departure Mono has NO npm distribution. `npm view` returns 404 for all of
+ *   `departure-mono`, `@fontsource/departure-mono`, `departure-mono-webfont`.
+ *   Shipping it would require a CDN or a vendored binary — both rejected
+ *   (brief says "no CDN dependency").
+ *
+ *   'VT323' — the design register's OWN declared fallback — IS on npm as
+ *   @fontsource/vt323@5.3.0, OFL-1.1, self-hosted, 17.9 KB woff2. That is the
+ *   face actually loaded. 'Departure Mono' is retained FIRST in the stack for
+ *   register fidelity: it resolves only if a local copy is ever installed, and
+ *   costs nothing when absent.
+ *
+ * CHROME CONTRACT: mono + 1 amber accent · no halo/glow/gradient · 0-2px
+ * corners. A bitmap display face adds no color, no shadow, no radius.
+ * ========================================================================== */
+
+/* ---------------------------------------------------------------------------
+ * Metric-matched fallback — the actual CLS lever.
+ *
+ * VT323 real metrics (fontTools, unitsPerEm 1000):
+ *   ascent 800 (0.800em) · descent -200 (0.200em) · lineGap 0
+ *   advanceWidth 400 (0.400em) · capHeight 560 · xHeight 400
+ *
+ * Generic `monospace` resolves to Menlo / Courier New / DejaVu Sans Mono at
+ * ~1233/2048 = 0.602em advance — i.e. 50% WIDER per character than VT323.
+ * Swapping an unmatched fallback would re-wrap the H1 and shift everything
+ * below it. These overrides squeeze the fallback onto VT323's exact metrics so
+ * the pre-swap and post-swap boxes are identical.
+ *
+ *   size-adjust        = 0.400 / 0.602            = 66.4%
+ *   ascent-override    = 0.800 / 0.664            = 120.5%
+ *   descent-override   = 0.200 / 0.664            = 30.1%
+ *   line-gap-override  = 0                        = 0%
+ *
+ * (ascent/descent percentages resolve against the em box AFTER size-adjust,
+ *  hence the division by the size-adjust factor.)
+ * ------------------------------------------------------------------------- */
+@font-face {
+  font-family: 'VT323 Fallback';
+  src:
+    local('Menlo'),
+    local('Courier New'),
+    local('DejaVu Sans Mono'),
+    local('Consolas');
+  size-adjust: 66.4%;
+  ascent-override: 120.5%;
+  descent-override: 30.1%;
+  line-gap-override: 0%;
+}
+
+:root {
+  /* Pixel display stack. 'VT323 Fallback' sits between the webfont and the
+     generic so the swap period is metric-identical, not merely similar. */
+  --ff-pixel: 'Departure Mono', 'VT323', 'VT323 Fallback', monospace;
+
+  /* Optical size compensation.
+     VT323 capHeight = 560/1000 = 0.560em.
+     Outgoing serif (Georgia / Source Serif 4) capHeight ~= 0.692em.
+     0.692 / 0.560 = 1.236 -> 1.24. Without this the H1 reads ~24% smaller at
+     the same declared font-size. Applied via calc() so the ratio stays
+     visible and tunable rather than baked into magic numbers. */
+  --ff-pixel-scale: 1.24;
+}
+
+/* ---------------------------------------------------------------------------
+ * .pixel-display — guarded opt-in utility.
+ *
+ * Deliberately NOT applied to `h1` as an element selector. The register asks
+ * for flagship surfaces only; a bare `h1 { font-family: var(--ff-pixel) }`
+ * would leak the bitmap face onto every section header and interior page
+ * title across ~36 pages. Opt-in by class, one surface at a time.
+ *
+ * NOTE ON SPECIFICITY: Astro scoped styles compile to `.cls[data-astro-cid-*]`
+ * (0,2,0) and will out-rank this global (0,1,0). Any component adopting the
+ * pixel face must ALSO set font-family in its own scoped block — see
+ * `.hero-flagship__name` in src/pages/index.astro. This class carries the
+ * shared rendering hygiene.
+ * ------------------------------------------------------------------------- */
+.pixel-display {
+  font-family: var(--ff-pixel);
+  /* VT323 ships weight 400 only. Any heavier declared weight triggers
+     synthetic emboldening, which smears a bitmap grid into mush. */
+  font-weight: 400;
+  font-synthesis: none;
+  /* Negative tracking fights the fixed pixel grid — reset to neutral. */
+  letter-spacing: 0;
+  font-variant-ligatures: none;
+}

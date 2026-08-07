@@ -100,17 +100,27 @@ body {
   font-size: var(--fs-base);
   background: var(--c-bg);
   overflow-x: clip;
-  /* v6.18 — hairline-grid background. Bloomberg-terminal grain:
-     24px radial dot at 1px opacity 2.5%. No decoration, no halo,
-     just paper-noise. Renders as a fixed background-attachment so it
-     doesn't scroll-shimmer. Suppressed on paper sections to keep
-     the cream band clean. */
+  /* v9.6 (Bryllim) — halftone dot field. Supersedes the v6.18 24px grain.
+     Tile tightened 24px -> 16px and the dot softened to a 0.5px core with a
+     half-pixel antialias ramp, which is what makes it read as halftone rather
+     than as a hairline grid.
+
+     Painted as a <body> background rather than a fixed `body::before` with
+     z-index:-1. Same visual result, three fewer failure modes: backgrounds
+     can never intercept pointer events, they cannot be trapped behind a
+     stacking context (html AND body both set `background`, so a negative
+     z-index child is genuinely at risk here), and there is no second painted
+     layer to moire against this one. `background-attachment: fixed` supplies
+     the fixed-viewport behaviour.
+
+     Colour + tile live in tokens.css (--halftone-ink / --halftone-tile).
+     print.css resets `background: #fff` on body, so this never prints. */
   background-image: radial-gradient(
     circle at 1px 1px,
-    rgba(235, 229, 212, 0.025) 1px,
-    transparent 0
+    var(--halftone-ink) 0.5px,
+    transparent 1px
   );
-  background-size: 24px 24px;
+  background-size: var(--halftone-tile) var(--halftone-tile);
   background-attachment: fixed;
 }
 @media (prefers-color-scheme: dark) {
@@ -1189,5 +1199,34 @@ li {
   }
   .katex-display > .katex {
     white-space: nowrap;
+  }
+}
+
+/* === v9.5 · Bryllim side-rail layout grid ===
+   Replaces the prior centered single-column .container flow. The
+   grid pins the 240px sticky SideRail on the left and flows the
+   main content on the right at max-width 1080px. The rail's own
+   media-query at 980px turns the grid into a single column and
+   moves the rail to a slide-in drawer (see SideRail.astro). */
+.layout-grid {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 0;
+  min-height: 100vh;
+  align-items: stretch;
+}
+.layout-main {
+  padding: 32px 48px 64px;
+  max-width: 1080px;
+  width: 100%;
+  box-sizing: border-box;
+}
+@media (max-width: 980px) {
+  .layout-grid {
+    grid-template-columns: 1fr;
+  }
+  .layout-main {
+    padding: 56px 20px 48px;
+    max-width: 100%;
   }
 }

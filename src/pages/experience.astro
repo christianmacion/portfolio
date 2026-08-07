@@ -89,6 +89,8 @@ const expWindow = `${expWindowEarliest} → ${expWindowLatest}`;
 >
   <header class="page-head">
     <div class="container">
+      {/* Bryllim pattern — number-prefixed section header before page H1. */}
+      <p class="bryllim-mark mono" aria-hidden="true">01 — experience</p>
       <ChromeHeader
         chip="EXPERIENCE · ENGAGEMENTS + PROOFS"
         eyebrow={`${entries.length} ENGAGEMENTS · NDA-SAFE · ${totalMonths}-MONTH ARC`}
@@ -182,6 +184,10 @@ const expWindow = `${expWindowEarliest} → ${expWindowLatest}`;
           ))
         }
       </div>
+      {/* Bryllim overflow — section list ends with right-aligned "ALL X →". */}
+      <p class="timeline__overflow">
+        <a href={path('/proof')} class="bryllim-overflow mono">ALL {totalProofs} PROOFS →</a>
+      </p>
     </div>
   </section>
 
@@ -312,5 +318,38 @@ const expWindow = `${expWindowEarliest} → ${expWindowLatest}`;
        "NDA-protected desk" is an institutional NDA disclosure
        marker — high contrast is the contract. */
     color: var(--c-ink-2);
+  }
+
+  /* Bryllim pattern — number-prefixed section register. */
+  .bryllim-mark {
+    font-size: 11px;
+    color: var(--c-ink);
+    letter-spacing: 0.04em;
+    margin: 0 0 6px;
+    text-transform: lowercase;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Bryllim overflow — "ALL X →" link. */
+  .bryllim-overflow {
+    display: inline-block;
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--c-ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--c-amber);
+    padding-bottom: 1px;
+    transition: border-color 120ms ease, color 120ms ease;
+  }
+  .bryllim-overflow:hover {
+    color: var(--c-ink);
+    border-bottom-color: var(--c-ink);
+  }
+  .timeline__overflow {
+    text-align: right;
+    margin: var(--sp-5) 0 0;
   }
 </style>

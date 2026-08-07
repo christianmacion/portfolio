@@ -16,15 +16,22 @@ import '@fontsource/inter/latin-400.css';
 import '@fontsource/inter/latin-500.css';
 import '@fontsource/inter/latin-600.css';
 import '@fontsource/inter/latin-700.css';
+// v9.6 (Bryllim) — pixel display face for flagship H1 surfaces. VT323 is the
+// design register's declared fallback and the only self-hostable option:
+// Departure Mono has no npm distribution (404 on all three package names).
+// Single weight, latin subset, 17.9 KB woff2, OFL-1.1, font-display: swap.
+import '@fontsource/vt323/latin-400.css';
 import '@styles/tokens.css';
 import '@styles/tokens-v6.13.css';
 import '@styles/status-binding-color.css';
 import '@styles/global.css';
+// v9.6 (Bryllim) — --ff-pixel token + metric-matched 'VT323 Fallback' face.
+// Loaded AFTER global.css so the pixel tokens win on equal specificity.
+import '@styles/fonts.css';
 import '@styles/back-to-top.css';
 import '@styles/print.css';
 
-import Nav from '@components/Nav.astro';
-import SiteHeader from '@components/SiteHeader.astro';
+import SideRail from '@components/SideRail.astro';
 import Footer from '@components/Footer.astro';
 import V613Fonts from '@components/V613Fonts.astro';
 import { profile } from '@utils/profile';
@@ -43,6 +50,11 @@ import { path } from '@utils/url';
 // stylesheet.
 import inter400Url from '@fontsource/inter/files/inter-latin-400-normal.woff2?url';
 import sourceSerif400Url from '@fontsource/source-serif-4/files/source-serif-4-latin-400-normal.woff2?url';
+// v9.6 (Bryllim) — VT323 400 is the pixel display face on the flagship H1.
+// Preloaded only when `pixelDisplay` is set so it never blocks pages that
+// don't paint it. 17.9 KB, same-origin; combined with the metric-matched
+// 'VT323 Fallback' face in fonts.css this makes the swap geometry-neutral.
+import vt323400Url from '@fontsource/vt323/files/vt323-latin-400-normal.woff2?url';
 // v9.2.3 (Gate 12) — Phase 5a fix. motion.css (27 KB, 6 @keyframes, 13 animation
 // rules, 44 transition rules, reduced-motion overrides) is referenced by ZERO
 // `.stl-*` or `.bind-*` classes on slim-chrome pages (home, /for-recruiters,
@@ -63,6 +75,12 @@ interface Props {
   extraJsonLd?: unknown; // optional page-specific JSON-LD (e.g. ItemList, CreativeWork)
   breadcrumbs?: Array<{ name: string; href: string }>; // optional BreadcrumbList JSON-LD
   surface?: 'v6-13'; // v6.13.0 — opt-in redesign surface (Jane Street × Noir). Default = legacy.
+  // v9.6 (Bryllim) — opt in to the VT323 pixel display face for this page's
+  // flagship H1. Gates the woff2 <link rel="preload"> ONLY; the @font-face is
+  // in the shared bundle either way. Default false so the other ~35 pages pay
+  // zero preload bytes for a font they never paint. `surface` cannot serve
+  // this role — it defaults to 'v6-13' on every page (see line 89).
+  pixelDisplay?: boolean;
   // v6.17 — theme mode. 'auto' (default) respects prefers-color-scheme.
   // 'light' / 'dark' forces the theme via body.theme-light / body.theme-dark.
   // Note: tokens-v6.13.css uses :has() to detect these body classes.
@@ -94,6 +112,7 @@ const {
   extraJsonLd,
   breadcrumbs,
   surface = 'v6-13',
+  pixelDisplay = false,
   theme = 'auto',
   chrome = 'full',
 } = Astro.props;
@@ -162,6 +181,23 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
             crossorigin="anonymous"
           />
         </>
+      )
+    }
+    {
+      /* v9.6 (Bryllim) — pixel display preload. Gated on the `pixelDisplay`
+         prop, not `surface` (which is on by default everywhere). Fetching the
+         face at parse time is what keeps the H1 from painting in the fallback
+         and re-painting in VT323. */
+    }
+    {
+      pixelDisplay && (
+        <link
+          rel="preload"
+          as="font"
+          type="font/woff2"
+          href={vt323400Url}
+          crossorigin="anonymous"
+        />
       )
     }
 
@@ -323,16 +359,18 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
       )
     }
     {
-      /* v9.3.5 — SiteHeader. The unifying running tape (geometric CM monogram +
-         name + role + UTC + deployed stamp) renders on every page (full +
-         slim chrome). Lifts the home's signature chrome to site-wide so the
-         identity reads as one portfolio, not 36 disconnected pages. The Nav
-         below still respects chrome="full" / "slim" as before. */
+      /* v9.5 — Bryllim side-rail layout. SideRail.astro replaces the prior
+         top-sticky Nav + SiteHeader pair. The grid below (display: grid;
+         grid-template-columns: 240px 1fr;) places the sticky rail on the
+         left and main content on the right. <SideRail /> renders once per
+         page regardless of chrome mode (the chrome prop continues to gate
+         Footer + tenet line only). The mobile drawer < 980px is handled
+         inside SideRail.astro itself. */
     }
-    <SiteHeader />
-    {chrome === 'full' && <Nav />}
-    <main id="main">
-      <slot />
+    <div class="layout-grid">
+      <SideRail />
+      <main id="main" class="layout-main">
+        <slot />
       {
         /* v8.4 — tenet line chrome contract. Injected by BaseLayout so
         every page inherits the operating-principles footer without
@@ -349,7 +387,8 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
           </p>
         )
       }
-    </main>
+      </main>
+    </div>
     {chrome === 'full' && <Footer />}
 
     <button id="back-to-top" type="button" aria-label="Back to top" hidden>

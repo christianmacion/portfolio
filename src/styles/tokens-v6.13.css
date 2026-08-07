@@ -286,6 +286,11 @@
   --c-proof-stripe: 4px; /* v8.3 — proof-card top stripe */
   --ff-sans: var(--j-ff-body);
   --ff-mono: var(--j-ff-mono);
+  /* v9.5 — Bryllim side-rail pixel-logo font stack. Falls back to
+     Courier New when Press Start 2P / VT323 aren't loaded (no remote
+     font added to keep bundle small; the chunky monospace fallback
+     still reads as pixel-register). */
+  --ff-pixel: 'Press Start 2P', 'VT323', 'Courier New', ui-monospace, monospace;
   --serif-display: var(--j-ff-display);
   --fs-3xs: var(--j-t-xs);
   --fs-2xs: var(--j-t-xs);

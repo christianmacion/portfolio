@@ -86,6 +86,7 @@ const liveCounters = [
   surface="v6-13"
   theme="light"
   chrome="full"
+  pixelDisplay={true}
   breadcrumbs={[{ name: 'Home', href: '/' }]}
 >
   <!-- v9.3.2 (2026-08-02) — a11y: BaseLayout.astro already wraps the
@@ -103,6 +104,14 @@ const liveCounters = [
          quick-route grid — the broadside reading still differentiates
          home from subpages; the chrome is now shared. -->
 
+    <!-- ============= 00 — HOME =============
+         Bryllim-style number-prefixed section header. Mono digit + space
+         + em-dash + space + lowercase name. Sits BEFORE the existing
+         hero landmark as an editorial section register (not a heading).
+         The hero H1 below remains the page H1; this mark is decorative
+         chrome so a11y heading hierarchy is preserved. -->
+    <p class="bryllim-mark mono" aria-hidden="true">00 — home</p>
+
     <!-- ============= v9.4.1 HIRING HERO =============
          Left: searchable role title, hybrid value proposition, recruiter CTAs.
          Right: concise expertise matrix showing quant + AI engineering capability.
@@ -115,7 +124,7 @@ const liveCounters = [
         <p class="hero-flagship__eyebrow mono">
           CHRISTIAN T. MACION · DIGOS CITY, DAVAO DEL SUR, PHILIPPINES · REMOTE (UTC+8)
         </p>
-        <h1 class="hero-flagship__name">
+        <h1 class="hero-flagship__name pixel-display">
           Senior Quantitative Researcher
         </h1>
         <p class="hero-flagship__role">
@@ -148,6 +157,10 @@ const liveCounters = [
         {
           liveCounters.map((c) => (
             <div class="strip__cell">
+              {/* Bryllim-style diagonal arrow in upper-right of each cell.
+                  Decorative only — aria-hidden so screen-readers get the
+                  numeric value from data-countup without competing chrome. */}
+              <span class="strip__arrow" aria-hidden="true">↗</span>
               <p class="strip__num" data-countup={c.value}>{c.value}</p>
               <p class="strip__label mono">{c.label}</p>
             </div>
@@ -171,6 +184,7 @@ const liveCounters = [
            Stripped 31-gate / AAR / Math.random internal jargon (those live
            on /methodology for the engineers who care). Replaced with the
            5-second value prop: what I build + where to see it + NDA note. -->
+      <p class="bryllim-mark mono" aria-hidden="true">01 — projects</p>
       <h2 class="lede__mark mono">§ 01 — The Work</h2>
       <p class="lede__body">
         I build quantitative research systems and production AI applications. Six years across
@@ -184,6 +198,7 @@ const liveCounters = [
 
     <!-- ============= § 02 — ARTIFACTS TABLE ============= -->
     <section class="artifacts" aria-label="What I ship">
+      <p class="bryllim-mark mono" aria-hidden="true">02 — proof</p>
       <h2 class="artifacts__mark mono">§ 02 — What I Ship</h2>
       <p class="artifacts__sub">
         Real artifacts, real numbers. Each row links to the proof page or repo. Numbers are counted
@@ -239,13 +254,25 @@ const liveCounters = [
           </tr>
         </tbody>
       </table>
+      {/* Bryllim-style overflow link: right-aligned "ALL X →" anchors
+          the artifacts table back to the canonical /projects index.
+          Decorative arrow ↗ already lives in the strip; this is the
+          section-end overflow that points to the full page. */}
+      <p class="artifacts__overflow">
+        <a href={path('/projects')} class="bryllim-overflow mono">ALL {profile.stats.strategyCount + profile.stats.aiProjectCount} PROJECTS →</a>
+      </p>
     </section>
 
     <!-- ============= § 03 — CERTIFICATIONS WALL ============= -->
+    <p class="bryllim-mark mono" aria-hidden="true">03 — certifications</p>
     <CertWall />
+    <p class="certwall__overflow">
+      <a href={path('/certifications')} class="bryllim-overflow mono">ALL {profile.stats.certCount} CERTS →</a>
+    </p>
 
     <!-- ============= § 04 — READING LIST ============= -->
     <section class="help" aria-label="How I help">
+      <p class="bryllim-mark mono" aria-hidden="true">04 — now</p>
       <h2 class="help__mark mono">§ 04 — How I help</h2>
       <p class="reading__sub">
         Engagement shapes I've shipped. Not services I list — live systems built, deployed, and
@@ -286,6 +313,11 @@ const liveCounters = [
           </p>
         </article>
       </div>
+      {/* Bryllim overflow: section list ends with right-aligned "ALL X →"
+          to the proof page where every capability claim is anchored. */}
+      <p class="help__overflow">
+        <a href={path('/proof')} class="bryllim-overflow mono">ALL PROOFS →</a>
+      </p>
     </section>
 
     <!-- ============= § 05 — FOOTPRINT ============= -->
@@ -454,6 +486,24 @@ const liveCounters = [
   .strip__cell {
     padding: 0 16px;
     border-left: 1px solid var(--c-rule);
+    position: relative;
+  }
+  /* v9.4.2 — Bryllim diagonal-arrow mark. Upper-right of each cell.
+     Mono caps so it reads as a label, not an emoji. Hover bumps it to
+     ink color (no halo, no glow, no transform). */
+  .strip__arrow {
+    position: absolute;
+    top: 2px;
+    right: 8px;
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    line-height: 1;
+    color: var(--c-ink-3);
+    letter-spacing: 0;
+    transition: color 120ms ease;
+  }
+  .strip__cell:hover .strip__arrow {
+    color: var(--c-ink);
   }
   .strip__cell:first-child {
     border-left: 0;
@@ -510,6 +560,49 @@ const liveCounters = [
     margin: 0 0 18px;
     text-transform: uppercase;
     font-weight: 600;
+  }
+
+  /* ============================================================
+   * v9.4.2 BRYLLIM PATTERN — number-prefixed section register.
+   * Sits ABOVE the existing § marks as a parallel editorial register.
+   * Mono + 1 accent; no halo/glow; sharp corners.
+   * ============================================================ */
+  .bryllim-mark {
+    font-size: 11px;
+    color: var(--c-ink);
+    letter-spacing: 0.04em;
+    margin: 0 0 6px;
+    text-transform: lowercase;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ============================================================
+   * v9.4.2 BRYLLIM PATTERN — "ALL X →" overflow link.
+   * Right-aligned at section end; mono caps; amber accent underline.
+   * No halo, no glow, no transform.
+   * ============================================================ */
+  .bryllim-overflow {
+    display: inline-block;
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--c-ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--c-warn, #8a6a2a);
+    padding-bottom: 1px;
+    transition: border-color 120ms ease, color 120ms ease;
+  }
+  .bryllim-overflow:hover {
+    color: var(--c-ink);
+    border-bottom-color: var(--c-ink);
+  }
+  .artifacts__overflow,
+  .certwall__overflow,
+  .help__overflow {
+    text-align: right;
+    margin: 18px 0 0;
   }
 
   .lede__body {
@@ -689,11 +782,24 @@ const liveCounters = [
     margin: 0;
   }
   .hero-flagship__name {
-    font-family: var(--font-serif, 'Source Serif Pro', 'Iowan Old Style', Georgia, serif);
-    font-size: clamp(28px, 3.4vw, 48px);
-    line-height: 1.0;
-    letter-spacing: -0.02em;
-    font-weight: 700;
+    /* v9.6 (Bryllim) — pixel display face. Set here (scoped) rather than
+       relying on the global `.pixel-display` utility: Astro compiles scoped
+       selectors to `.cls[data-astro-cid-*]` (0,2,0), which out-ranks the
+       global class (0,1,0). The utility still carries the shared hygiene. */
+    font-family: var(--ff-pixel);
+    /* VT323 capHeight is 0.560em vs the outgoing serif's ~0.692em, so the
+       same declared size reads ~24% smaller. --ff-pixel-scale (1.24) restores
+       the optical size. Ratio stays in the calc() so it is auditable. */
+    font-size: clamp(
+      calc(28px * var(--ff-pixel-scale)),
+      calc(3.4vw * var(--ff-pixel-scale)),
+      calc(48px * var(--ff-pixel-scale))
+    );
+    line-height: 1;
+    /* Bitmap grid: neutral tracking, single weight, no synthetic bold. */
+    letter-spacing: 0;
+    font-weight: 400;
+    font-synthesis: none;
     color: var(--c-ink);
     margin: 0;
     text-wrap: balance;

@@ -1,0 +1,513 @@
+---
+/**
+ * SideRail.astro — v9.5 BRYLLIM SIDE-RAIL NAV.
+ *
+ * Replaces the top sticky Nav.astro + SiteHeader.astro pattern with a left
+ * side-rail that mirrors the Bryllim institutional register:
+ *   - light cream background, 240px wide, sticky
+ *   - pixel-logo "Christian T. Macion" at the top (uses --ff-pixel token)
+ *   - icon-first nav (16x16 inline SVG per item) with aria-current="page"
+ *   - ⌘K Search at top of footer block, GitHub + LinkedIn icon row,
+ *     email handle at bottom
+ *
+ * Mobile fallback < 980px: collapses to a top drawer with a hamburger
+ * toggle (aria-expanded mirror). Tap targets stay ≥ 44px.
+ *
+ * a11y: aria-label="Primary navigation", aria-current="page" on the
+ * active item, role="navigation" implicit on <nav>, and all icons
+ * are aria-hidden="true" so the visible text is the accessible name.
+ */
+import { path } from '@utils/url';
+import { profile } from '@utils/profile';
+
+const { pathname } = Astro.url;
+const isActive = (href: string) => {
+  const suffix = href === '/' ? '/' : href;
+  return pathname === suffix || pathname.startsWith(suffix + '/');
+};
+
+// v9.5 IA — same links as Nav.astro primary + secondary, flattened into
+// one scrollable rail. No dropdowns. Icon-first.
+const links: Array<{ href: string; label: string; icon: string }> = [
+  { href: path('/'),                label: 'Home',            icon: 'home' },
+  { href: path('/now'),             label: 'Now',             icon: 'now' },
+  { href: path('/for-recruiters'),  label: 'For recruiters',  icon: 'recruit' },
+  { href: path('/proof'),           label: 'Proof',           icon: 'proof' },
+  { href: path('/projects'),        label: 'Projects',        icon: 'project' },
+  { href: path('/experience'),      label: 'Experience',      icon: 'experience' },
+  { href: path('/skills'),          label: 'Skills',          icon: 'skill' },
+  { href: path('/certifications'),  label: 'Certifications',  icon: 'cert' },
+  { href: path('/positions'),       label: 'Positions',       icon: 'pos' },
+  { href: path('/methodology'),     label: 'Methodology',     icon: 'method' },
+  { href: path('/contact'),         label: 'Contact',         icon: 'contact' },
+];
+
+// Inline SVG path strings keyed by icon name (1px stroke, 16×16 viewBox).
+const ICONS: Record<string, string> = {
+  home: 'M2 8 L8 2 L14 8 M3.5 7 V13.5 H7 V10 H9 V13.5 H12.5 V7',
+  now: 'M8 1.5 A6.5 6.5 0 1 0 8 14.5 A6.5 6.5 0 1 0 8 1.5 Z M8 4 V8.5 L11 10.5',
+  recruit: 'M5 3.5 A2 2 0 1 0 5 7.5 A2 2 0 1 0 5 3.5 Z M2 13.5 C2 10.5 3.5 9 5 9 C6.5 9 8 10.5 8 13.5 M9 6 L11.5 8.5 L9 11 M11.5 8.5 H7',
+  proof: 'M8 1.5 L14 4 V8 C14 11 11 13.5 8 14.5 C5 13.5 2 11 2 8 V4 Z M5.5 8 L7 9.5 L10.5 6',
+  project: 'M2 4 H10 V8 H2 Z M2 8 H6 V12 H2 Z M10 8 H14 V12 H10 Z M10 4 L13 1.5 L14.5 3',
+  experience: 'M2 4 H14 V12 H2 Z M5 4 V2 H11 V4 M5 7 H11 M5 9.5 H9',
+  skill: 'M3 3 L13 13 M11 3 L13 5 L5 13 L3 13 L3 11 Z',
+  cert: 'M8 1.5 L10 3 L12.5 2.5 L12 5 L14 6.5 L12 8 L12.5 10.5 L10 10 L8 11.5 L6 10 L3.5 10.5 L4 8 L2 6.5 L4 5 L3.5 2.5 L6 3 Z M5.5 6.5 L7 8 L10.5 4.5',
+  pos: 'M8 1.5 V14.5 M3 6 L8 1.5 L13 6 M3 11 H6 M3 13 H9',
+  method: 'M2 3 H14 M2 7 H14 M2 11 H10 M12 11 L14 13',
+  contact: 'M2 4 L8 8 L14 4 M2 4 V13 H14 V4',
+};
+---
+
+<!-- Mobile drawer toggle (visible < 980px only). -->
+<input
+  type="checkbox"
+  id="rail-toggle"
+  class="side-rail__toggle-input"
+  aria-hidden="false"
+  aria-expanded="false"
+  aria-controls="primary-rail"
+/>
+<label
+  for="rail-toggle"
+  class="side-rail__toggle"
+  aria-label="Toggle navigation"
+>
+  <span></span><span></span><span></span>
+</label>
+
+<aside class="side-rail" id="primary-rail" aria-label="Primary navigation">
+  <div class="side-rail__inner">
+    <!-- Pixel logo + identity strip at the top of the rail. -->
+    <a href={path('/')} class="side-rail__brand" aria-label="Christian T. Macion — home">
+      <span class="side-rail__pixel-logo">CHRISTIAN<br/>T. MACION</span>
+      <span class="side-rail__brand-sub mono">{profile.titles.short}</span>
+    </a>
+
+    <hr class="side-rail__rule" aria-hidden="true" />
+
+    <!-- Nav landmark; aria-label matches the aside. -->
+    <nav class="side-rail__nav" aria-label="Primary navigation">
+      <ul class="side-rail__list" role="list">
+        {
+          links.map(({ href, label, icon }) => (
+            <li class="side-rail__item">
+              <a
+                href={href}
+                class:list={['side-rail__link', { 'side-rail__link--active': isActive(href) }]}
+                aria-current={isActive(href) ? 'page' : undefined}
+              >
+                <svg
+                  class="side-rail__icon"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.4"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <path d={ICONS[icon]}></path>
+                </svg>
+                <span class="side-rail__label">{label}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <!-- Footer block: ⌘K search + social icon row + email handle. -->
+    <div class="side-rail__foot">
+      <button
+        type="button"
+        class="side-rail__search"
+        data-cmdk-trigger
+        aria-label="Search the site (press Command K)"
+      >
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 16 16"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.4"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <circle cx="7" cy="7" r="4.5"></circle>
+          <path d="m10.5 10.5 3.5 3.5"></path>
+        </svg>
+        <span class="side-rail__search-label">Search</span>
+        <kbd class="side-rail__kbd mono" aria-hidden="true">⌘K</kbd>
+      </button>
+
+      <div class="side-rail__socials">
+        <a
+          href="https://github.com/christianmacion26"
+          class="side-rail__social"
+          aria-label="Christian Macion on GitHub (opens in new tab)"
+          target="_blank"
+          rel="me noopener"
+          title="GitHub"
+        >
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 16 16"
+            fill="currentColor"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path d="M8 .198a8 8 0 0 0-2.53 15.59c.4.074.547-.174.547-.387 0-.19-.007-.693-.01-1.36-2.226.484-2.695-1.073-2.695-1.073-.364-.924-.89-1.17-.89-1.17-.727-.497.055-.487.055-.487.804.056 1.227.825 1.227.825.714 1.223 1.873.87 2.33.665.072-.517.279-.87.508-1.07-1.777-.2-3.644-.888-3.644-3.953 0-.874.31-1.588.823-2.148-.09-.202-.357-1.015.077-2.117 0 0 .67-.215 2.2.82a7.66 7.66 0 0 1 4 0c1.52-1.035 2.19-.82 2.19-.82.437 1.102.17 1.915.08 2.117.51.56.82 1.274.82 2.148 0 3.073-1.87 3.75-3.653 3.947.287.247.543.735.543 1.48 0 1.07-.01 1.933-.01 2.195 0 .215.144.465.55.387A8 8 0 0 0 8 .198"></path>
+          </svg>
+          <span class="side-rail__social-label">GitHub</span>
+        </a>
+        <a
+          href="https://www.linkedin.com/in/christianmacion/"
+          class="side-rail__social"
+          aria-label="Christian Macion on LinkedIn (opens in new tab)"
+          target="_blank"
+          rel="me noopener"
+          title="LinkedIn"
+        >
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 16 16"
+            fill="currentColor"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path d="M13.6 13.6h-2.4V9.9c0-.9 0-2.1-1.3-2.1s-1.5 1-1.5 2v3.8H6V6h2.3v1h.04c.32-.6 1.1-1.2 2.26-1.2 2.4 0 2.86 1.6 2.86 3.7v4.1zM3.6 4.96a1.4 1.4 0 1 1 0-2.8 1.4 1.4 0 0 1 0 2.8zM4.8 13.6H2.4V6h2.4v7.6zM14.8 0H1.2C.54 0 0 .52 0 1.16v13.68C0 15.48.54 16 1.2 16h13.6c.66 0 1.2-.52 1.2-1.16V1.16C16 .52 15.46 0 14.8 0z"></path>
+          </svg>
+          <span class="side-rail__social-label">LinkedIn</span>
+        </a>
+      </div>
+
+      <a
+        href={`mailto:${profile.contact.email}`}
+        class="side-rail__email mono"
+        aria-label="Email Christian Macion"
+      >
+        {profile.contact.email}
+      </a>
+    </div>
+  </div>
+</aside>
+
+<style>
+  /* === Bryllim side-rail ===
+     v9.5 — replaces top sticky Nav + SiteHeader with a 240px sticky left
+     rail. Light cream background, hairline right border, monospace
+     pixel-logo at the top. Icon-first nav. ⌘K search + socials + email
+     pinned at the bottom. Mobile < 980px collapses to a top drawer. */
+  .side-rail {
+    position: sticky;
+    top: 0;
+    align-self: start;
+    width: 240px;
+    flex-shrink: 0;
+    height: 100vh;
+    overflow-y: auto;
+    background: var(--c-bg);
+    border-right: 1px solid var(--c-rule);
+    color: var(--c-ink);
+    font-family: var(--ff-sans);
+  }
+  .side-rail__inner {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    padding: 18px 14px 16px;
+    gap: 12px;
+  }
+
+  /* Pixel-logo brand strip. --ff-pixel is a chunky monospace stack
+     (Press Start 2P / VT323 / Courier New fallback). Tight tracking +
+     uppercase gives the Bryllim pixel-register feel. */
+  .side-rail__brand {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 4px 4px 8px;
+    text-decoration: none;
+    color: var(--c-ink);
+  }
+  .side-rail__pixel-logo {
+    font-family: var(--ff-pixel);
+    font-size: 11px;
+    line-height: 1.35;
+    letter-spacing: 0.06em;
+    color: var(--c-ink);
+    text-transform: uppercase;
+    word-spacing: -1px;
+  }
+  .side-rail__brand-sub {
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--c-ink-3);
+  }
+
+  .side-rail__rule {
+    border: 0;
+    border-top: 1px solid var(--c-rule);
+    margin: 0;
+  }
+
+  .side-rail__nav {
+    flex: 1;
+  }
+  .side-rail__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+  .side-rail__link {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 7px 9px;
+    min-height: 32px;
+    color: var(--c-ink-2);
+    text-decoration: none;
+    font-size: 12.5px;
+    font-weight: 500;
+    border-left: 2px solid transparent;
+    transition:
+      color var(--transition),
+      background var(--transition),
+      border-color var(--transition);
+  }
+  .side-rail__link:hover {
+    color: var(--c-ink);
+    background: var(--c-bg-2);
+  }
+  .side-rail__link--active,
+  .side-rail__link[aria-current='page'] {
+    color: var(--c-amber);
+    border-left-color: var(--c-amber);
+    background: var(--c-bg-2);
+    font-weight: 600;
+  }
+  .side-rail__icon {
+    flex-shrink: 0;
+    color: currentColor;
+    opacity: 0.85;
+  }
+  .side-rail__label {
+    line-height: 1.2;
+  }
+
+  /* Footer block — search + socials + email. */
+  .side-rail__foot {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-top: 10px;
+    border-top: 1px solid var(--c-rule);
+  }
+  .side-rail__search {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    width: 100%;
+    padding: 7px 9px;
+    min-height: 32px;
+    background: var(--c-bg-2);
+    color: var(--c-ink-2);
+    border: 1px solid var(--c-rule);
+    border-radius: var(--radius-sm);
+    font-family: var(--ff-sans);
+    font-size: 12px;
+    cursor: pointer;
+    text-align: left;
+    transition:
+      color var(--transition),
+      border-color var(--transition),
+      background var(--transition);
+  }
+  .side-rail__search:hover {
+    color: var(--c-ink);
+    border-color: var(--c-amber);
+  }
+  .side-rail__search:focus-visible {
+    outline: 2px solid var(--c-amber);
+    outline-offset: 1px;
+  }
+  .side-rail__search-label {
+    flex: 1;
+  }
+  .side-rail__kbd {
+    font-size: 10px;
+    padding: 1px 5px;
+    border: 1px solid var(--c-rule);
+    border-radius: 3px;
+    color: var(--c-ink-3);
+    background: var(--c-bg);
+  }
+
+  .side-rail__socials {
+    display: flex;
+    gap: 6px;
+  }
+  .side-rail__social {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    min-width: 44px;
+    min-height: 44px;
+    color: var(--c-ink-2);
+    border: 1px solid var(--c-rule);
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    transition:
+      color var(--transition),
+      border-color var(--transition);
+  }
+  .side-rail__social::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+  }
+  .side-rail__social:hover {
+    color: var(--c-amber);
+    border-color: var(--c-amber);
+  }
+  .side-rail__social:focus-visible {
+    outline: 2px solid var(--c-amber);
+    outline-offset: 2px;
+  }
+  .side-rail__social-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  .side-rail__email {
+    font-size: 10.5px;
+    letter-spacing: 0.04em;
+    color: var(--c-ink-3);
+    text-decoration: none;
+    word-break: break-all;
+    transition: color var(--transition);
+  }
+  .side-rail__email:hover {
+    color: var(--c-amber);
+  }
+
+  /* === Mobile drawer (< 980px) ===
+     The rail collapses to a slide-down drawer at the top of the page,
+     toggled by the .side-rail__toggle hamburger. The CSS uses the
+     checkbox :checked sibling selector to swap visibility; the inline
+     script at the bottom mirrors state into aria-expanded. */
+  .side-rail__toggle-input {
+    display: none;
+  }
+  .side-rail__toggle {
+    display: none;
+    position: fixed;
+    top: 12px;
+    right: 14px;
+    z-index: calc(var(--z-nav) + 2);
+    flex-direction: column;
+    justify-content: space-between;
+    width: 28px;
+    height: 22px;
+    cursor: pointer;
+    background: var(--c-bg);
+    border: 1px solid var(--c-rule);
+    border-radius: var(--radius-sm);
+    padding: 4px;
+  }
+  .side-rail__toggle span {
+    display: block;
+    height: 2px;
+    width: 100%;
+    background: var(--c-ink);
+    border-radius: 1px;
+    transition:
+      background 200ms ease,
+      transform 200ms ease,
+      opacity 200ms ease;
+  }
+
+  @media (max-width: 980px) {
+    .side-rail__toggle {
+      display: flex;
+    }
+    .side-rail {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 280px;
+      max-width: 85vw;
+      height: 100vh;
+      z-index: calc(var(--z-nav) + 1);
+      border-right: 1px solid var(--c-rule);
+      transform: translateX(-100%);
+      transition: transform 220ms ease;
+      box-shadow: var(--shadow-md);
+    }
+    .side-rail__toggle-input:checked ~ .side-rail {
+      transform: translateX(0);
+    }
+  }
+
+  /* === Reduced-motion: kill the drawer slide. ===
+     The un-animated state is the open drawer at translateX(0). */
+  @media (prefers-reduced-motion: reduce) {
+    .side-rail {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  /* v9.5 a11y — keep aria-expanded in sync with the checkbox state.
+     The CSS uses :checked ~ .side-rail to slide the drawer; this
+     mirrors that state into aria-expanded so screen readers announce
+     "expanded" / "collapsed". Idempotent: only mutates when the
+     attribute would actually change. */
+  const toggle = document.getElementById('rail-toggle');
+  if (toggle instanceof HTMLInputElement) {
+    const sync = () => {
+      const next = toggle.checked ? 'true' : 'false';
+      if (toggle.getAttribute('aria-expanded') !== next) {
+        toggle.setAttribute('aria-expanded', next);
+      }
+    };
+    toggle.addEventListener('change', sync);
+    sync();
+  }
+
+  /* v9.5 — ⌘K / Ctrl-K shortcut opens site search. Reuses the same
+     path that Nav.astro used (/search?focus=1) so the existing
+     search page gets keyboard focus. */
+  const searchBtn = document.querySelector('[data-cmdk-trigger]');
+  searchBtn?.addEventListener('click', () => {
+    window.location.href = '/search?focus=1';
+  });
+  document.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      window.location.href = '/search?focus=1';
+    }
+  });
+</script>
