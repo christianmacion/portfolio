@@ -60,36 +60,61 @@ const logoByIssuer: Record<string, string> = {
   // Forage: '/logos/forage.png',                                                     // PENDING: Owner download + license check
 };
 
-// Verify URLs — populated 2026-08-07 by OSINT Cell v1.0 dispatch.
+// Verify URLs — populated 2026-08-07 by OSINT Cell v1.0 (4 URLs) + v2.0 dispatch (10 more).
 // Confidence tiers per NATO Admiralty:
-//   A2 (program + URL pattern):  Forage/JPMorganChase — subject-specific code requires Owner pull
-//   A2 (issuer portal):          CSC Philippines — portal exists, no per-record permalink
-//   LOW (badge page):            IBM Credly — issuer badge page, no holder-specific URL
-//   N/A (no public verify):      NASA · Meta · Bitget · STA PH · Ateneo · Google —
-//                                render `''` (CertWall shows "verify URL pending")
-//   RED FLAG resolved:           Goldman Sachs reframed as educational module (see 02-finance.md)
+//   A1: primary text (issuer portal with per-record permalink)
+//   A2: secondary issuer source or program + URL pattern (subject code requires Owner pull)
+//   B2: tertiary source (issuer landing page, no per-cert URL)
+//   LOW: badge page / partial verification
+//   N/A: no public verify URL exists — CertWall renders "verify URL pending"
+//   RED FLAG resolved: Goldman Sachs reframed as educational module (see 02-finance.md)
 const verifyByKey: Record<string, string> = {
-  // Goldman Sachs — reframed 2026-08-07 per Owner decision. Educational module, NOT a credential.
+  // v1.0 active (4)
   'Goldman Sachs::Completed Goldman Sachs Asset Management educational module: Foundations of Growth Equity (GS Alternatives University, 2025)':
     'https://am.gs.com/en-us/advisors/insights/education/foundations-of-growth-equity',
-
-  // A2 (program + URL pattern) — Forage/JPMorganChase IB Job Simulation
   'Forage::JPMorganChase — Investment Banking Job Simulation':
     'https://www.theforage.com/virtual-internships/prototype/YD2kY95RQxQtXxFTS/JPM-IB-Virtual-Experience-Program',
-
-  // A2 (issuer portal) — Philippine Civil Service Commission CoE verification
   'Civil Service Commission (Philippines)::Career Service Professional Eligibility':
     'https://verification.csc.gov.ph/coe/coe.asp',
-
-  // LOW (badge page) — IBM Credly badge page (holder-specific URL requires login)
   'IBM::Artificial Intelligence Fundamentals':
     'https://www.credly.com/org/ibm/badge/artificial-intelligence-fundamentals',
 
-  // N/A (no public verify) — empty strings; CertWall renders "verify URL pending"
-  // 'NASA::Galactic Problem Solver — NASA Space Apps Challenge (Zurich, CH)': '',
-  // 'Meta::BIDA META AICCELERATE 2025': '',
-  // 'Bitget::Blockchain4Youth (B4Y-2026-000701)': '',
-  // 'Society of Technical Analysts of the Philippines (Tier-1)::Certified Technical Analyst Program': '',
+  // v2.0 OSINT additions (10) — primarily issuer landing pages where no per-cert permalink exists
+  // A2 (per-person URL exists) — NASA Space Apps Zurich 2025 cohort
+  'NASA::Galactic Problem Solver — NASA Space Apps Challenge (Zurich, CH)':
+    'https://www.spaceappschallenge.org/people/christian-macion/',
+
+  // B2 (issuer program page) — Bayan Academy AIccelerate program landing
+  'Meta::BIDA META AICCELERATE 2025':
+    'https://www.bayanacademy.org/events/bida-year-2-meta-aiccelerate-training-2025-program',
+
+  // B2 (issuer program page; geo-blocked in PH) — Bitget Blockchain4Youth
+  'Bitget::Blockchain4Youth (B4Y-2026-000701)':
+    'https://www.bitget.com/promotion/blockchain4youth',
+
+  // B2 (issuer landing page; per-cert uses email inquiry) — STA PH
+  'Society of Technical Analysts of the Philippines (Tier-1)::Certified Technical Analyst Program':
+    'https://staphilippines.org/',
+
+  // B2 (issuer course page; free course, no per-holder URL) — Marginal Revolution University
+  'Marginal Revolution University::Principles of Economics — Macroeconomics':
+    'https://learn.mru.org/courses/principles-of-macroeconomics',
+
+  // B2 (issuer landing page; per-cert code requires Owner pull) — Basel Institute on Governance
+  'Basel Institute on Governance::Operational Analysis of Suspicious Transaction Reports':
+    'https://learn.baselgovernance.org/',
+
+  // B2 (issuer portal) — SEC Philippines Academy (4 certs share the same issuer page)
+  'SEC Philippines::Fundamentals of Accounting':
+    'https://academy.sec.gov.ph/',
+  'SEC Philippines::Introduction to Capital Market':
+    'https://academy.sec.gov.ph/',
+  'SEC Philippines::Financial Reporting':
+    'https://academy.sec.gov.ph/',
+  'SEC Philippines::Introduction to Corporation':
+    'https://academy.sec.gov.ph/',
+
+  // N/A (no public verify) — CertWall renders "verify URL pending"
   // 'Ateneo de Davao University::AI for the Modern Workforce: From Blockchain to the MOVE Language': '',
   // 'Google::Introduction to AI': '',
 };

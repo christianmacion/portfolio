@@ -207,7 +207,11 @@ const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circ
     class="earth-map__svg"
     viewBox={`0 0 ${width} ${height}`}
     role="img"
-    aria-label={`Three-layer world map: ${venues.length} research venues, ${worldEvents.length} curated world events, ${dedupGdelt.length} GDELT signals (24h). Equirectangular projection.`}
+    aria-label={
+      mode === 'pins'
+        ? `World footprint map: ${venues.length} venue pins. Equirectangular projection.`
+        : `Three-layer world map: ${venues.length} research venues, ${worldEvents.length} curated world events, ${dedupGdelt.length} GDELT signals (24h). Equirectangular projection.`
+    }
     preserveAspectRatio="xMidYMid meet"
   >
     <title>Three-layer world map — venues · world events · GDELT 24h</title>
@@ -227,13 +231,18 @@ const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circ
     {
       venuePositions.map((c) => (
         <g class="earth-map__venue">
-          {c.weight >= 0.7 && <circle cx={c.x} cy={c.y} r={c.r + 4} class="earth-map__pulse" />}
+          {c.weight >= 1.0 && <circle cx={c.x} cy={c.y} r="2.5" class="earth-map__anchor" />}
           <circle cx={c.x} cy={c.y} r={c.r} class="earth-map__dot">
             <title>
               {c.city} ({c.lat.toFixed(2)}°, {c.lon.toFixed(2)}°) — {c.caption}
             </title>
           </circle>
-          <text x={c.x} y={c.y - c.r - 4} text-anchor="middle" class="earth-map__label">
+          <text
+            x={c.x}
+            y={c.weight >= 1.0 ? c.y + c.r + 14 : c.y - c.r - 4}
+            text-anchor="middle"
+            class:list={["earth-map__label", c.weight >= 1.0 && "earth-map__label--home"]}
+          >
             {c.city}
           </text>
         </g>
@@ -373,12 +382,15 @@ const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circ
     opacity: 0.18;
   }
 
-  /* === Layer A — venues (amber, weighted) === */
-  .earth-map__pulse {
-    fill: none;
+  /* === Layer A — venues (amber, weighted) ===
+     v9.4.2 — replaced the blanket halo pulse ring (chrome-contract rule 3
+     violation; overlapped Manila + Digos labels) with an inner anchor
+     dot that only renders on weight >= 1.0 pins (home base). Reads as a
+     target reticle, not a halo. */
+  .earth-map__anchor {
+    fill: var(--c-tape);
     stroke: var(--c-primary-2);
     stroke-width: 1;
-    opacity: 0.4;
   }
   .earth-map__dot {
     fill: var(--c-primary-2);
@@ -390,6 +402,12 @@ const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circ
     fill: var(--c-ink);
     font-weight: 600;
     letter-spacing: 0.04em;
+  }
+  .earth-map__label--home {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    fill: var(--c-ink);
   }
 
   /* === Layer B — world events (shape-coded by category) === */
