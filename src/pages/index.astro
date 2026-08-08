@@ -28,7 +28,6 @@ import { path } from '@utils/url';
 import headshot from '../assets/portrait/headshot-source.jpg';
 import Footprint from '@components/Footprint.astro';
 import Marquee from '@components/Marquee.astro';
-import HeroSkills from '@components/HeroSkills.astro';
 import HeroCurve from '@components/HeroCurve.astro';
 import CertWall from '@components/CertWall.astro';
 import SectionMark from '@components/SectionMark.astro';
@@ -92,35 +91,28 @@ const liveCounters = [
          quick-route grid. the broadside reading still differentiates
          home from subpages; the chrome is now shared. -->
 
-    <!-- ============= 00 : HOME =============
-         Bryllim-style number-prefixed section header. Mono digit + space
-         + em-dash + space + lowercase name. Sits BEFORE the existing
-         hero landmark as an editorial section register (not a heading).
-         The hero H1 below remains the page H1; this mark is decorative
-         chrome so a11y heading hierarchy is preserved. -->
-    <SectionMark index="00" title="home" />
+    <!-- ============= v13.1 BRYLLIM HERO =============
+         Two-column Bryllim parity (2026-08-09): headshot on the left,
+         name + subhead + 2-paragraph bio + social-links row on the right.
+         Stats strip (years / strategies / LOC / projects) moves below as
+         a full-width 4-cell row. The 5-CTA button cluster is replaced
+         by the social-links row + a quiet resume text-link in the
+         markets rail — fewer buttons, same routing.
 
-    <!-- ============= v11.W1.2 HIRING HERO =============
-         Left: searchable role title, hybrid value proposition, recruiter CTAs.
-         Right: concise expertise matrix showing quant + AI engineering capability.
-         v11.W1.2: H1 = "Quantitative Researcher" (seniority signalled via
-         tenure + proof + Stage 0 doctrine integration, not the bare title).
-         Role line refreshed for financial markets. Voice: Munger latticework
-         (quant + AI + chrome as one cross-validated practice), Tetlock
-         calibration (sample size + era on every OOS claim), Kahneman
-         System-2 (numbers + evidence + tenure), Sagan Standard (every
-         number verified or removed), Goldratt constraint (proof beats
-         chrome, chrome never delays the proof beat). -->
+         Voice: Bryllim register (short declarative sentences, plain
+         language, no adjective stacks). Doctrine: Munger latticework
+         (the bio names quant + AI + chrome as one cross-validated
+         practice); Sagan Standard (every numeric claim traces to a
+         shipped artifact); Goldratt constraint (chrome never delays
+         the proof beat — the strip + curve below carry that beat). -->
     <section
       class="hero-flagship"
       aria-label="Quantitative researcher and AI engineer for financial markets"
     >
-      <!-- v12.W4 Bryllim parity : headshot is the FIRST element of the home
-           hero. The landing-page owns the "this is me" first-impression
-           beat. Source is 755x1200 portrait (aspect 0.629); we honor the
-           natural ratio so the FULL image is visible. Widths=[200, 280,
-           440] match the sizes attribute: 200px on mobile, 280px on
-           desktop. -->
+      <!-- Left column : headshot. No caption (decorative chrome removed
+           per image #22-23). No entrance animation (per prefers-reduced-
+           motion baseline). Widths match the sizes attribute: 200px on
+           mobile, 280px on desktop. -->
       <figure class="hero-flagship__headshot">
         <Image
           src={headshot}
@@ -128,87 +120,80 @@ const liveCounters = [
           width={280}
           height={445}
           widths={[200, 280, 440]}
-          sizes="(max-width: 720px) 200px, 280px"
+          sizes="(max-width: 860px) 200px, 280px"
           loading="eager"
           fetchpriority="high"
           decoding="async"
           class="hero-flagship__headshot-img"
         />
-        <figcaption class="hero-flagship__headshot-credit mono">
-          {profile.headshot.credit}
-        </figcaption>
       </figure>
 
+      <!-- Right column : Bryllim reading order.
+           H1 first (the recruiter's 5-second grade), then subhead, then
+           2-paragraph bio, then the social-links row, then the markets
+           rail that closes the hero with the domain frame. -->
       <div class="hero-flagship__copy">
-        <p class="hero-flagship__eyebrow mono" data-stagger="1">
+        <p class="hero-flagship__eyebrow mono">
           CHRISTIAN T. MACION · DIGOS CITY, DAVAO DEL SUR, PHILIPPINES · REMOTE (UTC+8)
         </p>
-        <p class="hero-flagship__availability mono" data-stagger="2">
-          OPEN TO QUANT RESEARCH + AI ENGINEER ROLES FOR FINANCIAL MARKETS · REMOTE 30 HRS/WK ·
-          UTC+8
+        <h1 class="hero-flagship__name">Quantitative Researcher</h1>
+        <p class="hero-flagship__subhead">
+          AI Engineer-Architect. 6 years across quant research, production trading systems, and
+          multi-agent AI for financial markets.
         </p>
-        <!-- v12.W4 : removed pixel-display class so the H1 renders in
-             Inter display (var(--j-ff-display)) instead of JetBrains Mono.
-             The Bryllim reference uses pixel LOGO + serif body; the H1
-             is the body, so it ships as institutional sans-serif (FT /
-             Bloomberg register), not bitmap mono. data-words fires the
-             motion.ts word-wrap so "Quantitative Researcher" cascades
-             into view on load (80ms cadence, see motion.css §3). -->
-        <h1 class="hero-flagship__name" data-stagger="3" data-words>Quantitative Researcher</h1>
-        <!-- v13.1 (2026-08-09, positioning brief): subhead rewritten to
-             14-word eval-first register. AI Engineer. 31-gate eval stack.
-             Live systems on public data, reproducible by a stranger. -->
-        <p class="hero-flagship__role" data-stagger="4">
-          AI Engineer. 31-gate eval stack. Live systems on public data, reproducible by a stranger.
+        <p class="hero-flagship__bio">
+          I'm a quant researcher who builds the eval harness behind the alpha. Six years across
+          equities, futures, FX, and crypto. Same methodology, two lanes: systematic strategies on
+          public data and multi-agent LLM systems behind frozen specs.
         </p>
-        <!-- v13.1 (positioning brief): 42-word intro paragraph. Two
-             sentences. Eval-first methodology + two lanes + verifiability. -->
-        <p class="hero-flagship__intro mono" data-stagger="4b">
-          I design alpha that survives the 31-gate stack and ship the eval harness behind it. Same
-          methodology, two lanes: systematic strategies on public data and multi-agent LLM systems
-          behind frozen specs. Every claim traces to a shipped repo or a verifiable measurement.
+        <p class="hero-flagship__bio">
+          I love turning rough ideas into things a stranger can re-run from a public commit. The
+          proof sits one click below: strategy workbooks, trade logs, and the G1 to G31 gate stack.
         </p>
-        <!-- v11.W1.2 : 60-second path. Kahneman WYSIATI: front-load proof,
-             not adjectives. Tetlock calibration: name a Brier-style grade
-             so a recruiter sees the trader skill in the same 5 seconds
-             they see the title. Munger latticework: name quant + AI +
-             chrome as one cross-validated practice, not five siloed skills. -->
-        <p class="hero-flagship__60s mono" data-stagger="5">If you are hiring - 60-second path:</p>
-        <p class="hero-flagship__sixty" data-stagger="6">
-          A fox across 5 era buckets, not a hedgehog on one story. 31-gate eval stack. Brier near
-          0.72 (70% CI 0.64 to 0.79) against the 0.50 base rate for self-reported practitioner
-          claims. The proof sits one click below: strategy workbooks, trade logs, and the G1 to G31
-          gate stack.
-        </p>
-        <!-- v12.W4 quant-aesthetic : unified CTA treatment. ONE consistent
-             institutional pattern across all five buttons (no three-style
-             mix). Outlined, paper bg, hairline border, ink color, no fill,
-             no transform on hover. Color shift only: border + text go amber
-             on hover (the institutional "system responds" cue, not a SaaS
-             lift). Chrome contract rule 3 (no halo / glow / lift) is upheld. -->
-        <div class="hero-flagship__cta" data-stagger="7">
+
+        <!-- v13.1 (Bryllim parity) : social-links row. Mono caps + ↗
+             arrow on each cell matches the Bryllim reference spacing.
+             github / linkedin / medium / email — the four canonical
+             public surfaces. No new chrome tokens introduced. -->
+        <nav class="hero-flagship__links" aria-label="Public profiles">
+          <a
+            href={profile.contact.github}
+            class="hero-flagship__link"
+            rel="me noopener"
+            target="_blank"
+          >github <span aria-hidden="true">↗</span></a>
+          <a
+            href={profile.contact.linkedin}
+            class="hero-flagship__link"
+            rel="me noopener"
+            target="_blank"
+          >linkedin <span aria-hidden="true">↗</span></a>
+          <a
+            href={profile.contact.medium}
+            class="hero-flagship__link"
+            rel="me noopener"
+            target="_blank"
+          >medium <span aria-hidden="true">↗</span></a>
+          <a
+            href={`mailto:${profile.contact.email}`}
+            class="hero-flagship__link"
+          >email <span aria-hidden="true">↗</span></a>
+        </nav>
+
+        <!-- v13.1 (Bryllim parity) : markets rail + quiet resume link.
+             The 5-CTA cluster is removed; a single text-link to the
+             1-page resume lives at the end of the rail so the
+             institutional "system responds" cue survives without
+             becoming a SaaS button. -->
+        <p class="hero-flagship__markets mono">
+          {profile.titles.marketsRail}
+          <span class="hero-flagship__markets-sep" aria-hidden="true">·</span>
           <a
             href={path('/resume-quant-onepage.pdf')}
-            class="hero-flagship__cta-btn hero-flagship__cta-btn--key"
+            class="hero-flagship__resume"
             download
-          >
-            Download the 1-page resume
-          </a>
-          <a href={path('/proof')} class="hero-flagship__cta-btn"> See the shipped work </a>
-          <a href={path('/contact')} class="hero-flagship__cta-btn"> Book a 30-minute call </a>
-          <a href={path('/methodology')} class="hero-flagship__cta-btn"> Method (G1-G31) </a>
-          <a href={path('/for-recruiters')} class="hero-flagship__cta-btn"> Recruiter brief </a>
-        </div>
-        <!-- v11.W1: financial-markets evidence rail. Sits directly below the
-             60-second CTA strip so the domain frame is the last thing read
-             before the eye leaves the hero. Mono caps + ink-2 match the
-             `__60s` eyebrow already above the strip, so this adds a register
-             the chrome contract already defines rather than a new one.
-             `<p>` (not a heading) keeps the h1-only hero hierarchy intact. -->
-        <p class="hero-flagship__markets mono" data-stagger="8">{profile.titles.marketsRail}</p>
-      </div>
-      <div class="hero-flagship__viz">
-        <HeroSkills />
+          >1-PAGE RESUME <span aria-hidden="true">↗</span></a>
+        </p>
       </div>
     </section>
 
@@ -870,32 +855,28 @@ const liveCounters = [
   }
 
   /* ============================================================
-   * v9.4 FLAGSHIP HERO : 2-column flagship layout
-   * Left: eyebrow + H1 + role + 2 CTAs. Right: animated SVG curve.
-   * Cream surface for the copy column; dark inset panel hosts the
-   * curve. Hairline rule between the two columns; collapses to a
-   * single column ≤ 860px.
+   * v13.1 BRYLLIM HERO : 2-column flagship layout.
+   * Left column : headshot (no caption, no entrance scale).
+   * Right column : eyebrow, H1 name, subhead, 2-paragraph bio,
+   * social-links row, markets rail + quiet resume text-link.
+   * Single column on mobile (≤860px). Stats strip below the hero
+   * owns the 4-cell counter row (years / strategies / LOC / projects).
    * ============================================================ */
   .hero-flagship {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 28px;
-    align-items: stretch;
-    padding: 28px 0 32px;
+    grid-template-columns: 320px 1fr;
+    column-gap: 56px;
+    row-gap: 0;
+    align-items: start;
+    padding: 36px 0 40px;
     border-bottom: 1px solid var(--c-rule);
   }
-  /* v12.W4 Bryllim parity : landing-page headshot. Sits as the first
-     element of the hero, owns the "this is me" first-impression beat.
-     Monochrome (already desaturated at source), hairline border, sharp
-     0-2px corners. No halo, no glow, no gradient (chrome contract).
-     v12.W4.3 Owner directive: CENTER the image and show it FULL
-     (no aspect-ratio crop, no object-fit:cover). Source is 755×1200
-     portrait (aspect 0.629); we honor the natural ratio. Widths
-     match the sizes attribute: 200px on mobile, 280px on desktop.
-     Bryllim-style entrance: subtle fade + slight scale-up on load. */
+  /* v13.1 Bryllim parity : headshot. No caption, no entrance scale-up
+     (removed per prefers-reduced-motion baseline + image #22-23). Hairline
+     border, sharp 0-2px corners. No halo, no glow, no gradient. */
   .hero-flagship__headshot {
-    margin: 0 auto 4px;
-    max-width: 280px;
+    margin: 0;
+    max-width: 320px;
     width: 100%;
   }
   .hero-flagship__headshot-img {
@@ -904,46 +885,17 @@ const liveCounters = [
     height: auto;
     border: 1px solid var(--c-rule);
     border-radius: 2px;
-    /* Bryllim-style entrance : opacity + slight scale on load. */
-    opacity: 0;
-    transform: translateY(6px) scale(0.985);
-    animation: hero-flagship__headshot-enter 720ms cubic-bezier(0.16, 1, 0.3, 1) 120ms forwards;
-    will-change: opacity, transform;
   }
-  /* Subtle hover lift, color-shift only (no transform per chrome
-     contract rule 3). Cursor reveals the photo is interactive (clicks
-     to /about or scrolls). */
+  /* Subtle hover : color-shift only (no transform per chrome contract). */
   .hero-flagship__headshot-img:hover,
   .hero-flagship__headshot-img:focus-visible {
     border-color: var(--c-amber);
     transition: border-color 180ms var(--j-ease-snappy, ease-out);
   }
-  @keyframes hero-flagship__headshot-enter {
-    to {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-  }
-  /* Honor reduced motion : skip the entrance, sit at rest. */
-  @media (prefers-reduced-motion: reduce) {
-    .hero-flagship__headshot-img {
-      animation: none;
-      opacity: 1;
-      transform: none;
-    }
-  }
-  .hero-flagship__headshot-credit {
-    margin: 6px 0 0;
-    font-size: 10px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--c-ink-3);
-    text-align: center;
-  }
   .hero-flagship__copy {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 20px;
     min-width: 0;
   }
   .hero-flagship__eyebrow {
@@ -952,52 +904,15 @@ const liveCounters = [
     color: var(--c-ink-3);
     margin: 0;
   }
-  /* W2.7 : availability badge. Single-line amber accent below the location
-     eyebrow. Mono caps + 0.06em tracking match the chrome contract. */
-  .hero-flagship__availability {
-    font-size: 10.5px;
-    letter-spacing: 0.06em;
-    color: var(--c-amber);
-    margin: 6px 0 0;
-    text-transform: uppercase;
-  }
-  /* W2.7 : 60-second path eyebrow. Recruiter-facing prompt that sits
-     immediately above the CTA strip. Mono caps, muted ink-2, tight
-     11px so it reads as a label, not a heading. */
-  .hero-flagship__60s {
-    font-size: 11px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--c-ink-2);
-    margin: 8px 0 0;
-  }
-  /* v11.W1: financial-markets evidence rail. Closes the hero with the
-     primary positioning frame. Reuses --c-ink-2 (already verified 7.15:1
-     against the hero surface on the __60s eyebrow above) so this ships no
-     new contrast pair for the site-wide axe sweep to grade. Hairline top
-     rule only: no glow, no gradient, no halo, per the chrome contract. */
-  .hero-flagship__markets {
-    font-size: 10.5px;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--c-ink-2);
-    margin: 18px 0 0;
-    padding-top: 12px;
-    border-top: 1px solid var(--c-rule, var(--c-ink-3));
-    max-width: 46ch;
-    text-wrap: pretty;
-  }
+  /* v13.1 Bryllim parity : H1 name. Inter display, weight 600. The H1
+     is the first thing the recruiter's eye lands on; the name fits
+     the Bryllim register as institutional sans-serif body, not pixel
+     bitmap. text-wrap: balance so "Quantitative Researcher" never
+     breaks weirdly on mid-width viewports. */
   .hero-flagship__name {
-    /* v12.W4 quant-aesthetic : H1 typography reads as institutional
-       FT-style sans (Inter display, --j-ff-display). The pre-W4 era
-       shipped this in JetBrains Mono (via pixel-display + --ff-mono),
-       which read as AI-vibe / bitmap, not Bloomberg-Terminal-grade
-       body type. The Bryllim reference uses pixel LOGO + serif/sans
-       BODY; the H1 is the body, so it inherits --j-ff-display
-       (Inter) without any font-face override. */
     font-family: var(--j-ff-display);
-    font-size: clamp(32px, 4vw, 56px);
-    line-height: 1.04;
+    font-size: clamp(36px, 4.2vw, 64px);
+    line-height: 1.02;
     letter-spacing: -0.025em;
     font-weight: 600;
     color: var(--c-ink);
@@ -1005,109 +920,110 @@ const liveCounters = [
     text-wrap: balance;
     overflow-wrap: break-word;
   }
-  .hero-flagship__name-1,
-  .hero-flagship__name-2,
-  .hero-flagship__name-3 {
-    /* v12.W5 : no serif, no italic, no amber. All three spans render
-       in Inter display, weight 600, color ink. */
-    font-style: normal;
-    color: var(--c-ink);
-  }
-  .hero-flagship__name-2 {
-    padding: 0 0.04em;
-  }
-  .hero-flagship__role {
+  /* v13.1 Bryllim parity : subhead. Sits below the H1 as the
+     domain frame line (the "what kind" answer). Larger than body,
+     smaller than H1. ink-2 so it doesn't compete with the H1. */
+  .hero-flagship__subhead {
     font-family: var(--j-ff-display);
-    font-size: clamp(18px, 1.7vw, 22px);
+    font-size: clamp(17px, 1.6vw, 21px);
     line-height: 1.4;
     color: var(--c-ink-2);
     margin: 0;
-    max-width: 36ch;
+    max-width: 52ch;
     text-wrap: balance;
   }
-  /* v13.1 (2026-08-09, positioning brief): 42-word intro paragraph
-     beneath the subhead. Mono, ink-3, smaller. Reads as footnote
-     register (citation-style evidence claim) so it doesn't compete
-     with the subhead for the recruiter's first 8 words. */
-  .hero-flagship__intro {
-    font-family: var(--ff-mono, ui-monospace);
-    font-size: 13px;
-    line-height: 1.55;
-    color: var(--c-ink-3);
-    margin: 14px 0 0;
-    max-width: 62ch;
-    text-wrap: pretty;
-    letter-spacing: 0.005em;
+  /* v13.1 Bryllim parity : bio paragraphs. Two short declarative
+     sentences each (Bryllim register: plain language, no adjective
+     stacks). Inter body, 15px, line-height 1.6 for legibility. */
+  .hero-flagship__bio {
+    font-family: var(--j-ff-display);
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--c-ink);
+    margin: 0;
+    max-width: 56ch;
   }
-  .hero-flagship__cta {
+  /* v13.1 Bryllim parity : social-links row. github / linkedin /
+     medium / email, mono caps, ↗ arrow on each. The Bryllim
+     reference spacing is wide (32-40px between cells). No border,
+     no fill — these are text links, not buttons. */
+  .hero-flagship__links {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 8px;
+    gap: 32px;
+    margin: 4px 0 0;
+    padding: 0;
   }
-  /* v12.W4 quant-aesthetic : UNIFIED BUTTON TREATMENT.
-     Owner directive 2026-08-08: ONE consistent institutional pattern
-     across every CTA on the home page. The pre-v12.W4 era shipped
-     three styles (filled amber primary + outlined secondary + light
-     outlined tertiary) which read as three different ideas. New
-     treatment: every CTA gets the same shape, paper bg, ink color,
-     hairline border, no fill, no transform. Color shift only on hover:
-     border + text go amber (the institutional "system responds" cue,
-     not a SaaS lift or fill change). Reference register: D.E. Shaw
-     + Renaissance + Jane Street + Two Sigma use outlined text-link
-     or hairline-bordered buttons as their primary affordance; the
-     filled amber CTA was the AI-vibe tell.
-     Subtle weight via copy + ordering, not via fill. The first two
-     CTAs (Download + Book) are the "do this now" affordances; the
-     remaining three (See shipped + Method + Recruiter brief) are
-     proof / context routes. Visual hierarchy comes from placement
-     and copy, not from fill state.
-     Chrome contract compliance:
-       rule 1 : mono + 1 accent (amber border on hover)
-       rule 3 : NO halo / glow / lift on hover (no transform)
-       rule 6 : NO pill (border-radius: 0)
-       rule 7 : NO animation that competes with content (100ms transition)
-     The --key variant (Download resume) gets a 1px ink border at
-     rest so the eye lands on it first; everything else uses the
-     --c-rule hairline. Still outlined, no fill. */
-  .hero-flagship__cta-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 11px 18px;
+  .hero-flagship__link {
     font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
-    font-size: 11.5px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: lowercase;
+    color: var(--c-ink-2);
     text-decoration: none;
-    border-radius: 0;
-    background: transparent;
+    transition: color 140ms var(--j-ease-snappy, ease-out);
+  }
+  .hero-flagship__link span {
+    margin-left: 4px;
+    color: var(--c-ink-3);
+  }
+  .hero-flagship__link:hover,
+  .hero-flagship__link:focus-visible {
+    color: var(--c-amber);
+  }
+  .hero-flagship__link:hover span,
+  .hero-flagship__link:focus-visible span {
+    color: var(--c-amber);
+  }
+  /* v13.1 Bryllim parity : markets rail + quiet resume text-link.
+     Hairline rule on top so the rail reads as a closing band, not a
+     competing CTA strip. The single text-link to the 1-page resume
+     replaces the 5-button CTA cluster from v12.W4 — institutional
+     register, no SaaS affordance. */
+  .hero-flagship__markets {
+    font-size: 10.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--c-ink-2);
+    margin: 8px 0 0;
+    padding-top: 14px;
+    border-top: 1px solid var(--c-rule, var(--c-ink-3));
+    max-width: 64ch;
+    text-wrap: pretty;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .hero-flagship__markets-sep {
+    color: var(--c-ink-3);
+    margin: 0 4px;
+  }
+  .hero-flagship__resume {
+    font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+    font-size: 10.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
     color: var(--c-ink);
-    border: 1px solid var(--c-rule);
+    text-decoration: none;
+    border-bottom: 1px solid var(--c-rule);
+    padding-bottom: 1px;
     transition:
-      border-color 100ms var(--j-ease-snappy),
-      color 100ms var(--j-ease-snappy);
+      color 140ms var(--j-ease-snappy, ease-out),
+      border-color 140ms var(--j-ease-snappy, ease-out);
   }
-  .hero-flagship__cta-btn--key {
-    /* Key affordance (Download resume) gets a heavier ink border at
-       rest so the eye lands on it first within the row. Still
-       outlined, still no fill, still no transform. */
-    border-color: var(--c-ink-2);
-    font-weight: 600;
+  .hero-flagship__resume span {
+    margin-left: 4px;
+    color: var(--c-ink-3);
   }
-  .hero-flagship__cta-btn:hover,
-  .hero-flagship__cta-btn:focus-visible {
-    border-color: var(--c-amber);
+  .hero-flagship__resume:hover,
+  .hero-flagship__resume:focus-visible {
     color: var(--c-amber);
-    /* NO transform: chrome-contract rule 3 forbids the SaaS lift. */
+    border-bottom-color: var(--c-amber);
   }
-  .hero-flagship__cta-btn--key:hover,
-  .hero-flagship__cta-btn--key:focus-visible {
-    border-color: var(--c-amber);
+  .hero-flagship__resume:hover span,
+  .hero-flagship__resume:focus-visible span {
     color: var(--c-amber);
-  }
-  .hero-flagship__viz {
-    min-width: 0;
   }
 
   /* ============================================================
@@ -1126,15 +1042,18 @@ const liveCounters = [
   @media (max-width: 860px) {
     .hero-flagship {
       grid-template-columns: 1fr;
-      gap: 28px;
+      gap: 24px;
       padding: 24px 0 28px;
     }
     .hero-flagship__headshot {
       max-width: 200px;
-      margin: 0 auto 4px;
+      margin: 0 auto;
     }
-    .hero-flagship__cta {
-      gap: 10px;
+    .hero-flagship__copy {
+      gap: 16px;
+    }
+    .hero-flagship__links {
+      gap: 18px;
     }
   }
 </style>
