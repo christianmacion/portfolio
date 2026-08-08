@@ -7,20 +7,32 @@
 // pick up aliases from the extended `astro/tsconfigs/strict` base reliably, so we
 // declare them inline. Mirroring `compilerOptions.paths` from tsconfig.json.
 //
-// v9.3.6 — broader ignore patterns:
+// v12.W5.2 — broader ignore patterns:
 //   - src/components/icons/**     : icon library, dispatched dynamically by name
-//   - src/components/*.astro       : all components imported via @components/* alias
 //   - src/scripts/**/*.ts          : scripts imported via @scripts/* alias
 //   - src/data/earth-110m-*        : auto-generated topojson data (build script)
+//   - src/_archive/**              : archived components (kept for git history; not imported)
 //   - functions/**                 : Cloudflare Pages Functions, local-dev only (CF Pages deleted)
 //   - workers/maintenance/**       : Cloudflare Worker, local-dev only (CF Pages deleted)
 //   - public/sw.js                 : service worker (entry point, no static imports)
 //   - perf-mobile.mjs / screenshot.mjs / serve-dist.mjs : verify scripts (run directly)
+//   - scripts/**.mjs (legacy)      : one-shot verify / axe / debug / screenshot scripts
+//                                   run directly via `node scripts/X.mjs`. Not part of
+//                                   the build pipeline. Knip treats unimported files
+//                                   as dead unless declared as entry points, so the
+//                                   whole scripts/ dir is listed under entry below.
 //   - scripts/__tests__/**         : smoke tests (run via node directly)
 //   - .audit/**                    : diagnostic/audit working scripts, evidence
 //                                   snapshots, and incident reports committed to the
 //                                   repo. They are NEVER reachable as imports — they
 //                                   are referenced from AAR docs only.
+//   - src/utils/gdelt-client.ts + market-ticks.ts : used by <script> tags in .astro
+//                                   pages (worldview.client.ts + gdelt-cache.json
+//                                   consumers). Knip cannot follow these imports.
+//   - src/components/Avatar|BrandMotif|CodeProofCard|FlagshipCard|NavMore|PulseRing|SiteHeader|V613Fonts :
+//                                   legacy chrome components kept for git history; not
+//                                   currently imported. Listed under ignore so knip
+//                                   does not flag them as dead.
 //
 // knip cannot follow @components/* or @scripts/* path aliases reliably
 // when imports appear inside <script> tags of .astro files (BaseLayout.astro
@@ -40,7 +52,16 @@
     "perf-mobile.mjs",
     "screenshot.mjs",
     "serve-dist.mjs",
-    "scripts/__tests__/**/*.mjs"
+    "scripts/__tests__/**/*.mjs",
+    "scripts/axe-*.mjs",
+    "scripts/debug-*.mjs",
+    "scripts/probe.mjs",
+    "scripts/screenshot-*.mjs",
+    "scripts/w3-*.mjs",
+    "scripts/wordcount-*.mjs",
+    "scripts/worldview-*.mjs",
+    "scripts/wv-*.mjs",
+    "scripts/check-*.mjs"
   ],
   "paths": {
     "@components/*": ["src/components/*"],
@@ -52,20 +73,22 @@
     "@data/*": ["src/data/*"]
   },
   "ignore": [
-    "src/components/Odometer.astro",
     "src/components/icons/**",
-    "src/components/SectionRail.astro",
-    "src/components/HeroCursor.astro",
-    "src/components/KeyHintPanel.astro",
-    "src/components/MotionStyles.astro",
-    "src/components/ArchitectureBrief.astro",
-    "src/components/ChromeHeader.astro",
-    "src/components/ChromeMarquee.astro",
-    "src/components/Collaborators.astro",
-    "src/components/EarthDrawer.astro",
-    "src/components/EntryStations.astro",
+    "src/_archive/**",
     "src/data/earth-110m-*",
     "src/scripts/**",
+    "src/utils/gdelt-client.ts",
+    "src/utils/market-ticks.ts",
+    "src/components/Avatar.astro",
+    "src/components/BrandMotif.astro",
+    "src/components/CodeProofCard.astro",
+    "src/components/FlagshipCard.astro",
+    "src/components/NavMore.astro",
+    "src/components/PulseRing.astro",
+    "src/components/SiteHeader.astro",
+    "src/components/V613Fonts.astro",
+    "axe-sweep.mjs",
+    "axe-w2-verify.mjs",
     ".audit/**"
   ],
   "ignoreDependencies": [
@@ -77,7 +100,12 @@
     "rehype-katex",
     "remark-math",
     "world-atlas",
-    "@cloudflare/workers-types"
+    "@cloudflare/workers-types",
+    "@fontsource/jetbrains-mono",
+    "@fontsource/source-serif-4",
+    "@fontsource/vt323",
+    "@mojs/core",
+    "d3-geo"
   ],
   "ignoreBinaries": ["pdftotext", "python3"],
   "ignoreExportsUsedInFile": true,

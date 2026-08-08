@@ -93,9 +93,3 @@ export const subpages: ReadonlyArray<SubpageEntry> = [
     icon: 'timeline',
   },
 ];
-
-/** Lookup by URL slug. */
-export function getSubpageBySlug(slug: string): SubpageEntry | undefined {
-  const normalized = slug.replace(/^\/+|\/+$/g, '');
-  return subpages.find((s) => s.slug === normalized);
-}
