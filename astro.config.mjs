@@ -3,19 +3,14 @@ import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 
-// Site deploy target. Default is the GH Pages canonical site
-// (https://christianmacion26.github.io/portfolio). For the Cloudflare Pages mirror,
-// pass PUBLIC_SITE_URL=https://christianmacion-portfolio.pages.dev at build time.
-// Used by feed.xml / sitemap to set the canonical host in generated XML.
-const SITE = process.env.PUBLIC_SITE_URL ?? 'https://christianmacion26.github.io';
-// BASE_PATH: explicit env var > Cloudflare Pages auto-detect (CF_PAGES=1) > /portfolio.
-// CF_PAGES=1 is set by Cloudflare Pages during `wrangler pages deploy` and during
-// the Pages CI build, so the mirror deploy uses `/` automatically — `npm run build`
-// (no env var) keeps the /portfolio default for GH Pages. The Phase 5a pre-deploy
-// regression (2026-08-01) showed that relying on `BASE_PATH=/` in the `build:mirror`
-// npm script alone is fragile: a `npm run build` + `wrangler pages deploy` cycle
-// silently produced a broken site with all assets at /portfolio/_astro/ 404ing.
-const BASE_PATH = process.env.BASE_PATH ?? (process.env.CF_PAGES ? '/' : '/portfolio');
+// 2026-08-08 — single deploy surface: GitHub Pages.
+// Live URL = https://christianmacion26.github.io/portfolio/.
+// CF Pages mirror at christianmacion-portfolio.pages.dev has been DELETED
+// (per Owner directive: "we just need the live site. and in GH").
+// The CF_PAGES detection branch is no longer reachable — kept as a safety
+// valve for local dev, but never set in any CI/CD path.
+const SITE = 'https://christianmacion26.github.io';
+const BASE_PATH = '/portfolio';
 
 // 2026-08-08 — Astro hybrid mode (SSR opt-in for personalization pages).
 // `output: 'static'` is the Astro 5+/7 equivalent of the legacy `output: 'hybrid'`:
@@ -29,9 +24,6 @@ const BASE_PATH = process.env.BASE_PATH ?? (process.env.CF_PAGES ? '/' : '/portf
 
 export default defineConfig({
   site: SITE,
-  // Same env var controls the base path: mirror wants `/`, GH Pages wants `/portfolio`.
-  // Build scripts must set BASE_PATH=/ for the mirror deploy — the CLI
-  // --base flag does NOT override a config-file value in current Astro.
   base: BASE_PATH,
   output: 'static',
   trailingSlash: 'always',
@@ -55,15 +47,13 @@ export default defineConfig({
       // Include public static workbook readers that are copied from public/
       // rather than emitted as Astro routes.
       customPages: [
-        `${SITE}${BASE_PATH === '/' ? '' : BASE_PATH}/workbooks/ai-engineering/`,
-        `${SITE}${BASE_PATH === '/' ? '' : BASE_PATH}/workbooks/graph-engineering/`,
+        `${SITE}${BASE_PATH}/workbooks/ai-engineering/`,
+        `${SITE}${BASE_PATH}/workbooks/graph-engineering/`,
       ],
     }),
   ],
-  // No @astrojs/cloudflare adapter — see comment block above. The static build
-  // emits `dist/` directly; Cloudflare Pages Functions (in `functions/`) handle
-  // every dynamic endpoint. The CF Pages deploy runs `astro build` and uploads
-  // `dist/` as the static surface; `functions/` is auto-detected by Pages.
+  // No @astrojs/cloudflare adapter — static site only, deployed to GitHub Pages.
+  // Functions in `functions/` are now local-dev-only artifacts (CF Pages deleted).
   vite: {
     ssr: { noExternal: ['@fontsource/inter', '@fontsource/jetbrains-mono'] },
   },

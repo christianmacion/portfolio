@@ -1,3 +1,8 @@
+# 2026-08-08 — local-dev only. CF Pages project `christianmacion-portfolio`
+# has been deleted (per Owner directive). This file is consumed by
+# `wrangler pages dev` for local Functions development only.
+# No production deploy path reads this file.
+
 name = "christianmacion-portfolio"
 compatibility_date = "2026-07-31"
 compatibility_flags = ["nodejs_compat"]

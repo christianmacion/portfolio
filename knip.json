@@ -12,8 +12,8 @@
 //   - src/components/*.astro       : all components imported via @components/* alias
 //   - src/scripts/**/*.ts          : scripts imported via @scripts/* alias
 //   - src/data/earth-110m-*        : auto-generated topojson data (build script)
-//   - functions/**                 : Cloudflare Pages Functions, deployed via wrangler
-//   - workers/maintenance/**       : Cloudflare Worker, deployed via wrangler
+//   - functions/**                 : Cloudflare Pages Functions, local-dev only (CF Pages deleted)
+//   - workers/maintenance/**       : Cloudflare Worker, local-dev only (CF Pages deleted)
 //   - public/sw.js                 : service worker (entry point, no static imports)
 //   - perf-mobile.mjs / screenshot.mjs / serve-dist.mjs : verify scripts (run directly)
 //   - scripts/__tests__/**         : smoke tests (run via node directly)

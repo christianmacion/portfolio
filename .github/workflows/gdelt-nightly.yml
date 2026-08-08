@@ -1,31 +1,22 @@
 name: GDELT Nightly Refresh
 
-# v6.11 — keeps the EarthGlobe live-event feed fresh.
+# 2026-08-08 — keeps the EarthGlobe live-event feed fresh.
+# Single deploy surface: GitHub Pages.
+# Cron disabled by default; `workflow_dispatch` is always available for manual triggers.
 #
 # Every 4h on the off-hour (37 * * * * avoids the :00 thundering herd):
 #   1. checkout + npm ci
 #   2. run scripts/fetch-gdelt.mjs (writes src/data/gdelt-cache.json)
-#   3. build:mirror (rebuilds the static site with the fresh cache)
-#   4. wrangler pages deploy → Cloudflare Pages mirror
-#
-# Secrets required:
-#   CLOUDFLARE_API_TOKEN — already used by manual `npm run deploy:mirror`
-#
-# Disabled by default (cron commented out). Owner enables the schedule
-# after confirming CLOUDFLARE_API_TOKEN is set in the repo. The
-# `workflow_dispatch` block is always active for manual triggering.
-#
-# Why optional: this session ships the integration + cache + chrome.
-# Adding a fresh-data cron is infra plumbing that should be enabled
-# deliberately, not auto-surfaced.
+#   3. commit the refreshed cache (if changed)
+#   4. GH Pages deploy picks up the new cache on the next push to main
 
 on:
   workflow_dispatch:
   # schedule:
-  #   - cron: '37 */4 * * *'  # off-hour; Owner enables after CLOUDFLARE_API_TOKEN is confirmed
+  #   - cron: '37 */4 * * *'  # off-hour; Owner enables after confirming the schedule
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: gdelt-nightly
@@ -51,18 +42,14 @@ jobs:
       - name: Fetch latest GDELT events
         run: npm run scripts:fetch-gdelt
 
-      - name: Build mirror
-        env:
-          BUILD_DATE: ${{ github.event.head_commit.timestamp }}
-          PUBLIC_SITE_URL: https://christianmacion-portfolio.pages.dev
-        run: npm run build:mirror
-
-      - name: Deploy to Cloudflare Pages
-        if: env.CLOUDFLARE_API_TOKEN != ''
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-        run: npx wrangler pages deploy dist --project-name christianmacion-portfolio --commit-dirty=true --branch main
-
-      - name: Skip deploy (no CF token)
-        if: env.CLOUDFLARE_API_TOKEN == ''
-        run: echo "::notice::CLOUDFLARE_API_TOKEN not set; built dist/ not deployed. Run deploy:mirror locally to ship."
+      - name: Commit refreshed GDELT cache
+        run: |
+          if git diff --quiet src/data/gdelt-cache.json; then
+            echo "::notice::No GDELT changes; skipping commit."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add src/data/gdelt-cache.json
+            git commit -m "chore(gdelt): refresh event cache"
+            git push
+          fi
