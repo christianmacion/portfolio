@@ -134,6 +134,19 @@ const ICONS: Record<string, string> = {
 
 <aside class="side-rail" id="primary-rail" aria-label="Primary navigation">
   <div class="side-rail__inner">
+    <!-- v13.1 cross-site bridge : "Personal site" link at the top of
+         the rail so visitors see "this is one of two sites" before the
+         portfolio's internal nav. Amber accent + outgoing arrow. -->
+    <a
+      href="https://christianmacion.github.io/"
+      class="side-rail__cross-site"
+      rel="me noopener"
+      aria-label="Visit the personal site (sibling surface)"
+    >
+      <span class="side-rail__cross-site-label">Personal site</span>
+      <span class="side-rail__cross-site-arrow" aria-hidden="true">↗</span>
+    </a>
+
     <!-- v12.W4 Bryllim parity : text-only brand block. The face-photo
          was moved to the home page hero (index.astro) so it carries the
          landing-page first-impression instead of sitting in the
@@ -344,6 +357,46 @@ const ICONS: Record<string, string> = {
     border: 0;
     border-top: 1px solid var(--rule);
     margin: 0;
+  }
+
+  /* v13.1 cross-site sibling link. Sits at the very top of the rail
+     above the brand block so visitors see "this is one of two sites"
+     first. Amber accent + outgoing arrow so it reads as a sibling
+     surface, not a sibling page. */
+  .side-rail__cross-site {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 8px;
+    margin-bottom: 8px;
+    color: var(--accent);
+    text-decoration: none;
+    font-family: var(--ff-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 600;
+    border: 1px solid var(--rule);
+    border-color: var(--accent);
+    border-radius: var(--radius-sm, 0);
+    align-self: flex-start;
+    transition:
+      background var(--mv-dur-snap, 120ms) var(--mv-ease-settle, ease),
+      color var(--mv-dur-snap, 120ms) var(--mv-ease-settle, ease);
+  }
+  .side-rail__cross-site-label {
+    line-height: 1;
+  }
+  .side-rail__cross-site-arrow {
+    display: inline-block;
+    transition: transform var(--mv-dur-snap, 120ms) var(--mv-ease-settle, ease);
+  }
+  .side-rail__cross-site:hover {
+    background: var(--accent);
+    color: var(--surface-paper);
+  }
+  .side-rail__cross-site:hover .side-rail__cross-site-arrow {
+    transform: translate(2px, -2px);
   }
 
   .side-rail__nav {
