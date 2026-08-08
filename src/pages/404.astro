@@ -63,6 +63,7 @@ const quickCards = [
         <span class="not-found__eyebrow-line">NO PAGE FOUND · TRY A ROUTE BELOW</span>
       </p>
       <h1 class="not-found__title">Off the path.</h1>
+      <p class="not-found__quote mono">Page not found. The decade is long.</p>
       <p class="not-found__sub">
         The page you were looking for isn't here. or the URL changed. Try one of the routes below,
         or jump back to <a href={path('/')}>home</a>.
@@ -142,34 +143,44 @@ const quickCards = [
 
 <style>
   .not-found {
-    padding-block: var(--sp-9);
+    padding-block: var(--s-9);
     min-height: 70vh;
     display: flex;
     align-items: center;
-    background: var(--c-paper);
+    background: var(--surface-paper);
   }
   .not-found__inner {
     text-align: center;
   }
   .not-found__title {
-    font-size: clamp(2.5rem, 6vw, 4rem);
-    letter-spacing: -0.03em;
-    margin-bottom: var(--sp-3);
+    font-size: var(--type-h1-size);
+    letter-spacing: var(--type-h1-track);
+    line-height: var(--type-h1-line);
+    font-weight: var(--type-h1-weight);
+    margin-bottom: var(--s-3);
+  }
+  .not-found__quote {
+    font-family: var(--ff-mono);
+    font-size: var(--type-mono-size);
+    color: var(--c-ink-2);
+    line-height: var(--type-quote-line);
+    margin: 0 auto var(--s-5);
+    max-width: 56ch;
+    font-style: italic;
   }
   .not-found__sub {
-    font-size: var(--fs-lg);
+    font-size: var(--type-body-size);
     color: var(--c-ink-2);
-    line-height: var(--lh-loose);
-    margin-bottom: var(--sp-6);
+    line-height: var(--type-body-line);
+    margin-bottom: var(--s-6);
     max-width: 56ch;
     margin-inline: auto;
   }
   .not-found__eq {
-    padding: var(--sp-4) var(--sp-5);
-    background: var(--c-bg);
+    padding: var(--s-4) var(--s-5);
+    background: var(--surface-paper);
     border: 1px solid var(--c-rule);
-    border-radius: var(--radius);
-    margin-bottom: var(--sp-6);
+    margin-bottom: var(--s-6);
     overflow-x: auto;
     display: inline-block;
   }
@@ -178,8 +189,8 @@ const quickCards = [
   .not-found__quick {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: var(--sp-3);
-    margin-bottom: var(--sp-6);
+    gap: var(--s-3);
+    margin-bottom: var(--s-6);
     text-align: left;
   }
   @media (max-width: 720px) {
@@ -190,71 +201,62 @@ const quickCards = [
   .quick-card {
     display: flex;
     flex-direction: column;
-    gap: var(--sp-2);
-    padding: var(--sp-4) var(--sp-5);
-    background: var(--c-bg);
+    gap: var(--s-2);
+    padding: var(--s-4) var(--s-5);
+    background: var(--surface-paper);
     border: 1px solid var(--c-rule);
-    border-radius: var(--radius);
     text-decoration: none;
     color: var(--c-ink);
-    transition:
-      border-color var(--transition),
-      transform var(--transition),
-      box-shadow var(--transition);
+    transition: border-color var(--j-dur-fast) var(--motion-ease-institutional);
   }
   .quick-card:hover {
     border-color: var(--c-amber);
-    box-shadow: var(--shadow-sm);
   }
   .quick-card__label {
     font-family: var(--ff-mono);
-    font-size: var(--fs-sm);
+    font-size: var(--type-mono-size);
     color: var(--c-amber);
-    font-weight: 600;
+    font-weight: 400;
   }
   .quick-card__sub {
-    font-size: var(--fs-sm);
+    font-size: var(--type-body-size-mobile);
     color: var(--c-ink-2);
-    line-height: var(--lh-snug);
+    line-height: var(--type-body-line);
   }
   .quick-card__arrow {
     align-self: flex-end;
     color: var(--c-amber);
     font-family: var(--ff-mono);
-    font-size: var(--fs-base);
+    font-size: var(--type-mono-size);
   }
 
   /* === v6.0 : search box === */
   .not-found__search {
-    margin-bottom: var(--sp-6);
+    margin-bottom: var(--s-6);
     text-align: left;
     max-width: 56ch;
     margin-inline: auto;
   }
   .not-found__search-label {
-    font-size: var(--fs-xs);
+    font-size: var(--type-caption-size);
     color: var(--c-ink-3);
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: var(--type-caption-track);
     display: block;
-    margin-bottom: var(--sp-2);
+    margin-bottom: var(--s-2);
     text-align: center;
   }
   .not-found__search-row {
     display: flex;
-    gap: var(--sp-2);
+    gap: var(--s-2);
   }
   .not-found__search-input {
     flex: 1;
-    padding: var(--sp-3) var(--sp-4);
+    padding: var(--s-3) var(--s-4);
     font-family: var(--ff-mono);
-    /* v6.11.18.1 : iOS Safari auto-zooms the viewport on inputs with
-       font-size < 16px. Bump from --fs-sm (14px) to 16px to keep the
-       layout stable when a mobile user taps the search field on /404. */
-    font-size: 16px;
-    background: var(--c-bg);
+    font-size: var(--type-body-size);
+    background: var(--surface-paper);
     border: 1px solid var(--c-rule);
-    border-radius: var(--radius-sm);
     color: var(--c-ink);
   }
   .not-found__search-input:focus {
@@ -265,15 +267,15 @@ const quickCards = [
   .not-found__nav {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--sp-3);
+    gap: var(--s-3);
     justify-content: center;
   }
   .not-found__nav-eyebrow {
     width: 100%;
-    font-size: var(--fs-xs);
+    font-size: var(--type-caption-size);
     color: var(--c-ink-3);
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: var(--sp-2);
+    letter-spacing: var(--type-caption-track);
+    margin-bottom: var(--s-2);
   }
 </style>

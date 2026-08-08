@@ -11,7 +11,6 @@
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
 import { path } from '@utils/url';
-import VoiceLine from '@components/VoiceLine.astro';
 import { buildStampUtc8 } from '@utils/build-stamp';
 
 // Last-updated stamp derives from BUILD_DATE so it never goes stale.
@@ -35,15 +34,11 @@ const updatedHuman = new Date(updated).toLocaleDateString('en-GB', {
 >
   <header class="now-head">
     <div class="container container-narrow">
-      <p class="now-head__eyebrow mono">
-        <span class="now-head__eyebrow-chip">NOW · LAST UPDATED {updated}</span>
-      </p>
-      <h1 class="now-head__title" data-words>
-        What I'm doing <span class="hl">right now</span>.
-      </h1>
-      <VoiceLine class="now-head__voice">
+      <p class="now-head__eyebrow mono">01 — NOW · LAST UPDATED {updated}</p>
+      <h1 class="now-head__title">What's shipping this month</h1>
+      <p class="now-head__caption mono">
         Dated. Honest. Updated only when something changes that matters.
-      </VoiceLine>
+      </p>
     </div>
   </header>
 
@@ -129,37 +124,35 @@ const updatedHuman = new Date(updated).toLocaleDateString('en-GB', {
     border-bottom: var(--border);
   }
   .now-head__eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--sp-3);
+    /* v12.W5 : section mark in mono + muted gray, letter-spaced.
+       No chip border, no amber fill. */
     margin: 0 0 var(--sp-4);
-    font-size: var(--fs-xs);
+    font-size: 11px;
+    color: var(--c-ink-3);
     text-transform: uppercase;
-    letter-spacing: 0.12em;
-    flex-wrap: wrap;
-  }
-  .now-head__eyebrow-chip {
-    display: inline-block;
-    padding: 4px 10px;
-    /* v9.2 a11y : was --c-phi-teal. Dark theme --j-phi-teal = #2d5f5a
-     only hits 2.14:1 on dark page-head surface. Solid amber chip +
-     --c-bg text reads at ≥5.6:1 in both themes : institutional
-     register, F14-safe (no traffic-light). */
-    color: var(--c-bg);
-    border: 1px solid var(--c-amber);
-    background: var(--c-amber);
-    font-weight: 600;
+    letter-spacing: 0.14em;
+    font-weight: 400;
   }
   .now-head__title {
-    font-size: clamp(2.25rem, 5vw, 4rem);
-    letter-spacing: -0.025em;
-    line-height: 1.05;
-    margin-block: var(--sp-4) var(--sp-5);
+    /* v12.W5 : sans-serif (Inter), no italic, no amber highlight. */
+    font-family: var(--j-ff-display);
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.08;
+    margin-block: var(--sp-4) var(--sp-4);
     max-width: 22ch;
+    color: var(--c-ink);
   }
-  .now-head__voice {
+  .now-head__caption {
+    /* v12.W5 : plain mono caption, no italic, no gold border, no big
+       serif. Replaces the v9.2 italic blockquote (VoiceLine). */
     margin: 0 0 var(--sp-5);
     max-width: 60ch;
+    font-family: var(--ff-mono);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--c-ink-2);
   }
 
   .now-h2 {
@@ -188,10 +181,11 @@ const updatedHuman = new Date(updated).toLocaleDateString('en-GB', {
     font-size: var(--fs-base);
   }
   .now-list li::before {
+    /* v12.W5 : Bryllim parity — bullet is a single dot, not amber. */
     content: '-';
     position: absolute;
     left: 0;
-    color: var(--c-amber);
+    color: var(--c-ink-3);
     font-weight: 500;
   }
   .now-list strong {

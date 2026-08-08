@@ -278,20 +278,19 @@ const jsonLd = {
     letter-spacing: 0.12em;
     flex-wrap: wrap;
   }
-  /* v9.2 a11y : was --c-phi-teal. Dark theme --j-phi-teal = #2d5f5a
-     only hits 2.14:1 on the dark page-head surface. Same fix as
-     about.astro: solid amber chip + --c-bg text, ≥5.6:1 both themes. */
+  /* v12.W5 Bryllim parity : amber chip removed. Section mark +
+     plain mono text. */
   .hero__eyebrow-chip {
     display: inline-block;
-    padding: 4px 10px;
-    color: var(--c-bg);
-    border: 1px solid var(--c-amber);
-    background: var(--c-amber);
-    font-weight: 600;
+    padding: 0;
+    color: var(--c-ink-3);
+    border: 0;
+    background: transparent;
+    font-weight: 400;
   }
   .hero__eyebrow-line {
-    color: var(--c-warn);
-    font-weight: 600;
+    color: var(--c-ink-2);
+    font-weight: 400;
   }
   .hero__tenant {
     display: flex;

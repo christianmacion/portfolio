@@ -1,5 +1,19 @@
 /* tokens.css : design system for christianmacion.github.io
  *
+ * v12.W5 (2026-08-08) : BRYLLIM PARITY — LIGHT-ONLY PALETTE.
+ *   Owner directive: "this is way too far from bryllim. fucking do it.
+ *   same quality and as good as bryllim." The chrome now inherits the
+ *   Bryllim reference register:
+ *     - Near-monochrome: light cream paper, near-black ink, muted gray
+ *       secondary, hairline gray rule.
+ *     - Single accent: warm amber, used sparingly (1px dots, single
+ *       hover state, NOTHING ELSE).
+ *     - Sans-serif throughout (Inter primary, JetBrains Mono for data).
+ *     - LIGHT-ONLY. No dark theme, no theme toggle, no prefers-color
+ *       flip. The canonical surface is --surface-paper #FAFAFA.
+ *   The previous dark surface (#0d1117) is moved to :root[data-surface="legacy-dark"]
+ *   for any page that explicitly opts in (none expected post-W5).
+ *
  * v6.1.1 : UNIFIED DARK PALETTE (single source of truth, no light/dark mode)
  *   - The site is ALWAYS institutional-tape dark (#0d1117)
  *   - One consistent warm amber accent (#e8b220) for emphasis + interaction
@@ -7,6 +21,8 @@
  *   - No light/dark mode toggle, no prefers-color-scheme flip
  *
  * Color provenance:
+ *   - bryllim.com (WebFetch 2026-08-08) : #FAFAFA bg, #0A0A0A text,
+ *     #6B7280 muted, #E5E5E5 borders, sans-serif throughout.
  *   - resume.css #0b3d5c / #0b1f2a / #5b7488 / #1a5fb4  (brand)
  *   - figure_style.py NAVY #1f3a5f, ACCENT #2c7a7b, RULE #c9ced6,
  *     INK #1a1f24, MUTE #5a6473, GOLD #b8860b, FAIL #9b2226,
@@ -17,10 +33,27 @@
  *
  * v6.1.1: full-dark-only. Every page renders on the institutional-tape
  * backdrop. This is the Schonfeld / T-Digital / hedge-fund pattern.
+ * v12.W5: the site is now LIGHT-ONLY. The dark backdrop is preserved as
+ * a :root[data-surface="legacy-dark"] opt-in for any future page that
+ * needs the original Bloomberg-tape register.
  */
 
 :root {
-  /* v9.1 : token additions for nav, projects, research, workbooks */
+  /* === v12.W5 BRYLLIM TOKENS (AUTHORITATIVE, LIGHT-ONLY) ===
+   * These are the canonical chrome tokens. They redefine the previously
+   * dark defaults so the surface is now monochrome light. Per the
+   * chrome contract: mono + 1 accent, hairline rule, sharp corners,
+   * no halo, no glow, no gradient. */
+  --surface-paper: #FAFAFA; /* primary surface — Bryllim parity */
+  --surface-paper-deep: #F4F4F2; /* navy lifted slightly */
+  --ink-1: #0A0A0A; /* primary text — near-black */
+  --ink-2: #6B7280; /* secondary text — muted gray */
+  --ink-3: #9CA3AF; /* tertiary text — very muted */
+  --rule: #E5E5E5; /* hairline rule */
+  --rule-strong: #D4D4D4; /* emphasized rule */
+  --accent: #B45309; /* warm amber — sparingly used (small dots, single hover) */
+
+  /* === v9.1 : token additions for nav, projects, research, workbooks */
   :root {
     --c-bg-light: #f7f2e7; /* light bg for institutional-tape nav fallback */
     --c-bg-elev: rgba(255, 255, 255, 0.02); /* elevated surface */
@@ -473,4 +506,101 @@
     --ease-out: linear;
     --ease-overshoot-constrained: linear;
   }
+}
+
+/* === v12.W5 BRYLLIM PARITY : CANONICAL CHROME TOKENS (LATE OVERRIDE) ===
+ * These redefinitions sit at the bottom of the file so they win on cascade
+ * over the earlier dark-by-default declarations. The result: every page
+ * renders on the Bryllim light surface (--surface-paper #FAFAFA) with
+ * monochrome ink + a single amber accent, regardless of prefers-color-scheme
+ * (which is now ignored). The legacy dark surface is preserved as a
+ * :root[data-surface="legacy-dark"] opt-in for any future page that
+ * genuinely needs the Bloomberg-tape register.
+ *
+ * Per the chrome contract:
+ *   - Mono + 1 amber accent (no rainbow borders, no second highlight)
+ *   - Hairline rules (1px, single gray)
+ *   - Sharp corners (0-2px radius)
+ *   - Sans-serif throughout (Inter, no serif H1)
+ *   - No halo, no glow, no gradient
+ *   - LIGHT-ONLY.
+ */
+:root {
+  /* Primary surface : cream paper, monochrome near-monochrome. */
+  --c-bg: #FAFAFA;
+  --c-bg-2: #F4F4F2;
+  --c-bg-3: #EDEDEB;
+  --c-paper: #FFFFFF;
+  --c-paper-2: #F4F4F2;
+
+  /* Tape / dark surface — kept for surfaces that genuinely need a dark
+     register (live data terminals, marquee). These are NOT the default. */
+  --c-tape: #0d1117;
+  --c-tape-2: #161b22;
+  --c-tape-3: #1f242c;
+
+  /* Ink : monochrome. */
+  --c-ink: #0A0A0A;
+  --c-ink-2: #6B7280;
+  --c-ink-3: #9CA3AF;
+  --c-ink-mute: color-mix(in oklab, var(--c-ink) 70%, transparent);
+  --c-ink-soft: color-mix(in oklab, var(--c-ink) 78%, transparent);
+  --c-ink-faint: color-mix(in oklab, var(--c-ink) 65%, transparent);
+  --c-ink-ghost: color-mix(in oklab, var(--c-ink) 55%, transparent);
+  --c-ink-fade: color-mix(in oklab, var(--c-ink) 45%, transparent);
+  --c-ink-wisp: color-mix(in oklab, var(--c-ink) 35%, transparent);
+  --c-ink-haze: color-mix(in oklab, var(--c-ink) 25%, transparent);
+  --c-ink-mist: color-mix(in oklab, var(--c-ink) 85%, transparent);
+  --c-ink-veil: color-mix(in oklab, var(--c-ink) 42%, transparent);
+  --c-ink-shroud: color-mix(in oklab, var(--c-ink) 75%, transparent);
+  --c-ink-veil-95: color-mix(in oklab, var(--c-ink) 95%, transparent);
+
+  /* Rules : single hairline gray. */
+  --c-rule: #E5E5E5;
+  --c-rule-soft: #F0F0F0;
+  --c-rule-strong: #D4D4D4;
+
+  /* Body text on tape : light ink if a dark tape surface is used. */
+  --ink-on-tape: #E6EDF3;
+  --ink-on-tape-2: #ADBAC7;
+
+  /* Amber accent : warm, sparingly used. Smaller dots, single hover,
+     link color. NEVER used as section title, NEVER used as fill. */
+  --c-amber: #B45309;
+  --c-amber-light: #D97706;
+  --c-amber-deep: #92400E;
+  --c-amber-decor: rgba(180, 83, 9, 0.4);
+  --c-amber-decor-2: rgba(146, 64, 14, 0.4);
+  --c-amber-soft: rgba(180, 83, 9, 0.12);
+  --c-amber-decor-deep: rgba(180, 83, 9, 0.3);
+  --c-amber-faint: rgba(180, 83, 9, 0.05);
+
+  /* `rule` alias used by some components. */
+  --c-primary: #0A0A0A;
+
+  /* Light bg legacy alias. */
+  --c-bg-light: #FAFAFA;
+}
+
+/* Legacy dark surface opt-in (NOT used post-W5).
+   Any page that genuinely needs the old Bloomberg-tape register can opt
+   in by setting <html data-surface="legacy-dark">. The remaining ~0
+   pages ship on the light default. */
+:root[data-surface='legacy-dark'] {
+  --c-bg: #0d1117;
+  --c-bg-2: #161b22;
+  --c-bg-3: #1f242c;
+  --c-paper: #161b22;
+  --c-paper-2: #1f242c;
+  --c-ink: #e6edf3;
+  --c-ink-2: #adbac7;
+  --c-ink-3: #8b949e;
+  --c-rule: #30363d;
+  --c-rule-soft: #21262d;
+  --c-rule-strong: #e6edf3;
+  --c-amber: #c98a16;
+  --c-amber-light: #e8b220;
+  --c-amber-deep: #b8801e;
+  --c-primary: #e6edf3;
+  --c-bg-light: #f7f2e7;
 }

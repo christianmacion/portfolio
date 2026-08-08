@@ -26,7 +26,7 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import { profile } from '@utils/profile';
 import { path } from '@utils/url';
 import headshot from '../assets/portrait/headshot-source.jpg';
-import EarthMap from '@components/EarthMap.astro';
+import Footprint from '@components/Footprint.astro';
 import Marquee from '@components/Marquee.astro';
 import HeroSkills from '@components/HeroSkills.astro';
 import HeroCurve from '@components/HeroCurve.astro';
@@ -50,38 +50,9 @@ const heroMarqueeItems = [
   'STA TIER-1 CERTIFIED TECHNICAL ANALYST',
 ];
 
-const footprintPoints = [
-  // Home base : Digos City, Davao del Sur, Philippines. Canonical 6.74°N, 125.36°E.
-  { city: 'Digos City, PH', lat: 6.74, lon: 125.36, weight: 1.0, caption: 'home base · UTC+8', labelAnchor: 'bottom' as const, labelDx: 8, labelDy: 6 },
-  // 16 financial markets hubs : coverage of equities, futures, FX, crypto, alt-data.
-  // Each one is a real venue + a real venue-type (exchange / market-maker / data).
-  // v12.W4 Bryllim parity : dense clusters get explicit label anchors so
-  // the labels never overlap their pins (London/Frankfurt/Zurich, Chicago/
-  // Toronto, Tokyo/Seoul, HK/Shanghai/Manila, Singapore/Manila, NYC/GMU).
-  { city: 'Manila, PH', lat: 14.6, lon: 120.98, weight: 0.7, caption: 'PDEx · PSE', labelAnchor: 'right' as const },
-  { city: 'Singapore', lat: 1.35, lon: 103.82, weight: 0.9, caption: 'SGX · APAC derivatives', labelAnchor: 'bottom' as const, labelDx: -10, labelDy: 16 },
-  { city: 'Hong Kong', lat: 22.32, lon: 114.17, weight: 0.85, caption: 'HKEX · HSI · Hang Seng', labelAnchor: 'right' as const, labelDx: 6 },
-  { city: 'Tokyo', lat: 35.68, lon: 139.69, weight: 0.85, caption: 'JPX · TSE · Nikkei', labelAnchor: 'top' as const, labelDy: -8 },
-  { city: 'Shanghai', lat: 31.23, lon: 121.47, weight: 0.7, caption: 'SHFE · SSE', labelAnchor: 'top' as const, labelDx: -14, labelDy: -8 },
-  { city: 'Mumbai', lat: 19.08, lon: 72.88, weight: 0.7, caption: 'NSE · BSE · Nifty', labelAnchor: 'top' as const, labelDy: -6 },
-  { city: 'Dubai', lat: 25.2, lon: 55.27, weight: 0.6, caption: 'DGCX · regional oil', labelAnchor: 'top' as const, labelDy: -6 },
-  { city: 'Seoul', lat: 37.56, lon: 126.97, weight: 0.7, caption: 'KRX · Kospi', labelAnchor: 'top' as const, labelDx: 14, labelDy: -10 },
-  { city: 'Sydney', lat: -33.87, lon: 151.21, weight: 0.6, caption: 'ASX', labelAnchor: 'top' as const },
-  { city: 'Tokyo (alt-data)', lat: 35.68, lon: 139.78, weight: 0.5, caption: 'Japan alt-data · consumption', labelAnchor: 'right' as const, labelDx: 8 },
-  { city: 'London', lat: 51.51, lon: -0.13, weight: 0.95, caption: 'LSE · ICE · LCH · FX', labelAnchor: 'top' as const, labelDx: -16, labelDy: -10 },
-  { city: 'Frankfurt', lat: 50.11, lon: 8.68, weight: 0.85, caption: 'Eurex · DAX', labelAnchor: 'bottom' as const, labelDy: 14 },
-  { city: 'Zurich', lat: 47.38, lon: 8.54, weight: 0.85, caption: 'SIX · CTA', labelAnchor: 'top' as const, labelDx: 10, labelDy: -10 },
-  { city: 'Chicago', lat: 41.88, lon: -87.63, weight: 0.9, caption: 'CME · CBOT · agricultural', labelAnchor: 'top' as const, labelDy: -8 },
-  { city: 'New York', lat: 40.71, lon: -74.01, weight: 1.0, caption: 'NYSE · Nasdaq · Bloomberg · Refinitiv', labelAnchor: 'bottom' as const, labelDx: -10, labelDy: 18 },
-  { city: 'Zug, CH', lat: 47.17, lon: 8.51, weight: 0.7, caption: 'Crypto Valley · Ethereum foundation', labelAnchor: 'right' as const, labelDx: 8 },
-  { city: 'San Francisco', lat: 37.77, lon: -122.42, weight: 0.7, caption: 'Coinbase · Kraken · FalconX', labelAnchor: 'top' as const, labelDy: -6 },
-  { city: 'São Paulo', lat: -23.55, lon: -46.63, weight: 0.6, caption: 'B3 · Bovespa', labelAnchor: 'top' as const, labelDy: -8 },
-  { city: 'Toronto', lat: 43.65, lon: -79.38, weight: 0.6, caption: 'TSX · Toronto-Dominion', labelAnchor: 'right' as const, labelDx: 8 },
-  { city: 'GMU (GDELT)', lat: 38.83, lon: -77.31, weight: 0.5, caption: 'GDELT · alt-data · events 15-min', labelAnchor: 'top' as const, labelDx: 10, labelDy: -8 },
-];
-
 const email = profile.contact.email;
 // v9.3.5 : deployedStamp + buildTime moved to SiteHeader.astro (single source of truth).
+// v13.0 : SiteHeader removed from render; values now live on the global Nav chrome.
 
 // Live counters : v9.4.1 hireability-facing. All sourced from profile.stats.ts.
 // Stripped AARs / evalGates / pagesBuilt from first viewport (internal jargon);
@@ -142,11 +113,11 @@ const liveCounters = [
          chrome, chrome never delays the proof beat). -->
     <section class="hero-flagship" aria-label="Quantitative researcher and AI engineer for financial markets">
       <!-- v12.W4 Bryllim parity : headshot is the FIRST element of the home
-           hero. SideRail brand block is now text-only (no face photo). The
-           landing-page owns the "this is me" first-impression beat. Source
-           is 755x1200 portrait (aspect 0.629); we honor the natural ratio
-           so the FULL image is visible. Widths=[200, 280, 440] match the
-           sizes attribute: 200px on mobile, 280px on desktop. -->
+           hero. The landing-page owns the "this is me" first-impression
+           beat. Source is 755x1200 portrait (aspect 0.629); we honor the
+           natural ratio so the FULL image is visible. Widths=[200, 280,
+           440] match the sizes attribute: 200px on mobile, 280px on
+           desktop. -->
       <figure class="hero-flagship__headshot">
         <Image
           src={headshot}
@@ -451,9 +422,9 @@ const liveCounters = [
     <section class="footprint" aria-label="Footprint">
       <h2 class="footprint__mark mono">§ 05. Footprint</h2>
       <p class="footprint__sub">
-        17 venues. Real counterparts, real exchanges, real alt-data feeds. Verifiable, not decorative.
+        20 venues across 3 regions. Real counterparts, real exchanges, real alt-data feeds. Verifiable, not decorative.
       </p>
-      <EarthMap points={footprintPoints} mode="pins" />
+      <Footprint />
     </section>
 
     <!-- ============= § 06 : CONTACT ============= -->
@@ -569,22 +540,23 @@ const liveCounters = [
     margin: 0 0 24px;
     text-transform: uppercase;
   }
+  /* ====== HERO : big sans-serif display (Bryllim parity) ======
+     v12.W5 : serif replaced with sans-serif (Inter), italic role
+     removed, font-weight 800 → 600, smaller scale. */
   .hero__name {
     font-family: var(--j-ff-display);
-    font-weight: 700;
-    font-size: clamp(48px, 7vw, 88px);
-    line-height: 0.96;
-    letter-spacing: -0.028em;
+    font-weight: 600;
+    font-size: clamp(36px, 5.5vw, 56px);
+    line-height: 1.06;
+    letter-spacing: -0.025em;
     color: var(--c-ink);
     margin: 0 0 16px;
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
-    gap: 0 18px;
+    gap: 0 14px;
   }
-  .hero__name-1 {
-    font-style: normal;
-  }
+  .hero__name-1,
   .hero__name-2,
   .hero__name-3 {
     font-style: normal;
@@ -592,9 +564,8 @@ const liveCounters = [
     color: inherit;
   }
   .hero__role {
-    font: 400 17px / 1.45 var(--j-ff-display);
+    font: 400 16px / 1.55 var(--j-ff-display);
     color: var(--c-ink-2);
-    font-style: italic;
     margin: 0;
     max-width: 60ch;
   }
@@ -682,8 +653,10 @@ const liveCounters = [
   .reading__mark,
   .footprint__mark,
   .contact__mark {
+    /* v12.W5 Bryllim parity : section marks in mono + muted gray,
+       letter-spaced. No amber. */
     font-size: var(--type-caption-size);
-    color: var(--c-amber);
+    color: var(--c-ink-3);
     letter-spacing: var(--type-caption-track);
     margin: 0 0 var(--s-5);
     text-transform: uppercase;
@@ -1005,12 +978,14 @@ const liveCounters = [
     overflow-wrap: break-word;
   }
   .hero-flagship__name-1,
+  .hero-flagship__name-2,
   .hero-flagship__name-3 {
+    /* v12.W5 : no serif, no italic, no amber. All three spans render
+       in Inter display, weight 600, color ink. */
     font-style: normal;
+    color: var(--c-ink);
   }
   .hero-flagship__name-2 {
-    font-style: italic;
-    color: var(--c-amber);
     padding: 0 0.04em;
   }
   .hero-flagship__role {

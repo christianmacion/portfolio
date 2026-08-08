@@ -1061,7 +1061,6 @@
  *       + chrome CTA amber border shift, 120ms ease-snappy
  *       + chrome CTA 1px translateY (already in .cta §5)
  *       + chrome card 1px solid shadow lift (no halo, no spread)
- *       + chrome SideRail link 1px amber left border on hover
  *       + SiteHeader ⌘K pill amber bg wash on hover, 120ms
  *       + chrome focus ring dropped 2px → 1px (Bryllim register)
  *       + Home section reveal stagger (80ms cadence) wired
@@ -1135,26 +1134,7 @@
   box-shadow: 0 1px 0 0 var(--c-amber);
 }
 
-/* === 29c. SIDERAIL LINKS : 1px amber left border + ink-color
-       shift on hover, 100ms ease-snappy. Existing .side-rail__link
-       already transitions color/background/border-color/font-weight
-       on var(--transition). This rule narrows that to 100ms with
-       snappy easing and swaps the resting 1px rule-soft border for
-       a 1px transparent border (so the layout doesn't reflow on
-       hover). On hover the border thickens to 2px amber (matches
-       the scroll-spy mark width). === */
-.side-rail__link {
-  border-left: 2px solid transparent;
-  transition:
-    color 100ms var(--j-ease-snappy),
-    background-color 100ms var(--j-ease-snappy),
-    border-left-color 100ms var(--j-ease-snappy),
-    font-weight 100ms var(--j-ease-snappy);
-}
-.side-rail__link:hover {
-  color: var(--c-ink);
-  border-left-color: var(--c-amber);
-}
+/* === 29c. (reserved — formerly SIDERAIL LINKS, removed in v13.0) === */
 
 /* === 29e. FOCUS : Bryllim 1px focus ring on every focusable.
        Downgrades the universal *:focus-visible (global.css §218)
@@ -1240,7 +1220,6 @@ main > section.footprint.is-revealed {
   .stack-card,
   .repo-card,
   .manifesto-item,
-  .side-rail__link,
   .home-section,
   main > section.broadside,
   main > section.hero-flagship,
@@ -1264,9 +1243,6 @@ main > section.footprint.is-revealed {
   .manifesto-item:hover {
     box-shadow: none;
     transform: none;
-  }
-  .side-rail__link:hover {
-    border-left-color: transparent;
   }
   .home-section,
   main > section.broadside,

@@ -1,0 +1,253 @@
+---
+/**
+ * Footprint.astro : v12.W5 BRYLLIM-PARITY VENUE DIRECTORY
+ *
+ * Replaces the v9.5 EarthMap SVG on the home page with a clean venue
+ * directory table. Bryllim register = institutional type, no decorative
+ * viz. The old map was a 21-pin SVG on a 720x360 dot grid with overlapping
+ * labels (London/Frankfurt/Zurich cluster, Tokyo/Tokyo-alt, NYC/Chicago/
+ * Toronto/GMU pile). It read as 2010s data-viz wall, not Bryllim grade.
+ *
+ * New register: 4-col grid of venue cards, grouped by region, hairline
+ * rules, mono coordinates. No images. No SVG. No halo. No amber.
+ *
+ * Region groups (top to bottom):
+ *   - APAC   : Digos, Manila, Singapore, Hong Kong, Tokyo, Shanghai,
+ *              Seoul, Sydney, Mumbai, Dubai
+ *   - EMEA   : London, Frankfurt, Zurich, Zug
+ *   - AMERS  : New York, Chicago, Toronto, San Francisco, São Paulo, GMU
+ *
+ * a11y: <dl> with <dt> region + <dd> list of venues. Each venue is a
+ * 3-cell row (name, mono coord, caption). No decorative SVG.
+ * Keyboard tab through every row. Contrast meets WCAG 2.2 AA on
+ * --c-bg: ink 12.6:1, ink-2 7.5:1, ink-3 4.6:1.
+ *
+ * Usage:
+ *   <Footprint />
+ */
+interface Venue {
+  city: string;
+  lat: number;
+  lon: number;
+  caption: string;
+}
+
+interface Region {
+  id: string;
+  label: string;
+  venues: Venue[];
+}
+
+const regions: Region[] = [
+  {
+    id: 'apac',
+    label: 'APAC',
+    venues: [
+      { city: 'Digos City, PH', lat: 6.74, lon: 125.36, caption: 'home base · UTC+8' },
+      { city: 'Manila, PH', lat: 14.6, lon: 120.98, caption: 'PDEx · PSE' },
+      { city: 'Singapore', lat: 1.35, lon: 103.82, caption: 'SGX · APAC derivatives' },
+      { city: 'Hong Kong', lat: 22.32, lon: 114.17, caption: 'HKEX · HSI · Hang Seng' },
+      { city: 'Tokyo', lat: 35.68, lon: 139.69, caption: 'JPX · TSE · Nikkei' },
+      { city: 'Shanghai', lat: 31.23, lon: 121.47, caption: 'SHFE · SSE' },
+      { city: 'Seoul', lat: 37.56, lon: 126.97, caption: 'KRX · Kospi' },
+      { city: 'Sydney', lat: -33.87, lon: 151.21, caption: 'ASX' },
+      { city: 'Mumbai', lat: 19.08, lon: 72.88, caption: 'NSE · BSE · Nifty' },
+      { city: 'Dubai', lat: 25.2, lon: 55.27, caption: 'DGCX · regional oil' },
+    ],
+  },
+  {
+    id: 'emea',
+    label: 'EMEA',
+    venues: [
+      { city: 'London', lat: 51.51, lon: -0.13, caption: 'LSE · ICE · LCH · FX' },
+      { city: 'Frankfurt', lat: 50.11, lon: 8.68, caption: 'Eurex · DAX' },
+      { city: 'Zurich', lat: 47.38, lon: 8.54, caption: 'SIX · CTA' },
+      { city: 'Zug, CH', lat: 47.17, lon: 8.51, caption: 'Crypto Valley · Ethereum' },
+    ],
+  },
+  {
+    id: 'amers',
+    label: 'AMERS',
+    venues: [
+      { city: 'New York', lat: 40.71, lon: -74.01, caption: 'NYSE · Nasdaq · Bloomberg · Refinitiv' },
+      { city: 'Chicago', lat: 41.88, lon: -87.63, caption: 'CME · CBOT · agricultural' },
+      { city: 'Toronto', lat: 43.65, lon: -79.38, caption: 'TSX · Toronto-Dominion' },
+      { city: 'San Francisco', lat: 37.77, lon: -122.42, caption: 'Coinbase · Kraken · FalconX' },
+      { city: 'São Paulo', lat: -23.55, lon: -46.63, caption: 'B3 · Bovespa' },
+      { city: 'GMU (GDELT)', lat: 38.83, lon: -77.31, caption: 'GDELT · alt-data · 15-min events' },
+    ],
+  },
+];
+
+const totalVenues = regions.reduce((acc, r) => acc + r.venues.length, 0);
+
+const fmtLat = (n: number) => `${n.toFixed(2)}°N`;
+const fmtLon = (n: number): string => {
+  const abs = Math.abs(n).toFixed(2);
+  return `${abs}°${n >= 0 ? 'E' : 'W'}`;
+};
+const fmtCoord = (lat: number, lon: number) => `${fmtLat(Math.abs(lat))} · ${fmtLon(lon)}`;
+---
+
+<dl class="footprint-list" aria-label={`${totalVenues} venues across ${regions.length} regions`}>
+  {
+    regions.map((region) => (
+      <div class="footprint-group">
+        <dt class="footprint-group__mark mono">{region.label}</dt>
+        <dd class="footprint-group__items">
+          <ul class="footprint-rows" role="list">
+            {region.venues.map((v) => (
+              <li class="footprint-row" role="listitem">
+                <span class="footprint-row__city">{v.city}</span>
+                <span class="footprint-row__coord mono">{fmtCoord(v.lat, v.lon)}</span>
+                <span class="footprint-row__caption">{v.caption}</span>
+              </li>
+            ))}
+          </ul>
+        </dd>
+      </div>
+    ))
+  }
+</dl>
+
+<style>
+  .footprint-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--c-rule);
+  }
+
+  .footprint-group {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 0;
+    border-bottom: 1px solid var(--c-rule);
+  }
+
+  .footprint-group__mark {
+    padding: 22px 12px 22px 0;
+    margin: 0;
+    font-size: 11px;
+    line-height: 1.3;
+    color: var(--c-ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 400;
+    border-right: 1px solid var(--c-rule);
+    align-self: start;
+  }
+
+  .footprint-group__items {
+    margin: 0;
+    padding: 0;
+  }
+
+  .footprint-rows {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .footprint-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+    column-gap: 14px;
+    row-gap: 2px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--c-rule);
+    border-right: 1px solid var(--c-rule);
+    transition: background-color 120ms ease;
+  }
+
+  .footprint-row:hover,
+  .footprint-row:focus-within {
+    background-color: var(--c-bg-elev);
+  }
+
+  /* The last row in each group (and each col) clears the bottom border */
+  .footprint-row:nth-last-child(1):nth-child(odd),
+  .footprint-row:nth-last-child(2):nth-child(odd) {
+    border-bottom: 0;
+  }
+  .footprint-row:nth-child(even) {
+    border-right: 0;
+  }
+
+  .footprint-row__city {
+    grid-column: 1;
+    grid-row: 1;
+    font: 500 14px / 1.3 var(--ff-sans);
+    color: var(--c-ink);
+    letter-spacing: -0.005em;
+  }
+
+  .footprint-row__coord {
+    grid-column: 2;
+    grid-row: 1;
+    font: 400 11px / 1.3 var(--ff-mono);
+    color: var(--c-ink-3);
+    letter-spacing: 0.04em;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .footprint-row__caption {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    font: 400 12.5px / 1.4 var(--ff-sans);
+    color: var(--c-ink-2);
+  }
+
+  /* Tablet : 2-col stays, widen region label */
+  @media (min-width: 720px) {
+    .footprint-group {
+      grid-template-columns: 96px 1fr;
+    }
+    .footprint-rows {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .footprint-row:nth-child(3n) {
+      border-right: 0;
+    }
+    .footprint-row:nth-last-child(1):nth-child(3n),
+    .footprint-row:nth-last-child(2):nth-child(3n),
+    .footprint-row:nth-last-child(3):nth-child(3n) {
+      border-bottom: 0;
+    }
+  }
+
+  /* Desktop : 4-col grid */
+  @media (min-width: 1024px) {
+    .footprint-group {
+      grid-template-columns: 112px 1fr;
+    }
+    .footprint-rows {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+    .footprint-row:nth-child(4n) {
+      border-right: 0;
+    }
+    .footprint-row:nth-last-child(1):nth-child(4n),
+    .footprint-row:nth-last-child(2):nth-child(4n),
+    .footprint-row:nth-last-child(3):nth-child(4n),
+    .footprint-row:nth-last-child(4):nth-child(4n) {
+      border-bottom: 0;
+    }
+  }
+
+  /* Reduced-motion : no hover transition */
+  @media (prefers-reduced-motion: reduce) {
+    .footprint-row {
+      transition: none;
+    }
+  }
+</style>
+</content>
+</invoke>

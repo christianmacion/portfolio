@@ -1,0 +1,336 @@
+---
+/**
+ * Nav.astro : v13.0 BRYLLIM TOP NAV (2-row horizontal)
+ *
+ * Replaces the v9.5 left SideRail with a Bryllim-parity top horizontal nav.
+ * Per WebFetch bryllim.com (2026-08-08), the reference chrome is:
+ *   - Top nav only (no sidebar)
+ *   - 2 rows: row 1 = primary hubs, row 2 = secondary evidence pages
+ *   - Brand mark "CM" left, brand text mono muted right
+ *   - Sticky at top, hairline border-bottom, --surface-paper bg
+ *   - Active state = 1px underline ink-1
+ *   - Hover = opacity 0.7 (no transform)
+ *   - Mobile = hamburger drawer with both rows
+ *
+ * Row 1 (6 hubs, the decision path): Now, For hiring managers, Methodology,
+ *                                         Proof, Contact, Resources
+ * Row 2 (5 evidence pages): Projects, Experience, Stack, Certifications, AI Timeline
+ *
+ * a11y: aria-label="Primary navigation", aria-current="page" on active item.
+ */
+import { path } from '@utils/url';
+import { profile } from '@utils/profile';
+
+const { pathname } = Astro.url;
+const isActive = (href: string) => {
+  const suffix = href === '/' ? '/' : href;
+  return pathname === suffix || pathname.startsWith(suffix + '/');
+};
+
+interface NavLink {
+  href: string;
+  label: string;
+}
+
+const primary: NavLink[] = [
+  { href: path('/now'), label: 'Now' },
+  { href: path('/for-recruiters'), label: 'For hiring managers' },
+  { href: path('/methodology'), label: 'Methodology' },
+  { href: path('/proof'), label: 'Proof' },
+  { href: path('/contact'), label: 'Contact' },
+  { href: path('/resources'), label: 'Resources' },
+];
+
+const secondary: NavLink[] = [
+  { href: path('/projects'), label: 'Projects' },
+  { href: path('/experience'), label: 'Experience' },
+  { href: path('/stack'), label: 'Stack' },
+  { href: path('/certifications'), label: 'Certifications' },
+  { href: path('/timeline'), label: 'AI Timeline' },
+];
+
+const brandSubtitle = 'QUANT × AI × GRAPH · DIGOS CITY, PH (UTC+8)';
+---
+
+<input
+  type="checkbox"
+  id="nav-toggle"
+  class="nav__toggle-input"
+  aria-hidden="false"
+  aria-expanded="false"
+  aria-controls="primary-nav"
+/>
+<label
+  for="nav-toggle"
+  class="nav__toggle"
+  aria-label="Toggle navigation"
+>
+  <span></span><span></span><span></span>
+</label>
+
+<header class="nav" id="primary-nav" aria-label="Primary navigation">
+  <div class="nav__inner">
+    <a href={path('/')} class="nav__brand" aria-label="Christian T. Macion. home">
+      <span class="nav__brand-mark">CM</span>
+      <span class="nav__brand-text mono">
+        <span class="nav__brand-name">CHRISTIAN T. MACION</span>
+        <span class="nav__brand-sub">{brandSubtitle}</span>
+      </span>
+    </a>
+
+    <div class="nav__rows">
+      <nav class="nav__row nav__row--primary" aria-label="Primary navigation">
+        <ul class="nav__list" role="list">
+          {
+            primary.map(({ href, label }) => (
+              <li>
+                <a
+                  href={href}
+                  class:list={['nav__link', { 'nav__link--active': isActive(href) }]}
+                  aria-current={isActive(href) ? 'page' : undefined}
+                >
+                  {label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <nav class="nav__row nav__row--secondary" aria-label="Secondary navigation">
+        <ul class="nav__list" role="list">
+          {
+            secondary.map(({ href, label }) => (
+              <li>
+                <a
+                  href={href}
+                  class:list={['nav__link', 'nav__link--secondary', { 'nav__link--active': isActive(href) }]}
+                  aria-current={isActive(href) ? 'page' : undefined}
+                >
+                  {label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<style>
+  /* === Bryllim top nav (v13.0) ===
+     Sticky top, --surface-paper bg, hairline border-bottom.
+     2-row structure: row 1 primary hubs (mono caps), row 2 secondary evidence. */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-nav, 50);
+    background: var(--surface-paper);
+    border-bottom: 1px solid var(--rule);
+    color: var(--ink-1);
+    font-family: var(--ff-sans);
+  }
+
+  .nav__inner {
+    max-width: 1024px;
+    margin-inline: auto;
+    padding: 14px 24px 10px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+
+  /* Brand block (top-left) */
+  .nav__brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--ink-1);
+    padding-top: 4px;
+  }
+  .nav__brand-mark {
+    font-family: var(--ff-sans);
+    font-weight: 600;
+    font-size: 24px;
+    letter-spacing: -0.02em;
+    color: var(--ink-1);
+    line-height: 1;
+  }
+  .nav__brand-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+  }
+  .nav__brand-name {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-1);
+  }
+  .nav__brand-sub {
+    font-size: 10px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    font-weight: 400;
+  }
+
+  /* Nav rows (right side, stacked) */
+  .nav__rows {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: flex-end;
+    justify-self: end;
+    min-width: 0;
+  }
+  .nav__row {
+    width: 100%;
+  }
+  .nav__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  /* Row 1: primary hubs — sans, regular weight, ink-1 */
+  .nav__row--primary .nav__link {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--ink-2);
+    padding: 4px 12px;
+    text-decoration: none;
+    line-height: 1.4;
+    transition: opacity var(--mv-dur-1, 120ms) var(--mv-ease, ease);
+    border-bottom: 1px solid transparent;
+  }
+  .nav__row--primary .nav__link:hover {
+    opacity: 0.7;
+  }
+  .nav__row--primary .nav__link--active {
+    color: var(--ink-1);
+    border-bottom-color: var(--ink-1);
+    font-weight: 500;
+  }
+
+  /* Row 2: secondary evidence — mono, smaller, muted */
+  .nav__row--secondary {
+    border-top: 1px solid var(--rule);
+    padding-top: 6px;
+  }
+  .nav__row--secondary .nav__link--secondary {
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    letter-spacing: 0.02em;
+    color: var(--ink-2);
+    padding: 2px 10px;
+    text-decoration: none;
+    text-transform: lowercase;
+    transition: opacity var(--mv-dur-1, 120ms) var(--mv-ease, ease);
+    border-bottom: 1px solid transparent;
+  }
+  .nav__row--secondary .nav__link--secondary:hover {
+    opacity: 0.7;
+  }
+  .nav__row--secondary .nav__link--active {
+    color: var(--ink-1);
+    border-bottom-color: var(--ink-1);
+  }
+
+  /* === Mobile drawer (< 760px) ===
+     Hamburger toggle visible, nav collapses to slide-down drawer. */
+  .nav__toggle-input {
+    display: none;
+  }
+  .nav__toggle {
+    display: none;
+    position: fixed;
+    top: 14px;
+    right: 16px;
+    z-index: calc(var(--z-nav, 50) + 2);
+    flex-direction: column;
+    justify-content: space-between;
+    width: 44px;
+    height: 44px;
+    cursor: pointer;
+    background: var(--surface-paper);
+    border: 1px solid var(--rule);
+    padding: 12px 10px;
+  }
+  .nav__toggle span {
+    display: block;
+    height: 1px;
+    width: 100%;
+    background: var(--ink-1);
+  }
+
+  @media (max-width: 760px) {
+    .nav__toggle {
+      display: flex;
+    }
+    .nav__inner {
+      grid-template-columns: 1fr;
+      padding: 14px 16px;
+    }
+    .nav__rows {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: var(--surface-paper);
+      border-bottom: 1px solid var(--rule);
+      padding: 16px 20px 24px;
+      align-items: stretch;
+    }
+    .nav__toggle-input:checked ~ .nav .nav__rows {
+      display: flex;
+    }
+    .nav__list {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .nav__row--primary .nav__link,
+    .nav__row--secondary .nav__link--secondary {
+      font-size: 14px;
+      padding: 8px 0;
+    }
+    .nav__row--secondary {
+      border-top: 1px solid var(--rule);
+      margin-top: 12px;
+      padding-top: 12px;
+    }
+  }
+
+  /* === Reduced-motion === */
+  @media (prefers-reduced-motion: reduce) {
+    .nav__link {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  /* a11y : keep aria-expanded in sync with the checkbox state. */
+  const toggle = document.getElementById('nav-toggle');
+  if (toggle instanceof HTMLInputElement) {
+    const sync = () => {
+      const next = toggle.checked ? 'true' : 'false';
+      if (toggle.getAttribute('aria-expanded') !== next) {
+        toggle.setAttribute('aria-expanded', next);
+      }
+    };
+    toggle.addEventListener('change', sync);
+    sync();
+  }
+</script>

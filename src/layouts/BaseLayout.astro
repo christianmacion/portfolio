@@ -1,21 +1,13 @@
 ---
 /**
  * BaseLayout.astro : wraps every page; owns head, nav, footer.
+ *
+ * v13.0 : BRYLLIM PARITY (2026-08-08)
+ *   - Top horizontal Nav replaces the prior left SideRail (deleted)
+ *   - LIGHT-ONLY : no theme="dark" / theme="light" prop, no body class
+ *   - Content max-width 1024px centered (was 1080px in v6.13 era)
+ *   - No <SiteHeader /> below the nav (v9.5 tape removed)
  */
-/* v6.9.15 : latin-only Inter subsets (was all 5: Latin / Latin-Ext /
-   Cyrillic / Greek / Vietnamese). Site is English-only; saves ~470 KB
-   across the 4 weights on first paint. Plus dropped unused JetBrains-Mono
-   imports entirely (--ff-mono falls back to system mono; 0 source uses
-   the family). Total saved: ~720 KB across weights 400/500/600/700.
-   v6.13.1 : re-added JetBrains Mono + added Source Serif 4, SCOPED via
-   the `surface="v6-13"` prop on this layout. Pages that don't opt in
-   (F14-amber surfaces) keep the v6.9.15 zero-cost behavior. Pages that
-   opt in load these two fonts via the `v6-13-fonts.astro` component
-   rendered conditionally below the body.
-   v6.18 (W2 Bloomberg-Bryllim lock, 2026-08-08) : Source Serif 4 + VT323
-   RETIRED per W1.5 lockout. Only Inter + JetBrains Mono remain in the
-   font budget. @fontsource/source-serif-4 + @fontsource/vt323 imports
-   removed; preloads for those faces removed. */
 import '@fontsource/inter/latin-400.css';
 import '@fontsource/inter/latin-500.css';
 import '@fontsource/inter/latin-600.css';
@@ -24,41 +16,17 @@ import '@styles/tokens.css';
 import '@styles/tokens-v6.13.css';
 import '@styles/status-binding-color.css';
 import '@styles/global.css';
-// v9.6 (Bryllim) : --ff-pixel token + metric-matched 'VT323 Fallback' face.
-// Loaded AFTER global.css so the pixel tokens win on equal specificity.
 import '@styles/fonts.css';
-// v12.W1.5 : back-to-top.css REMOVED. Footer/back-to-top retired; stylesheet
-// no longer has any consumer.
 import '@styles/print.css';
 
-import SideRail from '@components/SideRail.astro';
-import SiteHeader from '@components/SiteHeader.astro';
+import TopNav from '@components/TopNav.astro';
 import CommandPalette from '@components/CommandPalette.astro';
 import WorldView from '@components/WorldView.astro';
-import V613Fonts from '@components/V613Fonts.astro';
 import { profile } from '@utils/profile';
 import { buildMeta, personJsonLd, websiteJsonLd, breadcrumbJsonLd } from '@utils/seo';
 import { path } from '@utils/url';
 
-// v9.2.2 (Gate 12) : LCP font preloading. The v6-13 surface renders
-// the LCP element (`.hero__name`, `.hero__role`) in Inter (display +
-// body, post-W2 lock), with JetBrains Mono for tabular/mono surfaces.
-// Preloading the Inter 400 woff2 cuts the LCP element's font-swap time.
-// `font-display: swap` is preserved on the @font-face rules (see
-// tokens.css) so non-preloaded weights still render with the system
-// font and swap in without a visible reload. We preload only on the
-// v6-13 surface where Inter is the LCP font.
-// v6.18 (W2 lock) : Source Serif 4 + VT323 imports + preloads removed.
 import inter400Url from '@fontsource/inter/files/inter-latin-400-normal.woff2?url';
-// v9.2.3 (Gate 12) : Phase 5a fix. motion.css (27 KB, 6 @keyframes, 13 animation
-// rules, 44 transition rules, reduced-motion overrides) is referenced by ZERO
-// `.stl-*` or `.bind-*` classes on slim-chrome pages (home, /for-recruiters,
-// /screening-call). Astro's CSS hoisting bundled it into the BaseLayout inline
-// stylesheet anyway, costing ~27 KB of inline-CSS parse + 472 ms styleLayout on
-// every page. We import it via `?url` so Vite emits a hashed CSS asset (NOT
-// inlined) and we preload + apply it via the `media="print" onload="swap"`
-// pattern only on chrome === 'full' pages. Result: full-chrome pages get the
-// motion layer (non-blocking), slim-chrome pages pay zero bytes.
 import motionCssUrl from '@styles/motion.css?url';
 
 interface Props {
@@ -67,37 +35,16 @@ interface Props {
   image?: string;
   type?: 'website' | 'article' | 'profile';
   className?: string;
-  extraJsonLd?: unknown; // optional page-specific JSON-LD (e.g. ItemList, CreativeWork)
-  breadcrumbs?: Array<{ name: string; href: string }>; // optional BreadcrumbList JSON-LD
-  surface?: 'v6-13'; // v6.13.0. opt-in redesign surface (Jane Street × Noir). Default = legacy.
-  // v9.6 (Bryllim) : opt in to the VT323 pixel display face for this page's
-  // flagship H1. Gates the woff2 <link rel="preload"> ONLY; the @font-face is
-  // in the shared bundle either way. Default false so the other ~35 pages pay
-  // zero preload bytes for a font they never paint. `surface` cannot serve
-  // this role : it defaults to 'v6-13' on every page (see line 89).
+  extraJsonLd?: unknown;
+  breadcrumbs?: Array<{ name: string; href: string }>;
+  surface?: 'v6-13';
   pixelDisplay?: boolean;
-  // v6.17 : theme mode. 'auto' (default) respects prefers-color-scheme.
-  // 'light' / 'dark' forces the theme via body.theme-light / body.theme-dark.
-  // Note: tokens-v6.13.css uses :has() to detect these body classes.
+  /** v13.0 : theme prop RETIRED. Light-only chrome. */
   theme?: 'auto' | 'light' | 'dark';
-  // v9.2 : chrome opt-out for flagship surfaces (home, /for-recruiters,
-  // /screening-call). When 'slim', skip the global Nav + Footer CTA
-  // strip + 4-column footer grid + page__tenet line : the page IS the
-  // chrome. Per webcraft-no-vibe §signature-layer: confidence = no
-  // duplicate nav/CTA on pages that have their own running tape.
   chrome?: 'full' | 'slim' | 'none';
-  // v9.3 : opt-in noindex signal for error pages (500). When true,
-  // BaseLayout emits `<meta name="robots" content="noindex">` so
-  // search engines skip the error surface.
   noindex?: boolean;
 }
 
-// v6.18 : `surface` now defaults to `'v6-13'` (warm-dim #1a1714) so EVERY
-// page on the site renders on the same paper-cream-on-warm-dark register
-// (no more cold-dark #0d1117 sections). Pass surface={undefined} explicitly
-// to opt a single page out to legacy cold-dark. The flagship home, /contact,
-// /for-recruiters, and /screening-call already opted in; pages that hadn't
-// were inheriting legacy cold-dark : this default fixes them site-wide.
 const {
   title,
   description,
@@ -112,18 +59,13 @@ const {
   chrome = 'full',
 } = Astro.props;
 
-// v6.17 : resolve theme to a body class. 'auto' yields no class (CSS
-// media query handles prefers-color-scheme). Explicit 'light' / 'dark'
-// forces the mode via body.theme-light / body.theme-dark.
-const themeClass = theme === 'light' ? 'theme-light' : theme === 'dark' ? 'theme-dark' : '';
+// v13.0 : always light. --surface-paper token = #FAFAFA. No body class.
+const themeClass = '';
 const bodyClass = [themeClass, className].filter(Boolean).join(' ');
 
 const meta = buildMeta({
   title,
   description: description ?? profile.titles.secondary,
-  // Default og:image is the headshot banner. `path()` prepends the configured
-  // base (`/portfolio` on GH Pages) so the resolved URL points at the actual
-  // deployed asset, not the site root.
   image: image ? path(image) : path('/og-image.jpg'),
   type,
   pathname: Astro.url.pathname,
@@ -151,13 +93,7 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
     <title>{meta.title}</title>
     <meta name="description" content={meta.description} />
     <link rel="canonical" href={meta.canonical} />
-    {
-      /* v9.2.2 (Gate 12) : LCP font preload. Inter 400 is the display + body
-         font on the v6-13 surface (W2 lock). Preload the woff2 file.
-         `crossorigin` is required because font requests are always CORS.
-         Reduced-motion + per-component contract are unaffected (these are
-         preloads, not content). */
-    }
+
     {
       surface === 'v6-13' && (
         <link
@@ -170,27 +106,6 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
       )
     }
 
-    {
-      /* === v9.2 · security meta baseline (CSP defense in depth)
-         The HTTP CSP from `functions/_middleware.js` is the AUTHORITATIVE
-         policy for production (architecture AAR §14 lines 599-644). This
-         meta CSP is the static-fallback when the HTTP CSP is not applied
-         (e.g., local `astro preview`, or before Pages Functions compile).
-         Both policies are kept consistent : the meta must NOT be stricter
-         than the HTTP CSP, or the browser enforces the intersection
-         (most-restrictive) and breaks inline scripts.
-
-         v9.2 deltas vs v6.0:
-           + script-src 'unsafe-inline' (HTTP CSP uses nonce; meta can't mint
-             per-request nonce, so meta allows inline as the static fallback)
-           + frame-src https://challenges.cloudflare.com https://cal.com https://*.cal.com
-           + worker-src 'self' (for /sw.js)
-           + object-src 'none'
-           + upgrade-insecure-requests
-           - form-action 'none' → 'self' (architecture AAR §14 line 613)
-           + font-src: kept 'self' + https://fonts.gstatic.com (self-hosted
-             @fontsource/inter + @fontsource/jetbrains-mono per vite ssr config) */
-    }
     <meta
       http-equiv="Content-Security-Policy"
       content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline'; style-src-attr 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com data:; script-src 'self' 'unsafe-inline'; script-src-attr 'unsafe-inline'; connect-src 'self' https://challenges.cloudflare.com https://data-api.ecb.europa.eu https://query1.finance.yahoo.com https://api.coingecko.com https://data.gdeltproject.org; frame-src 'self' https://challenges.cloudflare.com https://cal.com https://*.cal.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests"
@@ -213,17 +128,10 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
     <meta name="twitter:description" content={meta.twitter.description} />
     {meta.twitter.images?.map((src: string) => <meta name="twitter:image" content={src} />)}
 
-    <!-- CM monogram: single-color for browser tabs + bookmarks (currentColor
-         inherits from the user-agent's icon color rule); amber variant is the
-         primary brand mark used in nav, og:image, and About hero. -->
     <link rel="icon" type="image/svg+xml" href={path('/cm-mark.svg')} />
-    {
-      /* v6.9.15 : iOS Safari ignores SVG apple-touch-icon (no support
-       per WebKit spec). Point to the 180×180 PNG Apple actually renders. */
-    }
     <link rel="apple-touch-icon" sizes="180x180" href={path('/apple-touch-icon-180x180.png')} />
     <link rel="manifest" href={path('/site.webmanifest')} />
-    <link rel="mask-icon" href={path('/cm-mark.svg')} color="#1a1714" />
+    <link rel="mask-icon" href={path('/cm-mark.svg')} color="#FAFAFA" />
     <link rel="sitemap" href={path('/sitemap-index.xml')} />
     <link
       rel="alternate"
@@ -231,12 +139,6 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
       title={`${profile.fullName} to Portfolio Updates`}
       href={path('/feed.xml')}
     />
-    {
-      /* LLM-friendly alternates : short index + full concatenated Markdown.
-         Crawlers respect rel=alternate type=text/markdown as a first-class
-         signal (llmstxt.org convention). See public/llms.txt and
-         public/llms-full.txt. */
-    }
     <link
       rel="alternate"
       type="text/markdown"
@@ -249,20 +151,9 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
       title={`${profile.fullName} to llms-full.txt (full content)`}
       href={path('/llms-full.txt')}
     />
-    {
-      /* v6.17 : warm-dim theme-color (mobile browser chrome). Two tags
-        with `media` so the browser picks the matching color per OS
-        preference (Chrome 100+, Safari 15.4+). */
-    }
-    <meta name="theme-color" content="#1a1714" media="(prefers-color-scheme: dark)" />
-    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
 
-    {
-      /* === v6.1.0 : theme toggle REMOVED (legacy F14 amber surfaces).
-         v6.17 : light/dark variant RE-INTRODUCED for the v6-13 surface
-         via the `theme` prop on BaseLayout + tokens-v6.13.css :has()
-         selectors. Default is 'auto' (respects prefers-color-scheme). */
-    }
+    {/* v13.0 : LIGHT ONLY — single theme-color for Bryllim #FAFAFA surface */}
+    <meta name="theme-color" content="#FAFAFA" />
 
     <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
     <script is:inline type="application/ld+json" set:html={JSON.stringify(siteJsonLd)} />
@@ -277,156 +168,38 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
       )
     }
 
-    {
-      /* v6.10.20 : SEO: named "head" slot lets pages inject extra <meta>
-        tags (e.g. <meta name="robots" content="noindex"> on the 404 page)
-        without an explicit prop dance. Falls back to nothing if unused. */
-    }
     <slot name="head" />
-    {/*
-      v6.18 W2 deferral (2026-08-08): Cross-page entity registry
-      (entities.ts + EntityLink.astro + JSON-LD + auto-linker) is
-      NOT YET WIRED. Wave 6 (#89) owns this per
-      [[portfolio-v10-bryllim-structure-strategy]]. The 5 canonical
-      entities (Christian T. Macion, Acion Capital, Macion Ventures,
-      Bookkeeper v1, Operator Cockpit) currently render as plain
-      text mentions on every page; the auto-linker will thread them
-      through 47 routes. Out of W2 scope per Owner directive.
-    */}
   </head>
   <body class={bodyClass}>
-    <!-- v6.13.2 a11y fix (Lighthouse 95→100, 2026-07-31):
-         aria-label="Skip to main content" + visible-text match the WCAG 2.4.1
-         bypass-blocks convention. Visible text is identical to aria-label so
-         screen-reader and sighted users get the same anchor name. -->
     <a href="#main" class="skip-link" aria-label="Skip to main content">Skip to main content</a>
-    {
-      /* v7.3 : top hairline scroll progress (1px amber, driven by scroll-progress-driver.ts).
-        v9.3 a11y follow-up (2026-08-01): role="presentation" + tabindex=-1 wraps the
-        progress bar in a landmark so axe-core's region rule passes. Without the
-        landmark wrapper, the div sits outside <main> and <header> and axe flags
-        it as page content not contained by landmarks. */
-    }
-    <div class="scroll-progress" role="presentation" tabindex="-1" aria-hidden="true"><i></i></div>
-    {surface === 'v6-13' && <V613Fonts />}
-    {
-      /* v9.2.3 (Gate 12) : opt-in motion CSS via deferred-load link. The
-         `media="print"; onload="this.media='all'"` pattern downloads the
-         CSS file without blocking first paint, then swaps media so the
-         rules apply once the file is parsed. This is the standard
-         non-blocking-CSS technique (filamentgroup/async-css, also used by
-         loadCSS). Slim-chrome pages (home, /for-recruiters, /screening-call)
-         pay zero motion.css bytes. Full-chrome pages get the motion layer
-         but the CSS does not block render : FCP/LCP happen on the
-         BaseLayout inline CSS first. */
-    }
-    {
-      chrome === 'full' && (
-        <link
-          rel="preload"
-          href={motionCssUrl}
-          as="style"
-          onload="this.onload=null;this.rel='stylesheet'"
-        />
-      )
-    }
-    {
-      chrome === 'full' && (
-        <noscript>
-          <link rel="stylesheet" href={motionCssUrl} />
-        </noscript>
-      )
-    }
-    {
-      /* v9.5 : Bryllim side-rail layout. SideRail.astro replaces the prior
-         top-sticky Nav + SiteHeader pair. The grid below (display: grid;
-         grid-template-columns: 240px 1fr;) places the sticky rail on the
-         left and main content on the right. <SideRail /> renders once per
-         page regardless of chrome mode (the chrome prop continues to gate
-         Footer + tenet line only). The mobile drawer < 980px is handled
-         inside SideRail.astro itself. */
-    }
-    <div class="layout-grid">
-      {/* W2.7a a11y : wrap <SideRail /> so the rail-toggle input and
-         its <label> (rendered by SideRail.astro BEFORE the inner <aside>)
-         sit inside a landmark; otherwise axe-core flags them as page
-         content not contained by any region. The internal <aside> is
-         preserved (axe allows nested landmarks of the same type). */}
-      <aside class="layout-rail" aria-label="Site navigation rail">
-        <SideRail />
-      </aside>
-      <main id="main" class="layout-main">
-        {/* v9.8 Wave B renders the SiteHeader running tape (with the new
-            inline ⌘K contact pill) above the page content. SiteHeader is
-            technically deprecated but kept for the 30-day rollback window;
-            we re-enable it here so the contact pill + ⌘K behavior is
-            visible and functional on every page. The pill is positioned
-            at the top of <main> so the side-rail layout is unaffected. */}
-        <SiteHeader />
-        <slot />
-      {
-        /* v8.4 : tenet line chrome contract. Injected by BaseLayout so
-        every page inherits the operating-principles footer without
-        duplication. The page__tenet selector is single-source (defined
-        in src/styles/global.css). v9.2: suppressed on slim chrome :
-        the page's own § 05 / contact section owns the operating-principles
-        statement, doubling them is the AI-builder tell. */
-      }
-      {
-        /* v12.W1.5 : global tenet injection REMOVED. Per
-           feedback-no-defensive-trust-strips BINDING: defensive "no
-           fabricated metrics / no NDA-protected" claims introduce doubt
-           rather than removing it. Internal compliance rules remain ACTIVE
-           INTERNALLY (Standing Order §9 no Math.random / argless Date, NDA-
-           scrub at build, no-fabrication discipline) : they just don't
-           broadcast. Pages that explicitly opt into tenet via ChromeHeader
-           still receive their override (now defaulting to ''). */
-      }
-      </main>
-    </div>
-    {
-      /* v9.9 : FOOTER REMOVAL. The v9.x four-column / CTA-strip /
-         base-strip Footer is retired. Replaced by a single
-         treasury line: identity + UTC offset + deploy stamp, no
-         links, no chrome. No footer import is needed (removed at
-         the top of the file); this is the entire bottom-of-page
-         chrome contract going forward. The page__tenet line above
-         carries the operating-principles contract. */
-    }
 
-    {/* v11.W2 : ⌘K command palette mounted site-wide. Vanilla TS,
-        no new deps; the capture-phase keydown listener inside
-        CommandPalette.astro stops propagation so it wins against
-        any other ⌘K handler. Hidden until the SiteHeader pill (or
-        any [data-cmdk-open] trigger) is activated. */}
+    {/* v12.W5 : BRYLLIM TOP NAV replaces v9.5 left SideRail. */}
+    {chrome !== 'none' && <TopNav />}
+
+    {chrome === 'full' && (
+      <link
+        rel="preload"
+        href={motionCssUrl}
+        as="style"
+        onload="this.onload=null;this.rel='stylesheet'"
+      />
+    )}
+    {chrome === 'full' && (
+      <noscript>
+        <link rel="stylesheet" href={motionCssUrl} />
+      </noscript>
+    )}
+
+    {/* v13.0 : content wrapped in 1024px max-width centered container.
+       No layout-grid / layout-rail / layout-main (SideRail era). */}
+    <main id="main" class="layout-main">
+      <slot />
+    </main>
+
     <CommandPalette />
-    {/* v12.W2 : WorldView Live institutional data terminal (⌘J).
-        Mounted alongside CommandPalette; same chrome contract
-        (cream-on-dark, sharp 0-2px corners, hairline border,
-        2px amber top rule). Globe + ticker logic lives in
-        scripts/motion/worldview.client.ts; the script is loaded
-        here so it executes once per page and is wired into the
-        [data-worldview] modal mounted above. */}
     <WorldView />
-    {/* v12.W1.5 : Footer REMOVED. The footer/back-to-top block (layout-tail
-       <footer>, back-to-top button + scroll listener, back-to-top.css import)
-       is retired. Pages inherit the bottom-of-page exit via the page's own
-       final section; SiteHeader / SideRail carry the persistent chrome.
-       The .layout-tail class is also removed from global.css. No new landmark
-       wrapper is needed because CommandPalette lives outside the <main>
-       landmark by design (capture-phase global handler). */}
 
-    {
-      /* === v9.2 a11y : scrollable-region-focusable bridge ===
-         axe-core flags elements with `overflow:auto|scroll` that have
-         scrollable content but no keyboard focus. The canonical fix is
-         to add `tabindex="0"`. CSS cannot add tabindex, so this inline
-         enhancer runs before axe ever sees the DOM. It only tags
-         elements that ACTUALLY overflow (scrollWidth > clientWidth),
-         so non-overflowing blocks are not promoted to focusable.
-         Target selectors cover the institutional scrollable regions:
-         katex math blocks, .table-wrap tables, pre/code, ribbons. */
-    }
+    {/* Scrollable-region-focusable bridge */}
     <script is:inline>
       (() => {
         const tagScrollables = () => {
@@ -450,12 +223,6 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
       })();
     </script>
 
-    {
-      /* === v6.1.0 · institutional motion bundle ===
-        All scripts are pure-defer; total minified+gzipped < 4KB.
-        They respect prefers-reduced-motion on their own.
-        theme-toggle removed; everything else preserved. */
-    }
     <script>
       import '@scripts/reveal-on-scroll.ts';
       import '@scripts/odometer.ts';
@@ -465,10 +232,6 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
       import '@scripts/motion.ts';
       import '@scripts/carousel.ts';
       import '@scripts/keyboard-shortcuts.ts';
-      // v12.W2 : WorldView · Live globe + ticker (⌘J). Lazy-loaded
-      // d3-geo + topojson-client + the gdelt-client + market-ticks
-      // utility modules. Loaded on every page; the script is cheap
-      // until ⌘J is pressed (~12 KB lazy deps, ~3 KB this file).
       import '@scripts/motion/worldview.client.ts';
     </script>
   </body>
