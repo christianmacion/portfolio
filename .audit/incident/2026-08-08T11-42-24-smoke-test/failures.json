@@ -1,0 +1,6914 @@
+{
+  "dedupe_key": "portfolio-smoke-test-v1",
+  "ts": "2026-08-08T11:42:24.610Z",
+  "checked": 1410,
+  "failed": 1381,
+  "total_routes": 102,
+  "failures": [
+    {
+      "route": "/about-this-site",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/about-this-site",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/about-this-site",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/about-this-site",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/about-this-site",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/about-this-site",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/about-this-site",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/about-this-site",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/about-this-site",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/about-this-site",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/about-this-site",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/about-this-site",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/about-this-site",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/about",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/about",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/about",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/about",
+      "asset": "/portfolio/_astro/KatexStyles.BrRjLYRv.css",
+      "status": 404
+    },
+    {
+      "route": "/about",
+      "asset": "/portfolio/_astro/about.CZEP62p7.css",
+      "status": 404
+    },
+    {
+      "route": "/about",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/about",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/about",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/about",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/about",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/about",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/about",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/about",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/about",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/about",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/ai",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/ai",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/ai",
+      "asset": "/portfolio/_astro/KatexStyles.BrRjLYRv.css",
+      "status": 404
+    },
+    {
+      "route": "/ai",
+      "asset": "/portfolio/_astro/ai.CdSKMsFF.css",
+      "status": 404
+    },
+    {
+      "route": "/ai",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/ai",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/ai",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/ai",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/ai",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/ai",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/ai",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/ai",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/ai",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/ai",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/acion-rf-backtest",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/acion-rf-backtest",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/acion-rf-backtest",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/acion-rf-backtest",
+      "asset": "/portfolio/_astro/acion-rf-backtest.DDazumcU.css",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/acion-rf-backtest",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/acion-rf-backtest",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/acion-rf-backtest",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/acion-rf-backtest",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/acion-rf-backtest",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/acion-rf-backtest",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/acion-rf-backtest",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/acion-rf-backtest",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/acion-rf-backtest",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/acion-rf-backtest",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/phase-e-cockpit",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/phase-e-cockpit",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/phase-e-cockpit",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/phase-e-cockpit",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/phase-e-cockpit",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/phase-e-cockpit",
+      "asset": "/portfolio/_astro/phase-e-cockpit.BtZcWena.css",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/phase-e-cockpit",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/phase-e-cockpit",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/phase-e-cockpit",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/phase-e-cockpit",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/phase-e-cockpit",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/phase-e-cockpit",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/phase-e-cockpit",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/quant-overcoffee",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/quant-overcoffee",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/quant-overcoffee",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/quant-overcoffee",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/quant-overcoffee",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/quant-overcoffee",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/quant-overcoffee",
+      "asset": "/portfolio/_astro/quant-overcoffee.9XqUlUCp.css",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/quant-overcoffee",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/quant-overcoffee",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/quant-overcoffee",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/quant-overcoffee",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/quant-overcoffee",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/quant-overcoffee",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/quant-overcoffee",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/v9-3-chrome",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/v9-3-chrome",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/v9-3-chrome",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/v9-3-chrome",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/v9-3-chrome",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/v9-3-chrome",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/v9-3-chrome",
+      "asset": "/portfolio/_astro/v9-3-chrome.DGSrJ8-z.css",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/v9-3-chrome",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/v9-3-chrome",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/v9-3-chrome",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/v9-3-chrome",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/v9-3-chrome",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/v9-3-chrome",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/case-studies/v9-3-chrome",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/certifications",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/certifications",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/certifications",
+      "asset": "/portfolio/_astro/KatexStyles.BrRjLYRv.css",
+      "status": 404
+    },
+    {
+      "route": "/certifications",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/certifications",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/certifications",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/certifications",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/certifications",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/certifications",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/certifications",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/certifications",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/certifications",
+      "asset": "/portfolio/proof/ateneo-american-corner-2025-11.jpg",
+      "status": 404
+    },
+    {
+      "route": "/certifications",
+      "asset": "/portfolio/proof/bida-meta-aiccelerate-2025-11.jpg",
+      "status": 404
+    },
+    {
+      "route": "/certifications",
+      "asset": "/portfolio/proof/cta-cert-portrait-2026-01.jpg",
+      "status": 404
+    },
+    {
+      "route": "/certifications",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/certifications",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/colophon",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/colophon",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/colophon",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/colophon",
+      "asset": "/portfolio/_astro/colophon.DSTbRMfj.css",
+      "status": 404
+    },
+    {
+      "route": "/colophon",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/colophon",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/colophon",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/colophon",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/colophon",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/colophon",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/colophon",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/colophon",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/colophon",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/colophon",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/comp",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/comp",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/comp",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/comp",
+      "asset": "/portfolio/_astro/comp.1-jJPPEg.css",
+      "status": 404
+    },
+    {
+      "route": "/comp",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/comp",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/comp",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/comp",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/comp",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/comp",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/comp",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/comp",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/contact",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/contact",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/contact",
+      "asset": "/portfolio/_astro/KatexStyles.BrRjLYRv.css",
+      "status": 404
+    },
+    {
+      "route": "/contact",
+      "asset": "/portfolio/_astro/contact.BAAOxYJt.css",
+      "status": 404
+    },
+    {
+      "route": "/contact",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/contact",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/contact",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/contact",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/contact",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/contact",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/contact",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/contact",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/contact",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/contact",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/desk",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/desk",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/desk",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/desk",
+      "asset": "/portfolio/_astro/desk.Cay9NetE.css",
+      "status": 404
+    },
+    {
+      "route": "/desk",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/desk",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/desk",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/desk",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/desk",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/desk",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/desk",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/desk",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/desk",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/desk",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/engagement",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/engagement",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/engagement",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/engagement",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/engagement",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/engagement",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/engagement",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/engagement",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/engagement",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/engagement",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/engagement",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/engagement",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/experience",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/experience",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/experience",
+      "asset": "/portfolio/_astro/KatexStyles.BrRjLYRv.css",
+      "status": 404
+    },
+    {
+      "route": "/experience",
+      "asset": "/portfolio/_astro/experience.Nc6AAwGv.css",
+      "status": 404
+    },
+    {
+      "route": "/experience",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/experience",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/experience",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/experience",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/experience",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/experience",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/experience",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/experience",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/experience",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/experience",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/for-recruiters",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/for-recruiters",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/for-recruiters",
+      "asset": "/portfolio/_astro/for-recruiters.DeGN-rbk.css",
+      "status": 404
+    },
+    {
+      "route": "/for-recruiters",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/for-recruiters",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/for-recruiters",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/for-recruiters",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/for-recruiters",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/for-recruiters",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/for-recruiters",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/for-recruiters",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/for-recruiters",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/agent-charter",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/agent-charter",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/agent-charter",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/agent-charter",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/glossary/agent-charter",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/agent-charter",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/agent-charter",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/glossary/agent-charter",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/glossary/agent-charter",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/agent-charter",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/agent-charter",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/agent-charter",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/glossary/agent-charter",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/alpha",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/alpha",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/alpha",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/alpha",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/glossary/alpha",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/alpha",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/alpha",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/glossary/alpha",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/glossary/alpha",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/alpha",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/alpha",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/alpha",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/glossary/alpha",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/block-bootstrap",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/block-bootstrap",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/block-bootstrap",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/block-bootstrap",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/glossary/block-bootstrap",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/block-bootstrap",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/block-bootstrap",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/glossary/block-bootstrap",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/glossary/block-bootstrap",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/block-bootstrap",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/block-bootstrap",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/block-bootstrap",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/glossary/block-bootstrap",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/bonferroni-holm",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/bonferroni-holm",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/bonferroni-holm",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/bonferroni-holm",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/glossary/bonferroni-holm",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/bonferroni-holm",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/bonferroni-holm",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/glossary/bonferroni-holm",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/glossary/bonferroni-holm",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/bonferroni-holm",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/bonferroni-holm",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/bonferroni-holm",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/glossary/bonferroni-holm",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/cointegration",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/cointegration",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/cointegration",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/cointegration",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/glossary/cointegration",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/cointegration",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/cointegration",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/glossary/cointegration",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/glossary/cointegration",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/cointegration",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/cointegration",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/cointegration",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/glossary/cointegration",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/cscv-pbo",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/cscv-pbo",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/cscv-pbo",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/cscv-pbo",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/glossary/cscv-pbo",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/cscv-pbo",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/cscv-pbo",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/glossary/cscv-pbo",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/glossary/cscv-pbo",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/cscv-pbo",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/cscv-pbo",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/cscv-pbo",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/glossary/cscv-pbo",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/deflated-sharpe",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/deflated-sharpe",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/deflated-sharpe",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/deflated-sharpe",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/glossary/deflated-sharpe",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/deflated-sharpe",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/deflated-sharpe",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/glossary/deflated-sharpe",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/glossary/deflated-sharpe",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/deflated-sharpe",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/deflated-sharpe",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/deflated-sharpe",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/glossary/deflated-sharpe",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/drawdown",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/drawdown",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/drawdown",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/drawdown",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/glossary/drawdown",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/drawdown",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/drawdown",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/glossary/drawdown",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/glossary/drawdown",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/drawdown",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/drawdown",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/drawdown",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/glossary/drawdown",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/embargo",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/embargo",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/embargo",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/embargo",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/glossary/embargo",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/embargo",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/embargo",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/glossary/embargo",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/glossary/embargo",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/embargo",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/embargo",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/embargo",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/glossary/embargo",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/eval-harness",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/eval-harness",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/eval-harness",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/eval-harness",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/glossary/eval-harness",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/eval-harness",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/eval-harness",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/glossary/eval-harness",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/glossary/eval-harness",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/eval-harness",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/eval-harness",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/eval-harness",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/glossary/eval-harness",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/frozen-spec",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/frozen-spec",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/frozen-spec",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/frozen-spec",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/glossary/frozen-spec",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/frozen-spec",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/frozen-spec",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/glossary/frozen-spec",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/glossary/frozen-spec",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/frozen-spec",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/frozen-spec",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/frozen-spec",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/glossary/frozen-spec",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/g1-g31",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/g1-g31",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/g1-g31",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/g1-g31",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/glossary/g1-g31",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/g1-g31",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/g1-g31",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/glossary/g1-g31",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/glossary/g1-g31",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/g1-g31",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/g1-g31",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/g1-g31",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/glossary/g1-g31",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/glossary",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/glossary",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/glossary",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/glossary",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/json-schema",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/json-schema",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/json-schema",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/json-schema",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/glossary/json-schema",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/json-schema",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/json-schema",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/glossary/json-schema",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/glossary/json-schema",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/json-schema",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/json-schema",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/json-schema",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/glossary/json-schema",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/llm-as-judge",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/llm-as-judge",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/llm-as-judge",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/llm-as-judge",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/glossary/llm-as-judge",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/llm-as-judge",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/llm-as-judge",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/glossary/llm-as-judge",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/glossary/llm-as-judge",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/llm-as-judge",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/llm-as-judge",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/llm-as-judge",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/glossary/llm-as-judge",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/mcp",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/mcp",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/mcp",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/mcp",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/glossary/mcp",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/mcp",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/mcp",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/glossary/mcp",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/glossary/mcp",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/mcp",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/mcp",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/mcp",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/glossary/mcp",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/minbtl",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/minbtl",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/minbtl",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/minbtl",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/glossary/minbtl",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/minbtl",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/minbtl",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/glossary/minbtl",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/glossary/minbtl",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/minbtl",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/minbtl",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/minbtl",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/glossary/minbtl",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/multi-agent",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/multi-agent",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/multi-agent",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/multi-agent",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/glossary/multi-agent",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/multi-agent",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/multi-agent",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/glossary/multi-agent",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/glossary/multi-agent",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/multi-agent",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/multi-agent",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/multi-agent",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/glossary/multi-agent",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/oos",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/oos",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/oos",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/oos",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/glossary/oos",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/oos",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/oos",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/glossary/oos",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/glossary/oos",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/oos",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/oos",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/oos",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/glossary/oos",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/pbo",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/pbo",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/pbo",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/pbo",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/glossary/pbo",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/pbo",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/pbo",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/glossary/pbo",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/glossary/pbo",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/pbo",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/pbo",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/pbo",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/glossary/pbo",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/rag",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/rag",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/rag",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/rag",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/glossary/rag",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/rag",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/rag",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/glossary/rag",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/glossary/rag",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/rag",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/rag",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/rag",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/glossary/rag",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/regime",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/regime",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/regime",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/regime",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/glossary/regime",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/regime",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/regime",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/glossary/regime",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/glossary/regime",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/regime",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/regime",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/regime",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/glossary/regime",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/sharpe",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/sharpe",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/sharpe",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/sharpe",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/glossary/sharpe",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/sharpe",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/sharpe",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/glossary/sharpe",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/glossary/sharpe",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/sharpe",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/sharpe",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/sharpe",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/glossary/sharpe",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/slippage",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/slippage",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/slippage",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/slippage",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/glossary/slippage",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/slippage",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/slippage",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/glossary/slippage",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/glossary/slippage",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/slippage",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/slippage",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/slippage",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/glossary/slippage",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/survivorship-bias",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/survivorship-bias",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/survivorship-bias",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/survivorship-bias",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/glossary/survivorship-bias",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/survivorship-bias",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/survivorship-bias",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/glossary/survivorship-bias",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/glossary/survivorship-bias",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/survivorship-bias",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/survivorship-bias",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/survivorship-bias",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/glossary/survivorship-bias",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/walk-forward",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/walk-forward",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/walk-forward",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/walk-forward",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/glossary/walk-forward",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/glossary/walk-forward",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/glossary/walk-forward",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/glossary/walk-forward",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/glossary/walk-forward",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/glossary/walk-forward",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/walk-forward",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/glossary/walk-forward",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/glossary/walk-forward",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/",
+      "asset": "/portfolio/_astro/GatesLattice.astro_astro_type_script_index_0_lang.BW2_0iuD.js",
+      "status": 404
+    },
+    {
+      "route": "/",
+      "asset": "/portfolio/_astro/headshot-source.zzS5YFER_CjJ5q.webp",
+      "status": 404
+    },
+    {
+      "route": "/",
+      "asset": "/portfolio/_astro/headshot-source.zzS5YFER_Zeo1YP.webp",
+      "status": 404
+    },
+    {
+      "route": "/",
+      "asset": "/portfolio/_astro/index.D2CpCbpQ.css",
+      "status": 404
+    },
+    {
+      "route": "/",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/",
+      "asset": "/portfolio/logos/bitget.svg",
+      "status": 404
+    },
+    {
+      "route": "/",
+      "asset": "/portfolio/logos/ibm.svg",
+      "status": 404
+    },
+    {
+      "route": "/",
+      "asset": "/portfolio/logos/meta.svg",
+      "status": 404
+    },
+    {
+      "route": "/",
+      "asset": "/portfolio/logos/nasa.svg",
+      "status": 404
+    },
+    {
+      "route": "/",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/markets",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/markets",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/markets",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/markets",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/markets",
+      "asset": "/portfolio/_astro/markets.BmRiJMdV.css",
+      "status": 404
+    },
+    {
+      "route": "/markets",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/markets",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/markets",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/markets",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/markets",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/markets",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/markets",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/markets",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/markets",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/methodology",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/methodology",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/methodology",
+      "asset": "/portfolio/_astro/GatesLattice.astro_astro_type_script_index_0_lang.BW2_0iuD.js",
+      "status": 404
+    },
+    {
+      "route": "/methodology",
+      "asset": "/portfolio/_astro/KatexStyles.BrRjLYRv.css",
+      "status": 404
+    },
+    {
+      "route": "/methodology",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/methodology",
+      "asset": "/portfolio/_astro/methodology.BIIhl5ZD.css",
+      "status": 404
+    },
+    {
+      "route": "/methodology",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/methodology",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/methodology",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/methodology",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/methodology",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/methodology",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/methodology",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/methodology",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/methodology",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/mistakes",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/mistakes",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/mistakes",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/mistakes",
+      "asset": "/portfolio/_astro/KatexStyles.BrRjLYRv.css",
+      "status": 404
+    },
+    {
+      "route": "/mistakes",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/mistakes",
+      "asset": "/portfolio/_astro/mistakes.C_dq5mT_.css",
+      "status": 404
+    },
+    {
+      "route": "/mistakes",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/mistakes",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/mistakes",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/mistakes",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/mistakes",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/mistakes",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/mistakes",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/mistakes",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/mistakes",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/notes",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/notes",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/notes",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/notes",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/notes",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/notes",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/notes",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/notes",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/notes",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/notes",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/notes",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/notes",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/now",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/now",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/now",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/now",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/now",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/now",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/now",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/now",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/now",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/now",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/now",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/now",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/papers",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/papers",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/papers",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/papers",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/papers",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/papers",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/papers",
+      "asset": "/portfolio/_astro/papers.Cn1XdiFj.css",
+      "status": 404
+    },
+    {
+      "route": "/papers",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/papers",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/papers",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/papers",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/papers",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/papers",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/papers",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/positions",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/positions",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/positions",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/positions",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/positions",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/positions",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/positions",
+      "asset": "/portfolio/_astro/positions.CxoLfMph.css",
+      "status": 404
+    },
+    {
+      "route": "/positions",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/positions",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/positions",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/positions",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/positions",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/positions",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/positions",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/prediction-markets",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/prediction-markets",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/prediction-markets",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/prediction-markets",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/prediction-markets",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/prediction-markets",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/prediction-markets",
+      "asset": "/portfolio/_astro/prediction-markets.Cuw9wc5L.css",
+      "status": 404
+    },
+    {
+      "route": "/prediction-markets",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/prediction-markets",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/prediction-markets",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/prediction-markets",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/prediction-markets",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/prediction-markets",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/prediction-markets",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/01-rag-recall",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/01-rag-recall",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/01-rag-recall",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/01-rag-recall",
+      "asset": "/portfolio/_astro/_..BxFh3p--.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/01-rag-recall",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/01-rag-recall",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/01-rag-recall",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/01-rag-recall",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/01-rag-recall",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/01-rag-recall",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/01-rag-recall",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/01-rag-recall",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/01-rag-recall",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/01-rag-recall",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/02-toolcall-agent",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/02-toolcall-agent",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/02-toolcall-agent",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/02-toolcall-agent",
+      "asset": "/portfolio/_astro/_..BxFh3p--.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/02-toolcall-agent",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/02-toolcall-agent",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/02-toolcall-agent",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/02-toolcall-agent",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/02-toolcall-agent",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/02-toolcall-agent",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/02-toolcall-agent",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/02-toolcall-agent",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/02-toolcall-agent",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/02-toolcall-agent",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/03-judge-harness",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/03-judge-harness",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/03-judge-harness",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/03-judge-harness",
+      "asset": "/portfolio/_astro/_..BxFh3p--.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/03-judge-harness",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/03-judge-harness",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/03-judge-harness",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/03-judge-harness",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/03-judge-harness",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/03-judge-harness",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/03-judge-harness",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/03-judge-harness",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/03-judge-harness",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/03-judge-harness",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/04-eval-mcp-server",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/04-eval-mcp-server",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/04-eval-mcp-server",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/04-eval-mcp-server",
+      "asset": "/portfolio/_astro/_..BxFh3p--.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/04-eval-mcp-server",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/04-eval-mcp-server",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/04-eval-mcp-server",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/04-eval-mcp-server",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/04-eval-mcp-server",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/04-eval-mcp-server",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/04-eval-mcp-server",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/04-eval-mcp-server",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/04-eval-mcp-server",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/04-eval-mcp-server",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/05-reflect-revise",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/05-reflect-revise",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/05-reflect-revise",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/05-reflect-revise",
+      "asset": "/portfolio/_astro/_..BxFh3p--.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/05-reflect-revise",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/05-reflect-revise",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/05-reflect-revise",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/05-reflect-revise",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/05-reflect-revise",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/05-reflect-revise",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/05-reflect-revise",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/05-reflect-revise",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/05-reflect-revise",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/05-reflect-revise",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/06-slop-scanner",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/06-slop-scanner",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/06-slop-scanner",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/06-slop-scanner",
+      "asset": "/portfolio/_astro/_..BxFh3p--.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/06-slop-scanner",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/06-slop-scanner",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/06-slop-scanner",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/06-slop-scanner",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/06-slop-scanner",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/06-slop-scanner",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/06-slop-scanner",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/06-slop-scanner",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/06-slop-scanner",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/projects/ai/06-slop-scanner",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/projects",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/projects",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/projects",
+      "asset": "/portfolio/_astro/NewsRibbon.DpuJOFeK.css",
+      "status": 404
+    },
+    {
+      "route": "/projects",
+      "asset": "/portfolio/_astro/index.BvtZFHuM.css",
+      "status": 404
+    },
+    {
+      "route": "/projects",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/projects",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/projects",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/projects",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/projects",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/projects",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/projects",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/projects",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/projects",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/projects",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/01-deflated-sharpe",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/01-deflated-sharpe",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/01-deflated-sharpe",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/01-deflated-sharpe",
+      "asset": "/portfolio/_astro/KatexStyles.BrRjLYRv.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/01-deflated-sharpe",
+      "asset": "/portfolio/_astro/_..BxFh3p--.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/01-deflated-sharpe",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/01-deflated-sharpe",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/01-deflated-sharpe",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/01-deflated-sharpe",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/01-deflated-sharpe",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/01-deflated-sharpe",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/01-deflated-sharpe",
+      "asset": "/portfolio/figures/quant/01-multiple-testing-deflated-sharpe.webp",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/01-deflated-sharpe",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/01-deflated-sharpe",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/01-deflated-sharpe",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/01-deflated-sharpe",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/02-cross-sectional-momentum",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/02-cross-sectional-momentum",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/02-cross-sectional-momentum",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/02-cross-sectional-momentum",
+      "asset": "/portfolio/_astro/_..BxFh3p--.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/02-cross-sectional-momentum",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/02-cross-sectional-momentum",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/02-cross-sectional-momentum",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/02-cross-sectional-momentum",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/02-cross-sectional-momentum",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/02-cross-sectional-momentum",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/02-cross-sectional-momentum",
+      "asset": "/portfolio/figures/quant/02-cross-sectional-momentum.webp",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/02-cross-sectional-momentum",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/02-cross-sectional-momentum",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/02-cross-sectional-momentum",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/02-cross-sectional-momentum",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/03-timeseries-momentum-voltarget",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/03-timeseries-momentum-voltarget",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/03-timeseries-momentum-voltarget",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/03-timeseries-momentum-voltarget",
+      "asset": "/portfolio/_astro/_..BxFh3p--.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/03-timeseries-momentum-voltarget",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/03-timeseries-momentum-voltarget",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/03-timeseries-momentum-voltarget",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/03-timeseries-momentum-voltarget",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/03-timeseries-momentum-voltarget",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/03-timeseries-momentum-voltarget",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/03-timeseries-momentum-voltarget",
+      "asset": "/portfolio/figures/quant/03-timeseries-momentum-voltarget.webp",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/03-timeseries-momentum-voltarget",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/03-timeseries-momentum-voltarget",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/03-timeseries-momentum-voltarget",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/03-timeseries-momentum-voltarget",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/04-variance-risk-premium",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/04-variance-risk-premium",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/04-variance-risk-premium",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/04-variance-risk-premium",
+      "asset": "/portfolio/_astro/_..BxFh3p--.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/04-variance-risk-premium",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/04-variance-risk-premium",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/04-variance-risk-premium",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/04-variance-risk-premium",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/04-variance-risk-premium",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/04-variance-risk-premium",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/04-variance-risk-premium",
+      "asset": "/portfolio/figures/quant/04-variance-risk-premium.webp",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/04-variance-risk-premium",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/04-variance-risk-premium",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/04-variance-risk-premium",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/04-variance-risk-premium",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/05-pairs-cointegration",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/05-pairs-cointegration",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/05-pairs-cointegration",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/05-pairs-cointegration",
+      "asset": "/portfolio/_astro/_..BxFh3p--.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/05-pairs-cointegration",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/05-pairs-cointegration",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/05-pairs-cointegration",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/05-pairs-cointegration",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/05-pairs-cointegration",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/05-pairs-cointegration",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/05-pairs-cointegration",
+      "asset": "/portfolio/figures/quant/05-pairs-cointegration.webp",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/05-pairs-cointegration",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/05-pairs-cointegration",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/05-pairs-cointegration",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/05-pairs-cointegration",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/06-funding-carry",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/06-funding-carry",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/06-funding-carry",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/06-funding-carry",
+      "asset": "/portfolio/_astro/_..BxFh3p--.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/06-funding-carry",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/06-funding-carry",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/06-funding-carry",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/06-funding-carry",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/06-funding-carry",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/06-funding-carry",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/06-funding-carry",
+      "asset": "/portfolio/figures/quant/06-funding-carry.webp",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/06-funding-carry",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/06-funding-carry",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/06-funding-carry",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/06-funding-carry",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/07-macro-regime-overlay",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/07-macro-regime-overlay",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/07-macro-regime-overlay",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/07-macro-regime-overlay",
+      "asset": "/portfolio/_astro/_..BxFh3p--.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/07-macro-regime-overlay",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/07-macro-regime-overlay",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/07-macro-regime-overlay",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/07-macro-regime-overlay",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/07-macro-regime-overlay",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/07-macro-regime-overlay",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/07-macro-regime-overlay",
+      "asset": "/portfolio/figures/quant/07-macro-regime-overlay.webp",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/07-macro-regime-overlay",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/07-macro-regime-overlay",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/07-macro-regime-overlay",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/07-macro-regime-overlay",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/08-backtest-engine-costs",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/08-backtest-engine-costs",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/08-backtest-engine-costs",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/08-backtest-engine-costs",
+      "asset": "/portfolio/_astro/_..BxFh3p--.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/08-backtest-engine-costs",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/08-backtest-engine-costs",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/08-backtest-engine-costs",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/08-backtest-engine-costs",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/08-backtest-engine-costs",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/08-backtest-engine-costs",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/08-backtest-engine-costs",
+      "asset": "/portfolio/figures/quant/08-backtest-engine-costs.webp",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/08-backtest-engine-costs",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/08-backtest-engine-costs",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/08-backtest-engine-costs",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/08-backtest-engine-costs",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/09-lookahead-bias-audit",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/09-lookahead-bias-audit",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/09-lookahead-bias-audit",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/09-lookahead-bias-audit",
+      "asset": "/portfolio/_astro/_..BxFh3p--.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/09-lookahead-bias-audit",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/09-lookahead-bias-audit",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/09-lookahead-bias-audit",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/09-lookahead-bias-audit",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/09-lookahead-bias-audit",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/09-lookahead-bias-audit",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/09-lookahead-bias-audit",
+      "asset": "/portfolio/figures/quant/09-bias-audit.webp",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/09-lookahead-bias-audit",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/09-lookahead-bias-audit",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/09-lookahead-bias-audit",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/projects/quant/09-lookahead-bias-audit",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/proof",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/proof",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/proof",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/proof",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/proof",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/proof",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/proof",
+      "asset": "/portfolio/_astro/proof.DeL4TPYh.css",
+      "status": 404
+    },
+    {
+      "route": "/proof",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/proof",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/proof",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/proof",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/proof",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/proof",
+      "asset": "/portfolio/proof/ai-workflow.jpg",
+      "status": 404
+    },
+    {
+      "route": "/proof",
+      "asset": "/portfolio/proof/ai-workflow.mp4",
+      "status": 404
+    },
+    {
+      "route": "/proof",
+      "asset": "/portfolio/proof/cryptoneeds-christ-chart.jpg",
+      "status": 404
+    },
+    {
+      "route": "/proof",
+      "asset": "/portfolio/proof/usep-lecture.jpg",
+      "status": 404
+    },
+    {
+      "route": "/proof",
+      "asset": "/portfolio/proof/usep-lecture.mp4",
+      "status": 404
+    },
+    {
+      "route": "/proof",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/proof",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/publications",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/publications",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/publications",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/publications",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/publications",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/publications",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/publications",
+      "asset": "/portfolio/_astro/publications.DYbEOW2n.css",
+      "status": 404
+    },
+    {
+      "route": "/publications",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/publications",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/publications",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/publications",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/publications",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/publications",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/publications",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/reading",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/reading",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/reading",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/reading",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/reading",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/reading",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/reading",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/reading",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/reading",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/reading",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/reading",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/reading",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/repos",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/repos",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/repos",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/repos",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/repos",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/repos",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/repos",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/repos",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/repos",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/repos",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/repos",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/repos",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/01-rag-recall",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/01-rag-recall",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/01-rag-recall",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/01-rag-recall",
+      "asset": "/portfolio/_astro/_..D2CuHJpF.css",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/01-rag-recall",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/01-rag-recall",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/01-rag-recall",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/01-rag-recall",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/01-rag-recall",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/01-rag-recall",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/01-rag-recall",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/01-rag-recall",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/01-rag-recall",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/01-rag-recall",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/02-toolcall-agent",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/02-toolcall-agent",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/02-toolcall-agent",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/02-toolcall-agent",
+      "asset": "/portfolio/_astro/_..D2CuHJpF.css",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/02-toolcall-agent",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/02-toolcall-agent",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/02-toolcall-agent",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/02-toolcall-agent",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/02-toolcall-agent",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/02-toolcall-agent",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/02-toolcall-agent",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/02-toolcall-agent",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/02-toolcall-agent",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/02-toolcall-agent",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/03-judge-harness",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/03-judge-harness",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/03-judge-harness",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/03-judge-harness",
+      "asset": "/portfolio/_astro/_..D2CuHJpF.css",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/03-judge-harness",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/03-judge-harness",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/03-judge-harness",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/03-judge-harness",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/03-judge-harness",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/03-judge-harness",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/03-judge-harness",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/03-judge-harness",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/03-judge-harness",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/03-judge-harness",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/04-eval-mcp-server",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/04-eval-mcp-server",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/04-eval-mcp-server",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/04-eval-mcp-server",
+      "asset": "/portfolio/_astro/_..D2CuHJpF.css",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/04-eval-mcp-server",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/04-eval-mcp-server",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/04-eval-mcp-server",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/04-eval-mcp-server",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/04-eval-mcp-server",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/04-eval-mcp-server",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/04-eval-mcp-server",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/04-eval-mcp-server",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/04-eval-mcp-server",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/04-eval-mcp-server",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/05-reflect-revise",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/05-reflect-revise",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/05-reflect-revise",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/05-reflect-revise",
+      "asset": "/portfolio/_astro/_..D2CuHJpF.css",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/05-reflect-revise",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/05-reflect-revise",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/05-reflect-revise",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/05-reflect-revise",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/05-reflect-revise",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/05-reflect-revise",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/05-reflect-revise",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/05-reflect-revise",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/05-reflect-revise",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/05-reflect-revise",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/06-slop-scanner",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/06-slop-scanner",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/06-slop-scanner",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/06-slop-scanner",
+      "asset": "/portfolio/_astro/_..D2CuHJpF.css",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/06-slop-scanner",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/06-slop-scanner",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/06-slop-scanner",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/06-slop-scanner",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/06-slop-scanner",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/06-slop-scanner",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/06-slop-scanner",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/06-slop-scanner",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/06-slop-scanner",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/research/ai/06-slop-scanner",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/research/frontier-models",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/research/frontier-models",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/research/frontier-models",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/research/frontier-models",
+      "asset": "/portfolio/_astro/frontier-models.DNF5H1Yd.css",
+      "status": 404
+    },
+    {
+      "route": "/research/frontier-models",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/research/frontier-models",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/research/frontier-models",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/research/frontier-models",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/research/frontier-models",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/research/frontier-models",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/research/frontier-models",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/research/frontier-models",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/research/frontier-models",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/research/frontier-models",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/research",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/research",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/research",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/research",
+      "asset": "/portfolio/_astro/KatexStyles.BrRjLYRv.css",
+      "status": 404
+    },
+    {
+      "route": "/research",
+      "asset": "/portfolio/_astro/NewsRibbon.DpuJOFeK.css",
+      "status": 404
+    },
+    {
+      "route": "/research",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/research",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/research",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/research",
+      "asset": "/portfolio/_astro/research.DEr3jFxh.css",
+      "status": 404
+    },
+    {
+      "route": "/research",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/research",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/research",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/research",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/research",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/research",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/research",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/01-deflated-sharpe",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/01-deflated-sharpe",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/01-deflated-sharpe",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/01-deflated-sharpe",
+      "asset": "/portfolio/_astro/_..D2CuHJpF.css",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/01-deflated-sharpe",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/01-deflated-sharpe",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/01-deflated-sharpe",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/01-deflated-sharpe",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/01-deflated-sharpe",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/01-deflated-sharpe",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/01-deflated-sharpe",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/01-deflated-sharpe",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/01-deflated-sharpe",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/01-deflated-sharpe",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/02-cross-sectional-momentum",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/02-cross-sectional-momentum",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/02-cross-sectional-momentum",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/02-cross-sectional-momentum",
+      "asset": "/portfolio/_astro/_..D2CuHJpF.css",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/02-cross-sectional-momentum",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/02-cross-sectional-momentum",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/02-cross-sectional-momentum",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/02-cross-sectional-momentum",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/02-cross-sectional-momentum",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/02-cross-sectional-momentum",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/02-cross-sectional-momentum",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/02-cross-sectional-momentum",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/02-cross-sectional-momentum",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/02-cross-sectional-momentum",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/03-timeseries-momentum-voltarget",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/03-timeseries-momentum-voltarget",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/03-timeseries-momentum-voltarget",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/03-timeseries-momentum-voltarget",
+      "asset": "/portfolio/_astro/_..D2CuHJpF.css",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/03-timeseries-momentum-voltarget",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/03-timeseries-momentum-voltarget",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/03-timeseries-momentum-voltarget",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/03-timeseries-momentum-voltarget",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/03-timeseries-momentum-voltarget",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/03-timeseries-momentum-voltarget",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/03-timeseries-momentum-voltarget",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/03-timeseries-momentum-voltarget",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/03-timeseries-momentum-voltarget",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/03-timeseries-momentum-voltarget",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/04-variance-risk-premium",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/04-variance-risk-premium",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/04-variance-risk-premium",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/04-variance-risk-premium",
+      "asset": "/portfolio/_astro/_..D2CuHJpF.css",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/04-variance-risk-premium",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/04-variance-risk-premium",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/04-variance-risk-premium",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/04-variance-risk-premium",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/04-variance-risk-premium",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/04-variance-risk-premium",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/04-variance-risk-premium",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/04-variance-risk-premium",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/04-variance-risk-premium",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/04-variance-risk-premium",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/05-pairs-cointegration",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/05-pairs-cointegration",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/05-pairs-cointegration",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/05-pairs-cointegration",
+      "asset": "/portfolio/_astro/_..D2CuHJpF.css",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/05-pairs-cointegration",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/05-pairs-cointegration",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/05-pairs-cointegration",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/05-pairs-cointegration",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/05-pairs-cointegration",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/05-pairs-cointegration",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/05-pairs-cointegration",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/05-pairs-cointegration",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/05-pairs-cointegration",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/05-pairs-cointegration",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/06-funding-carry",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/06-funding-carry",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/06-funding-carry",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/06-funding-carry",
+      "asset": "/portfolio/_astro/_..D2CuHJpF.css",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/06-funding-carry",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/06-funding-carry",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/06-funding-carry",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/06-funding-carry",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/06-funding-carry",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/06-funding-carry",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/06-funding-carry",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/06-funding-carry",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/06-funding-carry",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/06-funding-carry",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/07-macro-regime-overlay",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/07-macro-regime-overlay",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/07-macro-regime-overlay",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/07-macro-regime-overlay",
+      "asset": "/portfolio/_astro/_..D2CuHJpF.css",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/07-macro-regime-overlay",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/07-macro-regime-overlay",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/07-macro-regime-overlay",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/07-macro-regime-overlay",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/07-macro-regime-overlay",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/07-macro-regime-overlay",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/07-macro-regime-overlay",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/07-macro-regime-overlay",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/07-macro-regime-overlay",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/07-macro-regime-overlay",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/08-backtest-engine-costs",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/08-backtest-engine-costs",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/08-backtest-engine-costs",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/08-backtest-engine-costs",
+      "asset": "/portfolio/_astro/_..D2CuHJpF.css",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/08-backtest-engine-costs",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/08-backtest-engine-costs",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/08-backtest-engine-costs",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/08-backtest-engine-costs",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/08-backtest-engine-costs",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/08-backtest-engine-costs",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/08-backtest-engine-costs",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/08-backtest-engine-costs",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/08-backtest-engine-costs",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/08-backtest-engine-costs",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/09-lookahead-bias-audit",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/09-lookahead-bias-audit",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/09-lookahead-bias-audit",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/09-lookahead-bias-audit",
+      "asset": "/portfolio/_astro/_..D2CuHJpF.css",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/09-lookahead-bias-audit",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/09-lookahead-bias-audit",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/09-lookahead-bias-audit",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/09-lookahead-bias-audit",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/09-lookahead-bias-audit",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/09-lookahead-bias-audit",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/09-lookahead-bias-audit",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/09-lookahead-bias-audit",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/09-lookahead-bias-audit",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/research/quant/09-lookahead-bias-audit",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/resources",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/resources",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/resources",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/resources",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/resources",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/resources",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/resources",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/resources",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/resources",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/resources",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/resources",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/resources",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/resume",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/resume",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/resume",
+      "asset": "/portfolio/_astro/KatexStyles.BrRjLYRv.css",
+      "status": 404
+    },
+    {
+      "route": "/resume",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/resume",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/resume",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/resume",
+      "asset": "/portfolio/_astro/resume.CO8bBP-f.css",
+      "status": 404
+    },
+    {
+      "route": "/resume",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/resume",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/resume",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/resume",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/resume",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/resume",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/resume",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/screening-call",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/screening-call",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/screening-call",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/screening-call",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/screening-call",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/screening-call",
+      "asset": "/portfolio/_astro/screening-call.C0xoLmwB.css",
+      "status": 404
+    },
+    {
+      "route": "/screening-call",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/screening-call",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/screening-call",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/screening-call",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/screening-call",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/screening-call",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/screening-call",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/search",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/search",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/search",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/search",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/search",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/search",
+      "asset": "/portfolio/_astro/search.BP8ci5Jy.css",
+      "status": 404
+    },
+    {
+      "route": "/search",
+      "asset": "/portfolio/_astro/search.astro_astro_type_script_index_0_lang.CB2CrcyO.js",
+      "status": 404
+    },
+    {
+      "route": "/search",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/search",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/search",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/search",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/search",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/search",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/search",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/skills",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/skills",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/skills",
+      "asset": "/portfolio/_astro/KatexStyles.BrRjLYRv.css",
+      "status": 404
+    },
+    {
+      "route": "/skills",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/skills",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/skills",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/skills",
+      "asset": "/portfolio/_astro/skills.IQEK1aSW.css",
+      "status": 404
+    },
+    {
+      "route": "/skills",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/skills",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/skills",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/skills",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/skills",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/skills",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/skills",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/solutions",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/solutions",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/solutions",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/solutions",
+      "asset": "/portfolio/_astro/KatexStyles.BrRjLYRv.css",
+      "status": 404
+    },
+    {
+      "route": "/solutions",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/solutions",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/solutions",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/solutions",
+      "asset": "/portfolio/_astro/solutions.NT_dB0y6.css",
+      "status": 404
+    },
+    {
+      "route": "/solutions",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/solutions",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/solutions",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/solutions",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/solutions",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/solutions",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/solutions",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/stack",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/stack",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/stack",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/stack",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/stack",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/stack",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/stack",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/stack",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/stack",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/stack",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/stack",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/stack",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/stella",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/stella",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/stella",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/stella",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/stella",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/stella",
+      "asset": "/portfolio/_astro/stella.B3XpuV9D.css",
+      "status": 404
+    },
+    {
+      "route": "/stella",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/stella",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/stella",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/stella",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/stella",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/stella",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/stella",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/talks",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/talks",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/talks",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/talks",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/talks",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/talks",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/talks",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/talks",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/talks",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/talks",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/talks",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/talks",
+      "asset": "/portfolio/proof/ai-workflow.jpg",
+      "status": 404
+    },
+    {
+      "route": "/talks",
+      "asset": "/portfolio/proof/ai-workflow.mp4",
+      "status": 404
+    },
+    {
+      "route": "/talks",
+      "asset": "/portfolio/proof/usep-lecture.jpg",
+      "status": 404
+    },
+    {
+      "route": "/talks",
+      "asset": "/portfolio/proof/usep-lecture.mp4",
+      "status": 404
+    },
+    {
+      "route": "/talks",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/talks",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/timeline",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/timeline",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/timeline",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/timeline",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/timeline",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/timeline",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/timeline",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/timeline",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/timeline",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/timeline",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/timeline",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/timeline",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/uses",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/uses",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/uses",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/uses",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/uses",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/uses",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/uses",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/uses",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/uses",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/uses",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/uses",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/uses",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/uses",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/work",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/work",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/work",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/work",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/work",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/work",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/work",
+      "asset": "/portfolio/_astro/work.DYo4t1IK.css",
+      "status": 404
+    },
+    {
+      "route": "/work",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/work",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/work",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/work",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/work",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/work",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/work",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/workbooks",
+      "asset": "/portfolio/_astro/BaseLayout.Ccj0FDHh.css",
+      "status": 404
+    },
+    {
+      "route": "/workbooks",
+      "asset": "/portfolio/_astro/BaseLayout.astro_astro_type_script_index_0_lang.DjYaSZ_e.js",
+      "status": 404
+    },
+    {
+      "route": "/workbooks",
+      "asset": "/portfolio/_astro/CTABanner.BfpbkfYK.css",
+      "status": 404
+    },
+    {
+      "route": "/workbooks",
+      "asset": "/portfolio/_astro/KatexStyles.BrRjLYRv.css",
+      "status": 404
+    },
+    {
+      "route": "/workbooks",
+      "asset": "/portfolio/_astro/inter-latin-400-normal.C38fXH4l.woff2",
+      "status": 404
+    },
+    {
+      "route": "/workbooks",
+      "asset": "/portfolio/_astro/motion.DZlxx9mk.css",
+      "status": 404
+    },
+    {
+      "route": "/workbooks",
+      "asset": "/portfolio/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/workbooks",
+      "asset": "/portfolio/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/workbooks",
+      "asset": "/portfolio/cm-mark.svg",
+      "status": 404
+    },
+    {
+      "route": "/workbooks",
+      "asset": "/portfolio/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/workbooks",
+      "asset": "/portfolio/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/workbooks",
+      "asset": "/portfolio/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/workbooks",
+      "asset": "/portfolio/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/workbooks",
+      "asset": "/portfolio/sitemap-index.xml",
+      "status": 404
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "dedupe_key": "portfolio-deploy-gate-v1",
+  "ts": "2026-08-08T15:21:51.633Z",
+  "prod_url": "https://christianmacion26.github.io/portfolio/",
+  "checked": 264,
+  "failed": 4,
+  "total_routes": 19,
+  "failures": [
+    {
+      "route": "/experience/",
+      "asset": "/proof/ai-workflow.jpg",
+      "status": 404
+    },
+    {
+      "route": "/experience/",
+      "asset": "/proof/ai-workflow.mp4",
+      "status": 404
+    },
+    {
+      "route": "/experience/",
+      "asset": "/proof/usep-lecture.jpg",
+      "status": 404
+    },
+    {
+      "route": "/experience/",
+      "asset": "/proof/usep-lecture.mp4",
+      "status": 404
+    }
+  ]
+}

@@ -1,9 +1,0 @@
-smoke-test: serving /tmp/broken-dist via python3 http.server
-smoke-test: 5 assets checked across 1 routes; 5 failed.
-smoke-test: FAIL — 5 broken asset reference(s):
-  /  →  /missing.css  (HTTP 404)
-  /  →  /missing.jpg  (HTTP 404)
-  /  →  /missing.js  (HTTP 404)
-  /  →  /missing.mp4  (HTTP 404)
-  /  →  /missing.png  (HTTP 404)
-smoke-test: failure evidence written to /Users/christianmacion/Contingency/christianmacion.github.io/.audit/incident/2026-08-01T05-52-43-smoke-test/failures.json

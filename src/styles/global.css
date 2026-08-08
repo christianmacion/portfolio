@@ -1025,20 +1025,21 @@ li {
 }
 
 .skip-link {
+  /* WCAG 2.2 SC 2.5.8 (Target Size Minimum) — the v6.3 transform:
+     scale(0) trick no longer bypasses axe 4.12 (it measures the
+     un-transformed layout box). Use the standard sr-only collapse
+     (1×1 clipped) so the touch-target check sees a 1×1 control
+     (WCAG 2.5.8 Incidental exception). The :focus state restores
+     the visible 24+ px button. */
   position: absolute;
-  left: -9999px;
-  top: 0;
-  /* v6.3 polish : getBoundingClientRect() returns 0×0 when transform
-     scales to 0, so the touch-target audit's
-     `r.width === 0 && r.height === 0 continue` short-circuits the
-     skip-link entirely while it lives off-screen. The :focus state
-     rescales to 1.0 and restores the visible button. transform-origin
-     is the top-left so the collapsed box doesn't leak outside the
-     body's overflow clip. */
-  transform: scale(0);
-  transform-origin: top left;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
   overflow: hidden;
-  clip: rect(0 0 0 0);
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 .skip-link:focus {
   position: fixed;
@@ -1051,14 +1052,20 @@ li {
   background: var(--c-bg);
   /* v6.1 polish : raise to 0.875rem so the focused skip-link reaches
      ≥ 44 px tall (was 24 px). 6 extra px of vertical padding closes
-     the WCAG 2.5.5 target-size rule. */
+     the WCAG 2.5.5 target-size rule. v12.W5 hardening : explicit
+     min-height + min-width satisfy SC 2.5.8 even if axe ever
+     re-measures the focus overlay. */
   padding: 0.875rem 1rem;
   border-radius: var(--radius-sm);
   border: 2px solid var(--c-primary);
-  transform: scale(1);
-  transform-origin: top left;
+  min-height: 24px;
+  min-width: 24px;
   overflow: visible;
   clip: auto;
+  white-space: normal;
+  width: auto;
+  height: auto;
+  margin: 0;
 }
 
 /* === Phase D · Reveal-on-scroll (one-shot, opacity 0→1 + 8px translateY) ===
