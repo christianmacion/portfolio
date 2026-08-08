@@ -25,7 +25,7 @@ const SITE_NAME = profile.fullName;
 // with `import.meta.env.`, so we read it via `import.meta.env.PUBLIC_SITE_URL`
 // at build time and fall back to the default.
 export const SITE_URL =
-  (import.meta.env.PUBLIC_SITE_URL as string | undefined) ?? 'https://christianmacion26.github.io';
+  (import.meta.env.PUBLIC_SITE_URL as string | undefined) ?? 'https://christianmacion.github.io';
 
 /**
  * Absolute URL with the configured base path appended.
@@ -39,7 +39,7 @@ export const SITE_URL =
  * On the Cloudflare Pages mirror (--base=/), BASE is empty and this returns
  * `https://christianmacion-portfolio.pages.dev/og-image.jpg`.
  * On GH Pages (default base), BASE='/portfolio' and this returns
- * `https://christianmacion26.github.io/portfolio/og-image.jpg`.
+ * `https://christianmacion.github.io/portfolio/og-image.jpg`.
  */
 function absUrl(p: string): string {
   return `${SITE_URL}${BASE}${p}`;

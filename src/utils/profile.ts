@@ -25,7 +25,7 @@ const stats = {
   // v6.11.13 : derived chrome counts. /positions had hardcoded
   // "15 repos" / "Five seats" / "Three seat types" that contradicted
   // other pages and silently drifted when role-cards were added/removed.
-  repoCount: '25', // GitHub public repos (api.github.com/users/christianmacion26 → public_repos=25)
+  repoCount: '25', // GitHub public repos (api.github.com/users/christianmacion → public_repos=25)
   targetSeats: '5', // /positions conversation cards (lines 248-374)
   offTableSeats: '3', // /positions "off the table" bullets (lines 388-392)
   strategyCount: '9', // /projects quant files (01-…mdx) to update on strategy add/remove
@@ -150,7 +150,7 @@ export const profile = {
     phone: '+63-991-616-2630',
     phoneDisplay: '+63 991 616 2630',
     linkedin: 'https://www.linkedin.com/in/christianmacion',
-    github: 'https://github.com/christianmacion26',
+    github: 'https://github.com/christianmacion',
     medium: 'https://medium.com/@christianmacion',
     ojp: 'https://v2.onlinejobs.ph/jobseekers/info/4760383',
     upwork: 'https://www.upwork.com/freelancers/~01785a76c001e4acd8',

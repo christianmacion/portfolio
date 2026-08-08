@@ -3,13 +3,13 @@ import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 
-// 2026-08-08 — single deploy surface: GitHub Pages.
-// Live URL = https://christianmacion26.github.io/portfolio/.
+// 2026-08-09 — GitHub account renamed from christianmacion26 to christianmacion.
+// Live URL = https://christianmacion.github.io/portfolio/.
 // CF Pages mirror at christianmacion-portfolio.pages.dev has been DELETED
 // (per Owner directive: "we just need the live site. and in GH").
 // The CF_PAGES detection branch is no longer reachable — kept as a safety
 // valve for local dev, but never set in any CI/CD path.
-const SITE = 'https://christianmacion26.github.io';
+const SITE = 'https://christianmacion.github.io';
 // 2026-08-09 : BASE_PATH is env-driven so the same repo can build for:
 //   - GH Pages production (BASE_PATH=/portfolio, default)
 //   - Local dev + Lighthouse CI (BASE_PATH=/, no prefix)
