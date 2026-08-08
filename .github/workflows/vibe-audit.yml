@@ -62,7 +62,7 @@ jobs:
           cache: npm
 
       - name: Install Python (audit tool is Python)
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: "3.12"
 
