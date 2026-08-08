@@ -21,12 +21,18 @@ import type { FeatureCollection, Geometry } from 'geojson';
 import type { Topology } from 'topojson-specification';
 import { loadGdelt, type GdeltEvent } from '@utils/gdelt-client';
 import { loadMarketTicksWithMeta, type MarketTick } from '@utils/market-ticks';
+import { CITIES, markerVisual, cityLocalTime, type CityPin, type CityLevel } from '@data/cities';
 
 // === Constants ========================================================
 const ROTATION_PERIOD_MS = 90_000; // one full rotation = 90s
 const PIN_LIFETIME_MS = 30_000; // pins fade after 30s
-const TICKER_MAX_ROWS = 7; // visible ticker rows
+const TICKER_MAX_ROWS = 9; // visible ticker rows
 const GLOBE_SIZE = 360; // SVG viewBox width/height (square)
+// AMBER token used by pins + ring strokes. Mirrored from tokens-v6.13.css
+// (--c-amber) so the pin color stays in sync if the palette ever evolves.
+const AMBER = '#B45309';
+const INK_3 = '#666666'; // ring stroke + label text
+const LABEL_BG = '#FAFAFA'; // matches modal --c-bg
 
 // === Type contracts ===================================================
 interface WorldViewRefs {
@@ -38,6 +44,18 @@ interface WorldViewRefs {
   syncGdelt: HTMLElement;
   syncCoinGecko: HTMLElement;
   syncYahoo: HTMLElement;
+  regimeChip: HTMLElement | null;
+  provenance: HTMLElement | null;
+}
+
+// === Venue pin (persistent) ============================================
+interface VenuePin {
+  el: SVGGElement;
+  lat: number;
+  lon: number;
+  level: CityLevel;
+  city: string;
+  venue: string;
 }
 
 // === Globe renderer ===================================================
@@ -57,10 +75,14 @@ class Globe {
   private landGroup: SVGGElement;
   private graticuleGroup: SVGGElement;
   private pinGroup: SVGGElement;
+  private venueGroup: SVGGElement;
+  private labelGroup: SVGGElement;
   private pins = new Map<string, { el: SVGCircleElement; born: number; lat: number; lon: number }>();
+  private venues = new Map<string, VenuePin>();
   private d3: any = null;
   private topoFeature: any = null;
   private cachedFc: FeatureCollection<Geometry> | null = null;
+  private hoveredVenue: string | null = null;
 
   constructor(svg: SVGSVGElement, d3: any, topoFeature: any) {
     this.svg = svg;
@@ -120,6 +142,17 @@ class Globe {
     this.pinGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
     this.pinGroup.setAttribute('class', 'wv-globe__pins');
     this.svg.appendChild(this.pinGroup);
+
+    // Venue markers (L1/L2/L3) live below the transient GDELT pins so
+    // event pulses render on top. Hover labels render in their own group
+    // above everything else so the city name always wins the z-fight.
+    this.venueGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    this.venueGroup.setAttribute('class', 'wv-globe__venues');
+    this.svg.appendChild(this.venueGroup);
+
+    this.labelGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    this.labelGroup.setAttribute('class', 'wv-globe__labels');
+    this.svg.appendChild(this.labelGroup);
 
     // Drag to rotate (improves UX; does not interfere with scroll on modal body).
     let dragging = false;
@@ -254,6 +287,7 @@ class Globe {
       }
     }
     this.renderPins();
+    this.renderVenues();
   }
 
   /** Inject the loaded FeatureCollection for re-projection on each frame. */
@@ -267,9 +301,12 @@ class Globe {
     const loop = (t: number) => {
       this.tick(t);
       this.renderPins();
-      // Re-frame land every ~6 frames (~100ms) to keep costs down.
+      // Re-frame land + venues every ~6 frames (~100ms) to keep costs down.
       if (this.cachedFc && Math.floor(t / 100) !== Math.floor((t - 16) / 100)) {
         this.reframe();
+      } else if (!this.cachedFc) {
+        // Even without the topology loaded we still re-project venues.
+        this.renderVenues();
       }
       this.rafHandle = requestAnimationFrame(loop);
     };
@@ -289,6 +326,138 @@ class Globe {
       this.addPin(ev.id, ev.lat, ev.lon, `${ev.title} (${ev.city})`);
     }
   }
+
+  /** Drop a persistent L1/L2/L3 venue marker (12 baseline cities).
+   *  Persistent markers never age out. Visual differentiation per RFC
+   *  §5.1: L1 = 3px solid, L2 = 5px + 1 ring, L3 = 7px + 2 rings.
+   *  Marker is amber on the cream globe, with a hairline ink-3 ring for
+   *  contrast against bright ocean areas. */
+  addVenue(city: CityPin): void {
+    if (this.venues.has(city.id)) return;
+    const visual = markerVisual(city.level);
+    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    g.setAttribute('class', `wv-globe__venue wv-globe__venue--${city.level.toLowerCase()}`);
+    g.setAttribute('data-venue-id', city.id);
+    g.setAttribute('transform', 'translate(0 0)');
+    // Concentric rings drawn first so the solid dot renders on top.
+    for (let i = visual.rings; i >= 1; i--) {
+      const ring = document.createElementNS('http://www.w3.org/2000.svg', 'circle');
+      const ringR = visual.radius + i * 2.5;
+      ring.setAttribute('r', String(ringR));
+      ring.setAttribute('fill', 'none');
+      ring.setAttribute('stroke', AMBER);
+      ring.setAttribute('stroke-width', '0.6');
+      ring.setAttribute('stroke-opacity', String(Math.max(0.35, 0.85 - i * 0.25)));
+      g.appendChild(ring);
+    }
+    const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    dot.setAttribute('r', String(visual.radius));
+    dot.setAttribute('fill', AMBER);
+    dot.setAttribute('stroke', LABEL_BG);
+    dot.setAttribute('stroke-width', '0.8');
+    g.appendChild(dot);
+    // Tooltip for screen readers : city · venue · level · local time.
+    // Refreshed every 60s on the parent group's data attribute; cheap.
+    const title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+    title.textContent = `${city.city} · ${city.venue} · ${city.level}`;
+    g.appendChild(title);
+    this.venueGroup.appendChild(g);
+    this.venues.set(city.id, { el: g, lat: city.lat, lon: city.lon, level: city.level, city: city.city, venue: city.venue });
+
+    // Hover wiring : show city label group. Use pointerover/out on the
+    // venue group (not the dot) so the entire marker is the hit area.
+    g.addEventListener('pointerenter', () => {
+      this.hoveredVenue = city.id;
+      this.renderLabel();
+    });
+    g.addEventListener('pointerleave', () => {
+      if (this.hoveredVenue === city.id) {
+        this.hoveredVenue = null;
+        this.renderLabel();
+      }
+    });
+  }
+
+  /** Replace the entire venue set with a fresh array. Idempotent. */
+  replaceVenues(cities: readonly CityPin[]): void {
+    for (const [, v] of this.venues) v.el.remove();
+    this.venues.clear();
+    for (const c of cities) this.addVenue(c);
+    this.renderVenues();
+  }
+
+  /** Project all venue markers onto the visible disc; hide those on the
+   *  far side. Called by reframe() so labels + rings track rotation. */
+  renderVenues(): void {
+    const proj = this.path.projection();
+    if (!proj) return;
+    for (const [id, v] of this.venues) {
+      const coord = proj([v.lon, v.lat]);
+      const visible = coord && !isNaN(coord[0]) && !isNaN(coord[1]);
+      v.el.setAttribute('transform', visible ? `translate(${coord![0]} ${coord![1]})` : 'translate(-9999 -9999)');
+      // When the marker is on the far side of the disc (behind the
+      // sphere), the projection still produces a coord; dim it via opacity
+      // by checking whether the dot is occluded by the centrepoint.
+      if (visible) {
+        const dx = coord![0] - GLOBE_SIZE / 2;
+        const dy = coord![1] - GLOBE_SIZE / 2;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const radius = GLOBE_SIZE / 2 - 6;
+        const front = dist < radius * 0.85;
+        v.el.setAttribute('opacity', front ? '1' : '0.35');
+        if (id === this.hoveredVenue) this.renderLabel();
+      } else {
+        v.el.setAttribute('opacity', '0');
+      }
+    }
+  }
+
+  /** Render the hover label group (city + venue + L chip + local time). */
+  renderLabel(): void {
+    this.labelGroup.replaceChildren();
+    if (!this.hoveredVenue) return;
+    const v = this.venues.get(this.hoveredVenue);
+    if (!v) return;
+    const city = CITIES.find((c) => c.id === this.hoveredVenue);
+    if (!city) return;
+    const proj = this.path.projection();
+    if (!proj) return;
+    const coord = proj([v.lon, v.lat]);
+    if (!coord || isNaN(coord[0])) return;
+    const x = coord[0];
+    const y = coord[1] - 16; // float above the dot
+    // Background plate
+    const pad = 4;
+    const lines = [
+      `${v.city.toUpperCase()} · ${v.venue}`,
+      `${v.level} · ${cityLocalTime(city)} LOCAL · UTC${city.utcOffset >= 0 ? '+' : ''}${city.utcOffset}`,
+    ];
+    const charW = 5.4; // approximate mono glyph width at 10px
+    const lineH = 12;
+    const width = Math.max(...lines.map((l) => l.length * charW)) + pad * 2;
+    const height = lines.length * lineH + pad * 2 - 2;
+    const plate = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    plate.setAttribute('x', String(x - width / 2));
+    plate.setAttribute('y', String(y - height));
+    plate.setAttribute('width', String(width));
+    plate.setAttribute('height', String(height));
+    plate.setAttribute('fill', LABEL_BG);
+    plate.setAttribute('stroke', AMBER);
+    plate.setAttribute('stroke-width', '0.6');
+    this.labelGroup.appendChild(plate);
+    lines.forEach((text, i) => {
+      const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      t.setAttribute('x', String(x));
+      t.setAttribute('y', String(y - height + pad + lineH * (i + 1) - 3));
+      t.setAttribute('text-anchor', 'middle');
+      t.setAttribute('font-family', 'ui-monospace, SFMono-Regular, Menlo, monospace');
+      t.setAttribute('font-size', '9');
+      t.setAttribute('letter-spacing', '0.06em');
+      t.setAttribute('fill', i === 0 ? INK_3 : AMBER);
+      t.textContent = text;
+      this.labelGroup.appendChild(t);
+    });
+  }
 }
 
 // === Ticker scheduler =================================================
@@ -298,11 +467,12 @@ class Ticker {
   private ticks: MarketTick[] = [];
   private refreshTimer = 0;
   private gdeltTimer = 0;
+  private regimeChip: HTMLElement | null = null;
   constructor(list: HTMLUListElement) {
     this.list = list;
   }
 
-  private row(timestamp: string, source: string, region: string, headline: string, badge?: string): HTMLLIElement {
+  private row(timestamp: string, source: string, region: string, headline: string, signal: string, badge?: string): HTMLLIElement {
     const li = document.createElement('li');
     li.className = 'wv-ticker__row';
     li.setAttribute('role', 'listitem');
@@ -315,10 +485,13 @@ class Ticker {
     const r = document.createElement('span');
     r.className = 'wv-ticker__region mono';
     r.textContent = region;
+    const sig = document.createElement('span');
+    sig.className = 'wv-ticker__signal mono';
+    sig.textContent = signal;
     const h = document.createElement('span');
     h.className = 'wv-ticker__head';
     h.textContent = headline;
-    li.append(t, s, r, h);
+    li.append(t, s, r, sig, h);
     if (badge) {
       const b = document.createElement('span');
       const lvl = badge.toLowerCase();
@@ -330,32 +503,68 @@ class Ticker {
   }
 
   private render(): void {
-    const items: { ts: string; src: string; region: string; head: string; badge?: string }[] = [];
+    const items: { ts: string; src: string; region: string; head: string; signal: string; badge?: string }[] = [];
     for (const ev of this.events) {
+      // GDELT rows read as alpha signals: critical = L3 with HIGH-conviction tag,
+      // moderate = L2 with NEUTRAL, mild = L1 with LOW. Headline is the
+      // event title; signal column carries the regime tag.
+      const tag = ev.severity === 'critical' ? 'HIGH' : ev.severity === 'moderate' ? 'NEUT' : 'LOW';
       items.push({
         ts: ev.timestamp,
         src: 'GDELT',
         region: ev.city.slice(0, 12).toUpperCase(),
         head: ev.title,
+        signal: tag,
         badge: ev.severity === 'critical' ? 'L3' : ev.severity === 'moderate' ? 'L2' : 'L1',
       });
     }
     for (const t of this.ticks) {
+      // TICK rows show the price + changePct as headline; signal column
+      // shows the direction. Mapping: ▲ → LONG, ▼ → SHORT. The 'tag'
+      // (RSI/MA/volume) is reserved for future research overlays.
       items.push({
         ts: t.timestamp,
         src: 'TICK',
         region: t.symbol,
         head:
           t.price.toLocaleString('en-US', { maximumFractionDigits: 4 }) +
-          (t.changePct >= 0 ? ' ▲ +' : ' ▼ ') +
-          Math.abs(t.changePct).toFixed(2) +
+          ' · ' +
+          (t.changePct >= 0 ? '+' : '') +
+          t.changePct.toFixed(2) +
           '%',
+        signal: t.changePct >= 0 ? '▲ LONG' : '▼ SHORT',
         badge: t.level,
       });
     }
     items.sort((a, b) => (a.ts < b.ts ? 1 : a.ts > b.ts ? -1 : 0));
     const visible = items.slice(0, TICKER_MAX_ROWS);
-    this.list.replaceChildren(...visible.map((v) => this.row(v.ts, v.src, v.region, v.head, v.badge)));
+    this.list.replaceChildren(...visible.map((v) => this.row(v.ts, v.src, v.region, v.head, v.signal, v.badge)));
+    // Update the regime chip in the footer on every render so it tracks
+    // the live distribution. Cheap; runs on the same cadence as render().
+    this.computeRegime();
+  }
+
+  /** Compute the dominant regime from the tick distribution : green-bar
+   *  ratio of the most recent N ticks maps to RISK-ON / NEUTRAL / RISK-OFF.
+   *  N = 12 (covers a 6-min window at 30s refresh). */
+  private computeRegime(): void {
+    if (!this.regimeChip) return;
+    const window = this.ticks.slice(0, 12);
+    if (window.length === 0) {
+      this.regimeChip.textContent = 'NEUTRAL';
+      this.regimeChip.setAttribute('data-regime', 'neutral');
+      return;
+    }
+    const green = window.filter((t) => t.changePct > 0).length;
+    const ratio = green / window.length;
+    let label: string, attr: string;
+    if (ratio >= 0.6) { label = 'RISK-ON';  attr = 'on'; }
+    else if (ratio <= 0.4) { label = 'RISK-OFF'; attr = 'off'; }
+    else { label = 'NEUTRAL'; attr = 'neutral'; }
+    const avg = window.reduce((s, t) => s + t.changePct, 0) / window.length;
+    const sign = avg >= 0 ? '+' : '';
+    this.regimeChip.textContent = `${label} · ${window.length} ticks · avg ${sign}${avg.toFixed(2)}%`;
+    this.regimeChip.setAttribute('data-regime', attr);
   }
 
   async refreshGlobePins(globe: Globe): Promise<void> {
@@ -392,7 +601,8 @@ class Ticker {
     target.textContent = iso ? iso.slice(11, 16) + 'Z' : '--:--Z';
   }
 
-  start(globe: Globe, status: HTMLElement): void {
+  start(globe: Globe, status: HTMLElement, regimeChip: HTMLElement | null = null): void {
+    this.regimeChip = regimeChip;
     void this.refreshGlobePins(globe).then(() => {
       status.textContent = 'last sync ' + new Date().toISOString().slice(11, 19) + 'Z';
       this.paintSync(this.syncGdelt, new Date().toISOString());
@@ -475,11 +685,17 @@ async function openModal(): Promise<void> {
     void activeGlobe.loadLand();
   }
   activeGlobe.start();
+  // v13.1.4 Phase 1 showcase : seed the 12 L1/L2/L3 venue markers at open
+  // so the globe is never empty. The venues are persistent (no
+  // PIN_LIFETIME_MS fade) and rendered with size + ring differentiation
+  // per RFC §5.1. GDELT events drop on top as transient pins (existing
+  // behavior via Ticker.refreshGlobePins).
+  activeGlobe.replaceVenues(CITIES);
   if (!activeTicker) {
     activeTicker = new Ticker(activeRefs.tickerList);
   }
-  activeTicker.start(activeGlobe, activeRefs.status);
-  activeRefs.hint.textContent = 'GLobe auto-rotates · drag to pan · hover pauses';
+  activeTicker.start(activeGlobe, activeRefs.status, activeRefs.regimeChip);
+  activeRefs.hint.textContent = 'globe auto-rotates · drag to pan · hover pins for venue · 12 venues L1/L2/L3';
 }
 
 function closeModal(): void {
@@ -539,11 +755,12 @@ function init(): void {
   const syncGdelt = document.querySelector<HTMLElement>('[data-worldview-sync-gdelt]');
   const syncCoinGecko = document.querySelector<HTMLElement>('[data-worldview-sync-coingecko]');
   const syncYahoo = document.querySelector<HTMLElement>('[data-worldview-sync-yahoo]');
-  // v12.W4 LIVE DATA TERMINAL : root + status are the only required
-  // selectors. svg / tickerList / hint are optional : when absent, the
-  // open/close + last-sync stamp logic still runs. The previous globe +
-  // GDELT ticker content has been replaced with the AI History Timeline
-  // + chrome marquee; the script is now a thin status-bar refresher.
+  const regimeChip = document.querySelector<HTMLElement>('[data-worldview-regime]');
+  const provenance = document.querySelector<HTMLElement>('[data-worldview-provenance]');
+  // v13.1.4 Phase 1 globe : root + status are required selectors; svg +
+  // tickerList are optional (when absent, the open/close + status logic
+  // still runs but the globe does not render). hint + sync* + regimeChip
+  // + provenance are best-effort : the script no-ops on missing targets.
   if (!root || !status) return;
 
   // Tick the last-sync stamp every 30s while the modal is open so the
@@ -576,6 +793,8 @@ function init(): void {
     syncGdelt: syncGdelt ?? status,
     syncCoinGecko: syncCoinGecko ?? status,
     syncYahoo: syncYahoo ?? status,
+    regimeChip,
+    provenance,
   });
 
   // Wire the sync timer to the modal lifecycle. We piggy-back on

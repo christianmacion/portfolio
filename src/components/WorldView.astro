@@ -1,6 +1,6 @@
 ---
 /**
- * WorldView.astro : v12.W4 LIVE DATA TERMINAL.
+ * WorldView.astro : v13.1.4 PHASE 1 GLOBE.
  *
  * Opens on ⌘J / Ctrl+J from any page (capture-phase keydown registered
  * in worldview.client.ts). Modal sibling of CommandPalette.astro, same
@@ -8,29 +8,36 @@
  * border + 2px amber top rule, no halo/glow/gradient, mono + Inter only,
  * WCAG 2.2 AA.
  *
- * v12.W4 : replaced globe + GDELT ticker with the LIVE DATA TERMINAL :
- *   1. AIHistoryTimeline (compact 3-col variant) : the trend-tracking
- *      flagship visual, anchored as the central artifact.
- *   2. ChromeMarquee : the live identity ticker (auto-rotates 40s).
- *   3. Status footer : last-sync HH:MM:SSZ stamp + data-depth legend.
+ * v13.1.4 : Phase 1 of the Globe RFC (see specs/2026-08-09-globe-rfc.md)
+ * activates the rotating earth + L1/L2/L3 markers in the ⌘J modal,
+ * replacing the v12.W4 Live Data Terminal's AIHistoryTimeline payload.
+ *
+ * Layout (two-pane):
+ *   - LEFT  : the rotating globe SVG (360×360 viewBox), pins animate from
+ *             GDELT events. Drag-to-rotate + hover-pause + reduced-motion
+ *             handled by worldview.client.ts.
+ *   - RIGHT : the ticker (L1/L2/L3 market ticks + GDELT events, sorted by
+ *             timestamp, top 7 rows) — the data-feed story.
+ *   - FOOT  : last-sync stamp + L1/L2/L3 legend + refresh cadence.
  *
  * Esc closes. Click outside the panel closes. The script handles all
  * keyboard + click logic; the trigger button below is the canonical
  * event-bus target so any caller can dispatch the modal without
  * importing the script.
+ *
+ * d3-geo + topojson-client are dynamic-imported by worldview.client.ts so
+ * they only load on ⌘J (~25 KB lazy).
  */
-import AIHistoryTimeline from '@components/AIHistoryTimeline.astro';
 import ChromeMarquee from '@components/ChromeMarquee.astro';
 
-// The chrome marquee carries the live ticker identity : each stage of
-// the AI arc gets a slot in the strip so the terminal reads as a
-// "live system" rather than a static brochure.
+// The chrome marquee carries the live ticker identity : it sits above
+// the globe + ticker pair so the terminal reads as a "live system" rather
+// than a static brochure.
 const tickerText =
-  'CHRISTIAN T. MACION · LIVE DATA TERMINAL · ⌘J · ' +
-  'PROMPTS NOV 2022 · SKILLS JUL 2023 · AGENTS DEC 2023 · ' +
-  'HARNESS APR 2024 · LOOPS SEP 2024 · GRAPHS MAR 2025 · ' +
-  'OFFICES Q4 2025 · 11 MONTHS AHEAD · 7 STAGES · 112 AGENTS NOW · ' +
-  '2022 TO 2025 ·';
+  'CHRISTIAN T. MACION · LIVE COVERAGE · L1 / L2 / L3 · ⌘J · ' +
+  '12 VENUES · 5 CONTINENTS · UTC+8 HOME BASE · ' +
+  'GDELT 15-MIN · MARKET TICKS 30-SEC · DRAG TO ROTATE · HOVER PAUSES · ' +
+  'PREFERS-REDUCED-MOTION STOPS ROTATION ·';
 
 // Last-sync stamp is computed server-side at build time so the static
 // HTML carries an honest stamp even before the client-side scheduler
@@ -64,7 +71,7 @@ const buildStamp = new Date().toISOString().slice(11, 19) + 'Z';
   ></button>
   <div class="wv__panel" role="document">
     <header class="wv__header">
-      <p id="wv-title" class="wv__title mono">LIVE DATA TERMINAL · ⌘J</p>
+      <p id="wv-title" class="wv__title mono">LIVE COVERAGE · L1 / L2 / L3 · ⌘J</p>
       <button
         type="button"
         class="wv__close"
@@ -81,20 +88,38 @@ const buildStamp = new Date().toISOString().slice(11, 19) + 'Z';
       trailing="live ticker"
     />
 
-    <section class="wv__timeline-wrap" aria-labelledby="wv-timeline-label">
-      <h2 id="wv-timeline-label" class="wv__eyebrow mono">AI HISTORY · 6 STAGES</h2>
-      <AIHistoryTimeline
-        variant="compact"
-        chip="AI · HISTORY · 2022 TO 2025"
-        title="Always up to trend. Two months ahead."
-        lede=""
-      />
+    {/* v13.1.4 Phase 1 : two-pane globe + ticker layout. The SVG is the
+         surface that worldview.client.ts populates with the rotating
+         earth + L1/L2/L3 markers. The ul[data-worldview-ticker] is the
+         data-feed list populated by the Ticker scheduler. The hint
+         paragraph below is an aria-live region for screen-reader users. */}
+    <section class="wv__globe-wrap" aria-labelledby="wv-globe-label">
+      <h2 id="wv-globe-label" class="wv__eyebrow mono">LIVE COVERAGE · L1 / L2 / L3</h2>
+      <div class="wv__panes">
+        <div class="wv__globe-pane">
+          <svg
+            data-worldview-svg
+            class="wv-globe"
+            viewBox="0 0 360 360"
+            preserveAspectRatio="xMidYMid meet"
+            role="img"
+            aria-label="Live coverage globe. 12 venues across 5 continents."
+          ></svg>
+          <p class="wv__globe-hint mono" data-worldview-hint aria-live="polite">drag to rotate · hover pauses</p>
+        </div>
+        <div class="wv__ticker-pane" aria-labelledby="wv-ticker-label">
+          <h3 id="wv-ticker-label" class="wv__ticker-label mono">TICKER</h3>
+          <ul class="wv__ticker" data-worldview-ticker role="list"></ul>
+        </div>
+      </div>
     </section>
 
     <footer class="wv__footer mono">
       <span class="wv__legend" data-worldview-status
         >last sync {buildStamp}</span
       >
+      <span class="wv__sep" aria-hidden="true">·</span>
+      <span class="wv__legend wv__legend--regime" data-worldview-regime data-regime="neutral">NEUTRAL</span>
       <span class="wv__sep" aria-hidden="true">·</span>
       <span class="wv__legend">L1 · L2 · L3</span>
       <span class="wv__sep" aria-hidden="true">·</span>
@@ -103,15 +128,26 @@ const buildStamp = new Date().toISOString().slice(11, 19) + 'Z';
       <span class="wv__legend wv__legend--src">
         Clock <span data-worldview-sync-yahoo>{buildStamp}</span>
       </span>
+      <span class="wv__sep" aria-hidden="true">·</span>
+      <span class="wv__legend">
+        GDELT <span data-worldview-sync-gdelt>{buildStamp}</span>
+      </span>
+      <span class="wv__sep" aria-hidden="true">·</span>
+      <span class="wv__legend">
+        CoinGecko <span data-worldview-sync-coingecko>{buildStamp}</span>
+      </span>
     </footer>
+
+    {/* v13.1.4 Phase 1 showcase : provenance strip just above the footer
+         so visitors read the data plumbing as ground truth. Yahoo 6 +
+         CoinGecko 4 + ECB FX + GDELT 15m. Mono, hairline, 9px. */}
+    <p class="wv__provenance mono" data-worldview-provenance>
+      data · Yahoo 6 + CoinGecko 4 + ECB FX + GDELT 15m · L1 = top-of-book · L2 = consolidated tape · L3 = full depth · 12 venues · 5 continents · UTC+8 home base
+    </p>
 
     {/* Legacy data-attribute targets preserved so the existing
          worldview.client.ts script can still bind (no-op when
          the corresponding selectors are absent). */}
-    <span hidden data-worldview-svg aria-hidden="true"></span>
-    <ul hidden data-worldview-ticker aria-hidden="true"></ul>
-    <p hidden data-worldview-hint aria-hidden="true">live</p>
-    <span hidden data-worldview-sync-gdelt aria-hidden="true"></span>
     <span hidden data-worldview-sync-coingecko aria-hidden="true"></span>
   </div>
 </div>
@@ -205,8 +241,171 @@ const buildStamp = new Date().toISOString().slice(11, 19) + 'Z';
     min-height: 0;
   }
 
+  /* v13.1.4 Phase 1 : two-pane globe + ticker layout. Globe sits in a
+     square pane (GLOBE_SIZE = 360), ticker fills the remaining width.
+     On viewports < 720px the panes stack vertically. */
+  .wv__globe-wrap {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    border-bottom: 1px solid var(--c-rule);
+    overflow: hidden;
+  }
+  .wv__panes {
+    display: grid;
+    grid-template-columns: minmax(260px, 380px) 1fr;
+    gap: 0;
+    flex: 1;
+    min-height: 0;
+  }
+  .wv__globe-pane {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 16px 14px;
+    border-right: 1px solid var(--c-rule);
+    background: var(--c-bg);
+  }
+  .wv-globe {
+    width: 100%;
+    max-width: 360px;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    display: block;
+  }
+  .wv__globe-hint {
+    margin: 0;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--c-ink-3);
+    text-align: center;
+  }
+  .wv__ticker-pane {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    padding: 12px 14px 14px;
+    overflow: hidden;
+  }
+  .wv__ticker-label {
+    margin: 0 0 8px;
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    color: var(--c-ink-3);
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .wv__ticker {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    overflow-y: auto;
+    min-height: 0;
+    flex: 1;
+  }
+  /* Ticker row classes referenced by worldview.client.ts Ticker.row().
+     The row is a 5-column grid : time | source | symbol | signal | badge.
+     Headline (price + %) lives in the signal column instead, keeping
+     the headline cell as a free-text carry-over for GDELT event titles
+     (which can be longer than the symbol cell allows). */
+  :global(.wv-ticker__row) {
+    display: grid;
+    grid-template-columns: 60px 44px 60px 64px auto 28px;
+    gap: 8px;
+    align-items: center;
+    padding: 5px 8px;
+    border-bottom: 1px solid var(--c-rule);
+    font-size: 11px;
+    line-height: 1.35;
+    color: var(--c-ink);
+  }
+  :global(.wv-ticker__time),
+  :global(.wv-ticker__src),
+  :global(.wv-ticker__region),
+  :global(.wv-ticker__signal) {
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    color: var(--c-ink-2);
+  }
+  :global(.wv-ticker__src) {
+    color: var(--c-amber);
+  }
+  :global(.wv-ticker__head) {
+    font-family: var(--ff-sans);
+    color: var(--c-ink);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  :global(.wv-ticker__signal) {
+    color: var(--c-amber);
+    font-weight: 600;
+  }
+  :global(.wv-ticker__badge) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    padding: 1px 6px;
+    font-family: var(--ff-mono);
+    font-size: 9.5px;
+    letter-spacing: 0.06em;
+    color: var(--c-amber);
+    background: transparent;
+    border: 1px solid var(--c-amber);
+    border-radius: 2px;
+  }
+  :global(.wv-ticker__badge--l3) {
+    color: var(--c-bg);
+    background: var(--c-amber);
+  }
+
+  /* Provenance strip sits just above the footer, full-width, hairline
+     rule on top, 9px mono to mirror the chrome contract. No hover, no
+     interaction — pure provenance. */
+  .wv__provenance {
+    margin: 0;
+    padding: 7px 16px 8px;
+    border-top: 1px solid var(--c-rule);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--c-ink-3);
+    background: var(--c-bg-2);
+  }
+  /* Regime chip styling per data-regime attribute. RISK-ON reads in
+     amber (positive conviction), RISK-OFF in deeper amber-decor, NEUTRAL
+     in ink-3. No animation, no pulse — chrome contract is still. */
+  .wv__legend--regime {
+    display: inline-flex;
+    align-items: center;
+    padding: 1px 6px;
+    border: 1px solid var(--c-rule);
+    border-radius: 2px;
+    font-family: var(--ff-mono);
+    letter-spacing: 0.08em;
+    color: var(--c-ink-2);
+  }
+  .wv__legend--regime[data-regime='on'] {
+    color: var(--c-amber);
+    border-color: var(--c-amber);
+  }
+  .wv__legend--regime[data-regime='off'] {
+    color: var(--c-amber-decor);
+    border-color: var(--c-amber-decor);
+  }
+
   .wv__eyebrow {
     margin: 0 0 8px;
+    padding: 8px 16px 0;
     font-size: 9.5px;
     letter-spacing: 0.14em;
     color: var(--c-ink-3);
@@ -249,6 +448,17 @@ const buildStamp = new Date().toISOString().slice(11, 19) + 'Z';
     .wv__panel {
       width: 98vw;
       max-height: 94vh;
+    }
+    .wv__panes {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto;
+    }
+    .wv__globe-pane {
+      border-right: 0;
+      border-bottom: 1px solid var(--c-rule);
+    }
+    .wv-globe {
+      max-width: 240px;
     }
   }
 

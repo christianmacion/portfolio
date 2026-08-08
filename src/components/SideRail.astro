@@ -245,6 +245,45 @@ const ICONS: Record<string, string> = {
           })
         }
       </ul>
+
+      <!-- v13.1.4 : Bryllim-style shortcuts strip. Three rows : ⌘K opens
+           the command palette (cmdk:open event, handled by CommandPalette),
+           ⌘J opens the live data terminal (WorldView modal), ⌘G jumps to
+           the gates lattice on /methodology. Each row is [label][kbd][+][kbd]
+           matching Bryllim's `Ask anything ⌘ + K` register. The kbd badges
+           are decorative : the canonical handlers live in their respective
+           components and in CommandPalette's capture-phase listener. -->
+      <ul class="side-rail__shortcuts" role="list" aria-label="Keyboard shortcuts">
+        <li class="side-rail__shortcut">
+          <span class="side-rail__shortcut-label">Command palette</span>
+          <span class="side-rail__shortcut-keys mono" aria-hidden="true">
+            <kbd class="side-rail__kbd">⌘</kbd>
+            <span class="side-rail__kbd-sep">+</span>
+            <kbd class="side-rail__kbd">K</kbd>
+          </span>
+        </li>
+        <li class="side-rail__shortcut">
+          <span class="side-rail__shortcut-label">Live terminal</span>
+          <span class="side-rail__shortcut-keys mono" aria-hidden="true">
+            <kbd class="side-rail__kbd">⌘</kbd>
+            <span class="side-rail__kbd-sep">+</span>
+            <kbd class="side-rail__kbd">J</kbd>
+          </span>
+        </li>
+        <li class="side-rail__shortcut">
+          <a
+            href={path('/methodology/#gates')}
+            class="side-rail__shortcut-link"
+          >
+            <span class="side-rail__shortcut-label">Gates stack</span>
+            <span class="side-rail__shortcut-keys mono" aria-hidden="true">
+              <kbd class="side-rail__kbd">⌘</kbd>
+              <span class="side-rail__kbd-sep">+</span>
+              <kbd class="side-rail__kbd">G</kbd>
+            </span>
+          </a>
+        </li>
+      </ul>
     </nav>
 
     <!-- v9.10.1 : Search button removed (broken UX: was a "jump to contact"
@@ -542,6 +581,94 @@ const ICONS: Record<string, string> = {
     background: transparent;
   }
 
+  /* v13.1.4 : Bryllim-parity shortcuts strip. Three rows between the
+     tier-2 nav list and the footer block. Each row is [label][kbd][+][kbd]
+     matching Bryllim's "Ask anything ⌘ + K" register. The list is the
+     keyboard-shortcut map; the .side-rail__shortcut-link variant wraps a
+     single row in an anchor for the ⌘G gates stack jump. Rows render at
+     10px mono with hairline top border to separate from the tier-2 list
+     (the existing .side-rail__list--plain above already supplies the bottom
+     hairline; this list's top border re-establishes the divider cleanly). */
+  .side-rail__shortcuts {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 8px 0 0;
+    padding: 10px 12px 8px;
+    list-style: none;
+    border-top: 1px solid var(--rule);
+  }
+  .side-rail__shortcut {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 4px 0;
+    font-size: 10px;
+    color: var(--ink-2);
+  }
+  .side-rail__shortcut-label {
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    color: var(--ink-2);
+  }
+  .side-rail__shortcut-keys {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    line-height: 1;
+    letter-spacing: 0;
+    color: var(--ink-2);
+  }
+  .side-rail__kbd {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    line-height: 1;
+    color: var(--ink);
+    background: var(--bg);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    box-shadow: 0 1px 0 var(--rule);
+  }
+  .side-rail__kbd-sep {
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    color: var(--ink-2);
+    opacity: 0.6;
+    margin: 0 1px;
+  }
+  /* ⌘G wraps its row in an anchor so the gates-stack row is clickable
+     even before the user discovers the hotkey. Hover mirrors the tier-2
+     nav link treatment : color shift to ink + accent underline. */
+  .side-rail__shortcut-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    width: 100%;
+    padding: 4px 0;
+    color: var(--ink-2);
+    text-decoration: none;
+    transition: color var(--transition);
+  }
+  .side-rail__shortcut-link:hover {
+    color: var(--ink);
+  }
+  .side-rail__shortcut-link:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
   /* v9.10.1 : Footer block reduces to socials + email (search removed). */
   .side-rail__foot {
     display: flex;
@@ -735,6 +862,30 @@ const ICONS: Record<string, string> = {
       e.preventDefault();
       e.stopImmediatePropagation();
       document.dispatchEvent(new CustomEvent('cmdk:open'));
+    }
+  });
+
+  /* v13.1.4 : ⌘G / Ctrl+G shortcut. Jumps to the gates-stack section on
+     /methodology. Overrides the macOS "Find Next" default (⌘G) via
+     preventDefault. Capture-phase + stopImmediatePropagation matches the
+     ⌘K handler so a future third-party listener cannot intercept first.
+     When already on /methodology we scroll + focus in place rather than
+     reloading the page (avoids a full document fetch). */
+  document.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'g' && !e.altKey && !e.shiftKey) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      const onMethodology = window.location.pathname.replace(/\/+$/, '') === '/methodology';
+      if (onMethodology) {
+        const el = document.getElementById('gates');
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '-1');
+          (el as HTMLElement).focus({ preventScroll: true });
+        }
+      } else {
+        window.location.assign('/methodology/#gates');
+      }
     }
   });
 
