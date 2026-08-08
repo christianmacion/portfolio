@@ -1213,21 +1213,31 @@ li {
   }
 }
 
-/* === v13.0 · 1024px-centered layout (SideRail deleted) ===
-   Replaces the v9.5 Bryllim side-rail layout grid. The 240px
-   sticky SideRail is removed; content now flows as a single
-   centered column at max-width 1024px. The breakpoint is 760px
-   (was 980px) and only adjusts padding (no grid collapse
-   because there is no grid). */
+/* === v13.0 · SideRail RESTORED : 240px Bryllim-parity left rail ===
+   Re-introduces the v9.5 layout grid (240px rail + 1fr content).
+   Replaces the v13.0 1024px-centered layout that was added when
+   the SideRail was deleted (v12.W5). Breakpoint 980px (was 760px)
+   collapses the rail to a top drawer per SideRail.astro. */
+.layout-grid {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 0;
+  min-height: 100vh;
+  align-items: stretch;
+}
 .layout-main {
-  max-width: 1024px;
-  margin: 0 auto;
-  padding: 32px 24px 64px;
+  padding: 32px 48px 64px;
+  max-width: 1080px;
+  width: 100%;
   box-sizing: border-box;
 }
-@media (max-width: 760px) {
+@media (max-width: 980px) {
+  .layout-grid {
+    grid-template-columns: 1fr;
+  }
   .layout-main {
-    padding: 24px 16px 48px;
+    padding: 56px 20px 48px;
+    max-width: 100%;
   }
 }
 

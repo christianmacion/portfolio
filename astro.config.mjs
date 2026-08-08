@@ -10,7 +10,11 @@ import sitemap from '@astrojs/sitemap';
 // The CF_PAGES detection branch is no longer reachable — kept as a safety
 // valve for local dev, but never set in any CI/CD path.
 const SITE = 'https://christianmacion26.github.io';
-const BASE_PATH = '/portfolio';
+// 2026-08-09 : BASE_PATH is env-driven so the same repo can build for:
+//   - GH Pages production (BASE_PATH=/portfolio, default)
+//   - Local dev + Lighthouse CI (BASE_PATH=/, no prefix)
+// The default stays /portfolio so production deploy is unchanged.
+const BASE_PATH = process.env.BASE_PATH || '/portfolio';
 
 // 2026-08-08 — Astro hybrid mode (SSR opt-in for personalization pages).
 // `output: 'static'` is the Astro 5+/7 equivalent of the legacy `output: 'hybrid'`:

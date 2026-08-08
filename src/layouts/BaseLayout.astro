@@ -19,7 +19,7 @@ import '@styles/global.css';
 import '@styles/fonts.css';
 import '@styles/print.css';
 
-import TopNav from '@components/TopNav.astro';
+import SideRail from '@components/SideRail.astro';
 import CommandPalette from '@components/CommandPalette.astro';
 import WorldView from '@components/WorldView.astro';
 import { profile } from '@utils/profile';
@@ -173,9 +173,6 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
   <body class={bodyClass}>
     <a href="#main" class="skip-link" aria-label="Skip to main content">Skip to main content</a>
 
-    {/* v12.W5 : BRYLLIM TOP NAV replaces v9.5 left SideRail. */}
-    {chrome !== 'none' && <TopNav />}
-
     {chrome === 'full' && (
       <link
         rel="preload"
@@ -190,11 +187,15 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
       </noscript>
     )}
 
-    {/* v13.0 : content wrapped in 1024px max-width centered container.
-       No layout-grid / layout-rail / layout-main (SideRail era). */}
-    <main id="main" class="layout-main">
-      <slot />
-    </main>
+    {/* v13.0 : BRYLLIM SIDE-RAIL grid restored.
+       240px sticky left rail + flex content (mobile <980px collapses
+       the rail to a top drawer per SideRail.astro). */}
+    <div class="layout-grid">
+      {chrome !== 'none' && <SideRail />}
+      <main id="main" class="layout-main">
+        <slot />
+      </main>
+    </div>
 
     <CommandPalette />
     <WorldView />

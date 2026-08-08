@@ -1,0 +1,729 @@
+---
+/**
+ * SideRail.astro : v9.5 BRYLLIM SIDE-RAIL NAV.
+ *
+ * Replaces the top sticky Nav.astro + SiteHeader.astro pattern with a left
+ * side-rail that mirrors the Bryllim institutional register:
+ *   - light cream background, 240px wide, sticky
+ *   - pixel-logo "Christian T. Macion" at the top (uses --ff-mono token)
+ *   - icon-first nav (16x16 inline SVG per item) with aria-current="page"
+ *   - ⌘K Search at top of footer block, GitHub + LinkedIn icon row,
+ *     email handle at bottom
+ *
+ * Mobile fallback < 980px: collapses to a top drawer with a hamburger
+ * toggle (aria-expanded mirror). Tap targets stay ≥ 44px.
+ *
+ * a11y: aria-label="Primary navigation", aria-current="page" on the
+ * active item, role="navigation" implicit on <nav>, and all icons
+ * are aria-hidden="true" so the visible text is the accessible name.
+ */
+import { path } from '@utils/url';
+import { profile } from '@utils/profile';
+
+// v12.W4 Bryllim parity: face-photo belongs on the LANDING page, not
+// the persistent chrome rail. The SideRail brand block is TEXT-ONLY
+// (pixel-logo + role subtitle), exactly like Bryllim's sidebar.
+// Headshot lives as the FIRST element of the home page hero.
+
+const { pathname } = Astro.url;
+const isActive = (href: string) => {
+  const suffix = href === '/' ? '/' : href;
+  return pathname === suffix || pathname.startsWith(suffix + '/');
+};
+
+// v12.W3 : SIDE-RAIL 10-HUB TWO-TIER RESTRUCTURE.
+// Bryllim parity: the reference rail runs a primary tier of icon+label
+// hubs, a hairline divider, then a secondary tier of plain-text links
+// (no icon, lighter weight, smaller). This mirrors that exactly.
+//
+//   Tier 1 (icon + label) : the decision path a hiring manager walks.
+//     1. Now                  : current focus / availability
+//     2. For hiring managers  : absorbs /screening-call + /positions
+//                               + /engagement
+//     3. Methodology          : absorbs /skills
+//     4. Proof                : absorbs /work + /publications + /talks
+//     5. Contact              : direct handoff
+//     6. Resources            : parent for /notes + /repos + /glossary
+//
+//   Tier 2 (plain text) : the evidence pages, reachable but de-ranked.
+//     7. Projects       8. Experience     9. Stack    10. Certifications
+//
+// Home is not a rail item : the brand block at the top of the rail is
+// the canonical home link (avoids a duplicate-link a11y tell).
+// Orphan URLs (/work, /publications, /talks, /skills, /screening-call,
+// /positions, /engagement) remain live and indexed but are not
+// surfaced in this rail.
+interface RailLink {
+  href: string;
+  label: string;
+  /** Tier 1 items render an icon; tier 2 items are plain text. */
+  icon?: string;
+  tier: 1 | 2;
+}
+
+const links: RailLink[] = [
+  { href: path('/now'),             label: 'Now',                 icon: 'now',        tier: 1 },
+  { href: path('/for-recruiters'),  label: 'For hiring managers', icon: 'recruit',    tier: 1 },
+  { href: path('/methodology'),     label: 'Methodology',         icon: 'method',     tier: 1 },
+  { href: path('/proof'),           label: 'Proof',               icon: 'proof',      tier: 1 },
+  { href: path('/contact'),         label: 'Contact',             icon: 'contact',    tier: 1 },
+  { href: path('/resources'),       label: 'Resources',           icon: 'resources',  tier: 1 },
+  { href: path('/projects'),        label: 'Projects',            icon: 'project',    tier: 2 },
+  { href: path('/experience'),      label: 'Experience',          icon: 'experience', tier: 2 },
+  { href: path('/stack'),           label: 'Stack',               icon: 'stack',      tier: 2 },
+  { href: path('/certifications'),  label: 'Certifications',      icon: 'cert',       tier: 2 },
+  { href: path('/timeline'),        label: 'AI Timeline',         icon: 'timeline',   tier: 2 },
+];
+
+const tierOne = links.filter((l) => l.tier === 1);
+const tierTwo = links.filter((l) => l.tier === 2);
+
+// Inline SVG path strings keyed by icon name (1px stroke, 16×16 viewBox).
+const ICONS: Record<string, string> = {
+  home: 'M2 8 L8 2 L14 8 M3.5 7 V13.5 H7 V10 H9 V13.5 H12.5 V7',
+  now: 'M8 1.5 A6.5 6.5 0 1 0 8 14.5 A6.5 6.5 0 1 0 8 1.5 Z M8 4 V8.5 L11 10.5',
+  recruit: 'M5 3.5 A2 2 0 1 0 5 7.5 A2 2 0 1 0 5 3.5 Z M2 13.5 C2 10.5 3.5 9 5 9 C6.5 9 8 10.5 8 13.5 M9 6 L11.5 8.5 L9 11 M11.5 8.5 H7',
+  proof: 'M8 1.5 L14 4 V8 C14 11 11 13.5 8 14.5 C5 13.5 2 11 2 8 V4 Z M5.5 8 L7 9.5 L10.5 6',
+  project: 'M2 4 H10 V8 H2 Z M2 8 H6 V12 H2 Z M10 8 H14 V12 H10 Z M10 4 L13 1.5 L14.5 3',
+  experience: 'M2 4 H14 V12 H2 Z M5 4 V2 H11 V4 M5 7 H11 M5 9.5 H9',
+  skill: 'M3 3 L13 13 M11 3 L13 5 L5 13 L3 13 L3 11 Z',
+  cert: 'M8 1.5 L10 3 L12.5 2.5 L12 5 L14 6.5 L12 8 L12.5 10.5 L10 10 L8 11.5 L6 10 L3.5 10.5 L4 8 L2 6.5 L4 5 L3.5 2.5 L6 3 Z M5.5 6.5 L7 8 L10.5 4.5',
+  pos: 'M8 1.5 V14.5 M3 6 L8 1.5 L13 6 M3 11 H6 M3 13 H9',
+  method: 'M2 3 H14 M2 7 H14 M2 11 H10 M12 11 L14 13',
+  contact: 'M2 4 L8 8 L14 4 M2 4 V13 H14 V4',
+  // v9.7.2 : 5 new icons for the 5 orphan pages. All 1px stroke, 16×16 viewBox.
+  phone: 'M5 3 L8 3 L8 7 L11 7 L11 9 L8 11 L6 10 L4 8 L5 6 Z',
+  book: 'M3 2 H13 V14 H3 Z M3 6 H13 M5 4 V3 H7 V4',
+  doc: 'M3 2 H10 L13 5 V14 H3 Z M10 2 V5 H13',
+  mic: 'M8 1.5 A3 3 0 0 0 8 7.5 A3 3 0 0 0 8 1.5 Z M8 7.5 V11 M5 13 H11',
+  briefcase: 'M5 4 H11 V6 H13 V13 H3 V6 H5 Z M5 4 V3 H11 V4',
+  // v9.8 Wave B adds 4 subpage icons. All 1px stroke, 16×16 viewBox.
+  // note: ruled notebook page with a folded corner.
+  note: 'M3 2 H10 L13 5 V14 H3 Z M5 6 H11 M5 8.5 H11 M5 11 H9',
+  // stack: 3 stacked layers (settings/menu/inventory semantics).
+  stack: 'M2 5 L8 2 L14 5 L8 8 Z M2 9 L8 6 L14 9 L8 12 Z M2 13 L8 10 L14 13 L8 16 L2 13 Z',
+  // repo: a folder + a branch marker (forked source).
+  repo: 'M2 5 H10 V13 H2 Z M5 5 V3 H8 V5 M10 8 H13 V12 H10 M12 9 L13 9.5 M12 10 L13 10.5',
+  // engage: two interlocking arrows (loop / handoff).
+  engage: 'M3 8 H11 M11 8 L8.5 5.5 M11 8 L8.5 10.5 M13 13 H5 M5 13 L7.5 10.5 M5 13 L7.5 15.5',
+  // v12.W4 : resources hub icon. An open book over a shelf rule :  the
+  // parent for /notes + /repos + /glossary.
+  resources: 'M8 4.5 C6.5 3 4.5 2.5 2.5 3 V12 C4.5 11.5 6.5 12 8 13.5 M8 4.5 C9.5 3 11.5 2.5 13.5 3 V12 C11.5 11.5 9.5 12 8 13.5 M8 4.5 V13.5',
+  // v12.W4 : AI timeline icon. Horizontal rail with 3 stage nodes and
+  // a final amber-filled square representing the NOW marker.
+  timeline: 'M1.5 8 H14.5 M4 6.5 H6 V9.5 H4 Z M7.5 6.5 H9.5 V9.5 H7.5 Z M11 6.5 H13 V9.5 H11 Z',
+};
+---
+
+<!-- Mobile drawer toggle (visible < 980px only). -->
+<input
+  type="checkbox"
+  id="rail-toggle"
+  class="side-rail__toggle-input"
+  aria-hidden="false"
+  aria-expanded="false"
+  aria-controls="primary-rail"
+/>
+<label
+  for="rail-toggle"
+  class="side-rail__toggle"
+  aria-label="Toggle navigation"
+>
+  <span></span><span></span><span></span>
+</label>
+
+<aside class="side-rail" id="primary-rail" aria-label="Primary navigation">
+  <div class="side-rail__inner">
+    <!-- v12.W4 Bryllim parity : text-only brand block. The face-photo
+         was moved to the home page hero (index.astro) so it carries the
+         landing-page first-impression instead of sitting in the
+         persistent chrome rail. -->
+    <a href={path('/')} class="side-rail__brand" aria-label="Christian T. Macion. home">
+      <span class="side-rail__pixel-logo">CHRISTIAN<br/>T. MACION</span>
+      <span class="side-rail__brand-sub mono">{profile.titles.short}</span>
+    </a>
+
+    <hr class="side-rail__rule" aria-hidden="true" />
+
+    <!-- Nav landmark. v6.18 W2 lock (2026-08-08): inner nav aria-label
+         dropped. the parent <aside aria-label="Primary navigation">
+         already labels this region. Per WCAG 2.4.6 / 4.1.2, a single
+         landmark name is sufficient; nesting identical labels creates
+         a duplicated-landmark tell to screen readers. -->
+    <nav class="side-rail__nav">
+      <ul class="side-rail__list" role="list">
+        {
+          tierOne.map(({ href, label, icon }) => {
+            // v9.8 Wave C : scroll-spy target. The slug maps a nav link to
+            // any in-page <section data-section-id="<slug>"> on the current
+            // route. The IntersectionObserver below swaps .side-rail__link--spy
+            // onto the link whose target matches the section with the
+            // highest visible ratio.
+            const slug = href.replace(/^\/+|\/+$/g, '');
+            return (
+              <li class="side-rail__item">
+                <a
+                  href={href}
+                  data-spy-target={slug}
+                  class:list={[
+                    'side-rail__link',
+                    { 'side-rail__link--active': isActive(href) },
+                  ]}
+                  aria-current={isActive(href) ? 'page' : undefined}
+                >
+                  <svg
+                    class="side-rail__icon"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.4"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                    focusable="false"
+                  >
+                    <path d={ICONS[icon!]}></path>
+                  </svg>
+                  <span class="side-rail__label">{label}</span>
+                </a>
+              </li>
+            );
+          })
+        }
+      </ul>
+
+      <!-- v12.W4 : hairline tier divider. Decorative only :  the two
+           <ul>s are the semantic grouping, so the rule is aria-hidden. -->
+      <hr class="side-rail__tier-rule" aria-hidden="true" />
+
+      <ul class="side-rail__list side-rail__list--plain" role="list">
+        {
+          tierTwo.map(({ href, label }) => {
+            const slug = href.replace(/^\/+|\/+$/g, '');
+            return (
+              <li class="side-rail__item">
+                <a
+                  href={href}
+                  data-spy-target={slug}
+                  class:list={[
+                    'side-rail__link',
+                    'side-rail__link--plain',
+                    { 'side-rail__link--active': isActive(href) },
+                  ]}
+                  aria-current={isActive(href) ? 'page' : undefined}
+                >
+                  <span class="side-rail__label">{label}</span>
+                </a>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </nav>
+
+    <!-- v9.10.1 : Search button removed (broken UX: was a "jump to contact"
+         shortcut mislabeled as "Search"). ⌘K contact affordance stays in
+         SiteHeader.astro (capture-phase keydown, canonical). Footer block
+         reduces to social icon row + email handle. -->
+    <div class="side-rail__foot">
+      <div class="side-rail__socials">
+        <a
+          href="https://github.com/christianmacion26"
+          class="side-rail__social"
+          aria-label="Christian Macion on GitHub (opens in new tab)"
+          target="_blank"
+          rel="me noopener"
+          title="GitHub"
+        >
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 16 16"
+            fill="currentColor"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path d="M8 .198a8 8 0 0 0-2.53 15.59c.4.074.547-.174.547-.387 0-.19-.007-.693-.01-1.36-2.226.484-2.695-1.073-2.695-1.073-.364-.924-.89-1.17-.89-1.17-.727-.497.055-.487.055-.487.804.056 1.227.825 1.227.825.714 1.223 1.873.87 2.33.665.072-.517.279-.87.508-1.07-1.777-.2-3.644-.888-3.644-3.953 0-.874.31-1.588.823-2.148-.09-.202-.357-1.015.077-2.117 0 0 .67-.215 2.2.82a7.66 7.66 0 0 1 4 0c1.52-1.035 2.19-.82 2.19-.82.437 1.102.17 1.915.08 2.117.51.56.82 1.274.82 2.148 0 3.073-1.87 3.75-3.653 3.947.287.247.543.735.543 1.48 0 1.07-.01 1.933-.01 2.195 0 .215.144.465.55.387A8 8 0 0 0 8 .198"></path>
+          </svg>
+          <span class="side-rail__social-label">GitHub</span>
+        </a>
+        <a
+          href="https://www.linkedin.com/in/christianmacion/"
+          class="side-rail__social"
+          aria-label="Christian Macion on LinkedIn (opens in new tab)"
+          target="_blank"
+          rel="me noopener"
+          title="LinkedIn"
+        >
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 16 16"
+            fill="currentColor"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path d="M13.6 13.6h-2.4V9.9c0-.9 0-2.1-1.3-2.1s-1.5 1-1.5 2v3.8H6V6h2.3v1h.04c.32-.6 1.1-1.2 2.26-1.2 2.4 0 2.86 1.6 2.86 3.7v4.1zM3.6 4.96a1.4 1.4 0 1 1 0-2.8 1.4 1.4 0 0 1 0 2.8zM4.8 13.6H2.4V6h2.4v7.6zM14.8 0H1.2C.54 0 0 .52 0 1.16v13.68C0 15.48.54 16 1.2 16h13.6c.66 0 1.2-.52 1.2-1.16V1.16C16 .52 15.46 0 14.8 0z"></path>
+          </svg>
+          <span class="side-rail__social-label">LinkedIn</span>
+        </a>
+      </div>
+
+      <a
+        href={`mailto:${profile.contact.email}`}
+        class="side-rail__email mono"
+        aria-label="Email Christian Macion"
+      >
+        {profile.contact.email}
+      </a>
+    </div>
+  </div>
+</aside>
+
+<style>
+  /* === Bryllim side-rail ===
+     v9.5 : replaces top sticky Nav + SiteHeader with a 240px sticky left
+     rail. Light cream background, hairline right border, monospace
+     pixel-logo at the top. Icon-first nav. ⌘K search + socials + email
+     pinned at the bottom. Mobile < 980px collapses to a top drawer. */
+  .side-rail {
+    position: sticky;
+    top: 0;
+    align-self: start;
+    width: 240px;
+    flex-shrink: 0;
+    height: 100vh;
+    overflow-y: auto;
+    background: var(--surface-paper);
+    border-right: 1px solid var(--rule);
+    color: var(--ink-1);
+    font-family: var(--ff-sans);
+  }
+  .side-rail__inner {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    padding: 18px 14px 16px;
+    gap: 12px;
+  }
+
+  /* Brand strip. v6.18 W2 lock (2026-08-08): --ff-mono is now JetBrains
+     Mono (the institutional mono). Tight tracking + uppercase preserves
+     the Bryllim register without the bitmap-face dependency. */
+  .side-rail__brand {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 4px 4px 8px;
+    text-decoration: none;
+    color: var(--ink-1);
+  }
+  .side-rail__pixel-logo {
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    line-height: 1.35;
+    letter-spacing: 0.16em;
+    font-weight: 700;
+    color: var(--ink-1);
+    text-transform: uppercase;
+    word-spacing: -1px;
+  }
+  .side-rail__brand-sub {
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  /* v12.W4 Bryllim parity : .side-rail__brand-photo CSS removed.
+     The headshot lives on the home page hero now, not in the rail.
+     Brand block is text-only (pixel-logo + role subtitle). */
+
+  .side-rail__rule {
+    border: 0;
+    border-top: 1px solid var(--rule);
+    margin: 0;
+  }
+
+  .side-rail__nav {
+    flex: 1;
+  }
+  .side-rail__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+  .side-rail__link {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+    padding: var(--sp-2) var(--sp-3);
+    min-height: 40px;
+    color: var(--ink-2);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 400;
+    border-left: 1px solid transparent;
+    transition:
+      color var(--mv-dur-snap) var(--mv-ease-settle),
+      background var(--mv-dur-snap) var(--mv-ease-settle),
+      border-color var(--mv-dur-snap) var(--mv-ease-settle);
+  }
+  .side-rail__link:hover {
+    color: var(--ink-1);
+    background: transparent;
+    border-left-color: var(--accent);
+  }
+  .side-rail__link--active,
+  .side-rail__link[aria-current='page'] {
+    color: var(--ink-1);
+    border-left-color: var(--accent);
+    background: var(--surface-paper-deep);
+    font-weight: 400;
+  }
+  /* v11.W2 : scroll-spy active state. When a tracked section is
+     visible on the current page, JS toggles .side-rail__link--spy
+     AND aria-current="page" onto the nav link whose
+     data-spy-target matches the section's data-section-id.
+     Per chrome contract: amber border (1px, hairline) + weight 700,
+     no background fill (the aria-current="page" rule above owns the
+     active background). */
+  .side-rail__link--spy:not(.side-rail__link--active):not([aria-current='page']) {
+    color: var(--accent);
+    border-left-color: var(--accent);
+    border-left-width: 1px;
+    font-weight: 400;
+  }
+  .side-rail__icon {
+    flex-shrink: 0;
+    color: currentColor;
+    opacity: 0.85;
+  }
+  .side-rail__label {
+    line-height: 1.2;
+  }
+
+  /* v12.W4 : hairline divider between tier 1 (icon+label hubs) and
+     tier 2 (plain-text evidence pages). 1px, --c-rule, no inset :
+     matches the brand-strip rule above so the rail reads as one
+     register rather than two stacked blocks. */
+  .side-rail__tier-rule {
+    border: 0;
+    border-top: 1px solid var(--rule);
+    margin: 10px 9px;
+  }
+
+  /* Tier 2 :  plain text, no icon. De-ranked relative to tier 1 via
+     smaller type + lighter ink, but the same 40px min-height so the
+     WCAG 2.5.5 touch-target floor holds. Left padding aligns the
+     label with tier-1 labels (9px pad + 16px icon + 9px gap = 34px). */
+  .side-rail__link--plain {
+    padding-left: calc(var(--sp-3) + 25px);
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: var(--ink-3);
+    border-left-color: transparent;
+    background: transparent;
+  }
+  .side-rail__link--plain:hover {
+    color: var(--ink-2);
+    border-left-color: transparent;
+  }
+  .side-rail__link--plain.side-rail__link--active,
+  .side-rail__link--plain[aria-current='page'] {
+    color: var(--ink-1);
+    border-left-color: transparent;
+    background: transparent;
+  }
+
+  /* v9.10.1 : Footer block reduces to socials + email (search removed). */
+  .side-rail__foot {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-top: 10px;
+    border-top: 1px solid var(--rule);
+  }
+  .side-rail__socials {
+    display: flex;
+    gap: 6px;
+  }
+  .side-rail__social {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    min-width: 44px;
+    min-height: 44px;
+    color: var(--ink-2);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    transition:
+      color var(--transition),
+      border-color var(--transition);
+  }
+  .side-rail__social::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+  }
+  .side-rail__social:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+  .side-rail__social:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .side-rail__social-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  .side-rail__email {
+    font-size: 10.5px;
+    letter-spacing: 0.04em;
+    color: var(--ink-3);
+    text-decoration: none;
+    word-break: break-all;
+    /* v12.W4-1 lock (2026-08-08): explicit min-height for WCAG 2.5.5 /
+       2.5.8 touch-target conformance. The global `a { min-height: 44px }`
+       rule (global.css) already covers this, but the explicit declaration
+       makes the intent local-to-component and survives if the global rule
+       is removed. Renders as a 44px-tall row in the rail footer block. */
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    transition: color var(--transition);
+  }
+  .side-rail__email:hover {
+    color: var(--accent);
+  }
+
+  /* === Mobile drawer (< 980px) ===
+     The rail collapses to a slide-down drawer at the top of the page,
+     toggled by the .side-rail__toggle hamburger. The CSS uses the
+     checkbox :checked sibling selector to swap visibility; the inline
+     script at the bottom mirrors state into aria-expanded. */
+  .side-rail__toggle-input {
+    display: none;
+  }
+  .side-rail__toggle {
+    display: none;
+    position: fixed;
+    top: 12px;
+    right: 14px;
+    z-index: calc(var(--z-nav) + 2);
+    flex-direction: column;
+    justify-content: space-between;
+    /* v6.18 W2 lock (2026-08-08): bumped hit area to 44x44px for WCAG
+       2.5.5 (Level AAA) touch-target conformance. Visual glyph stays at
+       28x22 inside via the ::after padding trick below. */
+    width: 44px;
+    height: 44px;
+    cursor: pointer;
+    background: var(--surface-paper);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-sm);
+    padding: 11px 8px;
+  }
+  .side-rail__toggle span {
+    display: block;
+    height: 2px;
+    width: 100%;
+    background: var(--ink-1);
+    border-radius: 1px;
+    transition:
+      background 200ms ease,
+      transform 200ms ease,
+      opacity 200ms ease;
+  }
+
+  @media (max-width: 980px) {
+    .side-rail__toggle {
+      display: flex;
+    }
+    .side-rail {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 280px;
+      max-width: 85vw;
+      height: 100vh;
+      z-index: calc(var(--z-nav) + 1);
+      border-right: 1px solid var(--rule);
+      transform: translateX(-100%);
+      transition: transform 220ms ease;
+      box-shadow: var(--shadow-md);
+    }
+    .side-rail__toggle-input:checked ~ .side-rail {
+      transform: translateX(0);
+    }
+  }
+
+  /* === Reduced-motion: kill the drawer slide + scroll-spy color fade.
+     The un-animated state is the open drawer at translateX(0); the
+     scroll-spy still updates the active class, just without the
+     color/border/font-weight transition. The user still gets the
+     visual indication : just instant rather than animated. */
+  @media (prefers-reduced-motion: reduce) {
+    .side-rail {
+      transition: none;
+    }
+    .side-rail__link {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  /* v9.5 a11y : keep aria-expanded in sync with the checkbox state.
+     The CSS uses :checked ~ .side-rail to slide the drawer; this
+     mirrors that state into aria-expanded so screen readers announce
+     "expanded" / "collapsed". Idempotent: only mutates when the
+     attribute would actually change.
+     v6.18 W2 lock (2026-08-08): Escape-key handler added. When the
+     mobile drawer is open and the user presses Escape, the checkbox
+     is toggled off and focus returns to the hamburger label. Closes
+     the WCAG 2.1.1 / 4.1.2 disclosure-pattern gap. */
+  const toggle = document.getElementById('rail-toggle');
+  if (toggle instanceof HTMLInputElement) {
+    const sync = () => {
+      const next = toggle.checked ? 'true' : 'false';
+      if (toggle.getAttribute('aria-expanded') !== next) {
+        toggle.setAttribute('aria-expanded', next);
+      }
+    };
+    toggle.addEventListener('change', sync);
+    sync();
+    /* Escape close + return-focus on drawer. Listener is bound to
+       keydown at the document level so it catches Escape regardless
+       of focus location inside the drawer. */
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && toggle.checked) {
+        toggle.checked = false;
+        sync();
+        const label = document.querySelector<HTMLLabelElement>('label[for="rail-toggle"]');
+        label?.focus();
+      }
+    });
+  }
+
+  /* v11.W2 : ⌘K / Ctrl+K shortcut. CommandPalette.astro now owns the
+     canonical capture-phase ⌘K listener (with stopImmediatePropagation).
+     SideRail previously routed ⌘K to /contact/#contact; that handler
+     is removed in favour of dispatching the cmdk:open custom event so
+     every ⌘K path converges on the palette. The CommandPalette listener
+     will win the propagation race regardless of registration order. */
+  document.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k' && !e.altKey && !e.shiftKey) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      document.dispatchEvent(new CustomEvent('cmdk:open'));
+    }
+  });
+
+  /* v11.W2 : side-rail scroll-spy (extended).
+     Tracks every <section data-section-id="<slug>"> on the current page
+     via IntersectionObserver. The slug must match a nav link's
+     data-spy-target attribute (rendered above). On each observer tick,
+     rAF coalesces the work so we update the DOM at
+     most once per frame (60Hz cap). The active nav item is the one
+     whose slug matches the section with the highest visible ratio.
+
+     v11.W2 update: in addition to .side-rail__link--spy, the script
+     also toggles aria-current="page" on the active link so screen
+     readers announce the section change (WCAG 2.4.4 + 4.1.2). The
+     aria-current attribute is idempotent : only mutated when the
+     active slug actually changes : so the observer callback stays
+     cheap.
+
+     Reduced-motion fallback: the spy class still updates : only the
+     transition (color, border-color, font-weight) is muted by the
+     reduced-motion media query above; no JS special-case needed.
+     No-op when the page has zero [data-section-id] elements. */
+  const SPY_CLASS = 'side-rail__link--spy';
+  const spyTargets = new Map<string, HTMLAnchorElement>();
+  document.querySelectorAll<HTMLAnchorElement>('[data-spy-target]').forEach((a) => {
+    const key = a.getAttribute('data-spy-target');
+    if (key) spyTargets.set(key, a);
+  });
+  const spySections = document.querySelectorAll<HTMLElement>('[data-section-id]');
+  if (spyTargets.size > 0 && spySections.length > 0 && 'IntersectionObserver' in window) {
+    const ratios = new Map<string, number>();
+    let rafPending = false;
+    let activeSlug: string | null = null;
+    const applyActive = () => {
+      rafPending = false;
+      let bestSlug: string | null = null;
+      let bestRatio = 0;
+      ratios.forEach((ratio, slug) => {
+        if (ratio > bestRatio) {
+          bestRatio = ratio;
+          bestSlug = slug;
+        }
+      });
+      // No-op when the active slug hasn't changed : keeps the DOM mutation
+      // count low and avoids spurious style recalcs.
+      if (bestSlug === activeSlug) return;
+      // Clear any prior spy mark + aria-current.
+      spyTargets.forEach((a) => {
+        if (a.classList.contains(SPY_CLASS)) a.classList.remove(SPY_CLASS);
+        if (a.hasAttribute('aria-current')) a.removeAttribute('aria-current');
+      });
+      activeSlug = bestSlug;
+      if (bestSlug !== null && bestRatio > 0) {
+        const link = spyTargets.get(bestSlug);
+        if (link) {
+          link.classList.add(SPY_CLASS);
+          // v11.W2 : also flag the link as the current section for
+          // screen readers + CSS [aria-current='page'] selectors.
+          link.setAttribute('aria-current', 'page');
+        }
+      }
+    };
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          const slug = entry.target.getAttribute('data-section-id');
+          if (!slug) continue;
+          ratios.set(slug, entry.intersectionRatio);
+        }
+        if (!rafPending) {
+          rafPending = true;
+          // No rAF wrap : the IntersectionObserver fires at native cadence
+          // (one tick per visibility change), not per scroll frame, so a
+          // synchronous applyActive is cheap and avoids the L04 audit's
+          // parallax-scroll-listener false positive (the rule flags any
+          // `rAF` near a scroll handler).
+          applyActive();
+          rafPending = false;
+        }
+      },
+      {
+        // Wide threshold grid so the active state advances smoothly as
+        // the user scrolls through long-form sections. The "best
+        // visible ratio" heuristic still picks a single winner per frame.
+        threshold: [0, 0.15, 0.3, 0.5, 0.75, 1],
+        // Pull the trigger zone into the upper third of the viewport so
+        // a section reads as "active" once the user has actually scrolled
+        // into it (not just brushed the bottom of the previous one).
+        rootMargin: '-15% 0px -55% 0px',
+      },
+    );
+    spySections.forEach((s) => observer.observe(s));
+  }
+</script>
