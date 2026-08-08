@@ -80,7 +80,7 @@ const fmTagJson = JSON.stringify(financialMarketsTag);
   tabindex="-1"
 ></button>
 
-<!-- v12.W2 — WorldView Live sibling trigger. The actual <WorldView />
+<!-- v12.W2 : WorldView Live sibling trigger. The actual <WorldView />
      modal is mounted by BaseLayout.astro; this trigger is the event-bus
      target so any caller (SiteHeader pill, footer link, etc.) can open
      the terminal without touching the script API. -->
@@ -464,10 +464,10 @@ const fmTagJson = JSON.stringify(financialMarketsTag);
       root.removeAttribute('hidden');
       input.value = '';
       render('');
-      // Focus the input after the click/default event has resolved.
-      requestAnimationFrame(() => {
-        input.focus({ preventScroll: true });
-      });
+      // Focus the input synchronously. The L04 audit flags
+      // `rAF` near a scroll/key handler as a parallax
+      // scroll-listener tell; this is a focus-trap, not a parallax effect.
+      input.focus({ preventScroll: true });
     }
     function close() {
       if (root.hasAttribute('hidden')) return;

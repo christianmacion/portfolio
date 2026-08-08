@@ -1,11 +1,11 @@
 ---
-title: 'Eval MCP Server — 31 Gates as First-Class Tools'
+title: 'Eval MCP Server : 31 Gates as First-Class Tools'
 slug: 'eval-mcp-server'
 category: 'AI Systems Engineering'
 order: 6
 client: 'Self-directed / OSS'
 problem: |
-  LLM eval harnesses live in code or in spreadsheets — neither is a clean integration target for
+  LLM eval harnesses live in code or in spreadsheets : neither is a clean integration target for
   multi-agent pipelines. A multi-agent system needs the eval gates exposed as **tools**, not as
   Python imports.
 approach: |
@@ -19,7 +19,7 @@ evidence:
   - '**Exit-0 contract** enforced by mechanical validator'
   - '**No agent can bypass** the gate stack when calling downstream'
 outcome: |
-  The eval harness becomes the **single source of truth** for what counts as "passed validation" —
+  The eval harness becomes the **single source of truth** for what counts as "passed validation" :
   whether the input is an LLM output or a systematic strategy. Reusable across projects.
 proof:
   - 'Open-source repo (eval-mcp-server) with scorecard'

@@ -1,18 +1,18 @@
 ---
 /**
- * BaseLayout.astro — wraps every page; owns head, nav, footer.
+ * BaseLayout.astro : wraps every page; owns head, nav, footer.
  */
-/* v6.9.15 — latin-only Inter subsets (was all 5: Latin / Latin-Ext /
+/* v6.9.15 : latin-only Inter subsets (was all 5: Latin / Latin-Ext /
    Cyrillic / Greek / Vietnamese). Site is English-only; saves ~470 KB
    across the 4 weights on first paint. Plus dropped unused JetBrains-Mono
    imports entirely (--ff-mono falls back to system mono; 0 source uses
    the family). Total saved: ~720 KB across weights 400/500/600/700.
-   v6.13.1 — re-added JetBrains Mono + added Source Serif 4, SCOPED via
+   v6.13.1 : re-added JetBrains Mono + added Source Serif 4, SCOPED via
    the `surface="v6-13"` prop on this layout. Pages that don't opt in
    (F14-amber surfaces) keep the v6.9.15 zero-cost behavior. Pages that
    opt in load these two fonts via the `v6-13-fonts.astro` component
    rendered conditionally below the body.
-   v6.18 (W2 Bloomberg-Bryllim lock, 2026-08-08) — Source Serif 4 + VT323
+   v6.18 (W2 Bloomberg-Bryllim lock, 2026-08-08) : Source Serif 4 + VT323
    RETIRED per W1.5 lockout. Only Inter + JetBrains Mono remain in the
    font budget. @fontsource/source-serif-4 + @fontsource/vt323 imports
    removed; preloads for those faces removed. */
@@ -24,10 +24,10 @@ import '@styles/tokens.css';
 import '@styles/tokens-v6.13.css';
 import '@styles/status-binding-color.css';
 import '@styles/global.css';
-// v9.6 (Bryllim) — --ff-pixel token + metric-matched 'VT323 Fallback' face.
+// v9.6 (Bryllim) : --ff-pixel token + metric-matched 'VT323 Fallback' face.
 // Loaded AFTER global.css so the pixel tokens win on equal specificity.
 import '@styles/fonts.css';
-// v12.W1.5 — back-to-top.css REMOVED. Footer/back-to-top retired; stylesheet
+// v12.W1.5 : back-to-top.css REMOVED. Footer/back-to-top retired; stylesheet
 // no longer has any consumer.
 import '@styles/print.css';
 
@@ -40,7 +40,7 @@ import { profile } from '@utils/profile';
 import { buildMeta, personJsonLd, websiteJsonLd, breadcrumbJsonLd } from '@utils/seo';
 import { path } from '@utils/url';
 
-// v9.2.2 (Gate 12) — LCP font preloading. The v6-13 surface renders
+// v9.2.2 (Gate 12) : LCP font preloading. The v6-13 surface renders
 // the LCP element (`.hero__name`, `.hero__role`) in Inter (display +
 // body, post-W2 lock), with JetBrains Mono for tabular/mono surfaces.
 // Preloading the Inter 400 woff2 cuts the LCP element's font-swap time.
@@ -48,9 +48,9 @@ import { path } from '@utils/url';
 // tokens.css) so non-preloaded weights still render with the system
 // font and swap in without a visible reload. We preload only on the
 // v6-13 surface where Inter is the LCP font.
-// v6.18 (W2 lock) — Source Serif 4 + VT323 imports + preloads removed.
+// v6.18 (W2 lock) : Source Serif 4 + VT323 imports + preloads removed.
 import inter400Url from '@fontsource/inter/files/inter-latin-400-normal.woff2?url';
-// v9.2.3 (Gate 12) — Phase 5a fix. motion.css (27 KB, 6 @keyframes, 13 animation
+// v9.2.3 (Gate 12) : Phase 5a fix. motion.css (27 KB, 6 @keyframes, 13 animation
 // rules, 44 transition rules, reduced-motion overrides) is referenced by ZERO
 // `.stl-*` or `.bind-*` classes on slim-chrome pages (home, /for-recruiters,
 // /screening-call). Astro's CSS hoisting bundled it into the BaseLayout inline
@@ -70,34 +70,34 @@ interface Props {
   extraJsonLd?: unknown; // optional page-specific JSON-LD (e.g. ItemList, CreativeWork)
   breadcrumbs?: Array<{ name: string; href: string }>; // optional BreadcrumbList JSON-LD
   surface?: 'v6-13'; // v6.13.0. opt-in redesign surface (Jane Street × Noir). Default = legacy.
-  // v9.6 (Bryllim) — opt in to the VT323 pixel display face for this page's
+  // v9.6 (Bryllim) : opt in to the VT323 pixel display face for this page's
   // flagship H1. Gates the woff2 <link rel="preload"> ONLY; the @font-face is
   // in the shared bundle either way. Default false so the other ~35 pages pay
   // zero preload bytes for a font they never paint. `surface` cannot serve
-  // this role — it defaults to 'v6-13' on every page (see line 89).
+  // this role : it defaults to 'v6-13' on every page (see line 89).
   pixelDisplay?: boolean;
-  // v6.17 — theme mode. 'auto' (default) respects prefers-color-scheme.
+  // v6.17 : theme mode. 'auto' (default) respects prefers-color-scheme.
   // 'light' / 'dark' forces the theme via body.theme-light / body.theme-dark.
   // Note: tokens-v6.13.css uses :has() to detect these body classes.
   theme?: 'auto' | 'light' | 'dark';
-  // v9.2 — chrome opt-out for flagship surfaces (home, /for-recruiters,
+  // v9.2 : chrome opt-out for flagship surfaces (home, /for-recruiters,
   // /screening-call). When 'slim', skip the global Nav + Footer CTA
-  // strip + 4-column footer grid + page__tenet line — the page IS the
+  // strip + 4-column footer grid + page__tenet line : the page IS the
   // chrome. Per webcraft-no-vibe §signature-layer: confidence = no
   // duplicate nav/CTA on pages that have their own running tape.
   chrome?: 'full' | 'slim' | 'none';
-  // v9.3 — opt-in noindex signal for error pages (500). When true,
+  // v9.3 : opt-in noindex signal for error pages (500). When true,
   // BaseLayout emits `<meta name="robots" content="noindex">` so
   // search engines skip the error surface.
   noindex?: boolean;
 }
 
-// v6.18 — `surface` now defaults to `'v6-13'` (warm-dim #1a1714) so EVERY
+// v6.18 : `surface` now defaults to `'v6-13'` (warm-dim #1a1714) so EVERY
 // page on the site renders on the same paper-cream-on-warm-dark register
 // (no more cold-dark #0d1117 sections). Pass surface={undefined} explicitly
 // to opt a single page out to legacy cold-dark. The flagship home, /contact,
 // /for-recruiters, and /screening-call already opted in; pages that hadn't
-// were inheriting legacy cold-dark — this default fixes them site-wide.
+// were inheriting legacy cold-dark : this default fixes them site-wide.
 const {
   title,
   description,
@@ -112,7 +112,7 @@ const {
   chrome = 'full',
 } = Astro.props;
 
-// v6.17 — resolve theme to a body class. 'auto' yields no class (CSS
+// v6.17 : resolve theme to a body class. 'auto' yields no class (CSS
 // media query handles prefers-color-scheme). Explicit 'light' / 'dark'
 // forces the mode via body.theme-light / body.theme-dark.
 const themeClass = theme === 'light' ? 'theme-light' : theme === 'dark' ? 'theme-dark' : '';
@@ -152,7 +152,7 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
     <meta name="description" content={meta.description} />
     <link rel="canonical" href={meta.canonical} />
     {
-      /* v9.2.2 (Gate 12) — LCP font preload. Inter 400 is the display + body
+      /* v9.2.2 (Gate 12) : LCP font preload. Inter 400 is the display + body
          font on the v6-13 surface (W2 lock). Preload the woff2 file.
          `crossorigin` is required because font requests are always CORS.
          Reduced-motion + per-component contract are unaffected (these are
@@ -176,7 +176,7 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
          policy for production (architecture AAR §14 lines 599-644). This
          meta CSP is the static-fallback when the HTTP CSP is not applied
          (e.g., local `astro preview`, or before Pages Functions compile).
-         Both policies are kept consistent — the meta must NOT be stricter
+         Both policies are kept consistent : the meta must NOT be stricter
          than the HTTP CSP, or the browser enforces the intersection
          (most-restrictive) and breaks inline scripts.
 
@@ -193,7 +193,7 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
     }
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline'; style-src-attr 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com data:; script-src 'self' 'unsafe-inline'; script-src-attr 'unsafe-inline'; connect-src 'self' https://challenges.cloudflare.com https://data-api.ecb.europa.eu https://api.coingecko.com https://data.gdeltproject.org; frame-src 'self' https://challenges.cloudflare.com https://cal.com https://*.cal.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests"
+      content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline'; style-src-attr 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com data:; script-src 'self' 'unsafe-inline'; script-src-attr 'unsafe-inline'; connect-src 'self' https://challenges.cloudflare.com https://data-api.ecb.europa.eu https://query1.finance.yahoo.com https://api.coingecko.com https://data.gdeltproject.org; frame-src 'self' https://challenges.cloudflare.com https://cal.com https://*.cal.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests"
     />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
 
@@ -218,7 +218,7 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
          primary brand mark used in nav, og:image, and About hero. -->
     <link rel="icon" type="image/svg+xml" href={path('/cm-mark.svg')} />
     {
-      /* v6.9.15 — iOS Safari ignores SVG apple-touch-icon (no support
+      /* v6.9.15 : iOS Safari ignores SVG apple-touch-icon (no support
        per WebKit spec). Point to the 180×180 PNG Apple actually renders. */
     }
     <link rel="apple-touch-icon" sizes="180x180" href={path('/apple-touch-icon-180x180.png')} />
@@ -232,7 +232,7 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
       href={path('/feed.xml')}
     />
     {
-      /* LLM-friendly alternates — short index + full concatenated Markdown.
+      /* LLM-friendly alternates : short index + full concatenated Markdown.
          Crawlers respect rel=alternate type=text/markdown as a first-class
          signal (llmstxt.org convention). See public/llms.txt and
          public/llms-full.txt. */
@@ -250,7 +250,7 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
       href={path('/llms-full.txt')}
     />
     {
-      /* v6.17 — warm-dim theme-color (mobile browser chrome). Two tags
+      /* v6.17 : warm-dim theme-color (mobile browser chrome). Two tags
         with `media` so the browser picks the matching color per OS
         preference (Chrome 100+, Safari 15.4+). */
     }
@@ -258,8 +258,8 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
 
     {
-      /* === v6.1.0 — theme toggle REMOVED (legacy F14 amber surfaces).
-         v6.17 — light/dark variant RE-INTRODUCED for the v6-13 surface
+      /* === v6.1.0 : theme toggle REMOVED (legacy F14 amber surfaces).
+         v6.17 : light/dark variant RE-INTRODUCED for the v6-13 surface
          via the `theme` prop on BaseLayout + tokens-v6.13.css :has()
          selectors. Default is 'auto' (respects prefers-color-scheme). */
     }
@@ -278,7 +278,7 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
     }
 
     {
-      /* v6.10.20 — SEO: named "head" slot lets pages inject extra <meta>
+      /* v6.10.20 : SEO: named "head" slot lets pages inject extra <meta>
         tags (e.g. <meta name="robots" content="noindex"> on the 404 page)
         without an explicit prop dance. Falls back to nothing if unused. */
     }
@@ -301,7 +301,7 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
          screen-reader and sighted users get the same anchor name. -->
     <a href="#main" class="skip-link" aria-label="Skip to main content">Skip to main content</a>
     {
-      /* v7.3 — top hairline scroll progress (1px amber, driven by scroll-progress-driver.ts).
+      /* v7.3 : top hairline scroll progress (1px amber, driven by scroll-progress-driver.ts).
         v9.3 a11y follow-up (2026-08-01): role="presentation" + tabindex=-1 wraps the
         progress bar in a landmark so axe-core's region rule passes. Without the
         landmark wrapper, the div sits outside <main> and <header> and axe flags
@@ -310,14 +310,14 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
     <div class="scroll-progress" role="presentation" tabindex="-1" aria-hidden="true"><i></i></div>
     {surface === 'v6-13' && <V613Fonts />}
     {
-      /* v9.2.3 (Gate 12) — opt-in motion CSS via deferred-load link. The
+      /* v9.2.3 (Gate 12) : opt-in motion CSS via deferred-load link. The
          `media="print"; onload="this.media='all'"` pattern downloads the
          CSS file without blocking first paint, then swaps media so the
          rules apply once the file is parsed. This is the standard
          non-blocking-CSS technique (filamentgroup/async-css, also used by
          loadCSS). Slim-chrome pages (home, /for-recruiters, /screening-call)
          pay zero motion.css bytes. Full-chrome pages get the motion layer
-         but the CSS does not block render — FCP/LCP happen on the
+         but the CSS does not block render : FCP/LCP happen on the
          BaseLayout inline CSS first. */
     }
     {
@@ -338,7 +338,7 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
       )
     }
     {
-      /* v9.5 — Bryllim side-rail layout. SideRail.astro replaces the prior
+      /* v9.5 : Bryllim side-rail layout. SideRail.astro replaces the prior
          top-sticky Nav + SiteHeader pair. The grid below (display: grid;
          grid-template-columns: 240px 1fr;) places the sticky rail on the
          left and main content on the right. <SideRail /> renders once per
@@ -347,7 +347,7 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
          inside SideRail.astro itself. */
     }
     <div class="layout-grid">
-      {/* W2.7a a11y — wrap <SideRail /> so the rail-toggle input and
+      {/* W2.7a a11y : wrap <SideRail /> so the rail-toggle input and
          its <label> (rendered by SideRail.astro BEFORE the inner <aside>)
          sit inside a landmark; otherwise axe-core flags them as page
          content not contained by any region. The internal <aside> is
@@ -365,27 +365,27 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
         <SiteHeader />
         <slot />
       {
-        /* v8.4 — tenet line chrome contract. Injected by BaseLayout so
+        /* v8.4 : tenet line chrome contract. Injected by BaseLayout so
         every page inherits the operating-principles footer without
         duplication. The page__tenet selector is single-source (defined
-        in src/styles/global.css). v9.2: suppressed on slim chrome —
+        in src/styles/global.css). v9.2: suppressed on slim chrome :
         the page's own § 05 / contact section owns the operating-principles
         statement, doubling them is the AI-builder tell. */
       }
       {
-        /* v12.W1.5 — global tenet injection REMOVED. Per
+        /* v12.W1.5 : global tenet injection REMOVED. Per
            feedback-no-defensive-trust-strips BINDING: defensive "no
            fabricated metrics / no NDA-protected" claims introduce doubt
            rather than removing it. Internal compliance rules remain ACTIVE
            INTERNALLY (Standing Order §9 no Math.random / argless Date, NDA-
-           scrub at build, no-fabrication discipline) — they just don't
+           scrub at build, no-fabrication discipline) : they just don't
            broadcast. Pages that explicitly opt into tenet via ChromeHeader
            still receive their override (now defaulting to ''). */
       }
       </main>
     </div>
     {
-      /* v9.9 — FOOTER REMOVAL. The v9.x four-column / CTA-strip /
+      /* v9.9 : FOOTER REMOVAL. The v9.x four-column / CTA-strip /
          base-strip Footer is retired. Replaced by a single
          treasury line: identity + UTC offset + deploy stamp, no
          links, no chrome. No footer import is needed (removed at
@@ -394,13 +394,13 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
          carries the operating-principles contract. */
     }
 
-    {/* v11.W2 — ⌘K command palette mounted site-wide. Vanilla TS,
+    {/* v11.W2 : ⌘K command palette mounted site-wide. Vanilla TS,
         no new deps; the capture-phase keydown listener inside
         CommandPalette.astro stops propagation so it wins against
         any other ⌘K handler. Hidden until the SiteHeader pill (or
         any [data-cmdk-open] trigger) is activated. */}
     <CommandPalette />
-    {/* v12.W2 — WorldView Live institutional data terminal (⌘J).
+    {/* v12.W2 : WorldView Live institutional data terminal (⌘J).
         Mounted alongside CommandPalette; same chrome contract
         (cream-on-dark, sharp 0-2px corners, hairline border,
         2px amber top rule). Globe + ticker logic lives in
@@ -408,7 +408,7 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
         here so it executes once per page and is wired into the
         [data-worldview] modal mounted above. */}
     <WorldView />
-    {/* v12.W1.5 — Footer REMOVED. The footer/back-to-top block (layout-tail
+    {/* v12.W1.5 : Footer REMOVED. The footer/back-to-top block (layout-tail
        <footer>, back-to-top button + scroll listener, back-to-top.css import)
        is retired. Pages inherit the bottom-of-page exit via the page's own
        final section; SiteHeader / SideRail carry the persistent chrome.
@@ -417,7 +417,7 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
        landmark by design (capture-phase global handler). */}
 
     {
-      /* === v9.2 a11y — scrollable-region-focusable bridge ===
+      /* === v9.2 a11y : scrollable-region-focusable bridge ===
          axe-core flags elements with `overflow:auto|scroll` that have
          scrollable content but no keyboard focus. The canonical fix is
          to add `tabindex="0"`. CSS cannot add tabindex, so this inline
@@ -465,7 +465,7 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
       import '@scripts/motion.ts';
       import '@scripts/carousel.ts';
       import '@scripts/keyboard-shortcuts.ts';
-      // v12.W2 — WorldView · Live globe + ticker (⌘J). Lazy-loaded
+      // v12.W2 : WorldView · Live globe + ticker (⌘J). Lazy-loaded
       // d3-geo + topojson-client + the gdelt-client + market-ticks
       // utility modules. Loaded on every page; the script is cheap
       // until ⌘J is pressed (~12 KB lazy deps, ~3 KB this file).

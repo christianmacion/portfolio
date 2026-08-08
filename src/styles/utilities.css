@@ -1,12 +1,12 @@
-/* utilities.css — Portfolio v9.2 visual uplift
+/* utilities.css : Portfolio v9.2 visual uplift
  * Drop-in extension classes for paint-time motion.
- * Applied via class — never via inline style or per-element JS setup.
+ * Applied via class : never via inline style or per-element JS setup.
  * Reduced-motion contract: every utility collapses under prefers-reduced-motion.
  *
  * Token references:
- *   --dur-3 (320ms), --dur-4 (480ms)         [Phase 3a — front_end_engineer]
+ *   --dur-3 (320ms), --dur-4 (480ms)         [Phase 3a : front_end_engineer]
  *   --ease-out                               [exists in tokens.css]
- *   --ease-overshoot-constrained             [Phase 3a — front_end_engineer]
+ *   --ease-overshoot-constrained             [Phase 3a : front_end_engineer]
  *
  * Bind rules:
  *   - No gradient / halo / glow (institutional design contract).

@@ -1,11 +1,11 @@
 ---
 import MiniSpark from '@components/MiniSpark.astro';
 /**
- * PredictionCard.astro — single binary-event-market card.
+ * PredictionCard.astro : single binary-event-market card.
  *
  * Layout (top → bottom):
  *   - Category pill (mono, uppercase)
- *   - Title (h3) + inline MiniSpark (60x14) — v8.0.5
+ *   - Title (h3) + inline MiniSpark (60x14) : v8.0.5
  *   - Big implied probability (e.g. "18¢") + secondary fair value
  *   - Edge badge (positive = green, negative = red)
  *   - Per-card probability walk SVG (24 points, deterministic seed)
@@ -36,7 +36,7 @@ interface Event {
 interface Props {
   event: Event;
   buildDate?: string;
-  /** v8.0.5 — optional 12-point MiniSpark series shown next to the title. */
+  /** v8.0.5 : optional 12-point MiniSpark series shown next to the title. */
   sparkline?: number[];
 }
 const { event, sparkline } = Astro.props;
@@ -177,7 +177,7 @@ const gradId = `card-grad-${event.id.replace(/[^a-z0-9]/gi, '')}`;
     padding: var(--sp-4);
     background: var(--c-tape-2);
     border: 1px solid var(--c-rule);
-    /* v9.3.1 — F17 institutional: sharp corners (1px) instead of --radius (10px). */
+    /* v9.3.1 : F17 institutional: sharp corners (1px) instead of --radius (10px). */
     border-radius: 1px;
     color: var(--c-ink);
     min-width: 0;
@@ -198,17 +198,17 @@ const gradId = `card-grad-${event.id.replace(/[^a-z0-9]/gi, '')}`;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     padding: 2px 8px;
-    /* v9.3.1 — F17 institutional: sharp corners (1px) instead of 3px. */
+    /* v9.3.1 : F17 institutional: sharp corners (1px) instead of 3px. */
     border-radius: 1px;
     border: 1px solid currentColor;
   }
   .card__pill--macro {
     color: var(--c-phi);
   }
-  /* v9.2 a11y — pills at 7.8pt normal/600 are 4.5:1 threshold.
+  /* v9.2 a11y : pills at 7.8pt normal/600 are 4.5:1 threshold.
      Light --j-cobalt-3 (#5b6f9e) and --j-info (#5b6ba8) only hit
      4.27:1 / 4.37:1 on #f3ede1. Use the deeper --j-cobalt and a
-     parallel darken for the rates family — both ≥ 5.0:1 in light. */
+     parallel darken for the rates family : both ≥ 5.0:1 in light. */
   .card__pill--crypto {
     color: var(--j-cobalt);
   }
@@ -222,7 +222,7 @@ const gradId = `card-grad-${event.id.replace(/[^a-z0-9]/gi, '')}`;
     color: var(--c-amber);
   }
   .card__pill--volatility {
-    /* v6.11.10 — F14 amber-only. Volatility class no longer red. */
+    /* v6.11.10 : F14 amber-only. Volatility class no longer red. */
     color: var(--c-ink-2);
   }
   .card__tenor {
@@ -239,7 +239,7 @@ const gradId = `card-grad-${event.id.replace(/[^a-z0-9]/gi, '')}`;
     letter-spacing: -0.012em;
     min-height: 2.6em;
   }
-  /* v8.0.5 — inline MiniSpark under the title. Visual rhythm — gives the
+  /* v8.0.5 : inline MiniSpark under the title. Visual rhythm : gives the
      reader a quick "where the series has been" before drilling into the
      320x84 SVG walk below. */
   .card__sparkline {
@@ -287,11 +287,11 @@ const gradId = `card-grad-${event.id.replace(/[^a-z0-9]/gi, '')}`;
     font-size: 0.78rem;
     font-weight: 600;
     padding: 4px 8px;
-    /* v9.3.1 — F17 institutional: sharp corners (1px) instead of 3px. */
+    /* v9.3.1 : F17 institutional: sharp corners (1px) instead of 3px. */
     border-radius: 1px;
     white-space: nowrap;
   }
-  /* v6.11.10 — F14 amber-only. Positive edge = amber on soft amber;
+  /* v6.11.10 : F14 amber-only. Positive edge = amber on soft amber;
      negative edge = ink-2 on ink-3 tint. No green/red. */
   .card__edge--pos {
     color: var(--c-amber);
@@ -306,7 +306,7 @@ const gradId = `card-grad-${event.id.replace(/[^a-z0-9]/gi, '')}`;
     height: 84px;
     display: block;
     background: var(--c-bg);
-    /* v9.3.1 — F17 institutional: sharp corners (1px) instead of --radius-sm (6px). */
+    /* v9.3.1 : F17 institutional: sharp corners (1px) instead of --radius-sm (6px). */
     border-radius: 1px;
   }
   .card__evidence {

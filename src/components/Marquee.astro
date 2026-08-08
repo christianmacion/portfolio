@@ -1,8 +1,8 @@
 ---
 /**
- * Marquee.astro — v7.4 INSTITUTIONAL MARQUEE
+ * Marquee.astro : v7.4 INSTITUTIONAL MARQUEE
  *
- * Reusable infinite ribbon primitive. Sister to NewsRibbon — same edge
+ * Reusable infinite ribbon primitive. Sister to NewsRibbon : same edge
  * fade + seam-free loop, but designed for sparse "frame" content
  * (methodology / conviction frames / section markers), not streams.
  *
@@ -143,12 +143,12 @@ const strings = isFrameSet ? null : (items as string[]);
     color: var(--c-ink-2);
   }
   .marquee__frame-sep {
-    /* v9.9.1 — was var(--c-ink-4) (2.49:1 light / 1.93:1 dark) — fails AA.
-       Lifted to --c-ink-3 (5.19:1 / 5.62:1) — both AA. */
+    /* v9.9.1 : was var(--c-ink-4) (2.49:1 light / 1.93:1 dark) : fails AA.
+       Lifted to --c-ink-3 (5.19:1 / 5.62:1) : both AA. */
     color: var(--c-ink-3);
     font-weight: 600;
   }
-  /* v9.4.1 — chrome-contract rule 6: reserve --c-warn for semantic
+  /* v9.4.1 : chrome-contract rule 6: reserve --c-warn for semantic
      status only. .is-warn here is a decorative frame tint, not a
      warning signal; collapse to canonical --c-amber. */
   .marquee__frame.is-warn .marquee__frame-head {

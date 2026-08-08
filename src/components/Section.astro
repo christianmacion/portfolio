@@ -1,6 +1,6 @@
 ---
 /**
- * Section.astro — v11.W6 · canonical Section component.
+ * Section.astro : v11.W6 · canonical Section component.
  *
  * Replaces ad-hoc `<section>` blocks scattered across pages with one
  * predictable anatomy: id + eyebrow + title + lede + body + footer.
@@ -36,13 +36,13 @@
 interface Props {
   /** Anchor id for TOC + deep-link. */
   id?: string;
-  /** Section variant — default, paper (dark callout), or flush. */
+  /** Section variant : default, paper (dark callout), or flush. */
   variant?: 'default' | 'paper' | 'flush';
-  /** Inner width — narrow, reading, wide, full. */
+  /** Inner width : narrow, reading, wide, full. */
   width?: 'narrow' | 'reading' | 'wide' | 'full';
   /** Small uppercase eyebrow above the title (decorative). */
   eyebrow?: string;
-  /** H2 title — the section's heading. */
+  /** H2 title : the section's heading. */
   title?: string;
   /** Lede paragraph under the title (max-width auto-constrains). */
   lede?: string;

@@ -1,6 +1,6 @@
 ---
 /**
- * HeroCursor.astro — v7.7 SUBTLE HERO POINTER FOLLOW
+ * HeroCursor.astro : v7.7 SUBTLE HERO POINTER FOLLOW
  *
  * A 1px amber ring (8px) that follows the cursor with a 180ms
  * lerp delay. Invisible on touch devices. Reduced-motion-safe: when
@@ -30,11 +30,11 @@ const { size: _size = 8, accent: _accent = 'warn', lerp: _lerp = 0.18 } = Astro.
 ---
 
 <script>
-  // v9.3.2 — institutional: replace the rAF lerp loop with CSS transitions.
+  // v9.3.2 : institutional: replace the rAF lerp loop with CSS transitions.
   // The previous implementation used a JS frame loop to lerp the ring
   // toward the cursor; the new path writes the cursor position directly on
   // mousemove and lets CSS `transition: transform 180ms linear` handle the
-  // lag — same visual feel (a hairline ring trailing the cursor) without a
+  // lag : same visual feel (a hairline ring trailing the cursor) without a
   // JS frame loop. No scroll listener, no parallax; the cursor is the only
   // motion source.
   class HeroCursor {
@@ -75,7 +75,7 @@ const { size: _size = 8, accent: _accent = 'warn', lerp: _lerp = 0.18 } = Astro.
     }
   }
 
-  // Initialize once — sized from the first matched section's data attr
+  // Initialize once : sized from the first matched section's data attr
   const init = () => {
     const inst = document.querySelector<HTMLElement>('[data-hero-cursor]');
     if (!inst) return;

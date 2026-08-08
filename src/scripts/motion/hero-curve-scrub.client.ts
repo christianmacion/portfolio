@@ -1,5 +1,5 @@
 /**
- * hero-curve-scrub.client.ts — v11.W3 · scroll-triggered curve draw-on.
+ * hero-curve-scrub.client.ts : v11.W3 · scroll-triggered curve draw-on.
  *
  * Replaces the paint-time 2.4s stroke-dashoffset draw with a viewport-entry
  * 240ms ease-in-out scrub. The line draws once, fast, when the curve enters

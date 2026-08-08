@@ -1,12 +1,12 @@
 /**
- * profile.ts — single source of truth for the site's owner identity.
+ * profile.ts : single source of truth for the site's owner identity.
  * NDA-safe values only. Editing here propagates to nav, footer,
  * schema.org JSON-LD, and the resume download link.
  */
 
 // Stats are the canonical source for site-wide numerics. titles.secondary
 // derives its 4 chrome figures (aiAgentCount / evalGates / locPython /
-// certCount) from these values — so flipping any stat propagates to the
+// certCount) from these values : so flipping any stat propagates to the
 // default <meta description> + JSON-LD description + OG/Twitter card
 // description simultaneously. No developer grep required.
 const stats = {
@@ -16,13 +16,13 @@ const stats = {
   locPython: '76.5k', // ~76,500 LOC
   evalGates: '31', // 31-gate evaluation harness
   pagesBuilt: '84', // built pages. update on route add/remove
-  // v9.4.1 — hireability-facing chrome stats. Add `yearsExperience` + `aiProjectCount`
+  // v9.4.1 : hireability-facing chrome stats. Add `yearsExperience` + `aiProjectCount`
   // so the home counter strip (and any future recruiter-facing surface) can render
   // the exact figures a recruiter needs in 5 seconds. Internal-only counters
   // (AARs, evalGates, pagesBuilt) remain available but are NOT first-viewport.
   yearsExperience: '6',
   aiProjectCount: '6',
-  // v6.11.13 — derived chrome counts. /positions had hardcoded
+  // v6.11.13 : derived chrome counts. /positions had hardcoded
   // "15 repos" / "Five seats" / "Three seat types" that contradicted
   // other pages and silently drifted when role-cards were added/removed.
   repoCount: '25', // GitHub public repos (api.github.com/users/christianmacion26 → public_repos=25)
@@ -30,9 +30,9 @@ const stats = {
   offTableSeats: '3', // /positions "off the table" bullets (lines 388-392)
   strategyCount: '9', // /projects quant files (01-…mdx) to update on strategy add/remove
   positionsStartDate: '2026-04-21', // /positions paper-trading series start (BTC/USDT 1d klines)
-  // v6.11.33 — resume variants count. Drives /resume, /for-recruiters, /contact chrome.
+  // v6.11.33 : resume variants count. Drives /resume, /for-recruiters, /contact chrome.
   resumeCount: '3', // unified / AI-only / Quant one-pager (resumes[] in resume.astro)
-  // v7.5 — multi-agent office stats (STELLA-public-safe slice).
+  // v7.5 : multi-agent office stats (STELLA-public-safe slice).
   // These surface on /desk + ArchitectureBrief. Distinct from
   // aiAgentCount = '11' (the DAG node count on /ai) which is a different
   // abstraction level (orchestrator + 10 workers, not the full office).
@@ -42,7 +42,7 @@ const stats = {
   mustHaveCount: '5', // eval-first · NDA-clean · alpha-driven · ship-ready · tier-aware
 } as const;
 
-// v7.5 — architecture chrome used by ArchitectureBrief.astro + /desk.
+// v7.5 : architecture chrome used by ArchitectureBrief.astro + /desk.
 // NDA-safe: numbers + taxonomy only, no brand/officer names.
 export const archSafe = {
   agentCount: stats.agentOfficeCount,
@@ -78,7 +78,7 @@ export const archSafe = {
   ] as const,
   // 5-must-have compliance rubric. From the standing-order 5-must-have
   // contract (terminal state · idempotent write · dedupe key · coverage
-  // filter · AAR) — rephrased for external audiences.
+  // filter · AAR) : rephrased for external audiences.
   mustHave: [
     { tag: 'eval-first', text: 'every primitive ships behind a 31-gate statistical eval harness' },
     { tag: 'NDA-clean', text: 'NDA scope audited on every artifact before publish' },
@@ -90,7 +90,7 @@ export const archSafe = {
 
 export const profile = {
   fullName:
-    'Christian T. Macion' /* v6.18 — dropped "CTA®" suffix from masthead. The registered CTA® mark is held by UK STA / IFTA chartered designation; the PH STA Tier-1 program does not grant it. Recruiter-verifiable credential — drop the ®, keep the cert detail in the bio block. */,
+    'Christian T. Macion' /* v6.18 : dropped "CTA®" suffix from masthead. The registered CTA® mark is held by UK STA / IFTA chartered designation; the PH STA Tier-1 program does not grant it. Recruiter-verifiable credential : drop the ®, keep the cert detail in the bio block. */,
   shortName: 'Christian Macion',
   initials: 'CM',
   titles: {
@@ -102,7 +102,7 @@ export const profile = {
     // nav brand + JSON-LD schema.org, all of which track the visible H1 so
     // the recruiter's first impression is never contradicted.
     primary: 'Quantitative Researcher · AI Engineer-Architect',
-    // v6.10.47 — compact form for the Nav brand slot (36px logo). Uses
+    // v6.10.47 : compact form for the Nav brand slot (36px logo). Uses
     // 'Quant' (not 'Quantitative') so the word fits the available width
     // without ellipsis at the smallest desktop breakpoint. Kept distinct
     // from `primary` so the visual hierarchy at H1 size still reads
@@ -137,7 +137,7 @@ export const profile = {
   },
   contact: {
     // TODO(macion.ventures-domain): replace Gmail with christian@macion.ventures once domain
-    //   is acquired + MX records resolve. Gmail breaks institutional register — a hedge-fund
+    //   is acquired + MX records resolve. Gmail breaks institutional register : a hedge-fund
     //   head-of-research hits the Gmail, the chrome deflates. Voice audit 2026-08-02 BLOCKER.
     //   Verified via `dig macion.ventures MX +short` (empty) + `dig macion.ventures A +short`
     //   (empty) + `dig macion.ventures NS +short` (empty). Domain is registered at Identity
@@ -190,7 +190,7 @@ export const profile = {
     // reconcile. See chrome-honesty memory: portfolio-chrome-unification
     // for the rest of the v6.11.x chrome-derivation pattern.
     `${stats.certCount} certificates (2024-12 → 2026-05)`,
-    'STA Tier-1 Certified Technical Analyst · cert #260197 · Jan 2026' /* v6.18 — dropped ® and "Society of Technical Analysts" claim; renamed to PH STA Tier-1 (the actual program). UK STA / IFTA CTA® chartered designation is a separate credential not held. */,
+    'STA Tier-1 Certified Technical Analyst · cert #260197 · Jan 2026' /* v6.18 : dropped ® and "Society of Technical Analysts" claim; renamed to PH STA Tier-1 (the actual program). UK STA / IFTA CTA® chartered designation is a separate credential not held. */,
     'Galactic Problem Solver · NASA Space Apps Challenge 2025 (Zurich cohort)',
     'AI for the Modern Workforce · Ateneo de Davao + US Embassy · Nov 8 2025',
     'AIccelerate 2025 · BIDA × Bayan Academy × Meta · Nov 12 to 21 2025',

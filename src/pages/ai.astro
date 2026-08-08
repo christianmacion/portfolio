@@ -1,13 +1,13 @@
 ---
 /**
- * ai.astro — the "/ai" page: 11-agent platform tour + 31-gate eval console.
+ * ai.astro : the "/ai" page: 11-agent platform tour + 31-gate eval console.
  *
  * v6.1 Mission F. Composes:
  *   - Stat row (11 agents · 31 gates · 6 projects · 76.5 k LOC Python)
- *   - <AgentGraph /> — 11-node DAG, animated feedback loop, server SVG
- *   - Loop engineering explainer — "Idea → Eval → Ship → Measure → Next"
+ *   - <AgentGraph /> : 11-node DAG, animated feedback loop, server SVG
+ *   - Loop engineering explainer : "Idea → Eval → Ship → Measure → Next"
  *   - 6 AI project cards (collected from src/content/projects/ai/*.mdx)
- *   - <EvalConsole /> — 31-gate result grid
+ *   - <EvalConsole /> : 31-gate result grid
  *   - Disclosure: open-source on GitHub, 31 gates enforced by CI
  *
  * Determinism: no Math.random / Date.now / argless new Date() in any
@@ -59,7 +59,7 @@ const aiProjects: AIProject[] = allProjects
 
 // Deterministic sparklines per project, derived from the project slug.
 // Seed is the slug itself so the same project always renders the same
-// mini spark — never Math.random, never Date.now.
+// mini spark : never Math.random, never Date.now.
 function hashSlug(s: string): number {
   let h = 0x811c9dc5;
   for (let i = 0; i < s.length; i++) {
@@ -93,7 +93,7 @@ const loopSteps = [
   { num: '05', title: 'Next', desc: 'Reflect → revise → loop. No-progress halt ships nothing.' },
 ];
 
-// v6.11.34 — source-of-truth for the platform DAG. Mirrors the
+// v6.11.34 : source-of-truth for the platform DAG. Mirrors the
 // AgentGraph component's nodes[] in layout (4 inputs / 3 middles /
 // 3 outputs / 1 orchestrator). Counts derived from .length below.
 const platformInputs = [
@@ -161,7 +161,7 @@ const platformInputs = [
     </div>
   </header>
 
-  {/* === Section 1 — the {profile.stats.aiAgentCount}-agent platform === */}
+  {/* === Section 1 : the {profile.stats.aiAgentCount}-agent platform === */}
   <section
     class="section section--alt"
     id="platform"
@@ -204,7 +204,7 @@ const platformInputs = [
     </div>
   </section>
 
-  {/* === Section 1.5 — Live graph snapshot (v7.7) === */}
+  {/* === Section 1.5 : Live graph snapshot (v7.7) === */}
   <section class="section" id="live-graph" data-toc-id="live-graph" data-toc-label="Live graph">
     <div class="container">
       <header class="section__head">
@@ -222,7 +222,7 @@ const platformInputs = [
     </div>
   </section>
 
-  {/* === Section 2 — Loop engineering === */}
+  {/* === Section 2 : Loop engineering === */}
   <section class="section" id="loop" data-toc-id="loop" data-toc-label="Loop engineering">
     <div class="container">
       <header class="section__head">
@@ -249,7 +249,7 @@ const platformInputs = [
   </section>
 
   {
-    /* === Section 2b — STELLA + graph engineering === v7.6
+    /* === Section 2b : STELLA + graph engineering === v7.6
        Surfaces the next layer: STELLA Office (53-agent, 6-sub-team)
        + the graph rung. Link out to /workbooks/. NDA-safe: counts
        and taxonomy only, no officer names. */
@@ -311,7 +311,7 @@ const platformInputs = [
     </div>
   </section>
 
-  {/* === Section 3 — 6 AI projects === */}
+  {/* === Section 3 : 6 AI projects === */}
   <section
     class="section section--alt"
     id="projects"
@@ -337,7 +337,7 @@ const platformInputs = [
               <header class="ai-card__head">
                 <span class="ai-card__date mono">{p.date}</span>
                 <h3 class="ai-card__title">
-                  {/* v6.10.11 — lane prefix needed. /ai/ projects all live here. */}
+                  {/* v6.10.11 : lane prefix needed. /ai/ projects all live here. */}
                   <a href={path(`/projects/${p.slug}`)}>{p.title}</a>
                 </h3>
                 <MiniSpark
@@ -367,7 +367,7 @@ const platformInputs = [
   </section>
 
   {
-    /* === Section 4 — the eval console (31 gates) === — rendered gate count driven by profile.stats.evalGates */
+    /* === Section 4 : the eval console (31 gates) === : rendered gate count driven by profile.stats.evalGates */
   }
   <section class="section" id="console" data-toc-id="console" data-toc-label="Eval console">
     <div class="container">
@@ -411,9 +411,9 @@ const platformInputs = [
   .ai-head__eyebrow-chip {
     display: inline-block;
     padding: 4px 10px;
-    /* v9.2 a11y — was --c-phi-teal. Dark theme --j-phi-teal = #2d5f5a
+    /* v9.2 a11y : was --c-phi-teal. Dark theme --j-phi-teal = #2d5f5a
      only hits 2.14:1 on dark page-head surface. Solid amber chip +
-     --c-bg text reads at ≥5.6:1 in both themes — institutional
+     --c-bg text reads at ≥5.6:1 in both themes : institutional
      register, F14-safe (no traffic-light). */
     color: var(--c-bg);
     border: 1px solid var(--c-amber);
@@ -462,7 +462,7 @@ const platformInputs = [
     padding: var(--sp-3) var(--sp-4);
     background: var(--c-tape);
     border: 1px solid var(--c-rule);
-    /* v9.3.1 — F17 institutional: sharp corners (1px) instead of --radius (10px). */
+    /* v9.3.1 : F17 institutional: sharp corners (1px) instead of --radius (10px). */
     border-radius: 1px;
     font-size: 11px;
   }
@@ -494,7 +494,7 @@ const platformInputs = [
   .ai-loop__step {
     background: var(--c-tape);
     border: 1px solid var(--c-rule);
-    /* v9.3.1 — F17 institutional: sharp corners (1px) instead of --radius (10px). */
+    /* v9.3.1 : F17 institutional: sharp corners (1px) instead of --radius (10px). */
     border-radius: 1px;
     padding: var(--sp-4);
     position: relative;
@@ -551,7 +551,7 @@ const platformInputs = [
   .ai-card {
     background: var(--c-tape);
     border: 1px solid var(--c-rule);
-    /* v9.3.1 — F17 institutional: sharp corners (1px) instead of --radius (10px). */
+    /* v9.3.1 : F17 institutional: sharp corners (1px) instead of --radius (10px). */
     border-radius: 1px;
     padding: var(--sp-4);
     display: flex;
@@ -598,7 +598,7 @@ const platformInputs = [
     padding: var(--sp-3);
     background: var(--c-tape-2);
     border: 1px solid var(--c-rule-soft);
-    /* v9.3.1 — F17 institutional: sharp corners (1px) instead of --radius (10px). */
+    /* v9.3.1 : F17 institutional: sharp corners (1px) instead of --radius (10px). */
     border-radius: 1px;
   }
   .ai-card__metric {
@@ -643,18 +643,18 @@ const platformInputs = [
     background: var(--c-tape);
     border: 1px solid var(--c-rule);
     border-left: 3px solid var(--c-amber);
-    /* v9.3.1 — F17 institutional: sharp corners (1px) instead of --radius (10px). */
+    /* v9.3.1 : F17 institutional: sharp corners (1px) instead of --radius (10px). */
     border-radius: 1px;
     font-size: 12px;
     color: var(--c-ink-2);
     line-height: 1.55;
   }
   .ai-disclosure .hl {
-    /* v9.2 a11y — was var(--c-amber) which hits 4.48:1 on the
+    /* v9.2 a11y : was var(--c-amber) which hits 4.48:1 on the
        --c-amberl-mist pill bg in dark mode (Lighthouse mobile, dark default).
        --c-ink reads at ≥9.5:1 on the same surface. Bold weight + mono +
        pill silhouette still carry the highlight identity.
-       v9.3.1 — F17 institutional: sharp corners (1px) instead of 4px. */
+       v9.3.1 : F17 institutional: sharp corners (1px) instead of 4px. */
     color: var(--c-ink);
     font-weight: 600;
     background: var(--c-amberl-mist);
@@ -671,7 +671,7 @@ const platformInputs = [
   }
 
   /* ============================================================
-     v7.6 — STELLA + Graph Engineering grid (Section 2b)
+     v7.6 : STELLA + Graph Engineering grid (Section 2b)
      ============================================================ */
   .stella-grid {
     display: grid;
@@ -687,7 +687,7 @@ const platformInputs = [
   .stella-cell {
     padding: var(--sp-5);
     border: 1px solid var(--c-rule);
-    /* v9.3.1 — F17 institutional: sharp corners (1px) instead of 6px. */
+    /* v9.3.1 : F17 institutional: sharp corners (1px) instead of 6px. */
     border-radius: 1px;
     background: var(--c-bg);
     display: flex;
@@ -706,7 +706,7 @@ const platformInputs = [
     width: 4px;
     height: 100%;
     background: var(--c-amber);
-    /* v9.3.1 — F17 institutional: sharp rectangle stripe (0) instead of 4px 0 0 4px. */
+    /* v9.3.1 : F17 institutional: sharp rectangle stripe (0) instead of 4px 0 0 4px. */
     border-radius: 0;
   }
   .stella-cell--graph::before {

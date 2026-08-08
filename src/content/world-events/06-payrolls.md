@@ -10,4 +10,4 @@ order: 6
 ---
 
 Labour-market headline. Drives the recession-probability bars on every
-macro dashboard — five of the FOMC's six pivot-triggers depend on it.
+macro dashboard : five of the FOMC's six pivot-triggers depend on it.

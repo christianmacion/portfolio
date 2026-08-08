@@ -3,7 +3,7 @@ date: 2025-09-20
 title: Multiple Testing & the Deflated Sharpe Ratio
 role: quant
 order: 1
-summary: 'Best-of-160 BTC rule: IS Sharpe 1.14 is only 1.24× the pure-noise expectation — DSR = 0.70 (fail).'
+summary: 'Best-of-160 BTC rule: IS Sharpe 1.14 is only 1.24× the pure-noise expectation : DSR = 0.70 (fail).'
 summary_long: 'A study in multiple-testing discipline. Sweep 160 BTC trading rules, rank by in-sample Sharpe, then apply the Deflated Sharpe Ratio (Bailey & López de Prado, 2014). The rank-1 rule looks great until you condition on the number of trials.'
 stack:
   - Python (numpy / pandas / matplotlib)
@@ -43,7 +43,7 @@ If you test 160 coin-toss strategies on a BTC price series, the _best one_ will 
 ## What the project does
 
 1. Sweeps 160 parameterizations of a single rule family across BTC.
-2. Ranks them by in-sample Sharpe — the rank-1 looks like a 1.14 Sharpe.
+2. Ranks them by in-sample Sharpe : the rank-1 looks like a 1.14 Sharpe.
 3. Generates a block-bootstrap null with the same autocorrelation as the source.
 4. Asks: **what Sharpe would rank-1 achieve on pure noise?**
 5. Computes the **Deflated Sharpe Ratio** (DSR) per Bailey & López de Prado (2014).
@@ -65,12 +65,12 @@ If you test 160 coin-toss strategies on a BTC price series, the _best one_ will 
   nullStd={0.31}
   dataX={1.14}
   title="IS-Sharpe distribution (160-rule sweep) vs. pure-noise null"
-  caption="Histogram: 160 in-sample Sharpes from the BTC rule sweep. Red dashed: block-bootstrap null mean=0.92, σ=0.31. Blue line: our rank-1 (1.14) — sits at +0.71σ above the null mean. DSR = 0.70 fails the 0.95 cutoff."
+  caption="Histogram: 160 in-sample Sharpes from the BTC rule sweep. Red dashed: block-bootstrap null mean=0.92, σ=0.31. Blue line: our rank-1 (1.14) : sits at +0.71σ above the null mean. DSR = 0.70 fails the 0.95 cutoff."
 />
 
 - In-sample best Sharpe: **1.14**
 - Pure-noise expectation for rank-1: **≈ 0.92**
-- DSR: **0.70** — a _fail_ under the standard 0.95 cutoff.
+- DSR: **0.70** : a _fail_ under the standard 0.95 cutoff.
 
 ## What's transferable
 

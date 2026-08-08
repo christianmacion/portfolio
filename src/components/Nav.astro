@@ -1,17 +1,17 @@
 ---
 /**
- * Nav.astro — DEPRECATED as of v9.5 (2026-08-07). Replaced by SideRail.astro
+ * Nav.astro : DEPRECATED as of v9.5 (2026-08-07). Replaced by SideRail.astro
  * (Bryllim left side-rail). File retained for the next 30 days in case a
  * rollback is needed during the rollout. Do not import from new code.
  * Remove after 2026-09-06 if no rollback occurs.
  *
- * Nav.astro — top navigation, responsive (collapses on mobile).
+ * Nav.astro : top navigation, responsive (collapses on mobile).
  * v3.5: split into primary (always-visible on desktop) and secondary
  * (Resources disclosure) to keep 1280px rows breathable.
  */
 import { path } from '@utils/url';
 import { profile } from '@utils/profile';
-const bookMailto = `mailto:${profile.contact.email}?subject=${encodeURIComponent('Book a 30-min review')}&body=${encodeURIComponent('Suggested slots (next 14 days, PH UTC+8):\\n— Reply with 2-3 windows that work for you and I will confirm within 24 hours.')}`;
+const bookMailto = `mailto:${profile.contact.email}?subject=${encodeURIComponent('Book a 30-min review')}&body=${encodeURIComponent('Suggested slots (next 14 days, PH UTC+8):\\n: Reply with 2-3 windows that work for you and I will confirm within 24 hours.')}`;
 import NavMore from '@components/NavMore.astro';
 const { pathname } = Astro.url;
 const isActive = (href: string) => {
@@ -19,12 +19,12 @@ const isActive = (href: string) => {
   return pathname === suffix || pathname.startsWith(suffix + '/');
 };
 
-// Primary links — visible inline at every viewport >= 1024px.
+// Primary links : visible inline at every viewport >= 1024px.
 // Mobile (<=980px) renders ALL links flat inside the burger menu.
-// v6.11.13 — Positions promoted from secondary to primary. The "Live
+// v6.11.13 : Positions promoted from secondary to primary. The "Live
 // book" label was ambiguous (trade book? book to read?) and buried the
 // most important recruiter-visiting page behind a 10-link disclosure.
-// v9.3 IA wave 2 (2026-08-01) — /now promoted from position #8 to #2.
+// v9.3 IA wave 2 (2026-08-01) : /now promoted from position #8 to #2.
 // Reasoning: /now is the second-most-current artifact (dated one-pager
 // of current activities); eye-tracking on recruiters first-passes only
 // reads positions 1-4. Promoting to #2 lifts "what does he care about
@@ -41,7 +41,7 @@ const primary = [
   { href: path('/methodology'), label: 'Method' },
 ];
 
-// v6.1.0 (Mission G) — Markets dropdown sits between Proof and Projects
+// v6.1.0 (Mission G) : Markets dropdown sits between Proof and Projects
 // on desktop (as a <details><summary> disclosure), flat with a heading
 // inside the burger menu on mobile. /ai is a sub-route of /research for
 // nav IA but is its own page.
@@ -54,9 +54,9 @@ const markets = [
 
 // Secondary links - behind a "Resources" details disclosure on desktop,
 // flat list on mobile.
-// v6.11.13 — /positions promoted to primary nav (was "Live book" here);
+// v6.11.13 : /positions promoted to primary nav (was "Live book" here);
 // removed to avoid duplicate entry.
-// v6.12 — /screening-call promoted to top of Resources disclosure (recruiter-
+// v6.12 : /screening-call promoted to top of Resources disclosure (recruiter-
 // facing 30-min agenda; most-requested artifact after /for-recruiters).
 const secondary = [
   { href: path('/screening-call'), label: 'Screening' },
@@ -82,7 +82,7 @@ const secondary = [
          institutional register; "home" suffix preserves the link-purpose cue. -->
     <a href={path('/')} class="nav__brand" aria-label="Christian T. Macion. home">
       {
-        /* v7.2 2026-07-24 — logo legibility fix. The prior <picture> chose the
+        /* v7.2 2026-07-24 : logo legibility fix. The prior <picture> chose the
            mark asset by OS `prefers-color-scheme`, but the nav background follows
            the *body theme* (--c-tape → --j-bg): cream on theme-light, warm-dark on
            the base surface. So a dark-OS visitor on the light home got the
@@ -110,7 +110,7 @@ const secondary = [
       </svg>
       <span class="nav__brand-text">
         {
-          /* v6.10.47 — derive the brand name from profile.fullName. The ®
+          /* v6.10.47 : derive the brand name from profile.fullName. The ®
             glyph is wrapped in <sup> so the existing `.nav__brand-name sup`
             rule (font-size 0.65em + amber tint) renders it as a proper
             typographic superscript instead of inline text. */
@@ -120,7 +120,7 @@ const secondary = [
       </span>
     </a>
 
-    <!-- v9.3.2 a11y fix (architecture audit 2026-08-02) — WCAG 2.2 AA 4.1.2:
+    <!-- v9.3.2 a11y fix (architecture audit 2026-08-02) : WCAG 2.2 AA 4.1.2:
          the mobile-menu toggle now carries aria-expanded + aria-controls so
          screen readers announce the open/closed state. The checkbox is the
          state-bearing element; the small inline script below flips
@@ -141,7 +141,7 @@ const secondary = [
     <nav class="nav__links" id="primary-nav" aria-label="Primary">
       <div class="nav__primary">
         {
-          /* v6.1.0 (Mission G) — Markets dropdown sits BETWEEN Proof and Projects.
+          /* v6.1.0 (Mission G) : Markets dropdown sits BETWEEN Proof and Projects.
             Split the loop into 3 chunks so the dropdown interrupts the linear
             flow at the spec'd position. */
         }
@@ -167,7 +167,7 @@ const secondary = [
         <NavMore items={markets} mode="inline" label="Markets" class="nav__more-flat" />
         <NavMore items={secondary} mode="inline" class="nav__more-flat" />
         {
-          /* v9.3 IA wave 2 (2026-08-01) — Mobile drawer variant: same 3-pill
+          /* v9.3 IA wave 2 (2026-08-01) : Mobile drawer variant: same 3-pill
            Resume split-button, expanded inline (no dropdown panel). */
         }
         <details class="nav__resume-split nav__resume-split--mobile">
@@ -195,7 +195,7 @@ const secondary = [
           <div
             class="nav__resume-pills nav__resume-pills--mobile"
             id="resume-pills-mobile"
-            /* v6.18 W2 lock (2026-08-08): drop role="menu" — the parent
+            /* v6.18 W2 lock (2026-08-08): drop role="menu" : the parent
                <details><summary> provides native disclosure semantics;
                ARIA menu role is reserved for real `role="menubar"` parents.
                Per [[v10-w2-a11y-polish-audit]] rank #4. */
@@ -227,7 +227,7 @@ const secondary = [
           </div>
         </details>
         {
-          /* v9.3 IA wave 2 (2026-08-01) — Mobile drawer Book-a-call. Full-width
+          /* v9.3 IA wave 2 (2026-08-01) : Mobile drawer Book-a-call. Full-width
            amber CTA. Mailto fallback per Wave-2 conversion audit (cal.com
            /christianmacion/30min-review returns HTTP 404 as of 2026-08-01).
            Owner-action item to recover the cal.com handle + recreate the
@@ -240,7 +240,7 @@ const secondary = [
         >
           <span>Book a call</span>
         </a>
-        {/* v9.3 IA wave 2 (2026-08-01) — Mobile drawer GitHub icon. */}
+        {/* v9.3 IA wave 2 (2026-08-01) : Mobile drawer GitHub icon. */}
         <a
           href="https://github.com/christianmacion26"
           class="nav__icon-link nav__icon-link--mobile"
@@ -286,7 +286,7 @@ const secondary = [
         </svg>
       </a>
       {
-        /* v9.3 IA wave 2 (2026-08-01) — GitHub icon link in nav. Custom
+        /* v9.3 IA wave 2 (2026-08-01) : GitHub icon link in nav. Custom
          16×16 SVG (mono fill, accent on hover) → external profile.
          Touch target expanded to 44×44 via nav__icon-link::after. */
       }
@@ -312,7 +312,7 @@ const secondary = [
         </svg>
       </a>
       {
-        /* v9.3 IA wave 2 (2026-08-01) — Resume split-button disclosure.
+        /* v9.3 IA wave 2 (2026-08-01) : Resume split-button disclosure.
          Native <details>/<summary> → 3 direct-PDF pills (Quant / AI /
          Unified). Replaces the 2-click "Resume ↓ → /resume → variant →
          PDF" path with a 1-click variant chooser. aria-controls +
@@ -368,7 +368,7 @@ const secondary = [
         </div>
       </details>
       {
-        /* v9.3 IA wave 2 (2026-08-01) — Persistent Book-a-call CTA in nav.
+        /* v9.3 IA wave 2 (2026-08-01) : Persistent Book-a-call CTA in nav.
          Amber-deep on tape → terracotta on hover. Mailto fallback per
          Wave-2 conversion audit (cal.com/christianmacion/30min-review
          returns HTTP 404 as of 2026-08-01; verified via curl HTTP/2 404
@@ -393,14 +393,14 @@ const secondary = [
     position: sticky;
     top: 0;
     z-index: var(--z-nav);
-    /* v6.1.0 — always institutional-tape (single palette, no light/dark flip).
-       v6.11.6 — was rgba(13,17,23,1); use --c-tape token so future
+    /* v6.1.0 : always institutional-tape (single palette, no light/dark flip).
+       v6.11.6 : was rgba(13,17,23,1); use --c-tape token so future
        palette shifts propagate. */
     background: var(--c-tape);
     border-bottom: 1px solid var(--c-white-haze);
     color: var(--ink-on-tape);
   }
-  /* v6.1.0 — light/dark mode removed. Background is always tape (set above
+  /* v6.1.0 : light/dark mode removed. Background is always tape (set above
      on `.nav`); prefers-color-scheme and [data-theme] overrides are dead. */
   .nav__inner {
     height: var(--nav-h);
@@ -414,9 +414,9 @@ const secondary = [
     align-items: center;
     gap: var(--sp-3);
     text-decoration: none;
-    color: var(--c-primary); /* v6.1.0 — always tape nav, light text */
+    color: var(--c-primary); /* v6.1.0 : always tape nav, light text */
     flex-shrink: 0;
-    /* v6.3 polish — enforce ≥ 44 px tap target on the brand link.
+    /* v6.3 polish : enforce ≥ 44 px tap target on the brand link.
        The audit flagged the brand chrome at 184×36 px.
        min-height:44 lifts the rect without shifting visible content
        because the brand is centered in a 56 px nav row. */
@@ -444,7 +444,7 @@ const secondary = [
   }
   .nav__brand-sub {
     font-size: var(--fs-xs);
-    /* v7.2 — was --c-white-faint (--j-ink-4): 3.10:1 light / 1.93:1 dark, fails
+    /* v7.2 : was --c-white-faint (--j-ink-4): 3.10:1 light / 1.93:1 dark, fails
        WCAG AA at this 12px size. --c-ink-3 passes AA in both themes (6.20:1
        light / 5.62:1 dark) while staying secondary in the hierarchy. */
     color: var(--c-ink-3);
@@ -464,11 +464,11 @@ const secondary = [
     display: none;
   }
   .nav__link {
-    color: var(--c-ink-mute); /* v6.1.0 — light text on dark nav */
+    color: var(--c-ink-mute); /* v6.1.0 : light text on dark nav */
     font-size: var(--fs-sm);
     font-weight: 500;
     padding: 0.5rem 0;
-    /* v6.1 polish — enforce ≥ 44 px tap target on every nav link.
+    /* v6.1 polish : enforce ≥ 44 px tap target on every nav link.
        The nav itself is 56 px tall; previous padding (0.5rem top/bot)
        rendered ~30 px high. min-height doesn't shift layout because
        the parent flex container centers content vertically. */
@@ -481,7 +481,7 @@ const secondary = [
       border-color var(--transition);
   }
   .nav__link:hover {
-    /* v9.3.2 (2026-08-02) — a11y: --c-amber-light (#5b6f9e) on
+    /* v9.3.2 (2026-08-02) : a11y: --c-amber-light (#5b6f9e) on
        --c-bg light (#ece5d4) measured 3.97:1 (sub-AA). Switch to
        --c-amber which resolves to --j-cobalt = #2c4a7e in light mode
        → 7.00:1 PASS, dark mode → 4.96:1 PASS. Provides a clear hover
@@ -492,7 +492,7 @@ const secondary = [
     color: var(--c-amber-light);
     border-bottom-color: var(--c-amber);
   }
-  /* v6.1.0 — Match .nav__link color treatment when NavMore is nested
+  /* v6.1.0 : Match .nav__link color treatment when NavMore is nested
      in the primary row (Markets dropdown + Resources dropdown).
      NavMore's default styles are tuned for `--c-ink-2` against light bg;
      here the nav is institutional-tape, so re-color and remove the
@@ -503,7 +503,7 @@ const secondary = [
     font-weight: 500;
     padding: 0.5rem 0;
     border-radius: 0;
-    /* v6.1 polish — min-height + flex centering so the dropdown summary
+    /* v6.1 polish : min-height + flex centering so the dropdown summary
        matches the .nav__link touch target. */
     min-height: 44px;
     display: inline-flex;
@@ -532,7 +532,7 @@ const secondary = [
   /* === v6.x · Force amber on the Resume CTA (P0-4) ===
      .btn--primary uses var(--c-primary), which flips to a pale ink in
      dark mode → invisible against the dark navbar. Always amber.
-     v9.3 IA wave 2 (2026-08-01) a11y baseline — text color
+     v9.3 IA wave 2 (2026-08-01) a11y baseline : text color
      var(--c-bg-light) (#f7f2e7) on var(--c-amber) (#8a6f2f)
      measured 4.28:1 in dark theme, failing WCAG 1.4.3 (4.5:1 body).
      Switched to var(--c-bg) for ≥4.5:1 in both themes. Hover swap:
@@ -542,14 +542,14 @@ const secondary = [
     background: var(--c-amber);
     color: var(--c-on-amber-deep);
     border: 1px solid var(--c-amber);
-    /* v6.18 polish — prevent "Resume ↓" wrapping to "Res..." on narrower
+    /* v6.18 polish : prevent "Resume ↓" wrapping to "Res..." on narrower
        desktops. The audit found the CTA clipped at 1024-1280px when
        the primary link row + dropdowns ate the available width. */
     white-space: nowrap;
     flex-shrink: 0;
   }
   .nav__cta:hover {
-    /* v9.3.2 (2026-08-02) — a11y: --c-on-amber-deep (#ffffff) on
+    /* v9.3.2 (2026-08-02) : a11y: --c-on-amber-deep (#ffffff) on
        --c-amber (#a88a3e) measured 3.30:1 (sub-AA on dark theme).
        Switch hover text to --c-bg (#1a1714) so hover state reads as
        5.41:1 PASS in both themes. Matches the existing CSS comment
@@ -560,10 +560,10 @@ const secondary = [
     color: var(--c-bg);
   }
 
-  /* === v6.1.0 — theme toggle CSS removed (the button is gone) === */
+  /* === v6.1.0 : theme toggle CSS removed (the button is gone) === */
 
   /* === Search shortcut ===
-   * v6.1.1 polish — the 32×32 icon button failed WCAG 2.5.5 (44×44).
+   * v6.1.1 polish : the 32×32 icon button failed WCAG 2.5.5 (44×44).
    * The visual stays 32×32; an invisible `::after` pseudo-element
    * expands the hit target by 6px on every side (32 + 12 = 44×44),
    * without shifting the layout or changing the visible button box. */
@@ -597,7 +597,7 @@ const secondary = [
     border-color: var(--c-amber-light);
   }
 
-  /* === v9.3 IA wave 2 (2026-08-01) — GitHub icon link ===
+  /* === v9.3 IA wave 2 (2026-08-01) : GitHub icon link ===
      Same 32×32 visible / 44×44 hit-target pattern as .nav-search. */
   .nav__icon-link {
     position: relative;
@@ -634,7 +634,7 @@ const secondary = [
     outline-offset: 2px;
   }
   .nav__icon-link-label {
-    /* Mobile-only sr-only label — desktop hides via display:none in MQ */
+    /* Mobile-only sr-only label : desktop hides via display:none in MQ */
     position: absolute;
     width: 1px;
     height: 1px;
@@ -646,7 +646,7 @@ const secondary = [
     border: 0;
   }
 
-  /* === v9.3 IA wave 2 (2026-08-01) — Resume split-button disclosure ===
+  /* === v9.3 IA wave 2 (2026-08-01) : Resume split-button disclosure ===
      Native <details>/<summary> widget; on desktop the panel anchors
      below the chip via .nav__resume-split--desktop { position: relative }.
      The summary re-uses .nav__cta chrome so the chip looks identical
@@ -680,7 +680,7 @@ const secondary = [
     outline-offset: 2px;
   }
 
-  /* Desktop dropdown panel — anchored below the chip */
+  /* Desktop dropdown panel : anchored below the chip */
   .nav__resume-pills {
     position: absolute;
     top: calc(100% + 8px);
@@ -727,7 +727,7 @@ const secondary = [
     font-weight: 500;
   }
 
-  /* === v9.3 IA wave 2 (2026-08-01) — Book-a-call CTA ===
+  /* === v9.3 IA wave 2 (2026-08-01) : Book-a-call CTA ===
      Amber-deep on tape (--c-amber); terracotta hover. Distinct
      from the Resume chip so the eye reads two affordances, not one.
      a11y baseline: --c-bg on --c-amber measures ≥4.5:1 in both
@@ -765,7 +765,7 @@ const secondary = [
   .nav__book--mobile {
     display: none;
   }
-  /* v6.11.6 — removed dead .theme-toggle__sun / .theme-toggle__moon /
+  /* v6.11.6 : removed dead .theme-toggle__sun / .theme-toggle__moon /
      [data-theme='dark'] / prefers-color-scheme CSS. The theme toggle
      was removed (single palette, no light/dark flip) but the CSS
      survived. Aspirational bloat. */
@@ -787,7 +787,7 @@ const secondary = [
     width: 100%;
     background: var(--c-ink);
     border-radius: 1px;
-    /* v9.3.2 motion contract — explicit properties only. The hamburger
+    /* v9.3.2 motion contract : explicit properties only. The hamburger
        bars only change `background` on the active state (no rotate-to-X
        transform on this component). transform + opacity added for
        forward-compat with any future X-state animation. */
@@ -857,7 +857,7 @@ const secondary = [
     .nav__cta--desktop {
       display: none;
     }
-    /* === v9.3 IA wave 2 — mobile chrome variants ===
+    /* === v9.3 IA wave 2 : mobile chrome variants ===
        Show the mobile Resume split-button, Book-a-call, GitHub link;
        hide the desktop-only Resume split-button. */
     .nav__resume-split--desktop {
@@ -904,13 +904,13 @@ const secondary = [
       align-self: flex-start;
       margin-top: var(--sp-3);
     }
-    /* v6.11.6 — removed dead .theme-toggle block from mobile MQ. */
+    /* v6.11.6 : removed dead .theme-toggle block from mobile MQ. */
     .nav-search {
       align-self: flex-start;
       margin-top: var(--sp-3);
     }
   }
-  /* === v9.3 IA wave 2 — reduced-motion guard ===
+  /* === v9.3 IA wave 2 : reduced-motion guard ===
      The chevron rotation + Resume panel transform default to short
      transitions; turn them off entirely when prefers-reduced-motion
      is on. The un-animated state is the open panel + chevron-down. */
@@ -923,7 +923,7 @@ const secondary = [
 </style>
 
 <script>
-  // v9.3.2 a11y hook — keep aria-expanded in sync with the checkbox state.
+  // v9.3.2 a11y hook : keep aria-expanded in sync with the checkbox state.
   // The CSS uses :checked ~ .nav__links to toggle the panel; this script
   // mirrors that state into the aria-expanded attribute so screen readers
   // announce "expanded" / "collapsed" correctly. Idempotent: only mutates

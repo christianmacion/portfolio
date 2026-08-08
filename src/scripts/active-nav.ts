@@ -1,11 +1,11 @@
 /**
- * active-nav.ts — Phase D-2 + v6.0 · section-toc integration.
+ * active-nav.ts : Phase D-2 + v6.0 · section-toc integration.
  *
  * Tracks visible <section> ids and applies `.is-active` to:
  *   1. The matching nav link (.nav__link)
  *   2. The matching in-page TOC link (.toc__link, data-toc-href)
  *
- * Uses "leading section" logic — only the section whose top is
+ * Uses "leading section" logic : only the section whose top is
  * closest to a 25%-of-viewport reference line gets the active class.
  * No scroll-jacking; pure read.
  *

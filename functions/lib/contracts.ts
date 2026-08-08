@@ -275,7 +275,17 @@ export function allowedOrigin(request: Request, env: Env): string | null {
   const origin = request.headers.get('Origin');
   const configured = (
     env.PUBLIC_ORIGINS ??
-    'https://christianmacion-portfolio.pages.dev,https://christianmacion26.github.io'
+    [
+      'https://christianmacion-portfolio.pages.dev',
+      'https://christianmacion26.github.io',
+      // Upstream data origins allowed for WorldView Live (completeness — the
+      // worker proxies GDELT; the browser fetches Yahoo/CoinGecko/ECB
+      // directly, but we keep the allowlist aligned so future worker
+      // endpoints can talk to these origins without an extra deploy).
+      'https://query1.finance.yahoo.com',
+      'https://api.coingecko.com',
+      'https://data-api.ecb.europa.eu',
+    ].join(',')
   )
     .split(',')
     .map((item) => item.trim());

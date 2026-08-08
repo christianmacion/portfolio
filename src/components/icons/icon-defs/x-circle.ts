@@ -1,5 +1,5 @@
 /**
- * x-circle — circle + cross. The "fail / rejected / dismissed" indicator.
+ * x-circle : circle + cross. The "fail / rejected / dismissed" indicator.
  * Pair with red semantics; the role is set by the consuming element, not
  * the icon (currentColor carries the meaning).
  */

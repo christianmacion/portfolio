@@ -1,20 +1,20 @@
 ---
 /**
- * markets.astro — v6.1 "Bloomberg-terminal" landing page.
+ * markets.astro : v6.1 "Bloomberg-terminal" landing page.
  *
  * Layout (top → bottom):
- *   1. <MarketTape /> — full-bleed scrolling equity tape
- *   2. Stats row — 4 <StatCell /> for S&P, DXY, VIX, BTC-USD
+ *   1. <MarketTape /> : full-bleed scrolling equity tape
+ *   2. Stats row : 4 <StatCell /> for S&P, DXY, VIX, BTC-USD
  *   3. 3-col grid:
- *      - left  (30%) — <OrderBook symbol="SPX" />
- *      - center (45%) — <EquityCurveChart /> showing one strategy
- *      - right (25%) — mini order book / queue panel for a second symbol
- *   4. Bottom band — <CoverageGlobe /> · <TermStructure /> · indices list
+ *      - left  (30%) : <OrderBook symbol="SPX" />
+ *      - center (45%) : <EquityCurveChart /> showing one strategy
+ *      - right (25%) : mini order book / queue panel for a second symbol
+ *   4. Bottom band : <CoverageGlobe /> · <TermStructure /> · indices list
  *
  * No client:* directives. All numbers are seeded from BUILD_DATE so the
  * page is byte-deterministic for a given build and shifts only between
  * builds. Cross-fade / carousel patterns from StatementCarousel are NOT
- * used here — these are static primitives, not rotators.
+ * used here : these are static primitives, not rotators.
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
 import VoiceLine from '@components/VoiceLine.astro';
@@ -35,10 +35,10 @@ import { getIndexSnap } from '@utils/markets-data';
 // Four headline indices with deterministic mid-prices and a small
 // 30-day series for the inline MiniSpark on each card.
 //
-// v6.11.12 — pull px + delta + spark from src/utils/markets-data.ts so
+// v6.11.12 : pull px + delta + spark from src/utils/markets-data.ts so
 // the stat cards show IDENTICAL numbers to the same indices on the
 // MarketTape at the top of this page. Previously the cards had their
-// own walk (sigma=12, len=30) while the tape had sigma=8.0, len=80 —
+// own walk (sigma=12, len=30) while the tape had sigma=8.0, len=80 :
 // the same instrument rendered two different prices on one page.
 const STAT_CARD_SYMS = ['SPX', 'DXY', 'VIX', 'BTC-USD'] as const;
 const indexCards = STAT_CARD_SYMS.map((sym) => {
@@ -55,7 +55,7 @@ const indexCards = STAT_CARD_SYMS.map((sym) => {
 });
 
 // === Strategy equity curve for the center panel ===
-// Take a deterministic 60-day price walk starting at 100, sigma 0.6 —
+// Take a deterministic 60-day price walk starting at 100, sigma 0.6 :
 // matches the canonical "small systematic strategy" character so the
 // chart looks honest (no 100× blowups, no flat lines).
 const curveRng = seedFromString(buildSeed() + '::markets-curve');
@@ -76,7 +76,7 @@ const yieldCurve = [
 ];
 
 // === Secondary order book (right column) ===
-// BTC-USD order book to pair with the SPX book on the left. v6.11.12 —
+// BTC-USD order book to pair with the SPX book on the left. v6.11.12 :
 // pass the shared BTC-USD midPx so the right book shows the same BTC
 // price as the stat card above + the tape. Previously it used its
 // own internal walk (different sigma/seed) and rendered an unrelated
@@ -96,7 +96,7 @@ const secondarySymbol = 'BTC-USD';
 >
   {
     /* ============================================================
-       TAPE — full-bleed. The first thing the eye meets; instant
+       TAPE : full-bleed. The first thing the eye meets; instant
        signal density before the editorial copy begins.
        ============================================================ */
   }
@@ -104,7 +104,7 @@ const secondarySymbol = 'BTC-USD';
 
   {
     /* ============================================================
-       HERO — identity-first, single column, dark editorial.
+       HERO : identity-first, single column, dark editorial.
        Title is the page identity, not the navigation chrome.
        ============================================================ */
   }
@@ -136,7 +136,7 @@ const secondarySymbol = 'BTC-USD';
 
   {
     /* ============================================================
-       STATS ROW — 4 StatCells, indices + inline MiniSpark per cell.
+       STATS ROW : 4 StatCells, indices + inline MiniSpark per cell.
        ============================================================ */
   }
   <section class="mk-stats">
@@ -163,7 +163,7 @@ const secondarySymbol = 'BTC-USD';
 
   {
     /* ============================================================
-       3-COL TERMINAL — OrderBook (left) · EquityCurveChart (center)
+       3-COL TERMINAL : OrderBook (left) · EquityCurveChart (center)
        · Secondary OrderBook (right). On <=980px, stacks vertically.
        ============================================================ */
   }
@@ -206,7 +206,7 @@ const secondarySymbol = 'BTC-USD';
 
   {
     /* ============================================================
-       BOTTOM BAND — CoverageGlobe · TermStructure · indices list.
+       BOTTOM BAND : CoverageGlobe · TermStructure · indices list.
        Three columns of equal weight; each is its own data primitive.
        ============================================================ */
   }
@@ -289,7 +289,7 @@ const secondarySymbol = 'BTC-USD';
 
 <style>
   /* ============================================================
-     HERO — dark editorial, terminal cadence.
+     HERO : dark editorial, terminal cadence.
      ============================================================ */
   .mk-hero {
     padding-block: clamp(var(--sp-7), 12vh, var(--sp-9));
@@ -316,9 +316,9 @@ const secondarySymbol = 'BTC-USD';
   .markets-head__eyebrow-chip {
     display: inline-block;
     padding: 4px 10px;
-    /* v9.2 a11y — was --c-phi-teal. Dark theme --j-phi-teal = #2d5f5a
+    /* v9.2 a11y : was --c-phi-teal. Dark theme --j-phi-teal = #2d5f5a
      only hits 2.14:1 on dark page-head surface. Solid amber chip +
-     --c-bg text reads at ≥5.6:1 in both themes — institutional
+     --c-bg text reads at ≥5.6:1 in both themes : institutional
      register, F14-safe (no traffic-light). */
     color: var(--c-bg);
     border: 1px solid var(--c-amber);
@@ -381,7 +381,7 @@ const secondarySymbol = 'BTC-USD';
   }
 
   /* ============================================================
-     STATS ROW — 4-up grid of StatCell + inline sparkline.
+     STATS ROW : 4-up grid of StatCell + inline sparkline.
      ============================================================ */
   .mk-stats {
     padding-block: var(--sp-7);
@@ -421,7 +421,7 @@ const secondarySymbol = 'BTC-USD';
   }
 
   /* ============================================================
-     3-COL TERMINAL — OrderBook | EquityCurve | OrderBook.
+     3-COL TERMINAL : OrderBook | EquityCurve | OrderBook.
      ============================================================ */
   .mk-terminal {
     padding-block: var(--sp-8);
@@ -468,7 +468,7 @@ const secondarySymbol = 'BTC-USD';
   }
 
   /* ============================================================
-     BOTTOM BAND — CoverageGlobe · TermStructure · indices list.
+     BOTTOM BAND : CoverageGlobe · TermStructure · indices list.
      ============================================================ */
   .mk-band {
     padding-block: var(--sp-7);
@@ -541,7 +541,7 @@ const secondarySymbol = 'BTC-USD';
     font-feature-settings: 'tnum' 1;
     color: var(--c-ink-2);
   }
-  /* v6.11.10 — F14 amber-only rule. Sign carried by glyph (▲/▼)
+  /* v6.11.10 : F14 amber-only rule. Sign carried by glyph (▲/▼)
      + intensity (soft/normal), not hue. No traffic-light chrome. */
   .mk-band__indices-delta--up {
     color: var(--c-amber);

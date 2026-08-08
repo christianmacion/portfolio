@@ -3,8 +3,8 @@ date: 2026-02-04
 title: Eval MCP Server
 role: ai
 order: 4
-summary: 'MCP server exposing the slop-evaluation gate over Tools, Resources, and Prompts — 20/20 conformance, 100% round-trip parity.'
-summary_long: 'An MCP (Model Context Protocol) server that wraps the AI-output quality gate as a first-class tool any MCP-aware agent can call — exposes the 13-metric slop-evaluation gate over all three MCP primitives (Tools / Resources / Prompts) and proves the round-trip parity with a 20-case conformance suite.'
+summary: 'MCP server exposing the slop-evaluation gate over Tools, Resources, and Prompts : 20/20 conformance, 100% round-trip parity.'
+summary_long: 'An MCP (Model Context Protocol) server that wraps the AI-output quality gate as a first-class tool any MCP-aware agent can call : exposes the 13-metric slop-evaluation gate over all three MCP primitives (Tools / Resources / Prompts) and proves the round-trip parity with a 20-case conformance suite.'
 stack:
   - Python
   - Model Context Protocol (MCP)
@@ -25,14 +25,14 @@ tags: [mcp, agent-protocol, evaluation, tools, resources, prompts]
 
 ## Why this exists
 
-MCP is the protocol that lets agents call tools from any model client (Claude Code, IDE plugins, custom orchestrators). A quality gate that lives only in one app doesn't scale — an agent _anywhere_ should be able to ask "is this draft ready to ship?" with the same confidence.
+MCP is the protocol that lets agents call tools from any model client (Claude Code, IDE plugins, custom orchestrators). A quality gate that lives only in one app doesn't scale : an agent _anywhere_ should be able to ask "is this draft ready to ship?" with the same confidence.
 
 ## What it proves
 
-- **Conformance** — every MCP primitive (Tools, Resources, Prompts) round-trips with the same input/output shape across 20 conformance test cases.
-- **Parity** — calling the gate via MCP returns the same score as calling the in-process library directly.
-- **Composability** — wraps the existing 13-metric literature-grounded slop evaluator (see `reflect-revise` and `slop-scanner`) as a drop-in for any MCP-aware client.
+- **Conformance** : every MCP primitive (Tools, Resources, Prompts) round-trips with the same input/output shape across 20 conformance test cases.
+- **Parity** : calling the gate via MCP returns the same score as calling the in-process library directly.
+- **Composability** : wraps the existing 13-metric literature-grounded slop evaluator (see `reflect-revise` and `slop-scanner`) as a drop-in for any MCP-aware client.
 
 ## What's transferable
 
-The pattern — wrap an existing eval as an MCP server, prove round-trip parity, ship conformance tests — applies to any other evaluation you want to expose to a heterogeneous agent fleet.
+The pattern : wrap an existing eval as an MCP server, prove round-trip parity, ship conformance tests : applies to any other evaluation you want to expose to a heterogeneous agent fleet.

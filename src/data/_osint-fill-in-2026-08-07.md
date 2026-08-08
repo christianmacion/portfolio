@@ -1,5 +1,5 @@
 ---
-# OSINT Cell cert-fill-in dossier — v9.4.7 + v9.4.9
+# OSINT Cell cert-fill-in dossier : v9.4.7 + v9.4.9
 # Persisted 2026-08-07 by osint_engineer (re-write + stat() self-verify retrofit)
 # Filename prefixed with `_` to opt-out of Astro `certGroup` collection rendering.
 # This file is a dossier/handoff artifact, not a published certification page.
@@ -31,10 +31,10 @@ to the parent commits are at the bottom.
 |---|---|---|
 | **A1** | Primary source + confirmed (issuer portal with per-record permalink) | yes |
 | **A2** | Primary issuer + program-page URL pattern (subject code requires Owner pull) | yes |
-| **B2** | Tertiary source — issuer landing page; no per-cert URL exists publicly | yes |
-| **LOW** | Badge page or partial verification only — flag for re-verify | only with explicit `low: true` flag |
+| **B2** | Tertiary source : issuer landing page; no per-cert URL exists publicly | yes |
+| **LOW** | Badge page or partial verification only : flag for re-verify | only with explicit `low: true` flag |
 
-## v9.4.7 active URLs (4) — committed in `03fe017`
+## v9.4.7 active URLs (4) : committed in `03fe017`
 
 | # | Issuer | Cert | URL | Tier | Evidence summary |
 |---|---|---|---|---|---|
@@ -43,15 +43,15 @@ to the parent commits are at the bottom.
 | 3 | Civil Service Commission (PH) | Career Service Professional Eligibility | https://verification.csc.gov.ph/coe/coe.asp | **A1** | Government of the Philippines primary verification portal (CSC); per-COE inquiry endpoint; A1 primary. |
 | 4 | IBM | Artificial Intelligence Fundamentals | https://www.credly.com/org/ibm/badge/artificial-intelligence-fundamentals | **A1** | IBM Credly badge page; per-badge permalink; A1 issuer-controlled primary. |
 
-## v9.4.9 active URLs (10) — committed in `f9e325a`
+## v9.4.9 active URLs (10) : committed in `f9e325a`
 
 | # | Issuer | Cert | URL | Tier | Evidence summary |
 |---|---|---|---|---|---|
-| 5 | NASA | Galactic Problem Solver — NASA Space Apps Challenge (Zurich, CH) | https://www.spaceappschallenge.org/people/christian-macion/ | **A2** | Per-person URL exists on the official Space Apps Challenge people directory; canonical handle slug; primary issuer. |
+| 5 | NASA | Galactic Problem Solver : NASA Space Apps Challenge (Zurich, CH) | https://www.spaceappschallenge.org/people/christian-macion/ | **A2** | Per-person URL exists on the official Space Apps Challenge people directory; canonical handle slug; primary issuer. |
 | 6 | Meta (via Bayan Academy) | BIDA META AICCELERATE 2025 | https://www.bayanacademy.org/events/bida-year-2-meta-aiccelerate-training-2025-program | **B2** | Bayan Academy program landing page (Meta-funded cohort); no per-cohort permalink; tier B2 issuer program page. |
 | 7 | Bitget | Blockchain4Youth (B4Y-2026-000701) | https://www.bitget.com/promotion/blockchain4youth | **B2** | Bitget program landing page; geo-blocked in PH; per-cert code requires Owner pull from Bitget Academy dashboard. |
 | 8 | Society of Technical Analysts of the Philippines (Tier-1) | Certified Technical Analyst Program | https://staphilippines.org/ | **B2** | STA PH official site; per-cert verification requires email inquiry with name + cohort; landing page only. |
-| 9 | Marginal Revolution University | Principles of Economics — Macroeconomics | https://learn.mru.org/courses/principles-of-macroeconomics | **B2** | MRU free course page; no per-holder URL exists for free-tier enrollments. |
+| 9 | Marginal Revolution University | Principles of Economics : Macroeconomics | https://learn.mru.org/courses/principles-of-macroeconomics | **B2** | MRU free course page; no per-holder URL exists for free-tier enrollments. |
 | 10 | Basel Institute on Governance | Operational Analysis of Suspicious Transaction Reports | https://learn.baselgovernance.org/ | **B2** | Basel LEARN landing page; per-cert code requires Owner pull from Basel LEARN transcript. |
 | 11 | SEC Philippines (Academy) | Fundamentals of Accounting | https://academy.sec.gov.ph/ | **B2** | SEC Academy portal (4 SEC certs share this single issuer page); per-record requires login. |
 | 12 | SEC Philippines (Academy) | Introduction to Capital Market | https://academy.sec.gov.ph/ | **B2** | Same SEC Academy portal as #11; grouped under single issuer entry. |
@@ -70,8 +70,8 @@ to the parent commits are at the bottom.
 
 From the v9.4.7 dispatch (AskUserQuestion):
 
-1. **Goldman Sachs reframed** as "Educational module — not a credential"
-   (`02-finance.md` — name + issuer + tier 1 + note line).
+1. **Goldman Sachs reframed** as "Educational module : not a credential"
+   (`02-finance.md` : name + issuer + tier 1 + note line).
 2. **NASA Space Apps cohort year:** 2024 → 2025 (`src/utils/profile.ts:179`).
 3. **Meta cohort:** → "Batch 3" (`src/pages/publications.astro:175`).
 
@@ -79,8 +79,8 @@ From the v9.4.7 dispatch (AskUserQuestion):
 
 | Commit | Message | OSINT Cell deliverable |
 |---|---|---|
-| `03fe017` | v9.4.7 cert wall fill-in (OSINT dossier + Owner decisions) | v1.0 dispatch — 4 verify URLs + 7 PNG logos |
-| `f9e325a` | v9.4.9 EarthMap halo fix + cert wall extension | v2.0 dispatch — 10 additional verify URLs |
+| `03fe017` | v9.4.7 cert wall fill-in (OSINT dossier + Owner decisions) | v1.0 dispatch : 4 verify URLs + 7 PNG logos |
+| `f9e325a` | v9.4.9 EarthMap halo fix + cert wall extension | v2.0 dispatch : 10 additional verify URLs |
 
 AAR pointer: `~/.claude/cache/corporate/aars/2026-08-07-osint-cell-cert-fill-in.md`
 

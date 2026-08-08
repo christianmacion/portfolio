@@ -1,6 +1,6 @@
 ---
 /**
- * for-recruiters.astro — v6.0 · one-pager for HR / hiring managers.
+ * for-recruiters.astro : v6.0 · one-pager for HR / hiring managers.
  *
  * 60-second skim page for recruiters who don't yet know the body of
  * the site. Answers the six institutional questions directly:
@@ -10,7 +10,6 @@
  * canonical answers.
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
-import CTABanner from '@components/CTABanner.astro';
 import ChromeHeader from '@components/ChromeHeader.astro';
 import { profile } from '@utils/profile';
 import { path } from '@utils/url';
@@ -23,13 +22,13 @@ const phoneDisplay = profile.contact.phoneDisplay;
 const linkedin = profile.contact.linkedin;
 const NGATE = `${profile.stats.evalGates}-gate`;
 
-// v6.12 — cold-email template. The {placeholder} tokens must appear as
+// v6.12 : cold-email template. The {placeholder} tokens must appear as
 // literal text (the recruiter is supposed to copy-paste then fill them),
 // not as JSX expressions. Stored as a string in the frontmatter and
 // rendered via <pre>{...}</pre> so Astro doesn't try to evaluate them.
 const emailTemplate = `Subject: [{role-tag}] {seniority} · JD attached to {company}
 
-Hi Christian —
+Hi Christian :
 
 I’m a {your-role} at {company}, sourcing for a {role} seat.
 The JD is attached. Highlights:
@@ -41,44 +40,32 @@ If you’re open, I’d like a 30-min screening this {Tue|Wed|Thu}
 between 18:00 to 22:00 PHT (UTC+8). Full agenda: christianmacion-portfolio.pages.dev/screening-call
 If not, who do you recommend?
 
-— {name}`;
+: {name}`;
 
 // Same template, ASCII-punctuated, for the mailto body. Slightly different
-// (— → -, ’ → ') so it survives ASCII-only transport cleanly.
-const emailBody = `Hi Christian —\n\nI'm a {your-role} at {company}, sourcing for a {role} seat.\nThe JD is attached. Highlights:\n  - {JD bullet 1}\n  - {JD bullet 2}\n  - {JD bullet 3}\n\nIf you're open, I'd like a 30-min screening this {Tue|Wed|Thu} between 18:00-22:00 PHT (UTC+8).\nFull agenda: https://christianmacion-portfolio.pages.dev/screening-call\n\nIf not, who do you recommend?\n\n— {name}`;
+// (: → -, ’ → ') so it survives ASCII-only transport cleanly.
+const emailBody = `Hi Christian :\n\nI'm a {your-role} at {company}, sourcing for a {role} seat.\nThe JD is attached. Highlights:\n  - {JD bullet 1}\n  - {JD bullet 2}\n  - {JD bullet 3}\n\nIf you're open, I'd like a 30-min screening this {Tue|Wed|Thu} between 18:00-22:00 PHT (UTC+8).\nFull agenda: https://christianmacion-portfolio.pages.dev/screening-call\n\nIf not, who do you recommend?\n\n: {name}`;
 
+// v12.W4 : FAQ trimmed to the questions the key-value table above does
+// NOT already answer. Who / availability / location / resume / seniority
+// all live in the table; repeating them as FAQ rows was the same answer
+// twice on one page.
 const faqs = [
-  {
-    q: 'Who is this candidate?',
-    a: `${fullName} to a quantitative researcher and AI engineer based in ${loc.display}. ${profile.stats.aiAgentCount}-agent research platform, ${profile.stats.evalGates}-gate statistical eval harness, ${profile.stats.locPython} LOC Python, ${profile.stats.certCount} professional certifications across AI, finance, math, and events.`,
-  },
-  {
-    q: 'What is their current availability?',
-    a: `Open to remote Quant Researcher, QR-rotational, Quantitative Research Engineer, or Research Engineer seats with US-premarket or APAC overlap. Approximately ${profile.availability.hours} capacity, immediate start.`,
-  },
   {
     q: 'What seniority level are they targeting?',
     a: 'Senior / staff Quant Researcher or Research Engineer. Primary seat: Quant Researcher (with QR-rotational considered). Secondary: AI Engineer inside a quant team that ships LLM tooling.',
   },
   {
-    q: 'Where are they based, and what is their work authorization?',
-    a: `Based in ${loc.display}. Filipino citizen, Philippine passport. Fully remote, all hours delivered over the internet. Familiar with US pre-market (UTC-5 to UTC-8) and APAC overlap windows; primary working hours anchored at UTC+8.`,
-  },
-  {
-    q: 'Do they have a one-page resume PDF?',
-    a: `Yes. ${profile.stats.resumeCount} tailored one-page resumes are linked at /resume. Quant (one-page), AI-only, and Unified. Each lists the same identity block and ${NGATE} methodology but weights different evidence.`,
-  },
-  {
-    q: 'Is the work NDA-clean by construction?',
-    a: 'Yes. Every published research artifact uses only public-data sources (Yahoo Finance, CoinGecko, FRED, EDGAR, SEC filings, public CME/CBOE chains). No proprietary datasets, no non-public signals. The nda-audit script in /proof enforces this guarantee automatically on every build.',
+    q: 'What data do the published results use?',
+    a: 'Public sources only: Yahoo Finance, CoinGecko, FRED, EDGAR, SEC filings, public CME/CBOE chains. Every result on this site reproduces from them.',
   },
   {
     q: 'How fast can they respond?',
-    a: 'Replies to recruiter emails within four business hours during UTC+8 day. Cold DMs slower. Direct phone for qualified screening calls only.',
+    a: 'Four business hours during the UTC+8 day for recruiter email. Cold DMs slower. Direct phone for qualified screening calls only.',
   },
   {
     q: 'Do they require sponsorship?',
-    a: 'No sponsorship is required for remote engagements; the candidate works as an independent contractor from the Philippines. For full-time W-2 roles, visa sponsorship is the employer-side question. the candidate holds a Philippine passport and is open to globally remote (EOR) arrangements.',
+    a: 'Not for remote engagements. the candidate works as an independent contractor from the Philippines. For full-time W-2 roles, visa sponsorship is the employer-side question; the candidate holds a Philippine passport and is open to globally remote (EOR) arrangements.',
   },
 ];
 
@@ -117,12 +104,25 @@ const jsonLd = {
       />
       <h1 class="hero__title" data-words>{fullName}</h1>
       <VoiceLine class="hero__voice">
-        60-second skim. NDA-clean. Built so a hiring manager can decide in one read.
+        60-second skim. NDA-clean. Decide in one read.
       </VoiceLine>
       <p class="hero__sub">
-        Quantitative researcher and AI engineer. {loc.display}. Open to remote QR, QR-rotational, or
-        research-engineer seats with US-premarket or APAC overlap.
+        Quantitative researcher and AI engineer. {loc.display}. Remote QR, QR-rotational, or research-engineer
+        seats with US-premarket or APAC overlap.
       </p>
+
+      <div class="hero__fit">
+        <p class="hero__fit-eyebrow mono">LOOKING FOR</p>
+        <ul class="hero__fit-list">
+          <li>Senior QR or research-engineer seat with a real eval bar.</li>
+          <li>Strategy team that ships, with public-data or self-owned research.</li>
+          <li>AI engineer seat inside a quant team that builds LLM tooling.</li>
+        </ul>
+        <p class="hero__fit-eyebrow mono">NOT LOOKING FOR</p>
+        <ul class="hero__fit-list hero__fit-list--not">
+          <li>Junior, intern, or rotational-only seats. Junior framing will end the conversation.</li>
+        </ul>
+      </div>
 
       <p class="hero__comp-link mono">
         Need comp ranges first? <a href={path('/comp')}>See engagement bands →</a>
@@ -200,10 +200,10 @@ const jsonLd = {
     <div class="container container--narrow">
       <header class="section__head">
         <p class="section__eyebrow mono">intro/</p>
-        <h2 class="section__title">Cold-email template. paste, fill, send.</h2>
+        <h2 class="section__title">Cold-email template</h2>
         <p class="section__sub">
-          Copy the block below. Two mailto links pre-fill subject + body. Reply SLA: 4 business
-          hours during UTC+8 day.
+          Paste, fill, send. Two mailto links pre-fill subject + body. Reply SLA: 4 business hours during UTC+8
+          day.
         </p>
       </header>
 
@@ -237,72 +237,9 @@ const jsonLd = {
   <section class="section">
     <div class="container container--narrow">
       <header class="section__head">
-        <p class="section__eyebrow mono">paths/</p>
-        <h2 class="section__title">Reading paths. choose by role.</h2>
-        <p class="section__sub">Two ways to skim. Same site. Same eval gates. Different subset.</p>
-      </header>
-
-      <div class="persona-grid">
-        <article class="persona-card">
-          <h3 class="persona-card__title">If you’re hiring an AI engineer</h3>
-          <p class="persona-card__sub">
-            Eval-first engineer. MCP server. RAG pipeline. Multi-agent harness.
-          </p>
-          <ul class="persona-card__links">
-            <li>
-              <a href={path('/methodology')}>
-                {`G6, G7, G8, G11: frozen-spec eval · N-of-M · look-ahead bias`}
-              </a>
-            </li>
-            <li>
-              <a href={path('/projects')}>Projects → AI tooling lane</a>
-            </li>
-            <li>
-              <a href={path('/resume-ai-only.pdf')} download>AI resume (4-pg) ↓</a>
-            </li>
-            <li>
-              <a href={path('/proof')}>
-                Proof → mcp-backtest-server · qfin-rag-harness · numerical-faithfulness-eval
-              </a>
-            </li>
-          </ul>
-        </article>
-
-        <article class="persona-card">
-          <h3 class="persona-card__title">If you’re hiring a Quant researcher</h3>
-          <p class="persona-card__sub">
-            QR or QR-rotational. Deflated Sharpe. Look-ahead audit. Strategy research.
-          </p>
-          <ul class="persona-card__links">
-            <li>
-              <a href={path('/methodology')}>
-                {`G1 to G4: regime · PSL · p-hacking · deflated Sharpe`}
-              </a>
-            </li>
-            <li>
-              <a href={path('/projects')}>Projects → Quant research lane</a>
-            </li>
-            <li>
-              <a href={path('/resume-tailored.pdf')} download>Quant resume (4-pg) ↓</a>
-            </li>
-            <li>
-              <a href={path('/research')}>
-                {`Research → ${profile.stats.strategyCount} strategies · 12 sources`}
-              </a>
-            </li>
-          </ul>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="container container--narrow">
-      <header class="section__head">
-        <h2 class="section__title">FAQ. what hiring managers usually ask</h2>
+        <h2 class="section__title">FAQ</h2>
         <p class="section__sub">
-          {faqs.length} canonical questions. Each answer is short, factual, and verifiable from the rest
-          of the site.
+          {faqs.length} canonical questions. Short, factual, verifiable from the rest of the site.
         </p>
       </header>
 
@@ -323,14 +260,6 @@ const jsonLd = {
       </ol>
     </div>
   </section>
-
-  <CTABanner
-    title="Skim the proof, not just the resume."
-    sub="Every claim on this page is backed by a public-data reproducible artifact. See /proof for the full inventory of certifications, lectures, charts, OSS repos, and solutions."
-    primaryLabel="Go to /proof"
-    secondaryLabel="Browse /solutions"
-    secondaryHref={path('/solutions')}
-  />
 </BaseLayout>
 
 <style>
@@ -349,7 +278,7 @@ const jsonLd = {
     letter-spacing: 0.12em;
     flex-wrap: wrap;
   }
-  /* v9.2 a11y — was --c-phi-teal. Dark theme --j-phi-teal = #2d5f5a
+  /* v9.2 a11y : was --c-phi-teal. Dark theme --j-phi-teal = #2d5f5a
      only hits 2.14:1 on the dark page-head surface. Same fix as
      about.astro: solid amber chip + --c-bg text, ≥5.6:1 both themes. */
   .hero__eyebrow-chip {
@@ -380,7 +309,7 @@ const jsonLd = {
     color: var(--c-warn);
     font-weight: 600;
   }
-  /* v9.3.1 (Phase 3B) — comp-link under the tenant block. Lets the
+  /* v9.3.1 (Phase 3B) : comp-link under the tenant block. Lets the
      recruiter jump to /comp without scrolling past the 7-row KV table.
      Inline mono, amber underline matches the rest of the chrome. */
   .hero__comp-link {
@@ -421,6 +350,43 @@ const jsonLd = {
   .hero__voice {
     margin: 0 0 var(--sp-5);
     max-width: 60ch;
+  }
+
+  /* v12.W4.5 Bryllim-parity fit block. Looking-for / Not-looking-for as
+     one bullet-list pair, mono caps, hairline borders. No halo, no glow.
+     Sits directly below the hero sub so the recruiter reads the filter
+     before the 7-row KV table. */
+  .hero__fit {
+    margin: 0 0 var(--sp-6);
+    padding: var(--sp-4);
+    background: var(--c-bg);
+    border: 1px solid var(--c-rule);
+    border-left: 3px solid var(--c-amber);
+  }
+  .hero__fit-eyebrow {
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--c-ink-3);
+    margin: 0 0 var(--sp-2);
+  }
+  .hero__fit-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--sp-4);
+    color: var(--c-ink);
+    font-size: var(--fs-sm);
+    line-height: 1.55;
+  }
+  .hero__fit-list li {
+    padding: var(--sp-2) 0;
+    border-bottom: 1px solid var(--c-rule-soft);
+  }
+  .hero__fit-list li:last-child {
+    border-bottom: 0;
+  }
+  .hero__fit-list--not li {
+    color: var(--c-ink-2);
   }
   .kv {
     width: 100%;
@@ -524,7 +490,7 @@ const jsonLd = {
     font-weight: 400;
     transition: transform var(--transition);
   }
-  /* v6.9.16 — drop the translateY(-2px) decorative shift. Used line-height
+  /* v6.9.16 : drop the translateY(-2px) decorative shift. Used line-height
      + 1.5rem font for natural glyph centering instead. */
   .faq__item details[open] summary::after {
     content: '−';
@@ -560,7 +526,7 @@ const jsonLd = {
     }
   }
 
-  /* v6.12 — cold-email template block. Two-column on desktop, stacked on
+  /* v6.12 : cold-email template block. Two-column on desktop, stacked on
      mobile. Mailto deep-links pre-fill subject + body via encodeURIComponent. */
   .intro-template {
     display: grid;
@@ -611,7 +577,7 @@ const jsonLd = {
     }
   }
 
-  /* v6.12 — persona split. 2-pane reading-path grid; single column on
+  /* v6.12 : persona split. 2-pane reading-path grid; single column on
      narrow viewports. Derived from /methodology gate numbers + the
      3 resume PDF variants; no hardcoded chrome. */
   .persona-grid {

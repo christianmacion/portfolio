@@ -1,6 +1,6 @@
 ---
 /**
- * SectionTOC.astro — v6.0 · sticky in-page section navigation.
+ * SectionTOC.astro : v6.0 · sticky in-page section navigation.
  *
  * Renders a horizontal pill bar of anchors to all <section data-toc-id="...">
  * blocks on the same page. Sticky below the nav (top: var(--nav-h)).
@@ -17,7 +17,7 @@
 interface TocItem {
   id: string;
   label: string;
-  // Optional external link — when set, renders an <a href={href}>
+  // Optional external link : when set, renders an <a href={href}>
   // that navigates off-page instead of jumping to a section anchor.
   // Used for cross-page TOC entries like "Live terminal → /markets".
   href?: string;
@@ -114,7 +114,7 @@ const tocId = `toc-${
     background: var(--c-tape);
     border-bottom: var(--border);
   }
-  /* v6.10.6 — light/dark theme overrides removed; base background is solid
+  /* v6.10.6 : light/dark theme overrides removed; base background is solid
      institutional tape; the rgba + backdrop-filter glass is gone. */
   .toc__inner {
     display: flex;
@@ -159,14 +159,14 @@ const tocId = `toc-${
     background: var(--c-bg-2);
   }
   .toc__link--active {
-    /* v6.11.6 — was var(--c-warn-soft), a signal token. Now uses the
+    /* v6.11.6 : was var(--c-warn-soft), a signal token. Now uses the
        dedicated --c-active-surface so real warning chips elsewhere
        carry unique semantics. */
     color: var(--c-active-ink);
     background: var(--c-active-surface);
     font-weight: 600;
   }
-  /* v6.1 — external TOC entries (cross-page links like
+  /* v6.1 : external TOC entries (cross-page links like
      "Live terminal → /markets"). Visually distinguished from
      in-page anchors by the trailing glyph + amber underline. */
   .toc__link--ext {
@@ -185,7 +185,7 @@ const tocId = `toc-${
     margin-left: 0.25em;
     opacity: 0.7;
   }
-  /* v6.11.6 — removed dead prefers-color-scheme + [data-theme='dark']
+  /* v6.11.6 : removed dead prefers-color-scheme + [data-theme='dark']
      selectors. The site is one consistent palette (single tape bg);
      these rules were aspirational CSS bloat. */
   .toc__skeleton {

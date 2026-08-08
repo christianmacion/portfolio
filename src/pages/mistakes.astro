@@ -1,10 +1,10 @@
 ---
 /**
- * mistakes.astro — "What I got wrong" page. Postmortems of the failed/wrong calls.
+ * mistakes.astro : "What I got wrong" page. Postmortems of the failed/wrong calls.
  *
  * Why this page exists: a quant book that ships {quantProjectCount} winners and hides the
  * failure modes is a book primed for selection bias. A researcher's failures
- * are more diagnostic than their wins — they reveal what the discipline is
+ * are more diagnostic than their wins : they reveal what the discipline is
  * actually catching. This is the page that says "here is what my gates
  * stopped from shipping."
  *
@@ -20,10 +20,10 @@ import VoiceLine from '@components/VoiceLine.astro';
 import { profile } from '@utils/profile';
 import { countProjectsByRole } from '@utils/project-helpers';
 
-// v6.10.42 — derive "n projects" claim from the canonical quant project count.
+// v6.10.42 : derive "n projects" claim from the canonical quant project count.
 const quantProjectCount = await countProjectsByRole('quant');
 
-// v6.10.47 — derive gate-count chrome from profile.stats.evalGates.
+// v6.10.47 : derive gate-count chrome from profile.stats.evalGates.
 const GATE_RANGE = `G1 to G${profile.stats.evalGates}`;
 
 const mistakes = [
@@ -306,7 +306,7 @@ const mistakes = [
   .mistake:hover {
     border-color: var(--c-primary);
   }
-  /* v6.11.10 — F14 amber-only. Critical severity now ink-2 (no red). */
+  /* v6.11.10 : F14 amber-only. Critical severity now ink-2 (no red). */
   .severity--critical {
     border-left-color: var(--c-ink-2);
   }

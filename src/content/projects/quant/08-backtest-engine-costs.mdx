@@ -3,8 +3,8 @@ date: 2026-05-28
 title: Backtest Engine + Cost Model
 role: quant
 order: 8
-summary: 'High-turnover signal wins gross (0.20 > 0.13) but loses net of cost — break-even 20 bps.'
-summary_long: 'A backtest engine with a realistic cost model: spread + slippage + impact. The interesting result is a signal that *wins gross* and *loses net* — the cost model is the judge of whether a high-frequency idea is deployable.'
+summary: 'High-turnover signal wins gross (0.20 > 0.13) but loses net of cost : break-even 20 bps.'
+summary_long: 'A backtest engine with a realistic cost model: spread + slippage + impact. The interesting result is a signal that *wins gross* and *loses net* : the cost model is the judge of whether a high-frequency idea is deployable.'
 stack:
   - Python (numpy / pandas / matplotlib)
   - Event-driven backtest loop
@@ -32,13 +32,13 @@ import Chart from '@components/Chart.astro';
 
 ## The hypothesis
 
-If the backtest engine doesn't model realistic costs, every high-frequency alpha is an illusion. The cost model is part of the strategy — not a footnote.
+If the backtest engine doesn't model realistic costs, every high-frequency alpha is an illusion. The cost model is part of the strategy : not a footnote.
 
 ## What the project does
 
 - Tiny event-driven backtest loop on a high-turnover signal.
 - Cost model: spread + slippage + linear-impact estimate.
-- Scans break-even turnaround cost — the cost level at which Sharpe net → 0.
+- Scans break-even turnaround cost : the cost level at which Sharpe net → 0.
 
 ## The result
 
@@ -51,16 +51,16 @@ If the backtest engine doesn't model realistic costs, every high-frequency alpha
     { value: 20, label: 'Cost\nbreak-even' },
     { value: 40, label: 'Cost\nrealistic' },
   ]}
-  title="Net Sharpe vs cost-of-turnaround — high-turnover signal fails the test"
-  caption="Left pair: gross Sharpe 0.20 → net Sharpe −0.05 at realistic cost (~40 bps RT). Right triplet: break-even turnaround cost sits at ~20 bps — anything realistic wipes the edge. The cost model is the strategy. A signal that wins gross but loses net is not deployable."
+  title="Net Sharpe vs cost-of-turnaround : high-turnover signal fails the test"
+  caption="Left pair: gross Sharpe 0.20 → net Sharpe −0.05 at realistic cost (~40 bps RT). Right triplet: break-even turnaround cost sits at ~20 bps : anything realistic wipes the edge. The cost model is the strategy. A signal that wins gross but loses net is not deployable."
   yMin={-0.1}
   yMax={0.5}
 />
 
 - **Gross Sharpe: 0.20**.
-- **Realistic net Sharpe: < 0** — the signal loses after applying the cost model.
+- **Realistic net Sharpe: < 0** : the signal loses after applying the cost model.
 - **Break-even cost: ~20 bps per round trip**.
 
 ## What's transferable
 
-A cost-model-aware backtest engine is the gate between a research idea and a deployable strategy. The discipline — ship the break-even turnaround, not just the Sharpe — is the senior reporting standard.
+A cost-model-aware backtest engine is the gate between a research idea and a deployable strategy. The discipline : ship the break-even turnaround, not just the Sharpe : is the senior reporting standard.

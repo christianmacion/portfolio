@@ -1,4 +1,4 @@
-# Components archive — 2026-08-07
+# Components archive : 2026-08-07
 
 **Archived by:** Commander AFK sweep
 **Reason:** Zero functional references; all 10 files were orphans from prior v9.x iterations replaced by current components.

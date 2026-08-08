@@ -1,14 +1,15 @@
 ---
 /**
- * now.astro — Derek Sivers' /now pattern.
+ * now.astro : Derek Sivers' /now pattern.
  *
- * A single dated page that says what I'm shipping this month, who I'm
- * open to working with, what I'm *not* doing, and where I am. Highest-
- * impact one-page artifact in the 2026 personal-site canon.
+ * ONE purpose : live focus. What is on the desk this month, dated.
+ *
+ * v12.W4 content reduction : availability / open-to / not-open-to moved
+ * to /for-recruiters (the recruiter pitch owns the hiring answer), the
+ * contact ladder to /contact, and the reading list to /reading. This
+ * page states what is shipping and nothing else.
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
-import CTABanner from '@components/CTABanner.astro';
-import { profile } from '@utils/profile';
 import { path } from '@utils/url';
 import VoiceLine from '@components/VoiceLine.astro';
 import { buildStampUtc8 } from '@utils/build-stamp';
@@ -26,7 +27,7 @@ const updatedHuman = new Date(updated).toLocaleDateString('en-GB', {
 
 <BaseLayout
   title="Now"
-  description={`What Christian is shipping this month (${updatedHuman}). Open-to / not-open-to / where / how to reach me.`}
+  description={`What Christian is shipping this month (${updatedHuman}). A dated work log, updated on ship.`}
   breadcrumbs={[
     { name: 'Home', href: '/' },
     { name: 'Now', href: '/now' },
@@ -36,7 +37,6 @@ const updatedHuman = new Date(updated).toLocaleDateString('en-GB', {
     <div class="container container-narrow">
       <p class="now-head__eyebrow mono">
         <span class="now-head__eyebrow-chip">NOW · LAST UPDATED {updated}</span>
-        <span class="now-head__eyebrow-line">WHAT I'M SHIPPING · OPEN-TO · NOT-OPEN-TO</span>
       </p>
       <h1 class="now-head__title" data-words>
         What I'm doing <span class="hl">right now</span>.
@@ -44,181 +44,82 @@ const updatedHuman = new Date(updated).toLocaleDateString('en-GB', {
       <VoiceLine class="now-head__voice">
         Dated. Honest. Updated only when something changes that matters.
       </VoiceLine>
-      <p class="now-head__sub">
-        A dated one-pager. Updated ~monthly, or on regime-event override (job change, paper-trade
-        regime flip, new gate added to the stack). Inspired by <a
-          href="https://nownownow.com/about"
-          target="_blank"
-          rel="noopener noreferrer">/now</a
-        >.
-      </p>
-      <div class="now-head__stamp mono">
-        <span class="dot dot--amber"></span>
-        <span><strong>Status:</strong> open to conversations · remote · UTC+8</span>
-      </div>
-      <p class="now-head__tenant mono">
-        <span>CHRISTIAN.T.MACION</span>
-        <span aria-hidden="true">·</span>
-        <span>UTC+8</span>
-        <span aria-hidden="true">·</span>
-        <span>REMOTE-OK</span>
-        <span aria-hidden="true">·</span>
-        <span>{profile.availability.hours.toUpperCase()}</span>
-        <span aria-hidden="true">·</span>
-        <span>OWNER-VERIFIED</span>
-      </p>
     </div>
   </header>
 
   <section class="section">
     <div class="container container-narrow">
-      <h2 class="now-h2">Where I am</h2>
+      <h2 class="now-h2">Currently shipping</h2>
       <ul class="now-list">
         <li>
-          <strong>Based:</strong>
-          {profile.location.display}. Working hours 09:00 to 18:00 PHT on weekdays.
-        </li>
-        <li><strong>Mode:</strong> remote only. {profile.availability.hours} available.</li>
-        <li>
-          <strong>Stacking:</strong> Quant Researcher / QR-rotational / AI-engineer seat at a hedge fund,
-          prop shop, or systematic-trading fund.
-        </li>
-      </ul>
-
-      <h2 class="now-h2">What I'm shipping this month</h2>
-      <ul class="now-list">
-        <li>
-          <strong
-            >New workbook published to <a href={path('/workbooks/kaufman-efficiency-ratio.pdf')}
-              >Kaufman Efficiency Ratio (4 pp · 287 KB · PDF)</a
-            >:</strong
-          >
-          {' '}adaptive efficiency measurement for trading strategies. Source: <code
-            >macion2026kaufman</code
-          >. Anchors the KAMA adaptive-MA discussion across the quant book.
+          <strong>Bloomberg-style trading terminal.</strong>
+          9-panel layout for the live Upcomer Vanguard $2k account. Manual-only posture binding. Yahoo + Binance
+          live data. 6-hour AFK build, CONVERGED 2026-08-08.
         </li>
         <li>
-          <strong>Live paper-trade on <a href={path('/positions')}>/positions</a>:</strong>
-          running project 03 (vol-target time-series momentum, BTC/USDT, 30% annualized vol target) into
-          its second regime cycle. Tracking slippage against the 5 bps linear-impact model. currently
-          4.2 bps realized.
+          <strong>Stage 2.5 multi-asset sweep.</strong>
+          37 cells scored at 15m resolution across XAU/XAG/BTC/ETH. 11 carry the G16 monotone-positive
+          fingerprint, 0 survive FDR at q=0.10. Resolution-invariant. Vector coverage is the constraint.
         </li>
         <li>
-          <strong>Walk-forward OOS standardization across the book:</strong>
-          applying the locked-window pattern from project 06 to the remaining 8 quant projects. ETA end
+          <strong>Vanguard 2K synthesis.</strong>
+          0/26 cleared (BTC 3/3 + Gold 19/19 + Silver 3/3 KILL). Signal firer dormant, manual-only. Top-3
+          priorities queued.
+        </li>
+        <li>
+          <strong>Portfolio v12.W4 Bryllim parity.</strong>
+          10-hub nav (6 icon+label + 4 plain text). 5 v12.W3 regression fixes. Headshot re-crop to home hero.
+          Site-wide axe sweep queued.
+        </li>
+        <li>
+          <strong>Walk-forward OOS standardization.</strong>
+          Applying the locked-window pattern from project 06 to the remaining 8 quant projects. ETA end
           of August 2026.
-        </li>
-        <li>
-          <strong>Methodology expansion on <a href={path('/methodology')}>/methodology</a>:</strong>
-          the "what I'd build first" 90-day plan is the latest addition. Next up: per-asset-class G16 to G20
-          deep dives.
-        </li>
-        <li>
-          <strong>This site:</strong> ongoing edits. see <a
-            href="https://github.com/christianmacion26/portfolio/commits/main"
-            target="_blank"
-            rel="noopener noreferrer">commit history</a
-          >
-          for a dated build log.
-        </li>
-      </ul>
-
-      <h2 class="now-h2">Open to</h2>
-      <ul class="now-list">
-        <li>Quant Researcher / QR-rotational seats (crypto, equities, multi-asset).</li>
-        <li>
-          AI Engineer / Multi-Agent Engineer roles where evals and structured-output contracts are
-          part of the spec.
-        </li>
-        <li>Hybrid QR + AI roles. these are rare and I rank them highest.</li>
-        <li>
-          Contract research engagements with a defined deliverable (a memo, a backtest harness, a
-          strategy teardown).
-        </li>
-        <li>
-          QuantDev roles that touch an eval harness / model-routing policy / walk-forward pipeline.
-        </li>
-      </ul>
-
-      <h2 class="now-h2">Not open to</h2>
-      <ul class="now-list now-list--not">
-        <li>Unpaid trial tasks or take-homes longer than 4 hours.</li>
-        <li>
-          Relocation outside {profile.location.display}, or roles requiring proprietary data I
-          cannot disclose post-engagement. See <a href={path('/for-recruiters')}>/for-recruiters</a> for
-          the full 60-second skim; the reply-with-JD protocol is on <a href={path('/contact')}
-            >/contact</a
-          >.
         </li>
       </ul>
 
       <h2 class="now-h2">Currently reading</h2>
       <ul class="now-list">
         <li>
-          <em>Advances in Financial Machine Learning</em>n/a Marcos López de Prado (re-read, ch. 16 on
-          backtest overfitting).
+          <strong>Shreve, Stochastic Calculus for Finance II.</strong>
+          Ch. 4. Itô lemma + change-of-numéraire. Anchors the vol-target time-series momentum framework.
         </li>
         <li>
-          <em>The Deflated Sharpe Ratio</em>n/a Bailey &amp; López de Prado. The paper that gates
-          G16 of the eval stack.
+          <strong>Bailey &amp; López de Prado, Deflated Sharpe Ratio.</strong>
+          Re-read for the G16 rule wording across the methodology page.
         </li>
         <li>
-          <em>Evaluating LLM-based Code Generation: A Cross-Family Benchmark</em>n/a Parashar et al..
-          Closest peer work to my <a href={path('/glossary/eval-harness')}>eval-harness</a> + MCP server.
-        </li>
-        <li><em>Hamlet</em>n/a Shakespeare. Sometimes you have to step away from the screen.</li>
-        <li>
-          <em>Research writing patterns</em>n/a for technical audiences. <a
-            href="https://github.com/agentipedia/research-writing"
-            target="_blank"
-            rel="noopener noreferrer">GitHub</a
-          > + <em>Karpathy / autoresearch</em>n/a autonomous research loops. <a
-            href="https://github.com/karpathy/autoresearch"
-            target="_blank"
-            rel="noopener noreferrer">MIT licensed</a
-          >.
+          <strong>Deming, Out of the Crisis.</strong>
+          System of Profound Knowledge. Common cause vs special cause. Maps cleanly onto the
+          31-gate eval harness.
         </li>
       </ul>
 
-      <h2 class="now-h2">How to reach me</h2>
+      <h2 class="now-h2">Currently thinking about</h2>
       <ul class="now-list">
         <li>
-          <strong>For open roles:</strong> email with the JD attached to <a
-            href={`mailto:${profile.contact.email}?subject=JD%20%E2%80%94%20%5Brole%5D`}
-            >{profile.contact.email}</a
-          >. Reply within 24h on weekdays.
+          <strong>The vector-coverage gap.</strong>
+          Stage 2 keeps killing on coverage, not edge. Worth adding a G-candidate for regime-stratified
+          sample-size minimums before Stage 3 burns another sweep.
         </li>
         <li>
-          <strong>For casual / paper-trail:</strong>
-          <a href={profile.contact.linkedin} target="_blank" rel="noopener noreferrer"
-            >LinkedIn DM</a
-          >.
-        </li>
-        <li>
-          <strong>For public work / proof:</strong>
-          <a href={profile.contact.github} target="_blank" rel="noopener noreferrer">GitHub</a> ({
-            profile.stats.repoCount
-          } public repos, all NDA-safe). Stack: see <a href={path('/uses')}>/uses</a>.
+          <strong>Eval bars for LLM-eval claims.</strong>
+          A single Brier + FDR pair beats every "vibe" leaderboard. Standardizing the wording so
+          multi-agent eval pages cite the same gate IDs as quant research.
         </li>
       </ul>
 
       <div class="now-foot mono">
-        This page is versioned. <a
-          href={`https://github.com/christianmacion26/portfolio/commits/main/src/pages/now.astro`}
+        Hiring context: <a href={path('/for-recruiters')}>/for-recruiters</a> ·
+        reach me: <a href={path('/contact')}>/contact</a> ·
+        commit log: <a
+          href="https://github.com/christianmacion26/portfolio/commits/main"
           target="_blank"
-          rel="noopener noreferrer">Edit history →</a
-        >
+          rel="noopener noreferrer">github.com/christianmacion26/portfolio</a
+        >.
       </div>
     </div>
   </section>
-
-  <CTABanner
-    title="Got a JD? Send it."
-    sub="I read every email. If the role matches, you'll get a reply within 24h with: problem → approach → evidence → outcome → proof."
-    primaryLabel="Email me"
-    secondaryLabel="Read methodology"
-    secondaryHref={path('/methodology')}
-  />
 </BaseLayout>
 
 <style>
@@ -240,33 +141,13 @@ const updatedHuman = new Date(updated).toLocaleDateString('en-GB', {
   .now-head__eyebrow-chip {
     display: inline-block;
     padding: 4px 10px;
-    /* v9.2 a11y — was --c-phi-teal. Dark theme --j-phi-teal = #2d5f5a
+    /* v9.2 a11y : was --c-phi-teal. Dark theme --j-phi-teal = #2d5f5a
      only hits 2.14:1 on dark page-head surface. Solid amber chip +
-     --c-bg text reads at ≥5.6:1 in both themes — institutional
+     --c-bg text reads at ≥5.6:1 in both themes : institutional
      register, F14-safe (no traffic-light). */
     color: var(--c-bg);
     border: 1px solid var(--c-amber);
     background: var(--c-amber);
-    font-weight: 600;
-  }
-  .now-head__eyebrow-line {
-    color: var(--c-warn);
-    font-weight: 600;
-  }
-  .now-head__tenant {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--sp-2);
-    margin: var(--sp-4) 0 0;
-    padding: var(--sp-2) var(--sp-3);
-    background: var(--c-bg-2);
-    border: 1px solid var(--c-rule);
-    font-size: 0.78rem;
-    color: var(--c-ink-2);
-    letter-spacing: 0.06em;
-  }
-  .now-head__tenant span:nth-child(odd) {
-    color: var(--c-warn);
     font-weight: 600;
   }
   .now-head__title {
@@ -279,34 +160,6 @@ const updatedHuman = new Date(updated).toLocaleDateString('en-GB', {
   .now-head__voice {
     margin: 0 0 var(--sp-5);
     max-width: 60ch;
-  }
-  .now-head__sub {
-    font-size: var(--fs-lg);
-    color: var(--c-ink-2);
-    line-height: var(--lh-loose);
-    max-width: 60ch;
-    margin-bottom: var(--sp-5);
-  }
-  .now-head__sub a {
-    color: var(--c-primary);
-    text-decoration: underline;
-    text-decoration-color: var(--c-amber);
-    text-underline-offset: 3px;
-  }
-  .now-head__stamp {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--sp-2);
-    padding: var(--sp-2) var(--sp-4);
-    background: var(--c-bg-2);
-    border: 1px solid var(--c-rule);
-    border-radius: 0;
-    font-size: var(--fs-sm);
-    color: var(--c-ink-2);
-  }
-  .now-head__stamp strong {
-    color: var(--c-ink);
-    font-weight: 600;
   }
 
   .now-h2 {
@@ -335,7 +188,7 @@ const updatedHuman = new Date(updated).toLocaleDateString('en-GB', {
     font-size: var(--fs-base);
   }
   .now-list li::before {
-    content: '–';
+    content: '-';
     position: absolute;
     left: 0;
     color: var(--c-amber);
@@ -354,16 +207,6 @@ const updatedHuman = new Date(updated).toLocaleDateString('en-GB', {
   .now-list a:hover {
     text-decoration-color: var(--c-amber);
   }
-  .now-list--not li::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0.6em;
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: var(--c-ink-3);
-  }
 
   .now-foot {
     margin-top: var(--sp-6);
@@ -375,7 +218,7 @@ const updatedHuman = new Date(updated).toLocaleDateString('en-GB', {
     color: var(--c-ink-3);
   }
   .now-foot a {
-    /* v9.3 a11y 96 follow-up (2026-08-01) — was --c-amber
+    /* v9.3 a11y 96 follow-up (2026-08-01) : was --c-amber
        (dark: #8a6f2f) on --c-paper dark (#221f1b) = 3.43:1 fail.
        Promoted to --c-amber (dark: #a88a3e) = 5.25:1 pass. Light
        --c-amber #6b5220 on --c-paper #f3ede1 = 7.39:1 pass. */

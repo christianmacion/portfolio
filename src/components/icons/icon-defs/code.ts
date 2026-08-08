@@ -1,5 +1,5 @@
 /**
- * code — angle brackets + center slash (the "code" or "</>" glyph).
+ * code : angle brackets + center slash (the "code" or "</>" glyph).
  * Tagline: any link to a code repository, a code snippet, or a programming
  * topic.
  */

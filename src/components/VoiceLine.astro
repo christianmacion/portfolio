@@ -1,6 +1,6 @@
 ---
 /**
- * VoiceLine.astro — italic serif editorial voice line.
+ * VoiceLine.astro : italic serif editorial voice line.
  *
  * Single source of truth for the institutional "voice line" pattern
  * (Anthropic / Stratechery / Schonfeld signature): a one- or two-sentence
@@ -13,9 +13,9 @@
  * talks, projects/[...slug], glossary, mistakes). Hoisted into this
  * component to eliminate drift.
  *
- * v2026-08-02 — `lg` size variant bumped to clamp(2.5rem, 5vw, 5.5rem)
+ * v2026-08-02 : `lg` size variant bumped to clamp(2.5rem, 5vw, 5.5rem)
  *   so it reads as a display-scale voice line (88px desktop max)
- *   instead of an oversized 32px run-on. sm + md unchanged — they
+ *   instead of an oversized 32px run-on. sm + md unchanged : they
  *   stay in the editorial-body register where they belong.
  *
  * Usage:
@@ -31,7 +31,7 @@ interface Props {
   /** Quote-mark style. 'curly' (default) inserts " and " via ::before/::after. */
   quote?: 'curly' | 'none';
   /** Visual size variant. 'md' (default) = clamp(1.1rem, 2.4vw, 1.6rem).
-   *  'lg' is display-scale: clamp(2.5rem, 5vw, 5.5rem) — 88px desktop max. */
+   *  'lg' is display-scale: clamp(2.5rem, 5vw, 5.5rem) : 88px desktop max. */
   size?: 'sm' | 'md' | 'lg';
   /** Override the rail color (defaults to var(--c-amber)). */
   railColor?: string;
@@ -66,17 +66,17 @@ const { ruled = true, quote = 'curly', size = 'md', railColor, class: className 
     max-width: 60ch;
   }
 
-  /* Sizes — sm + md stay in the editorial-body register; lg is the
+  /* Sizes : sm + md stay in the editorial-body register; lg is the
      display-scale voice line (88px desktop max) added v2026-08-02
      per the typography sweep. clamp(2.5rem, 5vw, 5.5rem) reads as
-     institutional — heavy enough to anchor a hero, light enough to
+     institutional : heavy enough to anchor a hero, light enough to
      not break the line-height 1.4. */
   .voice-line--sm {
     font-size: clamp(0.95rem, 1.6vw, 1.1rem);
   }
-  /* v2026-08-02 — single-decimal rem bounds (1.1 / 1.6) bypass the
+  /* v2026-08-02 : single-decimal rem bounds (1.1 / 1.6) bypass the
      audit's regex false positive on 2-digit decimals like 1.15rem.
-     Visual delta is ~1px — institutional cadence unchanged. */
+     Visual delta is ~1px : institutional cadence unchanged. */
   .voice-line--md {
     font-size: clamp(1.1rem, 2.4vw, 1.6rem);
   }
@@ -84,7 +84,7 @@ const { ruled = true, quote = 'curly', size = 'md', railColor, class: className 
     font-size: clamp(2.5rem, 5vw, 5.5rem);
   }
 
-  /* Ruled variant — left rail + 1ch padding. */
+  /* Ruled variant : left rail + 1ch padding. */
   .voice-line--ruled {
     padding-left: var(--sp-3);
     border-left: 2px solid var(--voice-line-rail);
@@ -114,7 +114,7 @@ const { ruled = true, quote = 'curly', size = 'md', railColor, class: className 
     content: none;
   }
 
-  /* v6.0.12 — single reduced-motion gate. The voice-line carries no
+  /* v6.0.12 : single reduced-motion gate. The voice-line carries no
      motion of its own; the universal `* { animation: none }` already
      covers any accidental fade-ins. This block is here as a docstring
      so future authors don't add a transition to this component. */

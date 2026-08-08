@@ -4,7 +4,7 @@ title: The Variance Risk Premium (VIX vs Realized)
 role: quant
 order: 4
 summary: 'Implied > realized 85% of 36 yrs; predicts returns, Newey-West t = +6.5.'
-summary_long: 'The Variance Risk Premium (VRP) is the gap between implied volatility (VIX) and subsequent realized volatility. It is a structural premium — option sellers have been paid for bearing the gap for decades — and it is also a forward-looking predictor of equity returns.'
+summary_long: 'The Variance Risk Premium (VRP) is the gap between implied volatility (VIX) and subsequent realized volatility. It is a structural premium : option sellers have been paid for bearing the gap for decades : and it is also a forward-looking predictor of equity returns.'
 stack:
   - Python (numpy / pandas / matplotlib)
   - VIX (CBOE) historical
@@ -13,7 +13,7 @@ stack:
 metrics:
   - { label: 'Years VRP > 0', value: '85%', sub: 'of 36 yrs' }
   - { label: 'Newey-West t-stat', value: '+6.5', sub: 'HAC-consistent' }
-  - { label: 'Sample window', value: '1990 – 2025' }
+  - { label: 'Sample window', value: '1990 - 2025' }
 sourceLink: 'https://github.com/christianmacion26/variance-risk-premium'
 status: open-source
 pinned: false
@@ -23,7 +23,7 @@ assetType: code
 tags: [volatility, variance-risk-premium, vix, newey-west, public-data]
 hero:
   src: /figures/quant/04-variance-risk-premium.webp
-  alt: Line chart of the centered annualized Variance Risk Premium (VIX minus 30-day realized vol) from 1990 to 2025, persistently in the 10–13% range with crisis-era spikes in 2008, 2020, and 2022.
+  alt: Line chart of the centered annualized Variance Risk Premium (VIX minus 30-day realized vol) from 1990 to 2025, persistently in the 10-13% range with crisis-era spikes in 2008, 2020, and 2022.
   fit: cover
   aspect: 16/9
 ---
@@ -32,11 +32,11 @@ import Chart from '@components/Chart.astro';
 
 ## The hypothesis
 
-VIX quotes _implied_ volatility for the next 30 days. Markets systematically over-pay for optionality relative to what realizes. The gap — the **Variance Risk Premium** — is structural: sellers are paid for bearing it.
+VIX quotes _implied_ volatility for the next 30 days. Markets systematically over-pay for optionality relative to what realizes. The gap : the **Variance Risk Premium** : is structural: sellers are paid for bearing it.
 
 ## What the project does
 
-- Loads VIX (CBOE) + a realized-vol estimator across 1990–2025.
+- Loads VIX (CBOE) + a realized-vol estimator across 1990-2025.
 - Compares implied to realized at the 30-day horizon.
 - Regresses subsequent returns on the VRP with **Newey-West HAC standard errors** to handle the obvious autocorrelation.
 
@@ -51,15 +51,15 @@ VIX quotes _implied_ volatility for the next 30 days. Markets systematically ove
   ]}
   color="var(--c-amber)"
   title="Annualized VRP (VIX − 30-day realized) across 36 yrs"
-  caption="Centered 30-day VRP rolling mean, 1990–2025. Persistent ~10–13% structural premium: option sellers get paid for bearing the gap. Spikes cluster in crisis regimes (2008, 2020, 2022)."
+  caption="Centered 30-day VRP rolling mean, 1990-2025. Persistent ~10-13% structural premium: option sellers get paid for bearing the gap. Spikes cluster in crisis regimes (2008, 2020, 2022)."
   yMin={8}
   yMax={14}
 />
 
 - **85% of 36 calendar years** show implied > realized.
 - The VRP is a **positive** forward predictor of equity returns.
-- **Newey-West t = +6.5** — survives heteroskedasticity-consistent inference.
+- **Newey-West t = +6.5** : survives heteroskedasticity-consistent inference.
 
 ## What's transferable
 
-The pattern — model implied vs realized, regress forward returns, correct for autocorrelation — is the template for any _carry_ signal. The Newey-West step is what makes the t-statistic interpretable; OLS t-stats in vol signals routinely overstate significance by 2–3×.
+The pattern : model implied vs realized, regress forward returns, correct for autocorrelation : is the template for any _carry_ signal. The Newey-West step is what makes the t-statistic interpretable; OLS t-stats in vol signals routinely overstate significance by 2-3×.

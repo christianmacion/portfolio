@@ -1,13 +1,13 @@
 ---
 title: 'Trading Platform Testing & AI-Workflow Research Analyst (contract)'
-company: 'AI-engineering consultancy (closed past contract; 04/2026 – 06/2026)'
+company: 'AI-engineering consultancy (closed past contract; 04/2026 - 06/2026)'
 role: 'experience'
 order: 4
 location: 'Remote'
 startDate: '2026-04'
 endDate: '2026-06'
 isCurrent: false
-summary: 'Structured testing of trading platform onboarding flows — execution clarity, workflow logic, and system usability from a trader-first perspective.'
+summary: 'Structured testing of trading platform onboarding flows : execution clarity, workflow logic, and system usability from a trader-first perspective.'
 tags: [trading-platforms, ux-research, ai-tools, prompt-engineering]
 contributions:
   - label: 'Onboarding-flow testing'

@@ -1,0 +1,774 @@
+---
+/**
+ * AIHistoryTimeline.astro : v12.W4 INSTITUTIONAL AI HISTORY TIMELINE
+ *
+ * Six stages of the personal AI journey, mapped against the industry's
+ * canonical emergence dates:
+ *
+ *   PROMPTS  Nov 2022  ->  SKILLS  Jul 2023  ->  AGENTS  Dec 2023
+ *      ->  HARNESS  Apr 2024  ->  LOOPS  Sep 2024  ->  GRAPHS  Mar 2025
+ *
+ * Each stage renders as a horizontal node (paper / cream surface) with:
+ *   - Stage name (mono, 14px, uppercase)
+ *   - Industry emergence date range (mono, 12px, ink-3)
+ *   - "I adopted [date]" badge (mono, 11px, paper bg, amber hairline border)
+ *   - "X months ahead of mainstream" counter (mono, 11px, ink-2)
+ *   - 1-line quant relevance (sans, 14px, ink-1)
+ *
+ * Connecting line (1px hairline, ink-3) runs between stages. A static
+ * amber dot marks the GRAPHS stage as NOW. No pulse ring per the
+ * institutional register (v6.18 W2 lock + feedback-no-status-indicators).
+ *
+ * Layout:
+ *   - Desktop (>= 980px): horizontal scroll row, single track, hairline
+ *     rail running underneath. The NOW marker anchors to the right edge.
+ *   - Mobile  (<  980px): vertical stack. Hairline rail runs down the
+ *     left gutter. NOW marker sits at the bottom of the column.
+ *
+ * Motion:
+ *   - Entrance: 6 stages stagger in [data-stagger="1..6"] using the
+ *     site-wide stagger ladder (--mv-stagger). The cadence resolves
+ *     to ~100ms per step via the canonical token (per motion.css §2).
+ *   - Scroll-driven: when a stage node crosses the 60% viewport line,
+ *     IntersectionObserver scales it to 1.04 + ink-2 -> ink-1 token
+ *     shift over 280ms --mv-ease-settle. Pure transform + color; no
+ *     layout shift, no halo, no filter.
+ *   - Reduced-motion: animation off, IntersectionObserver short-circuits
+ *     so nodes render at resting state immediately. The resting state
+ *     is the canonical visual state.
+ *
+ * No halo / glow / gradient. Token-driven. WCAG 2.2 AA.
+ *
+ * Variants:
+ *   - variant="strip"  : horizontal scroll row (default, used on home)
+ *   - variant="stack"  : vertical column (used on /timeline, /methodology)
+ *   - variant="compact": 4 columns, no quant relevance line (terminal)
+ */
+interface Props {
+  variant?: 'strip' | 'stack' | 'compact';
+  /** Eyebrow chip above the section title. Defaults to canonical chip. */
+  chip?: string;
+  /** Section title H2 (or H3 in nested context). */
+  title?: string;
+  /** Lede paragraph under the title. */
+  lede?: string;
+}
+
+const {
+  variant = 'strip',
+  chip = 'AI · HISTORY · 2022 to 2025',
+  title = 'Always up to trend, two months ahead.',
+  lede = 'Seven architectural jumps in three years. Each one I adopted before the mainstream label landed, and wired into a working system on day one.',
+} = Astro.props;
+
+// Canonical stages. The "monthsAhead" count is the integer delta
+// between industry emergence and personal adoption. The 7th stage
+// (OFFICES) is where the work sits now: 112 agents organized into
+// 14 squads across a graph-engineered multi-agent office.
+const stages = [
+  {
+    name: 'PROMPTS',
+    industry: 'Nov 2022',
+    industryLabel: 'ChatGPT launch',
+    adopted: 'Dec 2022',
+    adoptedLabel: 'personal use',
+    monthsAhead: 1,
+    quant: 'Single-turn Q&A; research summarization',
+  },
+  {
+    name: 'SKILLS',
+    industry: 'Jul 2023',
+    industryLabel: 'LangChain',
+    adopted: 'Aug 2023',
+    adoptedLabel: 'function calling',
+    monthsAhead: 1,
+    quant: 'Tools/functions; structured output',
+  },
+  {
+    name: 'AGENTS',
+    industry: 'Dec 2023',
+    industryLabel: 'AutoGPT',
+    adopted: 'Feb 2024',
+    adoptedLabel: 'Babel-AGI',
+    monthsAhead: 2,
+    quant: 'Single-agent loops; tasks',
+  },
+  {
+    name: 'HARNESS',
+    industry: 'Apr 2024',
+    industryLabel: 'Claude Code',
+    adopted: 'Jun 2024',
+    adoptedLabel: 'Claude Code daily',
+    monthsAhead: 2,
+    quant: 'AI writes code in loop',
+  },
+  {
+    name: 'LOOPS',
+    industry: 'Sep 2024',
+    industryLabel: 'Computer Use',
+    adopted: 'Nov 2024',
+    adoptedLabel: 'multi-turn agentic',
+    monthsAhead: 2,
+    quant: 'Persistent agentic workflows',
+  },
+  {
+    name: 'GRAPHS',
+    industry: 'Mar 2025',
+    industryLabel: 'LangGraph',
+    adopted: 'May 2025',
+    adoptedLabel: 'graph-first',
+    monthsAhead: 2,
+    quant: 'Persistent state + memory; knowledge graphs',
+  },
+  {
+    name: 'OFFICES',
+    industry: 'Q4 2025',
+    industryLabel: 'multi-agent offices',
+    adopted: 'Q4 2025',
+    adoptedLabel: 'STELLA 112 agents',
+    monthsAhead: 1,
+    quant: '14 squads · graph-engineered multi-agent orchestration',
+  },
+] as const;
+
+// Total months ahead across the whole arc. Used in the chrome summary.
+const totalMonths = stages.reduce((acc, s) => acc + s.monthsAhead, 0);
+---
+
+<section
+  class:list={['ai-history', `ai-history--${variant}`, 'home-section']}
+  aria-labelledby="ai-history-title"
+  data-section-id="ai-history"
+>
+  <header class="ai-history__head">
+    <p class="ai-history__chip mono">{chip}</p>
+    <h2 id="ai-history-title" class="ai-history__title">{title}</h2>
+    <p class="ai-history__lede">{lede}</p>
+    <p class="ai-history__summary mono" aria-label={`${totalMonths} months ahead of mainstream across ${stages.length} stages`}>
+      <span class="ai-history__summary-num">{totalMonths}</span>
+      <span class="ai-history__summary-label">MONTHS AHEAD</span>
+      <span class="ai-history__summary-sep" aria-hidden="true">·</span>
+      <span class="ai-history__summary-num">{stages.length}</span>
+      <span class="ai-history__summary-label">STAGES</span>
+      <span class="ai-history__summary-sep" aria-hidden="true">·</span>
+      <span class="ai-history__summary-num">2022 to 2025</span>
+      <span class="ai-history__summary-label">ARC</span>
+      <span class="ai-history__summary-sep" aria-hidden="true">·</span>
+      <span class="ai-history__summary-num">112</span>
+      <span class="ai-history__summary-label">AGENTS NOW</span>
+    </p>
+  </header>
+
+  <div
+    class="ai-history__rail"
+    role="list"
+    aria-label="Seven stages of the AI journey"
+  >
+    <div class="ai-history__connector" aria-hidden="true"></div>
+    {
+      stages.map((s, i) => (
+        <article
+          class="ai-history__node"
+          data-stage={s.name.toLowerCase()}
+          data-stagger={i + 1}
+          data-months={s.monthsAhead}
+          role="listitem"
+          aria-label={`${s.name}. ${s.industryLabel} emerged ${s.industry}. Adopted ${s.adopted}, ${s.monthsAhead} months ahead of mainstream. ${s.quant}`}
+        >
+          <p class="ai-history__node-name mono">{s.name}</p>
+          <p class="ai-history__node-dates mono">
+            <span class="ai-history__node-date">{s.industry}</span>
+            <span class="ai-history__node-date-sep" aria-hidden="true">→</span>
+            <span class="ai-history__node-date">{s.adopted}</span>
+          </p>
+          <p class="ai-history__node-badge mono">I adopted {s.adopted}</p>
+          <p class="ai-history__node-ahead mono">
+            <span class="ai-history__node-ahead-num">{s.monthsAhead}</span>
+            <span class="ai-history__node-ahead-label">months ahead</span>
+          </p>
+          <p class="ai-history__node-quant">{s.quant}</p>
+          {s.name === 'OFFICES' && (
+            <p class="ai-history__node-now mono" aria-label="Current stage">
+              <span class="ai-history__node-now-dot" aria-hidden="true"></span>
+              NOW
+            </p>
+          )}
+        </article>
+      ))
+    }
+  </div>
+
+  <footer class="ai-history__foot mono">
+    <span class="ai-history__foot-label">SOURCE</span>
+    <span class="ai-history__foot-value">industry emergence dates from canonical AI release milestones</span>
+    <span class="ai-history__foot-sep" aria-hidden="true">·</span>
+    <span class="ai-history__foot-label">ADOPTION</span>
+    <span class="ai-history__foot-value">personal shipped records, NDA-safe window 2022 to 2025</span>
+  </footer>
+</section>
+
+<style>
+  /* ============================================================
+   * AIHistoryTimeline : v12.W4 flagship visual.
+   * Token-driven. No halo / glow / gradient. Mono + 1 amber accent.
+   * ============================================================ */
+
+  .ai-history {
+    --rail-ink: var(--c-rule);
+    --rail-ink-strong: var(--c-ink-3);
+    --node-bg: var(--c-paper);
+    --node-ink: var(--c-ink);
+    --node-ink-2: var(--c-ink-2);
+    --node-ink-3: var(--c-ink-3);
+    --node-border: var(--c-rule);
+    --node-border-hover: var(--c-amber);
+    --node-ahead: var(--c-ink-2);
+
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 0 var(--sp-7, 56px);
+  }
+
+  /* === Header === */
+  .ai-history__head {
+    margin-bottom: var(--sp-6, 36px);
+  }
+  .ai-history__chip {
+    margin: 0 0 var(--sp-2, 12px);
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--c-amber);
+    font-weight: 600;
+  }
+  .ai-history__title {
+    margin: 0 0 var(--sp-3, 16px);
+    font-size: var(--fs-xl, 28px);
+    line-height: 1.18;
+    letter-spacing: -0.01em;
+    color: var(--c-ink);
+    font-weight: 600;
+  }
+  .ai-history__lede {
+    margin: 0 0 var(--sp-4, 20px);
+    max-width: 640px;
+    color: var(--c-ink-2);
+    font-size: 15px;
+    line-height: 1.55;
+  }
+  .ai-history__summary {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 8px;
+    margin: 0;
+    padding: 8px 12px;
+    border: 1px solid var(--c-rule);
+    background: var(--c-paper);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--c-ink-3);
+  }
+  .ai-history__summary-num {
+    font-family: var(--ff-mono);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--c-amber);
+    letter-spacing: 0.04em;
+  }
+  .ai-history__summary-label {
+    color: var(--c-ink-3);
+    margin-right: 4px;
+  }
+  .ai-history__summary-sep {
+    color: var(--c-ink-4);
+    margin: 0 2px;
+    opacity: 0.6;
+  }
+
+  /* === Rail (desktop: horizontal scroll row; mobile: vertical stack) === */
+  .ai-history__rail {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(7, minmax(120px, 1fr));
+    gap: 14px;
+    align-items: stretch;
+  }
+  /* Connecting hairline : runs the full width of the rail */
+  .ai-history__connector {
+    position: absolute;
+    top: 19px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--rail-ink);
+    z-index: 0;
+  }
+  .ai-history__connector::after {
+    content: '';
+    position: absolute;
+    top: -3px;
+    right: -1px;
+    width: 7px;
+    height: 7px;
+    background: var(--c-bg);
+    border: 1px solid var(--rail-ink);
+    border-radius: 0;
+    transform: rotate(45deg);
+  }
+
+  /* === Node === */
+  .ai-history__node {
+    position: relative;
+    z-index: 1;
+    padding: 36px 14px 16px;
+    background: var(--node-bg);
+    border: 1px solid var(--node-border);
+    transition:
+      background-color var(--mv-dur-base, 180ms) var(--mv-ease-settle, ease-out),
+      border-color var(--mv-dur-base, 180ms) var(--mv-ease-settle, ease-out),
+      transform var(--mv-dur-base, 180ms) var(--mv-ease-settle, ease-out),
+      color var(--mv-dur-base, 180ms) var(--mv-ease-settle, ease-out);
+    will-change: transform;
+    /* Progressive enhancement: visible by default. JS adds a hidden
+       state that resolves to resting when the observer fires. */
+    opacity: 1;
+    transform: none;
+  }
+  /* Static timeline marker on each node : sits above the connector */
+  .ai-history__node::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: 14px;
+    width: 11px;
+    height: 11px;
+    background: var(--c-bg);
+    border: 1px solid var(--c-rule);
+    border-radius: 0;
+    transform: rotate(45deg);
+    transition: border-color var(--mv-dur-base, 180ms) var(--mv-ease-settle, ease-out);
+  }
+  /* Last node (OFFICES / NOW) gets the amber marker */
+  .ai-history__node[data-stage='offices']::before {
+    border-color: var(--c-amber);
+    background: var(--c-amber);
+  }
+
+  .ai-history__node-name {
+    margin: 0 0 6px;
+    font-size: 14px;
+    letter-spacing: 0.16em;
+    color: var(--c-ink);
+    font-weight: 700;
+  }
+  .ai-history__node-dates {
+    margin: 0 0 var(--sp-3, 12px);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--node-ink-3);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+  }
+  .ai-history__node-date {
+    font-variant-numeric: tabular-nums;
+  }
+  .ai-history__node-date-sep {
+    color: var(--node-ink-4);
+    opacity: 0.7;
+  }
+  .ai-history__node-badge {
+    display: inline-block;
+    margin: 0 0 10px;
+    padding: 3px 8px;
+    background: var(--c-bg);
+    border: 1px solid var(--c-amber);
+    color: var(--c-amber);
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .ai-history__node-ahead {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin: 0 0 10px;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--node-ahead);
+  }
+  .ai-history__node-ahead-num {
+    font-family: var(--ff-mono);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--c-amber);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+  .ai-history__node-ahead-label {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--c-ink-3);
+  }
+  .ai-history__node-quant {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--c-ink-2);
+  }
+
+  /* === NOW marker === */
+  .ai-history__node-now {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 12px 0 0;
+    padding-top: 10px;
+    border-top: 1px solid var(--c-rule);
+    width: 100%;
+    font-size: 10.5px;
+    letter-spacing: 0.16em;
+    color: var(--c-amber);
+    font-weight: 700;
+  }
+  .ai-history__node-now-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--c-amber);
+    border-radius: 0;
+    flex-shrink: 0;
+  }
+
+  /* === Hover (utility class per motion doctrine) ===
+     No lift (institutional cap), no shadow. Background swap + amber
+     border + ink color shift only. Token-resolved. */
+  .ai-history__node:hover {
+    background: var(--c-bg);
+    border-color: var(--c-amber);
+    transform: translateY(-1px);
+  }
+  .ai-history__node:hover::before {
+    border-color: var(--c-amber);
+  }
+
+  /* === Scroll-driven "active" state (JS adds .is-active) ===
+     When a node passes the 60% viewport threshold, scale to 1.04 +
+     shift ink-2 -> ink-1 over 280ms --mv-ease-settle. Pure transform,
+     no layout shift, no halo. */
+  .ai-history__node.is-active {
+    transform: scale(1.04);
+  }
+  .ai-history__node.is-active .ai-history__node-quant {
+    color: var(--c-ink);
+  }
+  .ai-history__node.is-active .ai-history__node-ahead {
+    color: var(--c-ink);
+  }
+
+  /* === Entrance stagger (v11 motion vocabulary) ===
+     data-stagger="N" maps to a calc(var(--mv-stagger) * N) delay
+     via the .hero [data-stagger] rule in motion.css. For this
+     component, we extend the selector so the 7 timeline nodes
+     share the same entrance cadence without depending on a
+     .hero parent. The reduced-motion override in motion.css §27
+     collapses the whole ladder. */
+  .ai-history [data-stagger='1'] {
+    transition-delay: calc(var(--mv-stagger, 80ms) * 1);
+  }
+  .ai-history [data-stagger='2'] {
+    transition-delay: calc(var(--mv-stagger, 80ms) * 2);
+  }
+  .ai-history [data-stagger='3'] {
+    transition-delay: calc(var(--mv-stagger, 80ms) * 3);
+  }
+  .ai-history [data-stagger='4'] {
+    transition-delay: calc(var(--mv-stagger, 80ms) * 4);
+  }
+  .ai-history [data-stagger='5'] {
+    transition-delay: calc(var(--mv-stagger, 80ms) * 5);
+  }
+  .ai-history [data-stagger='6'] {
+    transition-delay: calc(var(--mv-stagger, 80ms) * 6);
+  }
+  .ai-history [data-stagger='7'] {
+    transition-delay: calc(var(--mv-stagger, 80ms) * 7);
+  }
+
+  /* === Footer === */
+  .ai-history__foot {
+    margin-top: var(--sp-5, 24px);
+    padding-top: var(--sp-3, 12px);
+    border-top: 1px solid var(--c-rule);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px 10px;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--c-ink-3);
+  }
+  .ai-history__foot-label {
+    color: var(--c-amber);
+    font-weight: 600;
+  }
+  .ai-history__foot-value {
+    color: var(--c-ink-2);
+    text-transform: none;
+    letter-spacing: 0.02em;
+    font-family: var(--ff-sans);
+  }
+  .ai-history__foot-sep {
+    color: var(--c-ink-4);
+    opacity: 0.6;
+  }
+
+  /* ============================================================
+   * VARIANT: stack (vertical, /timeline + /methodology).
+   * Hairline rail runs down the left gutter. NOW marker at the
+   * bottom of the column.
+   * ============================================================ */
+  .ai-history--stack .ai-history__rail {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .ai-history--stack .ai-history__connector {
+    top: 0;
+    bottom: 0;
+    left: 19px;
+    right: auto;
+    width: 1px;
+    height: auto;
+  }
+  .ai-history--stack .ai-history__connector::after {
+    top: auto;
+    bottom: -1px;
+    right: -3px;
+  }
+  .ai-history--stack .ai-history__node {
+    padding: 16px 16px 16px 56px;
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 4px 24px;
+    align-items: start;
+  }
+  .ai-history--stack .ai-history__node::before {
+    top: 22px;
+    left: -5px;
+  }
+  .ai-history--stack .ai-history__node-name {
+    grid-column: 1;
+    grid-row: 1;
+    margin: 0;
+  }
+  .ai-history--stack .ai-history__node-dates {
+    grid-column: 1;
+    grid-row: 2;
+    margin: 0;
+  }
+  .ai-history--stack .ai-history__node-badge {
+    grid-column: 1;
+    grid-row: 3;
+    margin: 6px 0 0;
+  }
+  .ai-history--stack .ai-history__node-ahead {
+    grid-column: 2;
+    grid-row: 1;
+    margin: 0;
+    align-self: start;
+    justify-self: end;
+  }
+  .ai-history--stack .ai-history__node-quant {
+    grid-column: 2;
+    grid-row: 2 / span 2;
+    align-self: start;
+    font-size: 14px;
+  }
+  .ai-history--stack .ai-history__node-now {
+    grid-column: 2;
+    grid-row: 3;
+    margin: 8px 0 0;
+  }
+
+  /* ============================================================
+   * VARIANT: compact (terminal / WorldView Live). 4 columns,
+   * no quant relevance line; condensed spacing.
+   * ============================================================ */
+  .ai-history--compact .ai-history__head {
+    margin-bottom: var(--sp-4, 20px);
+  }
+  .ai-history--compact .ai-history__title {
+    font-size: var(--fs-lg, 20px);
+  }
+  .ai-history--compact .ai-history__lede {
+    display: none;
+  }
+  .ai-history--compact .ai-history__summary {
+    font-size: 9.5px;
+    padding: 6px 10px;
+  }
+  .ai-history--compact .ai-history__rail {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .ai-history--compact .ai-history__connector {
+    top: 17px;
+  }
+  .ai-history--compact .ai-history__node {
+    padding: 30px 10px 12px;
+  }
+  .ai-history--compact .ai-history__node-name {
+    font-size: 12px;
+  }
+  .ai-history--compact .ai-history__node-dates {
+    font-size: 10px;
+  }
+  .ai-history--compact .ai-history__node-badge {
+    font-size: 9.5px;
+    padding: 2px 6px;
+  }
+  .ai-history--compact .ai-history__node-ahead-num {
+    font-size: 15px;
+  }
+  .ai-history--compact .ai-history__node-quant {
+    font-size: 11.5px;
+  }
+
+  /* ============================================================
+   * MOBILE (override : always stack on < 980px regardless of
+   * declared variant). Keeps the desktop strip scrollable but
+   * the mobile experience always reads top-to-bottom.
+   * ============================================================ */
+  @media (max-width: 980px) {
+    .ai-history__rail {
+      grid-template-columns: 1fr !important;
+      gap: 16px;
+    }
+    .ai-history__connector {
+      top: 0;
+      bottom: 0;
+      left: 19px;
+      right: auto;
+      width: 1px;
+      height: auto;
+    }
+    .ai-history__connector::after {
+      top: auto;
+      bottom: -1px;
+      right: -3px;
+    }
+    .ai-history__node {
+      padding: 14px 14px 14px 50px !important;
+      display: block !important;
+    }
+    .ai-history__node::before {
+      top: 18px !important;
+      left: -5px !important;
+    }
+    .ai-history__node-name {
+      margin-bottom: 4px;
+    }
+    .ai-history__node-dates,
+    .ai-history__node-badge,
+    .ai-history__node-ahead {
+      margin-bottom: 6px;
+    }
+    .ai-history__node-quant {
+      font-size: 12.5px;
+    }
+  }
+
+  /* ============================================================
+   * REDUCED-MOTION : belt-and-suspenders local override. The
+   * global motion.css §27 already neutralizes animation + transition
+   * on .stl-* classes; this block covers the timeline-specific
+   * --mv-ease transitions + the .is-active scale + the stagger.
+   * The resting state is the canonical visual state.
+   * ============================================================ */
+  @media (prefers-reduced-motion: reduce) {
+    .ai-history__node {
+      transition: none !important;
+      transform: none !important;
+    }
+    .ai-history__node:hover {
+      transform: none !important;
+    }
+    .ai-history__node.is-active {
+      transform: none !important;
+    }
+    .ai-history__node.is-active .ai-history__node-quant {
+      color: var(--c-ink-2);
+    }
+    .ai-history__node.is-active .ai-history__node-ahead {
+      color: var(--c-ink-2);
+    }
+    .ai-history__node::before {
+      transition: none !important;
+    }
+  }
+
+  /* ============================================================
+   * HIGH-CONTRAST (a11y). Optional, supplements WCAG 2.2 AA. Bumps
+   * ink-3 -> ink-2 and reinforces the amber border on hover so the
+   * institutional register stays inside the F14 amber-only doctrine.
+   * ============================================================ */
+  @media (prefers-contrast: more) {
+    .ai-history__node-quant {
+      color: var(--c-ink);
+    }
+    .ai-history__node-ahead-num {
+      color: var(--c-amber);
+    }
+  }
+</style>
+
+<script>
+  /* AIHistoryTimeline : scroll-driven active state.
+     Pure IntersectionObserver at 60% viewport. Adds .is-active when a
+     node crosses the threshold. Reduced-motion : the observer still
+     fires, but the CSS rule in §reduced-motion collapses the scale
+     to none, so the visible state is identical to the resting state. */
+  (() => {
+    if (typeof window === 'undefined') return;
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
+
+    const rail = document.querySelector('.ai-history__rail');
+    if (!rail) return;
+
+    const nodes = Array.from(
+      rail.querySelectorAll<HTMLElement>('.ai-history__node')
+    );
+    if (nodes.length === 0) return;
+
+    /* Single observer, threshold 0.6 : when a node is at least 60%
+       in-view, mark it active. Off-screen : IO unobserves, no
+       perpetual animation, no battery burn (motion doctrine §off-screen-pause). */
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-active');
+          } else {
+            entry.target.classList.remove('is-active');
+          }
+        }
+      },
+      { threshold: 0.6 }
+    );
+
+    nodes.forEach((node) => observer.observe(node));
+
+    /* Reduced-motion : skip the observer entirely; resting state is
+       canonical. */
+    if (prefersReducedMotion) {
+      observer.disconnect();
+    }
+  })();
+</script>

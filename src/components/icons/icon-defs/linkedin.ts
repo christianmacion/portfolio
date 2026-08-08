@@ -1,5 +1,5 @@
 /**
- * linkedin — LinkedIn "in" mark (rounded box + lowercase "i" + "n" stroke).
+ * linkedin : LinkedIn "in" mark (rounded box + lowercase "i" + "n" stroke).
  * Communication category: link to LinkedIn profile.
  */
 export const SVG_PATH =

@@ -1,6 +1,6 @@
 ---
 /**
- * PipelineDiagram.astro — inline SVG flowchart for the AI lane.
+ * PipelineDiagram.astro : inline SVG flowchart for the AI lane.
  *
  * v3.5: replaces ProcessStrip's flat bar visualization with a real
  * control-systems-style diagram: 5 boxes, forward arrows between them,
@@ -255,7 +255,7 @@ const clip = (s: string, n: number) => (s.length <= n ? s : s.slice(0, n - 1).tr
       })
     }
 
-    {/* loop caption at bottom (no curve on vertical — just annotation) */}
+    {/* loop caption at bottom (no curve on vertical : just annotation) */}
     <text class="pd-loop-label" x={V_W / 2} y={V_H - 18} text-anchor="middle">
       ↻ feedback loop: deliverable revises intent
     </text>

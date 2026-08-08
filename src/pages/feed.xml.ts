@@ -1,10 +1,10 @@
 /**
- * feed.xml.ts — RSS 2.0 feed of all portfolio content (projects + solutions merged).
+ * feed.xml.ts : RSS 2.0 feed of all portfolio content (projects + solutions merged).
  *
  * Three streams:
- *   /feed.xml            — merged (all kinds), canonical homepage link
- *   /feed-projects.xml   — project stream only
- *   /feed-solutions.xml  — solution stream only
+ *   /feed.xml            : merged (all kinds), canonical homepage link
+ *   /feed-projects.xml   : project stream only
+ *   /feed-solutions.xml  : solution stream only
  *
  * Surfaced via <link rel="alternate" type="application/rss+xml"> in BaseLayout.
  * Items are ordered newest-first; capped at 50 per stream. Each entry links to

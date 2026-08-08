@@ -1,12 +1,12 @@
 ---
 /**
- * NewsRibbon.astro — v7.4 INSTITUTIONAL NEWS TICKER
+ * NewsRibbon.astro : v7.4 INSTITUTIONAL NEWS TICKER
  *
  * Two-lane scrolling news strip. Visually different from MarketTape:
  *   - MarketTape is FINANCE (px · delta% · vol). Server-rendered.
  *   - NewsRibbon is ACTIVITY (releases · milestones · reading · availability).
  *
- * Designed to answer "is this site updated?" — Lane 1 shows recent
+ * Designed to answer "is this site updated?" : Lane 1 shows recent
  * portfolio updates (deterministic timeline, build-seeded), Lane 2
  * shows methodology frames (also deterministic, semantic content).
  *
@@ -33,7 +33,7 @@ interface NewsItem {
   t: string;
   /** Short uppercase label (3-4 chars, fits ribbon rhythm). */
   tag: string;
-  /** Headline — 2-4 short words, no emoji. */
+  /** Headline : 2-4 short words, no emoji. */
   text: string;
   /** Optional accent: 'warn' | 'cobalt' | 'sage' | 'terracotta' | 'teal' | 'violet' | undefined. */
   accent?: 'warn' | 'cobalt' | 'sage' | 'terracotta' | 'teal' | 'violet';
@@ -71,7 +71,7 @@ const {
   trailing = 'updates seeded from BUILD_DATE',
 } = Astro.props;
 
-// === DEFAULT LANE 1 — portfolio updates (deterministic, time-stamped).
+// === DEFAULT LANE 1 : portfolio updates (deterministic, time-stamped).
 // Edit these to add new releases. Time stamps are floor-of-build so the
 // timeline reads as "earlier today" even if you re-deploy.
 const defaultNews: NewsItem[] = [
@@ -122,8 +122,8 @@ const defaultNews: NewsItem[] = [
   { t: '10:01', tag: 'STATUS', text: 'DUTY · ONLINE · 24H REPLY · NDA-CLEAN', accent: 'sage' },
 ];
 
-// === DEFAULT LANE 2 — methodology frames.
-// Renders as a continuous loop of "HEAD · tail" pairs — reads as the
+// === DEFAULT LANE 2 : methodology frames.
+// Renders as a continuous loop of "HEAD · tail" pairs : reads as the
 // site's bio compressed into a moving headline.
 const defaultMethodology: MethodologyFrame[] = [
   { head: 'EVAL-FIRST', tail: '31 GATES · ZERO ROLLBACKS', accent: 'warn' },
@@ -146,7 +146,7 @@ const frames = (methodology ?? defaultMethodology).map((it) => ({ ...it }));
   class="ribbon"
   aria-label="Portfolio updates and methodology frames (deterministic, paused on hover)"
 >
-  {/* === LANE 1 — news timeline === */}
+  {/* === LANE 1 : news timeline === */}
   <div class="ribbon__lane ribbon__lane--news" role="region" aria-label="Latest updates">
     <div class="ribbon__lane-label mono" aria-hidden="true">UPDATES</div>
     <div class="ribbon__viewport">
@@ -167,7 +167,7 @@ const frames = (methodology ?? defaultMethodology).map((it) => ({ ...it }));
     </div>
   </div>
 
-  {/* === LANE 2 — methodology frames === */}
+  {/* === LANE 2 : methodology frames === */}
   <div class="ribbon__lane ribbon__lane--method" role="region" aria-label="Methodology frames">
     <div class="ribbon__lane-label mono" aria-hidden="true">METHOD</div>
     <div class="ribbon__viewport ribbon__viewport--reverse">
@@ -199,10 +199,10 @@ const frames = (methodology ?? defaultMethodology).map((it) => ({ ...it }));
     color: var(--c-ink);
     overflow: hidden;
     user-select: none;
-    /* hairline grain — single line of CSS only; same register as MarketTape */
+    /* hairline grain : single line of CSS only; same register as MarketTape */
   }
 
-  /* === Lane — two stacked rows === */
+  /* === Lane : two stacked rows === */
   .ribbon__lane {
     display: grid;
     grid-template-columns: 80px 1fr;
@@ -230,7 +230,7 @@ const frames = (methodology ?? defaultMethodology).map((it) => ({ ...it }));
   .ribbon__viewport {
     overflow: hidden;
     position: relative;
-    /* Soft edge fade — 24px transparent → opaque → 24px transparent.
+    /* Soft edge fade : 24px transparent → opaque → 24px transparent.
        mask-image is the institutional way to fade; no extra DOM nodes. */
     mask-image: linear-gradient(
       to right,
@@ -257,7 +257,7 @@ const frames = (methodology ?? defaultMethodology).map((it) => ({ ...it }));
     animation: ribbon-scroll var(--ribbon-dur, 56s) linear infinite;
     will-change: transform;
   }
-  /* Reverse-direction track for lane 2 — same keyframe, starts at -50%
+  /* Reverse-direction track for lane 2 : same keyframe, starts at -50%
      so the loop matches the natural rhythm of the lower lane. */
   .ribbon__viewport--reverse .ribbon__track {
     animation-direction: reverse;
@@ -268,7 +268,7 @@ const frames = (methodology ?? defaultMethodology).map((it) => ({ ...it }));
     animation-play-state: paused;
   }
 
-  /* === Lane 1 — news items === */
+  /* === Lane 1 : news items === */
   .ribbon__item {
     display: inline-flex;
     align-items: center;
@@ -277,7 +277,7 @@ const frames = (methodology ?? defaultMethodology).map((it) => ({ ...it }));
     line-height: 1;
     color: var(--c-ink);
     letter-spacing: 0.02em;
-    /* Each item is a clickable pause point — make the whole row a
+    /* Each item is a clickable pause point : make the whole row a
        subtle hit target. Pointer-events:none so the click goes to the
        underlying element on pages that wrap the ribbon. */
     padding-block: 11px;
@@ -302,7 +302,7 @@ const frames = (methodology ?? defaultMethodology).map((it) => ({ ...it }));
     padding: 2px 6px;
     border: 1px solid currentColor;
     color: var(--c-ink-2);
-    /* v6.16 — sharp corners; no pill vocabulary. */
+    /* v6.16 : sharp corners; no pill vocabulary. */
     border-radius: 0;
     line-height: 1.4;
   }
@@ -330,16 +330,16 @@ const frames = (methodology ?? defaultMethodology).map((it) => ({ ...it }));
   }
 
   .ribbon__sep {
-    /* v9.9.1 — was var(--c-ink-4) (#8a92a3 light / #4a4742 dark) which gave
-       2.49:1 (light) / 1.93:1 (dark) — fails WCAG 2.2 AA 4.5:1 and is the
+    /* v9.9.1 : was var(--c-ink-4) (#8a92a3 light / #4a4742 dark) which gave
+       2.49:1 (light) / 1.93:1 (dark) : fails WCAG 2.2 AA 4.5:1 and is the
        source of 2 contrast violations on /projects/. Lifted to --c-ink-3
-       (#525f72 light / #9a9486 dark) → 5.19:1 / 5.62:1 — both AA. */
+       (#525f72 light / #9a9486 dark) → 5.19:1 / 5.62:1 : both AA. */
     color: var(--c-ink-3);
     margin-inline-start: var(--sp-2);
     font-weight: 600;
   }
 
-  /* === Lane 2 — methodology frames === */
+  /* === Lane 2 : methodology frames === */
   .ribbon__frame {
     display: inline-flex;
     align-items: center;
@@ -364,12 +364,12 @@ const frames = (methodology ?? defaultMethodology).map((it) => ({ ...it }));
     color: var(--c-ink-2);
   }
   .ribbon__frame-sep {
-    /* v9.9.1 — was var(--c-ink-4) (2.49:1 light / 1.93:1 dark) — fails AA.
-       Lifted to --c-ink-3 (5.19:1 / 5.62:1) — both AA. */
+    /* v9.9.1 : was var(--c-ink-4) (2.49:1 light / 1.93:1 dark) : fails AA.
+       Lifted to --c-ink-3 (5.19:1 / 5.62:1) : both AA. */
     color: var(--c-ink-3);
     font-weight: 600;
   }
-  /* v9.4.1 — chrome-contract rule 6: reserve --c-warn for semantic
+  /* v9.4.1 : chrome-contract rule 6: reserve --c-warn for semantic
      status only. .is-warn here is a decorative frame tint, not a
      warning signal; collapse to canonical --c-amber. */
   .ribbon__frame.is-warn .ribbon__frame-head {
@@ -391,7 +391,7 @@ const frames = (methodology ?? defaultMethodology).map((it) => ({ ...it }));
     color: var(--j-violet);
   }
 
-  /* === Edge stop — trailing label === */
+  /* === Edge stop : trailing label === */
   .ribbon__stop {
     position: absolute;
     right: 0;
@@ -408,7 +408,7 @@ const frames = (methodology ?? defaultMethodology).map((it) => ({ ...it }));
     pointer-events: none;
   }
 
-  /* === Keyframe — same seam-free math as MarketTape (translate 0 → -50%) === */
+  /* === Keyframe : same seam-free math as MarketTape (translate 0 → -50%) === */
   @keyframes ribbon-scroll {
     from {
       transform: translateX(0);
@@ -421,7 +421,7 @@ const frames = (methodology ?? defaultMethodology).map((it) => ({ ...it }));
   /* === Reduced-motion: freeze + flatten the edge fade ===
      Per CLAUDE.md / motion doctrine: every animation must be neutralized
      in reduced-motion. The mask-image is the only thing that creates
-     the "moving" feel — kill it; the static tracks already read. */
+     the "moving" feel : kill it; the static tracks already read. */
   @media (prefers-reduced-motion: reduce) {
     .ribbon__track {
       animation: none !important;
@@ -432,7 +432,7 @@ const frames = (methodology ?? defaultMethodology).map((it) => ({ ...it }));
     }
   }
 
-  /* === Multi-lane on narrow viewports — drop the lane labels === */
+  /* === Multi-lane on narrow viewports : drop the lane labels === */
   @media (max-width: 720px) {
     .ribbon__lane {
       grid-template-columns: 0 1fr;

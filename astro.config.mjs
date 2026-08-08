@@ -17,12 +17,23 @@ const SITE = process.env.PUBLIC_SITE_URL ?? 'https://christianmacion26.github.io
 // silently produced a broken site with all assets at /portfolio/_astro/ 404ing.
 const BASE_PATH = process.env.BASE_PATH ?? (process.env.CF_PAGES ? '/' : '/portfolio');
 
+// 2026-08-08 — Astro hybrid mode (SSR opt-in for personalization pages).
+// `output: 'static'` is the Astro 5+/7 equivalent of the legacy `output: 'hybrid'`:
+// pages are prerendered by default; individual routes opt into SSR via
+// `export const prerender = false` (used by /index.astro, /for-recruiters.astro,
+// and /api/who-am-i + /api/track-visit). Static routes keep the build-time
+// prerender path so 95% of routes stay 0-RTT edge-cacheable.
+// Adapter v14 sets `Astro.locals.cfContext` (replaces `Astro.locals.runtime.ctx`)
+// and binds via `import { env } from 'cloudflare:workers'`. Local dev reads
+// bindings from `wrangler.toml` natively via the workerd dev server.
+
 export default defineConfig({
   site: SITE,
   // Same env var controls the base path: mirror wants `/`, GH Pages wants `/portfolio`.
   // Build scripts must set BASE_PATH=/ for the mirror deploy — the CLI
   // --base flag does NOT override a config-file value in current Astro.
   base: BASE_PATH,
+  output: 'static',
   trailingSlash: 'always',
   build: {
     format: 'directory',
@@ -49,6 +60,10 @@ export default defineConfig({
       ],
     }),
   ],
+  // No @astrojs/cloudflare adapter — see comment block above. The static build
+  // emits `dist/` directly; Cloudflare Pages Functions (in `functions/`) handle
+  // every dynamic endpoint. The CF Pages deploy runs `astro build` and uploads
+  // `dist/` as the static surface; `functions/` is auto-detected by Pages.
   vite: {
     ssr: { noExternal: ['@fontsource/inter', '@fontsource/jetbrains-mono'] },
   },

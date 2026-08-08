@@ -1,13 +1,13 @@
 ---
 /**
- * about-this-site.astro — v1.0 · meta page about this site.
+ * about-this-site.astro : v1.0 · meta page about this site.
  *
  * Five sections:
- *   (a) Built with         — tech list
- *   (b) Design tokens      — color, type, spacing, motion bullets
- *   (c) NDA guardrail      — link to nda-audit.ts, "0 violations" claim
- *   (d) Open-source repos  — 4 public repos surfaced from /proof
- *   (e) License            — CC-BY-SA (copy) + MIT (code) placeholder
+ *   (a) Built with         : tech list
+ *   (b) Design tokens      : color, type, spacing, motion bullets
+ *   (c) NDA guardrail      : link to nda-audit.ts, "0 violations" claim
+ *   (d) Open-source repos  : 4 public repos surfaced from /proof
+ *   (e) License            : CC-BY-SA (copy) + MIT (code) placeholder
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
 import CTABanner from '@components/CTABanner.astro';
@@ -76,7 +76,7 @@ const repos = [
   },
 ];
 
-// v6.11.31 — license rows extracted to array for chrome derivation
+// v6.11.31 : license rows extracted to array for chrome derivation
 const licenses = [
   {
     name: 'LICENSE-COPY',
@@ -391,7 +391,7 @@ const licenses = [
   .bullet code {
     background: var(--c-bg-2);
     padding: 1px 6px;
-    /* v9.3.1 — F17 institutional: sharp corners (1px) instead of 3px. */
+    /* v9.3.1 : F17 institutional: sharp corners (1px) instead of 3px. */
     border-radius: 1px;
     font-size: 0.9em;
   }
@@ -404,7 +404,7 @@ const licenses = [
   .guard {
     border: 1px solid var(--c-rule);
     border-left: 3px solid var(--c-primary);
-    /* v9.3.1 — F17 institutional: sharp corners (1px) instead of --radius (10px). */
+    /* v9.3.1 : F17 institutional: sharp corners (1px) instead of --radius (10px). */
     border-radius: 1px;
     background: var(--c-bg);
     padding: var(--sp-4);
@@ -475,7 +475,7 @@ const licenses = [
     padding: var(--sp-4);
     border: 1px solid var(--c-rule);
     border-left: 3px solid var(--c-primary);
-    /* v9.3.1 — F17 institutional: sharp corners (1px) instead of --radius (10px). */
+    /* v9.3.1 : F17 institutional: sharp corners (1px) instead of --radius (10px). */
     border-radius: 1px;
     background: var(--c-bg);
     display: grid;

@@ -1,15 +1,15 @@
 /**
- * url.ts — small URL helpers that respect the configured `base`
+ * url.ts : small URL helpers that respect the configured `base`
  * (defaults to `/portfolio` for GitHub Pages deployment).
  *
  * Use `path('/projects')` instead of writing `href="/projects"` so
  * internal links resolve correctly under any base path.
  *
- * v6.10.12 — `path()` now appends a trailing slash for internal page
+ * v6.10.12 : `path()` now appends a trailing slash for internal page
  * links to match Astro's `trailingSlash: 'always'`. Skipped for
  * assets (have `.` in segment) and fragments (`#anchor`).
  *
- * v9.2 fix — `path()` now passes absolute URLs through unchanged.
+ * v9.2 fix : `path()` now passes absolute URLs through unchanged.
  * Before this fix, `path('https://example.com/')` returned
  * `/portfolio/https://example.com/`, which silently broke 3 cert
  * issuer URLs on /certifications. Detected by the T2-1 audit.

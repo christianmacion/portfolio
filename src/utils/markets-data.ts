@@ -1,7 +1,7 @@
 /**
- * markets-data.ts — shared index-seed data for /markets/ chrome.
+ * markets-data.ts : shared index-seed data for /markets/ chrome.
  *
- * v6.11.12 — Before this file existed, the MarketTape and the four
+ * v6.11.12 : Before this file existed, the MarketTape and the four
  * StatCell cards (S&P / DXY / VIX / BTC-USD) on /markets/ each generated
  * their own PRNG walk from the same `base` but with DIFFERENT seeds,
  * sigmas, and walk lengths. That produced visible price disagreement:
@@ -14,7 +14,7 @@
  * {px, deltaPct, spark} for that build. The walk is shared across all
  * consumers because all consumers go through this function.
  *
- * Standing Order §9 — no Math.random / Date.now / argless Date anywhere.
+ * Standing Order §9 : no Math.random / Date.now / argless Date anywhere.
  * Seed comes from build-stamp.ts -> buildSeed() (which reads
  * BUILD_DATE env var). Same build → same numbers. Next build → fresh.
  *
@@ -25,7 +25,7 @@
  *
  * Both consumers then render identical prices for SPX / NDX / DJI /
  * DXY / VIX / BTC-USD / GOLD. Strategy tape entries (01·DEFLATED etc.)
- * are unaffected — they live in MarketTape.stratSeeds.
+ * are unaffected : they live in MarketTape.stratSeeds.
  */
 import { seedFromString, walk, formatPx, buildSeed } from '@utils/prng';
 
@@ -42,7 +42,7 @@ export interface IndexSeed {
 }
 
 /**
- * Seven headline market indicators — real instrument names, public-domain
+ * Seven headline market indicators : real instrument names, public-domain
  * data shape. Vol columns are illustrative (e.g., VIX in points, BTC in
  * USD). Base prices are illustrative "session" levels that read as
  * plausible 2026 values, NOT live quotes. The whole point of the

@@ -1,6 +1,6 @@
 ---
 /**
- * CoverageGlobe.astro — v6.1 institutional coverage dot map.
+ * CoverageGlobe.astro : v6.1 institutional coverage dot map.
  *
  * Server-rendered SVG (no JS). Renders a sparse world dot-map using
  * the Equirectangular projection (lat/lon → x/y directly) and plots a
@@ -8,11 +8,11 @@
  * render as dots; the default 6 cities are linked to relevant pages.
  *
  * Visual conventions:
- *   - Equirectangular 0–360 lon, 0–180 lat, viewBox 720×360.
+ *   - Equirectangular 0-360 lon, 0-180 lat, viewBox 720×360.
  *   - Background landmass dots: a small grid (8° spacing) of faint
- *     amber dots — gives the "we cover the world" impression without
+ *     amber dots : gives the "we cover the world" impression without
  *     shipping a real basemap (heavy, IP-encumbered).
- *   - City dots: weighted by `weight` (0–1), colored amber with a
+ *   - City dots: weighted by `weight` (0-1), colored amber with a
  *     faint pulse-ring around the larger cities.
  *   - Hover reveals the city name + lat/lon via <title> (a11y) +
  *     underline-on-hover (visual).
@@ -37,7 +37,7 @@ interface Props {
   points?: Point[];
   /** ViewBox width (default 720). */
   width?: number;
-  /** ViewBox height (default 360 — Equirectangular 2:1). */
+  /** ViewBox height (default 360 : Equirectangular 2:1). */
   height?: number;
   /** Spacing in degrees between background landmass dots (default 20). */
   bgStep?: number;
@@ -68,7 +68,7 @@ function project(lat: number, lon: number): { x: number; y: number } {
 }
 
 // === Background landmass dot grid ===
-// We don't ship a basemap — render a sparse grid of faint dots. For a
+// We don't ship a basemap : render a sparse grid of faint dots. For a
 // more "institutional" feel we'd mask them to land, but the dot grid
 // reads as "we are everywhere" without that work, and keeps the file
 // small + IP-clean. Step is in degrees.
@@ -82,7 +82,7 @@ for (let lat = -60; lat <= 75; lat += bgStep) {
   for (let lon = -180; lon <= 180; lon += bgStep) {
     const { x, y } = project(lat, lon);
     // Crude land mask: keep dots that fall in a coarse continent outline.
-    // The exact borders don't matter — we just want denser coverage in
+    // The exact borders don't matter : we just want denser coverage in
     // northern-hemisphere continents and sparser in the southern oceans.
     // North America + Europe + Asia band
     const nhContinent =
@@ -134,7 +134,7 @@ const primeX = project(0, 0).x;
   >
     <title>Coverage map. equirectangular world dot map with city markers</title>
 
-    {/* Background grid lines (equator, prime meridian) — very faint. */}
+    {/* Background grid lines (equator, prime meridian) : very faint. */}
     <line x1="0" y1={equatorY} x2={width} y2={equatorY} class="globe__eq"></line>
     <line x1={primeX} y1="0" x2={primeX} y2={height} class="globe__pm"></line>
 
@@ -147,7 +147,7 @@ const primeX = project(0, 0).x;
         <g>
           {c.weight >= 0.7 && <circle cx={c.x} cy={c.y} r={c.r + 5} class="globe__pulse" />}
           {c.href ? (
-            // v6.3 polish — single home-base city dot is rendered as a
+            // v6.3 polish : single home-base city dot is rendered as a
             // <circle> with a <title> tooltip instead of a clickable
             // anchor. The audit was flagging the only href-bearing dot
             // (Digos City) as 9×9 / 21×21 px undersized on /markets;
@@ -248,7 +248,7 @@ const primeX = project(0, 0).x;
     fill: var(--c-ink);
     font-weight: 600;
     letter-spacing: 0.04em;
-    /* no text-shadow — institutional: read on background alone */
+    /* no text-shadow : institutional: read on background alone */
   }
   .globe__legend {
     list-style: none;

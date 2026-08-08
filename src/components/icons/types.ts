@@ -1,14 +1,14 @@
 /**
- * types.ts — IconName contract for the STELLA custom SVG icon library.
+ * types.ts : IconName contract for the STELLA custom SVG icon library.
  *
  * Single source of truth for which icons ship. The IconName union below is
- * the allowlist — every other file imports from here. A typo at any consumer
+ * the allowlist : every other file imports from here. A typo at any consumer
  * site (e.g. `arrow-riight`) is caught at TypeScript compile time, not at
  * runtime.
  *
- * v9.2 — institutional chrome contract. Designed for the matcha + amber
+ * v9.2 : institutional chrome contract. Designed for the matcha + amber
  * palette via `currentColor`. All icons are stroke-only at 1.5px stroke-width
- * with round linecap + linejoin — matches the Heroicons outline register
+ * with round linecap + linejoin : matches the Heroicons outline register
  * and rejects the SF Symbols "tinted weight" feel.
  *
  * Per [[webcraft-no-vibe]]: no halo, no glow, no gradient, no filter.
@@ -18,7 +18,7 @@
  */
 
 /**
- * The canonical icon allowlist — 38 single-concern icons.
+ * The canonical icon allowlist : 38 single-concern icons.
  *
  * Categories:
  *   - Navigation + chrome (9): arrow-right, arrow-left, arrow-up, arrow-down,
@@ -78,7 +78,7 @@ export type IconName =
   | 'pause';
 
 /**
- * The exhaustive list — used for build-time coverage checks and for
+ * The exhaustive list : used for build-time coverage checks and for
  * Storybook's `<IconGallery />`. Keep in lockstep with the union above.
  */
 export const ICON_NAMES: readonly IconName[] = [

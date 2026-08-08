@@ -1,6 +1,6 @@
 ---
 /**
- * /glossary/[slug].astro — long-form per-term deep page.
+ * /glossary/[slug].astro : long-form per-term deep page.
  *
  * One page per GlossaryTerm in src/data/glossary-terms.ts. Each page
  * surfaces the short definition, the extended prose, a category-anchored
@@ -29,7 +29,7 @@ const { term } = Astro.props;
 // only ships the 3-6 cross-links instead of the entire 25-term table.
 const relatedTerms = term.related.map((id) => terms.find((t) => t.id === id)).filter(Boolean);
 
-// Category breadcrumb — top of page
+// Category breadcrumb : top of page
 const categoryHref = term.category === 'Quant' ? '/methodology' : '/proof';
 const categoryLabel = term.category === 'Quant' ? 'Quant methodology' : 'AI proof';
 
@@ -114,7 +114,7 @@ const categoryColor = term.category === 'Quant' ? 'pill--accent' : 'pill--brand'
 <style>
   .hero {
     padding-block: var(--sp-9) var(--sp-7);
-    /* v6.10.18 — institutional: drop both decorative hero amber radial-gradients (chrome≠data).
+    /* v6.10.18 : institutional: drop both decorative hero amber radial-gradients (chrome≠data).
        Man/AQR/Renaissance hero panels read as paper + grid, not atmosphere. Keep only the solid --c-paper. */
     background: var(--c-paper);
     border-bottom: var(--border);

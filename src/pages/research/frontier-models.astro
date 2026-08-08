@@ -1,14 +1,14 @@
 ---
 /**
- * research/frontier-models.astro — static route for the r3 frontier-models
+ * research/frontier-models.astro : static route for the r3 frontier-models
  * consulting brief (PDF hosted at /research/frontier-models.pdf).
  *
- * Unlike /research/[...slug], this brief is NOT in the `project` collection —
+ * Unlike /research/[...slug], this brief is NOT in the `project` collection :
  * it's a public research artifact (PDF only). This page exists so a
  * recruiter visiting /research/ can find, open, and read the brief from
  * the portfolio surface.
  *
- * v6.10.x institutional chrome — warm-dark, amber accent, sharp corners,
+ * v6.10.x institutional chrome : warm-dark, amber accent, sharp corners,
  * mono + 1 accent. Mirrors /research/[...slug].astro's discipline:
  *   - eyebrow / H1 / sub / italic abstract
  *   - executive summary (~200 words distilled from §1 of the PDF)
@@ -22,7 +22,6 @@
 import BaseLayout from '@layouts/BaseLayout.astro';
 import CTABanner from '@components/CTABanner.astro';
 import Marquee from '@components/Marquee.astro';
-import PulseRing from '@components/PulseRing.astro';
 import { path } from '@utils/url';
 
 const TITLE = 'Frontier Models for Quant Research & AI Engineering';
@@ -36,7 +35,7 @@ const CANONICAL_URL = 'https://christianmacion-portfolio.pages.dev/research/fron
 const YEAR = '2026';
 const ISO_DATE = PUBLISHED;
 
-// Label-only PDF size for the CTA — show KB on the link text.
+// Label-only PDF size for the CTA : show KB on the link text.
 const PDF_LABEL = `Open the ${PDF_PAGES}-page PDF · ${PDF_SIZE_KB} KB`;
 
 const bibtex = `@techreport{${CITATION_KEY},
@@ -49,7 +48,7 @@ const bibtex = `@techreport{${CITATION_KEY},
   url          = {${CANONICAL_URL}}
 }`;
 
-// Why this brief matters — 4 bullets mapping the brief to decision work.
+// Why this brief matters : 4 bullets mapping the brief to decision work.
 const whyMatters = [
   {
     k: 'QUANT-RESEARCH WORKLOAD DECISION-MAKING',
@@ -93,7 +92,6 @@ const companions = [
   <section class="hero" data-reveal id="hero">
     <div class="container container-narrow">
       <p class="eyebrow mono">
-        <PulseRing label="r3 live" variant="live" color="warn" />
         <span>Model Intelligence Brief</span>
         <span aria-hidden="true">·</span>
         <span>{YEAR}</span>
@@ -122,7 +120,7 @@ const companions = [
     </div>
   </section>
 
-  {/* v7.4-WIDE — model ledger marquee between hero and exec summary. */}
+  {/* v7.4-WIDE : model ledger marquee between hero and exec summary. */}
   <Marquee
     items={[
       { head: 'M3', tail: '$0.30 / $1.20 · MARKET FLOOR', accent: 'warn' },
@@ -167,7 +165,7 @@ const companions = [
         <p>
           Capability per dollar now has three distinct tiers. Fable 5 ($10/$50) leads general
           reasoning and commands the highest price. The middle tier (K3, Opus 4.8, GPT-5.6 Sol,
-          Gemini 3 Pro) trades blows within a few points on most benchmarks at $2–$30. M3 delivers
+          Gemini 3 Pro) trades blows within a few points on most benchmarks at $2-$30. M3 delivers
           90 to 95% of the middle tier's measured capability at one-tenth the price. The correct
           question is not "which model is best" but which tier each workload deserves.
         </p>
@@ -327,7 +325,7 @@ const companions = [
 </BaseLayout>
 
 <script>
-  // Wire the copy-to-clipboard on the BibTeX card — mirrors the
+  // Wire the copy-to-clipboard on the BibTeX card : mirrors the
   // /research/[...slug].astro pattern. Uses navigator.clipboard;
   // falls back to a hidden textarea for non-secure contexts.
   document.querySelectorAll<HTMLButtonElement>('.cite-copy').forEach((btn) => {
@@ -586,7 +584,7 @@ const companions = [
     font-family: var(--ff-mono);
     scrollbar-width: thin;
   }
-  /* v9.2 a11y — copy BibTeX button. Was --c-amber bg + --c-primary
+  /* v9.2 a11y : copy BibTeX button. Was --c-amber bg + --c-primary
      text. Use theme-neutral amber/bg pairing: --c-amber bg + --c-bg text
      gives ≥4.5:1 in both themes. */
   .cite-copy {

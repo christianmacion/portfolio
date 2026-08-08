@@ -1,9 +1,9 @@
 ---
 /**
- * search.astro — client-side full-text search via Pagefind.
+ * search.astro : client-side full-text search via Pagefind.
  *
  * Pagefind indexes the static `dist/` tree at build time (postbuild hook in
- * package.json). The Pagefind UI is NOT bundled by Astro — it ships as a
+ * package.json). The Pagefind UI is NOT bundled by Astro : it ships as a
  * pre-built bundle inside `dist/_pagefind/` and is loaded lazily by this
  * page. The result is zero-JS on the rest of the site, ~30 KB JS + ~50 KB
  * fragmented index chunks on /search/ only.
@@ -23,7 +23,7 @@ import { fileURLToPath } from 'node:url';
 // no Date.now / argless new Date in deterministic outputs).
 const lastBuild = buildStampUtc8();
 
-// Live page count — read directly from the Pagefind manifest at build time.
+// Live page count : read directly from the Pagefind manifest at build time.
 // This avoids the previous stale literal "33 documents indexed" (which was
 // correct for v5.x but stale by v6.0.4 when the spine added 40 new pages).
 // Pagefind writes `dist/_pagefind/pagefind-entry.json` AFTER the Astro build
@@ -31,12 +31,12 @@ const lastBuild = buildStampUtc8();
 // manifest doesn't yet exist. We therefore try THREE sources in order of
 // preference:
 //
-//   1. `dist/_pagefind/pagefind-entry.json` (from a previous build — survives
+//   1. `dist/_pagefind/pagefind-entry.json` (from a previous build : survives
 //      across rebuilds when pagefind was run after a prior build).
 //   2. Walk `dist/` (will fail during the FIRST Astro build since dist doesn't
 //      exist yet, but works on subsequent rebuilds).
 //   3. Fall back to a static count (current true number, will be visibly wrong
-//      if a new page is added without updating this string — that's the bug
+//      if a new page is added without updating this string : that's the bug
 //      we're fixing).
 //
 // The walker logic counts one route per top-level HTML file or per
@@ -159,7 +159,7 @@ const popular = [
       <div id="search-root"></div>
 
       {
-        /* Empty state — hidden once the user starts typing. Pure CSS via
+        /* Empty state : hidden once the user starts typing. Pure CSS via
           the .search-root.has-query class that the script below toggles. */
       }
       <section id="search-empty" class="search-empty" aria-label="Popular destinations">
@@ -217,8 +217,8 @@ const popular = [
     const focus = params.get('focus') === '1';
 
     // Dynamically inject the Pagefind UI assets. Astro does not bundle
-    // these — they live as static files in dist/_pagefind/ after postbuild.
-    // @ts-expect-error — pagefind-ui is generated at postbuild; path resolves
+    // these : they live as static files in dist/_pagefind/ after postbuild.
+    // @ts-expect-error : pagefind-ui is generated at postbuild; path resolves
     // at runtime only, so TS's static module resolution is necessarily wrong.
     await import(/* @vite-ignore */ '/_pagefind/pagefind-ui.js');
 
@@ -238,7 +238,7 @@ const popular = [
       showImages: false,
       showEmptyFilters: false,
       autofocus: focus,
-      // ?q=foo preset — Pagefind reads the URL on its own, but we mirror
+      // ?q=foo preset : Pagefind reads the URL on its own, but we mirror
       // it into the input so the empty state hides immediately.
       ...(presetQ ? { query: presetQ } : {}),
       processResult: (result: any) => {
@@ -249,7 +249,7 @@ const popular = [
     });
     /* eslint-enable @typescript-eslint/no-explicit-any */
 
-    // Hide empty state once the user types — observe the input Pagefind
+    // Hide empty state once the user types : observe the input Pagefind
     // mounts. The input is dynamically created inside #search-root.
     const observer = new MutationObserver(() => {
       const input = root.querySelector<HTMLInputElement>('input[type="search"], input');
@@ -310,7 +310,7 @@ const popular = [
     padding: var(--sp-6) 0 var(--sp-9);
   }
 
-  /* === Pagefind UI overrides — match site palette ===
+  /* === Pagefind UI overrides : match site palette ===
      Pagefind writes its own .pagefind-ui__* classes. We restyle the
      input + results to match the amber+black design system and to
      respect both [data-theme="dark"] and prefers-color-scheme. */
@@ -387,7 +387,7 @@ const popular = [
     margin-bottom: var(--sp-3);
   }
 
-  /* === Empty state — popular destinations grid === */
+  /* === Empty state : popular destinations grid === */
   .search-empty {
     margin-top: var(--sp-6);
   }
@@ -488,7 +488,7 @@ const popular = [
     font-weight: 500;
   }
 
-  /* Dark-mode-aware fallbacks — Pagefind's own CSS is light-only, so
+  /* Dark-mode-aware fallbacks : Pagefind's own CSS is light-only, so
      we lean on the input + result styles above which already use CSS
      vars. The :root[data-theme="dark"] token swaps already cover both
      data-theme and prefers-color-scheme (handled in tokens.css). */

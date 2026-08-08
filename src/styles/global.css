@@ -1,4 +1,4 @@
-/* global.css — base styles + resets + layout primitives */
+/* global.css : base styles + resets + layout primitives */
 
 *,
 *::before,
@@ -20,9 +20,9 @@
  * value row that already has its own rule plus the wildcard
  * descent.
  *
- * v6.2.1 polish — added `[class*="hero"]` so the home / glossary /
+ * v6.2.1 polish : added `[class*="hero"]` so the home / glossary /
  * /for-recruiters / /prediction-markets / /research/[slug] hero
- * containers (which carry the incidental "UTC+8 Quant" or "G1–G31"
+ * containers (which carry the incidental "UTC+8 Quant" or "G1-G31"
  * digits above the fold) inherit tabular-nums. The audit's
  * data-cell-selector matches every element with "hero" in its
  * class name; without this branch the home reports 0/10 above-fold
@@ -31,7 +31,7 @@
  * v6.1.1 list covered). Lifting the rule into a parent-inherited
  * property closes the gap in one selector.
  *
- * v6.3 polish — broadened to `[class*="stat"]`, `[class*="cell"]`,
+ * v6.3 polish : broadened to `[class*="stat"]`, `[class*="cell"]`,
  * `[class*="row"]`, `[class*="grid"]` so the audit's wildcard
  * data-cell-selector matches every container that carries digits.
  * The leaf cells (`.tape__delta` / `.r-card__metric` / `.stat__value`)
@@ -77,14 +77,14 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  /* v6.0.12 — smooth scroll + scroll-padding-top are gated on
+  /* v6.0.12 : smooth scroll + scroll-padding-top are gated on
      `prefers-reduced-motion: no-preference`. With the sticky nav at
      56px and (sometimes) a section TOC at 36px above, hash anchors
      otherwise land ~92px under the nav. The fallback is `auto` (instant
      jump) when the user prefers reduced motion or the system honors it. */
   scroll-behavior: auto;
   scroll-padding-top: 96px;
-  /* v6.0.11 — guard against horizontal overflow on narrow viewports.
+  /* v6.0.11 : guard against horizontal overflow on narrow viewports.
      `clip` is preferred over `hidden` because it doesn't establish a
      scroll container (preserves `position: sticky` semantics). */
   overflow-x: clip;
@@ -100,7 +100,7 @@ body {
   font-size: var(--fs-base);
   background: var(--c-bg);
   overflow-x: clip;
-  /* v9.6 (Bryllim) — halftone dot field. Supersedes the v6.18 24px grain.
+  /* v9.6 (Bryllim) : halftone dot field. Supersedes the v6.18 24px grain.
      Tile tightened 24px -> 16px and the dot softened to a 0.5px core with a
      half-pixel antialias ramp, which is what makes it read as halftone rather
      than as a hairline grid.
@@ -176,7 +176,7 @@ a {
   transition:
     color var(--transition),
     text-decoration-color var(--transition);
-  /* v6.3 polish — universal min-height for any inline text-link.
+  /* v6.3 polish : universal min-height for any inline text-link.
      The audit's touch-target check flags every <a> whose visible
      glyph is shorter or narrower than 44 px (inline text-links inside
      <p> / <li> / <h*> content were the largest remaining class of
@@ -201,7 +201,7 @@ a:focus-visible {
   border-radius: 1px;
 }
 
-/* v6.3 polish — the skip-link lives off-screen until :focus, so the
+/* v6.3 polish : the skip-link lives off-screen until :focus, so the
    universal a{min-height:44} rule above must not broaden it. The
    :focus state resets to allow the visible button to expand. */
 .skip-link,
@@ -211,11 +211,11 @@ a.skip-link {
 }
 
 /* === v6.0 · universal focus-visible ring for keyboard nav ===
-   v9.3 IA wave 2 (2026-08-01) a11y baseline — switched to --c-amber
+   v9.3 IA wave 2 (2026-08-01) a11y baseline : switched to --c-amber
    because --c-amber (#475891 on #1a1714) measured 2.61:1 in
    dark theme, failing WCAG 1.4.11 (3:1 UI). --c-amber (#c98a16)
    passes in both themes.
-   v11.W3 (2026-08-08) Bryllim motion library — ring tightened
+   v11.W3 (2026-08-08) Bryllim motion library : ring tightened
    from 2px → 1px to match the chrome micro-interaction layer in
    motion.css §29e. Still WCAG 2.2 SC 1.4.11 compliant (3:1
    contrast vs --c-amber on --c-bg). The offset stays at 2px so
@@ -273,12 +273,11 @@ li {
   line-height: var(--lh-loose);
 }
 
-/* === v8.4 · CHROME CONTRACT — SITE-WIDE EYEBROW CHIP + TENANT + TENET ===
+/* === v8.4 · CHROME CONTRACT : SITE-WIDE EYEBROW CHIP + TENANT ===
    These primitives are the single source of truth for the chrome contract.
    Pages consume them via:
      <p class="page__eyebrow mono"><span class="hero__eyebrow-chip">…</span> · …</p>
      <p class="page__tenant mono">… <span class="page__tenant-sep">·</span> …</p>
-     <p class="page__tenet mono">No Math.random() · …</p>
    The .hero__eyebrow-chip class is reused from the home (index.astro) so
    both surfaces read identically without redefining palette tokens. */
 .page__eyebrow {
@@ -319,28 +318,16 @@ li {
   color: var(--c-ink-4);
   font-weight: 400;
 }
-/* v12.W1.5 — TRUST-STRIP REMOVED. Per feedback-no-defensive-trust-strips
-   BINDING, the "No Math.random / No fabricated metrics / No NDA-protected
-   employers" strip is REMOVED from chrome. Internal compliance rules
-   remain active INTERNALLY (Standing Order §9). This rule is intentionally
-   a no-op so any stale reference does not reintroduce the chrome. */
-.page__tenet {
-  /* no-op — tenet removed in v12.W1.5 */
-}
-.page__tenet--block-end {
-  /* no-op — variant removed in v12.W1.5 */
-}
-
-/* v12.W1.5 — TREASURY FOOTER REMOVED. The .page__treasury rule
+/* v12.W1.5 : TREASURY FOOTER REMOVED. The .page__treasury rule
    is intentionally no-op (empty body) so any stale reference does
    not reintroduce the chrome. The dark "CHRISTIAN T. MACION · UTC+8
-   · DEPLOYED" strip is removed entirely per Bryllim parity — Bryllim
+   · DEPLOYED" strip is removed entirely per Bryllim parity : Bryllim
    has no footer. */
 .page__treasury {
-  /* no-op — treasury removed in v12.W1.5 */
+  /* no-op : treasury removed in v12.W1.5 */
 }
 
-/* W2.7a a11y — landmark wrappers added to give rail-toggle and
+/* W2.7a a11y : landmark wrappers added to give rail-toggle and
    page__treasury a containing region. Rendered as transparent
    wrappers; the inner <aside> + content preserve all visual
    chrome. No margin/padding so layout-grid stays intact. */
@@ -348,7 +335,7 @@ li {
   display: contents;
 }
 
-/* v8.4 — page-head chrome variants used by pages that wrap the
+/* v8.4 : page-head chrome variants used by pages that wrap the
    eyebrow/tenant/tenet inside .page-head instead of at top-level.
    Same phi-teal accent + mono typography as the global page__* rules.
    The chip carries the eyebrow tagline; the line copy lives next to it. */
@@ -398,7 +385,7 @@ li {
   max-width: 70ch;
 }
 
-/* v8.4 — page-name-specific chrome variants (contact-head, desk-head, etc.)
+/* v8.4 : page-name-specific chrome variants (contact-head, desk-head, etc.)
    Same phi-teal accent + mono typography as the canonical page-head set. */
 .contact-head__eyebrow,
 .desk-head__eyebrow,
@@ -644,13 +631,13 @@ li {
 [class*='stat']:not([class*='state']):not([class*='status'])::after,
 [class*='kpi']::after,
 [class*='metric']::after {
-  /* v8.4 — KPI underline. Only fires on leaf cells, not on containers.
+  /* v8.4 : KPI underline. Only fires on leaf cells, not on containers.
      :not([class*='state']) excludes .stat--trend-* etc., so the underline
      fires on the metric cell, not on a row wrapper that happens to
      contain "stat" in its class name. */
 }
 
-/* KPI underline — applied to leaf metric cells via a single rule. We
+/* KPI underline : applied to leaf metric cells via a single rule. We
    scope to specific known leaf classes rather than every element with
    "stat" in its name (which would over-fire on grid containers). */
 .stat,
@@ -690,17 +677,17 @@ li {
 
 /* === v6.0.7 · INSTITUTIONAL UTILITIES === */
 
-/* Tabular numerals — apply to any number display so digit columns align.
+/* Tabular numerals : apply to any number display so digit columns align.
  * Wired to a CSS variable so the feature-settings list is single-source. */
 .tnum {
   font-feature-settings: var(--tnum);
   font-variant-numeric: tabular-nums lining-nums;
 }
 
-/* Italic "voice line" — used on the home hero and the manifesto.
+/* Italic "voice line" : used on the home hero and the manifesto.
  * W2 lock (2026-08-08): Inter italic replaces --serif-display (was Source
  * Serif 4). The institutional voice-line register reads as italic
- * editorial weight 500 — Inter handles this natively without serif
+ * editorial weight 500 : Inter handles this natively without serif
  * dependency. */
 .voice-line {
   font-family: var(--j-ff-display);
@@ -721,11 +708,11 @@ li {
 }
 
 /* === v6.5 · INSTITUTIONAL UTILITIES (HUD chrome, data signal, gridlines) ===
- * Additive — does NOT replace .eyebrow / .voice-line / .mono.
+ * Additive : does NOT replace .eyebrow / .voice-line / .mono.
  * Used sparingly: HUD overlays, scale bars, station IDs, data-tick tables,
  * globe gridlines. Stays out of body prose. */
 
-/* Mono mini — 9-10px mono, tracked +0.08em, uppercase, tabular-nums.
+/* Mono mini : 9-10px mono, tracked +0.08em, uppercase, tabular-nums.
    Denser than .eyebrow (which is 12.5px / +0.12em). Used for HUD chrome,
    scale bars, station IDs, ticker corner stamps. */
 .mono-micro {
@@ -737,7 +724,7 @@ li {
   font-variant-numeric: tabular-nums;
 }
 
-/* HUD panel — solid darker background + cooler border. For scale bars,
+/* HUD panel : solid darker background + cooler border. For scale bars,
    overlay cards, station chrome, market-data footers. */
 .hud {
   background: var(--c-hud-bg);
@@ -747,8 +734,8 @@ li {
   color: var(--c-ink);
 }
 
-/* Data-tick signal — color-only classes for tabular data.
-   v6.11.10 — F14 amber-only. Pair with .tnum or [class*="metric"]
+/* Data-tick signal : color-only classes for tabular data.
+   v6.11.10 : F14 amber-only. Pair with .tnum or [class*="metric"]
    etc. for full institutional readout. */
 .data-up {
   color: var(--c-amber);
@@ -760,7 +747,7 @@ li {
   color: var(--c-ink-3);
 }
 
-/* Gridline primitives — 1px hairlines for globe lat/lon, table separators,
+/* Gridline primitives : 1px hairlines for globe lat/lon, table separators,
    chart axes. Two strengths; the strong variant is for primary axes
    (equator, prime meridian, terminator). Background for HTML dividers,
    stroke for SVG <line> elements. */
@@ -794,7 +781,7 @@ li {
 }
 
 .section--alt {
-  /* v6.1.0 — full dark palette. Alt sections are a slightly-lifted panel
+  /* v6.1.0 : full dark palette. Alt sections are a slightly-lifted panel
      (--c-tape-2) for rhythm without changing the world. */
   background: var(--c-tape-2);
   color: var(--ink-on-tape);
@@ -805,7 +792,7 @@ li {
   padding-block: var(--sp-6);
 }
 
-/* v6.3 — slim section padding for low-content panels (what/numbers/creds).
+/* v6.3 : slim section padding for low-content panels (what/numbers/creds).
    Sits between .section (sp-10) and .section--tight (sp-6). */
 .section--slim {
   padding-block: var(--sp-7);
@@ -891,7 +878,7 @@ li {
   font-weight: 500;
   border-radius: var(--radius-sm);
   border: 1px solid transparent;
-  /* v9.3.2 motion contract — explicit properties only. `transition: all`
+  /* v9.3.2 motion contract : explicit properties only. `transition: all`
      would repaint on every animatable property (incl. layout-triggering
      width/height). The .btn class only changes background, color, and
      border-color on its variants (.btn--primary, .btn--ghost). */
@@ -901,7 +888,7 @@ li {
     border-color var(--transition);
   text-decoration: none;
   cursor: pointer;
-  /* v6.3 polish — every button ≥ 44 px tap target (default size
+  /* v6.3 polish : every button ≥ 44 px tap target (default size
      already 38 px tall; 6 px of vertical padding lifts to ≥ 44).
      Audit flagged "Get in touch" at 119×43 and nav__cta--mobile at
      88×33. min-height:44 enforces WCAG 2.5.5 universally. */
@@ -921,7 +908,7 @@ li {
 
 .btn--ghost {
   background: transparent;
-  /* v9.2 a11y — was var(--c-amber) which hits 3.43:1 on dark
+  /* v9.2 a11y : was var(--c-amber) which hits 3.43:1 on dark
      bg-2 (Lighthouse mobile, dark default). --c-amber-light (#d4a849)
      reads at ≥4.5:1 on the same surface. Border ink + amber text +
      underline still carry the link/button identity. */
@@ -968,7 +955,7 @@ li {
   border: 1px solid var(--c-rule-soft);
   white-space: nowrap;
 }
-/* v6.9.16 — was 8%-opacity black on #0d1117 = invisible. Match the
+/* v6.9.16 : was 8%-opacity black on #0d1117 = invisible. Match the
    monochrome hairline pattern of --pass / --tag / --mute. */
 .pill--brand {
   background: transparent;
@@ -976,7 +963,7 @@ li {
   border-color: var(--c-rule);
 }
 .pill--accent {
-  /* v6.10.36 — token aliases. --c-amber-soft (0.12) is the closest
+  /* v6.10.36 : token aliases. --c-amber-soft (0.12) is the closest
      declared token; the 0.1 vs 0.12 difference is sub-perceptual on
      dark backgrounds and consistent with the 0.12 used for active
      filters/pagers. */
@@ -985,7 +972,7 @@ li {
   border-color: var(--c-amber-decor-deep);
 }
 .pill--gold {
-  /* v6.10.40 — F24 institutional: status-label pills carry the meaning,
+  /* v6.10.40 : F24 institutional: status-label pills carry the meaning,
      not the background. Was F13-era rgba(232,178,32,0.12) amber wash
      (rgb 232,178,32 = #e8b220, the OLD --c-amber before F14 lifted it
      to #c98a16). Used 3× for status/flagship/public, so cleanup is
@@ -994,7 +981,7 @@ li {
   color: var(--c-ink-2);
   border: 1px solid var(--c-rule);
 }
-/* F24 — institutional: pass/warn chrome pills → monochrome ink-3.
+/* F24 : institutional: pass/warn chrome pills → monochrome ink-3.
      The pass-green / warn-amber backgrounds were AI-vibe. Pills with
      status semantics (PASS/WARN) should remain monochrome with the
      label carrying the meaning, not the background. (Numeric data
@@ -1042,7 +1029,7 @@ li {
   position: absolute;
   left: -9999px;
   top: 0;
-  /* v6.3 polish — getBoundingClientRect() returns 0×0 when transform
+  /* v6.3 polish : getBoundingClientRect() returns 0×0 when transform
      scales to 0, so the touch-target audit's
      `r.width === 0 && r.height === 0 continue` short-circuits the
      skip-link entirely while it lives off-screen. The :focus state
@@ -1058,12 +1045,12 @@ li {
   position: fixed;
   left: 1rem;
   top: 1rem;
-  /* v6.11.6 — must exceed --z-toast (200) so the skip-link always
+  /* v6.11.6 : must exceed --z-toast (200) so the skip-link always
      wins over toasts/popovers for a11y compliance. Documented intent;
      no token covers this top-priority surface. */
   z-index: 1000;
   background: var(--c-bg);
-  /* v6.1 polish — raise to 0.875rem so the focused skip-link reaches
+  /* v6.1 polish : raise to 0.875rem so the focused skip-link reaches
      ≥ 44 px tall (was 24 px). 6 extra px of vertical padding closes
      the WCAG 2.5.5 target-size rule. */
   padding: 0.875rem 1rem;
@@ -1080,7 +1067,7 @@ li {
    to each [data-reveal] target when it scrolls into view. Two safety nets:
 
    1) Sections without JS render visible immediately (no opacity:0 in the
-      default state — `.is-revealed` IS the default).
+      default state : `.is-revealed` IS the default).
    2) prefers-reduced-motion users see everything immediately. */
 [data-reveal] {
   opacity: 1;
@@ -1247,4 +1234,78 @@ li {
     padding: 56px 20px 48px;
     max-width: 100%;
   }
+}
+
+/* === v12.W4-1 · orphan-crosslinks target-size hardening ===
+   Used by /about/ and /reading/ as a 5-link "Related surfaces" nav
+   block at the end of long-form sections. The universal
+   `a { min-height: 44px }` rule already covers these, but an explicit
+   declaration localizes the intent to the page-level crosslink
+   surface and survives future removal of the universal rule.
+   Renders as 44px-tall anchor rows in mobile viewports.
+   Per WCAG 2.5.5 (Level AAA, 44x44) + 2.5.8 (Level AA, 24x24). */
+.orphan-crosslinks > a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+/* === v12.W4.5 · methodology pipeline lede ===
+   Bulleted list under the H1 on /methodology/. Mono caps + hairline
+   rules match the chrome contract (no halo, no glow, no fill). */
+.method-head__pipeline {
+  list-style: none;
+  padding: 0;
+  margin: var(--sp-5) 0 0;
+  max-width: 64ch;
+  border-top: 1px solid var(--c-rule);
+}
+.method-head__pipeline li {
+  padding: var(--sp-3) 0;
+  border-bottom: 1px solid var(--c-rule-soft);
+  color: var(--c-ink-2);
+  line-height: 1.55;
+  font-size: var(--fs-base);
+}
+.method-head__pipeline strong {
+  color: var(--c-ink);
+  font-weight: 600;
+  margin-right: 0.4rem;
+}
+
+/* === v12.W4.5 · for-recruiters fit block ===
+   Two-list looking-for / not-looking-for block under the hero.
+   Hairline-bordered card, amber left rule, mono caps for the
+   eyebrows. */
+.hero__fit {
+  margin: 0 0 var(--sp-6);
+  padding: var(--sp-4);
+  background: var(--c-bg);
+  border: 1px solid var(--c-rule);
+  border-left: 3px solid var(--c-amber);
+}
+.hero__fit-eyebrow {
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--c-ink-3);
+  margin: 0 0 var(--sp-2);
+}
+.hero__fit-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--sp-4);
+  color: var(--c-ink);
+  font-size: var(--fs-sm);
+  line-height: 1.55;
+}
+.hero__fit-list li {
+  padding: var(--sp-2) 0;
+  border-bottom: 1px solid var(--c-rule-soft);
+}
+.hero__fit-list li:last-child {
+  border-bottom: 0;
+}
+.hero__fit-list--not li {
+  color: var(--c-ink-2);
 }

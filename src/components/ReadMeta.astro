@@ -1,6 +1,6 @@
 ---
 /**
- * ReadMeta.astro — small, restrained read-time + last-updated annotation.
+ * ReadMeta.astro : small, restrained read-time + last-updated annotation.
  *
  * Genre rule (Jane Street / Two Sigma / E. Sharpe): read-time and freshness
  * dates are visible at the top of long-form artefacts. Markdown browsers
@@ -17,12 +17,12 @@ interface Props {
   /** Approximate read-time in minutes. Calculated client-side from the
    * wordCount prop when omitted. */
   minutes?: number;
-  /** Last-updated ISO date (YYYY-MM-DD). Defaults to buildStampUtc8() —
+  /** Last-updated ISO date (YYYY-MM-DD). Defaults to buildStampUtc8() :
    * the deploy timestamp via the canonical BUILD_DATE pipeline. Pass an
    * explicit date only when the page is meaningfully older than the
    * current build (e.g., archived). */
   updatedIso?: string;
-  /** Optional provenance link — usually /proof. */
+  /** Optional provenance link : usually /proof. */
   href?: string;
   /** Word count for client-side reading-time calc. */
   wordCount?: number;

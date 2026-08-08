@@ -1,6 +1,6 @@
-/* tokens.css — design system for christianmacion.github.io
+/* tokens.css : design system for christianmacion.github.io
  *
- * v6.1.1 — UNIFIED DARK PALETTE (single source of truth, no light/dark mode)
+ * v6.1.1 : UNIFIED DARK PALETTE (single source of truth, no light/dark mode)
  *   - The site is ALWAYS institutional-tape dark (#0d1117)
  *   - One consistent warm amber accent (#e8b220) for emphasis + interaction
  *   - One consistent institutional green (#3fb950) for "verified" signal only
@@ -20,7 +20,7 @@
  */
 
 :root {
-  /* v9.1 — token additions for nav, projects, research, workbooks */
+  /* v9.1 : token additions for nav, projects, research, workbooks */
   :root {
     --c-bg-light: #f7f2e7; /* light bg for institutional-tape nav fallback */
     --c-bg-elev: rgba(255, 255, 255, 0.02); /* elevated surface */
@@ -35,19 +35,19 @@
     --c-green-tint-border: rgba(46, 125, 50, 0.25); /* workbook badge border */
   }
 
-  /* === BRAND (v6.1.1 — full dark, unified palette) === */
-  --c-primary: #e6edf3; /* off-white ink — primary text on dark */
-  --c-primary-deep: #0a0e14; /* near-black — preserved for code blocks / deep backgrounds */
+  /* === BRAND (v6.1.1 : full dark, unified palette) === */
+  --c-primary: #e6edf3; /* off-white ink : primary text on dark */
+  --c-primary-deep: #0a0e14; /* near-black : preserved for code blocks / deep backgrounds */
   --c-ink-dark: #0a0e14; /* alias kept for old code that wants near-black */
 
-  /* v6.10.12 — WCAG AA bump. Was #8c6f2a (3.64:1 on c-tape FAIL small
+  /* v6.10.12 : WCAG AA bump. Was #8c6f2a (3.64:1 on c-tape FAIL small
    * text). The previous claim "5.0:1 on white" was for cream/light
    * backgrounds which the dark theme no longer uses. New value
    * #b8801e clears 5.0:1 on all dark surfaces while remaining
-   * visually distinct from --c-amber (#c98a16) — i.e. a "deeper
+   * visually distinct from --c-amber (#c98a16) : i.e. a "deeper
    * amber" hierarchy preserved.
    *
-   * v9.4.1 — TOKEN COLLAPSE (chrome-contract rule 1: mono + 1 amber).
+   * v9.4.1 : TOKEN COLLAPSE (chrome-contract rule 1: mono + 1 amber).
    * The 4 hex aliases (--c-amber / --c-amber /
    * --c-amber-light / --c-amber / --c-amber) all pointed at the
    * same amber family. Canonical accent is --c-amber (#c98a16) per
@@ -57,32 +57,32 @@
    * because they are alpha-blended, not hex equivalents. */
   --c-amber: #c98a16;
   --c-amber-light: #e8b220;
-  /* v6.9.16 — tokenize the 10×-repeated amber underline rgba literal. */
+  /* v6.9.16 : tokenize the 10×-repeated amber underline rgba literal. */
   --c-amber-decor: rgba(212, 160, 23, 0.4);
   --c-amber-decor: rgba(140, 111, 42, 0.4);
-  /* v6.10.36 — consolidate the 7 remaining rgba(212,160,23,*) literals
+  /* v6.10.36 : consolidate the 7 remaining rgba(212,160,23,*) literals
      (5 sites at 0.12, 1 at 0.3, 1 at 0.05) onto token aliases so the
      F13 color family stays consistent. Functional data viz
      (EquityCurveChart regimes) + pagefind search highlight are kept
-     inline — those are intentionally alpha-mixed with calm/stress
+     inline : those are intentionally alpha-mixed with calm/stress
      rgba(63,185,80,…) / rgba(248,81,73,…). */
-  --c-amber-soft: rgba(212, 160, 23, 0.12); /* active-bg (filter/pager/status) — 5 sites */
-  --c-amber-decor-deep: rgba(212, 160, 23, 0.3); /* pill--accent border — 1 site */
-  --c-amber-faint: rgba(212, 160, 23, 0.05); /* skill chip subtle tint — 1 site */
+  --c-amber-soft: rgba(212, 160, 23, 0.12); /* active-bg (filter/pager/status) : 5 sites */
+  --c-amber-decor-deep: rgba(212, 160, 23, 0.3); /* pill--accent border : 1 site */
+  --c-amber-faint: rgba(212, 160, 23, 0.05); /* skill chip subtle tint : 1 site */
   --c-accent-cyan: #22d3ee; /* alternative accent (signal/data) */
 
   /* === INK === */
   --c-ink: #e6edf3; /* body text on dark */
   --c-ink-2: #adbac7; /* muted text on dark */
-  /* v6.10.17 — a11y: lift --c-ink-3 from #6e7681 (4.12:1 on bg, fails
+  /* v6.10.17 : a11y: lift --c-ink-3 from #6e7681 (4.12:1 on bg, fails
      WCAG AA body-text) to #8b949e (5.6:1 on bg, passes AA). Affects
      ~14 components + 80 elements. */
-  --c-ink-3: #8b949e; /* faintest (captions, footnotes) — WCAG AA pass */
+  --c-ink-3: #8b949e; /* faintest (captions, footnotes) : WCAG AA pass */
   --c-rule: #30363d; /* dividers on dark */
   --c-rule-soft: #21262d; /* hairline on dark */
   --c-rule-strong: #e6edf3;
 
-  /* === v6.11.1 — INK ALPHA STEPS (tokenize the 47 hardcoded
+  /* === v6.11.1 : INK ALPHA STEPS (tokenize the 47 hardcoded
      rgba(230,237,243,X) literals across Nav, Footer, ProofCard,
      Collaborators, KeyHintPanel, Stat, Equation. Each
      step is named for its semantic role; auto-tracks any future
@@ -104,13 +104,13 @@
    *
    * NOT a chrome-contract violation: `radial-gradient` here paints ONE 0.5px
    * dot per 16px tile with a half-pixel antialias ramp. It is a repeating
-   * pattern, not a gradient wash — no halo, no glow, no directional fill.
+   * pattern, not a gradient wash : no halo, no glow, no directional fill.
    *
    * Derived from --c-ink-faint (theme-reactive) rather than the v6.18 fixed
    * paper-cream rgba(235,229,212,0.025). That fixed cream was invisible on
    * theme-light surfaces (home ships theme="light"), so the grain only ever
    * rendered on dark pages. Ink-derived means dark dots on cream, light dots
-   * on dark — a halftone in both directions.
+   * on dark : a halftone in both directions.
    *
    * 9% of --c-ink-faint (itself 65% ink) => ~5.9% effective alpha. Visible as
    * texture at reading distance; well under the threshold where it competes
@@ -134,14 +134,14 @@
   --c-amberl-strong: color-mix(in oklab, var(--c-amber-light) 35%, transparent);
   --c-amberl-mist: color-mix(in oklab, var(--c-amber-light) 12%, transparent);
 
-  /* === BG (DARK — the default everywhere) === */
+  /* === BG (DARK : the default everywhere) === */
   --c-bg: #0d1117; /* institutional-tape primary surface */
   --c-bg-2: #161b22; /* deeper panel */
   --c-bg-3: #1f242c; /* deepest panel */
   --c-paper: #161b22; /* alias for panel */
   --c-paper-2: #1f242c;
 
-  /* === TAPE (institutional dark — same family, no separate concept) === */
+  /* === TAPE (institutional dark : same family, no separate concept) === */
   --c-tape: #0d1117; /* terminal/equity-tape dark */
   --c-tape-2: #161b22; /* slightly lifted */
   --c-tape-3: #1f242c; /* lifted panel */
@@ -149,16 +149,16 @@
   --ink-on-tape-2: #adbac7; /* muted text on tape */
 
   /* === STATUS / SIGNAL === */
-  --c-pass: #3fb950; /* equity green — verified, pass (dark mode) */
+  --c-pass: #3fb950; /* equity green : verified, pass (dark mode) */
   --c-pass-soft: #1c3a25;
   --c-fail: #f85149; /* error / danger */
   --c-fail-soft: #3a1c1f;
-  --c-warn: #d4a017; /* warning amber — text-safe */
+  --c-warn: #d4a017; /* warning amber : text-safe */
   --c-warn-soft: #3a2e15;
   --c-info: #58a6ff; /* info blue */
   --c-info-soft: #1c2a3d;
 
-  /* === v6.11.6 — UI state surfaces === */
+  /* === v6.11.6 : UI state surfaces === */
   /* Dedicated surface for "selected/active" UI elements (TOC current,
      pressed buttons). Distinct from --c-warn-soft so a real warning
      chip carries unique semantics. */
@@ -171,20 +171,20 @@
   --c-sigma: #9d80c4; /* σ purple (lifted) */
   --c-delta: #e8b220; /* Δ deep amber (text-safe) */
   --c-mu: #adbac7; /* μ gray */
-  --c-alpha: #3fb950; /* α green (signal pass) — text-safe */
+  --c-alpha: #3fb950; /* α green (signal pass) : text-safe */
   --c-beta: #e8b220; /* β deep amber (text-safe) */
 
   /* === TYPE === */
   --ff-sans: 'Inter', 'Helvetica Neue', system-ui, -apple-system, sans-serif;
-  /* v6.11.6 — JetBrains Mono removed from the stack since it isn't
+  /* v6.11.6 : JetBrains Mono removed from the stack since it isn't
      imported. Falls through ui-monospace → SF Mono → Menlo → monospace,
      all installed by default on every modern OS. */
   --ff-mono: ui-monospace, 'SF Mono', Menlo, monospace;
   --ff-math:
     'KaTeX_Main', 'Latin Modern Math', 'Computer Modern Serif', 'STIX Two Math', 'Cambria Math',
     'Times New Roman', serif;
-  --fs-3xs: 0.5625rem; /*  9px — HUD overlays, scale bars, station IDs */
-  --fs-2xs: 0.6875rem; /* 11px — chrome labels, data-tick micro */
+  --fs-3xs: 0.5625rem; /*  9px : HUD overlays, scale bars, station IDs */
+  --fs-2xs: 0.6875rem; /* 11px : chrome labels, data-tick micro */
   --fs-xs: 0.78rem; /* 12.5px */
   --fs-sm: 0.875rem; /* 14px */
   --fs-base: 1rem; /* 16px */
@@ -255,12 +255,12 @@
    * v6.18 (W2 lock, 2026-08-08): --serif-display is REASSIGNED to
    * Inter chain in tokens-v6.13.css (the binding source of truth).
    * The legacy Source Serif 4 / Iowan Old Style stack is removed
-   * per [[v10-w2-typography-lock]] — only Inter + JetBrains Mono
+   * per [[v10-w2-typography-lock]] : only Inter + JetBrains Mono
    * remain in the live font surface. */
   --serif-display: var(--j-ff-display);
 
   /* === v6.5 · INSTITUTIONAL ACCENT TOKENS (HUD chrome, gridlines, data signal) ===
-   * Additive — does NOT replace any existing brand color.
+   * Additive : does NOT replace any existing brand color.
    * Usage scope: HUD overlays, lat/lon gridlines, data-tick semantics ONLY.
    * Brand amber (--c-amber / --c-amber-light) + tape dark (--c-tape) remain the
    * dominant palette; these accents are chrome punctuation. */
@@ -268,14 +268,14 @@
   --c-hud-border: #2a3548; /* cooler than --c-rule (#30363d) for HUD chrome edges */
   --c-grid-line: var(--c-white-haze); /* hairline lat/lon gridlines on globe */
   --c-grid-line-strong: var(--c-white-wisp); /* equator + prime meridian + terminator */
-  --c-data-positive: #4ade80; /* institutional green — positive tick / data up */
-  --c-data-negative: #f87171; /* institutional red   — negative tick / data down */
-  --c-data-neutral: #94a3b8; /* institutional gray  — unchanged / zero delta */
+  --c-data-positive: #4ade80; /* institutional green : positive tick / data up */
+  --c-data-negative: #f87171; /* institutional red   : negative tick / data down */
+  --c-data-neutral: #94a3b8; /* institutional gray  : unchanged / zero delta */
 
   color-scheme: dark;
 }
 
-/* v6.1.0 — Light/dark mode is REMOVED. The site is always cream-paper
+/* v6.1.0 : Light/dark mode is REMOVED. The site is always cream-paper
  * with institutional-tape sections. No prefers-color-scheme flip.
  * The :root[data-theme="..."] selectors from v6.0 are gone; any
  * remaining user-preference attribute on <html> is ignored.
@@ -287,7 +287,7 @@
     transition: none !important;
     animation: none !important;
   }
-  /* v6.0.12 — gate hover-driven `transform` rules that survive the
+  /* v6.0.12 : gate hover-driven `transform` rules that survive the
      universal `transition: none` because the *final state* still applies
      the moment the cursor enters. These are the eight motion sources the
      a11y audit flagged; disabling them gives users who opted out of
@@ -307,7 +307,7 @@
     filter: none !important;
   }
 
-  /* v6.5 — defensively pause CSS-driven motion inside Earth primitives.
+  /* v6.5 : defensively pause CSS-driven motion inside Earth primitives.
      Retained for any future earth-* component; currently the surviving
      EarthMap surfaces (EarthDrawer / CoverageGlobe) ship no nested CSS
      animations, so the rule is a no-op today. Re-asserting
@@ -332,7 +332,7 @@
   font-size: 0.92em;
 }
 
-/* Background motifs (gradients) removed per chrome contract — no halo/glow/gradient. */
+/* Background motifs (gradients) removed per chrome contract : no halo/glow/gradient. */
 
 .bg--tape {
   background: var(--c-tape);
@@ -340,11 +340,11 @@
 }
 
 /* === Reusable status dot ===
-   F21 — institutional: kill every `box-shadow: 0 0 0 3px var(--*-soft)` halo.
+   F21 : institutional: kill every `box-shadow: 0 0 0 3px var(--*-soft)` halo.
    That "lightbulb" pattern is the AI-vibe anti-pattern Owner flagged on the
    hero badge. Status is conveyed by color, not by a glow ring around the dot.
    - dot--pass / dot--fail / dot--warn / dot--info remain colored but unhaloed
-     (these are ticker values, not chrome — still allowed for status semantics)
+     (these are ticker values, not chrome : still allowed for status semantics)
    - dot--amber replaces dot--pass for chrome-only contexts (availability dots)
    - dot--muted stays
 */
@@ -355,7 +355,7 @@
   border-radius: 50%;
   vertical-align: middle;
 }
-/* v6.11.10 — F14 amber-only. dot--pass now amber; dot--fail now
+/* v6.11.10 : F14 amber-only. dot--pass now amber; dot--fail now
    ink-2 (no red dot). The .dot utility is still allowed for tickers
    and chrome, just not the green/red semantic. */
 .dot--pass {
@@ -400,7 +400,7 @@
   --ease-snappy: cubic-bezier(0.4, 0, 0.2, 1); /* standard UI / hover / state */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1); /* smooth landing / ambient fade-in */
   --ease-overshoot-constrained: cubic-bezier(0.34, 1.2, 0.5, 1); /* overshoot, capped to 800ms */
-  /* Drop 3 reserved easings — ship 3 curves only. */
+  /* Drop 3 reserved easings : ship 3 curves only. */
 }
 
 /* === Shadow hierarchy (4 steps, no lift on hover per T1-5) === */

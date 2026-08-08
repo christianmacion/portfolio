@@ -1,13 +1,13 @@
 ---
 /**
- * colophon.astro — v1.0 · the design system, made visible.
+ * colophon.astro : v1.0 · the design system, made visible.
  *
  * Five sections:
- *   (a) Type              — Inter, JetBrains Mono, KaTeX_Main. 4-step scale.
- *   (b) Color palette     — 4 swatches across, with hex and role label.
- *   (c) Spacing scale     — 6 cells: --sp-2 → --sp-7 with their px values.
- *   (d) Motion vocabulary — table of 5 effects with durations.
- *   (e) Accessibility     — WCAG AA contrast pairs, skip-nav, focus-visible.
+ *   (a) Type              : Inter, JetBrains Mono, KaTeX_Main. 4-step scale.
+ *   (b) Color palette     : 4 swatches across, with hex and role label.
+ *   (c) Spacing scale     : 6 cells: --sp-2 → --sp-7 with their px values.
+ *   (d) Motion vocabulary : table of 5 effects with durations.
+ *   (e) Accessibility     : WCAG AA contrast pairs, skip-nav, focus-visible.
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
 import CTABanner from '@components/CTABanner.astro';
@@ -17,8 +17,8 @@ import VoiceLine from '@components/VoiceLine.astro';
 
 const fullName = profile.fullName.split(',')[0];
 
-// === (a) Type — step count derived from typeScale ==========================
-// Comments use `4-step scale` / `6 cells` / `5 effects` literals — derived
+// === (a) Type : step count derived from typeScale ==========================
+// Comments use `4-step scale` / `6 cells` / `5 effects` literals : derived
 // here so chrome stays in lockstep with the array lengths.
 // Counts are declared alongside the arrays so chrome stays in lockstep.
 // (Order matters: derive AFTER arrays.)
@@ -29,9 +29,9 @@ const typeScale = [
   { token: '--fs-3xl', px: '36px', role: 'section title' },
 ];
 
-// v6.11.26 — type-faces extracted as canonical list. 3 faces fill the
+// v6.11.26 : type-faces extracted as canonical list. 3 faces fill the
 // 4-role grid: UI/body (sans), data/code (mono), math (serif). Chrome
-// reads "{typeFaces.length} faces, four roles." — second number is
+// reads "{typeFaces.length} faces, four roles." : second number is
 // intentional ("three faces play four roles" is the design claim).
 const typeFaces = [
   { name: 'Inter', ff: 'var(--ff-sans)', role: 'UI / body. sans, 400 / 500 / 600 / 700' },
@@ -39,7 +39,7 @@ const typeFaces = [
   { name: 'KaTeX_Main', ff: 'var(--ff-math)', role: 'Math serifs (rendered by KaTeX)' },
 ];
 
-// === (b) Color palette — v6.17 warm-dim register ===========================
+// === (b) Color palette : v6.17 warm-dim register ===========================
 const palette = [
   { name: '--j-bg', hex: '#1a1714', role: 'warm-dark · page background (v6.17)' },
   { name: '--j-ink', hex: '#ebe5d4', role: 'paper-cream · primary text (v6.17)' },
@@ -49,7 +49,7 @@ const palette = [
   { name: '--j-paper', hex: '#ebe5d4', role: 'paper-cream · light-variant bg (v6.17)' },
 ];
 
-// === (c) Spacing scale — 6 cells ===========================================
+// === (c) Spacing scale : 6 cells ===========================================
 const spacing = [
   { token: '--sp-2', px: '8px' },
   { token: '--sp-3', px: '12px' },
@@ -59,12 +59,12 @@ const spacing = [
   { token: '--sp-7', px: '48px' },
 ];
 
-// === (d) Motion vocabulary — 5 effects =====================================
+// === (d) Motion vocabulary : 5 effects =====================================
 const motion = [
   {
     effect: 'odometer',
     trigger: 'data-counter scrolls into view',
-    // v2026-08-02 — default shortened to 0.6s (was 1.2s) per the
+    // v2026-08-02 : default shortened to 0.6s (was 1.2s) per the
     // SEV-3 motion sweep; spec row updated to match the live value.
     duration: '0.6s',
     easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
@@ -95,7 +95,7 @@ const motion = [
   },
 ];
 
-// === (e) Accessibility — WCAG AA pairs + a11y primitives ===================
+// === (e) Accessibility : WCAG AA pairs + a11y primitives ===================
 const contrastPairs = [
   { fg: '--c-ink', bg: '--c-bg', ratio: '17.1:1', level: 'AAA' },
   { fg: '--c-ink-2', bg: '--c-bg', ratio: '6.4:1', level: 'AA' },
@@ -104,7 +104,7 @@ const contrastPairs = [
   { fg: '--c-primary', bg: '--c-bg', ratio: '19.2:1', level: 'AAA' },
 ];
 
-// v6.11.23 — colophon chrome counts derived from the array lengths above
+// v6.11.23 : colophon chrome counts derived from the array lengths above
 // so they stay in lockstep when a token/effect/pair is added.
 const typeScaleCount = typeScale.length;
 const paletteCount = palette.length;
@@ -407,9 +407,9 @@ const motionCount = motion.length;
   .col-head__eyebrow-chip {
     display: inline-block;
     padding: 4px 10px;
-    /* v9.2 a11y — was --c-phi-teal. Dark theme --j-phi-teal = #2d5f5a
+    /* v9.2 a11y : was --c-phi-teal. Dark theme --j-phi-teal = #2d5f5a
      only hits 2.14:1 on dark page-head surface. Solid amber chip +
-     --c-bg text reads at ≥5.6:1 in both themes — institutional
+     --c-bg text reads at ≥5.6:1 in both themes : institutional
      register, F14-safe (no traffic-light). */
     color: var(--c-bg);
     border: 1px solid var(--c-amber);
@@ -553,7 +553,7 @@ const motionCount = motion.length;
     background: var(--c-tape);
     border: 1px solid var(--c-rule);
   }
-  /* v6.11.10 — F14 amber-only. swatch__chip--pass now shows amber. */
+  /* v6.11.10 : F14 amber-only. swatch__chip--pass now shows amber. */
   .swatch__chip--pass {
     background: var(--c-amber);
   }

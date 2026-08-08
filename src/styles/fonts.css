@@ -1,5 +1,5 @@
 /* ============================================================================
- * fonts.css — v9.6 Bryllim pixel-display layer
+ * fonts.css : v9.6 Bryllim pixel-display layer
  * ----------------------------------------------------------------------------
  * Design register (mission 2026-08-07-hireability-v9.6-bryllim-chrome) calls
  * for a pixel/bitmap display face on flagship H1 surfaces:
@@ -9,10 +9,10 @@
  * SUBSTITUTION ON RECORD (verified 2026-08-07):
  *   Departure Mono has NO npm distribution. `npm view` returns 404 for all of
  *   `departure-mono`, `@fontsource/departure-mono`, `departure-mono-webfont`.
- *   Shipping it would require a CDN or a vendored binary — both rejected
+ *   Shipping it would require a CDN or a vendored binary : both rejected
  *   (brief says "no CDN dependency").
  *
- *   'VT323' — the design register's OWN declared fallback — IS on npm as
+ *   'VT323' : the design register's OWN declared fallback : IS on npm as
  *   @fontsource/vt323@5.3.0, OFL-1.1, self-hosted, 17.9 KB woff2. That is the
  *   face actually loaded. 'Departure Mono' is retained FIRST in the stack for
  *   register fidelity: it resolves only if a local copy is ever installed, and
@@ -23,7 +23,7 @@
  * ========================================================================== */
 
 /* ============================================================================
- * fonts.css — v9.6 Bryllim pixel-display layer
+ * fonts.css : v9.6 Bryllim pixel-display layer
  * ----------------------------------------------------------------------------
  * v6.18 (W2 Bloomberg-Bryllim lock, 2026-08-08):
  *   VT323 / Press Start 2P / Departure Mono are LOCKED OUT per W1.5 (#99).
@@ -48,7 +48,7 @@
 }
 
 /* ---------------------------------------------------------------------------
- * .pixel-display — guarded opt-in utility (now no-op, retained for back-compat).
+ * .pixel-display : guarded opt-in utility (now no-op, retained for back-compat).
  *
  * The class is preserved so legacy markup still resolves cleanly, but the
  * pixel font family is gone. The rule collapses to the institutional mono.

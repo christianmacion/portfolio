@@ -1,10 +1,10 @@
 /**
- * earth-110m-countries.ts — pre-projected SVG path data for the
+ * earth-110m-countries.ts : pre-projected SVG path data for the
  * Natural Earth 1:110m countries dataset (via the world-atlas
  * npm package, ISC-licensed, derived from Natural Earth public-domain data).
  *
  * Generated at build time by `scripts/build-earth-110m.mjs`. Do not
- * edit by hand — re-run the script.
+ * edit by hand : re-run the script.
  *
  * Each `d` string is in the orthographic-projected SVG viewBox space
  * matching the DEFAULT EarthGlobe.astro props (width=800, height=800,

@@ -1,6 +1,6 @@
 ---
 /**
- * StatementCarousel.astro — discipline-statement rotator.
+ * StatementCarousel.astro : discipline-statement rotator.
  *
  * Two variants:
  *   - 'inline' (default): one-line rotating sentence (legacy). Six short
@@ -16,18 +16,18 @@
  *     hover/focus, honors prefers-reduced-motion (no auto-rotate when
  *     reduced).
  *
- * v6.0.13 — Cross-fade bug fix (inline mode):
+ * v6.0.13 : Cross-fade bug fix (inline mode):
  *   Outgoing slide snaps via 0 ms transition so the active slide's
  *   280 ms fade-in never overlaps a fading-out slide. Track width
  *   set to 100% so the 0-wide-content bug is fixed.
  *
- * v6.6.0 (Mission UI-X) — `variant="graphic"` for the home page:
+ * v6.6.0 (Mission UI-X) : `variant="graphic"` for the home page:
  *   Editorial 3-card layout (top-left roman numeral, center text,
  *   bottom-right pips, eyebrow above each card). Deterministic
- *   Roman numerals (i/ii/iii) regardless of statement count — only
+ *   Roman numerals (i/ii/iii) regardless of statement count : only
  *   the first 3 are shown when more are passed.
  *
- * v2026-08-02 — graphic-variant card text bumped to clamp(2rem, 4vw, 3rem)
+ * v2026-08-02 : graphic-variant card text bumped to clamp(2rem, 4vw, 3rem)
  *   so the display reads as institutional, not editorial-caption small.
  *
  * Usage:
@@ -51,7 +51,7 @@ interface Props {
 }
 
 const {
-  // v6.10.39 — defaults derive from profile.stats.* so a future
+  // v6.10.39 : defaults derive from profile.stats.* so a future
   // stat update auto-propagates. Note: all current callers pass
   // their own `statements` prop (see index/solutions/methodology/proof),
   // so these defaults are dead code in production but kept for
@@ -93,7 +93,7 @@ const ROMAN = ['i', 'ii', 'iii', 'iv', 'v', 'vi'];
               data-stmt-index={i}
             >
               {/* Inner span gives us a real block child so text-wrap: balance
-                and padding-inline work — bare text inside a flex item
+                and padding-inline work : bare text inside a flex item
                 becomes an anonymous flex item with min-width: auto and
                 refuses to wrap properly. */}
               <span class="stmt-carousel__text">{s}</span>
@@ -211,10 +211,10 @@ const ROMAN = ['i', 'ii', 'iii', 'iv', 'v', 'vi'];
     padding: 0;
     margin: 0;
     position: relative;
-    /* v6.0.13 — width:100% is critical. Without it, the track (a flex
+    /* v6.0.13 : width:100% is critical. Without it, the track (a flex
        item whose only children are `position: absolute`) collapses to
        its content size, which is 0, and the slides render as a 0-wide
-       column overflowing the viewport's overflow-hidden — clipped to
+       column overflowing the viewport's overflow-hidden : clipped to
        a narrow center slice that looks like "...ugeni." / "O...". */
     width: 100%;
     height: 3.4em;
@@ -234,7 +234,7 @@ const ROMAN = ['i', 'ii', 'iii', 'iv', 'v', 'vi'];
     letter-spacing: -0.005em;
     padding: 0;
     opacity: 0;
-    /* v6.0.13 — outgoing slide gets a 0 ms transition (instant hide)
+    /* v6.0.13 : outgoing slide gets a 0 ms transition (instant hide)
        so the active slide's 280 ms fade-in never overlaps a fading-out
        slide. The single `is-active` class flip then produces a clean
        cross-fade without stacked glyphs. */
@@ -304,7 +304,7 @@ const ROMAN = ['i', 'ii', 'iii', 'iv', 'v', 'vi'];
     transform: scale(1.4);
   }
 
-  /* v6.3 polish — keep dots at 44×44 even on small viewports.
+  /* v6.3 polish : keep dots at 44×44 even on small viewports.
      The audit flagged `Show statement 1` etc. at 32×32 px on the
      390 px mobile viewport (the legacy shrink rule). 6 × 44 + 5 × 4
      = 284 px which fits comfortably in 390 px with 53 px margins. */
@@ -347,7 +347,7 @@ const ROMAN = ['i', 'ii', 'iii', 'iv', 'v', 'vi'];
   .stmt-cards__viewport {
     position: relative;
     display: grid;
-    /* Single grid cell, all cards stack via position: absolute — same
+    /* Single grid cell, all cards stack via position: absolute : same
        cross-fade trick as the inline variant. width:100% on the
        implicit row/column is what allows the absolute children to find
        a non-zero box (Astro 7 collapses 0-wide tracks). */
@@ -393,7 +393,7 @@ const ROMAN = ['i', 'ii', 'iii', 'iv', 'v', 'vi'];
     pointer-events: auto;
   }
 
-  /* Eyebrow — 10px mono all-caps tracked 0.08em, centered above. */
+  /* Eyebrow : 10px mono all-caps tracked 0.08em, centered above. */
   .stmt-card__eyebrow {
     grid-area: eyebrow;
     display: flex;
@@ -417,7 +417,7 @@ const ROMAN = ['i', 'ii', 'iii', 'iv', 'v', 'vi'];
     color: var(--c-amber-light);
   }
 
-  /* Numeral — 40×40 1px-stroked square, padded to ink, holding
+  /* Numeral : 40×40 1px-stroked square, padded to ink, holding
      a 24px serif roman numeral. Centered glyphs in both axes. */
   .stmt-card__head {
     grid-area: numeral;
@@ -451,9 +451,9 @@ const ROMAN = ['i', 'ii', 'iii', 'iv', 'v', 'vi'];
     border: 0;
   }
 
-  /* Text — kept as-is from inline, just tighter line-height 1.4
+  /* Text : kept as-is from inline, just tighter line-height 1.4
      and the serif stays italic per house style. */
-  /* Text — bumped to display scale per v2026-08-02 typography sweep.
+  /* Text : bumped to display scale per v2026-08-02 typography sweep.
      3rem desktop max keeps it readable as institutional voice-line
      rather than caption. Italic serif unchanged. */
   .stmt-card__text {
@@ -468,7 +468,7 @@ const ROMAN = ['i', 'ii', 'iii', 'iv', 'v', 'vi'];
     text-wrap: balance;
   }
 
-  /* Pips — bottom-right three small squares. Active = --c-amber,
+  /* Pips : bottom-right three small squares. Active = --c-amber,
      inactive = --c-ink-3. They're aria-hidden inside the card; the
      screen-reader-accessible tabs live in the .stmt-cards__pips
      row below. */
@@ -492,7 +492,7 @@ const ROMAN = ['i', 'ii', 'iii', 'iv', 'v', 'vi'];
     transform: scale(1.2);
   }
 
-  /* Tabs row — same 44px hit-target pattern as inline variant. */
+  /* Tabs row : same 44px hit-target pattern as inline variant. */
   .stmt-cards__pips {
     list-style: none;
     padding: 0;

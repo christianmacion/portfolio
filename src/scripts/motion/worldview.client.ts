@@ -1,5 +1,5 @@
 /**
- * worldview.client.ts — WorldView Live globe + ticker scheduler.
+ * worldview.client.ts : WorldView Live globe + ticker scheduler.
  *
  * Loaded lazily when ⌘J opens the WorldView modal. d3-geo and
  * topojson-client are imported DYNAMICALLY so they only load on ⌘J
@@ -20,7 +20,7 @@
 import type { FeatureCollection, Geometry } from 'geojson';
 import type { Topology } from 'topojson-specification';
 import { loadGdelt, type GdeltEvent } from '@utils/gdelt-client';
-import { loadMarketTicks, type MarketTick } from '@utils/market-ticks';
+import { loadMarketTicksWithMeta, type MarketTick } from '@utils/market-ticks';
 
 // === Constants ========================================================
 const ROTATION_PERIOD_MS = 90_000; // one full rotation = 90s
@@ -35,6 +35,9 @@ interface WorldViewRefs {
   tickerList: HTMLUListElement;
   status: HTMLElement;
   hint: HTMLElement;
+  syncGdelt: HTMLElement;
+  syncCoinGecko: HTMLElement;
+  syncYahoo: HTMLElement;
 }
 
 // === Globe renderer ===================================================
@@ -47,7 +50,7 @@ class Globe {
   private lastTick = 0;
   private hoverPaused = false;
   private reduceMotion: boolean;
-  private path: any; // d3 GeoPath — lazy typed to avoid static d3-geo import
+  private path: any; // d3 GeoPath : lazy typed to avoid static d3-geo import
   private landPaths: string[] = [];
   private graticulePath: string;
   private oceanRect: SVGRectElement;
@@ -166,7 +169,7 @@ class Globe {
       }
       this.cachedFc = fc;
     } catch {
-      // Land data unavailable — the globe still spins, just empty.
+      // Land data unavailable : the globe still spins, just empty.
       // This is the CORS-fallback path; the modal stays informative.
     }
   }
@@ -318,7 +321,8 @@ class Ticker {
     li.append(t, s, r, h);
     if (badge) {
       const b = document.createElement('span');
-      b.className = 'wv-ticker__badge mono';
+      const lvl = badge.toLowerCase();
+      b.className = 'wv-ticker__badge mono wv-ticker__badge--' + lvl;
       b.textContent = badge;
       li.appendChild(b);
     }
@@ -362,23 +366,55 @@ class Ticker {
   }
 
   async refreshTicks(): Promise<void> {
-    this.ticks = await loadMarketTicks();
+    const out = await loadMarketTicksWithMeta();
+    this.ticks = out.ticks;
+    this.lastBySource = out.bySource;
     this.render();
+  }
+
+  private lastBySource: Record<string, string> = {};
+  private syncGdelt: HTMLElement | null = null;
+  private syncCoinGecko: HTMLElement | null = null;
+  private syncYahoo: HTMLElement | null = null;
+
+  setSyncTargets(refs: {
+    syncGdelt: HTMLElement;
+    syncCoinGecko: HTMLElement;
+    syncYahoo: HTMLElement;
+  }): void {
+    this.syncGdelt = refs.syncGdelt;
+    this.syncCoinGecko = refs.syncCoinGecko;
+    this.syncYahoo = refs.syncYahoo;
+  }
+
+  private paintSync(target: HTMLElement | null, iso: string | undefined): void {
+    if (!target) return;
+    target.textContent = iso ? iso.slice(11, 16) + 'Z' : '--:--Z';
   }
 
   start(globe: Globe, status: HTMLElement): void {
     void this.refreshGlobePins(globe).then(() => {
       status.textContent = 'last sync ' + new Date().toISOString().slice(11, 19) + 'Z';
+      this.paintSync(this.syncGdelt, new Date().toISOString());
     });
-    void this.refreshTicks();
+    void this.refreshTicks().then(() => {
+      this.paintSync(this.syncCoinGecko, this.lastBySource.CoinGecko);
+      this.paintSync(this.syncYahoo, this.lastBySource.Yahoo);
+    });
     // GDELT refresh every 15 minutes (matches upstream cadence).
     this.gdeltTimer = window.setInterval(() => {
       void this.refreshGlobePins(globe).then(() => {
         status.textContent = 'last sync ' + new Date().toISOString().slice(11, 19) + 'Z';
+        this.paintSync(this.syncGdelt, new Date().toISOString());
       });
     }, 15 * 60 * 1000);
     // Market ticks refresh every 30 seconds.
-    this.refreshTimer = window.setInterval(() => void this.refreshTicks(), 30_000);
+    this.refreshTimer = window.setInterval(() => {
+      void this.refreshTicks().then(() => {
+        this.paintSync(this.syncCoinGecko, this.lastBySource.CoinGecko);
+        this.paintSync(this.syncYahoo, this.lastBySource.Yahoo);
+      });
+    }, 30_000);
   }
 
   stop(): void {
@@ -458,7 +494,7 @@ function closeModal(): void {
 
 function bind(refs: WorldViewRefs): void {
   activeRefs = refs;
-  // Capture-phase keyboard handler — same pattern as CommandPalette.
+  // Capture-phase keyboard handler : same pattern as CommandPalette.
   document.addEventListener(
     'keydown',
     (e) => {
@@ -500,8 +536,56 @@ function init(): void {
   const tickerList = document.querySelector<HTMLUListElement>('[data-worldview-ticker]');
   const status = document.querySelector<HTMLElement>('[data-worldview-status]');
   const hint = document.querySelector<HTMLElement>('[data-worldview-hint]');
-  if (!root || !svg || !tickerList || !status || !hint) return;
-  bind({ root, svg, tickerList, status, hint });
+  const syncGdelt = document.querySelector<HTMLElement>('[data-worldview-sync-gdelt]');
+  const syncCoinGecko = document.querySelector<HTMLElement>('[data-worldview-sync-coingecko]');
+  const syncYahoo = document.querySelector<HTMLElement>('[data-worldview-sync-yahoo]');
+  // v12.W4 LIVE DATA TERMINAL : root + status are the only required
+  // selectors. svg / tickerList / hint are optional : when absent, the
+  // open/close + last-sync stamp logic still runs. The previous globe +
+  // GDELT ticker content has been replaced with the AI History Timeline
+  // + chrome marquee; the script is now a thin status-bar refresher.
+  if (!root || !status) return;
+
+  // Tick the last-sync stamp every 30s while the modal is open so the
+  // HH:MM:SSZ footer reads as a live system, not a stale snapshot.
+  let syncTimer: number | null = null;
+  function tickStatus(): void {
+    const now = new Date().toISOString().slice(11, 19) + 'Z';
+    status.textContent = 'last sync ' + now;
+    if (syncYahoo) syncYahoo.textContent = now;
+  }
+  function startSync(): void {
+    if (syncTimer !== null) return;
+    tickStatus();
+    syncTimer = window.setInterval(tickStatus, 30_000);
+  }
+  function stopSync(): void {
+    if (syncTimer !== null) {
+      window.clearInterval(syncTimer);
+      syncTimer = null;
+    }
+  }
+
+  // Refactor bind to expose start/stop hooks for the sync timer.
+  bind({
+    root,
+    svg: svg ?? document.createElementNS('http://www.w3.org/2000/svg', 'svg'),
+    tickerList: tickerList ?? document.createElement('ul'),
+    status,
+    hint: hint ?? status,
+    syncGdelt: syncGdelt ?? status,
+    syncCoinGecko: syncCoinGecko ?? status,
+    syncYahoo: syncYahoo ?? status,
+  });
+
+  // Wire the sync timer to the modal lifecycle. We piggy-back on
+  // data-worldview-open attribute as the open signal (set by openModal
+  // below / by the legacy handler in bind).
+  const observer = new MutationObserver(() => {
+    if (root.hasAttribute('hidden')) stopSync();
+    else startSync();
+  });
+  observer.observe(root, { attributes: true, attributeFilter: ['hidden'] });
 }
 
 if (document.readyState === 'loading') {

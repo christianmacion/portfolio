@@ -1,6 +1,6 @@
 ---
 /**
- * FiveEraCurve.astro — v11.W4 · 5-era out-of-sample stability curve.
+ * FiveEraCurve.astro : v11.W4 · 5-era out-of-sample stability curve.
  *
  * Visual: 1px equity curve across 5 era bands (2018-2019, 2020, 2021, 2022,
  * 2023-2024). Era boundary markers as 1px amber vertical hairlines with 6px
@@ -121,7 +121,7 @@ const avgDD = eras.reduce((s, e) => s + e.dd, 0) / eras.length;
 
 <style>
   .fiveera {
-    /* FiveEraCurve is a 'paper' callout panel — dark elevated surface with cream ink.
+    /* FiveEraCurve is a 'paper' callout panel : dark elevated surface with cream ink.
        Use --j-paper / --j-paper-ink directly so both dark and light chrome themes resolve
        to the same dark-paper treatment (--c-paper aliases to --j-bg-elev which flips to
        cream in light mode, breaking the dark-panel pattern). */

@@ -1,6 +1,6 @@
 ---
 /**
- * research/[slug].astro — academic-citation surface for every quant and AI project.
+ * research/[slug].astro : academic-citation surface for every quant and AI project.
  *
  * This is a lean citation hub (not a duplicate of /projects/[slug]). It renders:
  *   - H1 project title (from the project collection)
@@ -47,7 +47,7 @@ const isoDate =
       ? rawDate.toISOString().slice(0, 10)
       : String(rawDate);
 const citeKey = `macion${year}${project.id.replace(/[^a-z0-9]/gi, '')}`;
-/* v6.10.11 — URL needs lane prefix */
+/* v6.10.11 : URL needs lane prefix */
 const canonicalUrl = `https://christianmacion-portfolio.pages.dev/projects/${project.id}/`;
 const bibtex = `@techreport{${citeKey},
   author       = {Macion, Christian T.},
@@ -93,7 +93,7 @@ const laneClass = data.role === 'ai' ? 'pill--brand' : 'pill--accent';
     </div>
   </section>
 
-  {/* v7.4-WIDE — discipline mini-marquee (5 frames) between hero and cite. */}
+  {/* v7.4-WIDE : discipline mini-marquee (5 frames) between hero and cite. */}
   <Marquee
     items={[
       { head: 'EVAL-FIRST', tail: '31 GATES', accent: 'warn' },
@@ -230,7 +230,7 @@ const laneClass = data.role === 'ai' ? 'pill--brand' : 'pill--accent';
 <style>
   .hero {
     padding-block: var(--sp-9) var(--sp-7);
-    /* v6.10.18 — institutional: drop both decorative hero amber radial-gradients (chrome≠data).
+    /* v6.10.18 : institutional: drop both decorative hero amber radial-gradients (chrome≠data).
        Man/AQR/Renaissance hero panels read as paper + grid, not atmosphere. Keep only the solid --c-paper. */
     background: var(--c-paper);
     border-bottom: var(--border);
@@ -324,7 +324,7 @@ const laneClass = data.role === 'ai' ? 'pill--brand' : 'pill--accent';
     font-family: var(--ff-mono);
     scrollbar-width: thin;
   }
-  /* v9.2 a11y — copy BibTeX button. Was --c-amber bg + --c-primary
+  /* v9.2 a11y : copy BibTeX button. Was --c-amber bg + --c-primary
      text. After --c-phi legacy remap, --c-primary is no longer
      guaranteed AA on amber-deep. Use theme-neutral amber/bg pairing:
      --c-amber bg + --c-bg text gives ≥4.5:1 in both themes. */

@@ -1,10 +1,10 @@
 ---
 /**
- * projects/index.astro — full project index, filter chips.
+ * projects/index.astro : full project index, filter chips.
  *
- * v6.4 — adds `?tag=quant` and `?tag=ai` URL-param filtering via a
+ * v6.4 : adds `?tag=quant` and `?tag=ai` URL-param filtering via a
  * tiny inline `<script is:inline>` at the bottom of the file. This is
- * not a `client:*` directive — Astro's framework-hydration directives
+ * not a `client:*` directive : Astro's framework-hydration directives
  * are unrelated to plain inline scripts, which Astro compiles to a
  * single per-page bundle. The script degrades gracefully: if JS is
  * disabled, all projects stay visible (the default state, matching
@@ -16,7 +16,7 @@
  * filter chip (`[data-filter][aria-pressed]`).
  *
  * Canonical entry-point for the home page `OPEN NOTEBOOKS` chip is
- * `/projects/?tag=quant` — this lands users directly on the lane-2
+ * `/projects/?tag=quant` : this lands users directly on the lane-2
  * section, with the AI lane hidden until they clear the filter.
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
@@ -35,7 +35,7 @@ const aiProjects: ProjectEntry[] = projects.filter((p) => p.data.role === 'ai');
 const quantProjects: ProjectEntry[] = projects.filter((p) => p.data.role === 'quant');
 const ossProjects: ProjectEntry[] = projects.filter((p) => p.data.sourceLink);
 
-/* v9.2 a11y — active filter tag for aria-current="page" on the
+/* v9.2 a11y : active filter tag for aria-current="page" on the
    lane-filter chips. Read at SSR from Astro.url.searchParams so the
    initial markup already carries the correct aria state (the inline
    script below re-applies it client-side on hydration). */
@@ -66,21 +66,21 @@ const itemListJsonLd = projectListJsonLd(
 >
   <header class="page-head">
     <div class="container">
-      {/* Bryllim pattern — number-prefixed section header before page H1.
+      {/* Bryllim pattern : number-prefixed section header before page H1.
           Decorative chrome (aria-hidden) so it doesn't shift the document
           outline; the <h1> remains the page's single h1. */}
       <p class="bryllim-mark mono" aria-hidden="true">01. projects</p>
       <p class="section__eyebrow">Portfolio</p>
-      <h1 class="page-head__title" data-words>{projects.length} projects, two lanes.</h1>
+      <h1 class="page-head__title" data-words>{projects.length} projects. Two lanes.</h1>
       <VoiceLine class="page-head__voice">
-        Every metric below is real, every method is documented, every line of code is on disk.
+        Metrics real. Methods documented. Code on disk.
       </VoiceLine>
       <p class="page-head__sub">
-        Every project is reproducible, headline metrics are real, and the methodology is documented.
-        Filter by lane to focus on the work most relevant to the role you're hiring for.
+        Every metric is real, every method is documented, every line of code is on disk. Filter by lane to
+        focus on the role you're hiring for.
       </p>
 
-      {/* === Headline stats — two-lane split at a glance === */}
+      {/* === Headline stats : two-lane split at a glance === */}
       <div class="page-head__stats">
         <div class="page-head__stat">
           <span class="page-head__stat-num tnum">{projects.length}</span>
@@ -101,8 +101,8 @@ const itemListJsonLd = projectListJsonLd(
       </div>
 
       {
-        /* v6.4 — Lane filter chips (URL-param-driven, no client:*).
-         v9.2 a11y — aria-pressed is not valid on <a>; use aria-current
+        /* v6.4 : Lane filter chips (URL-param-driven, no client:*).
+         v9.2 a11y : aria-pressed is not valid on <a>; use aria-current
          on the active filter (semantically "this navigation represents
          the current view"). Inactive filters don't need an aria attr. */
       }
@@ -135,7 +135,7 @@ const itemListJsonLd = projectListJsonLd(
     </div>
   </header>
 
-  {/* v7.4-WIDE — project news strip + lane marquee at the top of the index. */}
+  {/* v7.4-WIDE : project news strip + lane marquee at the top of the index. */}
   <NewsRibbon
     news={[
       {
@@ -205,10 +205,6 @@ const itemListJsonLd = projectListJsonLd(
       <header class="section__head">
         <p class="section__eyebrow">Lane 1 · AI Engineer</p>
         <h2 class="section__title" data-words>Multi-agent LLM systems & eval</h2>
-        <p class="section__sub">
-          {aiProjects.length} projects spanning RAG scorecards, ReAct tool-calling, MCP servers, LLM-as-judge
-          validation, reflection loops, and AI-output quality gates.
-        </p>
       </header>
       <div class="grid grid-3">
         {
@@ -233,10 +229,6 @@ const itemListJsonLd = projectListJsonLd(
       <header class="section__head">
         <p class="section__eyebrow">Lane 2 · Quantitative Researcher</p>
         <h2 class="section__title">Systematic strategies & statistical validation</h2>
-        <p class="section__sub">
-          {quantProjects.length} projects across multiple-testing, cross-sectional and time-series alpha,
-          volatility, cointegration, funding-carry, and bias control.
-        </p>
       </header>
       <div class="grid grid-3">
         {
@@ -256,80 +248,8 @@ const itemListJsonLd = projectListJsonLd(
     </div>
   </section>
 
-  <section class="section section--alt book-analysis">
-    <div class="container">
-      <header class="section__head">
-        <p class="section__eyebrow">Combined-book analysis · cross-project</p>
-        <h2 class="section__title">
-          What {quantProjects.length} projects tell you about a research book
-        </h2>
-        <p class="section__sub">
-          None of these projects stand alone. The signal, cost, regime, and bias-control layers are
-          designed to compose. a single vol-targeted carry trade (03 + 06) carries different risk
-          than a cointegration pair (05) carrying regime-aware sizing (07). The shared methodology
-          across all {quantProjects.length} is what makes the book interpretable to a risk manager, not
-          just an alpha-hunter.
-        </p>
-      </header>
-
-      <div class="book-grid">
-        <article class="book-card">
-          <div class="book-card__layer">Layer A. Signal</div>
-          <h3 class="book-card__title">Alpha sources</h3>
-          <ul class="book-card__list">
-            <li>
-              <strong>Cross-sectional:</strong> project 02 (failed OOS, as the test predicted)
-            </li>
-            <li><strong>Time-series:</strong> projects 03 (vol-targeted), 04 (VRP)</li>
-            <li><strong>Carry / funding:</strong> project 06 (OOS Sharpe decayed post-2023)</li>
-            <li><strong>Cointegration / stat-arb:</strong> project 05 (rejected by ADF)</li>
-          </ul>
-        </article>
-
-        <article class="book-card">
-          <div class="book-card__layer">Layer B. Risk</div>
-          <h3 class="book-card__title">Risk-management overlays</h3>
-          <ul class="book-card__list">
-            <li><strong>Vol targeting (20-day):</strong> project 03 (Sharpe 0.27 → 0.39)</li>
-            <li><strong>Regime overlay (smoothed VIX):</strong> project 07 (DD −58% → −42%)</li>
-            <li><strong>Cost-aware sizing:</strong> project 08 (break-even turnaround scan)</li>
-            <li>
-              <strong>Look-ahead audit:</strong> project 09 (one-line shift test, every book run)
-            </li>
-          </ul>
-        </article>
-
-        <article class="book-card">
-          <div class="book-card__layer">Layer C. Validation</div>
-          <h3 class="book-card__title">Statistical gating</h3>
-          <ul class="book-card__list">
-            <li><strong>Multiple-testing:</strong> project 01 (Deflated Sharpe, 160-trial null)</li>
-            <li>
-              <strong>Pre-registration:</strong> project 06 (OOS window locked before data touched)
-            </li>
-            <li><strong>HAC inference:</strong> project 04 (Newey-West t = +6.5)</li>
-            <li>
-              <strong>Honest nulls:</strong> projects 02 + 05 (rejected, shipped as rejections)
-            </li>
-          </ul>
-        </article>
-      </div>
-
-      <p class="book-note">
-        The book is not {quantProjects.length} winning trades. It is one pipeline with three orthogonal
-        layers and a layered validation discipline that catches the failure modes that eat naive books
-        alive. A risk manager reading these {quantProjects.length} projects sees the same engineering
-        discipline applied end-to-end. that is what is hireable.
-      </p>
-      {/* Bryllim overflow — section list ends with right-aligned "ALL X →". */}
-      <p class="book-analysis__overflow">
-        <a href={path('/methodology')} class="bryllim-overflow mono">ALL PROOFS →</a>
-      </p>
-    </div>
-  </section>
-
   {
-    /* v6.4 — Lane filter script (no `client:*`). Reads `?tag=` from
+    /* v6.4 : Lane filter script (no `client:*`). Reads `?tag=` from
       the URL and toggles `[hidden]` on the matching lane sections.
       Degrades to "all lanes visible" if JS is off. The same script
       also activates the matching chip via `aria-pressed`. */
@@ -351,7 +271,7 @@ const itemListJsonLd = projectListJsonLd(
           }
         });
 
-        /* v9.2 a11y — switched to aria-current="page" on links. The script
+        /* v9.2 a11y : switched to aria-current="page" on links. The script
            clears the attr on every chip and sets it only on the active one. */
         document.querySelectorAll('[data-filter]').forEach(function (chip) {
           chip.removeAttribute('aria-current');
@@ -422,12 +342,7 @@ const itemListJsonLd = projectListJsonLd(
     max-width: 64ch;
   }
 
-  /* Combined-book analysis */
-  .book-analysis {
-    border-top: var(--border);
-  }
-
-  /* v6.4 — Lane filter chips (URL-param-driven, no client:*). */
+  /* v6.4 : Lane filter chips (URL-param-driven, no client:*). */
   .lane-filter {
     display: flex;
     flex-wrap: wrap;
@@ -458,7 +373,7 @@ const itemListJsonLd = projectListJsonLd(
     border-color: var(--c-amber);
     color: var(--c-ink);
   }
-  /* v9.2 a11y — was [aria-pressed='true']; now [aria-current='page']
+  /* v9.2 a11y : was [aria-pressed='true']; now [aria-current='page']
      since lane-filter chips are links, not buttons. Same visual chip
      stays AA in both themes because --c-bg flips dark/light. */
   .lane-filter__chip[aria-current='page'] {
@@ -466,7 +381,7 @@ const itemListJsonLd = projectListJsonLd(
     border-color: var(--c-amber);
     color: var(--c-bg);
   }
-  /* v9.2 a11y — drop opacity (was 0.75) so the count badge on the filter
+  /* v9.2 a11y : drop opacity (was 0.75) so the count badge on the filter
      chip hits 4.5:1 in both states. Inactive chip uses --c-ink-2
      (slate); active chip inherits the parent's --c-bg (cream/dark) so
      the count stays AA on the amber background. */
@@ -478,72 +393,8 @@ const itemListJsonLd = projectListJsonLd(
   .lane-filter__chip[aria-current='page'] .lane-filter__count {
     color: inherit;
   }
-  .book-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--sp-4);
-    margin-bottom: var(--sp-6);
-  }
-  @media (max-width: 880px) {
-    .book-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-  .book-card {
-    background: var(--c-bg-2);
-    border: var(--border);
-    border-radius: var(--radius);
-    padding: var(--sp-5);
-    transition: border-color 120ms ease;
-  }
-  .book-card:hover {
-    border-color: var(--c-amber);
-  }
-  .book-card__layer {
-    font-family: var(--ff-mono);
-    font-size: var(--fs-xs);
-    color: var(--c-amber);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    font-weight: 600;
-    margin-bottom: var(--sp-2);
-  }
-  .book-card__title {
-    font-size: var(--fs-lg);
-    margin-bottom: var(--sp-3);
-    color: var(--c-ink);
-  }
-  .book-card__list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    font-size: var(--fs-sm);
-    color: var(--c-ink-2);
-    line-height: var(--lh-loose);
-  }
-  .book-card__list li {
-    padding: var(--sp-1) 0;
-    border-bottom: 1px dashed var(--c-rule);
-  }
-  .book-card__list li:last-child {
-    border-bottom: none;
-  }
-  .book-card__list strong {
-    color: var(--c-ink);
-    font-weight: 600;
-  }
-  .book-note {
-    font-size: var(--fs-base);
-    color: var(--c-ink-2);
-    line-height: var(--lh-loose);
-    max-width: 72ch;
-    padding: var(--sp-4) var(--sp-5);
-    background: var(--c-bg);
-    border-left: 3px solid var(--c-amber);
-    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-  }
 
-  /* Bryllim pattern — number-prefixed section register. */
+  /* Bryllim pattern : number-prefixed section register. */
   .bryllim-mark {
     font-size: 11px;
     color: var(--c-ink);
@@ -552,27 +403,5 @@ const itemListJsonLd = projectListJsonLd(
     text-transform: lowercase;
     font-weight: 600;
     font-variant-numeric: tabular-nums;
-  }
-
-  /* Bryllim overflow — "ALL X →" link. */
-  .bryllim-overflow {
-    display: inline-block;
-    font-family: var(--ff-mono);
-    font-size: 11px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--c-ink);
-    text-decoration: none;
-    border-bottom: 1px solid var(--c-amber);
-    padding-bottom: 1px;
-    transition: border-color 120ms ease, color 120ms ease;
-  }
-  .bryllim-overflow:hover {
-    color: var(--c-ink);
-    border-bottom-color: var(--c-ink);
-  }
-  .book-analysis__overflow {
-    text-align: right;
-    margin: var(--sp-4) 0 0;
   }
 </style>

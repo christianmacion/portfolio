@@ -1,6 +1,6 @@
 ---
 /**
- * skills.astro — v3: domain-grouped skill matrix + math/quant aesthetic
+ * skills.astro : v3: domain-grouped skill matrix + math/quant aesthetic
  *                + per-skill proficiency bar + self-rated level & years.
  *
  * Hero equation: skill_stack = build + validate + ship (one stack across two lanes).
@@ -325,7 +325,7 @@ const levelLabel: Record<1 | 2 | 3 | 4 | 5, string> = {
       background var(--transition),
       border-color var(--transition);
   }
-  /* ON dots — color hue tracks proficiency level */
+  /* ON dots : color hue tracks proficiency level */
   .dot5--on,
   .dot5--5,
   .dot5--4,
@@ -392,10 +392,10 @@ const levelLabel: Record<1 | 2 | 3 | 4 | 5, string> = {
   .skill__chip .mono {
     font-weight: 600;
   }
-  /* v9.2 a11y — drop opacity (was 0.7) so the muted "/5" suffix reads at
+  /* v9.2 a11y : drop opacity (was 0.7) so the muted "/5" suffix reads at
      WCAG 2.2 AA. opacity-stacked grays collapse to ~#6c727a on the chip
      background which only hit 3.17:1. --c-ink-3 (#525f72 light / #9a9486
-     dark) hit 4.23:1 on light page bg — still failing. Use --c-ink-2
+     dark) hit 4.23:1 on light page bg : still failing. Use --c-ink-2
      (#3d4a5e light / #c4bfb1 dark) which gives ≥6.0:1 in both themes. */
   .skill__chip .muted {
     font-size: 0.8em;
@@ -403,7 +403,7 @@ const levelLabel: Record<1 | 2 | 3 | 4 | 5, string> = {
     font-weight: 500;
   }
   .skill__chip--lvl-5 {
-    /* v6.10.41 — derive mastery chip tint from --c-amber via color-mix.
+    /* v6.10.41 : derive mastery chip tint from --c-amber via color-mix.
        Was rgba(196,138,22,0.14). The +/- 5 R-channel drift at 14% alpha
        is invisible (<0.7 RGB units rendered). */
     background: color-mix(in oklab, var(--c-amber) 14%, transparent);
@@ -422,7 +422,7 @@ const levelLabel: Record<1 | 2 | 3 | 4 | 5, string> = {
     color: var(--c-amber);
   }
   .skill__chip--lvl-3 {
-    /* v6.10.36 — token alias for F13 amber family. */
+    /* v6.10.36 : token alias for F13 amber family. */
     background: var(--c-amber-faint);
     border: 1px solid var(--c-ink-3);
     color: var(--c-ink-2);

@@ -1,18 +1,18 @@
 /**
- * prng.ts — deterministic PRNG fixture generator.
+ * prng.ts : deterministic PRNG fixture generator.
  *
  * Standing Order §9 forbids `Math.random()`, `Date.now()`, and argless
  * `new Date()` in deterministic outputs. This module exposes a single
  * stable PRNG seeded from a string (e.g. `seedFromString(BUILD_DATE)`)
  * so the rest of the system can compose deterministic but build-stamped
- * "live-feel" data — order books, probability walks, ticker tape, equity
- * curves — without violating the standing order.
+ * "live-feel" data : order books, probability walks, ticker tape, equity
+ * curves : without violating the standing order.
  *
  * Algorithm: mulberry32 (a 32-bit single-state generator). Passes the
  * BigCrush-ish sanity tests, period 2^32, single-line advance; sufficient
  * for portfolio fixtures. If a higher-quality generator is needed,
  * upgrade path is to swap to sfc32 or xoshiro128** while keeping the
- * `seedFromString(str) -> () => number` interface intact — call sites
+ * `seedFromString(str) -> () => number` interface intact : call sites
  * don't change.
  *
  * Usage:
@@ -40,10 +40,10 @@
  */
 /**
  * FNV-1a 32-bit hash of a string, returned as an 8-character lowercase
- * hex string. Deterministic across runtimes — same input always
+ * hex string. Deterministic across runtimes : same input always
  * produces the same output. Used to derive stable element IDs from
  * prop signatures so component frontmatter can stay SSR/hydration
- * parity-safe (Standing Order §9 — no Math.random / Date.now in
+ * parity-safe (Standing Order §9 : no Math.random / Date.now in
  * deterministic outputs).
  */
 export function fnv1a(str: string): string {
@@ -65,7 +65,7 @@ export function seedFromString(str: string): () => number {
   // Mix once so the seed can't be all-zeros (mulberry32's bad state).
   state = (state + 0x6d2b79f5) >>> 0;
 
-  // mulberry32 — see https://stackoverflow.com/a/47593316
+  // mulberry32 : see https://stackoverflow.com/a/47593316
   function next(): number {
     state = (state + 0x6d2b79f5) >>> 0;
     let t = state;
@@ -79,7 +79,7 @@ export function seedFromString(str: string): () => number {
 /**
  * Sample a standard normal N(0, 1) by composing two uniforms through
  * Box-Muller. Consumes two PRNG calls per sample. For deterministic
- * fixtures this is fine — pre-compute at build time.
+ * fixtures this is fine : pre-compute at build time.
  *
  * Kept as a 1-arg overload for backwards compat with callers that
  * compose `gauss(rand)` and then scale/shift themselves.
@@ -161,5 +161,5 @@ export function buildSeed(): string {
   return (fromMeta || fromProc || '2026-07-10T00:00:00Z') as string;
 }
 
-// v6.10.28 — `driftWalk` removed (knip reported unused; only referenced
+// v6.10.28 : `driftWalk` removed (knip reported unused; only referenced
 // in this file's doc comment).

@@ -1,0 +1,366 @@
+---
+/**
+ * timeline.astro : v12.W4 AI HISTORY TIMELINE.
+ *
+ * Flagship visual proof that Christian tracks the AI curve in real
+ * time and ships on day one of each architectural jump. The page
+ * renders the canonical 6-stage sequence : PROMPTS to SKILLS to
+ * AGENTS to HARNESS to LOOPS to GRAPHS.
+ *
+ * NDA-safe. Public register. The dates and adoption claims are
+ * sourced from personal shipped records (window 2022 to 2025)
+ * and the canonical industry emergence milestones (ChatGPT Nov
+ * 2022, LangChain Jul 2023, AutoGPT Dec 2023, Claude Code Apr
+ * 2024, Computer Use Sep 2024, LangGraph Mar 2025).
+ *
+ * Mounted site-wide via the AIHistoryTimeline component. Linked
+ * from the SideRail tier-2 (subpages registry) and the home page
+ * trend-callout.
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import AIHistoryTimeline from '@components/AIHistoryTimeline.astro';
+import ChromeMarquee from '@components/ChromeMarquee.astro';
+import SectionMark from '@components/SectionMark.astro';
+import VoiceLine from '@components/VoiceLine.astro';
+import { profile } from '@utils/profile';
+
+// Six stages are intentionally canonical and NDA-safe. The narrative
+// framing here is "trend-tracking" : the page is the proof artifact
+// for the recruiter-facing claim "always up to trend and ahead".
+// v12.W4 : 7th stage (OFFICES) added :  Q4 2025 multi-agent office
+// (STELLA 112 agents / 14 squads). NOW marker moved OFFICES.
+const stages = [
+  {
+    name: 'PROMPTS',
+    industry: 'Nov 2022',
+    industryLabel: 'ChatGPT launch',
+    adopted: 'Dec 2022',
+    adoptedLabel: 'personal use',
+    monthsAhead: 1,
+    quant: 'Single-turn Q&A; research summarization',
+  },
+  {
+    name: 'SKILLS',
+    industry: 'Jul 2023',
+    industryLabel: 'LangChain',
+    adopted: 'Aug 2023',
+    adoptedLabel: 'function calling',
+    monthsAhead: 1,
+    quant: 'Tools/functions; structured output',
+  },
+  {
+    name: 'AGENTS',
+    industry: 'Dec 2023',
+    industryLabel: 'AutoGPT',
+    adopted: 'Feb 2024',
+    adoptedLabel: 'Babel-AGI',
+    monthsAhead: 2,
+    quant: 'Single-agent loops; tasks',
+  },
+  {
+    name: 'HARNESS',
+    industry: 'Apr 2024',
+    industryLabel: 'Claude Code',
+    adopted: 'Jun 2024',
+    adoptedLabel: 'Claude Code daily',
+    monthsAhead: 2,
+    quant: 'AI writes code in loop',
+  },
+  {
+    name: 'LOOPS',
+    industry: 'Sep 2024',
+    industryLabel: 'Computer Use',
+    adopted: 'Nov 2024',
+    adoptedLabel: 'multi-turn agentic',
+    monthsAhead: 2,
+    quant: 'Persistent agentic workflows',
+  },
+  {
+    name: 'GRAPHS',
+    industry: 'Mar 2025',
+    industryLabel: 'LangGraph',
+    adopted: 'May 2025',
+    adoptedLabel: 'graph-first',
+    monthsAhead: 2,
+    quant: 'Persistent state + memory; knowledge graphs',
+  },
+  {
+    name: 'OFFICES',
+    industry: 'Q4 2025',
+    industryLabel: 'multi-agent offices',
+    adopted: 'Q4 2025',
+    adoptedLabel: 'STELLA 112 agents',
+    monthsAhead: 1,
+    quant: '14 squads · graph-engineered multi-agent orchestration',
+  },
+];
+
+const totalMonths = stages.reduce((acc, s) => acc + s.monthsAhead, 0);
+const dateRange = `${stages[0].industry} to ${stages[stages.length - 1].industry}`;
+
+// The chrome marquee doubles as the live data ticker on this page : each
+// stage gets a slot in the strip so the page reads as a system, not a
+// static brochure.
+const tickerText = stages
+  .map(
+    (s) =>
+      `${s.name} · ${s.industry} · ADOPTED ${s.adopted} · ${s.monthsAhead} MO AHEAD`
+  )
+  .join(' · ');
+---
+
+<BaseLayout
+  title="AI History Timeline"
+  description={`Six architectural jumps in three years (${dateRange}). ${totalMonths} months ahead of mainstream across the AI arc.`}
+  surface="v6-13"
+  theme="light"
+  chrome="full"
+  breadcrumbs={[
+    { name: 'Home', href: '/' },
+    { name: 'AI History Timeline', href: '/timeline' },
+  ]}
+>
+  <header class="timeline-head">
+    <div class="container container-narrow">
+      <p class="timeline-head__eyebrow mono">
+        <span class="timeline-head__eyebrow-chip"
+          >AI · HISTORY · {dateRange} · {totalMonths} MONTHS AHEAD</span
+        >
+      </p>
+      <h1 class="timeline-head__title" data-words>
+        The <span class="hl">AI arc</span>, two months ahead.
+      </h1>
+      <VoiceLine class="timeline-head__voice">
+        Always up to trend, ahead of mainstream. Seven architectural jumps in three
+        years, each one wired into a working system on day one.
+      </VoiceLine>
+      <p class="timeline-head__sub">
+        The canonical AI release milestones are widely documented (ChatGPT Nov
+        2022, LangChain Jul 2023, AutoGPT Dec 2023, Claude Code Apr 2024,
+        Computer Use Sep 2024, LangGraph Mar 2025). My adoption dates come
+        from personal shipped records and dated repositories, NDA-safe window
+        2022 to 2025. The
+        <strong>{totalMonths}-month lead</strong> across {stages.length} stages
+        is the trend-tracking proof for a quant seat: a senior practitioner
+        reads the curve, not the press release.
+      </p>
+    </div>
+  </header>
+
+  <ChromeMarquee
+    text={tickerText + ' ·'}
+    speedSec={60}
+    trailing="live ticker"
+  />
+
+  <section class="section">
+    <div class="container container-wide">
+      <SectionMark index="01" title="the arc" ariaHidden={false} />
+      <p class="section__eyebrow">The full sequence</p>
+      <h2 class="section__title">PROMPTS to OFFICES, in {dateRange}.</h2>
+      <p class="section__sub">
+        Each node shows the industry emergence date, the personal adoption
+        date, the months-ahead delta, and a one-line note on why the
+        architectural jump mattered to a quant workflow.
+      </p>
+
+      <AIHistoryTimeline
+        variant="stack"
+        chip="AI · HISTORY · CANONICAL ARC"
+        title="The six stages of the AI arc."
+        lede="A dated record of personal adoption versus industry emergence, sourced from shipped artifacts and the canonical release milestones."
+      />
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="container container-wide">
+      <SectionMark index="02" title="why this matters" ariaHidden={false} />
+      <p class="section__eyebrow">Why trend-tracking matters in quant</p>
+      <h2 class="section__title">
+        Reading the curve is part of the job.
+      </h2>
+      <p class="section__sub">
+        In a quant seat, the practitioner reads the market regime before
+        the consensus catches up. The same pattern shows up in AI engineering:
+        the agentic arc was visible inside {profile.titles.short}'s office
+        weeks before the analyst reports caught up. This page is the dated
+        record of that read.
+      </p>
+      <ul class="timeline-meta" role="list">
+        <li class="timeline-meta__row">
+          <span class="timeline-meta__label mono">PATTERN</span>
+          <span class="timeline-meta__value"
+            >Industry emergence -> personal adoption on day one -> production
+            integration within the same quarter.</span
+          >
+        </li>
+        <li class="timeline-meta__row">
+          <span class="timeline-meta__label mono">EVIDENCE</span>
+          <span class="timeline-meta__value"
+            >Dated repos, workbook chapters, and AARs reference the adoption
+            milestones. NDA-safe window 2022 to 2025.</span
+          >
+        </li>
+        <li class="timeline-meta__row">
+          <span class="timeline-meta__label mono">STAGE</span>
+          <span class="timeline-meta__value"
+            >GRAPHS is the active rung. The next jump (decentralized
+            verification + on-graph agent routing) is in research.</span
+          >
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container container-wide">
+      <SectionMark index="03" title="how to read this" ariaHidden={false} />
+      <p class="section__eyebrow">Reading guide</p>
+      <h2 class="section__title">What each label means.</h2>
+      <dl class="timeline-legend">
+        <div class="timeline-legend__row">
+          <dt class="timeline-legend__key mono">INDUSTRY</dt>
+          <dd class="timeline-legend__val">
+            The month the architectural jump entered the mainstream
+            conversation. Sourced from canonical release milestones.
+          </dd>
+        </div>
+        <div class="timeline-legend__row">
+          <dt class="timeline-legend__key mono">I ADOPTED</dt>
+          <dd class="timeline-legend__val">
+            The month a working system shipped on the new rung, in this
+            office. Dated, sourced from shipped repos and AARs.
+          </dd>
+        </div>
+        <div class="timeline-legend__row">
+          <dt class="timeline-legend__key mono">MONTHS AHEAD</dt>
+          <dd class="timeline-legend__val">
+            Integer delta between industry emergence and personal adoption.
+            Recurring +1 to +2 month lead is the trend-tracking fingerprint.
+          </dd>
+        </div>
+        <div class="timeline-legend__row">
+          <dt class="timeline-legend__key mono">QUANT RELEVANCE</dt>
+          <dd class="timeline-legend__val">
+            Why this rung mattered for a quant workflow specifically, not
+            generic AI engineering.
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .timeline-head {
+    padding-block: var(--sp-9) var(--sp-7);
+    background: var(--c-bg);
+    border-bottom: var(--border);
+  }
+  .timeline-head__eyebrow {
+    margin: 0 0 var(--sp-3);
+  }
+  .timeline-head__eyebrow-chip {
+    display: inline-block;
+    padding: 4px 10px;
+    background: var(--c-paper);
+    border: 1px solid var(--c-amber);
+    color: var(--c-amber);
+    font-size: 10.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .timeline-head__title {
+    margin: 0 0 var(--sp-3);
+    font-size: clamp(32px, 5vw, 56px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--c-ink);
+  }
+  .timeline-head__title .hl {
+    color: var(--c-amber);
+    font-style: italic;
+  }
+  .timeline-head__voice {
+    margin: 0 0 var(--sp-4);
+  }
+  .timeline-head__sub {
+    margin: 0;
+    max-width: 720px;
+    color: var(--c-ink-2);
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
+  /* Meta table (WHY THIS MATTERS) */
+  .timeline-meta {
+    list-style: none;
+    margin: var(--sp-5) 0 0;
+    padding: 0;
+    border-top: 1px solid var(--c-rule);
+  }
+  .timeline-meta__row {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: var(--sp-4);
+    padding: var(--sp-3) 0;
+    border-bottom: 1px solid var(--c-rule);
+    align-items: start;
+  }
+  .timeline-meta__label {
+    font-size: 10.5px;
+    letter-spacing: 0.16em;
+    color: var(--c-amber);
+    font-weight: 600;
+    padding-top: 2px;
+  }
+  .timeline-meta__value {
+    margin: 0;
+    font-size: 14px;
+    color: var(--c-ink);
+    line-height: 1.5;
+  }
+
+  /* Legend (HOW TO READ THIS) */
+  .timeline-legend {
+    margin: var(--sp-5) 0 0;
+    padding: 0;
+    display: grid;
+    gap: 0;
+  }
+  .timeline-legend__row {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: var(--sp-4);
+    padding: var(--sp-3) 0;
+    border-bottom: 1px solid var(--c-rule);
+  }
+  .timeline-legend__row:last-child {
+    border-bottom: 0;
+  }
+  .timeline-legend__key {
+    margin: 0;
+    font-size: 10.5px;
+    letter-spacing: 0.16em;
+    color: var(--c-amber);
+    font-weight: 600;
+    padding-top: 2px;
+  }
+  .timeline-legend__val {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--c-ink-2);
+  }
+
+  /* Compact stacks on < 720px */
+  @media (max-width: 720px) {
+    .timeline-meta__row,
+    .timeline-legend__row {
+      grid-template-columns: 1fr;
+      gap: 4px;
+    }
+  }
+</style>

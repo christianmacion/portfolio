@@ -3,7 +3,7 @@ title: 'Public Finance Curriculum (CTA-Track, Self-Directed)'
 slug: 'cta-curriculum-public'
 category: 'Education & Outreach'
 order: 10
-client: 'Public — finance students / early-career analysts'
+client: 'Public : finance students / early-career analysts'
 problem: |
   The Philippines has limited access to rigorous CTA-grade technical analysis training. Most
   curriculum is either imported (US/UK, expensive) or shallow (TA-by-rote). There's a gap for
@@ -20,7 +20,7 @@ evidence:
   - '**University guest lectures** at PSHS-SMC and USeP'
 outcome: |
   Curriculum reached students who would otherwise not have had access to CTA-grade training.
-  Notebooks and videos are public — anyone can re-run the analysis end-to-end.
+  Notebooks and videos are public : anyone can re-run the analysis end-to-end.
 proof:
   - 'Public video library (URL on contact page)'
   - 'University guest-lecture invitations (PSHS-SMC, USeP)'

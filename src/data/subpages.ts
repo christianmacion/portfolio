@@ -33,7 +33,7 @@ export interface SubpageEntry {
   /** Eyebrow chip text above the H1. */
   chip: string;
   /** SVG icon key for SideRail (1px stroke, 16×16). */
-  icon: 'note' | 'stack' | 'repo' | 'engage';
+  icon: 'note' | 'stack' | 'repo' | 'engage' | 'timeline';
 }
 
 export const subpages: ReadonlyArray<SubpageEntry> = [
@@ -80,6 +80,17 @@ export const subpages: ReadonlyArray<SubpageEntry> = [
       'Engagement model: how to work together :  scope, cadence, deliverables, and the parts of the loop that are non-negotiable.',
     chip: 'ENGAGEMENT · HOW WE WORK · NON-NEGOTIABLES',
     icon: 'engage',
+  },
+  {
+    slug: 'timeline',
+    label: 'AI Timeline',
+    index: '05',
+    title: 'ai history timeline',
+    pageTitle: 'AI History Timeline',
+    description:
+      'Six architectural jumps in three years: PROMPTS to SKILLS to AGENTS to HARNESS to LOOPS to GRAPHS. Always up to trend, two months ahead of mainstream.',
+    chip: 'AI · HISTORY · 2022 TO 2025 · 10 MONTHS AHEAD',
+    icon: 'timeline',
   },
 ];
 

@@ -1,5 +1,5 @@
 /**
- * mojs-core.d.ts — minimal ambient declarations for @mojs/core UMD build.
+ * mojs-core.d.ts : minimal ambient declarations for @mojs/core UMD build.
  *
  * The mojs package only ships a single UMD file (no types). We declare
  * the subset used by [[scripts/motion/mojs-recipes.client.ts]] so that

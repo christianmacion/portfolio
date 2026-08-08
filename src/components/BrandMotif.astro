@@ -1,8 +1,8 @@
 ---
 /**
- * BrandMotif.astro — the 31-cell gate-lattice.
+ * BrandMotif.astro : the 31-cell gate-lattice.
  *
- * One reusable geometric SVG that visually encodes the G1–G31 evaluation
+ * One reusable geometric SVG that visually encodes the G1-G31 evaluation
  * stack: 31 gates grouped into 6 families. The aesthetic reference is a
  * single geometric mark used sparingly across the IA, never wallpapered.
  *
@@ -16,7 +16,7 @@
  *   - The footer, beside the brand wordmark.
  *
  * Usage:
- *   <BrandMotif width={420} caption="G1–G31 · ship(x) = 1 ⇔ ∀ gates pass" />
+ *   <BrandMotif width={420} caption="G1-G31 · ship(x) = 1 ⇔ ∀ gates pass" />
  */
 import { profile } from '@utils/profile';
 import { path } from '@utils/url';
@@ -32,10 +32,10 @@ interface Props {
    * the caption is the load-bearing context and you want screen readers
    * to reach it. */
   decorative?: boolean;
-  /** v9.3.2 motion contract — `false` disables the ship-cell breathe
+  /** v9.3.2 motion contract : `false` disables the ship-cell breathe
    * animation (the 5.5s opacity pulse on the bright indicator). Default
    * true. The audit (2026-08-02 M-2) says "let TrustStrip own the
-   * heartbeat on /proof/ and /methodology/" — those pages pass false.
+   * heartbeat on /proof/ and /methodology/" : those pages pass false.
    * The home page and the footer keep the default pulse. */
   pulse?: boolean;
 }
@@ -56,9 +56,9 @@ const captionY = 50;
 const shipIndex = 15;
 const blockIndex = 26;
 
-// Gate families — source of truth lives at /methodology. Each family anchors
+// Gate families : source of truth lives at /methodology. Each family anchors
 // a contiguous run of cells in the lattice (5 + 5 + 5 + 5 + 5 + 6 = 31).
-// family cells 0..4 = G1–G5, cells 5..9 = G6–G10, ..., cells 25..30 = G26–G31.
+// family cells 0..4 = G1-G5, cells 5..9 = G6-G10, ..., cells 25..30 = G26-G31.
 // Cells 15 and 26 are skipped (ship, block indicators) but those indices stay
 // in the 6-family frame; the math reads as "31 cells = 6 families".
 const families = [
@@ -115,7 +115,7 @@ for (const f of families) {
   style={`--brand-w:${width}px;${height ? `--brand-h:${height}px;` : ''}`}
 >
   {
-    /* v6.3 polish — wrap the motif in a single 44×44+ anchor to
+    /* v6.3 polish : wrap the motif in a single 44×44+ anchor to
      /methodology instead of 31 individual per-cell `<a>` tags.
      The audit was flagging every cell anchor as a 26×26 SVG link
      (insufficient tap target even with the 44-unit hit rect).
@@ -226,7 +226,7 @@ for (const f of families) {
     line-height: 0;
     max-width: 100%;
   }
-  /* v6.3 polish — the wrapping <a> is inline-block so it sizes to the
+  /* v6.3 polish : the wrapping <a> is inline-block so it sizes to the
      SVG bounding box, then receives a safe ≥ 44 px tap target via
      min-height (the visible lattice is already ≥ 240×60 px on desktop
      and scales proportionally on mobile, so min-height only widens the
@@ -244,8 +244,8 @@ for (const f of families) {
     max-width: 100%;
     height: auto;
   }
-  /* Subtle pulse on the ship indicator — restraint: opacity, no motion.
-     v9.3.2 motion contract — gated by [data-pulse="true"] on the figure
+  /* Subtle pulse on the ship indicator : restraint: opacity, no motion.
+     v9.3.2 motion contract : gated by [data-pulse="true"] on the figure
      so the page can opt out (proof/methodology pass `pulse={false}`).
      Audit 2026-08-02 M-2: TrustStrip owns the heartbeat on those pages. */
   @media (prefers-reduced-motion: no-preference) {

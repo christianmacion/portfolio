@@ -1,6 +1,6 @@
 ---
 /**
- * about.astro — v4.0 proof-first.
+ * about.astro : v4.0 proof-first.
  *
  * IA: hero (avatar + equations + stats) → proof strip (3 strongest solutions)
  *   → methodology teaser → quant teaser → bio (4 prose paragraphs) →
@@ -32,11 +32,11 @@ const proofStrip: SolutionEntry[] = allSolutions
   .sort((a, b) => a.data.order - b.data.order)
   .slice(0, 3);
 
-// v6.10.31 — derive project count from collection (quant lane = public-data reproducible)
+// v6.10.31 : derive project count from collection (quant lane = public-data reproducible)
 const allProjectsForCount: ProjectEntry[] = await getCollection('project');
 const quantProjectCount = allProjectsForCount.filter((p) => p.data.role === 'quant').length;
 
-// v6.10.47 — derive gate-count chrome from profile.stats.evalGates.
+// v6.10.47 : derive gate-count chrome from profile.stats.evalGates.
 const NGATE = `${profile.stats.evalGates}-gate`;
 ---
 
@@ -88,14 +88,14 @@ const NGATE = `${profile.stats.evalGates}-gate`;
         <Stat value={profile.stats.locPython} label="LOC" sub="light-dep" />
       </div>
 
-      {/* v8.4 — tenet line is now injected by BaseLayout at the bottom of <main>; */}
+      {/* v8.4 : tenet line is now injected by BaseLayout at the bottom of <main>; */}
       {/* the page-level duplicate is removed to avoid double-display. */}
     </div>
   </header>
 
   {
     /*
-    PROOF STRIP — proof-first, not bio-first.
+    PROOF STRIP : proof-first, not bio-first.
     The top three solutions: strongest signal of shipped work. A recruiter's
     first glance is here, not the bio.
   */
@@ -153,7 +153,7 @@ const NGATE = `${profile.stats.evalGates}-gate`;
 
   {
     /*
-    METHODOLOGY TEASER — Gates {GATE_RANGE}, DSR, PBO, MinBTL.
+    METHODOLOGY TEASER : Gates {GATE_RANGE}, DSR, PBO, MinBTL.
     A single inline equation + 3-stat row mirrors /methodology without
     duplicating it; the link does the heavy lifting.
   */
@@ -189,7 +189,7 @@ const NGATE = `${profile.stats.evalGates}-gate`;
 
   {
     /*
-    QUANT SIDE TEASER — single equation + quant-specific stat row.
+    QUANT SIDE TEASER : single equation + quant-specific stat row.
     Mirrors the canonical quant research discipline the user cares about.
   */
   }
@@ -224,7 +224,7 @@ const NGATE = `${profile.stats.evalGates}-gate`;
 
   {
     /*
-    BIO — kept short, moved below the proof surface.
+    BIO : kept short, moved below the proof surface.
     Four flowing paragraphs in the HIRED voice.
   */
   }
@@ -255,7 +255,7 @@ const NGATE = `${profile.stats.evalGates}-gate`;
         </p>
 
         <p>
-          On the quant side I design and backtest systematic strategies on crypto and equities —
+          On the quant side I design and backtest systematic strategies on crypto and equities :
           {quantProjectCount} reproducible public-data projects spanning multiple-testing (Deflated Sharpe),
           cross-sectional and time-series alpha, volatility carry, cointegration, funding-carry, regime
           overlays, transaction-cost realism, and look-ahead-bias audits. Every project ships with the
@@ -275,7 +275,7 @@ const NGATE = `${profile.stats.evalGates}-gate`;
 
   {
     /*
-    EDUCATION — flowing prose, not a list.
+    EDUCATION : flowing prose, not a list.
     Genre rule: quant and AI references keep education as one paragraph
     (Eva Miller, Gwern, Percy Liang pattern), not as a structured card list.
   */
@@ -299,7 +299,7 @@ const NGATE = `${profile.stats.evalGates}-gate`;
 
   {
     /*
-    DISCLOSURE POSTURE — flowing prose, not an X-list.
+    DISCLOSURE POSTURE : flowing prose, not an X-list.
     Genre rule: quants don't disclose NDA posture with red X marks;
     they declare it as a prose paragraph with provenance footnotes.
   */
@@ -335,7 +335,7 @@ const NGATE = `${profile.stats.evalGates}-gate`;
     title="Hiring for an AI Engineer or Quant Researcher seat?"
     sub={`Email me at ${profile.contact.email} with the JD. tailored resume within 24 hours. Or grab the matching PDF below.`}
     primaryLabel="Get in touch"
-    primaryHref={`mailto:${profile.contact.email}?subject=Role%20inquiry%20—%20%5Btailored%20resume%5D`}
+    primaryHref={`mailto:${profile.contact.email}?subject=Role%20inquiry%20:%20%5Btailored%20resume%5D`}
     secondaryLabel="Download resume ↓"
     secondaryHref={path('/resume')}
   />
@@ -362,10 +362,10 @@ const NGATE = `${profile.stats.evalGates}-gate`;
     letter-spacing: 0.12em;
     flex-wrap: wrap;
   }
-  /* v9.2 a11y — was --c-phi-teal. Dark-theme --j-phi-teal = #2d5f5a
+  /* v9.2 a11y : was --c-phi-teal. Dark-theme --j-phi-teal = #2d5f5a
      only hits 2.14:1 on the dark page-head surface (#232723).
      Solid amber chip with --c-bg text reads at ≥5.6:1 in both
-     themes — institutional register, F14-safe (no traffic-light). */
+     themes : institutional register, F14-safe (no traffic-light). */
   .page-head__eyebrow-chip {
     display: inline-block;
     padding: 4px 10px;
@@ -378,7 +378,7 @@ const NGATE = `${profile.stats.evalGates}-gate`;
     color: var(--c-warn);
     font-weight: 600;
   }
-  /* v2026-08-02 — page-head H1 bumped to display scale (5vw / 5.5rem
+  /* v2026-08-02 : page-head H1 bumped to display scale (5vw / 5.5rem
      max) so it reads as institutional anchor instead of an oversized
      section title. 88px desktop max; 40px mobile floor. Tracking
      tightened to -0.025em to balance the larger size. */
@@ -435,9 +435,9 @@ const NGATE = `${profile.stats.evalGates}-gate`;
   .section__head {
     margin-bottom: var(--sp-5);
   }
-  /* v2026-08-02 — max bound tightened to 2.2rem (was 2.25rem) to
+  /* v2026-08-02 : max bound tightened to 2.2rem (was 2.25rem) to
      bypass the audit's T04 regex false positive on 2-decimal rem
-     values inside clamp(). Visual delta is ~1px — institutional
+     values inside clamp(). Visual delta is ~1px : institutional
      section-header cadence unchanged. */
   .section__title {
     font-size: clamp(1.6rem, 3vw, 2.2rem);
@@ -463,9 +463,9 @@ const NGATE = `${profile.stats.evalGates}-gate`;
     letter-spacing: 0.08em;
   }
   .section__foot a {
-    /* v9.2 a11y — was var(--c-amber) which only hits 3.73:1 on
+    /* v9.2 a11y : was var(--c-amber) which only hits 3.73:1 on
        dark section surface (Lighthouse mobile, dark default). --c-amber
-       reads at ≥5.4:1 on the same surface — AA-compliant in both themes.
+       reads at ≥5.4:1 on the same surface : AA-compliant in both themes.
        Underline + offset still carry the link identity. */
     color: var(--c-amber);
     text-decoration: underline;
@@ -564,7 +564,7 @@ const NGATE = `${profile.stats.evalGates}-gate`;
     line-height: var(--lh-loose);
     margin: 0;
   }
-  /* v9.2 a11y — was --c-amber. Dark-theme --j-warn-deep is #8a6f2f
+  /* v9.2 a11y : was --c-amber. Dark-theme --j-warn-deep is #8a6f2f
      which only hits 3.66:1 on --c-bg (#1a1714). Use --c-amber (5.42:1
      dark, 5.86:1 light) and underline so the link is still distinct. */
   .proof-card__more {

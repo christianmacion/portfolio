@@ -1,6 +1,6 @@
 ---
 /**
- * SectionRail.astro — v7.7 SECTION RAIL (segmented navigation)
+ * SectionRail.astro : v7.7 SECTION RAIL (segmented navigation)
  *
  * Slim vertical-rail segment-control for section navigation on long
  * pages (proof, research, methodology). Tracks the section the reader
@@ -35,7 +35,7 @@ interface Props {
   position?: 'left' | 'right';
 }
 const { sections, position = 'right' } = Astro.props;
-// Standing Order §9 — no Math.random() in deterministic outputs.
+// Standing Order §9 : no Math.random() in deterministic outputs.
 // Deterministic ID from the joined section IDs: same section list →
 // same ID across SSR + hydration, so the data-rail-id attribute stays
 // stable and querySelectorAll('[data-rail-id]') still works.
@@ -150,7 +150,7 @@ const railId = `rail-${fnv1a(sections.map((s) => s.id).join('|'))}`;
     color: var(--c-warn);
   }
 
-  /* Mobile — collapse to footer-style pager */
+  /* Mobile : collapse to footer-style pager */
   @media (max-width: 720px) {
     .section-rail {
       position: static;
@@ -180,7 +180,7 @@ const railId = `rail-${fnv1a(sections.map((s) => s.id).join('|'))}`;
 </style>
 
 <script>
-  // Tiny runtime — IntersectionObserver + active-section sync.
+  // Tiny runtime : IntersectionObserver + active-section sync.
   class SectionRail {
     rail: HTMLElement;
     sections: { id: string; label: string }[];
@@ -200,7 +200,7 @@ const railId = `rail-${fnv1a(sections.map((s) => s.id).join('|'))}`;
     bindScroll() {
       const obs = new IntersectionObserver(
         (entries) => {
-          // v9.2 — guard against stale-element callbacks: if the
+          // v9.2 : guard against stale-element callbacks: if the
           // observed element was detached from the DOM (route change,
           // Astro view transition), the IntersectionObserver still
           // fires, but mutations against it are no-ops. Skip early.
@@ -217,7 +217,7 @@ const railId = `rail-${fnv1a(sections.map((s) => s.id).join('|'))}`;
       }
       // Track the observer so it can be torn down on page-leave.
       this._observer = obs;
-      // v9.2 — disconnect when the page is hidden so we don't leak
+      // v9.2 : disconnect when the page is hidden so we don't leak
       // observers into a back/forward cache revival.
       document.addEventListener('visibilitychange', () => {
         if (document.visibilityState === 'hidden') {
@@ -237,11 +237,11 @@ const railId = `rail-${fnv1a(sections.map((s) => s.id).join('|'))}`;
     }
 
     bindClicks() {
-      // v9.3 IA wave 2 (2026-08-01) a11y baseline — wrap scrollIntoView
+      // v9.3 IA wave 2 (2026-08-01) a11y baseline : wrap scrollIntoView
       // with a reduced-motion check so the H5 finding (SectionRail
       // smooth-scroll ignored prefers-reduced-motion) is closed. Honors
       // WCAG 2.3.3 (Animation from Interactions) and 2.2.2 (Pause, Stop,
-      // Hide). Behavior 'auto' jumps instantly — same as default anchor.
+      // Hide). Behavior 'auto' jumps instantly : same as default anchor.
       const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       for (const a of this.links) {
         a.addEventListener('click', (ev) => {

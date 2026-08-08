@@ -1,5 +1,5 @@
 /**
- * chevron-right — lightweight directional indicator.
+ * chevron-right : lightweight directional indicator.
  * Used in breadcrumbs, pagination, "see more" links where full arrow weight
  * is too heavy.
  */

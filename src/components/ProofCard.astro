@@ -1,9 +1,9 @@
 ---
 /**
- * ProofCard.astro — figure wrapper for static proof images.
+ * ProofCard.astro : figure wrapper for static proof images.
  *
  * Renders a `<figure>` with optional link wrap, `<img loading="lazy">`, caption,
- * and credit. Uses aspect-ratio to prevent CLS. No lightbox JS — uses native
+ * and credit. Uses aspect-ratio to prevent CLS. No lightbox JS : uses native
  * `<details>` if expand is needed, or a `target="_blank"` raw link.
  */
 interface Props {
@@ -81,27 +81,27 @@ const figureStyle = aspect === 'auto' ? '' : `--proof-aspect: ${aspect}; --proof
   .proof-card--paper {
     background: var(--c-paper);
     border: 1px solid var(--c-rule);
-    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade */
+    /* v6.18 : rely on --j-r=0 via tokens-v6.13.css cascade */
     padding: var(--sp-3);
   }
   .proof-card--tape {
     background: var(--c-tape);
     border: 1px solid var(--c-tape-2);
-    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade */
+    /* v6.18 : rely on --j-r=0 via tokens-v6.13.css cascade */
     padding: var(--sp-3);
   }
   .proof-card__link {
     display: block;
     overflow: hidden;
-    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade */
+    /* v6.18 : rely on --j-r=0 via tokens-v6.13.css cascade */
   }
   .proof-card__img {
     width: 100%;
     height: auto;
     display: block;
-    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade */
+    /* v6.18 : rely on --j-r=0 via tokens-v6.13.css cascade */
   }
-  /* Aspect-ratio guard for CLS prevention — when set via inline --proof-aspect */
+  /* Aspect-ratio guard for CLS prevention : when set via inline --proof-aspect */
   .proof-card[style*='--proof-aspect'] .proof-card__img {
     aspect-ratio: var(--proof-aspect);
     object-fit: var(--proof-fit, cover);
@@ -115,7 +115,7 @@ const figureStyle = aspect === 'auto' ? '' : `--proof-aspect: ${aspect}; --proof
     font-size: var(--fs-sm);
     color: var(--c-ink-2);
     line-height: var(--lh-snug);
-    /* v6.11.9 — wrap long credit strings on narrow viewports (e.g.
+    /* v6.11.9 : wrap long credit strings on narrow viewports (e.g.
        "Society of Technical Analysts · Jan 2026" at 320px card width
        on mobile). Without this the credit can overflow the card
        horizontally. */

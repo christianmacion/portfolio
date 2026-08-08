@@ -1,9 +1,9 @@
 ---
 /**
- * Stat.astro — a "metric tile": big mono number + label + sub + optional sparkline.
+ * Stat.astro : a "metric tile": big mono number + label + sub + optional sparkline.
  *
  * Usage:
- *   <Stat value="31" label="eval gates" sub="G1–G31 statistical harness" />
+ *   <Stat value="31" label="eval gates" sub="G1-G31 statistical harness" />
  *   <Stat value="0.886" label="recall@3" sub="on 800-query benchmark" spark={[...]} />
  */
 import Sparkline from '@components/Sparkline.astro';
@@ -126,10 +126,10 @@ if (formula) {
     font-weight: 600;
   }
   .stat__formula {
-    /* v9.9.1 — was var(--c-amber) + opacity:0.85, which alpha-blends to
-       #7e683b over --c-bg-2 (#f3ede1) → 4.25:1 (light theme) — fails
+    /* v9.9.1 : was var(--c-amber) + opacity:0.85, which alpha-blends to
+       #7e683b over --c-bg-2 (#f3ede1) → 4.25:1 (light theme) : fails
        WCAG 2.2 AA 4.5:1. Swapped to var(--c-ink-2) (#3d4a5e light /
-       #c4bfb1 dark) with full opacity → 7.18:1 / 7.71:1 — both AAA. */
+       #c4bfb1 dark) with full opacity → 7.18:1 / 7.71:1 : both AAA. */
     font-size: var(--fs-sm);
     color: var(--c-ink-2);
     line-height: 1;
@@ -164,7 +164,7 @@ if (formula) {
     font-weight: 600;
     font-size: var(--fs-lg);
   }
-  /* v6.11.18 — F14 amber-only migration. Was var(--c-pass) / var(--c-fail);
+  /* v6.11.18 : F14 amber-only migration. Was var(--c-pass) / var(--c-fail);
      every chrome element across Man Group / Renaissance / AQR / Bridgewater
      uses monochrome amber + ink. Trend-up is amber-light (bright, advancing),
      trend-down is ink-3 (dimmed, receding); same hue family, sign lives in
@@ -204,8 +204,8 @@ if (formula) {
     color: var(--c-ink-mist);
   }
 
-  /* v6.9.16 — institutional: drop the amber linear-gradient background.
-     Variant reads as "tape panel" not "amber panel" — opacity hierarchy
+  /* v6.9.16 : institutional: drop the amber linear-gradient background.
+     Variant reads as "tape panel" not "amber panel" : opacity hierarchy
      via --c-bg-2 + amber-deep border is enough. */
   .stat--accent {
     background: var(--c-bg-2);
@@ -219,7 +219,7 @@ if (formula) {
   .stat--mono .stat__label {
     color: var(--c-white-ghost);
   }
-  /* v6.11.18.1 — F14 sweep. Was a hardcoded green (#3fb950) — traffic-
+  /* v6.11.18.1 : F14 sweep. Was a hardcoded green (#3fb950) : traffic-
      light signal. Mono variant now uses the institutional amber token. */
   .stat--mono .stat__value {
     color: var(--c-amber);

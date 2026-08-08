@@ -1,6 +1,6 @@
 /**
- * sun — center circle + 8 rays.
- * Meta category: theme toggle (light mode) — even though the portfolio is
+ * sun : center circle + 8 rays.
+ * Meta category: theme toggle (light mode) : even though the portfolio is
  * dark-only (per tokens.css §6.1.1), the icon is reserved for future
  * theme-toggle surfaces or open-graph rendering.
  */

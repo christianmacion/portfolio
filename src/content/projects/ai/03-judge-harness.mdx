@@ -3,7 +3,7 @@ date: 2026-01-12
 title: LLM-as-Judge Harness
 role: ai
 order: 3
-summary: "LLM-as-judge pipeline validated against human raters — Cohen's κ = 0.58 with bootstrap CI and position-bias measured."
+summary: "LLM-as-judge pipeline validated against human raters : Cohen's κ = 0.58 with bootstrap CI and position-bias measured."
 summary_long: "An LLM-as-judge pipeline that doesn't trust itself. Every judgment is paired with a position-bias flip test, a Cohen's κ against a human-rated gold set, and a 95% bootstrap CI. The pipeline tells you when you should trust it and when you shouldn't."
 stack:
   - Python
@@ -25,17 +25,17 @@ tags: [llm-as-judge, evaluation, cohen-kappa, bias, validation]
 
 ## Why this exists
 
-> An LLM-as-judge that doesn't trust itself — every judgment is paired with a position-bias flip test and a Cohen's κ against human-rated gold.
+> An LLM-as-judge that doesn't trust itself : every judgment is paired with a position-bias flip test and a Cohen's κ against human-rated gold.
 
 You cannot run a pipeline whose evaluator might be biased by where you placed "yes" in the prompt. You also cannot trust a κ number that doesn't have a CI. This project makes both visible.
 
 ## What it measures
 
-- **Agreement** — Cohen's κ against a held-out human-rated gold set (with bootstrap CI).
-- **Pass rate** — fraction of pairs the judge rated the same way the human did.
-- **Position bias** — flip the option order; measure how much the rating drifts. ~17% drift means: don't anchor on the judge's verdict alone for borderline cases.
-- **Confidence interval** — 95% bootstrap CI over the agreement set; the judge is _moderate_ agreement, not _excellent_.
+- **Agreement** : Cohen's κ against a held-out human-rated gold set (with bootstrap CI).
+- **Pass rate** : fraction of pairs the judge rated the same way the human did.
+- **Position bias** : flip the option order; measure how much the rating drifts. ~17% drift means: don't anchor on the judge's verdict alone for borderline cases.
+- **Confidence interval** : 95% bootstrap CI over the agreement set; the judge is _moderate_ agreement, not _excellent_.
 
 ## What's transferable
 
-The judge-harness template applies to any production eval where you want a "machine-readable" score from an LLM — code review quality, draft readiness, retrieval faithfulness. The pattern forces you to validate the validator before you trust its output.
+The judge-harness template applies to any production eval where you want a "machine-readable" score from an LLM : code review quality, draft readiness, retrieval faithfulness. The pattern forces you to validate the validator before you trust its output.

@@ -1,6 +1,6 @@
 ---
 /**
- * StatCell.astro — compact "metric tile" for terminal layouts.
+ * StatCell.astro : compact "metric tile" for terminal layouts.
  *
  * Reused on /markets, /positions, /certifications, /about, and any
  * place where 4 metrics sit side-by-side as a strip. Smaller than
@@ -62,7 +62,7 @@ const deltaStr =
     padding: var(--sp-3) var(--sp-4);
     background: var(--c-bg-2);
     border: 1px solid var(--c-rule);
-    /* border-radius: var(--radius-sm); v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade */
+    /* border-radius: var(--radius-sm); v6.18 : rely on --j-r=0 via tokens-v6.13.css cascade */
     min-width: 0;
   }
   .stat-cell__head {
@@ -99,7 +99,7 @@ const deltaStr =
     font-feature-settings: 'tnum' 1;
     color: var(--c-ink-2);
   }
-  /* v6.11.10 — F14 amber-only. Up = amber, down = ink-2. */
+  /* v6.11.10 : F14 amber-only. Up = amber, down = ink-2. */
   .stat-cell--up .stat-cell__delta {
     color: var(--c-amber);
     font-weight: 600;

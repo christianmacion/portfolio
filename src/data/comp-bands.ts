@@ -1,8 +1,8 @@
 /**
- * comp-bands.ts — institutional comp positioning data.
+ * comp-bands.ts : institutional comp positioning data.
  *
  * Source basis for the bands (defensible institutional defaults, 2026):
- *   - a16z salary bands (senior data + AI engineering, public posts 2024–2026)
+ *   - a16z salary bands (senior data + AI engineering, public posts 2024-2026)
  *   - OpenAI / Stripe senior staff engineer comp ranges (public + Levels.fyi)
  *   - H1B Wage-LCA Level IV (senior) for SF/NY data scientist + ML engineer seats
  *   - OJP/Upwork Top-Rated+ hourly senior quant data (public rate cards)
@@ -22,13 +22,13 @@ export interface CompBand {
   id: string;
   /** Display label for the row + section heading. */
   label: string;
-  /** Target audience — who is this band for. */
+  /** Target audience : who is this band for. */
   target: string;
   /** Defensible institutional range. Placeholder until Owner confirms. */
   band: string;
   /** Engagement-specific guard rails (hours / duration / scope). */
   conditions: string;
-  /** How the comp is delivered — base / bonus / equity / carry / retainer. */
+  /** How the comp is delivered : base / bonus / equity / carry / retainer. */
   structure: string;
 }
 
@@ -141,6 +141,6 @@ export const engagementChecklist = [
   'NDA requirements. counter-party form or firm-standard',
 ] as const;
 
-/** OWNER ACTION on wake — confirm / adjust the exact bands per row. */
+/** OWNER ACTION on wake : confirm / adjust the exact bands per row. */
 export const placeholderFlag =
   'Owner-confirmed band; flag any band outside the listed range if it changes Owner-work-life balance. Each band uses institutional-default 2026 ranges the candidate can defend on a call. The exact figure per role is confirmed at first screening.';

@@ -3,7 +3,7 @@ date: 2026-02-18
 title: Pairs Trading via Cointegration (BTC / ETH)
 role: quant
 order: 5
-summary: 'ADF −2.11 (not cointegrated), half-life 208 d — the fade loses, as the test predicts.'
+summary: 'ADF −2.11 (not cointegrated), half-life 208 d : the fade loses, as the test predicts.'
 summary_long: 'A cointegration study on BTC / ETH: the most-traded pair in crypto, and the most obvious candidate for mean-reversion. The ADF test is honest about it.'
 stack:
   - Python (numpy / pandas / matplotlib)
@@ -23,7 +23,7 @@ assetType: code
 tags: [cointegration, pairs-trading, adf, mean-reversion, public-data]
 hero:
   src: /figures/quant/05-pairs-cointegration.webp
-  alt: Bar chart of the Augmented Dickey-Fuller statistic on the BTC/ETH spread (−2.11) plotted against the 1%, 5%, and 10% critical values — fail to reject the unit-root null.
+  alt: 'Bar chart of the Augmented Dickey-Fuller statistic on the BTC/ETH spread (−2.11) plotted against the 1%, 5%, and 10% critical values : fail to reject the unit-root null.'
   fit: cover
   aspect: 16/9
 ---
@@ -32,7 +32,7 @@ import Chart from '@components/Chart.astro';
 
 ## The hypothesis
 
-BTC and ETH move together. If they are _cointegrated_, a stationary spread should mean-revert — a textbook stat-arb entry.
+BTC and ETH move together. If they are _cointegrated_, a stationary spread should mean-revert : a textbook stat-arb entry.
 
 ## What the project does
 
@@ -52,15 +52,15 @@ BTC and ETH move together. If they are _cointegrated_, a stationary spread shoul
     { value: -2.11, label: 'ADF\nstat' },
     { value: -1.62, label: 'CV 10%\n(−3.43)' },
   ]}
-  title="ADF test statistic vs critical values — fail to reject unit root"
-  caption="Spread ADF = −2.11 sits *less negative* than the 5% critical value (≈ −2.86) and even the 10% line. Cannot reject H₀: spread has a unit root. The cointegration hypothesis fails — by construction, no stat-arb trade is warranted."
+  title="ADF test statistic vs critical values : fail to reject unit root"
+  caption="Spread ADF = −2.11 sits *less negative* than the 5% critical value (≈ −2.86) and even the 10% line. Cannot reject H₀: spread has a unit root. The cointegration hypothesis fails : by construction, no stat-arb trade is warranted."
   yMin={-4}
   yMax={0}
 />
 
-- **ADF test statistic: −2.11** — fails to reject the unit-root hypothesis at the 5% level. The spread is not stationary.
-- **Half-life: 208 days** — too slow to be a trade.
-- The OOS fade produces **≈ 0 Sharpe net of cost** — and that is the _correct_ answer, given the test.
+- **ADF test statistic: −2.11** : fails to reject the unit-root hypothesis at the 5% level. The spread is not stationary.
+- **Half-life: 208 days** : too slow to be a trade.
+- The OOS fade produces **≈ 0 Sharpe net of cost** : and that is the _correct_ answer, given the test.
 
 ## What's transferable
 

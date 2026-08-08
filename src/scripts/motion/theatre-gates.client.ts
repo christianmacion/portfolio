@@ -1,7 +1,7 @@
 /**
- * theatre-gates.client.ts — v11.W3 · theatre.js gates-lattice stagger-reveal.
+ * theatre-gates.client.ts : v11.W3 · theatre.js gates-lattice stagger-reveal.
  *
- * Showcases the @theatre/core library on /methodology — the G1-G31 gate
+ * Showcases the @theatre/core library on /methodology : the G1-G31 gate
  * lattice (31 individual gate cells, organized as 6 family rows of ~5 gates
  * each + 1 trailer). Each cell fades in + 0.5px scale-up, 50ms stagger,
  * total 1.6s arc. Fires ONCE on viewport entry, then unobserves.
@@ -54,7 +54,7 @@ async function init(): Promise<void> {
     return;
   }
 
-  // Wrap getProject in a try/catch — Theatre v0.7+ throws "state seems to
+  // Wrap getProject in a try/catch : Theatre v0.7+ throws "state seems to
   // be formatted in a way that is unreadable" when the project name is
   // already registered with a different state shape (HMR / page reload).
   // Refusing to register is safer than crashing the whole motion bundle.
@@ -80,7 +80,7 @@ async function init(): Promise<void> {
 
     onChange(obj.props.progress, (progress: number) => {
       // progress 0→1 maps to opacity 0→1 and scale 0.995→1.005
-      // (the brief says "0.5px scale-up" — at the 240px cell width that's
+      // (the brief says "0.5px scale-up" : at the 240px cell width that's
       // a barely-perceptible settle, which matches Bryllim-grade restraint)
       const clamped = Math.min(1, Math.max(0, progress));
       el.style.opacity = String(clamped);
@@ -117,7 +117,7 @@ async function init(): Promise<void> {
     { threshold: 0.12, rootMargin: '0px 0px -8% 0px' },
   );
 
-  // Per-cell delayed fade-in is driven by theatre, not CSS — we just need
+  // Per-cell delayed fade-in is driven by theatre, not CSS : we just need
   // each cell to know its own delay. We pre-set transform/opacity to 0 so
   // the page doesn't flash a fully-visible lattice before theatre kicks in.
   bindings.forEach(({ el }) => {

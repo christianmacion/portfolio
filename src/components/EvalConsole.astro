@@ -1,8 +1,8 @@
 ---
 /**
- * EvalConsole.astro — 31-gate result grid mirroring methodology.astro.
+ * EvalConsole.astro : 31-gate result grid mirroring methodology.astro.
  *
- * v6.1 Mission F. Renders the full G1–G31 stack as a terminal-style
+ * v6.1 Mission F. Renders the full G1-G31 stack as a terminal-style
  * result table: [G-XX] gate-id, gate label (left), result pill
  * (PASS / CHECK / FAIL) coloured by the project's existing palette
  * tokens, and a measured value (mono, right-aligned). Grouped into
@@ -11,9 +11,9 @@
  * Generation / Eval / Deploy / Monitoring / Feedback) so the
  * /ai page reads as a system map, not a stats chapter.
  *
- * Labels and order are drawn from src/pages/methodology.astro's G1–G31
- * list — never invented. Numbers reflect the v6.0.12 / v6.1 reference
- * fixtures (deterministic, NDA-clean); the one FAIL is intentional —
+ * Labels and order are drawn from src/pages/methodology.astro's G1-G31
+ * list : never invented. Numbers reflect the v6.0.12 / v6.1 reference
+ * fixtures (deterministic, NDA-clean); the one FAIL is intentional :
  * a real eval console is not 100% green, and a green-only console
  * would be a credibility marker.
  *
@@ -113,7 +113,7 @@ const families: Family[] = [
     name: 'Feedback',
     source: 'Economic & cost realism. spread, capacity, regime overlay',
     gates: [
-      // Honest FAIL — slippage overrun is the most common budget miss in
+      // Honest FAIL : slippage overrun is the most common budget miss in
       // real backtests. A console showing 100% green is a credibility
       // marker (G26 visible FAIL signals: I read my own gates).
       { id: 'G26', label: 'spread / slippage / latency', value: '7.2 bps', result: 'FAIL' },
@@ -135,7 +135,7 @@ const counts = {
   total: allGates.length,
 };
 
-// v7.5 — narrow the gate list when topGates / bottomGates are passed.
+// v7.5 : narrow the gate list when topGates / bottomGates are passed.
 // Useful for embedded chrome (e.g. ArchitectureBrief) where a 31-row
 // table is too dense. topGates = first N from the first family +
 // remainder of that family if N exceeds the first family length, etc.
@@ -290,11 +290,11 @@ const passRateStr = passRate.toFixed(3);
   .eval-console__summary-item--check .eval-console__num {
     color: var(--c-amber);
   }
-  /* v6.11.10 — F14 amber-only. Fail summary number now ink-2. */
+  /* v6.11.10 : F14 amber-only. Fail summary number now ink-2. */
   .eval-console__summary-item--fail .eval-console__num {
     color: var(--c-ink-2);
   }
-  /* v6.11.10 — F14 amber-only. Pass-rate number now amber. */
+  /* v6.11.10 : F14 amber-only. Pass-rate number now amber. */
   .eval-console__summary-item--rate .eval-console__num {
     color: var(--c-amber);
   }
@@ -381,13 +381,13 @@ const passRateStr = passRate.toFixed(3);
     font-weight: 600;
   }
 
-  /* v6.11.9 — FAIL row tint was raw rgba(248,81,73,0.08). Mapped to ink-2
+  /* v6.11.9 : FAIL row tint was raw rgba(248,81,73,0.08). Mapped to ink-2
      alpha at 6% so FAIL rows still scan as "look here" but in amber/ink
      monochrome per F14 institutional rule. */
   .eval-row--fail {
     background: color-mix(in oklab, var(--c-ink-2) 6%, transparent);
   }
-  /* v6.10.41 — check-row amber tint now derives from --c-amber.
+  /* v6.10.41 : check-row amber tint now derives from --c-amber.
      Was rgba(201,138,22,0.04). */
   .eval-row--check {
     background: color-mix(in oklab, var(--c-amber) 4%, transparent);
@@ -406,11 +406,11 @@ const passRateStr = passRate.toFixed(3);
     text-align: center;
     line-height: 1.6;
   }
-  /* v6.11.9 — F14 institutional rule: amber-only chrome, no traffic-light
+  /* v6.11.9 : F14 institutional rule: amber-only chrome, no traffic-light
      semantics. PASS = amber-soft (lighter alpha than CHECK), CHECK = amber
      mid alpha (the pre-flight state, distinct from a confirmed pass),
      FAIL = ink-2 (passive absence, doesn't shout). The numeric count of
-     pass/fail rows already lives in the badge above — pills are only the
+     pass/fail rows already lives in the badge above : pills are only the
      per-row tag, and they read as data, not as sentiment. */
   .eval-pill--pass {
     background: color-mix(in oklab, var(--c-amber) 8%, transparent);
@@ -419,9 +419,9 @@ const passRateStr = passRate.toFixed(3);
   }
   .eval-pill--check {
     background: var(--c-amberl-mist);
-    /* v9.2 a11y — was var(--c-amber) which only hits 4.23:1 on the
+    /* v9.2 a11y : was var(--c-amber) which only hits 4.23:1 on the
        amber-tint pill bg in dark mode (Lighthouse mobile, dark default).
-       --c-ink reads at ≥9.5:1 on the same surface — institutional
+       --c-ink reads at ≥9.5:1 on the same surface : institutional
        register, F14-safe (amber pill silhouette retained, no traffic-light
        semantics). Bold weight + letter-spacing carry the chip identity. */
     color: var(--c-ink);

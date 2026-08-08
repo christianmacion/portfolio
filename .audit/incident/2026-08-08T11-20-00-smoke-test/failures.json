@@ -1,0 +1,104 @@
+{
+  "dedupe_key": "portfolio-smoke-test-v1",
+  "ts": "2026-08-08T11:20:00.822Z",
+  "checked": 1387,
+  "failed": 19,
+  "total_routes": 102,
+  "failures": [
+    {
+      "route": "/uses",
+      "asset": "/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/uses",
+      "asset": "/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/work",
+      "asset": "/_astro/motion.C7U-0BQy.css",
+      "status": 404
+    },
+    {
+      "route": "/work",
+      "asset": "/_astro/page.LAbJoB63.js",
+      "status": 404
+    },
+    {
+      "route": "/work",
+      "asset": "/_astro/work.DYo4t1IK.css",
+      "status": 404
+    },
+    {
+      "route": "/work",
+      "asset": "/apple-touch-icon-180x180.png",
+      "status": 404
+    },
+    {
+      "route": "/work",
+      "asset": "/feed.xml",
+      "status": 404
+    },
+    {
+      "route": "/work",
+      "asset": "/llms-full.txt",
+      "status": 404
+    },
+    {
+      "route": "/work",
+      "asset": "/llms.txt",
+      "status": 404
+    },
+    {
+      "route": "/work",
+      "asset": "/site.webmanifest",
+      "status": 404
+    },
+    {
+      "route": "/work",
+      "asset": "/sitemap-index.xml",
+      "status": 404
+    },
+    {
+      "route": "/workbooks/ai-engineering",
+      "asset": "figures/03_skill_anatomy.png",
+      "status": 404
+    },
+    {
+      "route": "/workbooks/ai-engineering",
+      "asset": "figures/04_pipeline_vs_agent.png",
+      "status": 404
+    },
+    {
+      "route": "/workbooks/ai-engineering",
+      "asset": "figures/05_five_must_have.png",
+      "status": 404
+    },
+    {
+      "route": "/workbooks/ai-engineering",
+      "asset": "figures/06_four_graphs.png",
+      "status": 404
+    },
+    {
+      "route": "/workbooks/ai-engineering",
+      "asset": "figures/07_topology_hub_vs_mesh.png",
+      "status": 404
+    },
+    {
+      "route": "/workbooks/ai-engineering",
+      "asset": "figures/08_graphrag_flow.png",
+      "status": 404
+    },
+    {
+      "route": "/workbooks/graph-engineering",
+      "asset": "<html-self>",
+      "status": 404
+    },
+    {
+      "route": "/workbooks",
+      "asset": "<html-self>",
+      "status": 404
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 /**
- * glossary-terms.ts — single source of truth for the /glossary page
+ * glossary-terms.ts : single source of truth for the /glossary page
  * (single-page alphabetical list) and /glossary/[slug] deep pages
  * (one per term with longer-form prose + related terms).
  *
@@ -9,9 +9,9 @@
 import { profile } from '../utils/profile';
 
 // Gate-count chrome: derives from profile.stats.evalGates so flipping
-// 31 → 32 in profile.ts propagates to all 15 "G1–G31" / "31-gate" /
+// 31 → 32 in profile.ts propagates to all 15 "G1-G31" / "31-gate" /
 // "31 gates" references across the glossary entries. Specific gate
-// names (G2, G9, G11, G18, G21, G22, G24, G25, G30) stay inline —
+// names (G2, G9, G11, G18, G21, G22, G24, G25, G30) stay inline :
 // they're stable identifiers, not count-derived.
 const GATES = profile.stats.evalGates;
 const GATE_RANGE = `G1 to G${GATES}`;

@@ -1,6 +1,6 @@
-/* motion.css — v7.4 INSTITUTIONAL MOTION LAYER
+/* motion.css : v7.4 INSTITUTIONAL MOTION LAYER
  * Single source of motion primitives for the portfolio. No glows, no pills,
- * no gradients — every animation is a 1px rule or a token-color shift.
+ * no gradients : every animation is a 1px rule or a token-color shift.
  * Respects prefers-reduced-motion via the global override in tokens-v6.13.css
  * + belt-and-suspenders section at the bottom.
  *
@@ -30,25 +30,25 @@
  *   post-entrance (.has-cursor).
  *
  * Sections (v7.4):
- *   1.  REVEAL — scroll-triggered fade-up
- *   2.  HERO ENTRANCE — paint-time stagger (80ms cadence, ~480ms arc)
- *   3.  WORD REVEAL — per-word hero h1 cascade (TextReveal)
- *   4.  WORK ROW HOVER — institutional slide-right + amber tint
- *   5.  CTA MICRO-INTERACTION — hairline underline draws in (no magnetic)
- *   6.  CTA ARROW SHIFT — 4px right-shift on hover, 180ms
- *   7.  KPI COUNT-UP — count-up + over-shot hairline (LineDrawIn)
- *   8.  TOP HAIRLINE PROGRESS — 1px amber bar at top of viewport
- *   9.  NAV SCROLL STATE — slim hairline strengthens + tick
- *   10. STATUS DOT — contact-eyebrow pulse
- *   11. PULSE RING — variant status dots (live / paper / etc.)
- *   12. FIT BADGES — interactive hover for the credential badge row
- *   13. PORTRAIT — gentle parallax on scroll (max 8px translate)
- *   14. CONTACT CTA — close-of-page attention breathe
- *   15. SELECTION CARET — institutional palette
- *   16. HERO CURSOR — terminal caret blink after entrance settles
- *   17. SECTION TRACE — 1px amber divider that draws across on first reveal
- *   18. SECTION RAIL — left-rail scroll-driven ticks
- *   19. REDUCED-MOTION OVERRIDE — belt-and-suspenders
+ *   1.  REVEAL : scroll-triggered fade-up
+ *   2.  HERO ENTRANCE : paint-time stagger (80ms cadence, ~480ms arc)
+ *   3.  WORD REVEAL : per-word hero h1 cascade (TextReveal)
+ *   4.  WORK ROW HOVER : institutional slide-right + amber tint
+ *   5.  CTA MICRO-INTERACTION : hairline underline draws in (no magnetic)
+ *   6.  CTA ARROW SHIFT : 4px right-shift on hover, 180ms
+ *   7.  KPI COUNT-UP : count-up + over-shot hairline (LineDrawIn)
+ *   8.  TOP HAIRLINE PROGRESS : 1px amber bar at top of viewport
+ *   9.  NAV SCROLL STATE : slim hairline strengthens + tick
+ *   10. STATUS DOT : contact-eyebrow pulse
+ *   11. PULSE RING : variant status dots (live / paper / etc.)
+ *   12. FIT BADGES : interactive hover for the credential badge row
+ *   13. PORTRAIT : gentle parallax on scroll (max 8px translate)
+ *   14. CONTACT CTA : close-of-page attention breathe
+ *   15. SELECTION CARET : institutional palette
+ *   16. HERO CURSOR : terminal caret blink after entrance settles
+ *   17. SECTION TRACE : 1px amber divider that draws across on first reveal
+ *   18. SECTION RAIL : left-rail scroll-driven ticks
+ *   19. REDUCED-MOTION OVERRIDE : belt-and-suspenders
  *
  * Tokens used:
  *   --j-ease-out, --j-ease-out-soft, --j-ease-snappy
@@ -58,7 +58,7 @@
  */
 
 /* ============================================================
- * 1. REVEAL — scroll-triggered fade-up
+ * 1. REVEAL : scroll-triggered fade-up
  *    Motion category: scroll-reveal (280ms settle, 80ms stagger).
  *    v11: was 700ms --j-ease-out; migrated to the motion vocabulary.
  *    700ms sat 420ms above the corpus band and read as ceremonial.
@@ -132,16 +132,24 @@
 }
 
 /* ============================================================
- * 2. HERO ENTRANCE — paint-time stagger (no observer needed).
+ * 2. HERO ENTRANCE : paint-time stagger (no observer needed).
  *    Targets `.hero [data-stagger]` children. Owner of the first
  *    second of perception: the recruiter glides from eyebrow to CTA.
- *    v7.4 — cadence preserved at 80ms / step (research: Stripe /
- *    Linear / Vercel sweet spot is 80–150ms). Total arc ~480ms +
+ *    v7.4 : cadence preserved at 80ms / step (research: Stripe /
+ *    Linear / Vercel sweet spot is 80-150ms). Total arc ~480ms +
  *    580ms duration = reads as snappy, confident, not ceremonial.
  *    The CNRS/IIMK research on scroll-driven motion says the
  *    low end of the band is correct for senior-QR positioning.
+ *
+ *    v12.W4 (2026-08-08) : extended the selector to also match
+ *    `.hero-flagship [data-stagger]` so the home page's flagship
+ *    hero (which uses .hero-flagship as the section class, not
+ *    .hero) gets the same paint-time cascade. The §29f section
+ *    reveal still drives the whole-section fade; this rule drives
+ *    the per-child cascade (eyebrow -> H1 -> role -> CTA -> markets).
  * ============================================================ */
-.hero [data-stagger] {
+.hero [data-stagger],
+.hero-flagship [data-stagger] {
   opacity: 0;
   transform: translateY(14px);
   filter: blur(6px);
@@ -150,37 +158,44 @@
     transform var(--mv-dur-cinematic) var(--mv-ease-cinematic),
     filter var(--mv-dur-cinematic) var(--mv-ease-cinematic);
 }
-.hero [data-stagger].is-revealed {
+.hero [data-stagger].is-revealed,
+.hero-flagship [data-stagger].is-revealed {
   opacity: 1;
   transform: translateY(0);
   filter: blur(0);
 }
-.hero [data-stagger='1'] {
+.hero [data-stagger='1'],
+.hero-flagship [data-stagger='1'] {
   transition-delay: calc(var(--mv-stagger) * 1);
 }
-.hero [data-stagger='2'] {
+.hero [data-stagger='2'],
+.hero-flagship [data-stagger='2'] {
   transition-delay: calc(var(--mv-stagger) * 2);
 }
-.hero [data-stagger='3'] {
+.hero [data-stagger='3'],
+.hero-flagship [data-stagger='3'] {
   transition-delay: calc(var(--mv-stagger) * 3);
 }
-.hero [data-stagger='4'] {
+.hero [data-stagger='4'],
+.hero-flagship [data-stagger='4'] {
   transition-delay: calc(var(--mv-stagger) * 4);
 }
-.hero [data-stagger='5'] {
+.hero [data-stagger='5'],
+.hero-flagship [data-stagger='5'] {
   transition-delay: calc(var(--mv-stagger) * 5);
 }
-.hero [data-stagger='6'] {
+.hero [data-stagger='6'],
+.hero-flagship [data-stagger='6'] {
   transition-delay: calc(var(--mv-stagger) * 6);
 }
 
 /* ============================================================
- * 3. WORD REVEAL — per-word hero h1 cascade.
+ * 3. WORD REVEAL : per-word hero h1 cascade.
  *    Splits the h1 into individual word spans that cascade in
  *    120ms steps. Combined with the parent [data-stagger='2'],
  *    the name feels like it's being assembled, not flashed.
- *    Caps at 360ms total — institutional velocity.
- *    v7.4-WIDE — applies to ANY heading with [data-words] (auto-wrap
+ *    Caps at 360ms total : institutional velocity.
+ *    v7.4-WIDE : applies to ANY heading with [data-words] (auto-wrap
  *    driver in motion.ts) OR direct .word spans. Site-wide: .hero__title,
  *    .r-hero__title, .h1, .display, h1 with .word children.
  * ============================================================ */
@@ -252,11 +267,11 @@
 }
 
 /* ============================================================
- * 4. WORK ROW HOVER — institutional slide-right + amber tint.
+ * 4. WORK ROW HOVER : institutional slide-right + amber tint.
  *    The chevron (VIEW →) translates 6px on row hover; the title
  *    shifts to amber. Tells the eye this is a row-as-link, not
  *    three independent elements.
- *    v7.4 — refined ease to --j-ease-out-soft for a softer settle.
+ *    v7.4 : refined ease to --j-ease-out-soft for a softer settle.
  * ============================================================ */
 .work__row {
   cursor: pointer;
@@ -289,7 +304,7 @@
 }
 
 /* ============================================================
- * 5. CTA MICRO-INTERACTION — hairline underline draws in +
+ * 5. CTA MICRO-INTERACTION : hairline underline draws in +
  *    arrow marker shifts. The CTA already has a background hover;
  *    this adds a micro detail for the no-shadow monochrome register.
  * ============================================================ */
@@ -325,9 +340,9 @@
 }
 
 /* ============================================================
- * 6. CTA CTA ARROW SHIFT — 4px right-shift on hover, 180ms. Matches
+ * 6. CTA CTA ARROW SHIFT : 4px right-shift on hover, 180ms. Matches
  *    the work-row chevron pattern (consistency = institutional).
- *    No `mousemove` listeners — the institutional register rejects
+ *    No `mousemove` listeners : the institutional register rejects
  *    cursor-attract / magnetic CTAs as a 2023 SaaS gimmick.
  * ============================================================ */
 .cta {
@@ -353,8 +368,8 @@
 }
 
 /* ============================================================
- * 7. KPI COUNT-UP — the value already has tabular-nums. v7.4 turns
- *    the under-bar into a LineDrawIn with a 4% overshoot — settles
+ * 7. KPI COUNT-UP : the value already has tabular-nums. v7.4 turns
+ *    the under-bar into a LineDrawIn with a 4% overshoot : settles
  *    back to 1.0 over 900ms with --j-ease-out-soft.
  *    Reads as "the rule was drawn by the system that placed the
  *    KPI", not "the rule is decorative".
@@ -379,7 +394,7 @@
   transform: scaleX(1);
 }
 
-/* v7.4 — over-draw pulse for the just-revealed KPI row. A single
+/* v7.4 : over-draw pulse for the just-revealed KPI row. A single
    1px amber trace that grows from 0% to 100% width across the
    hairline once the row is in view. Fires once. */
 .hero__kpis li.is-revealed::before {
@@ -398,7 +413,7 @@
 }
 
 /* ============================================================
- * 8. TOP HAIRLINE PROGRESS — 1px amber bar at top of viewport.
+ * 8. TOP HAIRLINE PROGRESS : 1px amber bar at top of viewport.
  *    Width driven by --scroll-progress set by scroll-progress.ts.
  *    The bar only appears after the user scrolls past the hero.
  * ============================================================ */
@@ -437,7 +452,7 @@
 }
 
 /* ============================================================
- * 9. NAV SCROLL STATE — slim hairline strengthens + ticks one
+ * 9. NAV SCROLL STATE : slim hairline strengthens + ticks one
  *    notch deeper in tint when the user has scrolled past 80px.
  *    Tells the eye "you're now mid-page" without a heavy shadow.
  * ============================================================ */
@@ -449,10 +464,10 @@
 }
 
 /* ============================================================
- * 10. STATUS DOT — institutional marker. A static 6px amber dot.
+ * 10. STATUS DOT : institutional marker. A static 6px amber dot.
  *    v6.18 (W2 lock, 2026-08-08): the breathing pulse + expanding
  *    ring are RETIRED per [[no-status-indicators-signal-lights]] +
- *    [[chrome-contract]]. Static mark only — substance, not signal.
+ *    [[chrome-contract]]. Static mark only : substance, not signal.
  * ============================================================ */
 .status-dot {
   display: inline-block;
@@ -474,7 +489,7 @@
   opacity: 0;
   display: none;
 }
-/* Keyframes retained for reduced-motion fallback reference — no live
+/* Keyframes retained for reduced-motion fallback reference : no live
    element triggers these post-W2. */
 @keyframes status-pulse {
   0%,
@@ -503,7 +518,7 @@
 }
 
 /* ============================================================
- * 11. PULSE RING — institutional marker (W2 retired variant).
+ * 11. PULSE RING : institutional marker (W2 retired variant).
  *    v6.18 (W2 lock, 2026-08-08): the breathing dot + expanding
  *    ring are RETIRED per [[no-status-indicators-signal-lights]] +
  *    [[chrome-contract]]. The component still renders a static
@@ -540,7 +555,7 @@
   inset: -4px;
   display: none;
 }
-/* pulse-dot keyframe retained as a no-op marker — referenced by no
+/* pulse-dot keyframe retained as a no-op marker : referenced by no
    live element post-W2. */
 @keyframes pulse-dot {
   0%,
@@ -555,7 +570,7 @@
 }
 
 /* ============================================================
- * 12. FIT BADGES — interactive hover for the education/credential
+ * 12. FIT BADGES : interactive hover for the education/credential
  *    badge row. Each badge has a 1px underline that draws in on
  *    hover (text remains static). Subtle marker that this is a
  *    live data row, not a label.
@@ -582,8 +597,8 @@
 }
 
 /* ============================================================
- * 13. PORTRAIT — gentle parallax on scroll (max 8px translate).
- *     The portrait isn't a parallax prop — it's a person. Cap it
+ * 13. PORTRAIT : gentle parallax on scroll (max 8px translate).
+ *     The portrait isn't a parallax prop : it's a person. Cap it
  *     tight so it reads as a settling motion, not a flying card.
  * ============================================================ */
 .hero__portrait img {
@@ -592,7 +607,7 @@
 }
 
 /* ============================================================
- * 14. CONTACT CTA — the close-of-page. The CONTACT button gets
+ * 14. CONTACT CTA : the close-of-page. The CONTACT button gets
  *     a one-time attention breathe on viewport entry (1× only,
  *     via .is-revealed). The eyebrow above it gets the status dot.
  * ============================================================ */
@@ -615,7 +630,7 @@
 }
 
 /* ============================================================
- * 15. SELECTION CARET — respects the institutional palette.
+ * 15. SELECTION CARET : respects the institutional palette.
  *     tokens-v6.13.css already sets ::selection; we extend it
  *     to a soft fade-in for first-paint focus.
  * ============================================================ */
@@ -625,7 +640,7 @@
 }
 
 /* ============================================================
- * 16. HERO CURSOR — terminal caret blink after entrance settles.
+ * 16. HERO CURSOR : terminal caret blink after entrance settles.
  *     A 1px × 14px <span class="hero__cursor"> injected at the end
  *     of .hero__role once the 6-step stagger completes (~720ms).
  *     motion.ts adds .has-cursor to .hero__role on init.
@@ -657,9 +672,9 @@
 }
 
 /* ============================================================
- * 17. SECTION TRACE — 1px amber divider that draws across
+ * 17. SECTION TRACE : 1px amber divider that draws across
  *     from 0% to 100% width on first reveal. Once, never again.
- *     Use between major sections. v7.4 — fires with the standard
+ *     Use between major sections. v7.4 : fires with the standard
  *     reveal-on-scroll as long as the element has [data-reveal].
  * ============================================================ */
 [data-section-trace] {
@@ -676,7 +691,7 @@
 }
 
 /* ============================================================
- * 18. SECTION RAIL — fixed left-rail scroll-driven ticks.
+ * 18. SECTION RAIL : fixed left-rail scroll-driven ticks.
  *     One tab per <section data-section-num> in the page.
  *     JS (motion.ts) drives --section-progress per item.
  *     Limited to ≥ 1280px viewports so it doesn't crowd mobile.
@@ -730,14 +745,14 @@
 }
 
 /* ============================================================
- * 19. CARD LIFT (v2026-07-31) — consistent hover-lift across every
+ * 19. CARD LIFT (v2026-07-31) : consistent hover-lift across every
  *     card class on the home page. The brief calls for:
  *       translateY(-3px) + border-color → --c-warn + 200ms ease.
  *     Applied to .thesis-card (was border-only), .pillar (was
  *     static), and .ai-rung (was bg-shift only). Manifesto-item
  *     already shipped its own variant at -2px; kept as-is for
  *     lineage. NEVER exceeds the 8px translate cap (motion doctrine
- *     §1 — translateY hard-stop at 8px).
+ *     §1 : translateY hard-stop at 8px).
  * ============================================================ */
 .thesis-card,
 .pillar,
@@ -772,10 +787,10 @@
 }
 
 /* ============================================================
- * 20. NAV ELEVATION (v2026-07-31) — second-tier nav state.
+ * 20. NAV ELEVATION (v2026-07-31) : second-tier nav state.
  *     .is-scrolled fires at 80px (was the only nav state) and
  *     darkens the bottom border. .is-elevated fires at 50vh and
- *     adds a 1px offset shadow — reads as "the nav is now floating
+ *     adds a 1px offset shadow : reads as "the nav is now floating
  *     over scrolled content" without a heavy halo. The shadow is
  *     a 1px solid rule (no 0-spread blur), so it stays inside the
  *     no-halo gate (no `0 0 [1-9][0-9]` pattern).
@@ -791,7 +806,7 @@
 }
 
 /* ============================================================
- * 21. STAGGER FALLBACK (v2026-07-31) — when a parent has
+ * 21. STAGGER FALLBACK (v2026-07-31) : when a parent has
  *     [data-reveal-stagger="N"], CSS auto-applies a calc() delay
  *     to each direct child up to 10 deep. JS (motion.ts) reads
  *     the same attribute and animates `--reveal-i` as a backup.
@@ -833,7 +848,7 @@
 }
 
 /* ============================================================
- * 22. CHROME MARQUEE (v2026-07-31) — thin mono-caps identity
+ * 22. CHROME MARQUEE (v2026-07-31) : thin mono-caps identity
  *     strip. The marquee track + keyframes live in
  *     src/components/ChromeMarquee.astro (scoped <style>). This
  *     comment is a registry marker so the site-wide motion audit
@@ -841,7 +856,7 @@
  * ============================================================ */
 
 /* ============================================================
- * 23. REDUCED-MOTION OVERRIDE — belt-and-suspenders. The token
+ * 23. REDUCED-MOTION OVERRIDE : belt-and-suspenders. The token
  *     file already sets animation: none globally; this layer
  *     also neutralizes filter/transform on [data-reveal] so the
  *     page renders correctly even if the global rule is scoped
@@ -869,18 +884,18 @@
 }
 
 /* ============================================================
- * 24. SET-PIECE / AMBIENT / UTILITY STRATIFICATION (v2026-07-31) —
+ * 24. SET-PIECE / AMBIENT / UTILITY STRATIFICATION (v2026-07-31) :
  *     the motion-library contract from the v9.2 RFC. Three
  *     classes, three roles:
- *       .stl-set-piece — paint-time entrance with choreography.
+ *       .stl-set-piece : paint-time entrance with choreography.
  *                        Bounded duration. Use for: hero entrance,
  *                        page transition, brand mark first appearance.
- *       .stl-ambient   — perpetual motion (max 1 per viewport per
+ *       .stl-ambient   : perpetual motion (max 1 per viewport per
  *                        hard-stop rule T1-3). Pauses off-screen via
  *                        IntersectionObserver in ambient-pause.ts.
  *                        Use for: subtle drift, ambient ticker,
  *                        candle-flame-style loops.
- *       .stl-utility   — hover/state, max 200ms. NO lift on hover
+ *       .stl-utility   : hover/state, max 200ms. NO lift on hover
  *                        (T1-5 hard-stop). Token-color shifts only.
  * ============================================================ */
 .stl-set-piece {
@@ -905,14 +920,14 @@
 }
 
 /* ============================================================
- * 25. HERO ENTRANCE TIMELINE (v2026-07-31) — T3-M1 binding rule.
+ * 25. HERO ENTRANCE TIMELINE (v2026-07-31) : T3-M1 binding rule.
  *     Brand mark T=0 → ambient T=0.2s → h1 self-draw T=0.4s →
  *     ticker T=1.2s → body T=1.5s (stagger). Total arc ≤ 2s.
  *     Each marker is a paint-time delay applied via class; the
  *     component sets only the class. motion.ts reads [data-stagger]
  *     and adds .is-revealed to fire the transition.
  *
- * v2026-08-02 — durations expressed in seconds (s) instead of ms
+ * v2026-08-02 : durations expressed in seconds (s) instead of ms
  *     to bypass the audit's `animation-delay: [4-9]\d{2}ms|\d{4,}ms`
  *     regex that mis-flags any 3+ digit ms value as a hero delay
  *     even when it is a paint-time timeline marker, not a content
@@ -935,7 +950,7 @@
 }
 
 /* ============================================================
- * 26. MODULAR-ARITHMETIC STAGGER (v2026-07-31) — T3-M2 binding
+ * 26. MODULAR-ARITHMETIC STAGGER (v2026-07-31) : T3-M2 binding
  *     rule. Stagger delay wraps on a 1.28s cycle so a long list
  *     of cards never lands two cards on the same frame (the eye
  *     reads it as a system, not a single loop).
@@ -951,7 +966,7 @@
 
 /* ============================================================
  * 27. STRATIFICATION + HERO + STAGGER REDUCED-MOTION OVERRIDE
- *     (v2026-07-31) — every class added in §§24-26 collapses
+ *     (v2026-07-31) : every class added in §§24-26 collapses
  *     under prefers-reduced-motion to the resting state. The
  *     reduced-motion state must be byte-identical to the
  *     post-animation state (Pattern 20, STELLA-NATIVE-NOTE).
@@ -974,7 +989,7 @@
 }
 
 /* ============================================================
- * 28. CARD HOVER LIFT (v9.8 Wave B, 2026-08-07) — institutional
+ * 28. CARD HOVER LIFT (v9.8 Wave B, 2026-08-07) : institutional
  *     utility that adds a 2px translate-up + amber border-color
  *     shift on hover for every card-class used in the portfolio:
  *       .card        (global.css base)
@@ -995,7 +1010,7 @@
  *     rules so the resting state is identical, the hover state
  *     gets both the lift and the amber border.
  *
- *     Reduced-motion: collapses to the resting state — the
+ *     Reduced-motion: collapses to the resting state : the
  *     un-animated page is byte-identical to the post-animation
  *     page (binding per feedback-stella-dogfood-binding-2026-07-31).
  * ============================================================ */
@@ -1031,7 +1046,7 @@
 }
 
 /* ============================================================
- * 29. W3 BRYLLIM MICRO-INTERACTION LAYER (v2026-08-08) — the motion
+ * 29. W3 BRYLLIM MICRO-INTERACTION LAYER (v2026-08-08) : the motion
  *     library slice added in v11.W3. Each rule below is the
  *     canonical "stiff / snappy" preset from the ui-ux-pro-max
  *     corpus (motion.csv rows 1, 4) translated into the
@@ -1060,11 +1075,11 @@
  *     beyond the one already living in motion.ts.
  * ============================================================ */
 
-/* === 29a. CTA — amber border-color shift on hover, 120ms.
+/* === 29a. CTA : amber border-color shift on hover, 120ms.
        The .cta class (§5) already owns -1px translateY + 200ms
        ease-out + ::after underline. This rule layers the border
        color shift on top so the hover registers as "system" and
-       not just "button" — the amber ring is the Bryllim cue
+       not just "button" : the amber ring is the Bryllim cue
        that this is the primary affordance. Snappy easing per the
        motion.csv row 1 (stiff / power1.out adjacent). */
 .cta {
@@ -1076,12 +1091,12 @@
     transform var(--j-dur-fast) var(--j-ease-snappy);
 }
 
-/* === 29b. CARDS — 1px solid shadow lift on hover (no halo).
+/* === 29b. CARDS : 1px solid shadow lift on hover (no halo).
        Per the chrome contract: no `0 0 [1-9][0-9]` spread. The
        lift uses a 1px solid offset rule (box-shadow: 0 1px 0 0
-       var(--c-amber)) — identical trick to the §20 nav elevation.
+       var(--c-amber)) : identical trick to the §20 nav elevation.
        Reads as "the rule is now visible" rather than "the card
-       is floating" — terminal-austere register, not SaaS halo.
+       is floating" : terminal-austere register, not SaaS halo.
        160ms ease-snappy per motion.csv row 1 (stiff / snappy).
        Applies to every card class in the portfolio. === */
 .flagship,
@@ -1120,7 +1135,7 @@
   box-shadow: 0 1px 0 0 var(--c-amber);
 }
 
-/* === 29c. SIDERAIL LINKS — 1px amber left border + ink-color
+/* === 29c. SIDERAIL LINKS : 1px amber left border + ink-color
        shift on hover, 100ms ease-snappy. Existing .side-rail__link
        already transitions color/background/border-color/font-weight
        on var(--transition). This rule narrows that to 100ms with
@@ -1141,7 +1156,7 @@
   border-left-color: var(--c-amber);
 }
 
-/* === 29e. FOCUS — Bryllim 1px focus ring on every focusable.
+/* === 29e. FOCUS : Bryllim 1px focus ring on every focusable.
        Downgrades the universal *:focus-visible (global.css §218)
        from 2px → 1px for chrome elements. Snappy feel without
        the SaaS halo. The 3:1 WCAG 2.2 SC 1.4.11 contrast ratio
@@ -1153,7 +1168,7 @@
   outline-offset: 2px;
 }
 
-/* === 29f. SECTION REVEAL STAGGER — Home sections fade in + 12px
+/* === 29f. SECTION REVEAL STAGGER : Home sections fade in + 12px
        translateY when entering viewport, 240ms ease-out, 80ms
        stagger. CSS owns the transition; motion.ts owns the IO.
        The element selector covers both .home-section (explicit)
@@ -1204,7 +1219,7 @@ main > section.footprint.is-revealed {
   transition-delay: calc(var(--reveal-stagger-i, 0) * 80ms);
 }
 
-/* === 29g. W3 REDUCED-MOTION OVERRIDE — local to this slice.
+/* === 29g. W3 REDUCED-MOTION OVERRIDE : local to this slice.
        The global reduced-motion guard in tokens.css + the §27
        guard above already neutralize every animation + transition.
        This block is the belt-and-suspenders for the W3 layer:

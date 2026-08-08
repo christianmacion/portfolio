@@ -3,14 +3,14 @@ title: 'Deflated Sharpe Ratio as a Built-in Pipeline Gate'
 slug: 'deflated-sharpe-gate'
 category: 'Quantitative Research'
 order: 5
-client: 'systematic-strategy desk (NDA-protected; closed past contract 03/2026 – 06/2026)'
+client: 'systematic-strategy desk (NDA-protected; closed past contract 03/2026 - 06/2026)'
 problem: |
-  Naive Sharpe ratios ignore the search effort — if you try 100 variants of an idea, the
+  Naive Sharpe ratios ignore the search effort : if you try 100 variants of an idea, the
   best-looking one will overstate the true edge. The desk needed this multiple-testing
   correction built into the validation pipeline, not stapled on at the end.
 approach: |
   Implemented **Deflated Sharpe Ratio (DSR)** with a scipy-free numpy implementation, plus
-  **CSCV-based Probability of Backtest Overfit (PBO)** and **Minimum Backtest Length (MinBTL)** —
+  **CSCV-based Probability of Backtest Overfit (PBO)** and **Minimum Backtest Length (MinBTL)** :
   the three canonical multiple-testing corrections. All three run as gates G-23 → G-25 in the
   31-gate harness, every strategy candidate.
 evidence:

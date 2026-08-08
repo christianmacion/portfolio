@@ -4,7 +4,7 @@ title: Time-Series Momentum + Vol Targeting
 role: quant
 order: 3
 summary: 'Vol-targeting lifts Sharpe 0.27 → 0.39 and halves max DD (−62% → −30%).'
-summary_long: "A time-series momentum strategy on a single crypto series, with and without vol targeting. The headline isn't alpha — it's risk management that doesn't break under drawdown."
+summary_long: "A time-series momentum strategy on a single crypto series, with and without vol targeting. The headline isn't alpha : it's risk management that doesn't break under drawdown."
 stack:
   - Python (numpy / pandas / matplotlib)
   - Time-series momentum signal
@@ -51,7 +51,7 @@ Time-series momentum (long positive-trend, flat/short negative-trend) is a docum
     { value: -30, label: 'Max DD\ntarget (%)' },
   ]}
   title="Risk-management lift: vol-targeting on/off"
-  caption="Left pair: Sharpe 0.27 → 0.39 (+44%). Right pair: Max drawdown −62% → −30% (−52%). Same signal, different position sizing — vol targeting doesn't make alpha, it makes calm. Currently deployed as my live paper-trading strategy."
+  caption="Left pair: Sharpe 0.27 → 0.39 (+44%). Right pair: Max drawdown −62% → −30% (−52%). Same signal, different position sizing : vol targeting doesn't make alpha, it makes calm. Currently deployed as my live paper-trading strategy."
   yMin={-70}
   yMax={10}
 />
@@ -61,7 +61,7 @@ Time-series momentum (long positive-trend, flat/short negative-trend) is a docum
 | Sharpe | 0.27       | **0.39**     |
 | Max DD | −62%       | **−30%**     |
 
-Vol targeting doesn't generate alpha — it generates **calm**. The Sharpe lift and the DD halving are the same story at different frequencies.
+Vol targeting doesn't generate alpha : it generates **calm**. The Sharpe lift and the DD halving are the same story at different frequencies.
 
 ## What's transferable
 
@@ -75,10 +75,10 @@ A vol-targeted BTC/USDT strategy at 30% annualized target vol has a capacity tha
 - **Position size at target vol:** \$1M notional × 30% / √(252 × 1) ≈ \$19k daily P&L σ, scaling to ≈ 0.18 BTC notional at \$60k BTC
 - **Linear-impact cost model:** slippage ≤ 5 bps at < 5% ADV participation
 
-**Capacity estimate:** ≈ **\$3–5M notional at &lt;5 bps impact** on BTC/USDT alone. Beyond \$5M, the linear-impact assumption begins to understate true slippage; the cost model in project 08 would need a square-root-impact calibration.
+**Capacity estimate:** ≈ **\$3-5M notional at &lt;5 bps impact** on BTC/USDT alone. Beyond \$5M, the linear-impact assumption begins to understate true slippage; the cost model in project 08 would need a square-root-impact calibration.
 
-**Cross-asset capacity:** the same signal on ETH/USDT or SOL/USDT is &lt;1% of the BTC-tier capacity — these are venue/asset class specific. The strategy is _not_ capacity-unconstrained; it's capacity-bounded at the venue level.
+**Cross-asset capacity:** the same signal on ETH/USDT or SOL/USDT is &lt;1% of the BTC-tier capacity : these are venue/asset class specific. The strategy is _not_ capacity-unconstrained; it's capacity-bounded at the venue level.
 
 ## Live-paper record
 
-This strategy is currently running as a paper-trade. See <a href="/positions">/positions</a> for the live equity curve, realized slippage, and weekly updates. The current live period is 50 trading days, +12% return, max DD −3.6% — confirming the calm-regime behaviour predicted by the backtest.
+This strategy is currently running as a paper-trade. See <a href="/positions">/positions</a> for the live equity curve, realized slippage, and weekly updates. The current live period is 50 trading days, +12% return, max DD −3.6% : confirming the calm-regime behaviour predicted by the backtest.

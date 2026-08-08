@@ -1,6 +1,6 @@
 ---
 /**
- * projects/[...slug].astro — single project detail page.
+ * projects/[...slug].astro : single project detail page.
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
 import MetricPill from '@components/MetricPill.astro';
@@ -95,7 +95,7 @@ const laneClass = role === 'ai' ? 'pill--brand' : 'pill--accent';
       </div>
     </header>
 
-    {/* v7.4-WIDE — discipline mini-marquee (5 frames) between header and body. */}
+    {/* v7.4-WIDE : discipline mini-marquee (5 frames) between header and body. */}
     <Marquee
       items={[
         { head: 'EVAL-FIRST', tail: '31 GATES', accent: 'warn' },
@@ -149,7 +149,7 @@ const laneClass = role === 'ai' ? 'pill--brand' : 'pill--accent';
 <style>
   .proj__head {
     padding-block: var(--sp-8) var(--sp-6);
-    /* v6.10.29 — institutional: drop decorative amber radial-gradient hero
+    /* v6.10.29 : institutional: drop decorative amber radial-gradient hero
        chrome (chrome≠data rule). Border + token bg only. */
     background: var(--c-bg);
     border-bottom: var(--border);
@@ -165,7 +165,7 @@ const laneClass = role === 'ai' ? 'pill--brand' : 'pill--accent';
   .proj__crumb-sep {
     color: var(--c-ink-3);
   }
-  /* v9.3 a11y 96 follow-up (2026-08-01) — global .pill--accent uses
+  /* v9.3 a11y 96 follow-up (2026-08-01) : global .pill--accent uses
      --c-phi = --j-warn (dark: #a88a3e) on the amber-tinted breadcrumb
      pill bg (effective #2e271a) = 4.48:1, just below 4.5:1 threshold
      on /projects/quant/*. Scope the lift to .proj__crumb only so other
@@ -182,7 +182,7 @@ const laneClass = role === 'ai' ? 'pill--brand' : 'pill--accent';
     overflow: hidden;
     background: var(--c-bg-2);
   }
-  /* v6.10.6 — removed decorative drop-shadow + inset amber ring.
+  /* v6.10.6 : removed decorative drop-shadow + inset amber ring.
      Flat border is the institutional chrome pattern. */
   .proj__hero-img {
     display: block;

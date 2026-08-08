@@ -1,21 +1,21 @@
 ---
 /**
- * V613Fonts.astro — CONDITIONAL font loader for v6.13 (Jane Street × Noir) surfaces.
+ * V613Fonts.astro : CONDITIONAL font loader for v6.13 (Jane Street × Noir) surfaces.
  *
- * v6.13.1 — closes deferred issue #2 + #3 from v6.13.0:
- *   • Source Serif 4 (display) — was missing; Georgia was the system fallback
+ * v6.13.1 : closes deferred issue #2 + #3 from v6.13.0:
+ *   • Source Serif 4 (display) : was missing; Georgia was the system fallback
  *     on macOS only, missing on Chromium-on-Linux deploy targets
- *   • JetBrains Mono (chrome) — re-added after v6.11.6 removed it; needed
+ *   • JetBrains Mono (chrome) : re-added after v6.11.6 removed it; needed
  *     by the new --j-ff-mono scale on v6.13 surfaces
  *
- * v8.2.3 — dropped JetBrains-Mono 600 (zero uses in src/).
+ * v8.2.3 : dropped JetBrains-Mono 600 (zero uses in src/).
  *   The 500 weight remains (used by graph-stream eyebrow, desk-events th).
  *
  * Component is rendered by BaseLayout ONLY when the page opts in via
  * `surface="v6-13"`. On v6.13 pages the frontmatter imports below run
  * (the @fontsource CSS files are emitted to dist) and the body is empty
  * (no DOM cost). On legacy surfaces the component is not rendered and
- * Astro tree-shakes the imports — zero bytes ship.
+ * Astro tree-shakes the imports : zero bytes ship.
  *
  * Latin-only subsets. Site is English-only; full character-set imports
  * would add ~470 KB across both families at 400/500/600/700 weights
@@ -28,4 +28,4 @@ import '@fontsource/jetbrains-mono/latin-400.css';
 import '@fontsource/jetbrains-mono/latin-500.css';
 ---
 
-{/* No DOM. Pure side-effect — CSS imports only. */}
+{/* No DOM. Pure side-effect : CSS imports only. */}

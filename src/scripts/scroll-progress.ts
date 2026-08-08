@@ -1,16 +1,16 @@
 /**
- * scroll-progress.ts — top-of-viewport 2px amber progress bar.
+ * scroll-progress.ts : top-of-viewport 2px amber progress bar.
  *
  * Pattern from Medium.com / Stripe-docs. Hidden until user scrolls past
  * the first 8px, then fills as the document scrolls. rAF-throttled,
  * respects prefers-reduced-motion (the bar still tracks scroll, but
- * does not animate — it just snaps to the right width).
+ * does not animate : it just snaps to the right width).
  *
  * Idempotent: re-running adds a single bar element.
  */
 const PROGRESS_ID = 'scroll-progress-bar';
 
-// === v8.3 — chrome token fallback constant (defensive against missing tokens) ===
+// === v8.3 : chrome token fallback constant (defensive against missing tokens) ===
 // Mirrors the legacy Jane-Street-era `--c-amber` fallback for the
 // scroll-progress bar fill. The `var(--c-amber, …)` pattern was used
 // because this script may fire before the v6-13 surface CSS is parsed.

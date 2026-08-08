@@ -1,5 +1,5 @@
 /**
- * circle-check — circle (drawn as a closed-path arc) + check inside.
+ * circle-check : circle (drawn as a closed-path arc) + check inside.
  * Single path with two subpaths: the circle outline and the checkmark.
  * Use when the "checked" state needs visual prominence above the row level
  * (status badges, success toasts).

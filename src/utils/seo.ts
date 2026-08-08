@@ -1,5 +1,5 @@
 /**
- * seo.ts — meta / JSON-LD helpers
+ * seo.ts : meta / JSON-LD helpers
  *
  * Canonical URLs use Astro.url which already includes the configured `base`,
  * so we never manually prepend it. SITE_URL is the deployment root (without
@@ -171,7 +171,7 @@ export function breadcrumbJsonLd(crumbs: Crumb[]) {
  * rich project carousels if the page qualifies for one.
  *
  * @alias imported via `@utils/seo` alias from projects/index.astro:26
- * — knip's tsconfig-path resolver doesn't follow the alias reliably.
+ * : knip's tsconfig-path resolver doesn't follow the alias reliably.
  */
 export function projectListJsonLd(
   projects: Array<{

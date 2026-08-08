@@ -1,5 +1,5 @@
 /**
- * target — three concentric circles + center dot.
+ * target : three concentric circles + center dot.
  * Work/case-study category: goal, objective, KPI indicator.
  */
 export const SVG_PATH =

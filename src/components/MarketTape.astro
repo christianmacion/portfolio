@@ -1,21 +1,26 @@
 ---
 /**
- * MarketTape.astro — v6.1 "Bloomberg-terminal" scrolling equity tape.
+ * MarketTape.astro : v12 live-data Bloomberg-terminal tape.
  *
- * Server-rendered. Zero runtime JS. The track is duplicated so the
- * 60s linear keyframes loop seamlessly without a snap. Color is driven
- * by sign of `deltaPct` (pass/fail); volatility string is shown as a
- * faint right-aligned glyph cluster.
+ * Server-renders with deterministic seeded values so first paint shows a
+ * plausible tape without flash. After hydration, a JS module fetches
+ * /api/market/ticker every 60s and replaces the inner track with live
+ * Yahoo + CoinGecko + ECB quotes. Each item carries a `data-source`
+ * attribute so the chrome (and axe-debug, and copy-paste reviewers) can
+ * see which upstream is feeding it.
+ *
+ * The trailing `lastSync HH:MM:SSZ` badge sits at the right edge and
+ * updates on every refresh, so visitors can see the freshness directly.
+ *
+ * Constraints (BINDING per Owner directive + chrome contract):
+ *   - NO em-dashes anywhere in user-visible text
+ *   - NO halo / glow / gradient / box-shadow with non-zero blur
+ *   - NO signal-lights / pulse rings / "available" dots
+ *   - WCAG 2.2 AA contrast; amber-only sentiment (F14)
  *
  * Usage:
- *   <MarketTape />                                    // default 16 symbols seeded from BUILD_DATE
+ *   <MarketTape />                                    // default 16 symbols (seeded)
  *   <MarketTape symbols={[{sym, px, deltaPct, vol}]} /> // per-page override
- *
- * `symbols` defaults to 16 deterministic entries: 9 of Christian's quant
- * strategies (cross-linkable to /projects/<id>) + 7 headline indices
- * (S&P, NDX, DJI, DXY, VIX, BTC-USD, GOLD). Numbers seeded from
- * `buildSeed()` so re-rendering the same build gives byte-identical
- * output and the next day's build shifts the series.
  */
 import { seedFromString, walk, formatPx, formatPct, buildSeed } from '@utils/prng';
 import { INDEX_SEEDS, getIndexSnap } from '@utils/markets-data';
@@ -25,6 +30,8 @@ interface Symbol {
   px: number;
   deltaPct: number;
   vol?: string;
+  /** Optional data-source attribution (yahoo | coingecko | ecb). */
+  source?: 'yahoo' | 'coingecko' | 'ecb' | 'static';
 }
 interface Props {
   symbols?: Symbol[];
@@ -39,20 +46,8 @@ const {
   trailing = 'series seeded from BUILD_DATE for reproducibility',
 } = Astro.props;
 
-// === Default symbol set ===
-// Seed from BUILD_DATE so the same build → same numbers; next-day build
-// → fresh numbers. OrderBook/MiniSpark share the same seed string so the
-// whole page reads as a coherent deterministic session.
 const rng = seedFromString(buildSeed() + '::tape');
 
-// 9 quant strategies — IDs match the filenames under src/content/projects/quant/.
-// Each starts with a baseline price (educational units, notional); the
-// walk drifts it ±10% with a per-strategy volatility that reflects the
-// strategy's character (carry/cointegration low-vol, momentum higher-vol).
-// v6.11.10 — add `ticker` for tape display. Full IDs are too long for the
-// 1440 px viewport when 3 strategies are positioned near the right edge —
-// they overlap the .tape__stop label. Tape shows the short form; project
-// links still resolve via the full `id`.
 const stratSeeds: { id: string; ticker: string; base: number; sigma: number }[] = [
   { id: '01-deflated-sharpe', ticker: '01·DEFLATED', base: 100, sigma: 1.6 },
   { id: '02-cross-sectional-momentum', ticker: '02·XS-MOM', base: 100, sigma: 1.4 },
@@ -65,68 +60,59 @@ const stratSeeds: { id: string; ticker: string; base: number; sigma: number }[] 
   { id: '09-lookahead-bias-audit', ticker: '09·LOOKAHD', base: 100, sigma: 0.4 },
 ];
 
-// 7 headline market indicators — real instrument names, public-domain
-// data shape. Vol columns are illustrative (e.g., VIX in points,
-// BTC in %). Source-of-truth is now src/utils/markets-data.ts so the
-// tape and the /markets/ stat cards agree on the same instrument.
-
 const indexSeeds = INDEX_SEEDS;
 
-// Compose defaults: 9 strategies + 7 indices = 16 tape entries.
 const defaultSymbols: Symbol[] = [];
 
-// Strategies — 100 ticks each, last value is the tape "now" price;
-// delta is computed vs an in-sample baseline of 100.
 for (const s of stratSeeds) {
   const series = walk(rng, s.base, s.sigma, 100);
   const px = +series[series.length - 1].toFixed(2);
   const deltaPct = +(((px - s.base) / s.base) * 100).toFixed(2);
-  defaultSymbols.push({ sym: s.ticker, px, deltaPct, vol: 'σ' + s.sigma.toFixed(1) });
+  defaultSymbols.push({ sym: s.ticker, px, deltaPct, vol: 'σ' + s.sigma.toFixed(1), source: 'static' });
 }
 for (const i of indexSeeds) {
-  // Pull from the shared markets-data cache so the tape and the
-  // stat cards on /markets/ render IDENTICAL px + deltaPct for SPX,
-  // DXY, VIX, BTC-USD, etc.
   const snap = getIndexSnap(i.sym);
   if (!snap) continue;
-  defaultSymbols.push({ sym: snap.sym, px: snap.px, deltaPct: snap.deltaPct, vol: snap.volUnit });
+  defaultSymbols.push({
+    sym: snap.sym,
+    px: snap.px,
+    deltaPct: snap.deltaPct,
+    vol: snap.volUnit,
+    source: 'static',
+  });
 }
 
 const items = (symbols ?? defaultSymbols).map((it) => ({
   ...it,
-  // Render-time formatted strings. Mono numerics in CSS handle alignment.
   pxStr: formatPx(it.px, it.px >= 1000 ? 2 : 2),
   deltaStr: formatPct(it.deltaPct),
-  // v6.11.10 — F14 amber-only rule. Sign carried by intensity
-  // (bright vs soft amber), not hue. No green/red traffic-light.
+  // F14 amber-only rule. Sign carried by intensity (bright vs soft amber),
+  // not hue. No green/red traffic-light.
   colorClass: Math.abs(it.deltaPct) < 0.005 ? 'muted' : it.deltaPct > 0 ? 'pass' : 'fail',
 }));
 
-// v6.11.10 — IDs we cross-link to /projects/<id>; everything else is
-// a plain label. The tape `sym` is a short ticker form; the URL slug
-// is still the full `id`. Resolve via lookup map.
 const idByTicker = new Map(stratSeeds.map((s) => [s.ticker, s.id] as const));
 
-// Trailing stop glyph + the in-DOM disclosure.
 const stop = trailing;
 ---
 
-<div class="tape" role="region" aria-label="Live market tape (deterministic)">
+<div
+  class="tape"
+  role="region"
+  aria-label="Live market tape"
+  data-component="market-tape"
+  data-live-url="/api/market/ticker"
+>
   <div class="tape__viewport">
-    <div class="tape__track" style={`--tape-dur: ${durationSec}s`}>
+    <div class="tape__track" style={`--tape-dur: ${durationSec}s`} data-track>
       {
-        // v6.10.11 — linkable symbols are always quant strategies
-        // (sourced from stratSeeds); the lane is hardcoded. If AI
-        // strategies ever become linkable, look up the lane from
-        // getCollection('project') at build time.
-        // v6.11.10 — tape uses short `ticker` form; resolve to full
-        // project slug via idByTicker for the href.
         [...items, ...items].map((it) => {
           const projectId = idByTicker.get(it.sym);
           return (
             <a
               class:list={['tape__item', `tape__item--${it.colorClass}`]}
               href={projectId ? `/projects/quant/${projectId}` : undefined}
+              data-source={it.source ?? 'static'}
             >
               <span class="tape__sym mono">{it.sym}</span>
               <span class="tape__px mono">{it.pxStr}</span>
@@ -138,14 +124,129 @@ const stop = trailing;
       }
     </div>
   </div>
-  <div class="tape__stop mono" aria-hidden="true">{stop}</div>
+  <div class="tape__stop mono" aria-hidden="true" data-stop>
+    <span class="tape__stop-label">{stop}</span>
+    <span class="tape__stop-sep" aria-hidden="true">·</span>
+    <time class="tape__stop-sync mono" data-last-sync datetime="">
+      sync pending
+    </time>
+  </div>
 </div>
+
+<script>
+  // Live ticker refresh - fetch /api/market/ticker every 60s, replace
+  // the track with fresh quotes. The chrome (data-source attribution,
+  // lastSync badge) updates in place; the scroll keyframe keeps running.
+
+  type TickerItem = {
+    sym: string;
+    px: number;
+    deltaPct: number;
+    source: 'yahoo' | 'coingecko' | 'ecb';
+    currency?: string;
+    label?: string;
+  };
+
+  type TickerResponse = {
+    ok: true;
+    items: TickerItem[];
+    lastSync: string;
+    sources: { yahoo: string | null; coingecko: string | null; ecb: string | null };
+    status: { yahoo: 'live' | 'cached' | 'error'; coingecko: 'live' | 'cached' | 'error'; ecb: 'live' | 'cached' | 'error' };
+  };
+
+  function formatPx(px: number): string {
+    if (px >= 1000) return px.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    if (px >= 1) return px.toFixed(4).replace(/\.?0+$/, '');
+    return px.toFixed(2);
+  }
+
+  function formatPct(pct: number): string {
+    if (Math.abs(pct) < 0.005) return '0.00%';
+    const sign = pct > 0 ? '+' : '';
+    return `${sign}${pct.toFixed(2)}%`;
+  }
+
+  function colorClass(pct: number): 'muted' | 'pass' | 'fail' {
+    if (Math.abs(pct) < 0.005) return 'muted';
+    return pct > 0 ? 'pass' : 'fail';
+  }
+
+  function isTickerResponse(raw: unknown): raw is TickerResponse {
+    if (!raw || typeof raw !== 'object') return false;
+    const o = raw as Record<string, unknown>;
+    return o.ok === true && Array.isArray(o.items) && typeof o.lastSync === 'string';
+  }
+
+  function isItem(raw: unknown): raw is TickerItem {
+    if (!raw || typeof raw !== 'object') return false;
+    const o = raw as Record<string, unknown>;
+    return (
+      typeof o.sym === 'string' &&
+      typeof o.px === 'number' &&
+      typeof o.deltaPct === 'number' &&
+      (o.source === 'yahoo' || o.source === 'coingecko' || o.source === 'ecb')
+    );
+  }
+
+  function lastSyncHHMMSS(iso: string): string {
+    const m = iso.match(/T(\d{2}:\d{2}:\d{2})/);
+    return m ? `${m[1]}Z` : iso;
+  }
+
+  async function refreshTape(tape: HTMLElement): Promise<void> {
+    const url = tape.dataset.liveUrl;
+    if (!url) return;
+    const track = tape.querySelector<HTMLElement>('[data-track]');
+    const lastSync = tape.querySelector<HTMLElement>('[data-last-sync]');
+    if (!track || !lastSync) return;
+    try {
+      const res = await fetch(url, { headers: { Accept: 'application/json' } });
+      if (!res.ok) return;
+      const raw: unknown = await res.json();
+      if (!isTickerResponse(raw)) return;
+      const items = raw.items.filter(isItem);
+      if (items.length === 0) return;
+      // Render fresh items (duplicated so the keyframe loop is seamless).
+      const html = items
+        .map((it) => {
+          const cls = colorClass(it.deltaPct);
+          return `<a class="tape__item tape__item--${cls}" data-source="${it.source}"><span class="tape__sym mono">${it.sym}</span><span class="tape__px mono">${formatPx(it.px)}</span><span class="tape__delta mono">${formatPct(it.deltaPct)}</span></a>`;
+        })
+        .join('');
+      // Replace the track contents in place - keep the original children count
+      // so the -50% translateX loop distance stays correct.
+      track.innerHTML = html + html;
+      // Update the lastSync badge.
+      const stamp = lastSyncHHMMSS(raw.lastSync);
+      lastSync.textContent = `sync ${stamp}`;
+      lastSync.setAttribute('datetime', raw.lastSync);
+    } catch {
+      // Network failure: leave the previous (or seeded) tape visible.
+    }
+  }
+
+  function init(): void {
+    const tapes = document.querySelectorAll<HTMLElement>('[data-component="market-tape"]');
+    tapes.forEach((tape) => {
+      // First refresh immediately, then every 60s.
+      void refreshTape(tape);
+      window.setInterval(() => void refreshTape(tape), 60_000);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+</script>
 
 <style>
   .tape {
-    background: var(--c-tape);
-    color: var(--ink-on-tape);
-    border-block: 1px solid var(--c-white-mist);
+    background: var(--surface-paper);
+    color: var(--c-ink-2);
+    border-block: 1px solid var(--c-rule);
     position: relative;
     overflow: hidden;
     user-select: none;
@@ -153,92 +254,71 @@ const stop = trailing;
   .tape__viewport {
     overflow: hidden;
     width: 100%;
-    /* v6.3 polish — viewport now 44 px tall so each tape__item has
-       ≥ 44 px tap-target height (was 19 px; audit flagged ~20
-       markers on /markets + /prediction). 8 px more vertical
-       breathing room reads as a tighter institutional banner, not
-       a layout shift. */
     height: 44px;
     display: flex;
     align-items: center;
   }
   .tape__track {
     display: inline-flex;
-    gap: var(--sp-6);
+    gap: var(--s-6);
     white-space: nowrap;
-    padding-inline: var(--sp-5);
-    /* 60s default; per-instance override via inline `--tape-dur` */
+    padding-inline: var(--s-5);
     animation: tape-scroll var(--tape-dur, 60s) linear infinite;
     will-change: transform;
   }
   .tape__item {
     display: inline-flex;
     align-items: center;
-    gap: var(--sp-3);
-    font-size: var(--fs-xs);
-    letter-spacing: 0.04em;
+    gap: var(--s-3);
+    font-size: var(--type-mono-size);
+    letter-spacing: var(--type-caption-track);
     text-decoration: none;
     color: inherit;
-    /* v6.3 polish — every tape anchor ≥ 44×44 tap target (was
-       32×~300 px). The viewport is 44 px so the item reaches
-       the full vertical hit area; horizontal hit is naturally
-       wider than 44 px because each item holds symbol+px+delta
-       +σ. */
     min-height: 44px;
-    padding-inline: 0.5rem;
-    /* v6.18 — explicit word-separator after each tape item so
-       adjacent ticker symbols (e.g. "04·VRP" → "05·PAIRS") never
-       visually collide on narrow viewports or dense browser zoom.
-       The bullet renders between items only (rendered via
-       ::after on .tape__item, hidden on hover-fade-out). */
+    padding-inline: var(--s-2);
     position: relative;
   }
   .tape__item::after {
     content: '·';
-    margin-left: var(--sp-3);
+    margin-left: var(--s-3);
     color: var(--c-ink-3);
     opacity: 0.6;
     pointer-events: none;
   }
   .tape__sym {
     color: var(--c-ink-2);
-    font-weight: 600;
+    font-weight: 400;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: var(--type-caption-track);
   }
   .tape__px {
     color: var(--c-ink);
-    font-weight: 600;
+    font-weight: 400;
     font-variant-numeric: tabular-nums;
     font-feature-settings: 'tnum' 1;
   }
   .tape__delta {
-    font-weight: 600;
+    font-weight: 400;
     font-variant-numeric: tabular-nums;
     font-feature-settings: 'tnum' 1;
   }
   .tape__vol {
     color: var(--c-ink-3);
-    font-size: 0.7em;
-    letter-spacing: 0.06em;
-    margin-left: 0.25em;
+    font-size: var(--type-caption-size-mobile);
+    letter-spacing: var(--type-caption-track);
+    margin-left: var(--s-1);
   }
-  /* v6.11.10 — F14 amber-only rule. Sign carried by intensity, not
-     hue. `pass` = bright amber (gain), `fail` = ink-2 (loss). No
-     green/red traffic-light chrome. */
   .tape__item--pass .tape__delta {
     color: var(--c-amber);
-    font-weight: 600;
+    font-weight: 400;
   }
   .tape__item--fail .tape__delta {
     color: var(--c-ink-2);
-    font-weight: 500;
+    font-weight: 400;
   }
   .tape__item--muted .tape__delta {
     color: var(--c-ink-3);
   }
-  /* Hover: pause the loop on the entire track so the visitor can read
-     a row they're inspecting. */
   .tape:hover .tape__track {
     animation-play-state: paused;
   }
@@ -250,16 +330,23 @@ const stop = trailing;
     bottom: 0;
     display: flex;
     align-items: center;
-    padding-inline: var(--sp-4);
+    gap: var(--s-2);
+    padding-inline: var(--s-4);
     color: var(--c-ink-3);
-    font-size: 0.66rem;
-    letter-spacing: 0.06em;
+    font-size: var(--type-caption-size-mobile);
+    letter-spacing: var(--type-caption-track);
     text-transform: uppercase;
-    /* v9.3.1 — F17 institutional: solid tokenized color (no decorative gradient).
-       Hairline left border separates the trailing label from the scrolling tape. */
-    background: var(--c-tape);
+    background: var(--surface-paper-deep);
     border-left: 1px solid var(--c-rule);
     pointer-events: none;
+  }
+  .tape__stop-sep {
+    color: var(--c-ink-4);
+    opacity: 0.6;
+  }
+  .tape__stop-sync {
+    color: var(--c-ink-3);
+    letter-spacing: var(--type-caption-track);
   }
 
   @keyframes tape-scroll {
@@ -271,20 +358,13 @@ const stop = trailing;
     }
   }
 
-  /* Reduced-motion: hold the track still at translateX(0). Visitors who
-     opted out of motion see the tape's first half, frozen — readable,
-     no scroll. The hover-pause rule above uses animation-play-state which
-     doesn't trigger this guard; the universal `* { animation: none }`
-     in tokens.css covers it too. */
+  /* Reduced-motion: hold the track still at translateX(0). */
   @media (prefers-reduced-motion: reduce) {
     .tape__track {
       animation: none !important;
     }
   }
 
-  /* v6.18.1 — narrow viewports: hide the trailing "series seeded…"
-     label that wraps off the right edge. The label re-appears on
-     viewports ≥ 1280px where the tape row has room. */
   @media (max-width: 1279px) {
     .tape__trailing {
       display: none;

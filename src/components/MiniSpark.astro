@@ -1,13 +1,13 @@
 ---
 /**
- * MiniSpark.astro — a compact 60x14 sparkline for stat-cell decoration.
+ * MiniSpark.astro : a compact 60x14 sparkline for stat-cell decoration.
  *
  * Smaller and stubbier than Sparkline.astro: no axis ticks, no
  * end-marker dot, just a polyline. Use in stat strips where the goal
  * is visual rhythm (a tiny line that suggests a series) and not a
  * readable data chart.
  *
- * v6.17.1 — added `trend` prop (Bloomberg register). Auto-derives stroke
+ * v6.17.1 : added `trend` prop (Bloomberg register). Auto-derives stroke
  * color from --j-sage / --j-terracotta / --j-ink-2. Custom `stroke` still
  * overrides (escape hatch for chart-specific palette calls).
  *
@@ -80,7 +80,7 @@ const path = points
   preserveAspectRatio="none"
 >
   {
-    /* v6.18 — data-spark hooks into reveal-on-scroll.ts to trigger a
+    /* v6.18 : data-spark hooks into reveal-on-scroll.ts to trigger a
       left-to-right draw-in (stroke-dashoffset transition). Cap path
       length at 200 so short and long strokes share the same timing. */
   }
@@ -101,7 +101,7 @@ const path = points
     vertical-align: middle;
     opacity: 0.85;
   }
-  /* v6.18 — draw-in animation. JS adds `.is-revealed` to the path
+  /* v6.18 : draw-in animation. JS adds `.is-revealed` to the path
      when it scrolls into view; CSS transitions stroke-dashoffset from
      full length to 0. Universal reduced-motion guard below. */
   :root.js .mini-spark__path {

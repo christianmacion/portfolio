@@ -11,7 +11,7 @@ problem: |
 approach: |
   Built a **transaction-cost-aware backtest engine** in numpy (no scipy dependency) with realistic
   spread + slippage + latency models per asset class. The engine treats **capacity** as a
-  constrained variable — strategies report the AUM at which they would still survive costs.
+  constrained variable : strategies report the AUM at which they would still survive costs.
   Walk-forward and 5-era stability are enforced.
 evidence:
   - '**Spread + slippage + latency** modeled per asset class'

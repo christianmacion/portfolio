@@ -1,8 +1,8 @@
 ---
 /**
- * comp.astro — engagement terms page. v1.0.
+ * comp.astro : engagement terms page. v1.0.
  *
- * Phase 3B (2026-08-02) — voice audit found ZERO rate/salary/fee signals
+ * Phase 3B (2026-08-02) : voice audit found ZERO rate/salary/fee signals
  * sitewide. The recruiter's first email pre-empts any conversation; the
  * site never answers. This page answers the comp question publicly with
  * defensible institutional bands so the screening call starts with the
@@ -10,7 +10,7 @@
  *
  * Chrome contract: mirrors /for-recruiters hero + section pattern.
  * Sharp corners, mono + amber, no halo/glow/gradient, hairline rules.
- * Container-narrow only — this is a one-pager.
+ * Container-narrow only : this is a one-pager.
  *
  * Bands source: institutional defaults the candidate can defend on a call.
  * The exact band per role is OWNER-CONFIRMED on wake (placeholder flag at
@@ -33,7 +33,7 @@ const fullName = profile.fullName;
 const loc = profile.location;
 const email = profile.contact.email;
 
-// v1.0 — comp JSON-LD. Schema.org `PriceSpecification` per band, so the page
+// v1.0 : comp JSON-LD. Schema.org `PriceSpecification` per band, so the page
 // is discoverable for "quant researcher remote comp" queries. Numeric values
 // are surfaced as structured data; the visible band string remains the
 // institutional-default placeholder until Owner confirms exact figures.
@@ -157,7 +157,7 @@ const jsonLd = {
         <p class="section__eyebrow mono">out-of-scope/</p>
         <h2 class="section__title">What's NOT in scope</h2>
         <p class="section__sub">
-          Five explicit de-scopings. The senior register is also a boundary —
+          Five explicit de-scopings. The senior register is also a boundary :
           these are the briefs that do not fit and will be declined politely.
         </p>
       </header>
@@ -200,7 +200,7 @@ const jsonLd = {
       <div class="hero__actions">
         <a
           class="btn btn--primary"
-          href={`mailto:${email}?subject=${encodeURIComponent('[Engage] Engagement scoping. Christian Macion')}&body=${encodeURIComponent('Role type:\nComp range:\nHours/wk:\nStart date:\nDuration:\nLocation/timezone overlap:\nNDA requirements:\n\n— sent from /comp')}`}
+          href={`mailto:${email}?subject=${encodeURIComponent('[Engage] Engagement scoping. Christian Macion')}&body=${encodeURIComponent('Role type:\nComp range:\nHours/wk:\nStart date:\nDuration:\nLocation/timezone overlap:\nNDA requirements:\n\n: sent from /comp')}`}
           >Email scoping note →</a
         >
         <a class="btn btn--ghost" href={path('/for-recruiters')}>Recruiter brief →</a>
@@ -218,7 +218,7 @@ const jsonLd = {
       <div class="recruiter-notes">
         <p class="recruiter-notes__p">
           If you're staffing a fund and need a senior QR / AI Engineer / Architect who ships
-          (per memory file evidence + repo-ship record), the bands above are starting points —
+          (per memory file evidence + repo-ship record), the bands above are starting points :
           comfortably within the MSA boundary for a 6+ year practitioner. The exact band
           per role is confirmed at the screening call, not before.
         </p>
@@ -248,7 +248,7 @@ const jsonLd = {
 </BaseLayout>
 
 <style>
-  /* === Hero — mirrors /for-recruiters chrome contract === */
+  /* === Hero : mirrors /for-recruiters chrome contract === */
   .hero {
     padding-block: var(--sp-9) var(--sp-7);
     background: var(--c-paper);
@@ -330,7 +330,7 @@ const jsonLd = {
     align-items: center;
   }
 
-  /* === Section shell — mirrors /for-recruiters === */
+  /* === Section shell : mirrors /for-recruiters === */
   .section {
     padding-block: var(--sp-9);
   }
@@ -358,7 +358,7 @@ const jsonLd = {
     margin-bottom: var(--sp-2);
   }
 
-  /* === Band cards — single column, full-width within container-narrow === */
+  /* === Band cards : single column, full-width within container-narrow === */
   .bands {
     display: flex;
     flex-direction: column;
@@ -427,7 +427,7 @@ const jsonLd = {
     letter-spacing: 0.02em;
   }
 
-  /* === Out-of-scope list — mirrors /for-recruiters FAQ styling === */
+  /* === Out-of-scope list : mirrors /for-recruiters FAQ styling === */
   .oos {
     list-style: none;
     margin: 0;

@@ -1,5 +1,5 @@
 /**
- * data-sources.ts — single source of truth for the public-domain data-source
+ * data-sources.ts : single source of truth for the public-domain data-source
  * registry rendered on /research → DataSourceList.
  *
  * Standing Order: only sources that are verifiably public-domain, NDA-clean,
@@ -9,7 +9,7 @@
  *
  * The shape mirrors DataSourceList.astro's `Source` interface. The
  * component imports from here so the registry has exactly one writer.
- * Length is the canonical "12 sources" chrome on /research — derived
+ * Length is the canonical "12 sources" chrome on /research : derived
  * via `.length`, never hardcoded.
  */
 
@@ -117,5 +117,5 @@ export const dataSources: DataSource[] = [
   },
 ];
 
-/** Canonical count — single source of truth for "12 sources" chrome. */
+/** Canonical count : single source of truth for "12 sources" chrome. */
 export const dataSourceCount = dataSources.length;

@@ -1,6 +1,6 @@
 ---
 /**
- * TrustStrip.astro — narrow horizontal strip of "trust anchors" rendered
+ * TrustStrip.astro : narrow horizontal strip of "trust anchors" rendered
  * below the hero on the home page. Each chip points at a verifiable proof
  * surface elsewhere on the site.
  *
@@ -12,13 +12,13 @@
  *   - Open-source first         → 6+ repos
  *
  * Why a strip (and not just a sentence): each anchor is a *pointer* to
- * evidence. Hiring managers skim — make the pointers skimmable.
+ * evidence. Hiring managers skim : make the pointers skimmable.
  *
  * Build SHA: derived from `import.meta.env.PUBLIC_BUILD_SHA` if the build
- * pipeline wired it. If missing, the build pill is hidden entirely — we
+ * pipeline wired it. If missing, the build pill is hidden entirely : we
  * never show "sha-loc" or "sha-unk" placeholders, which read as dishonest.
  *
- * Icons: inline SVG, currentColor, 12px. No Unicode glyphs, no emoji — those
+ * Icons: inline SVG, currentColor, 12px. No Unicode glyphs, no emoji : those
  * render as tofu or in unrelated platform colors on recruiter machines.
  */
 import { buildStampUtc8 as _bs } from '@utils/build-stamp';
@@ -215,7 +215,7 @@ const shortSha = buildSha ? buildSha.replace(/^.*?([0-9a-f]{7,})$/, '$1').slice(
     background: var(--c-bg);
     color: var(--c-ink);
     text-decoration: none;
-    /* v6.3 polish — audit flagged 4 pills at 176-208×30 px on mobile
+    /* v6.3 polish : audit flagged 4 pills at 176-208×30 px on mobile
        ("tested numerical-eval", "reproducible public repos",
        "NDA-clean by construction", "RSS /feed.xml"). The visible
        pill is fine but the touch rect was only 30 px tall;
@@ -230,7 +230,7 @@ const shortSha = buildSha ? buildSha.replace(/^.*?([0-9a-f]{7,})$/, '$1').slice(
   }
   a.trust-pill:hover {
     border-color: var(--c-amber);
-    /* v6.10.41 — derive hover tint from --c-amber via color-mix so
+    /* v6.10.41 : derive hover tint from --c-amber via color-mix so
        palette tweaks propagate. Was rgba(196,138,22,0.06). */
     background: color-mix(in oklab, var(--c-amber) 6%, transparent);
   }
@@ -256,12 +256,12 @@ const shortSha = buildSha ? buildSha.replace(/^.*?([0-9a-f]{7,})$/, '$1').slice(
   }
 
   /* === Phase D-9 · verified-dot pulse ===
-     Subtle 2.4s breathing on the green dot before "verified" — the lone
+     Subtle 2.4s breathing on the green dot before "verified" : the lone
      "live" affordance in the TrustStrip. Disables under reduced-motion. */
   .trust-pill__dot {
     display: inline-block;
     width: 6px;
-    /* F21 — institutional: kill the halo-pulse. Subtle opacity pulse
+    /* F21 : institutional: kill the halo-pulse. Subtle opacity pulse
        remains (it's a status semantics, not a glow ring). */
     height: 6px;
     border-radius: 50%;

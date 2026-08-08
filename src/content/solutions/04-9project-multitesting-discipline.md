@@ -9,14 +9,14 @@ problem: |
   un-reported multiple-testing bias, and no OOS discipline. A hiring-grade research portfolio
   needs every one of those addressed explicitly.
 approach: |
-  Built **9 reproducible research projects** on free public data — multiple-testing (Deflated Sharpe),
+  Built **9 reproducible research projects** on free public data : multiple-testing (Deflated Sharpe),
   cross-sectional & time-series alpha, volatility carry, cointegration, funding-carry, regime
   overlays, transaction-cost realism, and look-ahead-bias audits. Each project shipped with a
   locked OOS window, block-bootstrap CIs, frozen-spec evaluation, and methodology stated up-front
   (not bolted on).
 evidence:
   - '**9 projects**, each with methodology declared before results'
-  - '**Multiple-testing discipline** — Deflated Sharpe, CSCV-based PBO, MinBTL'
+  - '**Multiple-testing discipline** : Deflated Sharpe, CSCV-based PBO, MinBTL'
   - '**Locked OOS windows** + **block-bootstrap CIs** on every project'
   - '**Look-ahead-bias audits** as a dedicated project'
 outcome: |
@@ -24,7 +24,7 @@ outcome: |
   numbers so a hiring manager can see the rigor upfront.
 proof:
   - 'Each project has a memo + figure (public)'
-  - 'All projects on free public data — fully reproducible'
+  - 'All projects on free public data : fully reproducible'
 tags: [deflated-sharpe, PBO, CSCV, walk-forward, block-bootstrap, multiple-testing]
 lane: 'quant'
 ---

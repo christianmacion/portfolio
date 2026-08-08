@@ -1,15 +1,15 @@
 # STELLA Icon Library (v9.2)
 
 Custom SVG icon system for the portfolio. **38 single-concern icons**, vector-only,
-stroke-only at 1.5px — designed for the institutional chrome contract.
+stroke-only at 1.5px : designed for the institutional chrome contract.
 
 ## Why this exists
 
 The portfolio's chrome (nav, footer, status indicators, CTAs) consumes thousands of
 icons. Off-the-shelf icon sets (Lucide, Heroicons, Feather) drift over versions, ship
 their own visual register (often with halos / colored fills), and decouple the icon
-glyph from the project's palette. A small in-house system — 38 hand-curated icons,
-token-bound, monochrome + accent — is faster to maintain and auditable line by line.
+glyph from the project's palette. A small in-house system : 38 hand-curated icons,
+token-bound, monochrome + accent : is faster to maintain and auditable line by line.
 
 The `lucide` dependency in `package.json` is kept as a fallback for the odd icon we
 haven't shipped yet, but every chrome surface should consume `<Icon />` from this
@@ -38,10 +38,10 @@ src/components/icons/
 
 The chrome contract forbids:
 
-- `box-shadow: 0 0 Npx` (halo) — no exceptions
-- `filter: drop-shadow(...)` / `filter: blur(...)` / `filter: glow` — no exceptions
-- `<linearGradient>` / `<radialGradient>` / `fill="url(#…)"` — no exceptions
-- `border-radius: > 8px` on icon containers — no exceptions
+- `box-shadow: 0 0 Npx` (halo) : no exceptions
+- `filter: drop-shadow(...)` / `filter: blur(...)` / `filter: glow` : no exceptions
+- `<linearGradient>` / `<radialGradient>` / `fill="url(#…)"` : no exceptions
+- `border-radius: > 8px` on icon containers : no exceptions
 - Filled glyphs except where structurally required (e.g. dot inside `info-circle`)
 
 ## Adding a new icon
@@ -50,14 +50,14 @@ The chrome contract forbids:
 2. Add the name to `IconName` union in `types.ts`. TypeScript will error in `index.ts`
    if you skip step 3.
 3. Add the import to `index.ts` and add the entry to `PATHS`. TypeScript exhaustiveness
-   is the gate — there's no runtime `window.NAP.parts[key]` lookup table to keep in sync.
-4. Run `npx astro check` — both `getIconPath()` lookup AND any consumer will fail
+   is the gate : there's no runtime `window.NAP.parts[key]` lookup table to keep in sync.
+4. Run `npx astro check` : both `getIconPath()` lookup AND any consumer will fail
    at compile-time if the registry drifts.
 
 ```ts
 // icon-defs/example.ts
 /**
- * example — one-line description of the single concern.
+ * example : one-line description of the single concern.
  */
 export const SVG_PATH = 'M5 12h14M13 5l7 7-7 7';
 ```
@@ -93,6 +93,6 @@ matrix.
 ## Doctrine
 
 Per [[webcraft-no-vibe]] (chrome contract), [[wcag-2.2-aa-sc-1.1.1]] (a11y),
-[[goldratt-5focusingsteps]] (icons are the one constraint — Phase 4 chrome work
-unblocks once this ships). Public-surface register per [[greene-law-38]] — speak
+[[goldratt-5focusingsteps]] (icons are the one constraint : Phase 4 chrome work
+unblocks once this ships). Public-surface register per [[greene-law-38]] : speak
 as others speak; institutional chrome is the vocabulary.

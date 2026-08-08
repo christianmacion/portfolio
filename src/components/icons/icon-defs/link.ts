@@ -1,5 +1,5 @@
 /**
- * link — two interlocking chain-link ovals (the "hyperlink" glyph).
+ * link : two interlocking chain-link ovals (the "hyperlink" glyph).
  * Content category: inline link icon for body text and card CTAs.
  */
 export const SVG_PATH =

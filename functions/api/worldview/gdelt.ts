@@ -1,5 +1,5 @@
 /**
- * functions/api/worldview/gdelt.ts — Cloudflare Pages Function proxy for GDELT 2.0.
+ * functions/api/worldview/gdelt.ts - Cloudflare Pages Function proxy for GDELT 2.0.
  *
  * GDELT 2.0 publishes geo-tagged news events every 15 minutes. The manifest
  * (data.gdeltproject.org/gdeltv2/lastupdate.txt) lists a .export.CSV.zip URL
@@ -14,10 +14,15 @@
  *
  * Worker LoC: ~120.
  *
- * CORS: allowedOrigin(request, env) — same convention as the rest of
- * /api/*.  When called same-origin, CORS is moot; when called from a
- * different deploy (e.g. local dev), only PUBLIC_ORIGINS-listed hosts
- * get the ACAO header.
+ * CORS: allowedOrigin(request, env) - defined in functions/lib/contracts.ts.
+ * The v12.W2 WorldView pipeline expanded the allowlist to include
+ *   - query1.finance.yahoo.com   (Yahoo Finance v7 quote)
+ *   - api.coingecko.com          (CoinGecko simple/price)
+ *   - data-api.ecb.europa.eu     (ECB SDMX JSON)
+ * even though this worker only proxies GDELT directly. The expansion is for
+ * completeness so future worker endpoints can talk to those origins without
+ * an extra deploy. When called same-origin, CORS is moot; when called from
+ * a different deploy (e.g. local dev), only allowed-listed hosts get ACAO.
  */
 import type { PagesFunction } from '@cloudflare/workers-types';
 import {
@@ -147,7 +152,7 @@ function inflateZip(data: Uint8Array): string | null {
     try {
       // Synchronous inflate via DecompressionStream is unavailable; we use
       // a small async inflate. Worker pages support the API.
-      // For sync we ship: fall back to no-op for compressed entries —
+      // For sync we ship: fall back to no-op for compressed entries -
       // the upstream data is small enough to also accept a no-extract
       // path and return a static empty list.
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -274,11 +279,35 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
   }
 
   const events = await fetchEventsFromExport(manifest);
-  return json<{ ok: true; request_id: string; events: GdeltEvent[] }>(
-    { ok: true, request_id: rid, events },
+
+  // 2026-08-08 live-data wiring: add `lastSync` and seed a single
+  // "data-source pulling" event so the EarthMap shows the cache is alive.
+  // The seed event sits at the front of the list with synthetic coords
+  // (0,0) and category 'data-pull' so the chrome can colour it distinctly
+  // from real GDELT events.
+  const lastSync = new Date().toISOString();
+  const seedPull: GdeltEvent = {
+    id: `LIVE-${rid.slice(0, 8)}`,
+    title: `GDELT 2.0 · live pull · ${lastSync.slice(11, 19)}Z`,
+    category: 'data-pull',
+    severity: 'mild',
+    lat: 0,
+    lon: 0,
+    city: 'edge',
+    source: 'data-source-pull',
+    timestamp: lastSync,
+  };
+
+  return json<{
+    ok: true;
+    request_id: string;
+    events: GdeltEvent[];
+    lastSync: string;
+  }>(
+    { ok: true, request_id: rid, events: [seedPull, ...events], lastSync },
     200,
     rid,
-    cors,
+    { ...cors, 'Cache-Control': 'public, max-age=60' },
   );
 };
 

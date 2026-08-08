@@ -4,7 +4,7 @@ title: Macro / Volatility-Regime Overlay
 role: quant
 order: 7
 summary: 'Vol-managed exposure: Sharpe 0.64 → 0.67, max DD −58% → −42%.'
-summary_long: "A regime-aware overlay: scale exposure up when a volatility regime is calm, down when it isn't. The headline metric isn't headline alpha — it's a smoother equity curve."
+summary_long: "A regime-aware overlay: scale exposure up when a volatility regime is calm, down when it isn't. The headline metric isn't headline alpha : it's a smoother equity curve."
 stack:
   - Python (numpy / pandas / matplotlib)
   - VIX regime classifier
@@ -32,7 +32,7 @@ import Chart from '@components/Chart.astro';
 
 ## The hypothesis
 
-Some strategies are _the same alpha_ across regimes; others are not. Scaling exposure by an external regime indicator — a smoothed VIX percentile — is a textbook risk-management overlay.
+Some strategies are _the same alpha_ across regimes; others are not. Scaling exposure by an external regime indicator : a smoothed VIX percentile : is a textbook risk-management overlay.
 
 ## What the project does
 

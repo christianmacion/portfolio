@@ -1,5 +1,5 @@
 ---
-title: 'AI Systems Engineer (Independent) — Editorial & Content Automation'
+title: 'AI Systems Engineer (Independent) : Editorial & Content Automation'
 company: 'Editorial / content automation'
 role: 'experience'
 order: 3
@@ -14,7 +14,7 @@ contributions:
     evidence: 'topic-scout → researcher → drafter → editor → producer → art-director → chart-maker → exporter'
     proof: 'See /solutions/8-agent-editorial-pipeline'
   - label: '290-line AI-slop evaluator (13 metrics)'
-    evidence: 'Drove a real draft from HEAVY (81) to CLEAN (3) — 96% reduction'
+    evidence: 'Drove a real draft from HEAVY (81) to CLEAN (3) : 96% reduction'
     proof: 'OSS repo (slop-scanner project, /projects/slop-scanner)'
   - label: 'Dependency-free rendering pipeline'
     evidence: 'HTML/SVG → headless-Chrome PNG; Markdown → publish-ready PDF; no LLM API cost on the output side'

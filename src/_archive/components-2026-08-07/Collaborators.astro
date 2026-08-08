@@ -1,6 +1,6 @@
 ---
 /**
- * Collaborators.astro — v6.5 "Graphic Visual Dynamic" social-proof block.
+ * Collaborators.astro : v6.5 "Graphic Visual Dynamic" social-proof block.
  *
  * Seven NDA-positive mini-cards rendering the "We work with everyone."
  * pattern. Each card carries:
@@ -96,7 +96,7 @@ const collaborators: Collaborator[] = [
 
 /**
  * Build a 6-cell lit-pattern for each collaborator. The pool stays in
- * {3, 4, 5, 6} lit cells — the spec floor — so the band reads as a
+ * {3, 4, 5, 6} lit cells : the spec floor : so the band reads as a
  * confident engagement meter, never an empty one.
  */
 function meterFor(i: number): boolean[] {
@@ -208,7 +208,7 @@ function meterFor(i: number): boolean[] {
     border-color: var(--c-primary-2);
   }
 
-  /* Top row — 80×80 avatar to the left, heading to its right. */
+  /* Top row : 80×80 avatar to the left, heading to its right. */
   .collaborator__top {
     display: grid;
     grid-template-columns: 80px 1fr;
@@ -216,7 +216,7 @@ function meterFor(i: number): boolean[] {
     align-items: center;
   }
 
-  /* Letter-avatar — flat, no decorative rim. */
+  /* Letter-avatar : flat, no decorative rim. */
   .collaborator__avatar {
     width: 80px;
     height: 80px;
@@ -230,7 +230,7 @@ function meterFor(i: number): boolean[] {
     letter-spacing: -0.02em;
     position: relative;
   }
-  /* v6.10.6 — removed decorative ::after radial-gradient rim.
+  /* v6.10.6 : removed decorative ::after radial-gradient rim.
      Pure flat circle; institutional chrome reads cleaner. */
   .collaborator__avatar--amber-deep {
     background: var(--c-primary-2);

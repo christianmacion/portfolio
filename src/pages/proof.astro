@@ -1,28 +1,22 @@
 ---
 /**
- * proof.astro — the proof spine. v5.3 six-section narrative.
+ * proof.astro : the proof spine. Results only.
  *
- * Order matters. Each section is a "tier" of proof depth:
- *   P.1 Identity              — who, on disk
- *   P.2 Flagship credentials  — Tier-1 cert flagships
- *   P.3 Shipped code          — the eval-first artifacts in code
- *   P.4 Research artifacts    — 9 quant + 6 AI + 10 solutions lists
- *   P.5 Public track record   — lectures, charts, RSS
- *   P.6 Disclosure + contact  — what's not here, and how to ask
+ * ONE purpose : results, with the artifact behind each one.
+ *   P.1 Identity            : who, on disk
+ *   P.2 Research artifacts  : quant + AI results, metric per row
+ *   P.3 Public track record : lectures, charts, RSS
+ *   P.4 Evidence index      : the AARs behind the page
+ *   P.5 Disclosure          : what is not here, and how to ask
  *
- * Data sources for sections P.4 below are loaded from content collections.
- * Sub-page routing anchors at #identity / #credentials / #code / #research / #track.
- *
- * v6.18 W2 deferral (2026-08-08): SectionMark + SectionTOC components
- * are NOT YET APPLIED on this long page. Wave 5 (#88) owns the
- * canonical <Section> wrapper + TOC strip per
- * [[portfolio-v10-bryllim-structure-strategy]] — 11 canonical
- * Section components required. Out of W2 scope per Owner directive.
+ * v12.W4 content reduction : flagship credentials moved out to
+ * /certifications (which owns creds), shipped-code cards to /repos
+ * (which owns public code), the solutions list to /solutions, and the
+ * testimonials block deleted outright. This page carries results and
+ * the evidence trail, nothing else.
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
 import ProofCard from '@components/ProofCard.astro';
-import CodeProofCard from '@components/CodeProofCard.astro';
-import FlagshipCard from '@components/FlagshipCard.astro';
 import VideoEmbed from '@components/VideoEmbed.astro';
 import CTABanner from '@components/CTABanner.astro';
 import SectionTOC from '@components/SectionTOC.astro';
@@ -35,144 +29,31 @@ import { profile } from '@utils/profile';
 const NGATE = `${profile.stats.evalGates}-gate`;
 
 type ProjectEntry = CollectionEntry<'project'>;
-type SolutionEntry = CollectionEntry<'solution'>;
-type CertGroupEntry = CollectionEntry<'certGroup'>;
 
-// === Data: 4 flagship credentials (3 from certGroup.featured* + 1 standalone Bitget) ===
-const allCertGroups: CertGroupEntry[] = await getCollection('certGroup');
-const certGroups = allCertGroups.sort((a, b) => a.data.order - b.data.order);
-const flagshipCerts = certGroups
-  .filter((g) => g.data.featuredImg)
-  .map((g) => ({
-    group: g.data.group,
-    title: g.data.title,
-    blurb: g.data.blurb,
-    src: g.data.featuredImg!,
-    alt: g.data.featuredAlt ?? `${g.data.title} flagship certificate`,
-    caption: g.data.featuredCaption ?? g.data.blurb,
-    href: g.data.featuredHref ?? path('/certifications'),
-  }));
-
-// === Data: 4 CodeProofCard entries (3 v3.5 + 1 eval-mcp-server) ===
-const codeArtifacts = [
-  {
-    title: 'mcp-backtest-server',
-    kind: 'MCP server' as const,
-    tagline:
-      'IP-clean backtest tools over the Model Context Protocol. Three tools, four textbook strategies, zero market data.',
-    metric: '100% offline · 4 strategies · 0 lines of proprietary data',
-    preview: `$ uv run server.py
-# FastMCP server listening on stdio
-{"tools":["get_ohlcv","run_backtest","compute_metrics"]}`,
-    outputLines: [
-      'smoke · 262 bars returned',
-      'sma_cross sharpe=0.471 cagr=0.079 max_dd=-0.21',
-      'buy_and_hold sharpe=-0.490',
-      'PASS · deterministic from symbol seed',
-    ],
-    repoPath: '~/portfolio_v2/mcp-backtest-server/',
-    href: 'https://github.com/christianmacion26/portfolio_v2/tree/master/mcp-backtest-server',
-  },
-  {
-    title: 'qfin-rag-harness',
-    kind: 'Python package' as const,
-    tagline:
-      'Citation-grounded retrieval harness over a curated corpus of 16 canonical q-fin papers. Pure-Python TF-IDF cosine, no LLM call.',
-    metric: '16 papers · 0 API keys · 0 LLM dependency',
-    preview: `$ python -m qfin_rag "How do I correct factor significance for data mining?"
-
-# Citations for: How do I correct ...
-## Cross-Section Research / Factor-Model Foundations ...
-*Review of Financial Studies, 2016* (relevance: 0.173)`,
-    outputLines: [
-      'query → 16-paper curated corpus',
-      'top-3 by TF-IDF cosine',
-      'citation-grounded prompt template',
-      'NO network calls',
-    ],
-    repoPath: '~/portfolio_v2/qfin-rag-harness/',
-    href: 'https://github.com/christianmacion26/portfolio_v2/tree/master/qfin-rag-harness',
-  },
-  {
-    title: 'numerical-faithfulness-eval',
-    kind: 'Eval harness' as const,
-    tagline:
-      'Verify LLM numerical claims against deterministic fixtures. Catches the most common LLM failure mode. wrong numbers. in under one second.',
-    metric: '10 demo claims · 5 pass · 5 fail by design',
-    preview: `$ python -m eval_harness
-[FAIL] btc_2024_sma_cross_20_50 / sharpe: claimed=5.0,
-       truth=0.4707, diff=4.5293 > tol 0.05
-=== summary ===
-  5/10 passed (50.0%)`,
-    outputLines: [
-      'fixtures computed deterministically from seeded backtest',
-      'tolerances per metric (Sharpe atol=0.05, CAGR=0.02)',
-      'per-claim reason + diff vs tolerance',
-      'exit code = number of failed claims',
-    ],
-    repoPath: '~/portfolio_v2/numerical-faithfulness-eval/',
-    href: 'https://github.com/christianmacion26/portfolio_v2/tree/master/numerical-faithfulness-eval',
-  },
-  {
-    title: 'eval-mcp-server',
-    kind: 'MCP server' as const,
-    tagline:
-      'Slop-evaluation gate exposed as an MCP tool. Tools / Resources / Prompts. 20/20 conformance, 100% round-trip parity.',
-    metric: 'MCP conformance 20/20 · round-trip parity 100% · primitives 3/3',
-    preview: `$ uv run eval_mcp_server.py
-# MCP server with the slop-evaluation gate
-{"primitives":["tools","resources","prompts"],
- "tools":["evaluate_text","score_metrics","emit_report"]}`,
-    outputLines: [
-      '20/20 conformance cases pass',
-      'round-trip parity across all 3 primitives',
-      'Tools · Resources · Prompts all live',
-      'PASS · slop score reproducible per call',
-    ],
-    repoPath: '~/portfolio_v2/eval-mcp-server/',
-    href: 'https://github.com/christianmacion26/eval-mcp-server',
-  },
-];
-
-// === Data: projects + solutions, surfaced as compact rows ===
+// === Data: projects, surfaced as compact result rows ===
 const allProjects: ProjectEntry[] = await getCollection('project');
 const projects = allProjects.sort((a, b) => a.data.order - b.data.order);
 const quantProjects: ProjectEntry[] = projects.filter((p) => p.data.role === 'quant');
 const aiProjects: ProjectEntry[] = projects.filter((p) => p.data.role === 'ai');
-const allSolutions: SolutionEntry[] = await getCollection('solution');
-const solutions = allSolutions.sort((a, b) => a.data.order - b.data.order);
 
-// v6.10.27 — derive hero stat counts from the actual collections, not
-// hand-written literals. Previously "22 artifacts" was hardcoded but the
-// actual proof-list__name count is quantProjects + aiProjects + solutions
-// = N. The hero numbers now stay in lockstep with the data.
-const heroArtifactCount = quantProjects.length + aiProjects.length + solutions.length;
-// v6.10.40 — derive OSS-project count for the /proof table row.
+// v6.10.27 : counts derive from the actual collection, not hand-written
+// literals, so the hero numbers stay in lockstep with the data.
+const heroArtifactCount = quantProjects.length + aiProjects.length;
+// v6.10.40 : derive OSS-project count for the /proof table row.
 const ossProjectCount = projects.filter((p) => p.data.sourceLink).length;
 const heroQuantCount = quantProjects.length;
 const heroAiCount = aiProjects.length;
-const heroSolutionCount = solutions.length;
 
-// v6.11.18 — "on disk" = everything we can actually render: flagship
-// certs (3 from certGroup.featuredImg + 1 standalone Bitget card)
-// + codeArtifacts + quantProjects + aiProjects + solutions + 1
-// ProofCard (the operator-discretion Cryptoneeds-Christ chart).
-// Previously hardcoded "Thirty-one" — actual is 34.
-const proofCountOnDisk =
-  flagshipCerts.length +
-  1 /* standalone Bitget */ +
-  codeArtifacts.length +
-  heroArtifactCount +
-  1; /* ProofCard */
+// v12.W4 : "on disk" = what this page can actually render now that
+// credentials moved to /certifications and code cards to /repos:
+// quantProjects + aiProjects + 1 ProofCard (the operator-discretion chart).
+const proofCountOnDisk = heroArtifactCount + 1; /* ProofCard */
 
 const formatProjectMetric = (p: (typeof projects)[number]) => {
   if (!p.data.metrics?.length) return null;
   const first = p.data.metrics[0];
   return { label: first.label, value: first.value, sub: first.sub };
 };
-
-const formatSolutionMetric = (s: (typeof solutions)[number]) =>
-  s.data.evidence?.[0] ?? s.data.outcome.slice(0, 80);
 
 // === Status → tone + label mapping (for status pills) ===
 // production → Live (green), open-source → Open Source (amber),
@@ -226,7 +107,7 @@ const paginate = (items: any[]) => {
 
 <BaseLayout
   title="Proof"
-  description={`Decision-grade artefacts that back the claims on /experience, /certifications, and /now. Tier-1 credentials, ${codeArtifacts.length} open-source artifacts, ${quantProjects.length} quant projects, ${aiProjects.length} AI projects, ${solutions.length} case studies. all NDA-clean by construction.`}
+  description={`Results with the artifact behind each one: ${quantProjects.length} quant projects and ${aiProjects.length} AI projects, metric per row, public-data reproducible.`}
   type="profile"
   breadcrumbs={[
     { name: 'Home', href: '/' },
@@ -237,7 +118,7 @@ const paginate = (items: any[]) => {
     '@type': 'CollectionPage',
     name: `${profile.fullName} to Proof`,
     description:
-      'Six-tier proof spine: P.1 identity · P.2 flagship credentials · P.3 shipped code · P.4 research artifacts · P.5 public track record · P.6 NDA-positive disclosure.',
+      'Results spine: identity · research artifacts · public track record · evidence index · NDA-positive disclosure.',
     isPartOf: {
       '@type': 'WebSite',
       name: `${profile.fullName} to Portfolio`,
@@ -245,18 +126,8 @@ const paginate = (items: any[]) => {
     },
     hasPart: [
       {
-        '@type': 'CreativeWork',
-        name: 'Tier-1 credentials (CTA, Ateneo + US Embassy, BIDA × Meta, Bitget)',
-        url: 'https://christianmacion-portfolio.pages.dev/proof#credentials',
-      },
-      {
-        '@type': 'SoftwareSourceCode',
-        name: `Shipped code (${codeArtifacts.map((c) => c.title).join(', ')})`,
-        url: 'https://christianmacion-portfolio.pages.dev/proof#code',
-      },
-      {
         '@type': 'ItemList',
-        name: `${quantProjects.length} quant projects + ${aiProjects.length} AI projects + ${solutions.length} case studies`,
+        name: `${quantProjects.length} quant projects + ${aiProjects.length} AI projects`,
         url: 'https://christianmacion-portfolio.pages.dev/proof#research',
       },
       {
@@ -287,7 +158,7 @@ const paginate = (items: any[]) => {
     <div class="container container-narrow">
       <ChromeHeader
         chip="PROOF · SHOW YOUR WORK"
-        eyebrow={`${heroArtifactCount} ARTIFACTS · ${flagshipCerts.length + 1} FLAGSHIP CERTS · NDA-CLEAN`}
+        eyebrow={`${heroArtifactCount} ARTIFACTS · PUBLIC-DATA REPRODUCIBLE`}
         tenant={`CHRISTIAN.T.MACION · UTC+8 · ${proofCountOnDisk} ARTIFACTS · NDA-CLEAN · OWNER-VERIFIED`}
         noSep
         hideTenet
@@ -296,21 +167,13 @@ const paginate = (items: any[]) => {
         Proof. <span class="hl">Public or self-owned only</span>.
       </h1>
       <VoiceLine class="proof-head__voice">
-        If it isn’t reproducible from public data, it isn’t here.
+        {heroArtifactCount} artifacts. Public-data reproducible. {proofCountOnDisk} on disk.
       </VoiceLine>
 
       <p class="proof-head__sub">
-        A gallery of public, NDA-clean artifacts. records, charts, co-signed certificates. that
-        back up the claims on
-        <a href={path('/experience')}>/experience</a>,
-        <a href={path('/certifications')}>/certifications</a>, and <a href={path('/now')}>/now</a>.
-        Every entry on this page links to a public artifact, a self-owned file, or an explicit
-        attestation gap. {proofCountOnDisk} artifacts on disk, {heroArtifactCount} surfaced below;
-        the rest live on <a href={path('/certifications')}>/certifications</a> or the project
-        index. Each Tier-1 cert links to its issuer, every shipped repo runs offline with no LLM
-        dependency, every metric traces to a project frontmatter, every testimonial slot is held
-        back until a third-party paper trail is on file, and every NDA-protected engagement is a
-        closed past contract (systematic-strategy desk, 03 to 06/2026).
+        Strongest evidence first: {quantProjects.length} quant strategies with public-data backtests, then
+        {aiProjects.length} AI projects with frozen-spec eval harnesses. Each row links to the write-up. Metrics
+        come from project frontmatter, not hand-written.
       </p>
     </div>
   </header>
@@ -318,13 +181,10 @@ const paginate = (items: any[]) => {
   <SectionTOC
     label="On this proof page"
     items={[
-      { id: 'credentials', label: 'Flagship credentials' },
-      { id: 'code', label: 'Shipped code' },
       { id: 'research', label: 'Research artifacts' },
       { id: 'track', label: 'Track record' },
       { id: 'public-track', label: 'Public track record' },
       { id: 'evidence', label: 'Evidence index' },
-      { id: 'testimonials', label: 'Testimonials (pending)' },
       { id: 'disclosure', label: 'NDA disclosure' },
       {
         id: 'live-terminal',
@@ -335,139 +195,10 @@ const paginate = (items: any[]) => {
     ]}
   />
 
-  {
-    /* =========================================================
-      P.2 — Flagship credentials (Tier-1 certs with featuredImg)
-      Each card is anchored to a public issuer URL, an issue date, and
-      a copy of the certificate on disk. The certGroup schema lives at
-      src/content/certGroup/*.json; "flagship" means: an image on disk
-      + a verifiable issuer URL + a 2025–2026 issue date.
-      ========================================================= */
-  }
-  <section
-    class="section"
-    id="credentials"
-    data-toc-id="credentials"
-    data-toc-label="Flagship credentials"
-    data-section-id="proof"
-    data-reveal
-  >
-    <div class="container">
-      <header class="section__head">
-        <SectionMark index="00" title="proof" />
-        <p class="section__eyebrow">P.2 · Flagship credentials</p>
-        <h2 class="section__title">Tier-1 certs. Co-signed by name.</h2>
-        <p class="section__sub">
-          {flagshipCerts.length} flagship credentials curated on
-          <a href={path('/certifications')}>/certifications</a> plus one standalone Tier-1 from
-          Bitget. Each card carries the issuer URL, the issue date, and a photo of the certificate
-          on disk. The discipline: every cert card has a public issuer landing page, not just a
-          badge PNG.
-        </p>
-      </header>
-
-      <div class="proof-grid proof-grid--flagship">
-        {
-          flagshipCerts.map((f) => (
-            <FlagshipCard
-              title={f.title}
-              group={f.group}
-              blurb={f.blurb}
-              src={f.src}
-              alt={f.alt}
-              caption={f.caption}
-              href={f.href}
-              aspect="3/2"
-            />
-          ))
-        }
-        {/* Bitget B4Y-2026-000701 — Tier-1 cert that's currently orphaned on disk */}
-        <FlagshipCard
-          title="Blockchain4Youth · B4Y-2026-000701"
-          group="AI · Data · Technology"
-          blurb="Bitget Blockchain4Youth · Tier-1 distinction · 2026."
-          src={path('/proof/bitget-b4y-2026.jpg')}
-          alt="Blockchain4Youth B4Y-2026-000701 award certificate from Bitget, 2026."
-          caption="Blockchain4Youth (B4Y-2026-000701) · Tier-1 · Bitget · 2026."
-          href="https://www.bitget.com/"
-          aspect="3/2"
-        />
-      </div>
-
-      <p class="proof-prose">
-        The four Tier-1s above (CTA to Chicago Trading Academy, Ateneo + US Embassy Civic Tech,
-        BIDA × Meta Cohort 2, Bitget Blockchain4Youth) are the credentials an institutional reviewer
-        can verify in under three minutes. Each maps to a public, dated issuer surface. They back
-        the <a href={path('/experience')}>/experience</a> page's claim that Christian operates at the
-        intersection of systematic trading, civic data, and applied AI. not three separate
-        personas, one evidence spine.
-      </p>
-    </div>
-  </section>
 
   {
     /* =========================================================
-      P.3 — Shipped code (4 CodeProofCards · 3 v3.5 + 1 eval)
-      Each repo is small (under 2k LoC), MIT-licensed, offline-runnable,
-      and ships with a verification script that exits 0 against fixtures.
-      The eval-first methodology ships as code here, not as prose.
-      ========================================================= */
-  }
-  <section
-    class="section section--alt"
-    id="code"
-    data-toc-id="code"
-    data-toc-label="Shipped code"
-    data-section-id="proof"
-    data-reveal
-  >
-    <div class="container">
-      <header class="section__head">
-        <p class="section__eyebrow">P.3 · Shipped code</p>
-        <h2 class="section__title">Things I can <code class="mono">import</code>.</h2>
-        <p class="section__sub">
-          {codeArtifacts.length} repositories. Each is <strong>MIT-licensed</strong>,
-          <strong>offline-runnable</strong>, and <strong>dependency-light</strong>. Each one is a
-          small, auditable artifact that demonstrates the eval-first methodology in code rather than
-          prose. The four repos below back the methodology on
-          <a href={path('/methodology')}>/methodology</a>n/a same gate stack, different
-          domain.
-        </p>
-      </header>
-
-      <div class="proof-grid proof-grid--code">
-        {
-          codeArtifacts.map((c) => (
-            <CodeProofCard
-              title={c.title}
-              kind={c.kind}
-              tagline={c.tagline}
-              metric={c.metric}
-              preview={c.preview}
-              outputLines={c.outputLines}
-              path={c.repoPath}
-              href={c.href}
-            />
-          ))
-        }
-      </div>
-
-      <p class="proof-prose">
-        The four repos cover the three failure modes that bite agent-built work most often: tool
-        correctness (mcp-backtest-server. backtest functions over MCP, deterministic from a symbol
-        seed), retrieval correctness (qfin-rag-harness. citation-grounded TF-IDF over 16 canonical
-        q-fin papers, zero LLM call, zero API key), and numerics correctness
-        (numerical-faithfulness-eval. fails any LLM claim whose number differs from a deterministic
-        fixture beyond a per-metric tolerance). eval-mcp-server exposes the slop-evaluation gate as
-        a MCP tool so other agents can call it; it passes the MCP conformance suite 20/20 and
-        round-trips across all three MCP primitives (Tools, Resources, Prompts).
-      </p>
-    </div>
-  </section>
-
-  {
-    /* =========================================================
-      P.4 — Research artifacts (9 quant · 6 AI · 10 solutions)
+      P.4 : Research artifacts (9 quant · 6 AI · 10 solutions)
       Filter bar: Topic × Type. Client-side, URL query sync.
       ========================================================= */
   }
@@ -484,16 +215,14 @@ const paginate = (items: any[]) => {
   >
     <div class="container">
       <header class="section__head">
-        <p class="section__eyebrow">P.4 · Research artifacts</p>
+        <p class="section__eyebrow">P.2 · Research artifacts</p>
         <h2 class="section__title">
-          {quantProjects.length} quant · {aiProjects.length} AI · {solutions.length} solutions. <span
-            class="mono">All public-data reproducible.</span
+          {quantProjects.length} quant · {aiProjects.length} AI. <span class="mono"
+            >Public-data reproducible.</span
           >
         </h2>
         <p class="section__sub">
-          Compact list rendering (AQR-Insights style). Each row links to the project or solution
-          detail page; metrics come from the project frontmatter, not invented. Filter chips narrow
-          the gallery by topic and asset type.
+          One row, one result. Metric from project frontmatter. Each row links to the write-up.
         </p>
       </header>
 
@@ -566,7 +295,7 @@ const paginate = (items: any[]) => {
       </div>
 
       {/* Quant projects */}
-      {/* v6.10.27 — counts derived from the actual collection, not hand-written */}
+      {/* v6.10.27 : counts derived from the actual collection, not hand-written */}
       <h3 class="proof-list__heading">Quant projects to {heroQuantCount}</h3>
       <ol
         class="proof-list proof-list--paged"
@@ -704,64 +433,12 @@ const paginate = (items: any[]) => {
       </ol>
       <nav class="proof-pager" aria-label="AI projects pagination" data-pager hidden></nav>
 
-      {/* Solutions */}
-      <h3 class="proof-list__heading">Solutions to {heroSolutionCount} case studies</h3>
-      <ol
-        class="proof-list proof-list--paged"
-        aria-label="Solution case studies"
-        data-paged-list
-        data-page-size={PAGE_SIZE}
-      >
-        {
-          paginate(solutions).map(({ item: s, page }) => {
-            const dateIso = '';
-            const topic = solutionTopic(s);
-            const assetType = solutionType(s);
-            const isOss = true; // solutions are public writeups
-            return (
-              <li
-                class="proof-list__row"
-                data-page-index={page}
-                data-topic={topic}
-                data-oss={isOss ? 'true' : 'false'}
-                data-assettype={assetType}
-              >
-                <div class="proof-list__pills" aria-label="Solution metadata">
-                  <span class="pill pill--tag">Case Study</span>
-                  {dateIso && (
-                    <span class="proof-list__pills-sep mono" aria-hidden="true">
-                      ·
-                    </span>
-                  )}
-                  {dateIso && <span class="pill pill--mute mono">{dateIso}</span>}
-                </div>
-                <a class="proof-list__title" href={path(`/solutions#${s.data.slug}`)}>
-                  <span class="proof-list__kind proof-list__kind--sol mono">
-                    {s.data.lane.toUpperCase()}
-                  </span>
-                  <span class="proof-list__name">{s.data.title}</span>
-                  <span class="proof-list__metric mono">
-                    <span class="proof-list__metric-val mono">
-                      {formatSolutionMetric(s).replace(/\*\*/g, '')}
-                    </span>
-                  </span>
-                  <span class="proof-list__arrow mono" aria-hidden="true">
-                    →
-                  </span>
-                </a>
-                <p class="proof-list__summary">{s.data.problem}</p>
-              </li>
-            );
-          })
-        }
-      </ol>
-      <nav class="proof-pager" aria-label="Solutions pagination" data-pager hidden></nav>
     </div>
   </section>
 
   {
     /* =========================================================
-      P.5 — Public track record + lectures
+      P.5 : Public track record + lectures
       ========================================================= */
   }
   <section
@@ -775,10 +452,10 @@ const paginate = (items: any[]) => {
     <div class="container">
       <header class="section__head">
         <p class="section__eyebrow">P.5 · Public track record</p>
-        <h2 class="section__title">Lectures, charts, and feeds.</h2>
+        <h2 class="section__title">Lectures, charts, feeds.</h2>
         <p class="section__sub">
-          Two public lectures for <strong>USeP EGE 313</strong>, one public TradingView chart, and
-          three Atom feeds (portfolio updates · project updates · solution updates).
+          Two USeP EGE 313 lectures, one public TradingView chart, three Atom feeds (portfolio · project ·
+          solution updates).
         </p>
       </header>
 
@@ -825,7 +502,7 @@ const paginate = (items: any[]) => {
 
   {
     /* =========================================================
-      P.5b — Public track record (externally verifiable accounts)
+      P.5b : Public track record (externally verifiable accounts)
       ========================================================= */
   }
   <section
@@ -918,53 +595,13 @@ const paginate = (items: any[]) => {
       </div>
     </div>
   </section>
-
   {
     /* =========================================================
-      P.5c — Testimonials (honest gap · discipline #05 holds)
-      Per the v9.3 voice audit (commit 40aac29, 2026-08-01), no
-      fabricated quotes ship. The block is the explicit gap, not a
-      template waiting for content. Three attestee types are pending;
-      the next backfill is gated on real paper trail, not on volume.
-      ========================================================= */
-  }
-  <section
-    class="section section--tight"
-    id="testimonials"
-    data-toc-id="testimonials"
-    data-toc-label="Testimonials (pending)"
-    data-section-id="proof"
-    data-reveal
-  >
-    <div class="container container-narrow">
-      <header class="section__head">
-        <p class="section__eyebrow">P.5c · Testimonials</p>
-        <h2 class="section__title">Pending attestation.</h2>
-      </header>
-      <div class="testimonials-pending" role="region" aria-label="Testimonials gap. honest, not fabricated">
-        <p class="testimonials-pending__rule mono">
-          <span class="testimonials-pending__rule-n">05</span>Every testimonial is an attestable paper
-          trail, not a quote.
-        </p>
-        <p class="testimonials-pending__note">
-          The discipline holds. No third-party paper trail. email, call summary, signed reference,
-          or attested transcript. is on file yet, so no quote ships in this block. Three attestee
-          types are queued and gated on real evidence, not on volume: a portfolio v3 owner
-          reference, an Upwork client reference, and a recruiter / OJP-channel reference. Each
-          will be published as a dated, verifiable attachment the moment the paper trail lands —
-          not before. This is the gap, not the silence.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  {
-    /* =========================================================
-      P.5d — Evidence index (AARs that back the page)
+      P.5d : Evidence index (AARs that back the page)
       The audit's "wire real AARs as evidence" instruction: each proof
       entry on this page traces to a public, dated artifact. The AARs
       below are the After-Action Reports that produced or updated the
-      artifacts surfaced above. They are not promises — they are
+      artifacts surfaced above. They are not promises : they are
       signed, dated, and on disk in
       ~/.claude/cache/corporate/aars/.
 
@@ -988,10 +625,8 @@ const paginate = (items: any[]) => {
         <p class="section__eyebrow">P.5d · Evidence index</p>
         <h2 class="section__title">The AARs behind the page.</h2>
         <p class="section__sub">
-          Twelve AARs (After-Action Reports) from the last 30 days that produced, audited, or
-          updated the artifacts surfaced above. Each filename resolves to a markdown file on disk
-          at <code>~/.claude/cache/corporate/aars/</code>. The "CONVERGED" suffix means the
-          mission closed on a single ship; the bare-date names are rolling audit fixes.
+          Twelve AARs from the last 30 days that produced, audited, or updated the artifacts above. Each filename
+          resolves to a markdown file at <code>~/.claude/cache/corporate/aars/</code>.
         </p>
       </header>
 
@@ -1115,7 +750,7 @@ const paginate = (items: any[]) => {
 
   {
     /* =========================================================
-      P.6 — Disclosure + contact
+      P.6 : Disclosure + contact
       ========================================================= */
   }
   <section
@@ -1132,11 +767,10 @@ const paginate = (items: any[]) => {
         <h2 class="section__title">NDA-positive disclosure.</h2>
       </header>
       <p class="proof-neg">
-        <strong>What's not here:</strong> photos of NDA-protected offices. Screenshots of proprietary
-        strategy outputs. Calendar entries with client names. The systematic-strategy desk role is a <strong
-          >closed past contract</strong
-        > (03/2026 to 06/2026), and everything on this page is public-data or self-owned. If the proof
-        you need isn't on this page, email me. if it's public, I'll send it within 24 hours.
+        <strong>What's not here:</strong> photos of NDA-protected offices. Proprietary strategy outputs. Client
+        calendars. Everything on this page is public-data or self-owned. The systematic-strategy desk role is a
+        closed past contract. If the proof you need isn't on this page, email me. If it's public, I send it
+        within 24 hours.
       </p>
     </div>
   </section>
@@ -1169,9 +803,9 @@ const paginate = (items: any[]) => {
   .proof-head__eyebrow-chip {
     display: inline-block;
     padding: 4px 10px;
-    /* v9.2 a11y — was --c-phi-teal. Dark theme --j-phi-teal = #2d5f5a
+    /* v9.2 a11y : was --c-phi-teal. Dark theme --j-phi-teal = #2d5f5a
      only hits 2.14:1 on dark page-head surface. Solid amber chip +
-     --c-bg text reads at ≥5.6:1 in both themes — institutional
+     --c-bg text reads at ≥5.6:1 in both themes : institutional
      register, F14-safe (no traffic-light). */
     color: var(--c-bg);
     border: 1px solid var(--c-amber);
@@ -1188,7 +822,7 @@ const paginate = (items: any[]) => {
     line-height: 1.05;
     margin-block: var(--sp-4) var(--sp-5);
   }
-  /* v6.0.12 — `.proof-head__voice` styling moved to <VoiceLine /> component. */
+  /* v6.0.12 : `.proof-head__voice` styling moved to <VoiceLine /> component. */
   .proof-head__sub {
     font-size: var(--fs-lg);
     color: var(--c-ink-2);
@@ -1200,7 +834,7 @@ const paginate = (items: any[]) => {
     text-decoration: underline;
     text-decoration-color: var(--c-rule-strong);
     text-underline-offset: 3px;
-    /* v6.3 polish — `/now` link inside the proof intro paragraph was
+    /* v6.3 polish : `/now` link inside the proof intro paragraph was
        42×44 px on mobile (1 px short of WCAG 2.5.5 44×44 width).
        Padding-inline:0.25rem adds 8 px of horizontal hit-target
        without breaking the inline-flow of the sentence (the underline
@@ -1212,7 +846,7 @@ const paginate = (items: any[]) => {
     color: var(--c-amber);
   }
 
-  /* v3C — institutional prose paragraph (1-2 paragraphs per section).
+  /* v3C : institutional prose paragraph (1-2 paragraphs per section).
      No manifesto-style list. No slogan numbering. */
   .proof-prose {
     margin: var(--sp-6) 0 var(--sp-4);
@@ -1413,7 +1047,7 @@ const paginate = (items: any[]) => {
     line-height: var(--lh-loose);
   }
 
-  /* === v3C — Evidence index (tabular role=table of real AARs) === */
+  /* === v3C : Evidence index (tabular role=table of real AARs) === */
   .evidence {
     display: flex;
     flex-direction: column;
@@ -1486,7 +1120,7 @@ const paginate = (items: any[]) => {
   }
 
   /* ===========================================================
-   * v5.3 — filter bar (Topic × Type), status pills,
+   * v5.3 : filter bar (Topic × Type), status pills,
    * public-track-record table, and per-list pagination.
    * =========================================================== */
 
@@ -1532,7 +1166,7 @@ const paginate = (items: any[]) => {
     border: 1px solid var(--c-rule);
     border-radius: var(--radius-sm);
     cursor: pointer;
-    /* v6.3 polish — audit flagged 9 chips at 41-101×30 px on mobile
+    /* v6.3 polish : audit flagged 9 chips at 41-101×30 px on mobile
        (PI/QUANT/AI buttons at 30 px tall, AI narrower than 44 px).
        min-height: 44 + min-width: 44 enforces WCAG 2.5.5. */
     min-height: 44px;
@@ -1555,7 +1189,7 @@ const paginate = (items: any[]) => {
     :root:not([data-theme='light']) .filter-chip.is-active {
       color: var(--c-amber);
       border-color: var(--c-amber);
-      /* v6.10.36 — token alias for F13 amber family. */
+      /* v6.10.36 : token alias for F13 amber family. */
       background: var(--c-amber-soft);
     }
   }
@@ -1618,17 +1252,17 @@ const paginate = (items: any[]) => {
   .proof-pager[hidden] {
     display: none;
   }
-  /* v9.2 a11y — WCAG 2.2 SC 2.5.8 Target Size. Was 2rem square but
+  /* v9.2 a11y : WCAG 2.2 SC 2.5.8 Target Size. Was 2rem square but
      `inline-flex` + `0 0.55rem` padding + parent `display:flex`
      default `flex-shrink:1` let single-char chips (› ‹) shrink to
-     ~9.6px wide — fails AAA 24×24 floor. Force min-width via
+     ~9.6px wide : fails AAA 24×24 floor. Force min-width via
      `flex: 0 0 auto` so the chip never collapses inside the
      `.proof-pager` flex parent, even on a 412px mobile viewport.
 
      IMPORTANT: chips are built by the inline `<script>` via
      document.createElement('button'). Astro's scoped CSS adds
      [data-astro-cid-*] selectors which those JS-created buttons
-     don't carry — so we MUST declare these rules as :global(...). */
+     don't carry : so we MUST declare these rules as :global(...). */
   :global(.proof-pager__chip) {
     display: inline-flex;
     align-items: center;
@@ -1663,7 +1297,7 @@ const paginate = (items: any[]) => {
     :global(:root:not([data-theme='light']) .proof-pager__chip.is-active) {
       color: var(--c-amber);
       border-color: var(--c-amber);
-      /* v6.10.36 — token alias for F13 amber family. */
+      /* v6.10.36 : token alias for F13 amber family. */
       background: var(--c-amber-soft);
     }
   }

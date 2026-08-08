@@ -1,6 +1,6 @@
 ---
 /**
- * TermStructure.astro — v6.1 institutional term-structure ladder.
+ * TermStructure.astro : v6.1 institutional term-structure ladder.
  *
  * Server-rendered SVG (no JS, no client libs). Plots yields vs. tenor
  * along an X-axis of tenor labels and a Y-axis of yield percentages.
@@ -84,7 +84,7 @@ const spotInterp = (() => {
   if (typeof spot !== 'number') return null;
   if (points.length < 2) return null;
   // Linear interpolation by index.
-  // (v6.10.55 — removed unused `xs` const; first-tenor anchor is the
+  // (v6.10.55 : removed unused `xs` const; first-tenor anchor is the
   //  only interpolation target we render.)
   // For a "spot vs curve at first tenor" anchor, project to x=0.
   // Simpler: render the spot line at x=padL (left axis), extending to
@@ -97,7 +97,7 @@ const spotInterp = (() => {
 const yTickCount = 4;
 const yTicks = Array.from({ length: yTickCount + 1 }, (_, i) => yLo + (i / yTickCount) * yRange);
 
-// === X-axis labels — every Nth ===
+// === X-axis labels : every Nth ===
 const xStride = Math.max(1, Math.ceil(points.length / 8));
 
 // === Deterministic gradient id ===

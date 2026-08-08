@@ -1,5 +1,5 @@
 /**
- * alert-triangle — universally recognized warning glyph.
+ * alert-triangle : universally recognized warning glyph.
  * Triangle + exclamation dot inside.
  * Use SPARINGLY: reserve for true warnings (drift detected, gate fail);
  * NOT for "informational" content (info-circle is for that).

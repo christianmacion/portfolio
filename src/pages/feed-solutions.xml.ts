@@ -1,5 +1,5 @@
 /**
- * feed-solutions.xml.ts — RSS 2.0 stream of solution entries only.
+ * feed-solutions.xml.ts : RSS 2.0 stream of solution entries only.
  *
  * See _feed-shared.ts for the rendering helpers.
  */

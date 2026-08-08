@@ -1,9 +1,9 @@
 /**
- * motion.ts — v7.4 INSTITUTIONAL MOTION DRIVER (SITE-WIDE)
+ * motion.ts : v7.4 INSTITUTIONAL MOTION DRIVER (SITE-WIDE)
  *
- * v7.4-WIDE — applies to every page (not just /):
+ * v7.4-WIDE : applies to every page (not just /):
  *   - .hero [data-stagger] paint-time reveal (no observer needed)
- *   - .word TextReveal (per-word cascade) — auto-wrap ANY [data-words]
+ *   - .word TextReveal (per-word cascade) : auto-wrap ANY [data-words]
  *     heading OR direct .hero__title / .r-hero__title / h1.hero__title
  *   - .hero.has-cursor (after entrance settles, append the cursor)
  *   - .nav is-scrolled toggling (after 80px scroll)
@@ -22,7 +22,7 @@ const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
  * Auto-wrap any heading text into per-word <span class="word"> spans.
  * Targets: [data-words] (explicit), .hero__title, .r-hero__title,
  *          h1.hero__title, h1.r-hero__title, .hero__name.
- * Idempotent — re-runs are no-ops.
+ * Idempotent : re-runs are no-ops.
  */
 function autoWrapWords(): void {
   const selector = [
@@ -32,6 +32,12 @@ function autoWrapWords(): void {
     '.work__title',
     '.fit__title',
     '.h1',
+    // v12.W4 (2026-08-08) : add .hero-flagship__name so the home page H1
+    // (Quantitative Researcher) gets the per-word cascade. The H1 now
+    // carries data-words explicitly, so [data-words] matches it too,
+    // but the explicit class entry keeps the wiring intent obvious to
+    // any future maintainer.
+    '.hero-flagship__name',
     '.r-card__title',
     '.section__title',
     '.r-disclose__title',
@@ -43,7 +49,7 @@ function autoWrapWords(): void {
     if (h.dataset.wordsDone === 'true') return;
     // Skip if already wrapped (e.g., on the home h1 with explicit spans)
     if (h.querySelector('.word')) return;
-    // Collect text from leaf nodes — preserve icon/sup separately if any
+    // Collect text from leaf nodes : preserve icon/sup separately if any
     const walker = document.createTreeWalker(h, NodeFilter.SHOW_TEXT, {
       acceptNode: (node) => {
         const parent = node.parentElement;
@@ -87,7 +93,14 @@ function autoWrapWords(): void {
 }
 
 function initHeroStagger(): void {
-  const heroStagger = document.querySelectorAll<HTMLElement>('.hero [data-stagger]');
+  // v12.W4 (2026-08-08) : also match `.hero-flagship [data-stagger]` so
+  // the home page's flagship hero (which uses .hero-flagship, not .hero)
+  // gets the same paint-time cascade. The CSS layer in motion.css §2
+  // ships the matching transition rule; this JS just adds .is-revealed
+  // to fire it.
+  const heroStagger = document.querySelectorAll<HTMLElement>(
+    '.hero [data-stagger], .hero-flagship [data-stagger]',
+  );
   heroStagger.forEach((el) => el.classList.add('is-revealed'));
 
   // Auto-wrap any heading text into word spans (site-wide).
@@ -97,9 +110,11 @@ function initHeroStagger(): void {
 
   // Add the cursor class after the 6-step stagger completes (~720ms).
   // The class triggers the CSS keyframe (motion.css #16).
+  // v12.W4 (2026-08-08) : also fire on .hero-flagship so the home page
+  // H1 gets the terminal-caret blink after the word cascade settles.
   if (words.length > 0 || heroStagger.length > 0) {
     window.setTimeout(() => {
-      document.querySelectorAll<HTMLElement>('.hero').forEach((el) => {
+      document.querySelectorAll<HTMLElement>('.hero, .hero-flagship').forEach((el) => {
         el.classList.add('has-cursor');
       });
     }, 760);
@@ -138,7 +153,7 @@ function initNavAndScroll(): void {
     const y = window.scrollY;
     if (nav) {
       nav.classList.toggle('is-scrolled', y > 80);
-      // v2026-07-31 — second-tier elevation when the hero is fully
+      // v2026-07-31 : second-tier elevation when the hero is fully
       // scrolled past (50vh). Adds a 1px offset hairline that reads
       // as "the nav is floating over scrolled content". The CSS
       // uses `box-shadow: 0 1px 0 0 ...` (no 0-spread blur) so it
@@ -169,11 +184,11 @@ function initNavAndScroll(): void {
 }
 
 /**
- * v2026-07-31 — data-reveal-stagger helper.
+ * v2026-07-31 : data-reveal-stagger helper.
  * Reads [data-reveal-stagger="N"] (ms) on a parent and applies the
  * matching `--reveal-stagger` CSS custom property. The CSS in
  * motion.css §21 uses that var + nth-child() to compute per-child
- * delays. Idempotent — re-runs are no-ops.
+ * delays. Idempotent : re-runs are no-ops.
  */
 function initRevealStagger(): void {
   const groups = document.querySelectorAll<HTMLElement>('[data-reveal-stagger]');
@@ -186,7 +201,7 @@ function initRevealStagger(): void {
   });
 }
 
-/* === SectionRail — left-rail scroll-driven ticks.
+/* === SectionRail : left-rail scroll-driven ticks.
  * Single IO across all [data-section-num]. Each item fills its --section-progress
  * (0→1) as the section enters the viewport. Active = --section-progress > 0.5.
  *
@@ -261,7 +276,7 @@ function init(): void {
   initHomeSectionReveal();
 }
 
-/* === v11.W3 — single site-wide IntersectionObserver for home-section
+/* === v11.W3 : single site-wide IntersectionObserver for home-section
  * reveal stagger. CSS in motion.css §29f owns the transition (240ms
  * ease-out, 12px translateY, --reveal-stagger-i * 80ms delay). This
  * function:

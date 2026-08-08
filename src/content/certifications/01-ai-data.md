@@ -5,7 +5,7 @@ order: 1
 blurb: 'Flagship AI and data-science credentials across Tier-1 issuers (IBM, Google, Cisco, DataCamp, Ateneo de Davao).'
 featuredImg: /proof/ateneo-american-corner-2025-11.jpg
 featuredAlt: 'Co-signed certificate from Ateneo de Davao University and US Embassy American Spaces Philippines for the AI for the Modern Workforce workshop, Nov 8 2025. Signed by Lorgina Samson (Ateneo) and Kevin Punzalan (US Embassy).'
-featuredCaption: 'AI for the Modern Workforce: From Blockchain to the MOVE Language — Ateneo de Davao University + US Embassy American Spaces Philippines, Nov 8 2025. Co-signed by Lorgina Samson (Director, University Libraries) and Kevin Punzalan (American Spaces Philippines Specialist, US Embassy in the Philippines).'
+featuredCaption: 'AI for the Modern Workforce: From Blockchain to the MOVE Language : Ateneo de Davao University + US Embassy American Spaces Philippines, Nov 8 2025. Co-signed by Lorgina Samson (Director, University Libraries) and Kevin Punzalan (American Spaces Philippines Specialist, US Embassy in the Philippines).'
 featuredHref: https://www.ateneo.edu/
 items:
   - { name: 'Artificial Intelligence Fundamentals', issuer: 'IBM', year: 2026, tier: 1 }

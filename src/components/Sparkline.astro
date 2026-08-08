@@ -1,18 +1,18 @@
 ---
 /**
- * Sparkline.astro — inline SVG sparkline for time-series data.
+ * Sparkline.astro : inline SVG sparkline for time-series data.
  *
  * Usage:
  *   <Sparkline points={[1,2,3,5,4,7,9,12,11,15]} />
  *   <Sparkline points={...} width={140} height={40} stroke="var(--c-pass)" />
  *
  * Props:
- *   points  — number[]
- *   width   — pixel width (default 100)
- *   height  — pixel height (default 28)
- *   stroke  — stroke color (default primary teal)
- *   fill    — fill color (default transparent)
- *   aria-label — accessible description
+ *   points  : number[]
+ *   width   : pixel width (default 100)
+ *   height  : pixel height (default 28)
+ *   stroke  : stroke color (default primary teal)
+ *   fill    : fill color (default transparent)
+ *   aria-label : accessible description
  */
 interface Props {
   points: number[];

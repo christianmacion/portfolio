@@ -1,6 +1,6 @@
 ---
 /**
- * CertWall.astro — bryllim-adapted § 04-style certification wall.
+ * CertWall.astro : bryllim-adapted § 04-style certification wall.
  *
  * Renders two tab panels:
  *   - Top 10 (default): Tier-1 + flagship certs ranked by institutional weight
@@ -42,7 +42,7 @@ const top10 = ranked.slice(0, 10);
 const claimedTotal = Number(profile.stats.certCount);
 const remainder = claimedTotal - top10.length;
 
-// Logo paths — populated 2026-08-07 by OSINT Cell v1.0 dispatch
+// Logo paths : populated 2026-08-07 by OSINT Cell v1.0 dispatch
 // (aars/2026-08-07-osint-cell-cert-fill-in.md). 8 of 10 PNGs license-clean
 // from Wikimedia Commons (PD-textlogo / PD-US-gov). 2 require Owner download:
 //   - STA PH: trade-mark, Owner downloads + re-encodes to /logos/stap.png
@@ -60,13 +60,13 @@ const logoByIssuer: Record<string, string> = {
   // Forage: '/logos/forage.png',                                                     // PENDING: Owner download + license check
 };
 
-// Verify URLs — populated 2026-08-07 by OSINT Cell v1.0 (4 URLs) + v2.0 dispatch (10 more).
+// Verify URLs : populated 2026-08-07 by OSINT Cell v1.0 (4 URLs) + v2.0 dispatch (10 more).
 // Confidence tiers per NATO Admiralty:
 //   A1: primary text (issuer portal with per-record permalink)
 //   A2: secondary issuer source or program + URL pattern (subject code requires Owner pull)
 //   B2: tertiary source (issuer landing page, no per-cert URL)
 //   LOW: badge page / partial verification
-//   N/A: no public verify URL exists — CertWall renders "verify URL pending"
+//   N/A: no public verify URL exists : CertWall renders "verify URL pending"
 //   RED FLAG resolved: Goldman Sachs reframed as educational module (see 02-finance.md)
 const verifyByKey: Record<string, string> = {
   // v1.0 active (4)
@@ -79,32 +79,32 @@ const verifyByKey: Record<string, string> = {
   'IBM::Artificial Intelligence Fundamentals':
     'https://www.credly.com/org/ibm/badge/artificial-intelligence-fundamentals',
 
-  // v2.0 OSINT additions (10) — primarily issuer landing pages where no per-cert permalink exists
-  // A2 (per-person URL exists) — NASA Space Apps Zurich 2025 cohort
+  // v2.0 OSINT additions (10) : primarily issuer landing pages where no per-cert permalink exists
+  // A2 (per-person URL exists) : NASA Space Apps Zurich 2025 cohort
   'NASA::Galactic Problem Solver. NASA Space Apps Challenge (Zurich, CH)':
     'https://www.spaceappschallenge.org/people/christian-macion/',
 
-  // B2 (issuer program page) — Bayan Academy AIccelerate program landing
+  // B2 (issuer program page) : Bayan Academy AIccelerate program landing
   'Meta::BIDA META AICCELERATE 2025':
     'https://www.bayanacademy.org/events/bida-year-2-meta-aiccelerate-training-2025-program',
 
-  // B2 (issuer program page; geo-blocked in PH) — Bitget Blockchain4Youth
+  // B2 (issuer program page; geo-blocked in PH) : Bitget Blockchain4Youth
   'Bitget::Blockchain4Youth (B4Y-2026-000701)':
     'https://www.bitget.com/promotion/blockchain4youth',
 
-  // B2 (issuer landing page; per-cert uses email inquiry) — STA PH
+  // B2 (issuer landing page; per-cert uses email inquiry) : STA PH
   'Society of Technical Analysts of the Philippines (Tier-1)::Certified Technical Analyst Program':
     'https://staphilippines.org/',
 
-  // B2 (issuer course page; free course, no per-holder URL) — Marginal Revolution University
+  // B2 (issuer course page; free course, no per-holder URL) : Marginal Revolution University
   'Marginal Revolution University::Principles of Economics. Macroeconomics':
     'https://learn.mru.org/courses/principles-of-macroeconomics',
 
-  // B2 (issuer landing page; per-cert code requires Owner pull) — Basel Institute on Governance
+  // B2 (issuer landing page; per-cert code requires Owner pull) : Basel Institute on Governance
   'Basel Institute on Governance::Operational Analysis of Suspicious Transaction Reports':
     'https://learn.baselgovernance.org/',
 
-  // B2 (issuer portal) — SEC Philippines Academy (4 certs share the same issuer page)
+  // B2 (issuer portal) : SEC Philippines Academy (4 certs share the same issuer page)
   'SEC Philippines::Fundamentals of Accounting':
     'https://academy.sec.gov.ph/',
   'SEC Philippines::Introduction to Capital Market':
@@ -114,7 +114,7 @@ const verifyByKey: Record<string, string> = {
   'SEC Philippines::Introduction to Corporation':
     'https://academy.sec.gov.ph/',
 
-  // N/A (no public verify) — CertWall renders "verify URL pending"
+  // N/A (no public verify) : CertWall renders "verify URL pending"
   // 'Ateneo de Davao University::AI for the Modern Workforce: From Blockchain to the MOVE Language': '',
   // 'Google::Introduction to AI': '',
 };

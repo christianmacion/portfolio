@@ -1,13 +1,13 @@
 ---
 /**
- * VideoEmbed.astro — pure HTML5 <video> wrapper for proof recordings.
+ * VideoEmbed.astro : pure HTML5 <video> wrapper for proof recordings.
  *
  * Two modes:
  *   - 'inline'  (default): click-to-play with native controls. Used in /experience.
  *   - 'gallery': autoplay + muted + loop. Used in /proof gallery. Mobile Safari-safe
  *                via `playsinline`; audio is already stripped at the source.
  *
- * No client-side JS — `<video controls>` is HTML5 native.
+ * No client-side JS : `<video controls>` is HTML5 native.
  */
 interface Props {
   src: string;
@@ -59,21 +59,21 @@ const isGallery = mode === 'gallery';
   .video-embed--paper {
     background: var(--c-paper);
     border: 1px solid var(--c-rule);
-    /* v9.3.1 — F17 institutional: sharp corners (1px) instead of --radius (10px). */
+    /* v9.3.1 : F17 institutional: sharp corners (1px) instead of --radius (10px). */
     border-radius: 1px;
     padding: var(--sp-3);
   }
   .video-embed--tape {
     background: var(--c-tape);
     border: 1px solid var(--c-tape-2);
-    /* v9.3.1 — F17 institutional: sharp corners (1px) instead of --radius (10px). */
+    /* v9.3.1 : F17 institutional: sharp corners (1px) instead of --radius (10px). */
     border-radius: 1px;
     padding: var(--sp-3);
   }
   .video-embed__frame {
     position: relative;
     overflow: hidden;
-    /* v9.3.1 — F17 institutional: sharp corners (1px) instead of --radius-sm (6px). */
+    /* v9.3.1 : F17 institutional: sharp corners (1px) instead of --radius-sm (6px). */
     border-radius: 1px;
     background: var(--c-tape);
   }
@@ -92,7 +92,7 @@ const isGallery = mode === 'gallery';
     background: color-mix(in oklab, var(--c-tape) 0.78%, transparent);
     color: var(--c-amber);
     font-size: var(--fs-xs);
-    /* v9.3.1 — F17 institutional: sharp corners (1px) instead of 3px. */
+    /* v9.3.1 : F17 institutional: sharp corners (1px) instead of 3px. */
     border-radius: 1px;
     letter-spacing: 0.06em;
   }

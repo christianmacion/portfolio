@@ -54,7 +54,7 @@ function buildCSP(nonce) {
     "style-src-attr 'unsafe-inline'",
     "img-src 'self' data:",
     "font-src 'self' data:",
-    "connect-src 'self' https://data-api.ecb.europa.eu https://api.coingecko.com https://data.gdeltproject.org",
+    "connect-src 'self' https://data-api.ecb.europa.eu https://query1.finance.yahoo.com https://api.coingecko.com https://data.gdeltproject.org",
     'frame-src https://challenges.cloudflare.com https://cal.com https://*.cal.com',
     "worker-src 'self'",
     "object-src 'none'",

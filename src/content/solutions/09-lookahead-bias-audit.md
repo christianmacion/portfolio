@@ -6,7 +6,7 @@ order: 9
 client: 'Self-directed / Portfolio'
 problem: |
   Look-ahead bias is silent: a backtest that uses future data looks great until you deploy it.
-  A serious research portfolio needs an **explicit audit suite** — a checklist of failure modes
+  A serious research portfolio needs an **explicit audit suite** : a checklist of failure modes
   with mechanical tests.
 approach: |
   Built a **look-ahead-bias audit suite** with mechanical tests for the most common failure modes:

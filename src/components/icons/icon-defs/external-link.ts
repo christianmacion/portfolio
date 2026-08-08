@@ -1,5 +1,5 @@
 /**
- * external-link — arrow exiting a corner of a box.
+ * external-link : arrow exiting a corner of a box.
  * Three subpaths: (1) the box L-shape, (2) the corner arrow indicator,
  * (3) the diagonal shaft from inside the box to outside the corner.
  * Pattern: Heroicons v2 register.

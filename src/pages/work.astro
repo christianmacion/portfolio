@@ -1,6 +1,6 @@
 ---
 /**
- * work.astro — /work/ · Work Portfolio Index
+ * work.astro : /work/ · Work Portfolio Index
  *
  * v9.3 Wave-3 flagship index. Re-frames the existing
  * /research, /proof, /publications, /projects under
@@ -8,11 +8,11 @@
  * voice for self-built artifacts (no "I", "my", "me").
  *
  * IA (top → bottom):
- *   01 Work Loop       — hypothesis → backtest → paper → live → postmortem
- *   02 Quant Cases     — 5 cards from /projects/quant
- *   03 AI Cases        — 3 cards from /projects/ai
- *   04 Live In Prod    — what is running right now
- *   05 Where The Work  — graph engineering, pedagogy, doctrine corpus
+ *   01 Work Loop       : hypothesis → backtest → paper → live → postmortem
+ *   02 Quant Cases     : 5 cards from /projects/quant
+ *   03 AI Cases        : 3 cards from /projects/ai
+ *   04 Live In Prod    : what is running right now
+ *   05 Where The Work  : graph engineering, pedagogy, doctrine corpus
  *
  * §6 NDA-clean. Senior QR voice. Institutional chrome.
  */
@@ -73,13 +73,13 @@ const buildDate = new Date().toISOString().slice(0, 10);
     </div>
   </header>
 
-  <!-- v9.7.2 BLOCKER FIX — was `<main>` nested inside BaseLayout's `<main id="main">`.
+  <!-- v9.7.2 BLOCKER FIX : was `<main>` nested inside BaseLayout's `<main id="main">`.
        HTML5 disallows nested <main>; axe-core landmark-unique fails.
        Replaced with <div> so BaseLayout remains the single main landmark. -->
   <div class="work-body container container-narrow">
-    <!-- § 01 — The Work Loop -->
+    <!-- § 01 : The Work Loop -->
     <section class="work-section" id="work-loop" aria-labelledby="work-loop-h" data-section-id="work">
-      <!-- v9.7.2 — migrated non-canonical `.work-section__mark` → canonical
+      <!-- v9.7.2 : migrated non-canonical `.work-section__mark` → canonical
            `.bryllim-mark` (Bryllim design register). Stripped leading `§`
            glyph + uppercase to match the lowercase 'NN. title' format
            used on home + 4 v9.6 priority pages. CSS rule updated below. -->
@@ -111,7 +111,7 @@ const buildDate = new Date().toISOString().slice(0, 10);
       </p>
     </section>
 
-    <!-- § 02 — Quant Case Studies -->
+    <!-- § 02 : Quant Case Studies -->
     <section class="work-section" id="work-quant" aria-labelledby="work-quant-h" data-section-id="work">
       <SectionMark index="02" title="quant case studies" ariaHidden={false} />
       <h2 class="work-section__title" id="work-quant-h">Five public-data case studies.</h2>
@@ -153,7 +153,7 @@ const buildDate = new Date().toISOString().slice(0, 10);
       </ul>
     </section>
 
-    <!-- § 03 — AI Engineering Case Studies -->
+    <!-- § 03 : AI Engineering Case Studies -->
     <section class="work-section" id="work-ai" aria-labelledby="work-ai-h" data-section-id="work">
       <SectionMark index="03" title="AI engineering case studies" ariaHidden={false} />
       <h2 class="work-section__title" id="work-ai-h">Three reproducible eval-first cases.</h2>
@@ -193,7 +193,7 @@ const buildDate = new Date().toISOString().slice(0, 10);
       </ul>
     </section>
 
-    <!-- § 04 — Live In Production -->
+    <!-- § 04 : Live In Production -->
     <section class="work-section" id="work-live" aria-labelledby="work-live-h" data-section-id="work">
       <SectionMark index="04" title="live in production" ariaHidden={false} />
       <h2 class="work-section__title" id="work-live-h">What is running right now.</h2>
@@ -235,7 +235,7 @@ const buildDate = new Date().toISOString().slice(0, 10);
       </div>
     </section>
 
-    <!-- § 05 — What Ships Next -->
+    <!-- § 05 : What Ships Next -->
     <section class="work-section" id="work-frontier" aria-labelledby="work-frontier-h" data-section-id="work">
       <SectionMark index="05" title="what ships next" ariaHidden={false} />
       <h2 class="work-section__title" id="work-frontier-h">
@@ -280,7 +280,7 @@ const buildDate = new Date().toISOString().slice(0, 10);
 </BaseLayout>
 
 <style>
-  /* Container + narrow — same shape as the rest of the v6-13 surface */
+  /* Container + narrow : same shape as the rest of the v6-13 surface */
   .container-narrow {
     max-width: 70rem;
     margin: 0 auto;
@@ -343,7 +343,7 @@ const buildDate = new Date().toISOString().slice(0, 10);
   .work-section:first-of-type {
     border-top: 0;
   }
-  /* v9.7.2 — `.bryllim-mark` style migrated to <SectionMark> component
+  /* v9.7.2 : `.bryllim-mark` style migrated to <SectionMark> component
      (src/components/SectionMark.astro). The scoped rule is now resolved
      by the component's own scoped style so the visual register matches
      flagship pages without per-page duplication. */

@@ -1,6 +1,6 @@
 ---
 /**
- * SiteHeader.astro — DEPRECATED as of v9.5 (2026-08-07). Replaced by the
+ * SiteHeader.astro : DEPRECATED as of v9.5 (2026-08-07). Replaced by the
  * pixel-logo block at the top of SideRail.astro (Bryllim left side-rail).
  * File retained for the next 30 days in case a rollback is needed during
  * the rollout. Do not import from new code. Remove after 2026-09-06 if
@@ -13,14 +13,14 @@
  * shortcut + remove the only running-tape chrome. W2 audit rank #9
  * (IA decision) is DEFERRED to a future wave.
  *
- * SiteHeader.astro — v9.3.5 SITE-WIDE RUNNING TAPE.
+ * SiteHeader.astro : v9.3.5 SITE-WIDE RUNNING TAPE.
  *
  * The signature chrome lifted from the home broadside (geometric CM monogram +
  * name + role + UTC + deployed stamp) and applied to every page. Sits above
  * the existing Nav component so the institutional register reads:
  *   light (running tape) → dark (nav) → cream (content) → dark (footer)
  *
- * This is the unifying identity owner was pushing for — every page now opens
+ * This is the unifying identity owner was pushing for : every page now opens
  * with the same 4-line running tape so the site reads as ONE portfolio, not
  * 36 disconnected pages.
  *
@@ -29,7 +29,7 @@
  * for every page. Slim-chrome pages keep the same tap; they just skip the
  * second-row Nav via BaseLayout's chrome="slim" prop.
  *
- * The tape is NOT sticky — it lives at the top of the document and scrolls
+ * The tape is NOT sticky : it lives at the top of the document and scrolls
  * away with the page. The Nav still owns the sticky contract. This keeps
  * the running tape feeling like a "letterhead" (printed-on-top-and-done),
  * not a "scratchpad" (always-visible).
@@ -52,7 +52,7 @@ import { path } from '@utils/url';
 
 <header class="site-header" aria-label="Site identity">
   <div class="site-header__row site-header__row--top">
-    <!-- Geometric CM monogram — signature mark, identical to index.astro tape -->
+    <!-- Geometric CM monogram : signature mark, identical to index.astro tape -->
     <svg
       class="site-header__mark"
       viewBox="0 0 32 32"
@@ -118,7 +118,7 @@ import { path } from '@utils/url';
     font-weight: 500;
   }
 
-  /* Subpage-only inheritance — make sure the running tape doesn't bleed
+  /* Subpage-only inheritance : make sure the running tape doesn't bleed
      into the dark nav. The Nav lives right below this element and has its
      own background (--c-tape), so the visual transition is:
        light cream (tape) → dark warm (nav) → cream (content) → dark (footer). */

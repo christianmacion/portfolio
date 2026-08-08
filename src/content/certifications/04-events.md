@@ -4,12 +4,12 @@ group: certifications
 order: 4
 blurb: 'Distinguishing Tier-1 flagships that anchor a memorable profile: NASA Space Apps, Meta BIDA, university teaching, and Philippine civil-service eligibility.'
 featuredImg: /proof/bida-meta-aiccelerate-2025-11.jpg
-featuredAlt: 'Certificate of Attendance for BIDA × Bayan Academy × Meta AIccelerate 2025 (Nov 12–21 2025), awarded Dec 17 2025.'
-featuredCaption: 'BIDA × Bayan Academy × Meta AIccelerate 2025 · Nov 12–21 2025 (5-day hybrid training) · awarded Dec 17 2025. Co-signed by BIDA, Bayan Academy, and Meta Philippines.'
+featuredAlt: 'Certificate of Attendance for BIDA × Bayan Academy × Meta AIccelerate 2025 (Nov 12-21 2025), awarded Dec 17 2025.'
+featuredCaption: 'BIDA × Bayan Academy × Meta AIccelerate 2025 · Nov 12-21 2025 (5-day hybrid training) · awarded Dec 17 2025. Co-signed by BIDA, Bayan Academy, and Meta Philippines.'
 featuredHref: https://bida.gov.ph/
 items:
   - {
-      name: 'Galactic Problem Solver — NASA Space Apps Challenge (Zurich, CH)',
+      name: 'Galactic Problem Solver : NASA Space Apps Challenge (Zurich, CH)',
       issuer: 'NASA',
       year: 2025,
       tier: 1,
@@ -17,7 +17,7 @@ items:
     }
   - { name: 'BIDA META AICCELERATE 2025', issuer: 'Meta', year: 2025, tier: 1, flagship: true }
   - {
-      name: 'Guest Speaker — CBA Annual Business Expo 2026',
+      name: 'Guest Speaker : CBA Annual Business Expo 2026',
       issuer: 'University of Southeastern Philippines (USeP)',
       year: 2026,
       tier: 1,

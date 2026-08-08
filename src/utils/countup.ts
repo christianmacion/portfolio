@@ -1,5 +1,5 @@
 /**
- * countup.ts — animated count-up for the home page stats strip.
+ * countup.ts : animated count-up for the home page stats strip.
  *
  * Counts from 0 → data-countup target using requestAnimationFrame and a
  * cubic-out ease. Honors prefers-reduced-motion: reduce (snaps to target).
@@ -60,7 +60,7 @@ export function animateCountUp(el: HTMLElement, opts: CountUpOptions = {}): void
   // v6.18 W2 lock (2026-08-08): aria-live="polite" on count-up targets
   // so screen readers announce the final numeric value when the
   // animation completes (per WCAG 4.1.3 live-region requirement).
-  // Idempotent — only sets if not already present.
+  // Idempotent : only sets if not already present.
   if (!el.hasAttribute('aria-live')) {
     el.setAttribute('aria-live', 'polite');
   }

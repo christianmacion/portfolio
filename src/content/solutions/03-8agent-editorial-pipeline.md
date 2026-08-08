@@ -5,7 +5,7 @@ category: 'AI Systems Engineering'
 order: 3
 client: 'Editorial AI / Content Automation'
 problem: |
-  A high-volume editorial workflow was generating content with a measurable "slop index" — generic,
+  A high-volume editorial workflow was generating content with a measurable "slop index" : generic,
   templated, easily-detected text. Quality gate was after-the-fact and manual. Production scaled
   faster than the editorial team could review.
 approach: |

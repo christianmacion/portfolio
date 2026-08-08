@@ -1,5 +1,5 @@
 /**
- * index.ts — STELLA custom SVG icon registry.
+ * index.ts : STELLA custom SVG icon registry.
  *
  * Single source of truth for icon path resolution. Every icon lives in its
  * own file under `./icon-defs/` and exports a `SVG_PATH` string. This file
@@ -61,7 +61,7 @@ import { SVG_PATH as pause } from './icon-defs/pause';
 import type { IconName } from './types';
 
 /**
- * The canonical registry — `Record<IconName, string>`.
+ * The canonical registry : `Record<IconName, string>`.
  *
  * If you add a name to the IconName union but forget to register it here,
  * TypeScript will error at compile time. This is the contract that keeps

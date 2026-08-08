@@ -1,6 +1,6 @@
 ---
 /**
- * ProbabilityDecay.astro — aggregate panel showing all `events.length` events as
+ * ProbabilityDecay.astro : aggregate panel showing all `events.length` events as
  * polylines on a probability-over-tenor axis.
  *
  * Server-rendered SVG, no JS. The X axis is the tenors normalized to a
@@ -34,7 +34,7 @@ interface Props {
 }
 const { events, width = 1080, height = 320, buildDate = '2026-07-10' } = Astro.props;
 
-// Layout constants — padL/R/T/B sized for axis labels + legend
+// Layout constants : padL/R/T/B sized for axis labels + legend
 const padL = 56,
   padR = 220,
   padT = 24,
@@ -97,7 +97,7 @@ const yTicks = [0, 0.25, 0.5, 0.75, 1].map((v) => ({ p: v, y: yForProb(v) }));
 // Category → palette color mapping (palette-locked tokens).
 const CATEGORY_COLOR: Record<string, string> = {
   macro: 'var(--c-amber)',
-  /* v6.11.10 — F14 amber-only. Volatility series now amber. */
+  /* v6.11.10 : F14 amber-only. Volatility series now amber. */
   crypto: 'var(--c-amber-light)',
   rates: 'var(--c-accent-cyan)',
   political: 'var(--c-ink-2)',
@@ -402,9 +402,9 @@ function linePath(pts: { x: number; y: number }[]): string {
     border-radius: 1px;
     vertical-align: middle;
   }
-  /* v6.11.9 — F14 amber-only. Was --c-pass / --c-fail traffic-light.
+  /* v6.11.9 : F14 amber-only. Was --c-pass / --c-fail traffic-light.
      Now amber for positive edge, ink-2 for negative edge. Sign carries
-     via the value's own glyph (+/-) — the color is no longer a crutch. */
+     via the value's own glyph (+/-) : the color is no longer a crutch. */
   .edge--pos {
     color: var(--c-amber);
     font-weight: 500;

@@ -1,26 +1,26 @@
 ---
 /**
- * EquityCurveChart.astro — server-rendered SVG with three panels:
+ * EquityCurveChart.astro : server-rendered SVG with three panels:
  *
- *   1. Equity curve (top, 60% of inner height) — strategy PnL normalized to 100
- *   2. Drawdown subplot (bottom, 30% of inner height) — running max-to-current DD
- *   3. Regime bands (background tint across both panels) — calm / normal / stress
+ *   1. Equity curve (top, 60% of inner height) : strategy PnL normalized to 100
+ *   2. Drawdown subplot (bottom, 30% of inner height) : running max-to-current DD
+ *   3. Regime bands (background tint across both panels) : calm / normal / stress
  *
  * No JS. All series are server-rendered as SVG paths. Regime is computed from
  * rolling 5-day vol of the equity series itself (no external data required).
  *
  * Why this exists: positions.astro needs a real chart, not the "illustrative
  * series" badge. Computing the drawdown + regime from the live series is
- * honest — they're properties of the series, not external claims.
+ * honest : they're properties of the series, not external claims.
  *
  * Props:
- *   data            — equity series, normalized to 100 (number[])
- *   width / height  — viewBox dimensions (default 720×320)
- *   volWindow       — rolling vol window in days (default 5)
- *   regimeQuantiles — [qLow, qHigh] in [0,1] for calm/stress thresholds (default [0.33, 0.66])
- *   yMin / yMax     — equity axis bounds (else auto)
- *   title           — chart title
- *   caption         — caption below chart
+ *   data            : equity series, normalized to 100 (number[])
+ *   width / height  : viewBox dimensions (default 720×320)
+ *   volWindow       : rolling vol window in days (default 5)
+ *   regimeQuantiles : [qLow, qHigh] in [0,1] for calm/stress thresholds (default [0.33, 0.66])
+ *   yMin / yMax     : equity axis bounds (else auto)
+ *   title           : chart title
+ *   caption         : caption below chart
  */
 interface Props {
   data: number[];
@@ -176,7 +176,7 @@ const xLabels: { i: number; text: string }[] = (() => {
   return labels;
 })();
 
-// Deterministic gradient ID — avoids SVG `<defs>` id collisions across charts.
+// Deterministic gradient ID : avoids SVG `<defs>` id collisions across charts.
 function hashSeed(s: string): string {
   let h = 0x811c9dc5;
   for (let i = 0; i < s.length; i++) {
@@ -187,12 +187,12 @@ function hashSeed(s: string): string {
 }
 const gradId = `eq-grad-${hashSeed(`${data.length}|${data[0]}|${data[data.length - 1]}`)}`;
 
-// Regime colors — kept amber-only so the institutional palette isn't bent.
-// v6.11.18 — was rgba(63,185,80,0.06) green for calm + rgba(248,81,73,0.07)
+// Regime colors : kept amber-only so the institutional palette isn't bent.
+// v6.11.18 : was rgba(63,185,80,0.06) green for calm + rgba(248,81,73,0.07)
 // red for stress. F14 rule: monochrome amber + ink. Calm = amber-soft
 // (positive state, less saturated), stress = ink-2 with 6% opacity
-// (negative state, dimmed — same hue family, sign lives in intensity).
-// v8.2.1 — values read from CSS tokens at runtime so palette shifts propagate.
+// (negative state, dimmed : same hue family, sign lives in intensity).
+// v8.2.1 : values read from CSS tokens at runtime so palette shifts propagate.
 const regimeFill: Record<'calm' | 'normal' | 'stress', string> = (() => {
   if (typeof window === 'undefined') {
     return { calm: 'transparent', normal: 'transparent', stress: 'transparent' };
@@ -303,7 +303,7 @@ const regimeFill: Record<'calm' | 'normal' | 'stress', string> = (() => {
       stroke-linejoin="round"
       stroke-linecap="round"></path>
 
-    {/* v6.11.10 — F14 amber-only. Drawdown area now ink-2 (no red). */}
+    {/* v6.11.10 : F14 amber-only. Drawdown area now ink-2 (no red). */}
     <path d={ddArea} fill="var(--c-ink-2)" fill-opacity="0.18"></path>
 
     {/* Drawdown zero line (subtle) */}
@@ -351,7 +351,7 @@ const regimeFill: Record<'calm' | 'normal' | 'stress', string> = (() => {
     display: block;
     background: var(--c-bg-2);
     border: 1px solid var(--c-rule);
-    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade */
+    /* v6.18 : rely on --j-r=0 via tokens-v6.13.css cascade */
   }
   .eq-chart__grid {
     stroke: var(--c-rule-soft);
@@ -411,13 +411,13 @@ const regimeFill: Record<'calm' | 'normal' | 'stress', string> = (() => {
     display: inline-block;
     width: 14px;
     height: 10px;
-    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade (was 2px) */
+    /* v6.18 : rely on --j-r=0 via tokens-v6.13.css cascade (was 2px) */
     border: 1px solid var(--c-rule-soft);
   }
-  /* v6.11.18 — F14 amber-only migration. Was rgba(63,185,80,0.18) green
+  /* v6.11.18 : F14 amber-only migration. Was rgba(63,185,80,0.18) green
      for calm + rgba(248,81,73,0.22) red for stress. Now amber-soft for
      calm + ink-2 18% for stress. Sign lives in intensity, not hue.
-     v8.2.1 — values read from tokens-v6.13.css: --j-calm/normal/stress-tint. */
+     v8.2.1 : values read from tokens-v6.13.css: --j-calm/normal/stress-tint. */
   .eq-chart__swatch--calm {
     background: var(--j-calm-tint);
   }

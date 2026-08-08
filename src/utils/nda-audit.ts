@@ -1,5 +1,5 @@
 /**
- * nda-audit.ts — build-time NDA guardrail.
+ * nda-audit.ts : build-time NDA guardrail.
  *
  * Walks the built `dist/` directory and fails the build if any NDA-prohibited
  * content slips into public-facing HTML or PDFs.
@@ -20,7 +20,7 @@
  *   8. No PM-by-name disclosure ("Evan Ferioli" etc.) in resume PDFs or humans.md (defensive)
  *   9. No past-employer name leak ("Arclion AI") in resume PDFs or humans.md (defensive)
  *
- * Rules 7–9 are narrowly scoped to the file types whose source content has
+ * Rules 7-9 are narrowly scoped to the file types whose source content has
  * already been redacted (PDF resumes + humans.md). They catch future
  * re-introduction in those specific artifacts; broader coverage of
  * `src/content/experience/*.md` and similar is a separate task and is
@@ -64,7 +64,7 @@ const RULES: Rule[] = [
     label: 'Never claim "Present" employment at 19V Capital',
     pattern:
       /\b(?:Present|Currently|presently|currently)\b[^.]*?19V|19V[^.]*?(?:Present|Currently|presently|currently)\b/gi,
-    exceptionPattern: /closed past contract|03\/2026\s*[–-]\s*06\/2026/i,
+    exceptionPattern: /closed past contract|03\/2026\s*[--]\s*06\/2026/i,
     scope: 'content',
   },
   {
@@ -78,7 +78,7 @@ const RULES: Rule[] = [
     label: 'No proprietary data sources referenced (Polymarket, Kalshi, NOAA, USDA)',
     pattern: /\b(?:Polymarket|Kalshi|NOAA|USDA)\b/g,
     scope: 'content',
-    // v6.11 — GDELT 2.0 (Global Database of Events, Language, and Tone)
+    // v6.11 : GDELT 2.0 (Global Database of Events, Language, and Tone)
     // is a public-domain event monitor from Yahoo Research / Georgetown.
     // It's NOT in the proprietary-data-sources ban list. We do not
     // render raw GDELT SOURCEURL fields; the gdelt-bucket.ts mapper

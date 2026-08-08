@@ -1,5 +1,5 @@
 /**
- * gdelt-client.ts — Browser-direct GDELT 2.0 fetcher with CORS fallback.
+ * gdelt-client.ts : Browser-direct GDELT 2.0 fetcher with CORS fallback.
  *
  * GDELT 2.0 publishes geo-tagged news events at 15-minute cadence:
  *   1. data.gdeltproject.org/gdeltv2/lastupdate.txt   (3-line manifest)
@@ -44,22 +44,35 @@ export interface GdeltEvent {
   goldstein?: number;
 }
 
-/** Resolve a JSON value to GdeltEvent[] (handles the static-fallback shape). */
+/** Resolve a JSON value to GdeltEvent[] (handles the static-fallback shape).
+ *  2026-08-08 live-data wiring: filter out the synthetic 'data-pull' seed
+ *  event the Worker injects to indicate the cache is alive; consumers
+ *  want real GDELT events only.
+ */
 function asEvents(raw: unknown): GdeltEvent[] {
   if (!raw || typeof raw !== 'object') return [];
   const root = raw as { events?: unknown };
   const arr = root.events;
   if (!Array.isArray(arr)) return [];
-  return arr.filter((e: unknown): e is GdeltEvent => {
-    if (!e || typeof e !== 'object') return false;
-    const o = e as Record<string, unknown>;
-    return (
-      typeof o.id === 'string' &&
-      typeof o.lat === 'number' &&
-      typeof o.lon === 'number' &&
-      typeof o.title === 'string'
-    );
-  });
+  return arr
+    .filter((e: unknown): e is GdeltEvent => {
+      if (!e || typeof e !== 'object') return false;
+      const o = e as Record<string, unknown>;
+      return (
+        typeof o.id === 'string' &&
+        typeof o.lat === 'number' &&
+        typeof o.lon === 'number' &&
+        typeof o.title === 'string'
+      );
+    })
+    .filter((e) => e.source !== 'data-source-pull');
+}
+
+/** Extract the worker's lastSync timestamp from a worker response. */
+export function asLastSync(raw: unknown): string | null {
+  if (!raw || typeof raw !== 'object') return null;
+  const o = raw as { lastSync?: unknown };
+  return typeof o.lastSync === 'string' ? o.lastSync : null;
 }
 
 /**
@@ -125,7 +138,7 @@ async function fetchViaWorkerProxy(manifestUrl: string): Promise<GdeltEvent[]> {
 }
 
 /**
- * loadGdelt() — primary entry point. Returns up to 6 GDELT events, newest first.
+ * loadGdelt() : primary entry point. Returns up to 6 GDELT events, newest first.
  *
  * Resolution order:
  *   1. Cloudflare Worker at /api/worldview/gdelt (handles CORS + unzipping)

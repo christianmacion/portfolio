@@ -1,28 +1,28 @@
 ---
 /**
- * EntryStations.astro — v6.6 denser GRAPHIC VISUAL DYNAMIC polish.
+ * EntryStations.astro : v6.6 denser GRAPHIC VISUAL DYNAMIC polish.
  *
  * Replaces the v6.5 measured-text stations grid with a denser panel that
- * earns its space — Federal Reserve H.4.1 release tables / BIS Quarterly
+ * earns its space : Federal Reserve H.4.1 release tables / BIS Quarterly
  * Review section dividers / NASA Worldview data panels, but with a
  * Bloomberg-ticker wallop. Four stations, each now carries:
  *
- *   1. Top bar        — 1px solid amber line + station ID label (mono, tracked)
- *   2. Title row      — serif italic, section name in question form
- *   3. Big number     — sans tabular-nums, headline metric, with 14px icon
- *   4. Caption        — mono subtitle clarifying the metric
- *   5. 3 stats        — key/value pairs (mono, 11px) — existing
- *   6. 4th row        — STATUS · DELTA · NEXT, 1px pipe-separated (NEW)
- *   7. Trend strip    — 48-wide inline SVG, 4 deterministic bars (existing)
- *   8. Mini-trend     — 240×40 SVG, 60 bars, last-bar amber, ink-3 rest (NEW)
- *   9. Event tape     — 24×96 vertical, 5 stacked 6×6 ticks in 4-cat palette (NEW)
- *  10. Flow arrow     — [ INPUT ] →→→ [ OUTPUT ] replacing old 3 pills (NEW)
- *  11. Bottom rail    — 1px hairline divider (existing)
+ *   1. Top bar        : 1px solid amber line + station ID label (mono, tracked)
+ *   2. Title row      : serif italic, section name in question form
+ *   3. Big number     : sans tabular-nums, headline metric, with 14px icon
+ *   4. Caption        : mono subtitle clarifying the metric
+ *   5. 3 stats        : key/value pairs (mono, 11px) : existing
+ *   6. 4th row        : STATUS · DELTA · NEXT, 1px pipe-separated (NEW)
+ *   7. Trend strip    : 48-wide inline SVG, 4 deterministic bars (existing)
+ *   8. Mini-trend     : 240×40 SVG, 60 bars, last-bar amber, ink-3 rest (NEW)
+ *   9. Event tape     : 24×96 vertical, 5 stacked 6×6 ticks in 4-cat palette (NEW)
+ *  10. Flow arrow     : [ INPUT ] →→→ [ OUTPUT ] replacing old 3 pills (NEW)
+ *  11. Bottom rail    : 1px hairline divider (existing)
  *
  * Discipline:
  *   - Server-rendered, no client JS, no Math.random(), no Date.now()
  *   - All numbers deterministic from buildSeed() + per-station seed
- *   - Palette tokens only — no new tokens, no raw hex outside tokens
+ *   - Palette tokens only : no new tokens, no raw hex outside tokens
  *   - Each station is a clickable anchor with min-height ≥ 44px
  *   - prefers-reduced-motion: reduce honored (no hover-translate)
  */
@@ -33,7 +33,7 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 
 type ProjectEntry = CollectionEntry<'project'>;
 const seed = buildSeed();
-// v6.10.40 — derive stat counts from canonical sources.
+// v6.10.40 : derive stat counts from canonical sources.
 const allProjectsES: ProjectEntry[] = await getCollection('project');
 const quantCount = allProjectsES.filter((p) => p.data.role === 'quant').length;
 
@@ -77,8 +77,8 @@ const aiRng = seedFromString(seed + '::station-04');
 const aiPass = Math.max(91, Math.min(97, Math.round(94 + (aiRng() - 0.5) * 6)));
 const aiSpark = [0.6, 0.5, 0.8, 0.7].map((b) => +(b + (aiRng() - 0.5) * 0.2).toFixed(2));
 
-// === STATUS ROW — AS OF (deterministic UTC+8 time) ================
-// v6.10.55 — removed dead tsRng / hh / mm / asOf cluster. The status row
+// === STATUS ROW : AS OF (deterministic UTC+8 time) ================
+// v6.10.55 : removed dead tsRng / hh / mm / asOf cluster. The status row
 // now consumes a parent-supplied `nowIso`; the per-station timestamp was
 // never rendered after the v6.5 → v6.6 polish sweep.
 
@@ -359,8 +359,8 @@ const stations = [
 
 <style>
   /* ============================================================
-     ENTRY STATIONS — v7 sparser Apple HIG redesign.
-     Owner directive 2026-07-19: "looks fucked" — v6.6 had 11 visual
+     ENTRY STATIONS : v7 sparser Apple HIG redesign.
+     Owner directive 2026-07-19: "looks fucked" : v6.6 had 11 visual
      elements per station (id, title, big number, caption, 3 stats,
      status row, trend, mini-trend, tape, flow, rail). Cut to 4 elements
      per station: amber ID · italic title · big number with caption ·
@@ -423,7 +423,7 @@ const stations = [
     border-left: 1px solid var(--c-rule);
   }
 
-  /* === Each station — minimal clickable anchor ===
+  /* === Each station : minimal clickable anchor ===
      v7: cut from 11 visual elements to 4. No tape, no flow arrow, no
      status row, no dual trends, no supporting stats panel.
      Structure: ID bar · italic title · big number · mini-trend. */
@@ -448,7 +448,7 @@ const stations = [
     outline-offset: -1px;
   }
 
-  /* === ID bar — 1px amber line + tracked mono label === */
+  /* === ID bar : 1px amber line + tracked mono label === */
   .entry-station__id {
     display: flex;
     align-items: center;
@@ -469,7 +469,7 @@ const stations = [
     transition: width var(--transition);
   }
 
-  /* === Title — serif italic (institutional question form) === */
+  /* === Title : serif italic (institutional question form) === */
   .entry-station__title {
     font-family: var(--ff-math);
     font-style: italic;
@@ -483,7 +483,7 @@ const stations = [
     flex: 1;
   }
 
-  /* === Big number — tabular-nums + 14px amber icon === */
+  /* === Big number : tabular-nums + 14px amber icon === */
   .entry-station__big {
     display: flex;
     align-items: baseline;
@@ -517,7 +517,7 @@ const stations = [
     margin-left: 0.05em;
   }
 
-  /* === Caption — mono subtitle under the big number === */
+  /* === Caption : mono subtitle under the big number === */
   .entry-station__caption {
     font-size: 0.7rem;
     color: var(--c-ink-2);
@@ -525,7 +525,7 @@ const stations = [
     margin: 0;
   }
 
-  /* === Mini-trend — 240x32 SVG bar chart === */
+  /* === Mini-trend : 240x32 SVG bar chart === */
   .entry-station__minitrend {
     display: block;
     width: 100%;
@@ -546,7 +546,7 @@ const stations = [
     opacity: 0.9;
   }
 
-  /* === Hover affordance — id-bar grows; row tints to amber-wash === */
+  /* === Hover affordance : id-bar grows; row tints to amber-wash === */
   .entry-station:hover .entry-station__id-bar,
   .entry-station:focus-visible .entry-station__id-bar {
     width: 28px;

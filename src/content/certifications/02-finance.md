@@ -21,10 +21,10 @@ items:
       issuer: 'Goldman Sachs',
       year: 2025,
       tier: 1,
-      note: 'Educational module — not a credential. Public verify URL = the GS AM insights article.',
+      note: 'Educational module : not a credential. Public verify URL = the GS AM insights article.',
     }
   - {
-      name: 'JPMorganChase — Investment Banking Job Simulation',
+      name: 'JPMorganChase : Investment Banking Job Simulation',
       issuer: 'Forage',
       year: 2026,
       tier: 1,
@@ -54,7 +54,7 @@ items:
     }
   - { name: 'Economics Masterclass', issuer: 'upGrad', year: 2024, tier: 2 }
   - {
-      name: 'Principles of Economics — Macroeconomics',
+      name: 'Principles of Economics : Macroeconomics',
       issuer: 'Marginal Revolution University',
       year: 2024,
       tier: 2,

@@ -7,7 +7,7 @@ location: 'Remote'
 startDate: '2025-10'
 endDate: '2026-04'
 isCurrent: false
-summary: 'Structured analysis of crypto trading workflows — order execution, bots, and platform mechanics.'
+summary: 'Structured analysis of crypto trading workflows : order execution, bots, and platform mechanics.'
 tags: [crypto, trading-workflows, research, documentation]
 contributions:
   - label: 'Workflow-pattern catalog'

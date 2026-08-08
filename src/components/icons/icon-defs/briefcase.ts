@@ -1,5 +1,5 @@
 /**
- * briefcase — briefcase silhouette (handle arc + body rectangle).
+ * briefcase : briefcase silhouette (handle arc + body rectangle).
  * Work/case-study category: link to a project, case study, or contract.
  */
 export const SVG_PATH =

@@ -1,5 +1,5 @@
 /**
- * copy-button.ts — Phase D-5.
+ * copy-button.ts : Phase D-5.
  *
  * Auto-wires a "Copy" button to every <pre> block on the page.
  * Sits in the top-right corner, becomes visible on hover of the <pre>.
@@ -13,11 +13,11 @@
 
 const SUPPORTS_CLIPBOARD = typeof navigator !== 'undefined' && !!navigator.clipboard;
 
-// === v8.3 — chrome token fallback constants (defensive against missing tokens) ===
+// === v8.3 : chrome token fallback constants (defensive against missing tokens) ===
 // These mirror the legacy-cobalt Jane Street era hex values that the
 // `var(--c-X, #hex)` patterns used as fallbacks on pages without the
 // v6-13 surface alias block. Now consolidated into named TS constants
-// so check-tokens.mjs sees no hex literals — the source of truth for
+// so check-tokens.mjs sees no hex literals : the source of truth for
 // those hex values is `src/styles/tokens-v6.13.css` (legacy --c-* aliases).
 // If the v6-13 surface is loaded (the default for /, /desk, /prediction-markets,
 // etc.), the var(--c-*) tokens resolve to current --j-* values and these

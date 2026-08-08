@@ -1,8 +1,8 @@
 /**
- * github — GitHub Octocat mark.
+ * github : GitHub Octocat mark.
  * Communication category: link to GitHub profile or repository.
  *
- * Note: this path is the brand-glyph abstract from the GitHub mark — purely
+ * Note: this path is the brand-glyph abstract from the GitHub mark : purely
  * geometric, no letter forms, all single paths. Stroke rendering at 1.5px
  * preserves the silhouette without losing recognizability at chrome sizes
  * (16-24px).

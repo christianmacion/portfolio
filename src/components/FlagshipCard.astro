@@ -1,6 +1,6 @@
 ---
 /**
- * FlagshipCard.astro — Tier-1 credential card.
+ * FlagshipCard.astro : Tier-1 credential card.
  *
  * One-prop component for flagship certificates on /proof and /certifications.
  * Pulls featured fields from certGroup content collection (already in schema):
@@ -67,7 +67,7 @@ const {
     background: var(--c-bg);
     border: 1px solid var(--c-rule);
     border-left: 3px solid var(--c-amber);
-    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade */
+    /* v6.18 : rely on --j-r=0 via tokens-v6.13.css cascade */
     transition:
       border-color var(--transition),
       box-shadow var(--transition);
@@ -100,15 +100,15 @@ const {
     color: var(--c-amber);
     font-weight: 600;
   }
-  /* F22 — institutional: "Tier-1" is the most-emphasized tier, so amber
-     (single accent) — not pass-green which is reserved for ticker data. */
+  /* F22 : institutional: "Tier-1" is the most-emphasized tier, so amber
+     (single accent) : not pass-green which is reserved for ticker data. */
   .flagship__badge {
     font-size: var(--fs-xs);
     color: var(--c-phi);
     background: var(--c-amberl-mist);
     border: 1px solid var(--c-amberl-decor);
     padding: 0.125rem var(--sp-2);
-    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade */
+    /* v6.18 : rely on --j-r=0 via tokens-v6.13.css cascade */
     font-weight: 600;
     letter-spacing: 0.04em;
   }

@@ -1,6 +1,6 @@
 ---
 /**
- * OrderBook.astro — v6.1 institutional order-book ladder.
+ * OrderBook.astro : v6.1 institutional order-book ladder.
  *
  * Server-rendered. Zero runtime JS. Generates 12 bid + 12 ask rows from
  * mulberry32 (via @utils/prng), seeded from `buildSeed()` + symbol so
@@ -10,7 +10,7 @@
  * Columns: PRICE (right-aligned mono) · SIZE (right-aligned mono) ·
  * CUM (cumulative, mid-aligned). The size-bar background fills
  * proportional to size/maxSize via a linear-gradient from `--c-pass-soft`
- * (bid) / `--c-fail-soft` (ask) into transparent — gives the ladder its
+ * (bid) / `--c-fail-soft` (ask) into transparent : gives the ladder its
  * "wall of depth" feel without any DOM bloat.
  *
  * Usage:
@@ -52,12 +52,12 @@ const midPxResolved =
 // === Bid / Ask arrays ===
 // halfSpread is in absolute price units (bps of midPx).
 const halfSpread = (midPxResolved * spreadBps) / 10_000;
-// Tick size derived from symbol — round to a sensible grid. For SPX/NDX
+// Tick size derived from symbol : round to a sensible grid. For SPX/NDX
 // that's 0.01; for BTC-USD it's 1. We infer from midPx magnitude.
 const tick =
   midPxResolved >= 10_000 ? 1 : midPxResolved >= 1000 ? 0.05 : midPxResolved >= 100 ? 0.01 : 0.001;
 
-// Build the size ladders — geometric, with PRNG jitter so adjacent
+// Build the size ladders : geometric, with PRNG jitter so adjacent
 // rows don't look like a perfect staircase.  Bids are descending
 // outward from midPx; asks ascending. Cumulative-size runs from the
 // inside outward so the inside-edge fill is biggest.
@@ -74,7 +74,7 @@ function makeSide(side: 'bid' | 'ask', count: number, jitterRng: () => number): 
   for (let i = 0; i < count; i++) {
     // Inside edge largest (low i). Decay outward.
     const decay = 1 / (1 + i * 0.18);
-    // PRNG jitter: 0.5×–1.5× multiplicative noise.
+    // PRNG jitter: 0.5×-1.5× multiplicative noise.
     const jitter = 0.5 + jitterRng();
     sizes.push(Math.round(decay * 2400 * jitter));
   }
@@ -117,7 +117,7 @@ const spreadAbs = +(bestAsk - bestBid).toFixed(4);
 const midStr = formatPx(midPxResolved, midPxResolved >= 1000 ? 2 : 4);
 
 // === Render-side delta vs. midPx (for color) ===
-// Half-spread (bps) gives a stable, deterministic "feel" — purely
+// Half-spread (bps) gives a stable, deterministic "feel" : purely
 // cosmetic. The tape is seeded so this number doesn't drift per render.
 const sessionChangePct = (() => {
   // Use a fixed reference "yesterday close" derived from the seed so
@@ -128,7 +128,7 @@ const sessionDeltaStr = formatPct(sessionChangePct);
 const sessionColorClass =
   sessionChangePct > 0.005 ? 'pass' : sessionChangePct < -0.005 ? 'fail' : 'muted';
 
-// === Display decimals — match the symbol ===
+// === Display decimals : match the symbol ===
 const pxDecimals = midPxResolved >= 1000 ? 2 : midPxResolved >= 100 ? 2 : 4;
 ---
 
@@ -201,7 +201,7 @@ const pxDecimals = midPxResolved >= 1000 ? 2 : midPxResolved >= 100 ? 2 : 4;
     flex-direction: column;
     background: var(--c-bg-2);
     border: 1px solid var(--c-rule);
-    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade */
+    /* v6.18 : rely on --j-r=0 via tokens-v6.13.css cascade */
     padding: var(--sp-3);
     font-size: 0.78rem;
     min-width: 0;
@@ -235,7 +235,7 @@ const pxDecimals = midPxResolved >= 1000 ? 2 : midPxResolved >= 100 ? 2 : 4;
     font-variant-numeric: tabular-nums;
     font-feature-settings: 'tnum' 1;
   }
-  /* v6.11.10 — F14 amber-only. Pass = amber (gain), Fail = ink-2
+  /* v6.11.10 : F14 amber-only. Pass = amber (gain), Fail = ink-2
      (loss). Sign carried by intensity, not hue. */
   .book__delta--pass {
     color: var(--c-amber);
@@ -285,11 +285,11 @@ const pxDecimals = midPxResolved >= 1000 ? 2 : midPxResolved >= 100 ? 2 : 4;
     position: relative;
     isolation: isolate;
   }
-  /* Size bar — drawn behind the text as a solid block whose width is
+  /* Size bar : drawn behind the text as a solid block whose width is
      `--bar` (set per-row inline). Bid bar grows from the right (toward
      mid); ask bar grows from the left.
-     v9.3.1 — F17 institutional: solid tokenized color blocks (no decorative
-     gradient). Order book is a hard-edge tabular widget — Bloomberg terminal
+     v9.3.1 : F17 institutional: solid tokenized color blocks (no decorative
+     gradient). Order book is a hard-edge tabular widget : Bloomberg terminal
      register, not gradient surface. */
   .book__row::before {
     content: '';
@@ -320,7 +320,7 @@ const pxDecimals = midPxResolved >= 1000 ? 2 : midPxResolved >= 100 ? 2 : 4;
     font-variant-numeric: tabular-nums;
     font-feature-settings: 'tnum' 1;
   }
-  /* v6.11.10 — F14 amber-only. Bid = amber (lifted), ask = ink-2. */
+  /* v6.11.10 : F14 amber-only. Bid = amber (lifted), ask = ink-2. */
   .book__price--bid {
     color: var(--c-amber);
   }
@@ -346,7 +346,7 @@ const pxDecimals = midPxResolved >= 1000 ? 2 : midPxResolved >= 100 ? 2 : 4;
     color: var(--c-ink-2);
     font-size: 0.7rem;
   }
-  /* v6.11.10 — F14 amber-only. Spread bid = amber, ask = ink-2. */
+  /* v6.11.10 : F14 amber-only. Spread bid = amber, ask = ink-2. */
   .book__spread > :first-child {
     color: var(--c-amber);
     text-align: left;

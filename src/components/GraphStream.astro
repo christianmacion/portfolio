@@ -1,12 +1,12 @@
 ---
 /**
- * GraphStream.astro — v7.7 LIVE-STYLE GRAPH EMBED
+ * GraphStream.astro : v7.7 LIVE-STYLE GRAPH EMBED
  *
  * Renders a tiny force-directed graph of the STELLA knowledge graph
  * snapshot (public-safe slice). The data is built at compile time
  * from `~/.claude/cache/stella/graph/` via scripts/build-graph-snapshot.mjs
  * and shipped as /graph-stream.json. The client renders with a small
- * (~3KB) d3-style implementation — no CDN dependency, no tailwind,
+ * (~3KB) d3-style implementation : no CDN dependency, no tailwind,
  * no halo.
  *
  * Use:
@@ -27,7 +27,7 @@ interface Props {
 }
 
 const { height = 380, showLabels = false, squad = 'all', limit = 60 } = Astro.props;
-// Standing Order §9 — no Math.random() in deterministic outputs.
+// Standing Order §9 : no Math.random() in deterministic outputs.
 // Deterministic ID from the prop signature: same squad/limit/height/
 // showLabels tuple → same ID across SSR + hydration, so the
 // data-stream-id attribute stays stable.
@@ -48,7 +48,7 @@ const streamId = `graph-${fnv1a(`${squad}:${limit}:${showLabels}:${height}`)}`;
     <p class="graph-stream__eyebrow mono">BY CHRISTIAN MACION · QUANT RESEARCH + AI ENGINEERING</p>
     <p class="graph-stream__caption">
       <span class="graph-stream__pulse" aria-hidden="true"></span>
-      <span data-stream-count>–</span> agents online · <span data-stream-edges>–</span> edges
+      <span data-stream-count>-</span> agents online · <span data-stream-edges>-</span> edges
     </p>
   </div>
   <svg
@@ -95,8 +95,8 @@ const streamId = `graph-${fnv1a(`${squad}:${limit}:${showLabels}:${height}`)}`;
     gap: 6px;
     letter-spacing: 0.04em;
   }
-  /* v9.3.2 — institutional register per feedback-portfolio-visual-bar-2026-07-31.
-     The prior keyframes animated `box-shadow: 0 0 0 8px var(--j-pulse-end)` — a
+  /* v9.3.2 : institutional register per feedback-portfolio-visual-bar-2026-07-31.
+     The prior keyframes animated `box-shadow: 0 0 0 8px var(--j-pulse-end)` : a
      expanding ring that read as a halo/glow banner. Owner directive: NO halo,
      NO glow, NO `0 0 Npx var(--*)`. Replaced with a pure-fill opacity pulse:
      the dot stays a flat 7px circle, brightness oscillates 0.45 → 1 → 0.45 over
@@ -245,7 +245,7 @@ const streamId = `graph-${fnv1a(`${squad}:${limit}:${showLabels}:${height}`)}`;
         cy = H / 2;
       const nodes = this.nodes;
       const edges = this.edges;
-      // Static radial layout — fast, no animation library needed
+      // Static radial layout : fast, no animation library needed
       const rings = 4;
       nodes.forEach((node, i) => {
         const ring = Math.floor(i / (nodes.length / rings));

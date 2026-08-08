@@ -1,6 +1,6 @@
 ---
 /**
- * EarthDrawer.astro — v6.4 "Earth Mission Control" Bloomberg `<F1> Help`-
+ * EarthDrawer.astro : v6.4 "Earth Mission Control" Bloomberg `<F1> Help`-
  * style right-side event drawer.
  *
  * Deviates from the plan's `:target` mechanism in favor of the native
@@ -518,8 +518,8 @@ const events: DrawerEvent[] = [
 ];
 
 function signalPillColor(sig: string): string {
-  // v6.9.16 — return values match the renamed CSS classes above.
-  // Old: 'fail' / 'cyan' — both misleading (see comment block).
+  // v6.9.16 : return values match the renamed CSS classes above.
+  // Old: 'fail' / 'cyan' : both misleading (see comment block).
   switch (sig) {
     case 'long-vol':
       return 'amber-bordered';
@@ -745,20 +745,20 @@ function signalPillColor(sig: string): string {
   .pill {
     display: inline-block;
     padding: 0.1rem 0.4rem;
-    /* v9.3.1 — F17 institutional: sharp corners (1px) instead of 2px pill. */
+    /* v9.3.1 : F17 institutional: sharp corners (1px) instead of 2px pill. */
     border-radius: 1px;
     font-family: var(--ff-mono, monospace);
     font-size: 0.65rem;
     text-transform: uppercase;
     letter-spacing: 0.06em;
   }
-  /* F17 — institutional: collapse 6 pill colors → monochrome ink + amber.
+  /* F17 : institutional: collapse 6 pill colors → monochrome ink + amber.
      Earth map legend dots (in the globe) still use color for category ID,
-     but these pills in the drawer are chrome — they should not look like
+     but these pills in the drawer are chrome : they should not look like
      a status dashboard. All variants collapse to ink-3 hairline-bordered
      (pass/cyan/amber) or amber ink (amber). Fail pill renders as ink-3
      with a thin amber border to indicate severity. */
-  /* v6.9.16 — class-name hygiene: --cyan was misleading (ink-3 hairline,
+  /* v6.9.16 : class-name hygiene: --cyan was misleading (ink-3 hairline,
      not cyan); rename to --neutral (matches rendering). --fail with
      amber border is also misleading → --amber-bordered (describes CSS,
      not signal semantics). All five collapse to hairline-bordered ink

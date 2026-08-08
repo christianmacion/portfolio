@@ -1,14 +1,14 @@
 ---
 /**
- * AgentGraph.astro — server-rendered SVG of the 11-agent platform DAG.
+ * AgentGraph.astro : server-rendered SVG of the 11-agent platform DAG.
  *
- * v6.1 Mission F (`/ai` page) — the centerpiece diagram. Hand-rolled
+ * v6.1 Mission F (`/ai` page) : the centerpiece diagram. Hand-rolled
  * SVG (no runtime JS, no client:*). The active feedback loop is
  * highlighted in amber; a small amber dot "travels" along the active
  * path via CSS @keyframes (stroke-dashoffset). Honors
  * `prefers-reduced-motion: reduce` to freeze the dot at one position.
  *
- * Coordinates are deterministic constants — no Math.random anywhere.
+ * Coordinates are deterministic constants : no Math.random anywhere.
  * Layout: 4 inputs (left) → 1 orchestrator (centre) → 3 middles →
  * 3 outputs (right), with Feedback looping back to Orchestrator.
  *
@@ -21,7 +21,7 @@ interface Props {
   /** Optional CSS class on the outer wrapper (e.g. for grid sizing). */
   class?: string;
   /**
-   * Compact mode drops the 4 input columns — used in the home two-pillar
+   * Compact mode drops the 4 input columns : used in the home two-pillar
    * pane where the orchestrator + middles + outputs tell the same story in
    * less width. 11 nodes → 7 nodes (orchestrator + 3 middles + 3 outputs).
    */
@@ -175,10 +175,10 @@ const nodes: Node[] = [
   },
 ];
 
-// v6.10.39 — derive agent-count descriptors from the actual `nodes`
+// v6.10.39 : derive agent-count descriptors from the actual `nodes`
 // array, not hardcoded "11". If a 5th input or 4th output is added to
 // the DAG, the aria-label + legend caption auto-update.
-// v7.5 — in compact mode we render 7 nodes (orchestrator + middles +
+// v7.5 : in compact mode we render 7 nodes (orchestrator + middles +
 // outputs) instead of 11 (which includes the 4 input feeders).
 const visibleNodes = compact ? nodes.filter((n) => n.family !== 'input') : nodes;
 const nodeById = Object.fromEntries(nodes.map((n) => [n.id, n]));
@@ -195,7 +195,7 @@ type Edge = {
   skipCompact?: boolean;
 };
 const edges: Edge[] = [
-  // Inputs → Orchestrator (skipped in compact mode — input column dropped)
+  // Inputs → Orchestrator (skipped in compact mode : input column dropped)
   { from: 'in1', to: 'orch', skipCompact: true },
   { from: 'in2', to: 'orch', active: true, skipCompact: true }, // active start (input feeds the loop)
   { from: 'in3', to: 'orch', skipCompact: true },
@@ -261,7 +261,7 @@ const resolved: ResolvedEdge[] = edges
   });
 
 // Compute the active-loop polyline as a single combined SVG path. Used
-// twice — once for the static amber "track" and once with a smaller
+// twice : once for the static amber "track" and once with a smaller
 // dash + animation for the traveling dot.
 const activeEdges = resolved.filter((e) => e.active);
 const activePathD = activeEdges
@@ -270,7 +270,7 @@ const activePathD = activeEdges
 
 // Helper: render a non-active edge as a quadratic-curved path. Curve
 // bias is keyed off `from` so two edges between the same pair don't
-// visually merge. No Math.random — bias index is the edge's position in
+// visually merge. No Math.random : bias index is the edge's position in
 // `resolved`.
 function edgePath(e: ResolvedEdge, idx: number): string {
   const dx = e.x2 - e.x1;
@@ -543,7 +543,7 @@ const activeLength = activeEdges.reduce((acc, e) => acc + dist(e.x1, e.y1, e.x2,
   }
   .ag-node--highlight .ag-node-label {
     /* v6.18 W2 lock (2026-08-08): fill: #fff → var(--j-bg). The highlight
-       node reads "ink on amber" — --j-bg is the canonical ink token for
+       node reads "ink on amber" : --j-bg is the canonical ink token for
        chrome on amber surfaces (dark/light theme-invariant). */
     fill: var(--j-bg);
   }
@@ -552,7 +552,7 @@ const activeLength = activeEdges.reduce((acc, e) => acc + dist(e.x1, e.y1, e.x2,
   }
 
   .ag-legend-text {
-    /* v6.11.9 — was ink-3 at 10px. Bumped to ink-2 + 11px so legend
+    /* v6.11.9 : was ink-3 at 10px. Bumped to ink-2 + 11px so legend
        chrome survives at smaller viewports and reads on first scan. */
     fill: var(--c-ink-2);
     font-family: var(--ff-mono);

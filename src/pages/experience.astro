@@ -1,6 +1,6 @@
 ---
 /**
- * experience.astro — v2: timeline + math/quant aesthetic.
+ * experience.astro : v2: timeline + math/quant aesthetic.
  *
  * Hero equation: where proof / work / time = per-engagement contribution density.
  * Stats panel: total engagements, total months, total proofs declared.
@@ -9,9 +9,7 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import TimelineEntry from '@components/TimelineEntry.astro';
 import Stat from '@components/Stat.astro';
 import Equation from '@components/Equation.astro';
-import CTABanner from '@components/CTABanner.astro';
 import ReadMeta from '@components/ReadMeta.astro';
-import TrustStrip from '@components/TrustStrip.astro';
 import ChromeHeader from '@components/ChromeHeader.astro';
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import { path } from '@utils/url';
@@ -29,7 +27,7 @@ const rendered = await Promise.all(
   }),
 );
 
-// Aggregate metrics across all experiences (NDA-safe — only counts and labels)
+// Aggregate metrics across all experiences (NDA-safe : only counts and labels)
 const totalContributions = rendered.reduce(
   (sum, { entry }) => sum + (entry.data.contributions?.length ?? 0),
   0,
@@ -37,21 +35,21 @@ const totalContributions = rendered.reduce(
 const totalProofs = rendered.reduce((sum, { entry }) => sum + (entry.data.proofs?.length ?? 0), 0);
 const totalEntries = rendered.length;
 
-// v6.11.18.2 — wordCount derived from rendered entry bodies (was
+// v6.11.18.2 : wordCount derived from rendered entry bodies (was
 // hardcoded minutes={8} on the ReadMeta call). Sum across all entries
-// of `body.split(/\s+/).length` then round up — the union of evidence
+// of `body.split(/\s+/).length` then round up : the union of evidence
 // paragraphs, not a chrome lie.
 const wordCount = rendered.reduce((sum, { entry }) => {
   const body = typeof entry.body === 'string' ? entry.body : '';
   return sum + (body.trim().length ? body.trim().split(/\s+/).length : 0);
 }, 0);
 
-// v6.11.19 — totalMonths derived from frontmatter (was hardcoded 25 with
-// a stale comment "2024-12 → 2026-05 = ~25 months" — that span is
+// v6.11.19 : totalMonths derived from frontmatter (was hardcoded 25 with
+// a stale comment "2024-12 → 2026-05 = ~25 months" : that span is
 // actually 17 months, not 25). Union of months across all entries is
 // the honest unique-months span of the experience column. `today`
 // comes from buildStampUtc8() (BUILD_DATE env var) per Standing
-// Order §9 — no argless `new Date()` in deterministic outputs.
+// Order §9 : no argless `new Date()` in deterministic outputs.
 function parseExpDate(s: string): Date {
   const today = new Date(buildStampUtc8() + 'T00:00:00Z');
   if (s === 'present') return today;
@@ -71,7 +69,7 @@ for (const { entry } of rendered) {
   }
 }
 const totalMonths = monthKeys.size;
-// Earliest + latest months across all rendered entries — shown in the
+// Earliest + latest months across all rendered entries : shown in the
 // chrome as the experience window so the date stamps reflect real data.
 const sortedMonths = [...monthKeys].sort();
 const expWindowEarliest = sortedMonths[0] ?? '';
@@ -89,7 +87,7 @@ const expWindow = `${expWindowEarliest} → ${expWindowLatest}`;
 >
   <header class="page-head">
     <div class="container">
-      {/* Bryllim pattern — number-prefixed section header before page H1. */}
+      {/* Bryllim pattern : number-prefixed section header before page H1. */}
       <p class="bryllim-mark mono" aria-hidden="true">01. experience</p>
       <ChromeHeader
         chip="EXPERIENCE · ENGAGEMENTS + PROOFS"
@@ -111,22 +109,11 @@ const expWindow = `${expWindowEarliest} → ${expWindowLatest}`;
         (03/2026 to 06/2026); all references are NDA-safe and free of proprietary data sources.
       </p>
 
-      <div class="nda-callout" role="note">
-        <span class="dot dot--amber" aria-hidden="true"></span>
-        <div>
-          <strong>NDA-safe by construction.</strong> Every entry on this page was written from publicly-attributable
-          signals (public repos, public talks, public-data backtests) plus the contributions I have explicit
-          permission to disclose. <strong
-            >systematic-strategy desk (NDA-protected; closed past contract 03/2026 to 06/2026)</strong
-          >
-          is a <strong>closed past contract</strong>; PM of record with publicly attributable
-          initials
-          <span class="mono">(NDA-protected desk)</span>. No proprietary data sources, strategy
-          internals, or desk PnL are referenced anywhere on this site. If the proof you need is
-          missing, email me and if it's public, NDA-clean, and I have it on disk, I'll send it
-          within 24 hours.
-        </div>
-      </div>
+      <p class="mono nda-line">
+        NDA-safe by construction. Every entry is built from public repos, public talks, and
+        public-data backtests. No proprietary data sources, strategy internals, or desk PnL appear
+        anywhere on this site. Missing proof? email me and I'll send it within 24h if it's public.
+      </p>
 
       <div class="head-eq">
         <Equation
@@ -157,8 +144,6 @@ const expWindow = `${expWindowEarliest} → ${expWindowLatest}`;
     </div>
   </header>
 
-  <TrustStrip variant="tape" />
-
   <div class="container container-narrow">
     <ReadMeta wordCount={wordCount} href={path('/proof')} />
   </div>
@@ -184,17 +169,12 @@ const expWindow = `${expWindowEarliest} → ${expWindowLatest}`;
           ))
         }
       </div>
-      {/* Bryllim overflow — section list ends with right-aligned "ALL X →". */}
+      {/* Bryllim overflow : section list ends with right-aligned "ALL X →". */}
       <p class="timeline__overflow">
         <a href={path('/proof')} class="bryllim-overflow mono">ALL {totalProofs} PROOFS →</a>
       </p>
     </div>
   </section>
-
-  <CTABanner
-    title="Need a deeper reference list?"
-    sub="Contact me and I'll share a tailored reference pack. name, role, brief context. within 24 hours."
-  />
 </BaseLayout>
 
 <style>
@@ -216,9 +196,9 @@ const expWindow = `${expWindowEarliest} → ${expWindowLatest}`;
   .page-head__eyebrow-chip {
     display: inline-block;
     padding: 4px 10px;
-    /* v9.2 a11y — was --c-phi-teal. Dark theme --j-phi-teal = #2d5f5a
+    /* v9.2 a11y : was --c-phi-teal. Dark theme --j-phi-teal = #2d5f5a
      only hits 2.14:1 on dark page-head surface. Solid amber chip +
-     --c-bg text reads at ≥5.6:1 in both themes — institutional
+     --c-bg text reads at ≥5.6:1 in both themes : institutional
      register, F14-safe (no traffic-light). */
     color: var(--c-bg);
     border: 1px solid var(--c-amber);
@@ -288,39 +268,19 @@ const expWindow = `${expWindowEarliest} → ${expWindowLatest}`;
     }
   }
 
-  /* === NDA-safe disclosure callout (Delta 8) === */
-  .nda-callout {
-    display: flex;
-    align-items: flex-start;
-    gap: var(--sp-3);
-    margin-top: var(--sp-5);
-    padding: var(--sp-4) var(--sp-5);
-    background: var(--c-amberl-faint);
-    border: 1px solid var(--c-amberl-strong);
+  /* === NDA-safe disclosure (v12.W4 : now a single mono line, not a callout) === */
+  .nda-line {
+    margin-top: var(--sp-4);
+    padding: var(--sp-3) var(--sp-4);
+    background: var(--c-bg-2);
+    border: 1px solid var(--c-rule-soft);
     border-left: 3px solid var(--c-amber);
-    border-radius: var(--radius);
     font-size: var(--fs-sm);
-    color: var(--c-ink);
+    color: var(--c-ink-2);
     line-height: var(--lh-loose);
   }
-  .nda-callout strong {
-    color: var(--c-primary);
-    font-weight: 600;
-  }
-  .nda-callout .mono {
-    font-size: 0.92em;
-    /* v9.3 a11y 96 follow-up (2026-08-01) — was --c-amber
-       (dark: #8a6f2f) on the amber-tinted callout bg (effective
-       #352e20) = 2.81:1 fail. --c-amber (dark: #a88a3e) at the
-       same bg = 4.37:1 (still fails 4.5). --c-ink-2 (dark:
-       #c4bfb1) = 7.58:1 pass. Light theme --c-ink-2 #3d4a5e on
-       amber-tinted #f9f4e9 = 6.32:1 pass. The mono label
-       "NDA-protected desk" is an institutional NDA disclosure
-       marker — high contrast is the contract. */
-    color: var(--c-ink-2);
-  }
 
-  /* Bryllim pattern — number-prefixed section register. */
+  /* Bryllim pattern : number-prefixed section register. */
   .bryllim-mark {
     font-size: 11px;
     color: var(--c-ink);
@@ -331,7 +291,7 @@ const expWindow = `${expWindowEarliest} → ${expWindowLatest}`;
     font-variant-numeric: tabular-nums;
   }
 
-  /* Bryllim overflow — "ALL X →" link. */
+  /* Bryllim overflow : "ALL X →" link. */
   .bryllim-overflow {
     display: inline-block;
     font-family: var(--ff-mono);

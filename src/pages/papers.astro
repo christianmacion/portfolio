@@ -1,16 +1,16 @@
 ---
 /**
- * papers.astro — v1.0 · working memos + bookshelf.
+ * papers.astro : v1.0 · working memos + bookshelf.
  *
  * Two sections:
- *   A) Working memos — placeholder cards for in-progress research write-ups.
+ *   A) Working memos : placeholder cards for in-progress research write-ups.
  *      Each card is a real topic the methodology alludes to; the memo text
  *      is a representative paragraph that the public version of the page
  *      will eventually replace with a real PDF link.
- *   B) Bookshelf — 5 books / papers referenced in /methodology, /now, and
+ *   B) Bookshelf : 5 books / papers referenced in /methodology, /now, and
  *      the /projects/quant corpus. Author + year + 1-line rationale.
  *
- * No actual PDF links in section A — these are "drafts in flight" by
+ * No actual PDF links in section A : these are "drafts in flight" by
  * convention. The bookshelf in section B points to arXiv / public PDFs
  * where the source is freely available.
  */
@@ -21,7 +21,7 @@ import { path } from '@utils/url';
 import VoiceLine from '@components/VoiceLine.astro';
 import { countProjectsByRole } from '@utils/project-helpers';
 
-// v6.10.42 — derive "n projects" claim from the canonical quant project count.
+// v6.10.42 : derive "n projects" claim from the canonical quant project count.
 const quantProjectCount = await countProjectsByRole('quant');
 
 const NGATE = `${profile.stats.evalGates}-gate`;
@@ -131,7 +131,7 @@ const shelf: Book[] = [
 >
   <header class="papers-head">
     <div class="container">
-      {/* Bryllim pattern — number-prefixed section header before page H1. */}
+      {/* Bryllim pattern : number-prefixed section header before page H1. */}
       <p class="bryllim-mark mono" aria-hidden="true">01. papers</p>
       <p class="papers-head__eyebrow mono">
         <span class="papers-head__eyebrow-chip">PAPERS · MEMOS + BOOKSHELF</span>
@@ -162,7 +162,7 @@ const shelf: Book[] = [
 
   {
     /* =========================================================
-      Published brief — surfaced companion to the in-flight memos.
+      Published brief : surfaced companion to the in-flight memos.
       Single hairline card linking to the r3 frontier-models brief.
       ========================================================= */
   }
@@ -184,7 +184,7 @@ const shelf: Book[] = [
 
   {
     /* =========================================================
-      Section A — Working memos
+      Section A : Working memos
       ========================================================= */
   }
   <section class="section" data-reveal>
@@ -228,7 +228,7 @@ const shelf: Book[] = [
 
   {
     /* =========================================================
-      Section B — Bookshelf
+      Section B : Bookshelf
       ========================================================= */
   }
   <section class="section section--alt" data-reveal>
@@ -264,7 +264,7 @@ const shelf: Book[] = [
           ))
         }
       </ol>
-      {/* Bryllim overflow — section list ends with right-aligned "ALL X →". */}
+      {/* Bryllim overflow : section list ends with right-aligned "ALL X →". */}
       <p class="shelf__overflow">
         <a href={path('/methodology')} class="bryllim-overflow mono">ALL {shelf.length} REFERENCES →</a>
       </p>
@@ -476,7 +476,7 @@ const shelf: Book[] = [
     margin: 0;
   }
 
-  /* Bryllim pattern — number-prefixed section register. */
+  /* Bryllim pattern : number-prefixed section register. */
   .bryllim-mark {
     font-size: 11px;
     color: var(--c-ink);
@@ -487,7 +487,7 @@ const shelf: Book[] = [
     font-variant-numeric: tabular-nums;
   }
 
-  /* Bryllim overflow — "ALL X →" link. */
+  /* Bryllim overflow : "ALL X →" link. */
   .bryllim-overflow {
     display: inline-block;
     font-family: var(--ff-mono);

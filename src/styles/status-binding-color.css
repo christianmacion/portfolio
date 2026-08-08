@@ -1,4 +1,4 @@
-/* status-binding-color.css — Portfolio v9.2 visual uplift
+/* status-binding-color.css : Portfolio v9.2 visual uplift
  * The 4-color left-edge binding stripe system.
  * Per UI/UX review + a11y review (16-cell contrast matrix must pass WCAG 2.2 AA).
  * Per institutional design contract: no halo/glow/gradient.
@@ -10,10 +10,10 @@
 
 /* === Status binding tokens (4) === */
 :root {
-  --c-bind-ship: #3fb950; /* matcha     — shipped / live / done */
-  --c-bind-handoff: #c98a16; /* terracotta — handoff / delegated / pending */
-  --c-bind-iterate: #d4a017; /* amber      — iterate / in-progress / wip */
-  --c-bind-doctrine: #7e57c2; /* purple     — doctrine / spec / governance */
+  --c-bind-ship: #3fb950; /* matcha     : shipped / live / done */
+  --c-bind-handoff: #c98a16; /* terracotta : handoff / delegated / pending */
+  --c-bind-iterate: #d4a017; /* amber      : iterate / in-progress / wip */
+  --c-bind-doctrine: #7e57c2; /* purple     : doctrine / spec / governance */
 
   /* c-bg-3 USAGE RESTRICTION (T1-1 binding fix):
      --c-bind-doctrine (#7e57c2) FAILS WCAG 2.2 SC 1.4.11 at 2.99:1 against c-bg-3 (#1f242c).

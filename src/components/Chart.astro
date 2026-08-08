@@ -1,6 +1,6 @@
 ---
 /**
- * Chart.astro — small inline SVG charts. Server-side, no JS.
+ * Chart.astro : small inline SVG charts. Server-side, no JS.
  *
  * Variants:
  *   - type: 'line'  (single series)
@@ -8,17 +8,17 @@
  *   - type: 'bar'   (vertical bars)
  *
  * Props:
- *   data      — array of numbers (line) or {value, label}[] (bar)
- *   type      — 'line' | 'hist' | 'bar'
- *   width     — viewBox width (default 640)
- *   height    — viewBox height (default 220)
- *   title     — chart title (rendered above)
- *   caption   — caption below chart
- *   yMin/yMax — explicit axis range (else auto)
- *   color     — primary stroke color
- *   nullMean  — for hist: where the null mean sits on x-axis
- *   nullStd   — for hist: null std
- *   dataX     — for hist: actual data point x-position (e.g., your IS Sharpe)
+ *   data      : array of numbers (line) or {value, label}[] (bar)
+ *   type      : 'line' | 'hist' | 'bar'
+ *   width     : viewBox width (default 640)
+ *   height    : viewBox height (default 220)
+ *   title     : chart title (rendered above)
+ *   caption   : caption below chart
+ *   yMin/yMax : explicit axis range (else auto)
+ *   color     : primary stroke color
+ *   nullMean  : for hist: where the null mean sits on x-axis
+ *   nullStd   : for hist: null std
+ *   dataX     : for hist: actual data point x-position (e.g., your IS Sharpe)
  */
 interface Props {
   data?: number[] | { value: number; label?: string }[];

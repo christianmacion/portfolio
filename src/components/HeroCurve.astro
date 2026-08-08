@@ -1,6 +1,6 @@
 ---
 /**
- * HeroCurve.astro — v9.7.1 · animated SVG equity curve centerpiece.
+ * HeroCurve.astro : v9.7.1 · animated SVG equity curve centerpiece.
  *
  * Per cheeky-sniffing-fox plan (Home Page Flagship Redesign):
  *   - Pure SVG, no JS lib, ~5KB markup
@@ -9,7 +9,7 @@
  *   - Draw-on-mount via stroke-dasharray + stroke-dashoffset (2.4s ease-out)
  *   - Single amber pulse dot at the curve's terminus (1.6s pulse)
  *   - 4 hairline grid rules + 5 axis ticks (institutional register)
- *   - Caption row: +47.3% · 18 MO · Sharpe 1.84 — PLACEHOLDER values
+ *   - Caption row: +47.3% · 18 MO · Sharpe 1.84 : PLACEHOLDER values
  *     pending a public PnL attestation gate (see comment below)
  *
  * Chrome contract preserved:
@@ -81,7 +81,7 @@
       <text x="580" y="218" text-anchor="middle">NOW</text>
     </g>
 
-    <!-- ====== EQUITY CURVE — hand-drawn quant cumulative-PnL shape:
+    <!-- ====== EQUITY CURVE : hand-drawn quant cumulative-PnL shape:
            steady climb → drawdown 1 → recovery → plateau →
            drawdown 2 → late acceleration. ====== -->
     <path
@@ -105,7 +105,7 @@
       stroke-linejoin="miter"
     />
 
-    <!-- ====== TERMINUS DOT — single amber dot at the curve's end.
+    <!-- ====== TERMINUS DOT : single amber dot at the curve's end.
            v6.18 W2 lock (2026-08-08): pulse-ring animation removed
            (signal-light BINDING). Static dot only. no infinite pulse,
            no opacity oscillation, no scale animation. The draw-on-mount
@@ -113,14 +113,14 @@
            a static marker, not a "live" signal. -->
     <circle class="hero-curve__pulse" cx="580" cy="80" r="3" fill="var(--c-amber)" />
 
-    <!-- ====== CURRENT-VALUE TAG — small mono label at the terminus ====== -->
+    <!-- ====== CURRENT-VALUE TAG : small mono label at the terminus ====== -->
     <g class="hero-curve__tag" aria-hidden="true">
       <line x1="580" y1="74" x2="580" y2="64" stroke="var(--c-amber)" stroke-width="1" />
       <text x="580" y="58" text-anchor="end" class="hero-curve__tag-text">+47.3%</text>
     </g>
   </svg>
 
-  <!-- ====== CAPTION ROW — three mono figures, placeholders per comment ====== -->
+  <!-- ====== CAPTION ROW : three mono figures, placeholders per comment ====== -->
   <footer class="hero-curve__foot mono" aria-label="Live performance caption">
     <span class="hero-curve__stat">+47.3%</span>
     <span class="hero-curve__sep" aria-hidden="true">·</span>
@@ -135,7 +135,7 @@
 
 <script>
   /**
-   * v11.W3 — viewport-entry scrub driver (240ms ease-in-out).
+   * v11.W3 : viewport-entry scrub driver (240ms ease-in-out).
    * Replaces the paint-time 2.4s CSS keyframe so the curve only animates
    * when it enters the viewport, never before. Reduced-motion: CSS
    * override in <style> snaps stroke-dashoffset to 0 immediately.
@@ -145,7 +145,7 @@
 
 <style>
   /* ============================================================
-   * v9.7.1 — HERO CURVE flagship centerpiece.
+   * v9.7.1 : HERO CURVE flagship centerpiece.
    * Cream surface (matches page surface); hairline grid; amber line.
    * No halo, no glow, no gradient. Sharp 0-2px corners preserved.
    * ============================================================ */
@@ -201,9 +201,9 @@
     letter-spacing: 0.08em;
   }
 
-  /* ====== CURVE LINE — viewport-entry scrub ======
+  /* ====== CURVE LINE : viewport-entry scrub ======
      v11.W3: the actual draw animation is now driven by
-     [[src/scripts/motion/hero-curve-scrub.client.ts]] — 240ms ease-in-out
+     [[src/scripts/motion/hero-curve-scrub.client.ts]] : 240ms ease-in-out
      cubic, single playback when 12% of the section enters the viewport.
      CSS just holds the initial stroke-dashoffset = 720 (invisible) so the
      page doesn't flash a drawn line before JS attaches. Reduced-motion:
@@ -214,7 +214,7 @@
     stroke-dashoffset: 720;
   }
 
-  /* ====== TERMINUS DOT — v6.18 W2 lock (2026-08-08) — static only.
+  /* ====== TERMINUS DOT : v6.18 W2 lock (2026-08-08) : static only.
      Pulse-ring + opacity oscillation animations removed per
      [[feedback-no-status-indicators-signal-lights]] BINDING. The
      terminus is a static amber dot; the draw-on-mount keyframe above
@@ -225,7 +225,7 @@
     opacity: 1;
   }
 
-  /* ====== TAG — fade-in 240ms after the line draws (scrub = 240ms) ====== */
+  /* ====== TAG : fade-in 240ms after the line draws (scrub = 240ms) ====== */
   .hero-curve__tag {
     opacity: 0;
     animation: hero-curve-tag-in 0.4s ease-out 0.6s forwards;
@@ -267,7 +267,7 @@
     letter-spacing: 0.04em;
   }
 
-  /* ====== REDUCED MOTION — snap to terminal state ====== */
+  /* ====== REDUCED MOTION : snap to terminal state ====== */
   @media (prefers-reduced-motion: reduce) {
     .hero-curve__line {
       stroke-dashoffset: 0;

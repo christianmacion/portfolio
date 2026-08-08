@@ -1,6 +1,6 @@
 ---
 /**
- * contact.astro — v2: full contact directory with all channels and "use this for X" guidance.
+ * contact.astro : v2: full contact directory with all channels and "use this for X" guidance.
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
 import Equation from '@components/Equation.astro';
@@ -91,12 +91,11 @@ const platforms = [
             {channels.length} channels. <span class="hl">Pick the one that fits.</span>
           </h1>
           <VoiceLine class="contact-head__voice">
-            Email-with-JD gets the richest reply. LinkedIn DM for casual. Phone after email. never
-            first.
+            Email-with-JD: richest reply. LinkedIn DM: casual. Phone: after email. Never first.
           </VoiceLine>
           <p class="contact-head__sub">
-            Each tile names the job it does, not the platform. For open roles, the email-with-JD
-            path gets the richest reply (problem → approach → evidence → outcome → proof).
+            Each tile names the job it does, not the platform. Email-with-JD path: problem →
+            approach → evidence → outcome → proof.
           </p>
 
           <p class="contact-head__tenant mono">
@@ -146,25 +145,6 @@ const platforms = [
           ))
         }
       </div>
-
-      <aside class="loc-card">
-        <h2 class="loc-card__title">Location & availability</h2>
-        <ul class="mono">
-          <li><strong>Based in</strong> {profile.location.display}</li>
-          <li>
-            <strong>Availability</strong>
-            {profile.availability.mode} · {profile.availability.hours}
-          </li>
-          <li>
-            <strong>Open to</strong> AI Engineer · Quantitative Researcher · Quant Developer · Trading
-            Research Assistant roles
-          </li>
-          <li>
-            <strong>Overlap with</strong> US East (UTC-5) = 21:00 to 02:00 PHT · EU (UTC+1) = 15:00 to 23:00
-            PHT · APAC (UTC+9) = 09:00 to 18:00 PHT
-          </li>
-        </ul>
-      </aside>
     </div>
   </section>
 
@@ -207,8 +187,7 @@ const platforms = [
         <p class="section__eyebrow">Freelance platforms</p>
         <h2 class="section__title">If you're sourcing on a marketplace.</h2>
         <p class="section__sub">
-          These stay useful for Filipino-remote and short-engagement sourcing, but the channels
-          above are the primary path. I treat OJP/Upwork as supplementary, not as the first stop.
+          OJP/Upwork as supplementary, not first stop. Email-with-JD is the primary path.
         </p>
       </header>
       <div class="platforms-grid">
@@ -228,15 +207,15 @@ const platforms = [
   <section class="section section--alt">
     <div class="container">
       <header class="section__head">
-        <p class="section__eyebrow">How I respond</p>
-        <h2 class="section__title">What to expect in a reply.</h2>
+        <p class="section__eyebrow">Reply shape</p>
+        <h2 class="section__title">What to expect.</h2>
       </header>
       <ol class="how-i-reply">
         <li>
           <div class="how-i-reply__num mono">01</div>
           <div class="how-i-reply__body">
             <h3>Acknowledge within 24h</h3>
-            <p>Short reply confirming I received the message and when to expect a real response.</p>
+            <p>Short reply confirming receipt + when to expect the real response.</p>
           </div>
         </li>
         <li>
@@ -244,8 +223,7 @@ const platforms = [
           <div class="how-i-reply__body">
             <h3>Read the JD fully</h3>
             <p>
-              If a JD is attached, I'll read it end-to-end before replying. I'll surface the gates
-              from {GATE_RANGE} that already apply to your stack.
+              End-to-end before replying. I surface the {GATE_RANGE} gates that already apply to your stack.
             </p>
           </div>
         </li>
@@ -254,8 +232,8 @@ const platforms = [
           <div class="how-i-reply__body">
             <h3>Solution sketch</h3>
             <p>
-              You'll get a structured response: problem → approach → evidence → outcome → proof
-              pointer. Same shape as the solutions page.
+              Structured response: problem → approach → evidence → outcome → proof pointer. Same shape as the
+              solutions page.
             </p>
           </div>
         </li>
@@ -264,28 +242,8 @@ const platforms = [
           <div class="how-i-reply__body">
             <h3>Tailored resume if appropriate</h3>
             <p>
-              For open roles, I'll send a tailored PDF within 24h. {profile.stats.resumeCount} resume
-              shapes already exist (unified / AI-only / Quant one-pager).
-            </p>
-          </div>
-        </li>
-        <li>
-          <div class="how-i-reply__num mono">05</div>
-          <div class="how-i-reply__body">
-            <h3>AI architecture audit (on request)</h3>
-            <p>
-              Read your stack end-to-end and surface the gates from {GATE_RANGE} that already apply, plus
-              the ones it doesn't yet cover. Same lens I apply to my own multi-agent builds.
-            </p>
-          </div>
-        </li>
-        <li>
-          <div class="how-i-reply__num mono">06</div>
-          <div class="how-i-reply__body">
-            <h3>Business OSINT pass (on request)</h3>
-            <p>
-              Open-source intelligence on your business before we talk. public filings, posts,
-              product surface, team footprint. So the first call starts with context, not discovery.
+              Open roles get a tailored PDF within 24h. {profile.stats.resumeCount} resume shapes exist
+              (unified / AI-only / Quant one-pager).
             </p>
           </div>
         </li>
@@ -323,9 +281,9 @@ const platforms = [
   .contact-head__eyebrow-chip {
     display: inline-block;
     padding: 4px 10px;
-    /* v9.2 a11y — was --c-phi-teal. Dark theme --j-phi-teal = #2d5f5a
+    /* v9.2 a11y : was --c-phi-teal. Dark theme --j-phi-teal = #2d5f5a
      only hits 2.14:1 on dark page-head surface. Solid amber chip +
-     --c-bg text reads at ≥5.6:1 in both themes — institutional
+     --c-bg text reads at ≥5.6:1 in both themes : institutional
      register, F14-safe (no traffic-light). */
     color: var(--c-bg);
     border: 1px solid var(--c-amber);
@@ -354,7 +312,7 @@ const platforms = [
   }
 
   /* === Booking widget (Cal.com iframe embed) ===
-     v6.18 — switched from <cal-inline> web-component (which rendered
+     v6.18 : switched from <cal-inline> web-component (which rendered
      as an empty black box on cold load before the script hydrated) to
      a plain <iframe> pointing at /christianmacion/30min-review?embed=true.
      The iframe always loads; the embed mode in Cal.com's URL hides the
@@ -440,7 +398,7 @@ const platforms = [
     box-shadow: var(--shadow-md);
     color: var(--c-ink);
   }
-  /* v6.10.33 — institutional: drop the F13-era amber gradient (rgba 212,160,23 stale).
+  /* v6.10.33 : institutional: drop the F13-era amber gradient (rgba 212,160,23 stale).
      Lift via --c-bg-2 token; primary border remains to signal the hero variant. */
   .contact-card--primary {
     border-color: var(--c-primary);
@@ -517,37 +475,6 @@ const platforms = [
   .platform-card__hint {
     font-size: var(--fs-xs);
     color: var(--c-ink-3);
-  }
-
-  .loc-card {
-    padding: var(--sp-5);
-    background: var(--c-tape);
-    border: 1px solid var(--c-tape-2);
-    border-radius: var(--radius);
-    color: var(--c-ink-mist);
-  }
-  .loc-card__title {
-    font-size: var(--fs-lg);
-    margin-bottom: var(--sp-3);
-    color: var(--c-primary);
-  }
-  .loc-card ul {
-    list-style: none;
-    padding: 0;
-  }
-  .loc-card li {
-    padding-block: var(--sp-2);
-    border-bottom: 1px solid var(--c-white-mist);
-    line-height: var(--lh-loose);
-    font-size: var(--fs-sm);
-  }
-  .loc-card li:last-child {
-    border-bottom: none;
-  }
-  .loc-card strong {
-    color: var(--c-primary);
-    font-weight: 600;
-    margin-right: var(--sp-2);
   }
 
   .how-i-reply {

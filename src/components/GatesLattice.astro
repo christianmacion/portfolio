@@ -1,6 +1,6 @@
 ---
 /**
- * GatesLattice.astro — v11.W3 · 31-cell G1-G31 gate lattice visualization.
+ * GatesLattice.astro : v11.W3 · 31-cell G1-G31 gate lattice visualization.
  *
  * Composes the existing 6-family gate definitions from [[profile]] into a
  * flat 31-cell lattice: 6 family headers + 31 individual gate pills.
@@ -15,7 +15,7 @@
  *   - prefers-reduced-motion: snap to terminal state via CSS override
  *
  * W4 (data-viz) will replace this with a richer per-cell interactive viz.
- * This component is the W3 motion library SHOWCASE — it proves theatre.js
+ * This component is the W3 motion library SHOWCASE : it proves theatre.js
  * integrates cleanly with the chrome contract without disrupting a11y.
  */
 import { profile } from '@utils/profile';
@@ -139,7 +139,7 @@ const GATE_RANGE = `G1 to G${profile.stats.evalGates}`;
 
 <style>
   /* ============================================================
-   * v11.W3 — G1-G31 gate lattice, Bryllim-grade register.
+   * v11.W3 : G1-G31 gate lattice, Bryllim-grade register.
    * Cream surface + 1px hairlines + mono caps + amber accent.
    * No halo, no glow, no gradient, no rotation.
    * ============================================================ */
@@ -176,7 +176,7 @@ const GATE_RANGE = `G1 to G${profile.stats.evalGates}`;
     border: 1px solid var(--c-rule);
   }
 
-  /* Family header cell — spans the full row, 1px amber bottom border */
+  /* Family header cell : spans the full row, 1px amber bottom border */
   .gates-lattice__family {
     grid-column: 1 / -1;
     display: flex;
@@ -184,7 +184,7 @@ const GATE_RANGE = `G1 to G${profile.stats.evalGates}`;
     gap: 14px;
     padding: 10px 14px;
     background: var(--c-bg-2);
-    border-bottom: 1px solid var(--c-amber, #f4c430);
+    border-bottom: 1px solid var(--c-amber, #946b1f);
     font-size: 11px;
   }
 
@@ -201,7 +201,7 @@ const GATE_RANGE = `G1 to G${profile.stats.evalGates}`;
     color: var(--c-ink);
   }
 
-  /* Individual gate cell — fades + scales in via theatre.js */
+  /* Individual gate cell : fades + scales in via theatre.js */
   .gates-lattice__cell {
     display: flex;
     flex-direction: column;
@@ -226,7 +226,7 @@ const GATE_RANGE = `G1 to G${profile.stats.evalGates}`;
   .gates-lattice__cell-id {
     font-size: 10px;
     letter-spacing: 0.08em;
-    color: var(--c-amber, #f4c430);
+    color: var(--c-amber, #946b1f);
     text-transform: uppercase;
     font-weight: 600;
   }
@@ -237,7 +237,7 @@ const GATE_RANGE = `G1 to G${profile.stats.evalGates}`;
     line-height: 1.4;
   }
 
-  /* ====== REDUCED MOTION — snap to terminal state ====== */
+  /* ====== REDUCED MOTION : snap to terminal state ====== */
   @media (prefers-reduced-motion: reduce) {
     .gates-lattice__cell {
       opacity: 1 !important;

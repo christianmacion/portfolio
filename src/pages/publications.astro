@@ -1,9 +1,9 @@
 ---
 /**
- * publications.astro — research log: papers, workbooks, talks, videos, OSS projects.
+ * publications.astro : research log: papers, workbooks, talks, videos, OSS projects.
  * Targeted at recruiters who want to see *what Christian has published publicly*.
  *
- * Delta 6 — AQR-style research archive:
+ * Delta 6 : AQR-style research archive:
  *   - Topic filter (papers / OSS / workbooks / press) via CSS-only radio
  *   - Year grouping for research papers and OSS projects
  *   - Venue/author metadata column on each row
@@ -210,7 +210,7 @@ const totalCount = quantPubs.length + aiPubs.length + workbooks.length + press.l
 >
   {
     /* === CSS-only topic filter (no JS) ===
-      v6.10.17 — a11y: drop aria-hidden="true" so screen readers
+      v6.10.17 : a11y: drop aria-hidden="true" so screen readers
       can announce the filter state (was previously masked, defeating
       the purpose of the radio group). Visual hide is via .topic-input
       CSS below. */
@@ -238,11 +238,10 @@ const totalCount = quantPubs.length + aiPubs.length + workbooks.length + press.l
         Dated. Linkable. If a row says I did something, the proof is in the same row.
       </VoiceLine>
       <p class="pub-head__sub">
-        Every artifact below is either an OSS repo, a memo, a workbook, or a public talk. No
-        proprietary data sources. No NDA-protected content.
+        Every artifact below is either an OSS repo, a memo, a workbook, or a public talk.
       </p>
 
-      {/* Topic filter labels — radio inputs above are hidden; these are the clickable labels */}
+      {/* Topic filter labels : radio inputs above are hidden; these are the clickable labels */}
       <nav class="topic-filter" aria-label="Filter publications by topic">
         <label for="topic-all" class="topic-btn"
           ><span class="mono">all</span> <span class="topic-count">{totalCount}</span></label
@@ -434,7 +433,7 @@ const totalCount = quantPubs.length + aiPubs.length + workbooks.length + press.l
                 {w.url ? (
                   <>
                     {' '}
-                    —{' '}
+                    :{' '}
                     <a href={w.url}>
                       {w.fileSize ?? 'PDF'} · {w.pages}
                     </a>
@@ -515,7 +514,7 @@ const totalCount = quantPubs.length + aiPubs.length + workbooks.length + press.l
     font-size: var(--fs-sm);
     color: var(--c-ink-2);
     cursor: pointer;
-    /* v9.3.2 motion contract — explicit properties only. .topic-btn
+    /* v9.3.2 motion contract : explicit properties only. .topic-btn
        changes border-color, color, and background-color on hover/active.
        No layout-triggering properties (width/height). */
     transition:
@@ -541,9 +540,9 @@ const totalCount = quantPubs.length + aiPubs.length + workbooks.length + press.l
   .topic-input--oss:checked ~ * [data-topic='oss'],
   .topic-input--workbooks:checked ~ * [data-topic='workbooks'],
   .topic-input--press:checked ~ * [data-topic='press'] {
-    /* not quite — use sibling cascade */
+    /* not quite : use sibling cascade */
   }
-  /* v9.2 a11y — was --c-amber bg + --c-primary text which only
+  /* v9.2 a11y : was --c-amber bg + --c-primary text which only
      hits 1.39:1 in light theme after the legacy --c-phi remap.
      Use the same theme-neutral amber/bg pairing as the rest of the
      site: --c-amber bg + --c-bg text, both themes ≥ 4.5:1. */
@@ -595,7 +594,7 @@ const totalCount = quantPubs.length + aiPubs.length + workbooks.length + press.l
 
   /* Hide sections by default; show based on filter.
      Radio inputs and <section data-topic> are direct children of <main>
-     (siblings), so the selector is `~ [data-topic]` — `~ main` would
+     (siblings), so the selector is `~ [data-topic]` : `~ main` would
      require <main> to be a later sibling of the input, which it isn't. */
   [data-topic='papers'],
   [data-topic='oss'],
@@ -789,14 +788,14 @@ const totalCount = quantPubs.length + aiPubs.length + workbooks.length + press.l
   .wb__status {
     display: inline-block;
     padding: 0 6px;
-    /* v6.10.36 — token alias for F13 amber family. */
+    /* v6.10.36 : token alias for F13 amber family. */
     background: var(--c-amber-soft);
     color: var(--c-warn);
     border-radius: 1px;
     font-weight: 600;
     letter-spacing: 0.04em;
   }
-  /* Published variant — single accent (electric blue) hairline border
+  /* Published variant : single accent (electric blue) hairline border
      so it reads as a status badge, not a CTA. No glow, no fill flip. */
   .wb__status--pub {
     background: transparent;

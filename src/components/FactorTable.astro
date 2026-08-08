@@ -1,6 +1,6 @@
 ---
 /**
- * FactorTable.astro — strategy × factor decomposition grid for /research.
+ * FactorTable.astro : strategy × factor decomposition grid for /research.
  *
  * Reads metrics from the frontmatter of each `src/content/projects/quant/*.mdx`
  * and maps them into a Sharpe / PSR / DSR / PBO column grid. Rules:
@@ -10,7 +10,7 @@
  *   - "DSR" / "Deflated Sharpe" → DSR column
  *   - "PBO" / "Probability of Backtest Overfitting" → PBO column
  *   - Anything else → ignored from this table (rendered in the project card)
- *   - Missing → em dash (—). Never fabricate.
+ *   - Missing → em dash (:). Never fabricate.
  *
  * Per Standing Order: only report numbers that exist in frontmatter.
  *
@@ -87,7 +87,7 @@ const pboCols = projects.map((p) => mapMetric(p.data.metrics, [/pbo/, /probabili
 const filledCount = (cells: (Cell | null)[]) => cells.reduce((acc, c) => acc + (c ? 1 : 0), 0);
 
 // Honest accounting: how many cells are populated vs em-dash. The number
-// is itself a methodology statement — most strategies don't compute
+// is itself a methodology statement : most strategies don't compute
 // every factor, and that's the point.
 const totalsFilled = {
   sharpe: filledCount(sharpeCols),
@@ -143,7 +143,7 @@ function shortTitle(t: string): string {
             return (
               <tr class="factor__row">
                 <th scope="row" class="factor__name">
-                  {/* v6.10.11 — content collection `id` already includes the
+                  {/* v6.10.11 : content collection `id` already includes the
                      lane prefix (e.g., "quant/01-deflated-sharpe"), so we just
                      append it. All entries are quant (filtered on line 47). */}
                   <a class="factor__link" href={path(`/projects/${proj.id}`)}>
@@ -237,7 +237,7 @@ function shortTitle(t: string): string {
     padding-inline: var(--sp-4);
     overflow-x: auto;
     border: 1px solid var(--c-rule);
-    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade */
+    /* v6.18 : rely on --j-r=0 via tokens-v6.13.css cascade */
     background: var(--c-tape-2);
   }
   .factor__table {
@@ -346,7 +346,7 @@ function shortTitle(t: string): string {
     padding: 2px 8px;
     background: var(--c-bg-3);
     border: 1px solid var(--c-rule);
-    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade */
+    /* v6.18 : rely on --j-r=0 via tokens-v6.13.css cascade */
     color: var(--c-phi);
     font-weight: 600;
   }
@@ -373,7 +373,7 @@ function shortTitle(t: string): string {
     padding: var(--sp-2) var(--sp-3);
     background: var(--c-tape);
     border: 1px solid var(--c-rule);
-    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade */
+    /* v6.18 : rely on --j-r=0 via tokens-v6.13.css cascade */
     width: fit-content;
   }
 

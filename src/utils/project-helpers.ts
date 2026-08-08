@@ -1,5 +1,5 @@
 /**
- * project-helpers.ts — Typed query helper for the `project` collection.
+ * project-helpers.ts : Typed query helper for the `project` collection.
  *
  * Centralizes the (await getCollection('project')) boilerplate so that
  * downstream `.filter(p => …)`, `.map(p => …)` callsites retain the

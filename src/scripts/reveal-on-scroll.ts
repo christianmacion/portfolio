@@ -1,11 +1,11 @@
 /**
- * reveal-on-scroll.ts — Phase D-7.
+ * reveal-on-scroll.ts : Phase D-7.
  *
  * One-shot fade-in for any element with [data-reveal].
  * Triggers when any pixel of the element enters the viewport.
  * Honors prefers-reduced-motion (CSS side) and unobserves after firing.
  *
- * v6.18 — also drives [data-spark] paths (MiniSpark draw-in via
+ * v6.18 : also drives [data-spark] paths (MiniSpark draw-in via
  * stroke-dashoffset). And honors [data-reveal-delay] (ms) on any
  * data-reveal element so hero staggers (0/80/160/240/320ms) work
  * without per-target JS.
@@ -37,7 +37,7 @@ function init(): void {
   if (revealTargets.length === 0 && sparkTargets.length === 0) return;
 
   if (reduced || !('IntersectionObserver' in window)) {
-    // Reduced-motion or no IO support — show everything immediately.
+    // Reduced-motion or no IO support : show everything immediately.
     revealTargets.forEach((el) => el.classList.add('is-revealed'));
     sparkTargets.forEach((el) => el.classList.add('is-revealed'));
     return;

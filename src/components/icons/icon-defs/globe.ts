@@ -1,5 +1,5 @@
 /**
- * globe — sphere outline + equator + two meridians.
+ * globe : sphere outline + equator + two meridians.
  * Meta category: world / language / region indicator.
  */
 export const SVG_PATH =

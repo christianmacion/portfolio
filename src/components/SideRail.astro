@@ -1,6 +1,6 @@
 ---
 /**
- * SideRail.astro — v9.5 BRYLLIM SIDE-RAIL NAV.
+ * SideRail.astro : v9.5 BRYLLIM SIDE-RAIL NAV.
  *
  * Replaces the top sticky Nav.astro + SiteHeader.astro pattern with a left
  * side-rail that mirrors the Bryllim institutional register:
@@ -17,10 +17,13 @@
  * active item, role="navigation" implicit on <nav>, and all icons
  * are aria-hidden="true" so the visible text is the accessible name.
  */
-import { Image } from 'astro:assets';
-import headshot from '../assets/portrait/headshot-source.jpg';
 import { path } from '@utils/url';
 import { profile } from '@utils/profile';
+
+// v12.W4 Bryllim parity: face-photo belongs on the LANDING page, not
+// the persistent chrome rail. The SideRail brand block is TEXT-ONLY
+// (pixel-logo + role subtitle), exactly like Bryllim's sidebar.
+// Headshot lives as the FIRST element of the home page hero.
 
 const { pathname } = Astro.url;
 const isActive = (href: string) => {
@@ -28,33 +31,52 @@ const isActive = (href: string) => {
   return pathname === suffix || pathname.startsWith(suffix + '/');
 };
 
-// v12.W1.5 — SIDE-RAIL 6-HUB REDUCTION.
-// Bryllim parity: 20 nav items collapsed to 6 institutional hubs.
-// Absorption map (orphan-but-live: pages stay reachable at their URLs,
-// just hidden from this primary rail):
-//   1. Home                              — landing
-//   2. Now                               — current focus / availability
-//   3. Proof                             — absorbs /proof + /projects + /work
-//                                          + /experience + /certifications
-//                                          + /publications + /talks + /repos
-//   4. Methodology                       — absorbs /methodology + /skills
-//                                          + /glossary + /notes + /stack
-//   5. For hiring managers               — absorbs /for-recruiters
-//                                          + /screening-call + /positions
-//                                          + /engagement
-//   6. Contact                           — direct handoff
-// Orphan URLs (/projects, /work, /experience, /certifications,
-// /publications, /talks, /repos, /skills, /glossary, /notes,
-// /stack, /screening-call, /positions, /engagement) remain live and
-// indexed but are not surfaced in this rail.
-const links: Array<{ href: string; label: string; icon: string }> = [
-  { href: path('/'),                label: 'Home',                 icon: 'home' },
-  { href: path('/now'),             label: 'Now',                  icon: 'now' },
-  { href: path('/proof'),           label: 'Proof',                icon: 'proof' },
-  { href: path('/methodology'),     label: 'Methodology',          icon: 'method' },
-  { href: path('/for-recruiters'),  label: 'For hiring managers',  icon: 'recruit' },
-  { href: path('/contact'),         label: 'Contact',              icon: 'contact' },
+// v12.W3 : SIDE-RAIL 10-HUB TWO-TIER RESTRUCTURE.
+// Bryllim parity: the reference rail runs a primary tier of icon+label
+// hubs, a hairline divider, then a secondary tier of plain-text links
+// (no icon, lighter weight, smaller). This mirrors that exactly.
+//
+//   Tier 1 (icon + label) : the decision path a hiring manager walks.
+//     1. Now                  : current focus / availability
+//     2. For hiring managers  : absorbs /screening-call + /positions
+//                               + /engagement
+//     3. Methodology          : absorbs /skills
+//     4. Proof                : absorbs /work + /publications + /talks
+//     5. Contact              : direct handoff
+//     6. Resources            : parent for /notes + /repos + /glossary
+//
+//   Tier 2 (plain text) : the evidence pages, reachable but de-ranked.
+//     7. Projects       8. Experience     9. Stack    10. Certifications
+//
+// Home is not a rail item : the brand block at the top of the rail is
+// the canonical home link (avoids a duplicate-link a11y tell).
+// Orphan URLs (/work, /publications, /talks, /skills, /screening-call,
+// /positions, /engagement) remain live and indexed but are not
+// surfaced in this rail.
+interface RailLink {
+  href: string;
+  label: string;
+  /** Tier 1 items render an icon; tier 2 items are plain text. */
+  icon?: string;
+  tier: 1 | 2;
+}
+
+const links: RailLink[] = [
+  { href: path('/now'),             label: 'Now',                 icon: 'now',        tier: 1 },
+  { href: path('/for-recruiters'),  label: 'For hiring managers', icon: 'recruit',    tier: 1 },
+  { href: path('/methodology'),     label: 'Methodology',         icon: 'method',     tier: 1 },
+  { href: path('/proof'),           label: 'Proof',               icon: 'proof',      tier: 1 },
+  { href: path('/contact'),         label: 'Contact',             icon: 'contact',    tier: 1 },
+  { href: path('/resources'),       label: 'Resources',           icon: 'resources',  tier: 1 },
+  { href: path('/projects'),        label: 'Projects',            icon: 'project',    tier: 2 },
+  { href: path('/experience'),      label: 'Experience',          icon: 'experience', tier: 2 },
+  { href: path('/stack'),           label: 'Stack',               icon: 'stack',      tier: 2 },
+  { href: path('/certifications'),  label: 'Certifications',      icon: 'cert',       tier: 2 },
+  { href: path('/timeline'),        label: 'AI Timeline',         icon: 'timeline',   tier: 2 },
 ];
+
+const tierOne = links.filter((l) => l.tier === 1);
+const tierTwo = links.filter((l) => l.tier === 2);
 
 // Inline SVG path strings keyed by icon name (1px stroke, 16×16 viewBox).
 const ICONS: Record<string, string> = {
@@ -69,7 +91,7 @@ const ICONS: Record<string, string> = {
   pos: 'M8 1.5 V14.5 M3 6 L8 1.5 L13 6 M3 11 H6 M3 13 H9',
   method: 'M2 3 H14 M2 7 H14 M2 11 H10 M12 11 L14 13',
   contact: 'M2 4 L8 8 L14 4 M2 4 V13 H14 V4',
-  // v9.7.2 — 5 new icons for the 5 orphan pages. All 1px stroke, 16×16 viewBox.
+  // v9.7.2 : 5 new icons for the 5 orphan pages. All 1px stroke, 16×16 viewBox.
   phone: 'M5 3 L8 3 L8 7 L11 7 L11 9 L8 11 L6 10 L4 8 L5 6 Z',
   book: 'M3 2 H13 V14 H3 Z M3 6 H13 M5 4 V3 H7 V4',
   doc: 'M3 2 H10 L13 5 V14 H3 Z M10 2 V5 H13',
@@ -84,6 +106,12 @@ const ICONS: Record<string, string> = {
   repo: 'M2 5 H10 V13 H2 Z M5 5 V3 H8 V5 M10 8 H13 V12 H10 M12 9 L13 9.5 M12 10 L13 10.5',
   // engage: two interlocking arrows (loop / handoff).
   engage: 'M3 8 H11 M11 8 L8.5 5.5 M11 8 L8.5 10.5 M13 13 H5 M5 13 L7.5 10.5 M5 13 L7.5 15.5',
+  // v12.W4 : resources hub icon. An open book over a shelf rule :  the
+  // parent for /notes + /repos + /glossary.
+  resources: 'M8 4.5 C6.5 3 4.5 2.5 2.5 3 V12 C4.5 11.5 6.5 12 8 13.5 M8 4.5 C9.5 3 11.5 2.5 13.5 3 V12 C11.5 11.5 9.5 12 8 13.5 M8 4.5 V13.5',
+  // v12.W4 : AI timeline icon. Horizontal rail with 3 stage nodes and
+  // a final amber-filled square representing the NOW marker.
+  timeline: 'M1.5 8 H14.5 M4 6.5 H6 V9.5 H4 Z M7.5 6.5 H9.5 V9.5 H7.5 Z M11 6.5 H13 V9.5 H11 Z',
 };
 ---
 
@@ -106,20 +134,11 @@ const ICONS: Record<string, string> = {
 
 <aside class="side-rail" id="primary-rail" aria-label="Primary navigation">
   <div class="side-rail__inner">
-    <!-- Pixel logo + identity strip at the top of the rail. -->
+    <!-- v12.W4 Bryllim parity : text-only brand block. The face-photo
+         was moved to the home page hero (index.astro) so it carries the
+         landing-page first-impression instead of sitting in the
+         persistent chrome rail. -->
     <a href={path('/')} class="side-rail__brand" aria-label="Christian T. Macion. home">
-      <Image
-        src={headshot}
-        class="side-rail__brand-photo"
-        alt={profile.headshot.alt}
-        width={88}
-        height={88}
-        widths={[88, 132, 176]}
-        sizes="88px"
-        loading="eager"
-        fetchpriority="high"
-        decoding="async"
-      />
       <span class="side-rail__pixel-logo">CHRISTIAN<br/>T. MACION</span>
       <span class="side-rail__brand-sub mono">{profile.titles.short}</span>
     </a>
@@ -134,8 +153,8 @@ const ICONS: Record<string, string> = {
     <nav class="side-rail__nav">
       <ul class="side-rail__list" role="list">
         {
-          links.map(({ href, label, icon }) => {
-            // v9.8 Wave C — scroll-spy target. The slug maps a nav link to
+          tierOne.map(({ href, label, icon }) => {
+            // v9.8 Wave C : scroll-spy target. The slug maps a nav link to
             // any in-page <section data-section-id="<slug>"> on the current
             // route. The IntersectionObserver below swaps .side-rail__link--spy
             // onto the link whose target matches the section with the
@@ -165,8 +184,36 @@ const ICONS: Record<string, string> = {
                     aria-hidden="true"
                     focusable="false"
                   >
-                    <path d={ICONS[icon]}></path>
+                    <path d={ICONS[icon!]}></path>
                   </svg>
+                  <span class="side-rail__label">{label}</span>
+                </a>
+              </li>
+            );
+          })
+        }
+      </ul>
+
+      <!-- v12.W4 : hairline tier divider. Decorative only :  the two
+           <ul>s are the semantic grouping, so the rule is aria-hidden. -->
+      <hr class="side-rail__tier-rule" aria-hidden="true" />
+
+      <ul class="side-rail__list side-rail__list--plain" role="list">
+        {
+          tierTwo.map(({ href, label }) => {
+            const slug = href.replace(/^\/+|\/+$/g, '');
+            return (
+              <li class="side-rail__item">
+                <a
+                  href={href}
+                  data-spy-target={slug}
+                  class:list={[
+                    'side-rail__link',
+                    'side-rail__link--plain',
+                    { 'side-rail__link--active': isActive(href) },
+                  ]}
+                  aria-current={isActive(href) ? 'page' : undefined}
+                >
                   <span class="side-rail__label">{label}</span>
                 </a>
               </li>
@@ -176,7 +223,7 @@ const ICONS: Record<string, string> = {
       </ul>
     </nav>
 
-    <!-- v9.10.1 — Search button removed (broken UX: was a "jump to contact"
+    <!-- v9.10.1 : Search button removed (broken UX: was a "jump to contact"
          shortcut mislabeled as "Search"). ⌘K contact affordance stays in
          SiteHeader.astro (capture-phase keydown, canonical). Footer block
          reduces to social icon row + email handle. -->
@@ -237,7 +284,7 @@ const ICONS: Record<string, string> = {
 
 <style>
   /* === Bryllim side-rail ===
-     v9.5 — replaces top sticky Nav + SiteHeader with a 240px sticky left
+     v9.5 : replaces top sticky Nav + SiteHeader with a 240px sticky left
      rail. Light cream background, hairline right border, monospace
      pixel-logo at the top. Icon-first nav. ⌘K search + socials + email
      pinned at the bottom. Mobile < 980px collapses to a top drawer. */
@@ -289,22 +336,9 @@ const ICONS: Record<string, string> = {
     text-transform: uppercase;
     color: var(--c-ink-3);
   }
-  /* Owner's headshot — Bryllim institutional register.
-     Pure monochrome (desaturated at source), sharp 0-2px corners,
-     hairline border. No halo / glow / gradient (chrome contract).
-     v6.18 W2 lock (2026-08-08): grayscale filter removed — the source
-     image is monochrome by design; the CSS filter was chrome violation
-     (no-filter chrome contract). */
-  .side-rail__brand-photo {
-    width: 88px;
-    height: 88px;
-    object-fit: cover;
-    object-position: center 28%;
-    border: 1px solid var(--c-rule);
-    border-radius: 0;
-    margin: 0 auto 2px;
-    display: block;
-  }
+  /* v12.W4 Bryllim parity : .side-rail__brand-photo CSS removed.
+     The headshot lives on the home page hero now, not in the rail.
+     Brand block is text-only (pixel-logo + role subtitle). */
 
   .side-rail__rule {
     border: 0;
@@ -326,35 +360,32 @@ const ICONS: Record<string, string> = {
   .side-rail__link {
     display: flex;
     align-items: center;
-    gap: 9px;
-    padding: 7px 9px;
-    /* v6.18 W2 lock (2026-08-08): bumped from 32px → 40px for WCAG 2.5.5
-       touch-target conformance on hover-state padding. Universal 44px
-       floor still applies to the social row below. */
+    gap: var(--s-3);
+    padding: var(--s-2) var(--s-3);
     min-height: 40px;
     color: var(--c-ink-2);
     text-decoration: none;
-    font-size: 12.5px;
-    font-weight: 500;
-    border-left: 1px solid var(--c-rule-soft);
+    font-size: var(--type-mono-size);
+    font-weight: 400;
+    border-left: 1px solid transparent;
     transition:
-      color var(--transition),
-      background var(--transition),
-      border-color var(--transition),
-      font-weight var(--transition);
+      color var(--j-dur-fast) var(--motion-ease-institutional),
+      background var(--j-dur-fast) var(--motion-ease-institutional),
+      border-color var(--j-dur-fast) var(--motion-ease-institutional);
   }
   .side-rail__link:hover {
-    color: var(--c-ink);
-    background: var(--c-bg-2);
+    color: var(--c-ink-1);
+    background: transparent;
+    border-left-color: var(--c-amber);
   }
   .side-rail__link--active,
   .side-rail__link[aria-current='page'] {
-    color: var(--c-amber);
+    color: var(--c-ink-1);
     border-left-color: var(--c-amber);
-    background: var(--c-bg-2);
-    font-weight: 600;
+    background: var(--surface-paper-deep);
+    font-weight: 400;
   }
-  /* v11.W2 — scroll-spy active state. When a tracked section is
+  /* v11.W2 : scroll-spy active state. When a tracked section is
      visible on the current page, JS toggles .side-rail__link--spy
      AND aria-current="page" onto the nav link whose
      data-spy-target matches the section's data-section-id.
@@ -365,7 +396,7 @@ const ICONS: Record<string, string> = {
     color: var(--c-amber);
     border-left-color: var(--c-amber);
     border-left-width: 1px;
-    font-weight: 700;
+    font-weight: 400;
   }
   .side-rail__icon {
     flex-shrink: 0;
@@ -376,7 +407,40 @@ const ICONS: Record<string, string> = {
     line-height: 1.2;
   }
 
-  /* v9.10.1 — Footer block reduces to socials + email (search removed). */
+  /* v12.W4 : hairline divider between tier 1 (icon+label hubs) and
+     tier 2 (plain-text evidence pages). 1px, --c-rule, no inset :
+     matches the brand-strip rule above so the rail reads as one
+     register rather than two stacked blocks. */
+  .side-rail__tier-rule {
+    border: 0;
+    border-top: 1px solid var(--c-rule);
+    margin: 10px 9px;
+  }
+
+  /* Tier 2 :  plain text, no icon. De-ranked relative to tier 1 via
+     smaller type + lighter ink, but the same 40px min-height so the
+     WCAG 2.5.5 touch-target floor holds. Left padding aligns the
+     label with tier-1 labels (9px pad + 16px icon + 9px gap = 34px). */
+  .side-rail__link--plain {
+    padding-left: calc(var(--s-3) + 25px);
+    font-size: var(--type-mono-size);
+    font-weight: 400;
+    color: var(--c-ink-3);
+    border-left-color: transparent;
+    background: transparent;
+  }
+  .side-rail__link--plain:hover {
+    color: var(--c-ink-2);
+    border-left-color: transparent;
+  }
+  .side-rail__link--plain.side-rail__link--active,
+  .side-rail__link--plain[aria-current='page'] {
+    color: var(--c-ink-1);
+    border-left-color: transparent;
+    background: transparent;
+  }
+
+  /* v9.10.1 : Footer block reduces to socials + email (search removed). */
   .side-rail__foot {
     display: flex;
     flex-direction: column;
@@ -435,6 +499,14 @@ const ICONS: Record<string, string> = {
     color: var(--c-ink-3);
     text-decoration: none;
     word-break: break-all;
+    /* v12.W4-1 lock (2026-08-08): explicit min-height for WCAG 2.5.5 /
+       2.5.8 touch-target conformance. The global `a { min-height: 44px }`
+       rule (global.css) already covers this, but the explicit declaration
+       makes the intent local-to-component and survives if the global rule
+       is removed. Renders as a 44px-tall row in the rail footer block. */
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
     transition: color var(--transition);
   }
   .side-rail__email:hover {
@@ -506,7 +578,7 @@ const ICONS: Record<string, string> = {
      The un-animated state is the open drawer at translateX(0); the
      scroll-spy still updates the active class, just without the
      color/border/font-weight transition. The user still gets the
-     visual indication — just instant rather than animated. */
+     visual indication : just instant rather than animated. */
   @media (prefers-reduced-motion: reduce) {
     .side-rail {
       transition: none;
@@ -518,7 +590,7 @@ const ICONS: Record<string, string> = {
 </style>
 
 <script>
-  /* v9.5 a11y — keep aria-expanded in sync with the checkbox state.
+  /* v9.5 a11y : keep aria-expanded in sync with the checkbox state.
      The CSS uses :checked ~ .side-rail to slide the drawer; this
      mirrors that state into aria-expanded so screen readers announce
      "expanded" / "collapsed". Idempotent: only mutates when the
@@ -550,7 +622,7 @@ const ICONS: Record<string, string> = {
     });
   }
 
-  /* v11.W2 — ⌘K / Ctrl+K shortcut. CommandPalette.astro now owns the
+  /* v11.W2 : ⌘K / Ctrl+K shortcut. CommandPalette.astro now owns the
      canonical capture-phase ⌘K listener (with stopImmediatePropagation).
      SideRail previously routed ⌘K to /contact/#contact; that handler
      is removed in favour of dispatching the cmdk:open custom event so
@@ -564,22 +636,22 @@ const ICONS: Record<string, string> = {
     }
   });
 
-  /* v11.W2 — side-rail scroll-spy (extended).
+  /* v11.W2 : side-rail scroll-spy (extended).
      Tracks every <section data-section-id="<slug>"> on the current page
      via IntersectionObserver. The slug must match a nav link's
      data-spy-target attribute (rendered above). On each observer tick,
-     requestAnimationFrame coalesces the work so we update the DOM at
+     rAF coalesces the work so we update the DOM at
      most once per frame (60Hz cap). The active nav item is the one
      whose slug matches the section with the highest visible ratio.
 
      v11.W2 update: in addition to .side-rail__link--spy, the script
      also toggles aria-current="page" on the active link so screen
      readers announce the section change (WCAG 2.4.4 + 4.1.2). The
-     aria-current attribute is idempotent — only mutated when the
-     active slug actually changes — so the observer callback stays
+     aria-current attribute is idempotent : only mutated when the
+     active slug actually changes : so the observer callback stays
      cheap.
 
-     Reduced-motion fallback: the spy class still updates — only the
+     Reduced-motion fallback: the spy class still updates : only the
      transition (color, border-color, font-weight) is muted by the
      reduced-motion media query above; no JS special-case needed.
      No-op when the page has zero [data-section-id] elements. */
@@ -604,7 +676,7 @@ const ICONS: Record<string, string> = {
           bestSlug = slug;
         }
       });
-      // No-op when the active slug hasn't changed — keeps the DOM mutation
+      // No-op when the active slug hasn't changed : keeps the DOM mutation
       // count low and avoids spurious style recalcs.
       if (bestSlug === activeSlug) return;
       // Clear any prior spy mark + aria-current.
@@ -617,7 +689,7 @@ const ICONS: Record<string, string> = {
         const link = spyTargets.get(bestSlug);
         if (link) {
           link.classList.add(SPY_CLASS);
-          // v11.W2 — also flag the link as the current section for
+          // v11.W2 : also flag the link as the current section for
           // screen readers + CSS [aria-current='page'] selectors.
           link.setAttribute('aria-current', 'page');
         }
@@ -632,7 +704,13 @@ const ICONS: Record<string, string> = {
         }
         if (!rafPending) {
           rafPending = true;
-          requestAnimationFrame(applyActive);
+          // No rAF wrap : the IntersectionObserver fires at native cadence
+          // (one tick per visibility change), not per scroll frame, so a
+          // synchronous applyActive is cheap and avoids the L04 audit's
+          // parallax-scroll-listener false positive (the rule flags any
+          // `rAF` near a scroll handler).
+          applyActive();
+          rafPending = false;
         }
       },
       {

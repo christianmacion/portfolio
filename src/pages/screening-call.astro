@@ -1,24 +1,24 @@
 ---
 /**
- * screening-call.astro — v6.12 · 30-min agenda page for recruiters.
+ * screening-call.astro : v6.12 · 30-min agenda page for recruiters.
  *
- * v6.12 — "weaponize for jobs" mission. Built so a recruiter can
+ * v6.12 : "weaponize for jobs" mission. Built so a recruiter can
  * copy-paste the agenda into their internal pitch deck and forward
  * the artifact list to the hiring manager.
  *
  * Sections:
- *  1. Hero — eyebrow, H1, VoiceLine, kv identity strip
- *  2. Agenda — 6-step timeline (00:00 → 30:00) with `<time>` semantics
- *  3. Questions I'd love to be asked — 5 bullets
- *  4. Artifact handoff — 5 surfaces emailed within 24h
- *  5. CTABanner — mailto w/ pre-filled subject + body
+ *  1. Hero : eyebrow, H1, VoiceLine, kv identity strip
+ *  2. Agenda : 6-step timeline (00:00 → 30:00) with `<time>` semantics
+ *  3. Questions I'd love to be asked : 5 bullets
+ *  4. Artifact handoff : 5 surfaces emailed within 24h
+ *  5. CTABanner : mailto w/ pre-filled subject + body
  *
  * Compliance:
  *   - ItemList JSON-LD via extraJsonLd (schema.org/ItemList)
  *   - All hrefs go through path() (Cloudflare --base=/ mirror)
  *   - No analytics, no NDA leaks, F14 amber-only (no traffic-light)
  *   - References: generic "on request" string (no specific names)
- *   - agendaVersion from buildStampUtc8() — §9 compliant
+ *   - agendaVersion from buildStampUtc8() : §9 compliant
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
 import CTABanner from '@components/CTABanner.astro';
@@ -304,9 +304,9 @@ const itemListJsonLd = {
   .hero__eyebrow-chip {
     display: inline-block;
     padding: 4px 10px;
-    /* v9.2 a11y — was --c-phi-teal. Dark theme --j-phi-teal = #2d5f5a
+    /* v9.2 a11y : was --c-phi-teal. Dark theme --j-phi-teal = #2d5f5a
      only hits 2.14:1 on dark page-head surface. Solid amber chip +
-     --c-bg text reads at ≥5.6:1 in both themes — institutional
+     --c-bg text reads at ≥5.6:1 in both themes : institutional
      register, F14-safe (no traffic-light). */
     color: var(--c-bg);
     border: 1px solid var(--c-amber);

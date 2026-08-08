@@ -2,7 +2,7 @@
 title: Math, Statistics & Analytics
 group: certifications
 order: 3
-blurb: 'Math and analytics depth — statistics, data literacy, and the modeling foundations under the quant work.'
+blurb: 'Math and analytics depth : statistics, data literacy, and the modeling foundations under the quant work.'
 items:
   - {
       name: 'Probability & Statistics Foundations',

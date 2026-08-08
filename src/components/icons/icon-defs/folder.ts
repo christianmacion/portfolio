@@ -1,5 +1,5 @@
 /**
- * folder — folder silhouette (back tab + body).
+ * folder : folder silhouette (back tab + body).
  * Content category: links to a directory of files, a project folder, or
  * a content collection.
  */

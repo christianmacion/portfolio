@@ -1,6 +1,6 @@
 ---
 /**
- * positions.astro — Live paper-trading record.
+ * positions.astro : Live paper-trading record.
  *
  * "A backtest is what a strategy *would have done*. A paper-trade is what
  *  it *actually does*."
@@ -10,7 +10,7 @@
  * least one regime change has happened.
  *
  * Currently tracking:
- *   - Vol-target time-series momentum (BTC/USDT) — project 03
+ *   - Vol-target time-series momentum (BTC/USDT) : project 03
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
 import EquityCurveChart from '@components/EquityCurveChart.astro';
@@ -25,7 +25,7 @@ const lastRefreshed = buildStampUtc8();
 const email = profile.contact.email;
 const NGATE = `${profile.stats.evalGates}-gate`;
 
-// v6.10.37 — derive tradingDays from data array length so the
+// v6.10.37 : derive tradingDays from data array length so the
 // copy auto-stays in sync when the series is extended. Net return is
 // kept as a curated "12%" headline because it pairs with the rendered
 // chart's terminal point and the IS backtest claim.
@@ -226,7 +226,7 @@ const tradingDays = equitySeries.length;
 
       <aside class="positions-cal" aria-label="Intro-call availability">
         <p class="positions-cal__note mono">
-          I do 30-min intro calls on Tue/Wed/Thu 18:00 to 22:00 PHT (10:00 to 14:00 UTC). Email first —
+          I do 30-min intro calls on Tue/Wed/Thu 18:00 to 22:00 PHT (10:00 to 14:00 UTC). Email first :
           booking link in reply.
         </p>
         <p class="positions-cal__agenda">
@@ -497,7 +497,7 @@ const tradingDays = equitySeries.length;
     color: var(--c-ink-2);
   }
 
-  /* v6.11.13 — .positions-proof aside removed (XAUT/USDT chart broke
+  /* v6.11.13 : .positions-proof aside removed (XAUT/USDT chart broke
      the page's "what I'm currently running" frame). */
 
   .positions-grid {
@@ -512,7 +512,7 @@ const tradingDays = equitySeries.length;
     align-items: flex-start;
     gap: var(--sp-4);
     margin-bottom: var(--sp-3);
-    /* v6.11.13 — wrap so the badge drops below the long subtitle on
+    /* v6.11.13 : wrap so the badge drops below the long subtitle on
        mobile viewports ≤540px (badge has white-space: nowrap + flex:
        0 0 auto; without wrap it floats to the right edge awkwardly). */
     flex-wrap: wrap;
@@ -544,7 +544,7 @@ const tradingDays = equitySeries.length;
     border: 1px solid var(--c-amberl-strong);
     border-radius: var(--radius-sm);
     white-space: nowrap;
-    /* v6.11.13 — keep the badge pinned to the top of its line so it
+    /* v6.11.13 : keep the badge pinned to the top of its line so it
        doesn't drift down when the subtitle wraps multi-line. */
     align-self: flex-start;
   }
@@ -607,7 +607,7 @@ const tradingDays = equitySeries.length;
     line-height: var(--lh-loose);
   }
   .positions-tradeoffs__list li::before {
-    content: '–';
+    content: '-';
     position: absolute;
     left: 0;
     color: var(--c-amber);
@@ -729,7 +729,7 @@ const tradingDays = equitySeries.length;
     flex-shrink: 0;
     white-space: nowrap;
   }
-  /* v6.12 — agenda link under the availability one-liner. */
+  /* v6.12 : agenda link under the availability one-liner. */
   .positions-cal__agenda {
     margin: 0;
     font-family: var(--ff-mono);

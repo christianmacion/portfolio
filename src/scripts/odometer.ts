@@ -1,17 +1,17 @@
 /**
- * odometer.ts — Phase D-1.
+ * odometer.ts : Phase D-1.
  *
  * Animates [data-counter="N"] once when scrolled into view. Counter goes
  * from 0 → N over 0.6s with an ease-out cubic-bezier curve. Monospace
  * tabular-nums prevents layout shift. One-shot per element.
  *
- * v6.18 — fix 0-flash. SSR renders the formatted final value (not 0),
+ * v6.18 : fix 0-flash. SSR renders the formatted final value (not 0),
  * so we DON'T reset to '0' on init. Only when the IO fires AND the
  * element is in viewport do we start the count-up. Threshold also
  * dropped from 0.3 → 0 so a cell that's partially visible animates
  * immediately (the hero stats live near the top of the page).
  *
- * v2026-08-02 — default duration shortened to 0.6s (was 1.2s). The
+ * v2026-08-02 : default duration shortened to 0.6s (was 1.2s). The
  * value is SSR'd to the final figure, so the user only sees "0" for
  * the duration of the count-up. 0.6s reads as institutional snappy
  * (≤ the 0.6s audit threshold) while remaining legible for ≥ 2-digit
@@ -33,12 +33,12 @@ function init(): void {
     if (!Number.isFinite(final)) return;
 
     if (reduced || !('IntersectionObserver' in window)) {
-      // Already SSR'd to the final value — leave it.
+      // Already SSR'd to the final value : leave it.
       return;
     }
 
     // Allow per-element duration override via `data-duration` (ms).
-    // v2026-08-02 — default shortened from 1200 → 600.
+    // v2026-08-02 : default shortened from 1200 → 600.
     const overrideDur = Number.parseFloat(el.dataset.duration ?? '');
     const duration = Number.isFinite(overrideDur) && overrideDur > 0 ? overrideDur : 600;
     const start = performance.now();

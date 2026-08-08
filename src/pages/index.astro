@@ -1,6 +1,6 @@
 ---
 /**
- * index.astro — v9.1 HOME — INSTITUTIONAL BROADSIDE
+ * index.astro : v9.1 HOME : INSTITUTIONAL BROADSIDE
  *
  * Per webcraft-no-vibe (VIBE-DOCTRINE.md Part III):
  *   "If a stranger can tell you used AI to build it within 5 seconds,
@@ -14,16 +14,18 @@
  *   - Running header tape (deploy date + version + UTC offset + nav links)
  *   - Big Roman-serif display H1 (italic middle name, FT-style)
  *   - Hairline rules between sections, like a printed broadside
- *   - Section marks (§ 01, § 02) — editorial register
- *   - Tabular data strip (6 live counters — anchor the page as "alive")
- *   - Last: world map (8 pins) — the v8.5.1 hotfix, preserved
+ *   - Section marks (§ 01, § 02) : editorial register
+ *   - Tabular data strip (6 live counters : anchor the page as "alive")
+ *   - Last: world map (8 pins) : the v8.5.1 hotfix, preserved
  *
  * Density: 5 sections, ~480 lines. Was 11 sections, 2,032 lines.
  */
 
+import { Image } from 'astro:assets';
 import BaseLayout from '@layouts/BaseLayout.astro';
 import { profile } from '@utils/profile';
 import { path } from '@utils/url';
+import headshot from '../assets/portrait/headshot-source.jpg';
 import EarthMap from '@components/EarthMap.astro';
 import Marquee from '@components/Marquee.astro';
 import HeroSkills from '@components/HeroSkills.astro';
@@ -32,8 +34,9 @@ import CertWall from '@components/CertWall.astro';
 import SectionMark from '@components/SectionMark.astro';
 import FiveEraCurve from '@components/FiveEraCurve.astro';
 import GatesLattice from '@components/GatesLattice.astro';
+import AIHistoryTimeline from '@components/AIHistoryTimeline.astro';
 
-// v9.4.1 FLAGSHIP HERO — re-aimed for hireability.
+// v9.4.1 FLAGSHIP HERO : re-aimed for hireability.
 // Marquee ribbon between hero and counter strip. Reuses Marquee.astro.
 // v9.4.1: removed STELLA / GATE STACK / Acion / workbook chips (internal
 // jargon). Replaced with recruiter-readable proof chips that match the
@@ -48,36 +51,39 @@ const heroMarqueeItems = [
 ];
 
 const footprintPoints = [
-  // Home base — Digos City, Davao del Sur, Philippines. Canonical 6.74°N, 125.36°E.
-  { city: 'Digos City, PH', lat: 6.74, lon: 125.36, weight: 1.0, caption: 'home base · UTC+8' },
-  // 16 financial markets hubs — coverage of equities, futures, FX, crypto, alt-data.
+  // Home base : Digos City, Davao del Sur, Philippines. Canonical 6.74°N, 125.36°E.
+  { city: 'Digos City, PH', lat: 6.74, lon: 125.36, weight: 1.0, caption: 'home base · UTC+8', labelAnchor: 'bottom' as const, labelDx: 8, labelDy: 6 },
+  // 16 financial markets hubs : coverage of equities, futures, FX, crypto, alt-data.
   // Each one is a real venue + a real venue-type (exchange / market-maker / data).
-  { city: 'Manila, PH', lat: 14.6, lon: 120.98, weight: 0.7, caption: 'PDEx · PSE' },
-  { city: 'Singapore', lat: 1.35, lon: 103.82, weight: 0.9, caption: 'SGX · APAC derivatives' },
-  { city: 'Hong Kong', lat: 22.32, lon: 114.17, weight: 0.85, caption: 'HKEX · HSI · Hang Seng' },
-  { city: 'Tokyo', lat: 35.68, lon: 139.69, weight: 0.85, caption: 'JPX · TSE · Nikkei' },
-  { city: 'Shanghai', lat: 31.23, lon: 121.47, weight: 0.7, caption: 'SHFE · SSE' },
-  { city: 'Mumbai', lat: 19.08, lon: 72.88, weight: 0.7, caption: 'NSE · BSE · Nifty' },
-  { city: 'Dubai', lat: 25.2, lon: 55.27, weight: 0.6, caption: 'DGCX · regional oil' },
-  { city: 'Seoul', lat: 37.56, lon: 126.97, weight: 0.7, caption: 'KRX · Kospi' },
-  { city: 'Sydney', lat: -33.87, lon: 151.21, weight: 0.6, caption: 'ASX' },
-  { city: 'Tokyo (alt-data)', lat: 35.68, lon: 139.78, weight: 0.5, caption: 'Japan alt-data · consumption' },
-  { city: 'London', lat: 51.51, lon: -0.13, weight: 0.95, caption: 'LSE · ICE · LCH · FX' },
-  { city: 'Frankfurt', lat: 50.11, lon: 8.68, weight: 0.85, caption: 'Eurex · DAX' },
-  { city: 'Zurich', lat: 47.38, lon: 8.54, weight: 0.85, caption: 'SIX · CTA' },
-  { city: 'Chicago', lat: 41.88, lon: -87.63, weight: 0.9, caption: 'CME · CBOT · agricultural' },
-  { city: 'New York', lat: 40.71, lon: -74.01, weight: 1.0, caption: 'NYSE · Nasdaq · Bloomberg · Refinitiv' },
-  { city: 'Zug, CH', lat: 47.17, lon: 8.51, weight: 0.7, caption: 'Crypto Valley · Ethereum foundation' },
-  { city: 'San Francisco', lat: 37.77, lon: -122.42, weight: 0.7, caption: 'Coinbase · Kraken · FalconX' },
-  { city: 'São Paulo', lat: -23.55, lon: -46.63, weight: 0.6, caption: 'B3 · Bovespa' },
-  { city: 'Toronto', lat: 43.65, lon: -79.38, weight: 0.6, caption: 'TSX · Toronto-Dominion' },
-  { city: 'GMU (GDELT)', lat: 38.83, lon: -77.31, weight: 0.5, caption: 'GDELT · alt-data · events 15-min' },
+  // v12.W4 Bryllim parity : dense clusters get explicit label anchors so
+  // the labels never overlap their pins (London/Frankfurt/Zurich, Chicago/
+  // Toronto, Tokyo/Seoul, HK/Shanghai/Manila, Singapore/Manila, NYC/GMU).
+  { city: 'Manila, PH', lat: 14.6, lon: 120.98, weight: 0.7, caption: 'PDEx · PSE', labelAnchor: 'right' as const },
+  { city: 'Singapore', lat: 1.35, lon: 103.82, weight: 0.9, caption: 'SGX · APAC derivatives', labelAnchor: 'bottom' as const, labelDx: -10, labelDy: 16 },
+  { city: 'Hong Kong', lat: 22.32, lon: 114.17, weight: 0.85, caption: 'HKEX · HSI · Hang Seng', labelAnchor: 'right' as const, labelDx: 6 },
+  { city: 'Tokyo', lat: 35.68, lon: 139.69, weight: 0.85, caption: 'JPX · TSE · Nikkei', labelAnchor: 'top' as const, labelDy: -8 },
+  { city: 'Shanghai', lat: 31.23, lon: 121.47, weight: 0.7, caption: 'SHFE · SSE', labelAnchor: 'top' as const, labelDx: -14, labelDy: -8 },
+  { city: 'Mumbai', lat: 19.08, lon: 72.88, weight: 0.7, caption: 'NSE · BSE · Nifty', labelAnchor: 'top' as const, labelDy: -6 },
+  { city: 'Dubai', lat: 25.2, lon: 55.27, weight: 0.6, caption: 'DGCX · regional oil', labelAnchor: 'top' as const, labelDy: -6 },
+  { city: 'Seoul', lat: 37.56, lon: 126.97, weight: 0.7, caption: 'KRX · Kospi', labelAnchor: 'top' as const, labelDx: 14, labelDy: -10 },
+  { city: 'Sydney', lat: -33.87, lon: 151.21, weight: 0.6, caption: 'ASX', labelAnchor: 'top' as const },
+  { city: 'Tokyo (alt-data)', lat: 35.68, lon: 139.78, weight: 0.5, caption: 'Japan alt-data · consumption', labelAnchor: 'right' as const, labelDx: 8 },
+  { city: 'London', lat: 51.51, lon: -0.13, weight: 0.95, caption: 'LSE · ICE · LCH · FX', labelAnchor: 'top' as const, labelDx: -16, labelDy: -10 },
+  { city: 'Frankfurt', lat: 50.11, lon: 8.68, weight: 0.85, caption: 'Eurex · DAX', labelAnchor: 'bottom' as const, labelDy: 14 },
+  { city: 'Zurich', lat: 47.38, lon: 8.54, weight: 0.85, caption: 'SIX · CTA', labelAnchor: 'top' as const, labelDx: 10, labelDy: -10 },
+  { city: 'Chicago', lat: 41.88, lon: -87.63, weight: 0.9, caption: 'CME · CBOT · agricultural', labelAnchor: 'top' as const, labelDy: -8 },
+  { city: 'New York', lat: 40.71, lon: -74.01, weight: 1.0, caption: 'NYSE · Nasdaq · Bloomberg · Refinitiv', labelAnchor: 'bottom' as const, labelDx: -10, labelDy: 18 },
+  { city: 'Zug, CH', lat: 47.17, lon: 8.51, weight: 0.7, caption: 'Crypto Valley · Ethereum foundation', labelAnchor: 'right' as const, labelDx: 8 },
+  { city: 'San Francisco', lat: 37.77, lon: -122.42, weight: 0.7, caption: 'Coinbase · Kraken · FalconX', labelAnchor: 'top' as const, labelDy: -6 },
+  { city: 'São Paulo', lat: -23.55, lon: -46.63, weight: 0.6, caption: 'B3 · Bovespa', labelAnchor: 'top' as const, labelDy: -8 },
+  { city: 'Toronto', lat: 43.65, lon: -79.38, weight: 0.6, caption: 'TSX · Toronto-Dominion', labelAnchor: 'right' as const, labelDx: 8 },
+  { city: 'GMU (GDELT)', lat: 38.83, lon: -77.31, weight: 0.5, caption: 'GDELT · alt-data · events 15-min', labelAnchor: 'top' as const, labelDx: 10, labelDy: -8 },
 ];
 
 const email = profile.contact.email;
-// v9.3.5 — deployedStamp + buildTime moved to SiteHeader.astro (single source of truth).
+// v9.3.5 : deployedStamp + buildTime moved to SiteHeader.astro (single source of truth).
 
-// Live counters — v9.4.1 hireability-facing. All sourced from profile.stats.ts.
+// Live counters : v9.4.1 hireability-facing. All sourced from profile.stats.ts.
 // Stripped AARs / evalGates / pagesBuilt from first viewport (internal jargon);
 // yearsExperience + aiProjectCount added so the strip answers a recruiter's
 // "how long + how much" question in 5 seconds.
@@ -100,14 +106,14 @@ const liveCounters = [
   pixelDisplay={true}
   breadcrumbs={[{ name: 'Home', href: '/' }]}
 >
-  <!-- v9.3.2 (2026-08-02) — a11y: BaseLayout.astro already wraps the
+  <!-- v9.3.2 (2026-08-02) : a11y: BaseLayout.astro already wraps the
        page in <main id="main">; rendering an inner <main> here produced
        nested <main> landmarks (invalid HTML5; confusing to screen-reader
        landmark navigation). Replaced with <section> so the broadside is
        semantically sectioned, not landmarked. The outer BaseLayout
        <main id="main"> remains the single landmark for AT users. -->
   <section class="broadside home-section" aria-label="Home broadside">
-    <!-- v9.3.5 — running header tape REMOVED. The global SiteHeader (above
+    <!-- v9.3.5 : running header tape REMOVED. The global SiteHeader (above
          the Nav) now ships the CM monogram + name + role + UTC + deployed
          stamp on every page, including home. The downstream nav row is
          covered by the global Nav component. The home page keeps its
@@ -115,7 +121,7 @@ const liveCounters = [
          quick-route grid. the broadside reading still differentiates
          home from subpages; the chrome is now shared. -->
 
-    <!-- ============= 00 — HOME =============
+    <!-- ============= 00 : HOME =============
          Bryllim-style number-prefixed section header. Mono digit + space
          + em-dash + space + lowercase name. Sits BEFORE the existing
          hero landmark as an editorial section register (not a heading).
@@ -135,50 +141,83 @@ const liveCounters = [
          number verified or removed), Goldratt constraint (proof beats
          chrome, chrome never delays the proof beat). -->
     <section class="hero-flagship" aria-label="Quantitative researcher and AI engineer for financial markets">
+      <!-- v12.W4 Bryllim parity : headshot is the FIRST element of the home
+           hero. SideRail brand block is now text-only (no face photo). The
+           landing-page owns the "this is me" first-impression beat. Source
+           is 755x1200 portrait (aspect 0.629); we honor the natural ratio
+           so the FULL image is visible. Widths=[200, 280, 440] match the
+           sizes attribute: 200px on mobile, 280px on desktop. -->
+      <figure class="hero-flagship__headshot">
+        <Image
+          src={headshot}
+          alt={profile.headshot.alt}
+          width={280}
+          height={445}
+          widths={[200, 280, 440]}
+          sizes="(max-width: 720px) 200px, 280px"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+          class="hero-flagship__headshot-img"
+        />
+        <figcaption class="hero-flagship__headshot-credit mono">{profile.headshot.credit}</figcaption>
+      </figure>
+
       <div class="hero-flagship__copy">
-        <p class="hero-flagship__eyebrow mono">
+        <p class="hero-flagship__eyebrow mono" data-stagger="1">
           CHRISTIAN T. MACION · DIGOS CITY, DAVAO DEL SUR, PHILIPPINES · REMOTE (UTC+8)
         </p>
-        <p class="hero-flagship__availability mono">
+        <p class="hero-flagship__availability mono" data-stagger="2">
           OPEN TO QUANT RESEARCH + AI ENGINEER ROLES FOR FINANCIAL MARKETS · REMOTE 30 HRS/WK · UTC+8
         </p>
-        <h1 class="hero-flagship__name pixel-display">
+        <!-- v12.W4 : removed pixel-display class so the H1 renders in
+             Inter display (var(--j-ff-display)) instead of JetBrains Mono.
+             The Bryllim reference uses pixel LOGO + serif body; the H1
+             is the body, so it ships as institutional sans-serif (FT /
+             Bloomberg register), not bitmap mono. data-words fires the
+             motion.ts word-wrap so "Quantitative Researcher" cascades
+             into view on load (80ms cadence, see motion.css §3). -->
+        <h1 class="hero-flagship__name" data-stagger="3" data-words>
           Quantitative Researcher
         </h1>
-        <p class="hero-flagship__role">
-          AI Engineer-Architect · 6 years across quant research, production trading systems, and multi-agent AI for financial markets.
+        <p class="hero-flagship__role" data-stagger="4">
+          AI Engineer. Quantitative Researcher. 6 years. Live systems, not slides.
         </p>
-        <!-- v11.W1.2 — 60-second path. Kahneman WYSIATI: front-load proof,
+        <!-- v11.W1.2 : 60-second path. Kahneman WYSIATI: front-load proof,
              not adjectives. Tetlock calibration: name a Brier-style grade
              so a recruiter sees the trader skill in the same 5 seconds
              they see the title. Munger latticework: name quant + AI +
              chrome as one cross-validated practice, not five siloed skills. -->
-        <p class="hero-flagship__60s mono">If you are hiring - 60-second path:</p>
-        <p class="hero-flagship__sixty">
-          A fox across 5 era buckets, not a hedgehog on one story: roughly 31 graduated backtests under a 31-gate research
-          stack, 6 years shipping strategies and the production agents that run them, a calibration grade I put near
-          0.72 Brier (rough 70% CI: 0.64 to 0.79) against the 0.50 base rate for self-reported practitioner claims, and
-          0.25 for the dual quant + AI reference class. The proof sits one click below the fold: strategy workbooks,
-          trade logs, and the G1 to G31 gate stack.
+        <p class="hero-flagship__60s mono" data-stagger="5">If you are hiring - 60-second path:</p>
+        <p class="hero-flagship__sixty" data-stagger="6">
+          A fox across 5 era buckets, not a hedgehog on one story. 31-gate eval stack. Brier near 0.72
+          (70% CI 0.64 to 0.79) against the 0.50 base rate for self-reported practitioner claims. The proof sits
+          one click below: strategy workbooks, trade logs, and the G1 to G31 gate stack.
         </p>
-        <div class="hero-flagship__cta">
+        <!-- v12.W4 quant-aesthetic : unified CTA treatment. ONE consistent
+             institutional pattern across all five buttons (no three-style
+             mix). Outlined, paper bg, hairline border, ink color, no fill,
+             no transform on hover. Color shift only: border + text go amber
+             on hover (the institutional "system responds" cue, not a SaaS
+             lift). Chrome contract rule 3 (no halo / glow / lift) is upheld. -->
+        <div class="hero-flagship__cta" data-stagger="7">
           <a
             href={path('/resume-quant-onepage.pdf')}
-            class="hero-flagship__cta-primary"
+            class="hero-flagship__cta-btn hero-flagship__cta-btn--key"
             download
           >
             Download the 1-page resume
           </a>
-          <a href={path('/proof')} class="hero-flagship__cta-secondary">
+          <a href={path('/proof')} class="hero-flagship__cta-btn">
             See the shipped work
           </a>
-          <a href={path('/contact')} class="hero-flagship__cta-secondary">
+          <a href={path('/contact')} class="hero-flagship__cta-btn">
             Book a 30-minute call
           </a>
-          <a href={path('/methodology')} class="hero-flagship__cta-tertiary">
+          <a href={path('/methodology')} class="hero-flagship__cta-btn">
             Method (G1-G31)
           </a>
-          <a href={path('/for-recruiters')} class="hero-flagship__cta-tertiary">
+          <a href={path('/for-recruiters')} class="hero-flagship__cta-btn">
             Recruiter brief
           </a>
         </div>
@@ -188,21 +227,21 @@ const liveCounters = [
              `__60s` eyebrow already above the strip, so this adds a register
              the chrome contract already defines rather than a new one.
              `<p>` (not a heading) keeps the h1-only hero hierarchy intact. -->
-        <p class="hero-flagship__markets mono">{profile.titles.marketsRail}</p>
+        <p class="hero-flagship__markets mono" data-stagger="8">{profile.titles.marketsRail}</p>
       </div>
       <div class="hero-flagship__viz">
         <HeroSkills />
       </div>
     </section>
 
-    <!-- v9.7.1 — flagship live-performance centerpiece. Animated SVG equity
+    <!-- v9.7.1 : flagship live-performance centerpiece. Animated SVG equity
          curve placed between hero-flagship and the live counter strip. Reads
          as proof of "this person ships" to the curve draws on mount, pulses
          at the terminus, and captions the expected paper-trade return.
          Cream surface + amber line preserve the chrome contract. -->
     <HeroCurve />
 
-    <!-- ============= LIVE DATA STRIP — moved up (PATCH 7): primary visual proof
+    <!-- ============= LIVE DATA STRIP : moved up (PATCH 7): primary visual proof
          sits right after the hero. Reading order: H1 → role → CTAs → curve →
          strip (proof) → marquee (ambient) → § 01. ============= -->
     <aside class="strip" aria-label="Live counters">
@@ -211,7 +250,7 @@ const liveCounters = [
           liveCounters.map((c) => (
             <div class="strip__cell">
               {/* Bryllim-style diagonal arrow in upper-right of each cell.
-                  Decorative only — aria-hidden so screen-readers get the
+                  Decorative only : aria-hidden so screen-readers get the
                   numeric value from data-countup without competing chrome. */}
               <span class="strip__arrow" aria-hidden="true">↗</span>
               <p class="strip__num" data-countup={c.value}>{c.value}</p>
@@ -225,15 +264,15 @@ const liveCounters = [
       </p>
     </aside>
 
-    <!-- ============= RUNNING-TAPE RIBBON — moved down (PATCH 7): ambient
+    <!-- ============= RUNNING-TAPE RIBBON : moved down (PATCH 7): ambient
          ribbon AFTER the proof. Reuses Marquee.astro. 5 items per UI/UX. -->
     <aside class="hero-ribbon" aria-label="Operating register">
       <Marquee items={heroMarqueeItems} speedSec={60} />
     </aside>
 
-    <!-- ============= § 01 — LEDE ============= -->
+    <!-- ============= § 01 : LEDE ============= -->
     <section class="lede" aria-label="Working description" data-section-id="projects">
-      <!-- v11.W1.2 — copy refreshed for Stage 0 doctrine integration. The
+      <!-- v11.W1.2 : copy refreshed for Stage 0 doctrine integration. The
            lede is now a 2-paragraph latticework framing: paragraph 1
            names the practice (quant + AI + chrome as one cross-validated
            model), paragraph 2 names the proof beat (workbooks + trade
@@ -242,28 +281,40 @@ const liveCounters = [
       <SectionMark index="01" title="projects" />
       <h2 class="lede__mark mono">§ 01. The Work</h2>
       <p class="lede__body">
-        I work in latticework: quantitative research, production AI engineering, and the chrome discipline that makes
-        the work legible to a hiring reader are not adjacent skills but one cross-validated practice. A trading edge
-        cleared by the 31-gate research stack is the same artifact audited for accessibility, indexed in a workbook,
-        and rendered as recruiter-facing proof on this site. Each discipline stress-tests the others, and a claim
-        that survives the full lattice is a claim the portfolio can carry.
+        Quant research, production AI engineering, and the chrome discipline that makes the work legible to a hiring
+        reader are not adjacent skills. They are one cross-validated practice. A trading edge cleared by the 31-gate
+        stack is the same artifact audited for accessibility, indexed in a workbook, and rendered as recruiter-facing
+        proof on this site. Each discipline stress-tests the others.
       </p>
       <p class="lede__body">
-        The proof sits below: 9 quant strategies with published methodology, 6 production AI projects, 25 public
-        repositories, and a 31-gate evaluation harness with a kill log visible to anyone. Client-confidential work
-        is omitted. Every claim is dated, every commit is referenced, every closed backtest carries its drawdown
-        window.
+        Below: 9 quant strategies with published methodology, 6 production AI projects, 25 public repositories, and
+        a 31-gate eval harness with a public kill log. Every claim is dated. Every commit is referenced. Every closed
+        backtest carries its drawdown window. Client-confidential work is omitted.
       </p>
     </section>
 
-    <!-- ============= § 02 — ARTIFACTS TABLE ============= -->
+    <!-- ============= § 01.5 : AI HISTORY TIMELINE =============
+         v12.W4 : flagship visual proof that the trend-tracking fingerprint
+         is real. PROMPTS to GRAPHS, two months ahead of mainstream each
+         rung. NDA-safe copy: dates from canonical industry emergence +
+         personal shipped records. Renders as a horizontal strip on
+         desktop, vertical stack on mobile (auto via media query). -->
+    <section class="trend" aria-label="Trend-tracking arc">
+      <AIHistoryTimeline
+        variant="strip"
+        chip="AI · HISTORY · THE LEAD"
+        title="Always up to trend. Two months ahead."
+        lede="Six architectural jumps in three years, each adopted on day one. The lead is the trend-tracking fingerprint for a quant seat."
+      />
+    </section>
+
+    <!-- ============= § 02 : ARTIFACTS TABLE ============= -->
     <section class="artifacts" aria-label="What I ship" data-section-id="proof">
       <SectionMark index="02" title="proof" />
       <h2 class="artifacts__mark mono">§ 02. What I Ship</h2>
       <p class="artifacts__sub">
-        Financial-markets proof first: strategy workbooks and trade logs lead the table. Real artifacts, real
-        numbers. Each row links to the proof page or repo. Numbers are counted at deploy time, not rounded to
-        look round.
+        9 quant strategies with published methodology. 6 production AI projects. 31-gate eval harness with public
+        kill log. Numbers below are counted at deploy time, not rounded.
       </p>
       <table class="artifacts__table">
         <thead>
@@ -330,7 +381,7 @@ const liveCounters = [
       </p>
     </section>
 
-    <!-- ============= § 03 — CERTIFICATIONS WALL ============= -->
+    <!-- ============= § 03 : CERTIFICATIONS WALL ============= -->
     <SectionMark index="03" title="certifications" />
     <section aria-label="Strategy validation discipline" data-section-id="validation">
       <div class="home-section">
@@ -348,46 +399,44 @@ const liveCounters = [
       <a href={path('/certifications')} class="bryllim-overflow mono">ALL {profile.stats.certCount} CERTS →</a>
     </p>
 
-    <!-- ============= § 04 — READING LIST ============= -->
+    <!-- ============= § 04 : READING LIST ============= -->
     <section class="help" aria-label="How I help" data-section-id="now">
       <SectionMark index="04" title="now" />
-      <h2 class="help__mark mono">§ 04. How I help</h2>
+      <h2 class="help__mark mono">§ 04. What I Ship</h2>
       <p class="reading__sub">
-        Engagement shapes I've shipped. Not services I list. live systems built, deployed, and
-        kept honest with verifiable evidence.
+        Four engagement shapes. Not services I list. Live systems built, deployed, kept honest with verifiable
+        evidence.
       </p>
       <div class="help__grid help__grid--inline">
         <article class="help__card">
           <p class="help__kicker mono">QUANT RESEARCH</p>
           <h3 class="help__title">Statistical-arb pipelines that survive live deployment</h3>
           <p class="help__body">
-            Walk-forward backtests, deflated Sharpe, and a gate stack that filters out the ones
-            that only looked good in-sample. Each pipeline ships with a paper-trade leg and a
-            postmortem. kills included.
+            Walk-forward backtests, deflated Sharpe, regime conditioning. The 31-gate stack filters out edges that
+            only looked good in-sample. Each pipeline ships with a paper-trade leg and a postmortem.
           </p>
         </article>
         <article class="help__card">
           <p class="help__kicker mono">AI ENGINEERING</p>
           <h3 class="help__title">Multi-agent build systems with eval-first discipline</h3>
           <p class="help__body">
-            Production agents behind a frozen eval harness and a kill-switch. Failures banked
-            into postmortems; wins banked into the next eval set. Ship behind metrics, not vibes.
+            Production agents behind a frozen eval harness and a kill-switch. Failures banked into postmortems;
+            wins banked into the next eval set. Ship behind metrics, not vibes.
           </p>
         </article>
         <article class="help__card">
           <p class="help__kicker mono">AI EVAL</p>
-          <h3 class="help__title">Statistical gates for AI/ML claims</h3>
+          <h3 class="help__title">Statistical gates for LLM claims</h3>
           <p class="help__body">
-            Deflated Sharpe, block-bootstrap CIs, walk-forward stability. same tools you use on
-            backtests, applied to LLM eval scores. Built when the metric is too pretty.
+            Deflated Sharpe, block-bootstrap CIs, walk-forward stability. Same tools you use on backtests, applied
+            to LLM eval scores. Built when the metric is too pretty.
           </p>
         </article>
         <article class="help__card">
           <p class="help__kicker mono">REPRODUCIBILITY</p>
           <h3 class="help__title">Reproducible artifacts with audit trails</h3>
           <p class="help__body">
-            Frozen-spec eval, idempotent re-run path, one-page AAR. Verifiable by a stranger, not
-            just an insider.
+            Frozen-spec eval, idempotent re-run, one-page AAR. Verifiable by a stranger, not just an insider.
           </p>
         </article>
       </div>
@@ -398,17 +447,16 @@ const liveCounters = [
       </p>
     </section>
 
-    <!-- ============= § 05 — FOOTPRINT ============= -->
+    <!-- ============= § 05 : FOOTPRINT ============= -->
     <section class="footprint" aria-label="Footprint">
       <h2 class="footprint__mark mono">§ 05. Footprint</h2>
       <p class="footprint__sub">
-        Where I cover and where I've shipped. Each pin is a real counterpart, a real venue, or a
-        real engagement. verifiable, not decorative.
+        17 venues. Real counterparts, real exchanges, real alt-data feeds. Verifiable, not decorative.
       </p>
       <EarthMap points={footprintPoints} mode="pins" />
     </section>
 
-    <!-- ============= § 06 — CONTACT ============= -->
+    <!-- ============= § 06 : CONTACT ============= -->
     <footer class="contact" aria-label="Contact">
       <h2 class="contact__mark mono">§ 06. Contact</h2>
       <p class="contact__line mono">
@@ -421,8 +469,8 @@ const liveCounters = [
         <a href={path('/for-recruiters')}>Recruiter brief</a>
       </p>
       <p class="contact__sub">
-        Open to quant research and AI engineer roles in financial markets, applied research where the eval bar is
-        real, and selective contract engagements with publishable methodology. Reply within 24 hours.
+        Open to quant research and AI engineer roles in financial markets. Selective contract engagements with
+        publishable methodology. Reply within 24 hours.
       </p>
       <p class="contact__line mono">
         <a href={path('/methodology')}>Method (G1-G31)</a>
@@ -430,11 +478,6 @@ const liveCounters = [
         <a href={path('/comp')}>Comp bands</a>
         <span aria-hidden="true">·</span>
         <a href={path('/positions')}>Live positions</a>
-      </p>
-      <p class="contact__source mono">
-        Source: <code>profile.stats.ts</code>. Methodology: <a href={path('/methodology')}
-          >/methodology</a
-        >.
       </p>
     </footer>
   </section>
@@ -448,9 +491,9 @@ const liveCounters = [
      ============================================================ */
 
   .broadside {
-    max-width: 1080px;
+    max-width: var(--content-max);
     margin: 0 auto;
-    padding: 0 32px 96px;
+    padding: 0 var(--s-6) var(--s-9);
   }
 
   /* ====== RUNNING HEADER TAPE ====== */
@@ -514,7 +557,7 @@ const liveCounters = [
     color: var(--c-ink);
   }
 
-  /* ====== HERO — big serif display ====== */
+  /* ====== HERO : big serif display ====== */
   .hero {
     padding: 32px 0 24px;
     border-bottom: 1px solid var(--c-rule);
@@ -573,7 +616,7 @@ const liveCounters = [
     border-left: 1px solid var(--c-rule);
     position: relative;
   }
-  /* v9.4.2 — Bryllim diagonal-arrow mark. Upper-right of each cell.
+  /* v9.4.2 : Bryllim diagonal-arrow mark. Upper-right of each cell.
      Mono caps so it reads as a label, not an emoji. Hover bumps it to
      ink color (no halo, no glow, no transform). */
   .strip__arrow {
@@ -611,7 +654,7 @@ const liveCounters = [
     margin: 0;
   }
 
-  /* v9.4.2 — strip subtitle carries the "/ 11 MO" temporal context
+  /* v9.4.2 : strip subtitle carries the "/ 11 MO" temporal context
      that was previously crammed into the 6th counter label. */
   .strip__sub {
     font-size: 10px;
@@ -621,13 +664,13 @@ const liveCounters = [
     text-transform: uppercase;
   }
 
-  /* ====== SECTIONS — § marks + body ====== */
+  /* ====== SECTIONS : § marks + body ====== */
   .lede,
   .artifacts,
   .reading,
   .footprint,
   .contact {
-    padding: 40px 0 8px;
+    padding: var(--s-7) 0 var(--s-3);
     border-bottom: 1px solid var(--c-rule);
   }
   .contact {
@@ -639,28 +682,28 @@ const liveCounters = [
   .reading__mark,
   .footprint__mark,
   .contact__mark {
-    font-size: 11px;
-    color: var(--c-warn);
-    letter-spacing: 0.14em;
-    margin: 0 0 18px;
+    font-size: var(--type-caption-size);
+    color: var(--c-amber);
+    letter-spacing: var(--type-caption-track);
+    margin: 0 0 var(--s-5);
     text-transform: uppercase;
-    font-weight: 600;
+    font-weight: 400;
   }
 
   /* ============================================================
-   * v9.4.2 BRYLLIM PATTERN — "ALL X →" overflow link.
+   * v9.4.2 BRYLLIM PATTERN : "ALL X →" overflow link.
    * Right-aligned at section end; mono caps; amber accent underline.
    * No halo, no glow, no transform.
    * ============================================================ */
   .bryllim-overflow {
     display: inline-block;
     font-family: var(--ff-mono);
-    font-size: 11px;
-    letter-spacing: 0.14em;
+    font-size: var(--type-caption-size);
+    letter-spacing: var(--type-caption-track);
     text-transform: uppercase;
     color: var(--c-ink);
     text-decoration: none;
-    border-bottom: 1px solid var(--c-warn);
+    border-bottom: 1px solid var(--c-amber);
     padding-bottom: 1px;
     transition: border-color 120ms ease, color 120ms ease;
   }
@@ -727,7 +770,7 @@ const liveCounters = [
     font-weight: 500;
   }
 
-  /* v9.4 — hook + quick-route sections removed (PATCH 3+4) — see
+  /* v9.4 : hook + quick-route sections removed (PATCH 3+4) : see
      portfolio-flagship-hero-v9-4-2026-08-07 for the patch list. */
 
   /* ====== CONTACT ====== */
@@ -780,7 +823,7 @@ const liveCounters = [
       flex-wrap: wrap;
       gap: 6px 10px;
     }
-    /* v9.3 Wave 4 (2026-08-01) — wrap the bottom nav into a 2-column
+    /* v9.3 Wave 4 (2026-08-01) : wrap the bottom nav into a 2-column
        grid on mobile instead of horizontal-scroll. The previous
        `overflow-x: auto` was clipping "FOR RECRUITERS" → "FOR RECRUITER"
        on iPhone-13-width viewports and forcing the recruiter to
@@ -821,11 +864,11 @@ const liveCounters = [
     .reading__text {
       grid-column: 2;
     }
-    /* v9.4 — quick-route mobile rules removed (PATCH 4b). */
+    /* v9.4 : quick-route mobile rules removed (PATCH 4b). */
   }
 
   /* ============================================================
-   * v9.4 FLAGSHIP HERO — 2-column flagship layout
+   * v9.4 FLAGSHIP HERO : 2-column flagship layout
    * Left: eyebrow + H1 + role + 2 CTAs. Right: animated SVG curve.
    * Cream surface for the copy column; dark inset panel hosts the
    * curve. Hairline rule between the two columns; collapses to a
@@ -839,6 +882,63 @@ const liveCounters = [
     padding: 28px 0 32px;
     border-bottom: 1px solid var(--c-rule);
   }
+  /* v12.W4 Bryllim parity : landing-page headshot. Sits as the first
+     element of the hero, owns the "this is me" first-impression beat.
+     Monochrome (already desaturated at source), hairline border, sharp
+     0-2px corners. No halo, no glow, no gradient (chrome contract).
+     v12.W4.3 Owner directive: CENTER the image and show it FULL
+     (no aspect-ratio crop, no object-fit:cover). Source is 755×1200
+     portrait (aspect 0.629); we honor the natural ratio. Widths
+     match the sizes attribute: 200px on mobile, 280px on desktop.
+     Bryllim-style entrance: subtle fade + slight scale-up on load. */
+  .hero-flagship__headshot {
+    margin: 0 auto 4px;
+    max-width: 280px;
+    width: 100%;
+  }
+  .hero-flagship__headshot-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--c-rule);
+    border-radius: 2px;
+    /* Bryllim-style entrance : opacity + slight scale on load. */
+    opacity: 0;
+    transform: translateY(6px) scale(0.985);
+    animation: hero-flagship__headshot-enter 720ms
+      cubic-bezier(0.16, 1, 0.3, 1) 120ms forwards;
+    will-change: opacity, transform;
+  }
+  /* Subtle hover lift, color-shift only (no transform per chrome
+     contract rule 3). Cursor reveals the photo is interactive (clicks
+     to /about or scrolls). */
+  .hero-flagship__headshot-img:hover,
+  .hero-flagship__headshot-img:focus-visible {
+    border-color: var(--c-amber);
+    transition: border-color 180ms var(--j-ease-snappy, ease-out);
+  }
+  @keyframes hero-flagship__headshot-enter {
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+  /* Honor reduced motion : skip the entrance, sit at rest. */
+  @media (prefers-reduced-motion: reduce) {
+    .hero-flagship__headshot-img {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .hero-flagship__headshot-credit {
+    margin: 6px 0 0;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--c-ink-3);
+    text-align: center;
+  }
   .hero-flagship__copy {
     display: flex;
     flex-direction: column;
@@ -851,7 +951,7 @@ const liveCounters = [
     color: var(--c-ink-3);
     margin: 0;
   }
-  /* W2.7 — availability badge. Single-line amber accent below the location
+  /* W2.7 : availability badge. Single-line amber accent below the location
      eyebrow. Mono caps + 0.06em tracking match the chrome contract. */
   .hero-flagship__availability {
     font-size: 10.5px;
@@ -860,7 +960,7 @@ const liveCounters = [
     margin: 6px 0 0;
     text-transform: uppercase;
   }
-  /* W2.7 — 60-second path eyebrow. Recruiter-facing prompt that sits
+  /* W2.7 : 60-second path eyebrow. Recruiter-facing prompt that sits
      immediately above the CTA strip. Mono caps, muted ink-2, tight
      11px so it reads as a label, not a heading. */
   .hero-flagship__60s {
@@ -887,24 +987,18 @@ const liveCounters = [
     text-wrap: pretty;
   }
   .hero-flagship__name {
-    /* v9.6 (Bryllim) — pixel display face. Set here (scoped) rather than
-       relying on the global `.pixel-display` utility: Astro compiles scoped
-       selectors to `.cls[data-astro-cid-*]` (0,2,0), which out-ranks the
-       global class (0,1,0). The utility still carries the shared hygiene. */
-    font-family: var(--ff-mono);
-    /* VT323 capHeight is 0.560em vs the outgoing serif's ~0.692em, so the
-       same declared size reads ~24% smaller. --ff-pixel-scale (1.24) restores
-       the optical size. Ratio stays in the calc() so it is auditable. */
-    font-size: clamp(
-      calc(28px * var(--ff-pixel-scale)),
-      calc(3.4vw * var(--ff-pixel-scale)),
-      calc(48px * var(--ff-pixel-scale))
-    );
-    line-height: 1;
-    /* Bitmap grid: neutral tracking, single weight, no synthetic bold. */
-    letter-spacing: 0;
-    font-weight: 400;
-    font-synthesis: none;
+    /* v12.W4 quant-aesthetic : H1 typography reads as institutional
+       FT-style sans (Inter display, --j-ff-display). The pre-W4 era
+       shipped this in JetBrains Mono (via pixel-display + --ff-mono),
+       which read as AI-vibe / bitmap, not Bloomberg-Terminal-grade
+       body type. The Bryllim reference uses pixel LOGO + serif/sans
+       BODY; the H1 is the body, so it inherits --j-ff-display
+       (Inter) without any font-face override. */
+    font-family: var(--j-ff-display);
+    font-size: clamp(32px, 4vw, 56px);
+    line-height: 1.04;
+    letter-spacing: -0.025em;
+    font-weight: 600;
     color: var(--c-ink);
     margin: 0;
     text-wrap: balance;
@@ -931,84 +1025,76 @@ const liveCounters = [
   .hero-flagship__cta {
     display: flex;
     flex-wrap: wrap;
-    gap: 14px;
+    gap: 10px;
     margin-top: 8px;
   }
-  .hero-flagship__cta-primary,
-  .hero-flagship__cta-secondary {
+  /* v12.W4 quant-aesthetic : UNIFIED BUTTON TREATMENT.
+     Owner directive 2026-08-08: ONE consistent institutional pattern
+     across every CTA on the home page. The pre-v12.W4 era shipped
+     three styles (filled amber primary + outlined secondary + light
+     outlined tertiary) which read as three different ideas. New
+     treatment: every CTA gets the same shape, paper bg, ink color,
+     hairline border, no fill, no transform. Color shift only on hover:
+     border + text go amber (the institutional "system responds" cue,
+     not a SaaS lift or fill change). Reference register: D.E. Shaw
+     + Renaissance + Jane Street + Two Sigma use outlined text-link
+     or hairline-bordered buttons as their primary affordance; the
+     filled amber CTA was the AI-vibe tell.
+     Subtle weight via copy + ordering, not via fill. The first two
+     CTAs (Download + Book) are the "do this now" affordances; the
+     remaining three (See shipped + Method + Recruiter brief) are
+     proof / context routes. Visual hierarchy comes from placement
+     and copy, not from fill state.
+     Chrome contract compliance:
+       rule 1 : mono + 1 accent (amber border on hover)
+       rule 3 : NO halo / glow / lift on hover (no transform)
+       rule 6 : NO pill (border-radius: 0)
+       rule 7 : NO animation that competes with content (100ms transition)
+     The --key variant (Download resume) gets a 1px ink border at
+     rest so the eye lands on it first; everything else uses the
+     --c-rule hairline. Still outlined, no fill. */
+  .hero-flagship__cta-btn {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 12px 20px;
+    padding: 11px 18px;
     font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
     font-size: 11.5px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     text-decoration: none;
     border-radius: 0;
-    transition: transform 0.18s ease-out, background-color 0.18s ease-out, color 0.18s ease-out;
-  }
-  .hero-flagship__cta-primary {
-    /* v9.9.1 — fg was var(--c-ink-dark) which resolves to --j-ink (#1c2538
-       light / #d4cebd dark). Against --c-amber (--j-warn #6b5220 light /
-       #a88a3e dark) the contrast was 2.08:1 (light) — fails WCAG 2.2 AA
-       4.5:1. W2.7a — measured: --c-ink-1 (#0c0c0c light / #ece5d4 dark)
-       on amber (#6b5220 light / #a88a3e dark) yields 2.65:1 (light) —
-       also fails. The contrast-safe pairing is amber-on-paper:
-       --c-paper (#f3ede1 light / #2a2622 dark) on --c-amber yields
-       6.43:1 (light) / 5.18:1 (dark) — both AAA / AA. Swapped to
-       var(--c-paper) for both bg-elev and text-against-amber-cta. */
-    background: var(--c-amber);
-    color: var(--c-paper);
-    border: 1px solid var(--c-amber);
-  }
-  /* W2.7a — specificity bump: the parent .broadside a[data-astro-cid-*]
-     rule lists color: var(--c-ink) at specificity 0,3,1 (1 class + 2 attrs +
-     1 element) which beats the bare .hero-flagship__cta-primary
-     [data-astro-cid-*] rule at 0,2,0. Re-nesting the parent context +
-     double-stamping the Astro cid raises us to 0,4,3 — wins the cascade
-     and makes the --c-paper swap actually take effect on the rendered
-     page. Without this, axe-core still sees rgb(28,37,56) on amber. */
-  .broadside a.hero-flagship__cta-primary[data-astro-cid-lcdefpme][data-astro-cid-lcdefpme] {
-    color: var(--c-paper);
-  }
-  .hero-flagship__cta-primary:hover,
-  .hero-flagship__cta-primary:focus-visible {
-    background: var(--c-amber-light);
-    border-color: var(--c-amber-light);
-    transform: translateY(-1px);
-  }
-  .hero-flagship__cta-secondary {
     background: transparent;
     color: var(--c-ink);
-    border: 1px solid var(--c-rule-strong);
-  }
-  .hero-flagship__cta-secondary:hover,
-  .hero-flagship__cta-secondary:focus-visible {
-    background: var(--c-bg-elev);
-    transform: translateY(-1px);
-  }
-  /* W2.7 — tertiary CTA. Same shape as secondary but with default ink-2
-     color (subtler than secondary) + amber-on-hover. Used for the
-     secondary outbound routes (Method, Recruiter brief) so the primary
-     amber CTAs (Download, Book) stay dominant. */
-  .hero-flagship__cta-tertiary {
-    background: transparent;
-    color: var(--c-ink-2);
     border: 1px solid var(--c-rule);
+    transition:
+      border-color 100ms var(--j-ease-snappy),
+      color 100ms var(--j-ease-snappy);
   }
-  .hero-flagship__cta-tertiary:hover,
-  .hero-flagship__cta-tertiary:focus-visible {
-    color: var(--c-amber);
+  .hero-flagship__cta-btn--key {
+    /* Key affordance (Download resume) gets a heavier ink border at
+       rest so the eye lands on it first within the row. Still
+       outlined, still no fill, still no transform. */
+    border-color: var(--c-ink-2);
+    font-weight: 600;
+  }
+  .hero-flagship__cta-btn:hover,
+  .hero-flagship__cta-btn:focus-visible {
     border-color: var(--c-amber);
-    transform: translateY(-1px);
+    color: var(--c-amber);
+    /* NO transform: chrome-contract rule 3 forbids the SaaS lift. */
+  }
+  .hero-flagship__cta-btn--key:hover,
+  .hero-flagship__cta-btn--key:focus-visible {
+    border-color: var(--c-amber);
+    color: var(--c-amber);
   }
   .hero-flagship__viz {
     min-width: 0;
   }
 
   /* ============================================================
-   * v9.4 HERO RIBBON — Marquee sits between the flagship hero and
+   * v9.4 HERO RIBBON : Marquee sits between the flagship hero and
    * the counter strip. Hairline rules top + bottom; tight vertical
    * padding so it reads as a tape, not a section.
    * ============================================================ */
@@ -1026,6 +1112,10 @@ const liveCounters = [
       gap: 28px;
       padding: 24px 0 28px;
     }
+    .hero-flagship__headshot {
+      max-width: 200px;
+      margin: 0 auto 4px;
+    }
     .hero-flagship__cta {
       gap: 10px;
     }
@@ -1033,7 +1123,7 @@ const liveCounters = [
 </style>
 
 <script>
-  // v9.4 — count-up animation for the home page stats strip.
+  // v9.4 : count-up animation for the home page stats strip.
   // IntersectionObserver fires when the strip enters the viewport.
   // Honors prefers-reduced-motion: reduce (snap to target).
   import { initCountUps } from '../utils/countup';

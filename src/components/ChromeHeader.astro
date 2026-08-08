@@ -1,6 +1,6 @@
 ---
 /**
- * ChromeHeader.astro — v8.4 SITE-WIDE CHROME CONTRACT HEADER.
+ * ChromeHeader.astro : v8.4 SITE-WIDE CHROME CONTRACT HEADER.
  *
  * Renders the institutional eyebrow chip + tenant line + tenet trio that
  * every page in the portfolio must carry. Pages wrap their H1 section
@@ -21,7 +21,7 @@
  */
 
 interface Props {
-  /** Short-caps chip copy (1–3 words). */
+  /** Short-caps chip copy (1-3 words). */
   chip?: string;
   /** Eyebrow line copy (longer phrase). */
   eyebrow?: string;
@@ -29,7 +29,7 @@ interface Props {
   tenant?: string;
   /** Tenet line copy. Defaults to the operating-principles tenet. */
   tenet?: string;
-  /** Compact variant — drops the chip, shrinks typography. */
+  /** Compact variant : drops the chip, shrinks typography. */
   variant?: 'default' | 'compact';
   /** Hide the tenant line (useful when the page already has its own ticker). */
   hideTenant?: boolean;
@@ -39,8 +39,8 @@ interface Props {
    *  Use when the page renders chip + line as standalone phrases (no internal dot). */
   noSep?: boolean;
   /** Chip color variant.
-   *  `phi-teal` (default) — page__eyebrow .hero__eyebrow-chip base styling.
-   *  `amber` — solid amber chip + --c-bg text (v9.2 a11y baseline for
+   *  `phi-teal` (default) : page__eyebrow .hero__eyebrow-chip base styling.
+   *  `amber` : solid amber chip + --c-bg text (v9.2 a11y baseline for
    *  pages whose hero sits on a dark page-head surface; hits ≥5.6:1 in
    *  both themes vs. phi-teal's 2.14:1 on dark). */
   chipVariant?: 'phi-teal' | 'amber';
@@ -49,9 +49,9 @@ interface Props {
 const DEFAULT_CHIP = 'QUANT · AI · OPS';
 const DEFAULT_EYEBROW = 'OPERATOR + RESEARCHER';
 const DEFAULT_TENANT = 'CHRISTIAN.T.MACION · UTC+8 · REMOTE-OK · 5-SHIP SPRINT · OWNER-VERIFIED';
-// v12.W1.5 — trust-strip REMOVED per Owner directive (no-defensive-trust-strips BINDING).
+// v12.W1.5 : trust-strip REMOVED per Owner directive (no-defensive-trust-strips BINDING).
 // Internal compliance rules (no fabricated metrics, no NDA leaks) remain ACTIVE
-// INTERNALLY — they just don't render in chrome. Bryllim doesn't say "I won't lie."
+// INTERNALLY : they just don't render in chrome. Bryllim doesn't say "I won't lie."
 // Bryllim doesn't lie.
 const DEFAULT_TENET = '';
 
@@ -100,37 +100,35 @@ const {
 
 <style>
   .chrome-header {
-    margin: 0 0 var(--sp-4);
+    margin: 0 0 var(--s-4);
   }
   .chrome-header--compact {
-    margin: 0 0 var(--sp-3);
+    margin: 0 0 var(--s-3);
   }
   .chrome-header__eyebrow-line {
-    color: var(--c-warn);
-    font-weight: 500;
+    color: var(--c-amber);
+    font-weight: 400;
   }
-  /* v9.2 a11y baseline — solid amber chip + --c-bg text reads at
-     ≥5.6:1 in both themes vs. phi-teal's 2.14:1 on dark surfaces. */
   .hero__eyebrow-chip--amber {
     border: 1px solid var(--c-amber);
-    background: var(--c-amber);
-    color: var(--c-bg);
+    background: var(--surface-paper);
+    color: var(--c-amber);
   }
   .chrome-header__tenet {
-    margin: var(--sp-3) 0 0;
-    font: 400 10.5px / 1.55 var(--ff-mono);
+    margin: var(--s-3) 0 0;
+    font: var(--type-mono-weight) var(--type-caption-size) / var(--type-body-line) var(--ff-mono);
     color: var(--c-ink-3);
-    letter-spacing: 0.06em;
+    letter-spacing: var(--type-caption-track);
   }
 
   @media (max-width: 720px) {
     .page__tenant {
-      font-size: 10px;
-      gap: 6px;
-      letter-spacing: 0.12em;
+      font-size: var(--type-mono-size-mobile);
+      gap: var(--s-2);
+      letter-spacing: var(--type-caption-track);
     }
     .page__eyebrow {
-      gap: 8px;
+      gap: var(--s-2);
     }
   }
 </style>

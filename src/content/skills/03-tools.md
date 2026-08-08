@@ -21,7 +21,7 @@ items:
     level: 3
     years: 1
   - label: 'Docker'
-    sub: 'working — multi-agent + MCP service containers'
+    sub: 'working : multi-agent + MCP service containers'
     level: 4
     years: 2
   - label: 'TradingView + Pine Script'

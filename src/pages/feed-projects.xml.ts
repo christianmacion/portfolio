@@ -1,5 +1,5 @@
 /**
- * feed-projects.xml.ts — RSS 2.0 stream of project entries only.
+ * feed-projects.xml.ts : RSS 2.0 stream of project entries only.
  *
  * See _feed-shared.ts for the rendering helpers.
  */

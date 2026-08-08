@@ -1,11 +1,11 @@
 ---
 /**
- * KeyHintPanel.astro — v6.6 (Mission 6.6, Graphic Visual Dynamic)
+ * KeyHintPanel.astro : v6.6 (Mission 6.6, Graphic Visual Dynamic)
  * Floating keyboard-shortcut hints. Toggle with `?`.
  *
- * v6.6 — Converted from a wordy list to a graphic-visual-dynamic panel.
+ * v6.6 : Converted from a wordy list to a graphic-visual-dynamic panel.
  * Each shortcut is now a 240×96 tile with three stacked elements:
- *   1. Top: a 56×28 SVG keyboard-key visualization — a 1px-stroked
+ *   1. Top: a 56×28 SVG keyboard-key visualization : a 1px-stroked
  *      square with a 4×5 grid of 4×4 amber cells and a centered
  *      bracket-label like `[?]`, `[G]`, `[j]`, `[k]`, `[b]`, `[/]`.
  *   2. Middle: an 11px mono label naming the action.
@@ -20,7 +20,7 @@
  *   - `/` focuses the first `[data-search]` element on the page.
  *
  * Wired by `src/scripts/keyboard-shortcuts.ts` (imported via BaseLayout).
- * Honors `prefers-reduced-motion` (opacity transition only — no slide).
+ * Honors `prefers-reduced-motion` (opacity transition only : no slide).
  */
 import { seedFromString, buildSeed } from '@utils/prng';
 
@@ -84,7 +84,7 @@ const shortcuts: Shortcut[] = (() => {
                 stroke-width="1"
                 stroke-opacity="0.85"
               />
-              {/* v6.10.17 — hoist fill/fill-opacity to <g> (was on each of
+              {/* v6.10.17 : hoist fill/fill-opacity to <g> (was on each of
                 20 rects × 6 shortcuts = 120 attrs ≈ 3KB). */}
               <g fill="var(--c-amber)" fill-opacity="0.32">
                 {Array.from({ length: 5 }).map((_, row) =>
@@ -107,7 +107,7 @@ const shortcuts: Shortcut[] = (() => {
           <p class="keyhint__label mono">{s.desc}</p>
 
           {/* === Wave-pattern coverage (60×6, 4 humps) ===
-            v6.10.18 — hoist fill/stroke/stroke-width/stroke-linecap to <g>
+            v6.10.18 : hoist fill/stroke/stroke-width/stroke-linecap to <g>
             (4 attrs × 4 paths × 6 tiles = 96 attrs saved ≈ 1.2KB). */}
           <svg viewBox="0 0 60 6" class="keyhint__wave" aria-hidden="true">
             <g fill="none" stroke="var(--c-amber)" stroke-width="1" stroke-linecap="round">
@@ -127,7 +127,7 @@ const shortcuts: Shortcut[] = (() => {
 
 <style>
   /* ============================================================
-     PANEL SHELL — fixed bottom-right, tape-dark, 1px amber rule.
+     PANEL SHELL : fixed bottom-right, tape-dark, 1px amber rule.
      ============================================================ */
   .keyhint {
     position: fixed;
@@ -139,7 +139,7 @@ const shortcuts: Shortcut[] = (() => {
     background: var(--c-tape);
     color: var(--ink-on-tape);
     border: 1px solid var(--c-rule);
-    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade */
+    /* v6.18 : rely on --j-r=0 via tokens-v6.13.css cascade */
     padding: var(--sp-4);
     box-shadow: var(--shadow-lg);
     z-index: var(--z-toast);
@@ -166,7 +166,7 @@ const shortcuts: Shortcut[] = (() => {
   }
 
   /* ============================================================
-     HEADER — eyebrow + title + "press ? to close" hint.
+     HEADER : eyebrow + title + "press ? to close" hint.
      ============================================================ */
   .keyhint__head {
     display: grid;
@@ -211,12 +211,12 @@ const shortcuts: Shortcut[] = (() => {
     background: var(--c-tape);
     color: var(--c-amber);
     border: 1px solid var(--c-amber);
-    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade (was 4px) */
+    /* v6.18 : rely on --j-r=0 via tokens-v6.13.css cascade (was 4px) */
     line-height: 1;
   }
 
   /* ============================================================
-     TILE GRID — 2 columns × 3 rows of 240×96 tiles.
+     TILE GRID : 2 columns × 3 rows of 240×96 tiles.
      On narrow viewports, fall back to 1 column with horizontal scroll.
      ============================================================ */
   .keyhint__grid {
@@ -242,7 +242,7 @@ const shortcuts: Shortcut[] = (() => {
   }
 
   /* ============================================================
-     TILE — fixed 240×96, three stacked elements (key / label / wave).
+     TILE : fixed 240×96, three stacked elements (key / label / wave).
      ============================================================ */
   .keyhint__tile {
     width: 240px;
@@ -254,7 +254,7 @@ const shortcuts: Shortcut[] = (() => {
     padding: 8px 12px;
     background: var(--c-ink-haze);
     border: 1px solid var(--c-rule);
-    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade */
+    /* v6.18 : rely on --j-r=0 via tokens-v6.13.css cascade */
     transition:
       border-color 200ms ease,
       background 200ms ease;

@@ -1,6 +1,6 @@
 ---
 /**
- * workbooks.astro — /workbooks page (v7.6 — Graph Engineering Trilogy).
+ * workbooks.astro : /workbooks page (v7.6 : Graph Engineering Trilogy).
  *
  * Hosts the two shareable workbook editions. Surfaces the
  * "prompt → skills → agents → loops → graphs" arc with the same
@@ -8,7 +8,7 @@
  *
  * IA: hero (5-rung spine) → 2-card grid (W1 · W2) → CTA banner.
  *
- * W3 (STELLA Internal) is NOT surfaced here — per CLAUDE.md §6 the
+ * W3 (STELLA Internal) is NOT surfaced here : per CLAUDE.md §6 the
  * internal-only playbook stays off the public portfolio. Reference
  * link in the closing footer points to the Macion Library symlink.
  */
@@ -20,7 +20,7 @@ import ChromeHeader from '@components/ChromeHeader.astro';
 import { profile } from '@utils/profile';
 import { path } from '@utils/url';
 
-// The five-rung spine — the "AI engineering journey" thesis.
+// The five-rung spine : the "AI engineering journey" thesis.
 const spine = [
   {
     rung: 1,
@@ -54,7 +54,7 @@ const spine = [
   },
 ];
 
-// Two shareable workbooks — W1 (beginner), W2 (technical).
+// Two shareable workbooks : W1 (beginner), W2 (technical).
 const workbooks = [
   {
     id: 'w1',
@@ -119,7 +119,7 @@ const workbooks = [
 
   {
     /*
-    SPINE — the 5-rung progression. Same look as the proof page's
+    SPINE : the 5-rung progression. Same look as the proof page's
     "process" rail. Read top to bottom.
   */
   }
@@ -155,7 +155,7 @@ const workbooks = [
 
   {
     /*
-    TWO WORKBOOKS — the shareable W1 + W2. Both ship as HTML + PDF.
+    TWO WORKBOOKS : the shareable W1 + W2. Both ship as HTML + PDF.
     Each opens in a self-contained viewer (no external deps, all CSS
     inline) so the shareable HTML works on any host.
   */
@@ -216,7 +216,7 @@ const workbooks = [
 
 <style>
   /* ============================================================
-     SPINE — 5-rung progression rail. 5 horizontal cards.
+     SPINE : 5-rung progression rail. 5 horizontal cards.
      ============================================================ */
   .spine {
     list-style: none;
@@ -270,7 +270,7 @@ const workbooks = [
   .spine__item:nth-child(5)::before {
     background: var(--c-ink-1);
   }
-  /* v9.2 a11y — drop opacity so spine__num hits 4.5:1 (was #747b85 ≈ 3.66:1
+  /* v9.2 a11y : drop opacity so spine__num hits 4.5:1 (was #747b85 ≈ 3.66:1
      from --c-ink-2 + 0.7 opacity). Use --c-ink-3 directly. */
   .spine__num {
     font-size: 0.75rem;
@@ -292,7 +292,7 @@ const workbooks = [
     line-height: 1.5;
     flex: 1;
   }
-  /* v9.2 a11y — drop opacity (was 0.6) so spine__level hits 4.5:1
+  /* v9.2 a11y : drop opacity (was 0.6) so spine__level hits 4.5:1
      (was #868b92 ≈ 2.94:1). Use --c-ink-3 directly with bold weight. */
   .spine__level {
     font-size: 0.7rem;
@@ -302,7 +302,7 @@ const workbooks = [
   }
 
   /* ============================================================
-     WORKBOOK GRID — 2-card layout for the shareable editions.
+     WORKBOOK GRID : 2-card layout for the shareable editions.
      ============================================================ */
   .workbook-grid {
     display: grid;
@@ -367,7 +367,7 @@ const workbooks = [
     color: var(--c-green);
     border: 1px solid var(--c-green-tint-border);
   }
-  /* v9.2 a11y — drop opacity (was 0.6) so workbook-card__id hits 4.5:1
+  /* v9.2 a11y : drop opacity (was 0.6) so workbook-card__id hits 4.5:1
      (was #868b92 ≈ 2.94:1). Use --c-ink-3 with bold weight. */
   .workbook-card__id {
     font-size: 0.7rem;

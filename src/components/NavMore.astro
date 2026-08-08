@@ -1,6 +1,6 @@
 ---
 /**
- * NavMore.astro — disclosure-style "Resources" dropdown for the nav.
+ * NavMore.astro : disclosure-style "Resources" dropdown for the nav.
  *
  * Renders a <details>/<summary> pair that contains a list of secondary
  * nav links. Used by Nav.astro on desktop to keep the visible row
@@ -19,7 +19,7 @@ interface Props {
   items: NavItem[];
   mode?: 'dropdown' | 'inline';
   class?: string;
-  /** Top-level summary label (default "Resources"). v6.1 — Markets uses a custom label. */
+  /** Top-level summary label (default "Resources"). v6.1 : Markets uses a custom label. */
   label?: string;
   /** Show the label as a heading in inline/mobile mode. Default true. */
   showLabelInline?: boolean;
@@ -36,7 +36,7 @@ const isActive = (href: string) => {
   const suffix = href === '/' ? '/' : href;
   return pathname === suffix || pathname.startsWith(suffix + '/');
 };
-// v6.1.0 — true when ANY child href matches the current path. The parent
+// v6.1.0 : true when ANY child href matches the current path. The parent
 // CSS uses [data-active] to highlight the dropdown summary so the user
 // sees which top-level group they're inside (e.g., /markets lights up
 // the "Markets" dropdown label, not the "Resources" dropdown).
@@ -45,7 +45,7 @@ const groupActive = items.some((it) => isActive(it.href));
 
 {
   mode === 'dropdown' ? (
-    // v6.10.17 — a11y: drop role="menu"/role="menuitem" (anti-pattern
+    // v6.10.17 : a11y: drop role="menu"/role="menuitem" (anti-pattern
     //  outside true menu widgets; forces "application mode" in AT and
     //  bypasses virtual cursor link-list navigation). details + ul
     //  semantics are enough.
@@ -115,7 +115,7 @@ const groupActive = items.some((it) => isActive(it.href));
     font-weight: 500;
     color: var(--c-ink-2);
     padding: 0.5rem 0.6rem;
-    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade */
+    /* v6.18 : rely on --j-r=0 via tokens-v6.13.css cascade */
     transition:
       color var(--transition),
       background var(--transition);
@@ -150,7 +150,7 @@ const groupActive = items.some((it) => isActive(it.href));
     list-style: none;
     background: var(--c-bg);
     border: var(--border);
-    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade */
+    /* v6.18 : rely on --j-r=0 via tokens-v6.13.css cascade */
     box-shadow: var(--shadow-lg);
     z-index: var(--z-nav-more);
     display: flex;
@@ -166,7 +166,7 @@ const groupActive = items.some((it) => isActive(it.href));
     font-size: var(--fs-sm);
     color: var(--c-ink-2);
     text-decoration: none;
-    /* v6.18 — rely on --j-r=0 via tokens-v6.13.css cascade */
+    /* v6.18 : rely on --j-r=0 via tokens-v6.13.css cascade */
     transition:
       color var(--transition),
       background var(--transition);
@@ -201,7 +201,7 @@ const groupActive = items.some((it) => isActive(it.href));
   .nav-more__flat li {
     margin: 0;
   }
-  /* v6.1.0 — group heading for inline mode (used by Markets on mobile) */
+  /* v6.1.0 : group heading for inline mode (used by Markets on mobile) */
   .nav-more__flat-head {
     font-size: var(--fs-xs);
     text-transform: uppercase;

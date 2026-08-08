@@ -1,19 +1,19 @@
 ---
 /**
- * Equation.astro — server-side rendered KaTeX block.
+ * Equation.astro : server-side rendered KaTeX block.
  *
  * Usage:
  *   <Equation latex="P(A \mid B) = \frac{P(B \mid A) P(A)}{P(B)}" />
  *   <Equation latex="\sigma^2 = E[(X - \mu)^2]" block label="(1)" />
  *
  * Props:
- *   latex  — KaTeX-compatible LaTeX string
- *   block  — render as display block (default: false, inline)
- *   label  — optional equation label, e.g. "(1)"
- *   size   — 'sm' | 'md' | 'lg' | 'xl' (default 'md')
- *   tone   — 'paper' (default, near-black ink on light bg)
+ *   latex  : KaTeX-compatible LaTeX string
+ *   block  : render as display block (default: false, inline)
+ *   label  : optional equation label, e.g. "(1)"
+ *   size   : 'sm' | 'md' | 'lg' | 'xl' (default 'md')
+ *   tone   : 'paper' (default, near-black ink on light bg)
  *         | 'tape' (light ink on dark `--c-tape` bg)
- *   className — extra classes
+ *   className : extra classes
  */
 import katex from 'katex';
 import '@components/KatexStyles.astro';
@@ -64,7 +64,7 @@ const toneClass = tone === 'tape' ? 'eq--tape' : '';
     vertical-align: baseline;
     /* KaTeX HTML output is math-styled; preserve its baseline math */
   }
-  /* 'tape' tone — light ink on dark `--c-tape` background. */
+  /* 'tape' tone : light ink on dark `--c-tape` background. */
   /* Reassign every KaTeX class the engine uses for math text so glyphs */
   /* stay legible against dark cells; without this, .mord/.mathnormal */
   /* inherit from --c-eq (near-black) and disappear into --c-tape. */

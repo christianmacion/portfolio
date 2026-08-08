@@ -1,6 +1,6 @@
 ---
 /**
- * stella.astro · v11.W5 — STELLA showcase page.
+ * stella.astro · v11.W5 : STELLA showcase page.
  *
  * The office behind this portfolio. 9 squads + 8 doctrine-corpus owners +
  * 5-must-have loop contract + knowledge-graph stats. Surfaces the institutional
@@ -16,7 +16,7 @@ import Section from '@components/Section.astro';
 import SectionTOC from '@components/SectionTOC.astro';
 import AgentGraph from '@components/AgentGraph.astro';
 
-const title = 'STELLA — the office that builds the work';
+const title = 'STELLA : the office that builds the work';
 const description = '9 squads. 8 doctrine-corpus owners. 142 skills. 5-must-have loop contract. The office behind this portfolio.';
 
 const squads = [
@@ -231,7 +231,7 @@ const graphStats = [
   .cta--secondary { background: transparent; color: var(--stella-ink); }
   .cta--secondary:hover { background: var(--stella-ink); color: #1a1714; }
 
-  /* SectionTOC override — match dark-paper panel */
+  /* SectionTOC override : match dark-paper panel */
   .stella :global(.toc) {
     background: rgba(0, 0, 0, 0.18);
     border-bottom: 1px solid var(--stella-rule);
@@ -241,7 +241,7 @@ const graphStats = [
   .stella :global(.toc__link:hover) { color: var(--stella-amber); background: rgba(255, 255, 255, 0.04); }
   .stella :global(.toc__link--active) { color: var(--stella-amber); background: rgba(201, 138, 22, 0.12); font-weight: 600; }
 
-  /* Section component overrides — match dark-paper panel chrome.
+  /* Section component overrides : match dark-paper panel chrome.
      The .stella wrapper already provides the dark background, so the
      Section variant=paper overrides need transparent bg + stella rules. */
   .stella :global(.section--paper) {

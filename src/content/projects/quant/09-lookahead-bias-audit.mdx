@@ -22,7 +22,7 @@ assetType: code
 tags: [look-ahead-bias, audit, leakage, methodology, public-data]
 hero:
   src: /figures/quant/09-bias-audit.webp
-  alt: Bar chart decomposing a leaked Sharpe of 5.07 into real alpha 0.55 and phantom 4.48 from a one-bar forward shift — 88% of the apparent edge is leakage.
+  alt: 'Bar chart decomposing a leaked Sharpe of 5.07 into real alpha 0.55 and phantom 4.48 from a one-bar forward shift : 88% of the apparent edge is leakage.'
   fit: cover
   aspect: 16/9
 ---
@@ -36,7 +36,7 @@ Look-ahead bias is the silent killer of every quantitative backtest. The researc
 ## What the project does
 
 1. Run a backtest with the signal as designed.
-2. **Shift the data by one bar forward** — replicating what would happen if the signal accidentally used tomorrow's price.
+2. **Shift the data by one bar forward** : replicating what would happen if the signal accidentally used tomorrow's price.
 3. Compare the two Sharpe ratios.
 
 ## The result
@@ -61,4 +61,4 @@ Look-ahead bias is the silent killer of every quantitative backtest. The researc
 
 ## What's transferable
 
-The one-bar shift test is a one-line audit that catches the most expensive error class in research. Every production research stack should run it as a pre-ship check — before the strategy is ever traded.
+The one-bar shift test is a one-line audit that catches the most expensive error class in research. Every production research stack should run it as a pre-ship check : before the strategy is ever traded.

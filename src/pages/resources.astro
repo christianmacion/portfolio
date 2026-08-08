@@ -1,0 +1,162 @@
+---
+/**
+ * resources.astro :  /resources/ · v12.W4 hub page.
+ *
+ * Parent for the three reference surfaces that were previously orphaned
+ * (reachable by URL, unreachable by navigation):
+ *   /notes     :  research log
+ *   /repos     :  public code
+ *   /glossary  :  working definitions
+ *
+ * This page is tier 1 in the side rail (icon + label). It exists to give
+ * those three a single institutional entry point rather than three
+ * separate rail items competing with the hiring path.
+ *
+ * Section layout (single column, editorial register):
+ *   02 :  reference   (SectionMark)
+ *   H2   :  The reference shelf.
+ *   §    :  three cards (notes / repos / glossary)
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import SectionMark from '@components/SectionMark.astro';
+import SubpageHero from '@components/SubpageHero.astro';
+import { path } from '@utils/url';
+import { buildStampUtc8 } from '@utils/build-stamp';
+
+const subpage = {
+  slug: 'resources',
+  index: '02',
+  title: 'reference',
+  pageTitle: 'Resources',
+  description:
+    'The reference shelf: research log, public repositories, and a working glossary of quant and AI terms.',
+  chip: 'RESOURCES · REFERENCE SHELF',
+  roleLine: 'Reference material behind the quant research and AI engineering work',
+};
+
+const lastUpdated = buildStampUtc8();
+
+interface Resource {
+  href: string;
+  label: string;
+  kicker: string;
+  body: string;
+}
+
+const resources: Resource[] = [
+  {
+    href: path('/notes'),
+    label: 'Notes',
+    kicker: 'RESEARCH LOG',
+    body:
+      'Working notebook. Postmortems, sharp observations, lessons that survived review. Written when the work has something to teach, not on an editorial calendar.',
+  },
+  {
+    href: path('/repos'),
+    label: 'Repos',
+    kicker: 'PUBLIC CODE',
+    body:
+      'Public repositories: research harnesses, backtest scaffolding, the tooling that makes the loop reproducible. Read the code before you read the claims.',
+  },
+  {
+    href: path('/glossary'),
+    label: 'Glossary',
+    kicker: 'WORKING DEFINITIONS',
+    body:
+      'Terms used across methodology and proof, defined the way they are actually used here, not the way a textbook uses them. Ambiguity is where backtests go to die.',
+  },
+];
+---
+
+<BaseLayout
+  title={subpage.pageTitle}
+  description={subpage.description}
+  breadcrumbs={[
+    { name: 'Home', href: '/' },
+    { name: subpage.pageTitle, href: `/${subpage.slug}` },
+  ]}
+>
+  <SubpageHero slug={subpage.slug} label={subpage.pageTitle} roleLine={subpage.roleLine}>
+    <p class="page-head__eyebrow mono">
+      <span class="page-head__eyebrow-chip">{subpage.chip}</span>
+      <span class="page-head__eyebrow-line">{resources.length} SURFACES · UPDATED ON SHIP</span>
+    </p>
+    <SectionMark index={subpage.index} title={subpage.title} ariaHidden={false} />
+    <h2 class="page-head__title" data-words>
+      What I <span class="hl">read and ship</span>.
+    </h2>
+    <p class="page-head__lede">
+      5 books, 5 papers, 5 tools at the moment. Below: the log, the code, the glossary.
+    </p>
+  </SubpageHero>
+
+  <div class="resources-body container container-narrow">
+    <ul class="resources-list" role="list">
+      {
+        resources.map((r) => (
+          <li class="resource-card">
+            <p class="resource-card__kicker mono">{r.kicker}</p>
+            <h2 class="resource-card__title">
+              <a class="resource-card__link" href={r.href}>{r.label}</a>
+            </h2>
+            <p class="resource-card__body">{r.body}</p>
+          </li>
+        ))
+      }
+    </ul>
+
+    <p class="resources-stamp mono">LAST UPDATED {lastUpdated}</p>
+  </div>
+</BaseLayout>
+
+<style>
+  .resources-body {
+    padding-block: var(--sp-8);
+  }
+  .resources-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--sp-10);
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-7);
+  }
+  .resource-card {
+    padding-bottom: var(--sp-7);
+    border-bottom: 1px solid var(--c-rule);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm, 0.5rem);
+  }
+  .resource-card:last-child {
+    border-bottom: 0;
+  }
+  .resource-card__kicker {
+    font-size: var(--fs-xs, 11px);
+    letter-spacing: 0.12em;
+    color: var(--c-ink-3);
+  }
+  .resource-card__title {
+    margin: 0;
+    font-size: var(--fs-h3, 1.25rem);
+  }
+  .resource-card__link {
+    color: var(--c-ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--c-rule);
+    transition: color var(--transition), border-color var(--transition);
+  }
+  .resource-card__link:hover {
+    color: var(--c-amber);
+    border-bottom-color: var(--c-amber);
+  }
+  .resource-card__body {
+    margin: 0;
+    color: var(--c-ink-2);
+  }
+  .resources-stamp {
+    font-size: var(--fs-xs, 11px);
+    letter-spacing: 0.08em;
+    color: var(--c-ink-3);
+  }
+</style>

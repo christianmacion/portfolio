@@ -1,6 +1,6 @@
 ---
 /**
- * desk.astro — v7.5 THE DESK · 24h multi-asset coverage view.
+ * desk.astro : v7.5 THE DESK · 24h multi-asset coverage view.
  *
  * NDA-positive by construction. No employer or platform names; this
  * page is the public-facing "iron desk" view of the multi-agent office:
@@ -9,12 +9,12 @@
  *   - what's moving right now (50 GDELT signals, last 24h)
  *
  * Layout (top → bottom):
- *   1. MarketTape — scrolling equity tape
- *   2. Head — eyebrow + headline + lede + dual-path CTA
- *   3. EarthMap — 3-layer equirectangular world map
- *   4. World events table — 10 curated events with category / severity
- *   5. Coverage stats — venue count, event count, GDELT count, latency
- *   6. CTABanner — back to home / open /desk link
+ *   1. MarketTape : scrolling equity tape
+ *   2. Head : eyebrow + headline + lede + dual-path CTA
+ *   3. EarthMap : 3-layer equirectangular world map
+ *   4. World events table : 10 curated events with category / severity
+ *   5. Coverage stats : venue count, event count, GDELT count, latency
+ *   6. CTABanner : back to home / open /desk link
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
 import VoiceLine from '@components/VoiceLine.astro';
@@ -112,7 +112,7 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     </div>
   </header>
 
-  {/* === 3. EarthMap — 3-layer world viz === */}
+  {/* === 3. EarthMap : 3-layer world viz === */}
   <section class="desk-map" aria-label="Three-layer world map">
     <div class="container">
       <p class="desk-map__eyebrow mono">EARTH · VENUES · EVENTS · SIGNALS · 24H</p>
@@ -226,9 +226,9 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
   .desk-head__eyebrow-chip {
     display: inline-block;
     padding: 4px 10px;
-    /* v9.2 a11y — was --c-phi-teal. Dark theme --j-phi-teal = #2d5f5a
+    /* v9.2 a11y : was --c-phi-teal. Dark theme --j-phi-teal = #2d5f5a
      only hits 2.14:1 on dark page-head surface. Solid amber chip +
-     --c-bg text reads at ≥5.6:1 in both themes — institutional
+     --c-bg text reads at ≥5.6:1 in both themes : institutional
      register, F14-safe (no traffic-light). */
     color: var(--c-bg);
     border: 1px solid var(--c-amber);

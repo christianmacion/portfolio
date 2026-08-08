@@ -1,6 +1,6 @@
 ---
 /**
- * ScrollReveal.astro — v7.7 GENERIC SCROLL-TRIGGERED REVEAL
+ * ScrollReveal.astro : v7.7 GENERIC SCROLL-TRIGGERED REVEAL
  *
  * Drops a fade+rise reveal on any element. Wraps slot content with
  * a [data-reveal-target] marker. IntersectionObserver triggers the
@@ -27,7 +27,7 @@ interface Props {
   once?: boolean;
 }
 const { delayMs = 0, rise = 12, once = true } = Astro.props;
-// Standing Order §9 — no Math.random() in deterministic outputs.
+// Standing Order §9 : no Math.random() in deterministic outputs.
 // Deterministic ID from the prop signature: same delayMs/rise/once
 // tuple → same ID across SSR + hydration, so the data-reveal-id
 // attribute stays stable. The runtime script selects by attribute

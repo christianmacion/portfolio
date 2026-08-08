@@ -1,5 +1,5 @@
 /**
- * _feed-shared.ts — shared helpers for the three RSS 2.0 streams.
+ * _feed-shared.ts : shared helpers for the three RSS 2.0 streams.
  *
  * Used by:
  *   - /feed.xml            (merged)
@@ -25,7 +25,7 @@ export interface FeedItem {
   kind: FeedKind;
 }
 
-// tag: URI per RFC 4151 — stable, persistent, unique.
+// tag: URI per RFC 4151 : stable, persistent, unique.
 // Format: tag:<authority>,<date>:<specific>.
 // Use the deployment host (PUBLIC_SITE_URL on mirror builds, GH Pages default
 // otherwise) so feed <guid> values stay stable across builds. The year comes

@@ -1,13 +1,13 @@
 ---
 /**
- * ChromeMarquee.astro — v2026-07-31 INSTITUTIONAL CHROME MARQUEE (thin).
+ * ChromeMarquee.astro : v2026-07-31 INSTITUTIONAL CHROME MARQUEE (thin).
  *
  * A single 28px-tall mono-caps scrolling line that sits between major
  * sections as a hairline accent. Different from <Marquee>:
  *   - <Marquee> is the BIG methodology-frame loop (sparse heads + tails).
  *   - <ChromeMarquee> is the THIN identity strip (mono caps, no frames).
  *
- * v2026-07-31 — first cut. Pure CSS animation, zero runtime JS. The
+ * v2026-07-31 : first cut. Pure CSS animation, zero runtime JS. The
  * text is duplicated inside the track so the translateX(0 → -50%) loop
  * is seam-free. Pause on hover. Reduced-motion neutralizes the
  * animation AND flattens the edge fade (matches NewsRibbon/Marquee).
@@ -21,7 +21,7 @@
 interface Props {
   /** The full text strip. Duplicated server-side so the loop is seam-free. */
   text?: string;
-  /** Full-track traversal in seconds. Default 40s — slow enough to read. */
+  /** Full-track traversal in seconds. Default 40s : slow enough to read. */
   speedSec?: number;
   /** Trailing label pinned to the right edge. */
   trailing?: string;
@@ -55,15 +55,15 @@ const {
     position: relative;
     display: flex;
     align-items: stretch;
-    height: 28px;
-    background: var(--c-bg-2);
+    height: var(--s-7);
+    background: var(--surface-paper);
     border-block: 1px solid var(--c-rule);
     color: var(--c-ink-2);
     overflow: hidden;
     user-select: none;
   }
 
-  /* === Viewport — edge fade via mask-image ===
+  /* === Viewport : edge fade via mask-image ===
      Institutional pattern (matches NewsRibbon + Marquee). 16px
      transparent → opaque → 16px transparent so the strip bleeds in. */
   .chrome-marquee__viewport {
@@ -73,20 +73,20 @@ const {
     mask-image: linear-gradient(
       to right,
       transparent 0,
-      var(--c-bg) 16px,
-      var(--c-bg) calc(100% - 16px),
+      var(--surface-paper) var(--s-4),
+      var(--surface-paper) calc(100% - var(--s-4)),
       transparent 100%
     );
     -webkit-mask-image: linear-gradient(
       to right,
       transparent 0,
-      var(--c-bg) 16px,
-      var(--c-bg) calc(100% - 16px),
+      var(--surface-paper) var(--s-4),
+      var(--surface-paper) calc(100% - var(--s-4)),
       transparent 100%
     );
   }
 
-  /* === Track — single keyframe `chrome-marquee-scroll` ===
+  /* === Track : single keyframe `chrome-marquee-scroll` ===
      The two .chrome-marquee__strip children are duplicated, so a
      0 → -50% translate reads as an infinite loop with no snap. */
   .chrome-marquee__track {
@@ -106,15 +106,14 @@ const {
 
   .chrome-marquee__strip {
     display: inline-block;
-    padding-inline: 24px;
+    padding-inline: var(--s-5);
     font-family: var(--ff-mono);
-    font-size: 10.5px;
-    font-weight: 500;
-    letter-spacing: 0.16em;
+    font-size: var(--type-mono-size);
+    font-weight: 400;
+    letter-spacing: var(--type-caption-track);
     text-transform: uppercase;
     color: var(--c-ink-2);
-    line-height: 28px;
-    /* No flag — the strip is identity, not status. */
+    line-height: var(--s-7);
   }
 
   /* === Trailing label === */
@@ -122,17 +121,17 @@ const {
     flex: 0 0 auto;
     display: flex;
     align-items: center;
-    padding-inline: 14px;
+    padding-inline: var(--s-4);
     border-left: 1px solid var(--c-rule);
     color: var(--c-ink-3);
-    font-size: 9px;
-    letter-spacing: 0.14em;
+    font-size: var(--type-caption-size-mobile);
+    letter-spacing: var(--type-caption-track);
     text-transform: uppercase;
-    background: var(--c-bg);
+    background: var(--surface-paper);
     pointer-events: none;
   }
 
-  /* === Keyframe — same seam-free math as NewsRibbon + Marquee === */
+  /* === Keyframe : same seam-free math as NewsRibbon + Marquee === */
   @keyframes chrome-marquee-scroll {
     from {
       transform: translateX(0);

@@ -3,7 +3,7 @@ date: 2025-10-15
 title: Cross-Sectional Momentum (18 coins)
 role: quant
 order: 2
-summary: 'IS Sharpe 0.91 → OOS −0.03 — an honest decay; bootstrap CI straddles zero.'
+summary: 'IS Sharpe 0.91 → OOS −0.03 : an honest decay; bootstrap CI straddles zero.'
 summary_long: 'A cross-sectional momentum study across 18 BTC-correlated coins: each rebalance, go long the top decile by 14-day return and short the bottom decile. The interesting question is what survives the out-of-sample window.'
 stack:
   - Python (numpy / pandas / matplotlib)
@@ -23,7 +23,7 @@ assetType: code
 tags: [cross-sectional, momentum, oos, decay, public-data]
 hero:
   src: /figures/quant/02-cross-sectional-momentum.webp
-  alt: Bar chart comparing in-sample Sharpe 0.91 against out-of-sample Sharpe −0.03 with a block-bootstrap 95% CI of −0.12 to +0.18 — OOS cannot reject the null.
+  alt: 'Bar chart comparing in-sample Sharpe 0.91 against out-of-sample Sharpe −0.03 with a block-bootstrap 95% CI of −0.12 to +0.18 : OOS cannot reject the null.'
   fit: cover
   aspect: 16/9
 ---
@@ -32,7 +32,7 @@ import Chart from '@components/Chart.astro';
 
 ## The hypothesis
 
-Cross-sectional momentum — long winners, short losers — has decades of equity literature. Does it survive in a small crypto universe (18 BTC-correlated coins)?
+Cross-sectional momentum : long winners, short losers : has decades of equity literature. Does it survive in a small crypto universe (18 BTC-correlated coins)?
 
 ## What the project does
 
@@ -53,29 +53,29 @@ Cross-sectional momentum — long winners, short losers — has decades of equit
     { value: 0.18, label: 'OOS +1.96σ' },
   ]}
   title="Sharpe comparison: in-sample vs out-of-sample vs null bounds"
-  caption="The honest story: 0.91 IS Sharpe decays to −0.03 OOS. 95% block-bootstrap CI [−0.12, +0.18] straddles zero — cannot reject the null. IS region (left, green) is positive; OOS region (red) below zero. CI bounds shown for reference."
+  caption="The honest story: 0.91 IS Sharpe decays to −0.03 OOS. 95% block-bootstrap CI [−0.12, +0.18] straddles zero : cannot reject the null. IS region (left, green) is positive; OOS region (red) below zero. CI bounds shown for reference."
   yMin={-0.2}
   yMax={1.1}
 />
 
 - **In-sample Sharpe: 0.91** (looks like an edge).
 - **Out-of-sample Sharpe: −0.03** (the OOS window quietly goes the other way).
-- 95% bootstrap CI straddles zero — cannot reject the null.
+- 95% bootstrap CI straddles zero : cannot reject the null.
 
 ## How to read this result
 
 **This is, by construction, a mostly null result.** Cross-sectional momentum on 18 BTC-correlated coins over a 14-day
-rebalance horizon is a deliberately tight universe — the coins move together, the cross-sectional dispersion is small,
+rebalance horizon is a deliberately tight universe : the coins move together, the cross-sectional dispersion is small,
 and what looks like IS alpha is largely noise. The IS Sharpe (0.91) is _not_ real alpha; the OOS decay to −0.03 is the
 true signal content of this experiment, which is _approximately zero_.
 
 I ship it anyway because:
 
-1. The OOS test was **pre-registered** — the window was locked before data was touched.
-2. The CI bounds were computed honestly — block bootstrap on the OOS period.
+1. The OOS test was **pre-registered** : the window was locked before data was touched.
+2. The CI bounds were computed honestly : block bootstrap on the OOS period.
 3. A research book that ships nine winners and hides the failure modes is a book primed for selection bias. This project
    _is_ the failure-mode.
 
-> The discipline is the OOS lock — the moment you peek, the test is dead.
+> The discipline is the OOS lock : the moment you peek, the test is dead.
 
 The cross-sectional alpha literature gives the seat a realistic bar: BTC-correlated coins are too tightly coupled for cross-sectional dispersion to be a reliable signal at this horizon. If you want a deployable version of cross-sectional alpha, expand the universe, lengthen the rebalance horizon, or move up the stack to pair-cointegration inside a sector ETF basket (project 05 has the cointegration pre-filter for exactly this reason).

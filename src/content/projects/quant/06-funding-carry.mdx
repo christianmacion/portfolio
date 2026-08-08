@@ -4,7 +4,7 @@ title: Crypto Funding-Carry
 role: quant
 order: 6
 summary: 'Funding +11.9% annualized premium; fade IS 1.11 → OOS −0.05 (decayed post-2023).'
-summary_long: 'A novel-data carry study: perpetual-swap funding rates are a real, observable, regularly-paid signal — and the obvious trade is to fade them. The interesting question is whether the carry persists OOS post-2023.'
+summary_long: 'A novel-data carry study: perpetual-swap funding rates are a real, observable, regularly-paid signal : and the obvious trade is to fade them. The interesting question is whether the carry persists OOS post-2023.'
 stack:
   - Python (numpy / pandas / matplotlib)
   - Perpetual funding rates (Binance)
@@ -32,7 +32,7 @@ import Chart from '@components/Chart.astro';
 
 ## The hypothesis
 
-Perpetual-swap funding rates are paid by the leveraged long to the short (or vice versa) every 8 hours. The textbook trade is to fade the funding — collect the carry and pray the basis doesn't blow up.
+Perpetual-swap funding rates are paid by the leveraged long to the short (or vice versa) every 8 hours. The textbook trade is to fade the funding : collect the carry and pray the basis doesn't blow up.
 
 ## What the project does
 
@@ -56,10 +56,10 @@ Perpetual-swap funding rates are paid by the leveraged long to the short (or vic
   yMax={1.2}
 />
 
-- The funding rate averages **+11.9% annualized** — a real, structural premium.
-- **IS Sharpe (fade): 1.11** — looks like an edge.
-- **OOS Sharpe: −0.05** — the carry structurally decayed post-2023 as the participant mix shifted.
+- The funding rate averages **+11.9% annualized** : a real, structural premium.
+- **IS Sharpe (fade): 1.11** : looks like an edge.
+- **OOS Sharpe: −0.05** : the carry structurally decayed post-2023 as the participant mix shifted.
 
 ## What's transferable
 
-Carry signals are observable, regularly-paid, and visible to anyone with the data — which means they crowd fast. This is a clean example of _alpha decay_ detected before overfit, in production reporting cadence.
+Carry signals are observable, regularly-paid, and visible to anyone with the data : which means they crowd fast. This is a clean example of _alpha decay_ detected before overfit, in production reporting cadence.

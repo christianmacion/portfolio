@@ -1,5 +1,5 @@
 /**
- * mojs-recipes.client.ts — v11.W3 · @mojs/core recipe surface for W4.
+ * mojs-recipes.client.ts : v11.W3 · @mojs/core recipe surface for W4.
  *
  * Per [[mojs-library-corpus-2026-07-31]]: mojs is browser-only, ~30KB gz,
  * hard-banned from hero decoration (Lighthouse regression per v8.1.0
@@ -19,7 +19,7 @@
  *
  * W4 owner imports these via dynamic import in EarthMap.astro and
  * StabilityViz.astro. The 30KB mojs bundle stays OUT of the initial
- * route payload — `client:visible` Astro directive + dynamic import
+ * route payload : `client:visible` Astro directive + dynamic import
  * keep it deferred until the surface enters the viewport.
  */
 
@@ -51,7 +51,7 @@ async function loadMojs(): Promise<typeof import('@mojs/core') | null> {
 }
 
 /**
- * pulseOnce — single 6-dot ring burst on the given element.
+ * pulseOnce : single 6-dot ring burst on the given element.
  * The ring expands from 0 → 12px then fades over 600ms. ONCE.
  * Per the brief: "NEVER repeating", "pulse-once is allowed because it's
  * NOT a status indicator; it's an entrance gesture."
@@ -73,9 +73,9 @@ export async function pulseOnce(el: HTMLElement, opts: PulseOptions = {}): Promi
   const count = opts.count ?? 6;
   const radius = opts.radius ?? 12;
   const duration = opts.duration ?? 600;
-  const fill = opts.fill ?? 'var(--c-amber, #f4c430)';
+  const fill = opts.fill ?? 'var(--c-amber, #946b1f)';
 
-  // Burst is a particle system — 6 dots (count) on a swirl child. Each
+  // Burst is a particle system : 6 dots (count) on a swirl child. Each
   // child animates its radius from 0 → radius, opacity 1 → 0, then stops.
   // No repeat (per brief: "NEVER repeating"). No yoyo. Single playback.
   const burst = new mojs.Burst({
@@ -97,7 +97,7 @@ export async function pulseOnce(el: HTMLElement, opts: PulseOptions = {}): Promi
 }
 
 /**
- * eraBoundaryBurst — subtle 6-dot fade-in on a single era marker.
+ * eraBoundaryBurst : subtle 6-dot fade-in on a single era marker.
  * Used by StabilityViz (W4) when an era boundary enters the viewport.
  * 400ms total, no expansion (dots stay 1.5px), single playback.
  *
@@ -114,10 +114,10 @@ export async function eraBoundaryBurst(el: HTMLElement): Promise<void> {
   const rect = el.getBoundingClientRect();
   const x = rect.left + rect.width / 2 + window.scrollX;
   const y = rect.top + rect.height / 2 + window.scrollY;
-  const fill = 'var(--c-amber, #f4c430)';
+  const fill = 'var(--c-amber, #946b1f)';
 
   // 6 dots fade-in (opacity 0 → 1) over 400ms. No scale, no radius change
-  // — this is a marker-arrival gesture, not a celebration burst.
+  // : this is a marker-arrival gesture, not a celebration burst.
   const burst = new mojs.Burst({
     left: x,
     top: y,

@@ -10,7 +10,7 @@ problem: |
   to P&L *before* sizing.
 approach: |
   Built a **crypto stat-arb pipeline** that integrates funding carry into the cost model, pairs it
-  with a cointegration gate (Engle–Granger + Johansen + half-life band), and gates trades through
+  with a cointegration gate (Engle-Granger + Johansen + half-life band), and gates trades through
   the same 31-gate harness as systematic equity strategies. Locked OOS window; block-bootstrap CIs;
   random-timing nulls.
 evidence:

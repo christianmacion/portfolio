@@ -1,5 +1,5 @@
 /**
- * book — open book outline (rectangle + center spine separator).
+ * book : open book outline (rectangle + center spine separator).
  * Content category: links to long-form writing (workbook chapter, Medium
  * post, doc).
  */

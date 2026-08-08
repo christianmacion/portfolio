@@ -29,11 +29,11 @@ Most agent demos show happy paths. **This one breaks the path on purpose.** Inje
 
 ## What it proves
 
-- **Structured-output contracts** — every tool call goes through a JSON validator before dispatch.
-- **Loop guard** — `max_steps` cap + explicit "you have already called this tool twice this turn; do something else" prompt-correction.
-- **OTel GenAI traces** — every LLM call and tool dispatch writes `gen_ai.*` attributes per the CNCF semantic conventions, ready for vendor-neutral observability.
-- **Recovery patterns** — 6/6 injected faults recovered without re-prompting from a human.
+- **Structured-output contracts** : every tool call goes through a JSON validator before dispatch.
+- **Loop guard** : `max_steps` cap + explicit "you have already called this tool twice this turn; do something else" prompt-correction.
+- **OTel GenAI traces** : every LLM call and tool dispatch writes `gen_ai.*` attributes per the CNCF semantic conventions, ready for vendor-neutral observability.
+- **Recovery patterns** : 6/6 injected faults recovered without re-prompting from a human.
 
 ## What's transferable
 
-The loop guard, the contract validator, and the OTel trace shape apply directly to a Claude Agent SDK / MCP-backed production agent — same shape, different tool providers.
+The loop guard, the contract validator, and the OTel trace shape apply directly to a Claude Agent SDK / MCP-backed production agent : same shape, different tool providers.

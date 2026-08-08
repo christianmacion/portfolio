@@ -1,5 +1,5 @@
 /**
- * content.config.ts — Astro 5 content collection schemas (Zod).
+ * content.config.ts : Astro 5 content collection schemas (Zod).
  * All collections are loaded by the Slug routing in src/pages/projects/[slug].astro.
  */
 import { defineCollection } from 'astro:content';
@@ -135,9 +135,9 @@ const solution = defineCollection({
   }),
 });
 
-// v6.1 — `predictionEvent` collection. Eight binary event contracts,
+// v6.1 : `predictionEvent` collection. Eight binary event contracts,
 // each with: market-implied probability (in [0,1] units), an edge over
-// the market (in probability units — positive means our model-implied
+// the market (in probability units : positive means our model-implied
 // is higher than the implied price), a 1-line evidence string, and a
 // methodology pointer. NDA-positive by construction: no platform names
 // appear in any field. See `notes/v61-patterns.md` for the determinism
@@ -157,10 +157,10 @@ const predictionEvent = defineCollection({
   }),
 });
 
-// v6.2 — `worldEvent` collection. Fixture pins rendered on the
+// v6.2 : `worldEvent` collection. Fixture pins rendered on the
 // WorldEventMap iron-desk widget. Each entry has (lat, lon, category,
 // severity) so the map can render the pin and the legend can label it.
-// Generic language only — no platform or employer names (NDA-positive).
+// Generic language only : no platform or employer names (NDA-positive).
 const worldEvent = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/world-events' }),
   schema: z.object({

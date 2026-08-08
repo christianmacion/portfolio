@@ -1,6 +1,6 @@
 ---
 /**
- * DSRCalculator.astro — Interactive Deflated Sharpe Ratio calculator.
+ * DSRCalculator.astro : Interactive Deflated Sharpe Ratio calculator.
  *
  * Sliders:
  *   - N trials  (1 → 1000)
@@ -190,7 +190,7 @@
     // SR variance: assume returns ~ N(0,1) → Var(SR) ≈ 1 (simplified for interactive demo)
     // For T years at daily sampling, the std error of SR ≈ 1/√(252T)
     const se = 1 / Math.sqrt(252 * T);
-    // Skewness / kurtosis of returns (default 0, 3 for normal — not user-input here)
+    // Skewness / kurtosis of returns (default 0, 3 for normal : not user-input here)
     const g3 = 0,
       g4 = 3;
     const denom = se * Math.sqrt(1 - g3 * sr + ((g4 - 1) * sr * sr) / 4);
@@ -272,7 +272,7 @@
     padding: var(--sp-5) var(--sp-6);
     background: var(--c-bg);
     border: 1px solid var(--c-rule);
-    /* v9.3.1 — F17 institutional: sharp corners (1px) instead of --radius-lg (16px).
+    /* v9.3.1 : F17 institutional: sharp corners (1px) instead of --radius-lg (16px).
        Bloomberg-terminal widget register, not SaaS card. */
     border-radius: 1px;
     box-shadow: var(--shadow-sm);
@@ -366,7 +366,7 @@
     padding: var(--sp-4);
     background: var(--c-tape);
     color: var(--ink-on-tape);
-    /* v9.3.1 — F17 institutional: sharp corners (1px) instead of --radius (10px). */
+    /* v9.3.1 : F17 institutional: sharp corners (1px) instead of --radius (10px). */
     border-radius: 1px;
   }
   .dsr-calc__verdict {
@@ -376,7 +376,7 @@
     font-size: var(--fs-sm);
     color: var(--ink-on-tape);
   }
-  /* v6.10.6 — removed empty .dsr-calc__verdict .dot rule;
+  /* v6.10.6 : removed empty .dsr-calc__verdict .dot rule;
      verdict dot is now flat via tokens.css .dot base. */
   .dsr-calc__num {
     display: flex;
@@ -445,7 +445,7 @@
   .dsr-calc__why {
     margin-top: var(--sp-3);
     border: 1px solid var(--c-rule-soft);
-    /* v9.3.1 — F17 institutional: sharp corners (1px) instead of --radius-sm (6px). */
+    /* v9.3.1 : F17 institutional: sharp corners (1px) instead of --radius-sm (6px). */
     border-radius: 1px;
     background: var(--c-bg-2);
   }
@@ -457,8 +457,8 @@
     color: var(--c-primary);
     list-style: none;
     user-select: none;
-    /* v6.11.18.1 — WCAG 2.5.5 touch target. var(--sp-2) ≈ 8px vertical
-       padding on a ~14px line gives ~30px height — below the 44px
+    /* v6.11.18.1 : WCAG 2.5.5 touch target. var(--sp-2) ≈ 8px vertical
+       padding on a ~14px line gives ~30px height : below the 44px
        minimum. Flexbox + min-height gets us there without changing the
        visual. */
     display: flex;

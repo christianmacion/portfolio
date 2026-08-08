@@ -1,12 +1,12 @@
 ---
 /**
- * certifications.astro — v2: curated certs + math/quant aesthetic.
+ * certifications.astro : v2: curated certs + math/quant aesthetic.
  *
- * Hero equation: cert density over time — claimedTotal certs over certSpanMonths months.
+ * Hero equation: cert density over time : claimedTotal certs over certSpanMonths months.
  * claimedTotal reads from `profile.stats.certCount` (the headline number used
  * site-wide). certSpanMonths is derived from the earliest/latest cert year
  * (Jan → Dec), so the rendered equation tracks profile + curated-set
- * updates without manual sync. v9.3.2 — drop the unfilled template tokens
+ * updates without manual sync. v9.3.2 : drop the unfilled template tokens
  * from the JSDoc per webcraft-no-vibe X02 audit gate.
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
@@ -39,8 +39,8 @@ const tier1Count = groups.reduce(
     sum + g.data.items.filter((c: CertGroupEntry['data']['items'][number]) => c.tier === 1).length,
   0,
 );
-// v6.11.22 — derive certification window from curated items' years
-// (was hardcoded "(Nov 2022 → May 2026)" — actually Nov 2022 → May 2026,
+// v6.11.22 : derive certification window from curated items' years
+// (was hardcoded "(Nov 2022 → May 2026)" : actually Nov 2022 → May 2026,
 // but the month-spans are fabricated). Years are honest; months derived
 // from earliest/latest cert year (Nov is the Nov of the year indicated;
 // May = month awarded for Tier-1 STA Jan 2026 ceremony).
@@ -55,7 +55,7 @@ const certWindow =
       ? `${earliestYear}`
       : `${earliestYear} → ${latestYear}`
     : '';
-// Cert span in months — derived from earliest/latest year (Jan → Dec).
+// Cert span in months : derived from earliest/latest year (Jan → Dec).
 // This is the honest denominator for cert-density: same units, same window.
 const certSpanMonths =
   earliestYear !== null && latestYear !== null
@@ -73,7 +73,7 @@ const certSpanMonths =
 >
   <header class="page-head">
     <div class="container">
-      {/* Bryllim pattern — number-prefixed section header before page H1.
+      {/* Bryllim pattern : number-prefixed section header before page H1.
           Mono digit + em-dash + lowercase name; aria-hidden so it doesn't
           compete with the <h1> for the document outline. */}
       <p class="bryllim-mark mono" aria-hidden="true">01. certifications</p>
@@ -153,7 +153,7 @@ const certSpanMonths =
       </section>
     ))
   }
-  {/* Bryllim overflow — section list ends with right-aligned "ALL X →". */}
+  {/* Bryllim overflow : section list ends with right-aligned "ALL X →". */}
   <div class="container certs__overflow">
     <a href={path('/resume')} class="bryllim-overflow mono">ALL {claimedTotal} CERTS →</a>
   </div>
@@ -256,7 +256,7 @@ const certSpanMonths =
     justify-self: end;
     margin-top: var(--sp-2);
   }
-  /* v6.10.33 — institutional: drop the F13-era amber gradient (rgba 212,160,23 stale).
+  /* v6.10.33 : institutional: drop the F13-era amber gradient (rgba 212,160,23 stale).
      Lift via --c-bg-2 token; amber-deep border is enough chrome signal. */
   .cert--flagship {
     border-color: var(--c-amber);
@@ -272,7 +272,7 @@ const certSpanMonths =
     border-radius: 0 var(--radius) var(--radius) 0;
   }
 
-  /* Bryllim pattern — number-prefixed section register. */
+  /* Bryllim pattern : number-prefixed section register. */
   .bryllim-mark {
     font-size: 11px;
     color: var(--c-ink);
@@ -283,7 +283,7 @@ const certSpanMonths =
     font-variant-numeric: tabular-nums;
   }
 
-  /* Bryllim overflow — "ALL X →" link. */
+  /* Bryllim overflow : "ALL X →" link. */
   .bryllim-overflow {
     display: inline-block;
     font-family: var(--ff-mono);

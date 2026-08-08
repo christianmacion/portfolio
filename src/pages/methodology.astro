@@ -1,11 +1,10 @@
 ---
 /**
- * methodology.astro — the eval-first philosophy, G1–G31 gate stack, model-routing policy,
+ * methodology.astro : the eval-first philosophy, G1-G31 gate stack, model-routing policy,
  * agent charter pattern. Spell out the *method*, not just the outputs.
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
 import Equation from '@components/Equation.astro';
-import CTABanner from '@components/CTABanner.astro';
 import GatesLattice from '@components/GatesLattice.astro';
 import DSRCalculator from '@components/DSRCalculator.astro';
 import SectionTOC from '@components/SectionTOC.astro';
@@ -14,11 +13,12 @@ import ChromeHeader from '@components/ChromeHeader.astro';
 import { path } from '@utils/url';
 import VoiceLine from '@components/VoiceLine.astro';
 import SectionMark from '@components/SectionMark.astro';
+import AIHistoryTimeline from '@components/AIHistoryTimeline.astro';
 import { profile } from '@utils/profile';
 
 // Gate-count chrome: derives from profile.stats.evalGates. Used in
 // SectionTOC label, data-toc-label, headline H2, voice sub line,
-// and other "G1–G31" references on this page.
+// and other "G1-G31" references on this page.
 const GATE_RANGE = `G1 to G${profile.stats.evalGates}`;
 
 const gates = [
@@ -115,15 +115,20 @@ const charter = [
         Don’t ship what hasn’t passed a <span class="hl">measurable gate</span>.
       </h1>
       <VoiceLine class="method-head__voice">
-        If it isn’t measured, it isn’t built. Five-rule discipline, six gate families.
+        Five stages. Each kills 70%+ of the work.
       </VoiceLine>
 
+      <ul class="method-head__pipeline">
+        <li><strong>Regime.</strong> Classify market state. Trend / range / vol regime before any signal.</li>
+        <li><strong>Pre-flight.</strong> Mechanical validity. Schema, parse, dedupe, exit-0.</li>
+        <li><strong>Research.</strong> Walk-forward, deflated Sharpe, block-bootstrap, orthogonality.</li>
+        <li><strong>Backtest.</strong> OOS, regime conditioning, Monte-Carlo ruin probability.</li>
+        <li><strong>Scribe.</strong> One-page memo + kill log. Verdict derives from gates.</li>
+      </ul>
+
       <p class="method-head__sub">
-        One engineering principle. Applied to LLM outputs and to systematic trading strategies with
-        the same gate stack. The method is what scales; the tools change. The principle has three
-        operational rules: every candidate is gated before ship (mechanical, not opinionated); the
-        gate ID is load-bearing (a gate name is a contract); and a failure is logged, not worked
-        around (no live-tuning the gate to make the candidate pass).
+        One engineering principle. Applied to LLM outputs and to systematic trading strategies with the same
+        gate stack. The method is what scales; the tools change.
       </p>
 
       <div class="method-head__eq-block">
@@ -143,10 +148,6 @@ const charter = [
       { id: 'routing', label: 'Model routing' },
       { id: 'dsr', label: 'DSR calculator' },
       { id: 'charter', label: 'Agent charter' },
-      { id: 'incidents', label: 'Where the method broke' },
-      { id: 'oss', label: 'Open-source record' },
-      { id: 'neg', label: 'Negative space' },
-      { id: 'hire', label: 'If you hired me' },
     ]}
   />
 
@@ -157,12 +158,10 @@ const charter = [
         <p class="section__eyebrow">The gate stack</p>
         <h2 class="section__title" id="gates">{GATE_RANGE}. Six families. One contract.</h2>
         <p class="section__sub">
-          Every candidate (LLM output, systematic strategy, content artifact) passes through the
-          same gate stack. Gates are mechanical (exit-0 contract), not opinionated. A pass means the
-          candidate is allowed to surface; a fail means it isn't. Gate IDs are load-bearing: they
-          appear in the AAR footer, in the eval-harness CI run, and in the per-candidate
-          permission-to-publish decision, so a "G16" means the same thing across the corpus. The
-          table below shows one family per row; the gate ID is the row's first column.
+          Every candidate (LLM output, systematic strategy, content artifact) passes through the same gate stack.
+          Gates are mechanical (exit-0 contract), not opinionated. A pass means the candidate is allowed to
+          surface; a fail means it isn't. Gate IDs are load-bearing: a "G16" means the same thing across the
+          corpus.
         </p>
       </header>
 
@@ -183,11 +182,48 @@ const charter = [
         }
       </div>
 
-      {/* v11.W3 — 31-cell lattice visualisation wired to theatre.js.
+      {/* v11.W3 : 31-cell lattice visualisation wired to theatre.js.
            Sits below the 6-row summary as a deeper view of every
            individual gate. W4 will replace this with the interactive
            data-viz (per-cell hover + click-through to glossary). */}
       <GatesLattice />
+    </div>
+  </section>
+
+  {/* v12.W4 : AI HISTORY TIMELINE mounted as evidence of trend-tracking.
+      The methodology isn't a static document :  it tracks the AI arc in
+      real time. The 31-gate stack was assembled on the HARNESS + LOOPS
+      rungs and the GRAPHS rung is now wiring multi-agent orchestration
+      into the gate tests. Renders as a vertical stack on this page to
+      fit the reading rhythm. */}
+  <section class="section section--trend" data-section-id="methodology">
+    <div class="container container-wide">
+      <SectionMark index="01" title="trend arc" ariaHidden={false} />
+      <p class="section__eyebrow">Why the gate stack tracks the curve</p>
+      <h2 class="section__title">
+        The methodology is not a static document.
+      </h2>
+      <p class="section__sub">
+        Each rung of the AI arc changed how the gate stack is wired.
+        PROMPTS gave the eval family; SKILLS gave the structured-output
+        contract; AGENTS gave the run-loop schema; HARNESS gave the
+        sandbox; LOOPS gave the AAR pattern; GRAPHS gave the
+        shared-memory graph that connects every gate test to every shipped
+        artefact. OFFICES is where the gate stack now runs: 14 squads,
+        112 agents, every gate test attached to a graph node. Below:
+        the dated record of adoption versus mainstream emergence.
+      </p>
+
+      <AIHistoryTimeline
+        variant="stack"
+        chip="AI · HISTORY · METHODOLOGY EVIDENCE"
+        title="Six rungs that built this gate stack."
+        lede="The methodology is wired rung-by-rung. Each architectural jump maps to a gate family on this page."
+      />
+
+      <p class="section__foot mono">
+        <a href={path('/timeline')}>Full timeline →</a>
+      </p>
     </div>
   </section>
 
@@ -197,9 +233,8 @@ const charter = [
         <p class="section__eyebrow">Model routing</p>
         <h2 class="section__title" id="routing">Tiered dispatch, not single-agent.</h2>
         <p class="section__sub">
-          A multi-agent system runs at ~15× the token cost of a single agent. The cost is real: the
-          answer is to route by what the step actually needs to compute, not by default. Every
-          dispatch has a per-step budget.
+          A multi-agent system runs at ~15× the token cost of a single agent. Route by what the step needs to
+          compute, not by default. Every dispatch has a per-step budget.
         </p>
       </header>
 
@@ -252,9 +287,9 @@ const charter = [
           Try the <a href={path('/glossary/deflated-sharpe')}>deflated Sharpe</a> calculator.
         </h2>
         <p class="section__sub">
-          See how the same in-sample <a href={path('/glossary/sharpe')}>Sharpe</a> can pass or fail G16
-          depending on how many strategies you actually tried. This is the gate that turns "1.14 looks
-          great" into <a href={path('/glossary/deflated-sharpe')}>"DSR 0.70, fail."</a>
+          Same in-sample <a href={path('/glossary/sharpe')}>Sharpe</a>, different DSR, depending on how many
+          strategies you tried. This is the gate that turns "1.14 looks great" into
+          <a href={path('/glossary/deflated-sharpe')}>"DSR 0.70, fail."</a>
         </p>
       </header>
 
@@ -268,8 +303,7 @@ const charter = [
         <p class="section__eyebrow">Agent charter</p>
         <h2 class="section__title" id="charter">{charter.length} required fields per agent.</h2>
         <p class="section__sub">
-          A charter is a contract, not a prompt. Every agent has the same six fields, with the same
-          semantics. No exceptions.
+          A charter is a contract, not a prompt. Same six fields, same semantics, every agent. No exceptions.
         </p>
       </header>
 
@@ -286,760 +320,19 @@ const charter = [
     </div>
   </section>
 
-  <section class="section section--alt" data-toc-id="neg" data-toc-label="Negative space" data-section-id="methodology">
+  <section class="section section--alt" data-section-id="methodology">
     <div class="container">
       <header class="section__head">
-        <p class="section__eyebrow">What I will not do</p>
-        <h2 class="section__title" id="neg">Negative-space as design.</h2>
-      </header>
-      <ul class="neg">
-        <li>
-          I will not claim current employment at any NDA-protected firm. The systematic-strategy
-          desk engagement is a <strong>closed past contract</strong> (03/2026 to 06/2026).
-        </li>
-        <li>
-          I will not reference proprietary data sources, fund renames, or per-strategy t-stats from
-          any NDA-protected desk.
-        </li>
-        <li>
-          I will not share a <a href={path('/glossary/sharpe')}>"Sharpe = X.X"</a> number without showing
-          the gate stack that produced it.
-        </li>
-        <li>I will not ship an agent without an exit-0 mechanical-validator contract.</li>
-        <li>
-          I will not present a backtest without capacity, <a href={path('/glossary/slippage')}
-            >slippage</a
-          >, and a locked <a href={path('/glossary/oos')}>OOS</a> window.
-        </li>
-      </ul>
-    </div>
-  </section>
-
-  <section class="section section--alt" data-toc-id="hire" data-toc-label="If you hired me" data-section-id="methodology">
-    <div class="container">
-      <header class="section__head">
-        <p class="section__eyebrow">What I'd build first</p>
-        <h2 class="section__title" id="hire">If you hired me onto a quant desk.</h2>
+        <p class="section__eyebrow">Related pages</p>
+        <h2 class="section__title">Where the rest of the method lives.</h2>
         <p class="section__sub">
-          These are the first 90 days, ordered by leverage. A new QR on a 2 to 5 person pod doesn't
-          start with alpha. they start by making the existing book defensible to a risk manager and
-          a PM. The discipline compounds; the alpha is downstream.
+          This page owns the gate stack, model routing, and the agent charter. The incident log
+          (where the gate stack caught a real bug) lives on
+          <a href={path('/mistakes')}>/mistakes</a>. The first-90-days plan for a new QR seat is on
+          <a href={path('/for-recruiters')}>/for-recruiters</a>. The implementation record (repos,
+          licenses, verification dates) lives on <a href={path('/colophon')}>/colophon</a>.
         </p>
       </header>
-      <ol class="plan">
-        <li class="plan__row">
-          <div class="plan__week mono">WK 1 to 2</div>
-          <div class="plan__body">
-            <h3 class="plan__title">Backtest-engine audit + look-ahead scan</h3>
-            <p class="plan__body-p">
-              Run the one-bar shift test (project 09) on every strategy in the book. Quantify the
-              phantom-Sharpe gap. This is the gate that catches the most expensive error class
-              first.
-            </p>
-            <div class="plan__gates mono">G21 to G25 · look-ahead discipline</div>
-          </div>
-        </li>
-        <li class="plan__row">
-          <div class="plan__week mono">WK 3 to 4</div>
-          <div class="plan__body">
-            <h3 class="plan__title">Cost-model calibration + break-even turnaround</h3>
-            <p class="plan__body-p">
-              Per-strategy <a href={path('/glossary/slippage')}>slippage</a> / impact / spread estimate.
-              For every strategy, ship the break-even turnaround cost (project 08). Strategies that win
-              gross and lose net come off the book.
-            </p>
-            <div class="plan__gates mono">G26 to G31 · economic & cost realism</div>
-          </div>
-        </li>
-        <li class="plan__row">
-          <div class="plan__week mono">WK 5 to 8</div>
-          <div class="plan__body">
-            <h3 class="plan__title">Multiple-testing correction across the book</h3>
-            <p class="plan__body-p">
-              Re-rank every strategy by <a href={path('/glossary/deflated-sharpe')}>DSR</a> (project 01),
-              not raw <a href={path('/glossary/sharpe')}>Sharpe</a>. Re-rank by <a
-                href={path('/glossary/cscv-pbo')}>CSCV-based PBO</a
-              >
-              (prob. of backtest overfit). The book's "best strategy" is rarely the strategy with the
-              highest raw Sharpe.
-            </p>
-            <div class="plan__gates mono">G16 to G20 · multiple testing</div>
-          </div>
-        </li>
-        <li class="plan__row">
-          <div class="plan__week mono">WK 9 to 12</div>
-          <div class="plan__body">
-            <h3 class="plan__title">Walk-forward OOS window standardization</h3>
-            <p class="plan__body-p">
-              Locked, <a href={path('/glossary/embargo')}>embargoed</a>
-              <a href={path('/glossary/oos')}>OOS</a> windows (project 06 pattern) across the book. Frozen-spec
-              evaluation. <a href={path('/glossary/walk-forward')}>Walk-forward</a> standardization. The
-              book becomes reproducible from cold start.
-            </p>
-            <div class="plan__gates mono">G11 to G15 · walk-forward & OOS</div>
-          </div>
-        </li>
-      </ol>
-
-      <div class="plan__note">
-        <strong>The pattern:</strong> defenses before alpha. A QR who can defend the book is hireable;
-        a QR who can find alpha is hireable-and-defensible. The first 90 days establish the defense.
-      </div>
     </div>
   </section>
-
-  <section class="section" data-toc-id="incidents" data-toc-label="Where the method broke" data-section-id="methodology">
-    <div class="container">
-      <header class="section__head">
-        <p class="section__eyebrow">Methodology incidents</p>
-        <h2 class="section__title" id="incidents">Where the method broke, and what got codified.</h2>
-        <p class="section__sub">
-          Three cases where the gate stack caught a real bug, plus one where the gate stack was
-          wrong and got amended. The discipline holds because the gate stack has been
-          falsified: by its author's own work, not by a benchmark.
-        </p>
-      </header>
-
-      <ol class="incidents">
-        <li class="incidents__row">
-          <div class="incidents__id mono">G37</div>
-          <div class="incidents__body">
-            <h3 class="incidents__title">Bid-ask bounce vs. stitched-OHLCV</h3>
-            <p class="incidents__prose">
-              A backtest on a stitched MEXC mirror of Binance bars showed a +5.6 Sharpe "weekend-gap
-              fade" signal. The signal was a stitching artifact; the mirror overlapped weekend
-              bars with the next Monday's open, and the bounce was a phantom mean-reversion. Gate
-              G37 (data-source-stitch audit) caught the overlap; the signal was killed. The gate
-              was codified after this incident, not before. AAR: corrections.md entry 2026-08-02
-              "stitched-OHLCV binding rule."
-            </p>
-          </div>
-        </li>
-        <li class="incidents__row">
-          <div class="incidents__id mono">G21</div>
-          <div class="incidents__body">
-            <h3 class="incidents__title">One-bar shift on the BTC funding-carry book</h3>
-            <p class="incidents__prose">
-              The funding-carry candidate cleared pre-flight and the cheap n-aware t-stat gate. G21
-              (one-bar shift) collapsed the Sharpe from 2.4 to 0.31 on the same fixture panel; the
-              edge was a look-ahead in the funding-rate timestamp. The candidate was killed; the
-              methodology was not amended, because G21 is exactly the gate designed to catch this.
-              AAR: 2026-08-01-idea19-btc-funding-carry-deep-preflight.md.
-            </p>
-          </div>
-        </li>
-        <li class="incidents__row">
-          <div class="incidents__id mono">G16</div>
-          <div class="incidents__body">
-            <h3 class="incidents__title">Deflated Sharpe after 30 sweeps</h3>
-            <p class="incidents__prose">
-              A "BTC Friday short" candidate cleared with raw Sharpe 1.14 across 9 sweeps, then
-              failed G16 (deflated Sharpe) once the sweep count was raised to 30. The same in-sample
-              Sharpe with the corrected multiple-testing penalty became DSR 0.70, a fail. The
-              discipline is the gate, not the headline number. AAR:
-              2026-08-01-afk-strategy-mining-v2.md.
-            </p>
-          </div>
-        </li>
-        <li class="incidents__row">
-          <div class="incidents__id mono">G40</div>
-          <div class="incidents__body">
-            <h3 class="incidents__title">A gate the gate stack didn't have</h3>
-            <p class="incidents__prose">
-              The CFD 5-min landscape survey passed all existing pre-flight gates and still turned
-              out to be a thin market that manufactured Sharpe on a 3-month window. The gate stack
-              had no data-coverage gate, so the failure mode wasn't codified. G40 (minimum bar-count
-              per asset × frequency cell) was added after the survey was killed, with the explicit
-              "real-but-too-thin" binding rule. AAR: 2026-08-02-afk-sweep-v2p6-outcome.md.
-            </p>
-          </div>
-        </li>
-      </ol>
-    </div>
-  </section>
-
-  <section class="section section--alt" data-toc-id="oss" data-toc-label="Open-source record" data-section-id="methodology">
-    <div class="container">
-      <header class="section__head">
-        <p class="section__eyebrow">Open-source implementation record</p>
-        <h2 class="section__title" id="oss">Where the canon lives.</h2>
-        <p class="section__sub">
-          The repositories that anchor the methodology, motion, and chrome contracts on this site.
-          Each row: repo → role on this site → license → last verified date. The "verified" date is
-          the last time the license badge and upstream head were checked. License claims are
-          re-verified quarterly, not assumed.
-        </p>
-      </header>
-
-      <div class="oss-table" role="table" aria-label="Open-source implementation record">
-        <div class="oss-table__row oss-table__row--head" role="row">
-          <span class="oss-table__cell oss-table__cell--repo mono" role="columnheader">Repository</span>
-          <span class="oss-table__cell oss-table__cell--role" role="columnheader">Role on this site</span>
-          <span class="oss-table__cell oss-table__cell--license mono" role="columnheader">License</span>
-          <span class="oss-table__cell oss-table__cell--verified mono" role="columnheader">Verified</span>
-        </div>
-        <div class="oss-table__row" role="row">
-          <span class="oss-table__cell oss-table__cell--repo mono" role="cell">
-            <a href="https://github.com/karpathy/autoresearch" rel="noopener" target="_blank"
-              >karpathy/autoresearch</a
-            >
-          </span>
-          <span class="oss-table__cell oss-table__cell--role" role="cell"
-            >Pattern: autonomous research loop</span
-          >
-          <span class="oss-table__cell oss-table__cell--license mono" role="cell">MIT</span>
-          <span class="oss-table__cell oss-table__cell--verified mono" role="cell">2026-07-31</span>
-        </div>
-        <div class="oss-table__row" role="row">
-          <span class="oss-table__cell oss-table__cell--repo mono" role="cell">
-            <a href="https://github.com/obra/superpowers" rel="noopener" target="_blank"
-              >obra/superpowers</a
-            >
-          </span>
-          <span class="oss-table__cell oss-table__cell--role" role="cell"
-            >Pattern: skill authoring methodology</span
-          >
-          <span class="oss-table__cell oss-table__cell--license mono" role="cell">MIT</span>
-          <span class="oss-table__cell oss-table__cell--verified mono" role="cell">2026-07-31</span>
-        </div>
-        <div class="oss-table__row" role="row">
-          <span class="oss-table__cell oss-table__cell--repo mono" role="cell">
-            <a href="https://github.com/jeffallan/claude-skills" rel="noopener" target="_blank"
-              >jeffallan/claude-skills</a
-            >
-          </span>
-          <span class="oss-table__cell oss-table__cell--role" role="cell"
-            >Pattern: ui-ux-pro-max, chrome governance reference</span
-          >
-          <span class="oss-table__cell oss-table__cell--license mono" role="cell">MIT</span>
-          <span class="oss-table__cell oss-table__cell--verified mono" role="cell">2026-07-31</span>
-        </div>
-        <div class="oss-table__row" role="row">
-          <span class="oss-table__cell oss-table__cell--repo mono" role="cell">
-            <a href="https://github.com/i-dencker/research-writing" rel="noopener" target="_blank"
-              >i-dencker/research-writing</a
-            >
-          </span>
-          <span class="oss-table__cell oss-table__cell--role" role="cell"
-            >Pattern: research-writing methodology</span
-          >
-          <span class="oss-table__cell oss-table__cell--license mono" role="cell">MIT</span>
-          <span class="oss-table__cell oss-table__cell--verified mono" role="cell">2026-07-31</span>
-        </div>
-        <div class="oss-table__row" role="row">
-          <span class="oss-table__cell oss-table__cell--repo mono" role="cell">
-            <a href="https://github.com/legomushroom/mojs" rel="noopener" target="_blank"
-              >legomushroom/mojs</a
-            >
-          </span>
-          <span class="oss-table__cell oss-table__cell--role" role="cell"
-            >Reference: animation primitive for /desk motion</span
-          >
-          <span class="oss-table__cell oss-table__cell--license mono" role="cell">MIT</span>
-          <span class="oss-table__cell oss-table__cell--verified mono" role="cell">2026-07-31</span>
-        </div>
-        <div class="oss-table__row" role="row">
-          <span class="oss-table__cell oss-table__cell--repo mono" role="cell">
-            <a href="https://github.com/theatre-js/theatre" rel="noopener" target="_blank"
-              >theatre-js/theatre</a
-            >
-          </span>
-          <span class="oss-table__cell oss-table__cell--role" role="cell"
-            >Reference: animation core; studio AGPL-3.0 (dev-only)</span
-          >
-          <span class="oss-table__cell oss-table__cell--license mono" role="cell"
-            >Apache-2.0 / AGPL-3.0</span
-          >
-          <span class="oss-table__cell oss-table__cell--verified mono" role="cell">2026-07-31</span>
-        </div>
-        <div class="oss-table__row" role="row">
-          <span class="oss-table__cell oss-table__cell--repo mono" role="cell">
-            <a href="https://github.com/mendableai/firecrawl" rel="noopener" target="_blank"
-              >mendableai/firecrawl</a
-            >
-          </span>
-          <span class="oss-table__cell oss-table__cell--role" role="cell"
-            >Pattern-only: no portfolio embed (AGPL-3.0)</span
-          >
-          <span class="oss-table__cell oss-table__cell--license mono" role="cell">AGPL-3.0</span>
-          <span class="oss-table__cell oss-table__cell--verified mono" role="cell">2026-07-31</span>
-        </div>
-      </div>
-
-      <p class="oss-note mono">
-        License disclosures verified 2026-07-31 against each repo's LICENSE file or README badge.
-        Verification table at
-        <code>~/.claude/cache/stella/research/repo-licenses-2026-07-31.md</code> [Owner confirm —
-        audit at next quarterly cycle 2026-10-31].
-      </p>
-    </div>
-  </section>
-
-  <CTABanner
-    title="Method under-spec? Send the JD."
-    sub={`If your role has a written spec, send it. I'll respond with which gates from ${GATE_RANGE} already apply to your stack, and which I'd build.`}
-    primaryLabel="Email me"
-    secondaryLabel="View solutions"
-    secondaryHref={path('/solutions')}
-  />
 </BaseLayout>
-
-<style>
-  .method-head {
-    padding-block: var(--sp-9) var(--sp-7);
-    background: var(--c-bg);
-    border-bottom: var(--border);
-  }
-  .method-head__eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--sp-3);
-    margin: 0 0 var(--sp-4);
-    font-size: var(--fs-xs);
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    flex-wrap: wrap;
-  }
-  .method-head__eyebrow-chip {
-    display: inline-block;
-    padding: 4px 10px;
-    /* v9.2 a11y — was --c-phi-teal. Dark theme --j-phi-teal = #2d5f5a
-     only hits 2.14:1 on dark page-head surface. Solid amber chip +
-     --c-bg text reads at ≥5.6:1 in both themes — institutional
-     register, F14-safe (no traffic-light). */
-    color: var(--c-bg);
-    border: 1px solid var(--c-amber);
-    background: var(--c-amber);
-    font-weight: 600;
-  }
-  .method-head__eyebrow-line {
-    color: var(--c-warn);
-    font-weight: 600;
-  }
-  .method-head__title {
-    font-size: clamp(2rem, 4.5vw, 3.5rem);
-    letter-spacing: -0.02em;
-    line-height: 1.05;
-    margin-block: var(--sp-4) var(--sp-5);
-    max-width: 22ch;
-  }
-  .method-head__voice {
-    margin: 0 0 var(--sp-5);
-    max-width: 60ch;
-  }
-  .method-head__sub {
-    font-size: var(--fs-lg);
-    color: var(--c-ink-2);
-    line-height: var(--lh-loose);
-    max-width: 68ch;
-    margin-bottom: var(--sp-7);
-  }
-  .method-head__eq-block {
-    padding: var(--sp-6) var(--sp-5);
-    background: var(--c-paper);
-    border: 1px solid var(--c-rule);
-    border-radius: var(--radius);
-    overflow-x: auto;
-  }
-
-  /* === v3C — G1–G31 gate stack as a tabular role=table, not a 6-card
-     grid. Each row is one family; the gate ID is the first column. The
-     audit's "validation gate lattice repeats labels" issue was the
-     6-card grid printing the family name twice; this layout prints it
-     once. */
-  .gates {
-    display: flex;
-    flex-direction: column;
-    border: 1px solid var(--c-rule);
-  }
-  .gates__row {
-    display: grid;
-    grid-template-columns: 120px minmax(0, 1fr) minmax(0, 2.4fr);
-    gap: var(--sp-3);
-    padding: var(--sp-3) var(--sp-4);
-    align-items: baseline;
-    border-bottom: 1px solid var(--c-rule-soft);
-    transition: background var(--transition);
-  }
-  .gates__row:last-child {
-    border-bottom: 0;
-  }
-  .gates__row--head {
-    background: var(--c-bg-2);
-    border-bottom: 1px solid var(--c-rule);
-  }
-  .gates__row:hover:not(.gates__row--head) {
-    background: var(--c-paper);
-  }
-  .gates__cell--range {
-    font-size: var(--fs-sm);
-    color: var(--c-primary);
-    font-weight: 600;
-  }
-  .gates__row--head .gates__cell--range {
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-size: var(--fs-xs);
-    color: var(--c-ink-3);
-    font-weight: 600;
-  }
-  .gates__cell--name {
-    font-size: var(--fs-base);
-    color: var(--c-ink);
-    margin: 0;
-    font-weight: 600;
-  }
-  .gates__row--head .gates__cell--name {
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-size: var(--fs-xs);
-    color: var(--c-ink-3);
-  }
-  .gates__cell--desc {
-    font-size: var(--fs-sm);
-    color: var(--c-ink-2);
-    line-height: var(--lh-loose);
-    margin: 0;
-  }
-  .gates__row--head .gates__cell--desc {
-    font-size: var(--fs-xs);
-    color: var(--c-ink-3);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-  }
-  .gates__cell--desc a {
-    color: var(--c-primary);
-    text-decoration: underline;
-    text-decoration-color: var(--c-rule-strong);
-    text-underline-offset: 3px;
-  }
-  .gates__cell--desc a:hover {
-    color: var(--c-amber);
-    text-decoration-color: var(--c-amber);
-  }
-  @media (max-width: 720px) {
-    .gates__row {
-      grid-template-columns: 1fr;
-      gap: var(--sp-1);
-    }
-    .gates__row--head {
-      display: none;
-    }
-  }
-
-  .routing {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: var(--sp-3);
-    margin-bottom: var(--sp-5);
-  }
-  .route {
-    display: flex;
-    flex-direction: column;
-    gap: var(--sp-1);
-    padding: var(--sp-4);
-    background: var(--c-bg);
-    border: 1px solid var(--c-rule);
-    border-radius: var(--radius);
-  }
-  .route__tier {
-    font-size: var(--fs-base);
-    color: var(--c-primary);
-    font-weight: 600;
-  }
-  .route__role {
-    font-size: var(--fs-sm);
-    color: var(--c-ink);
-    line-height: var(--lh-normal);
-  }
-  .route__ratio {
-    font-size: var(--fs-xs);
-    color: var(--c-ink-3);
-    margin-top: var(--sp-1);
-  }
-
-  .routing-eq {
-    padding: var(--sp-5);
-    background: var(--c-paper);
-    border: 1px solid var(--c-rule);
-    border-radius: var(--radius);
-    overflow-x: auto;
-  }
-
-  .charter {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    background: var(--c-bg);
-    border: 1px solid var(--c-rule);
-    border-radius: var(--radius);
-    overflow: hidden;
-  }
-  .charter__row {
-    display: grid;
-    grid-template-columns: 100px 1fr;
-    gap: var(--sp-4);
-    padding: var(--sp-3) var(--sp-5);
-    border-bottom: 1px solid var(--c-rule-soft);
-    align-items: center;
-  }
-  .charter__row:last-child {
-    border-bottom: none;
-  }
-  .charter__tag {
-    color: var(--c-primary);
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: var(--fs-xs);
-    letter-spacing: 0.08em;
-  }
-  .charter__val {
-    color: var(--c-ink);
-    font-size: var(--fs-sm);
-    line-height: var(--lh-normal);
-  }
-
-  .neg {
-    list-style: none;
-    padding: 0;
-    max-width: 760px;
-  }
-  .neg li {
-    position: relative;
-    padding-left: 1.75rem;
-    margin-bottom: var(--sp-3);
-    line-height: var(--lh-loose);
-    color: var(--c-ink-2);
-    font-size: var(--fs-base);
-  }
-  .neg li::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0.6em;
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: var(--c-ink-3);
-  }
-  .neg strong {
-    color: var(--c-ink);
-    font-weight: 600;
-  }
-
-  @media (max-width: 720px) {
-    .charter__row {
-      grid-template-columns: 1fr;
-      gap: var(--sp-1);
-    }
-  }
-
-  /* === WHAT I'D BUILD FIRST === */
-  .plan {
-    list-style: none;
-    padding: 0;
-    counter-reset: plan;
-    max-width: 880px;
-  }
-  .plan__row {
-    display: grid;
-    grid-template-columns: 110px 1fr;
-    gap: var(--sp-4);
-    padding: var(--sp-5);
-    background: var(--c-bg);
-    border: 1px solid var(--c-rule);
-    border-left: 3px solid var(--c-amber);
-    border-radius: var(--radius);
-    margin-bottom: var(--sp-3);
-    counter-increment: plan;
-  }
-  .plan__week {
-    font-size: var(--fs-sm);
-    color: var(--c-amber);
-    font-weight: 600;
-    letter-spacing: 0.06em;
-  }
-  .plan__title {
-    font-size: var(--fs-lg);
-    margin: 0 0 var(--sp-2);
-    color: var(--c-ink);
-  }
-  .plan__body-p {
-    font-size: var(--fs-sm);
-    color: var(--c-ink-2);
-    line-height: var(--lh-loose);
-    margin-bottom: var(--sp-3);
-  }
-  .plan__gates {
-    display: inline-block;
-    padding: 4px 10px;
-    background: var(--c-bg-2);
-    border: 1px solid var(--c-rule);
-    border-radius: 0;
-    font-size: var(--fs-xs);
-    color: var(--c-primary);
-    font-weight: 600;
-  }
-  .plan__note {
-    margin-top: var(--sp-5);
-    padding: var(--sp-4) var(--sp-5);
-    background: var(--c-paper);
-    border-left: 3px solid var(--c-amber);
-    border-radius: 0 var(--radius) var(--radius) 0;
-    font-size: var(--fs-base);
-    color: var(--c-ink-2);
-    line-height: var(--lh-loose);
-    max-width: 760px;
-  }
-  .plan__note strong {
-    color: var(--c-ink);
-    font-weight: 600;
-  }
-
-  @media (max-width: 720px) {
-    .plan__row {
-      grid-template-columns: 1fr;
-      gap: var(--sp-2);
-    }
-  }
-
-  /* === Pipeline diagram embed (v6.0.2) === */
-  .routing-pipeline {
-    margin-top: var(--sp-6);
-  }
-  .routing-pipeline__cap {
-    font-size: var(--fs-xs);
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--c-ink-3);
-    margin: 0 0 var(--sp-3) 0;
-  }
-
-  /* === v3C — Where the method broke (incidents). Each row is one
-     real case where the gate stack caught a bug (or, in the G40 case,
-     didn't have a gate and got one codified). */
-  .incidents {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: var(--sp-3);
-  }
-  .incidents__row {
-    display: grid;
-    grid-template-columns: 88px 1fr;
-    gap: var(--sp-4);
-    padding: var(--sp-4) var(--sp-5);
-    background: var(--c-bg);
-    border: 1px solid var(--c-rule);
-    border-left: 3px solid var(--c-amber);
-  }
-  .incidents__id {
-    font-size: var(--fs-base);
-    color: var(--c-amber);
-    font-weight: 600;
-    letter-spacing: 0.04em;
-  }
-  .incidents__title {
-    font-size: var(--fs-base);
-    margin: 0 0 var(--sp-2);
-    color: var(--c-ink);
-    font-weight: 600;
-  }
-  .incidents__prose {
-    font-size: var(--fs-sm);
-    color: var(--c-ink-2);
-    line-height: var(--lh-loose);
-    margin: 0;
-  }
-  .incidents__prose code {
-    font-family: var(--ff-mono);
-    font-size: 0.92em;
-    color: var(--c-primary);
-  }
-  @media (max-width: 720px) {
-    .incidents__row {
-      grid-template-columns: 1fr;
-      gap: var(--sp-1);
-    }
-  }
-
-  /* === v3C — Open-source implementation record. Tabular role=table,
-     not a list of links. Each row: repo · role · license · verified. */
-  .oss-table {
-    display: flex;
-    flex-direction: column;
-    border: 1px solid var(--c-rule);
-  }
-  .oss-table__row {
-    display: grid;
-    grid-template-columns: minmax(0, 1.6fr) minmax(0, 2fr) minmax(0, 1.2fr) 110px;
-    gap: var(--sp-3);
-    padding: var(--sp-3) var(--sp-4);
-    align-items: baseline;
-    border-bottom: 1px solid var(--c-rule-soft);
-    transition: background var(--transition);
-  }
-  .oss-table__row:last-child {
-    border-bottom: 0;
-  }
-  .oss-table__row--head {
-    background: var(--c-bg-2);
-    border-bottom: 1px solid var(--c-rule);
-  }
-  .oss-table__row:hover:not(.oss-table__row--head) {
-    background: var(--c-paper);
-  }
-  .oss-table__row--head .oss-table__cell {
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-size: var(--fs-xs);
-    color: var(--c-ink-3);
-    font-weight: 600;
-  }
-  .oss-table__cell--repo a {
-    color: var(--c-primary);
-    text-decoration: underline;
-    text-decoration-color: var(--c-rule-strong);
-    text-underline-offset: 3px;
-  }
-  .oss-table__cell--repo a:hover {
-    color: var(--c-amber);
-    text-decoration-color: var(--c-amber);
-  }
-  .oss-table__cell--role {
-    font-size: var(--fs-sm);
-    color: var(--c-ink-2);
-    line-height: var(--lh-loose);
-  }
-  .oss-table__cell--license,
-  .oss-table__cell--verified {
-    font-size: var(--fs-xs);
-    color: var(--c-ink-2);
-  }
-  @media (max-width: 720px) {
-    .oss-table__row {
-      grid-template-columns: 1fr;
-      gap: var(--sp-1);
-    }
-    .oss-table__row--head {
-      display: none;
-    }
-  }
-  .oss-note {
-    margin: var(--sp-4) 0 0;
-    padding: var(--sp-3) var(--sp-4);
-    background: var(--c-bg-2);
-    border: 1px solid var(--c-rule-soft);
-    font-size: var(--fs-xs);
-    color: var(--c-ink-2);
-    line-height: var(--lh-loose);
-    max-width: 80ch;
-  }
-  .oss-note code {
-    font-family: var(--ff-mono);
-    color: var(--c-primary);
-    font-size: 0.95em;
-  }
-</style>

@@ -1,5 +1,5 @@
 /**
- * mail — envelope silhouette (rectangle + flap diagonal).
+ * mail : envelope silhouette (rectangle + flap diagonal).
  * Communication category: mailto: link, contact card.
  */
 export const SVG_PATH =

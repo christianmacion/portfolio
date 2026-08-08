@@ -1,14 +1,14 @@
 ---
 /**
- * AssetClassMatrix.astro — 4×4 asset-class × regime matrix for /research.
+ * AssetClassMatrix.astro : 4×4 asset-class × regime matrix for /research.
  *
  * Rows = asset class (equities, crypto, commodities, rates).
  * Cols = market regime   (bull, bear, range, crash).
  * Each cell lists up to 2 strategies that cover that intersection.
  *
  * Cells are deliberately populated from the *real* strategy coverage in
- * `src/content/projects/quant/*.mdx` — not fabricated. Empty cells read
- * "—" the same way FactorTable does: honest about the gap.
+ * `src/content/projects/quant/*.mdx` : not fabricated. Empty cells read
+ * ":" the same way FactorTable does: honest about the gap.
  *
  * The tooltips expose the project slug so a visitor can verify the mapping
  * by clicking through.
@@ -172,13 +172,13 @@ const COL_LABEL: Record<(typeof COLS)[number], { title: string; sub: string }> =
               >
                 {items.length === 0 ? (
                   <span class="acm__dash" aria-label="no strategy claimed">
-                    —
+                    :
                   </span>
                 ) : (
                   <ul class="acm__list">
                     {items.map((it, idx) => (
                       <li class="acm__item">
-                        {/* v6.10.11 — `it.slug` is the full content-collection id
+                        {/* v6.10.11 : `it.slug` is the full content-collection id
                            which already includes the lane prefix (e.g.,
                            "quant/01-deflated-sharpe"). All entries are
                            quant (filtered on line 33). */}

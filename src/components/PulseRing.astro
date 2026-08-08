@@ -1,13 +1,13 @@
 ---
 /**
- * PulseRing.astro — v7.4 INSTITUTIONAL PULSE RING (RETIRED v6.18 W2)
+ * PulseRing.astro : v7.4 INSTITUTIONAL PULSE RING (RETIRED v6.18 W2)
  *
  * v6.18 W2 lock (2026-08-08): the pulse-ring animation is RETIRED
  * per [[feedback-no-status-indicators-signal-lights]] BINDING.
  * Components that previously used <PulseRing> should swap to a plain
  * static `<span class="pulse-ring pulse-ring--static">` element with
  * no animation. The component is preserved here for back-compat with
- * any page that hasn't migrated yet — it now renders a STATIC dot
+ * any page that hasn't migrated yet : it now renders a STATIC dot
  * (no infinite pulse, no opacity oscillation, no scale animation).
  *
  * The variant prop is still accepted but ignored; the dot is always
@@ -18,7 +18,7 @@
  */
 
 interface Props {
-  /** Deprecated — variant ignored post-W2. Kept for back-compat. */
+  /** Deprecated : variant ignored post-W2. Kept for back-compat. */
   variant?: 'status' | 'live';
   /** Color override. Auto-defaults to amber. */
   color?: 'warn' | 'cobalt' | 'sage' | 'terracotta' | 'teal' | 'violet' | 'ink';
@@ -65,7 +65,7 @@ const colorClass = color ? `is-${color}` : 'is-warn';
     /* No transform-origin, no animation. Static. */
   }
 
-  /* === Color tints — pass through to the dot via currentColor. === */
+  /* === Color tints : pass through to the dot via currentColor. === */
   .pulse-ring.is-warn {
     color: var(--c-amber);
   }

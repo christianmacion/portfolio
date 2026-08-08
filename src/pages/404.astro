@@ -1,15 +1,15 @@
 ---
 /**
- * 404.astro — v6.0: math/quant aesthetic + AI-agent surface.
+ * 404.astro : v6.0: math/quant aesthetic + AI-agent surface.
  *
  * Equation: ∄ x ∈ site : URL(x) = requested. Try one of these.
  *
  * v6.0 changes:
  *   - <meta name="robots" content="noindex"> to prevent SEO leakage.
- *   - Quick-link cards (3): /proof, /now, /contact — institutional defaults.
+ *   - Quick-link cards (3): /proof, /now, /contact : institutional defaults.
  *   - Search box (Pagefind) so visitors can pivot to a known query.
  *
- * v8.0.2 — Added "If you're hiring, start here" CTA strip pointing to
+ * v8.0.2 : Added "If you're hiring, start here" CTA strip pointing to
  * /for-recruiters (recruiter-as-404 visitor = the highest-leverage rescue).
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
@@ -86,7 +86,7 @@ const quickCards = [
         />
       </div>
 
-      {/* v6.0 — three quick-link cards */}
+      {/* v6.0 : three quick-link cards */}
       <div class="not-found__quick">
         {
           quickCards.map((c) => (
@@ -101,7 +101,7 @@ const quickCards = [
         }
       </div>
 
-      {/* v6.0 — search box fallback */}
+      {/* v6.0 : search box fallback */}
       <form class="not-found__search" action={path('/search')} method="get" role="search">
         <label for="not-found-q" class="not-found__search-label mono"> Or search · pagefind </label>
         <div class="not-found__search-row">
@@ -174,7 +174,7 @@ const quickCards = [
     display: inline-block;
   }
 
-  /* === v6.0 — quick-link cards === */
+  /* === v6.0 : quick-link cards === */
   .not-found__quick {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -224,7 +224,7 @@ const quickCards = [
     font-size: var(--fs-base);
   }
 
-  /* === v6.0 — search box === */
+  /* === v6.0 : search box === */
   .not-found__search {
     margin-bottom: var(--sp-6);
     text-align: left;
@@ -248,7 +248,7 @@ const quickCards = [
     flex: 1;
     padding: var(--sp-3) var(--sp-4);
     font-family: var(--ff-mono);
-    /* v6.11.18.1 — iOS Safari auto-zooms the viewport on inputs with
+    /* v6.11.18.1 : iOS Safari auto-zooms the viewport on inputs with
        font-size < 16px. Bump from --fs-sm (14px) to 16px to keep the
        layout stable when a mobile user taps the search field on /404. */
     font-size: 16px;

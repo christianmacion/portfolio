@@ -8,6 +8,9 @@ binding = "DB"
 database_name = "portfolio-contact"
 database_id = "7b04bef2-3eea-45b3-a2a5-ffa3b50ab1ec"
 
+# 2026-08-08 — RATELIMIT KV also serves as the visitor-fingerprint store
+# for /api/personality/who-am-i + /api/personality/track-visit (no new
+# binding required; see AAR 2026-08-08-astro-hybrid-cloudflare.md §Decision).
 [[kv_namespaces]]
 binding = "RATELIMIT"
 id = "94b15ec48d9644f99599655618fc7afd"

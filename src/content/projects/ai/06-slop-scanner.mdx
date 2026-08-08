@@ -3,7 +3,7 @@ date: 2026-03-22
 title: Slop Scanner
 role: ai
 order: 6
-summary: '13-metric literature-grounded AI-output quality gate — drove a real draft from HEAVY (81) to CLEAN (3).'
+summary: '13-metric literature-grounded AI-output quality gate : drove a real draft from HEAVY (81) to CLEAN (3).'
 summary_long: 'A deployable Streamlit app that scores a draft on 13 literature-grounded quality metrics (vocabulary entropy, hedge-word density, generic-template phrases, repetition n-grams, etc.) and outputs a single SLOP index from HEAVY to CLEAN. The stdlib scoring core needs no LLM and no API key.'
 stack:
   - Python (stdlib)
@@ -24,7 +24,7 @@ tags: [evaluation, content-quality, nlg, stdlib, streamlit]
 
 ## Why this exists
 
-The "AI wrote this" smell is detectable in measurable ways — repetition, hedge-word density, generic phrases, low vocabulary entropy, template openings. **slop-scanner** operationalizes that instinct into 13 numeric metrics you can compute deterministically, no LLM needed.
+The "AI wrote this" smell is detectable in measurable ways : repetition, hedge-word density, generic phrases, low vocabulary entropy, template openings. **slop-scanner** operationalizes that instinct into 13 numeric metrics you can compute deterministically, no LLM needed.
 
 ## The 13 metrics
 
@@ -40,4 +40,4 @@ A combination of:
 
 ## What's transferable
 
-The scoring core is deliberately tiny and dependency-free — it drops directly into any CI step, including the `reflect-revise` loop and the `eval-mcp-server` exposed MCP tool. A real draft went from HEAVY (index 81) to CLEAN (index 3) over one revision cycle.
+The scoring core is deliberately tiny and dependency-free : it drops directly into any CI step, including the `reflect-revise` loop and the `eval-mcp-server` exposed MCP tool. A real draft went from HEAVY (index 81) to CLEAN (index 3) over one revision cycle.

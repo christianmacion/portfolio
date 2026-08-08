@@ -1,5 +1,5 @@
 /**
- * keyboard-shortcuts.ts — v6.2 (Mission T, part 3)
+ * keyboard-shortcuts.ts : v6.2 (Mission T, part 3)
  *
  * Global keyboard navigation for the home page.
  *
@@ -13,7 +13,7 @@
  *   Escape  close any open keyhint panel
  *
  * Honors prefers-reduced-motion (instant scroll jumps regardless of
- * behavior, because the script does not need the visual easing — only
+ * behavior, because the script does not need the visual easing : only
  * the panel transitions have a reduced-motion branch via CSS).
  *
  * Idempotent: uses a `Symbol`-keyed flag on `document.documentElement`
@@ -28,7 +28,7 @@ declare global {
 }
 const root = document.documentElement as unknown as Record<symbol, boolean | undefined>;
 if (root[INIT_FLAG]) {
-  // Already attached — bail. Astro 7 may double-invoke module imports.
+  // Already attached : bail. Astro 7 may double-invoke module imports.
 } else {
   root[INIT_FLAG] = true;
   attach();

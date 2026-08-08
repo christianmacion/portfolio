@@ -1,25 +1,31 @@
 ---
 /**
- * EarthMap.astro — v7.5 THREE-LAYER INSTITUTIONAL EARTH PRIMITIVE.
+ * EarthMap.astro : v12 LIVE-DATA THREE-LAYER INSTITUTIONAL EARTH PRIMITIVE.
  *
- * Server-rendered SVG (no JS). Three stacked layers on one equirectangular
- * world map:
+ * Server-rendered SVG (no JS) for the static layers. When mode is
+ * 'live-data', a client script fetches /api/worldview/gdelt every 5 min
+ * and overlays the resulting events on Layer C with a hairline that
+ * draws from the data-source origin to each event city (1200ms ease-out,
+ * reduced-motion safe).
  *
- *   Layer A — VENUES     (CoverageGlobe cities, weighted amber dots)
- *   Layer B — WORLD-EVENTS (10 curated events from src/content/world-events)
- *   Layer C — GDELT OVERLAY (50+ events from src/data/gdelt-cache.json,
- *                            polarity-tinted at low alpha)
+ * Three stacked layers on one equirectangular world map:
+ *
+ *   Layer A : VENUES     (CoverageGlobe cities, weighted amber dots)
+ *   Layer B : WORLD-EVENTS (10 curated events from src/content/world-events)
+ *   Layer C : GDELT OVERLAY (live events from /api/worldview/gdelt,
+ *                            polarity-tinted at low alpha + data-source
+ *                            pulling hairline)
  *
  * Visual register: institutional / Bloomberg. Mono + 1 amber accent.
  * No glow. No pills. No gradient. The landmass dot grid is the same
- * continent-aware sparse grid as CoverageGlobe — visually consistent.
+ * continent-aware sparse grid as CoverageGlobe : visually consistent.
  *
  * Same Equirectangular projection: x = (lon + 180) / 360 * width,
  * y = (90 - lat) / 180 * height. viewBox 720×360.
  *
  * Usage:
  *   <EarthMap />
- *   <EarthMap width={1080} height={540} />
+ *   <EarthMap width={1080} height={540} mode="live-data" />
  */
 import { getCollection } from 'astro:content';
 import gdeltCache from '../data/gdelt-cache.json';
@@ -27,7 +33,7 @@ import gdeltCache from '../data/gdelt-cache.json';
 interface Props {
   /** ViewBox width (default 720). */
   width?: number;
-  /** ViewBox height (default 360 — Equirectangular 2:1). */
+  /** ViewBox height (default 360 : Equirectangular 2:1). */
   height?: number;
   /** Spacing in degrees between background landmass dots (default 18). */
   bgStep?: number;
@@ -35,17 +41,18 @@ interface Props {
   class?: string;
   /**
    * Optional venue points override (Layer A). Defaults to the 6-city
-   * research-hub set. v8.5.1 — caller passes custom footprint pins
+   * research-hub set. v8.5.1 : caller passes custom footprint pins
    * (real places + research hubs) instead of the abstract venues.
    */
   points?: Venue[];
   /**
    * Layer mode:
-   *   - 'full'      — venues + world-events + GDELT overlay (markets.astro)
-   *   - 'pins'      — venues only (home footprint; cleaner for identity)
+   *   - 'full'      : venues + world-events + static GDELT overlay (markets.astro)
+   *   - 'pins'      : venues only (home footprint; cleaner for identity)
+   *   - 'live-data' : venues + world-events + LIVE GDELT overlay via Worker
    * Default: 'full'.
    */
-  mode?: 'full' | 'pins';
+  mode?: 'full' | 'pins' | 'live-data';
 }
 const {
   width = 720,
@@ -64,13 +71,20 @@ function project(lat: number, lon: number): { x: number; y: number } {
   };
 }
 
-// === Layer A — venue cities (same default 6 as CoverageGlobe) ===
+// === Layer A : venue cities (same default 6 as CoverageGlobe) ===
 interface Venue {
   city: string;
   lat: number;
   lon: number;
   weight: number;
   caption: string;
+  /** Label placement: 'auto' (default above/below based on home), or
+   *  'left' / 'right' / 'top' / 'bottom' to anchor against dense clusters. */
+  labelAnchor?: 'auto' | 'left' | 'right' | 'top' | 'bottom';
+  /** Manual x-offset in px (overrides anchor). Use for cluster spreading. */
+  labelDx?: number;
+  /** Manual y-offset in px (overrides anchor). */
+  labelDy?: number;
 }
 interface VenuePosition extends Venue {
   x: number;
@@ -92,7 +106,7 @@ const venuePositions: VenuePosition[] = venues.map((c: Venue): VenuePosition => 
   return { ...c, x, y, r };
 });
 
-// === Layer B — world events (Zod-validated collection) ===
+// === Layer B : world events (Zod-validated collection) ===
 interface WorldEventRow {
   id: string;
   title: string;
@@ -123,8 +137,8 @@ const eventPositions = worldEvents.map((e) => {
   return { ...e, x, y };
 });
 
-// === Layer C — GDELT cache (polarity-tinted overlay) ===
-// Read src/data/gdelt-cache.json — type-narrowed here to keep SSR safe.
+// === Layer C : GDELT cache (polarity-tinted overlay) ===
+// Read src/data/gdelt-cache.json : type-narrowed here to keep SSR safe.
 interface GdeltEvent {
   id: string;
   title: string;
@@ -202,7 +216,12 @@ const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circ
 };
 ---
 
-<figure class:list={['earth-map', className]}>
+<figure
+  class:list={['earth-map', `earth-map--${mode}`, className]}
+  data-component="earth-map"
+  data-mode={mode}
+  data-gdelt-url="/api/worldview/gdelt"
+>
   <svg
     class="earth-map__svg"
     viewBox={`0 0 ${width} ${height}`}
@@ -210,7 +229,9 @@ const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circ
     aria-label={
       mode === 'pins'
         ? `World footprint map: ${venues.length} venue pins. Equirectangular projection.`
-        : `Three-layer world map: ${venues.length} research venues, ${worldEvents.length} curated world events, ${dedupGdelt.length} GDELT signals (24h). Equirectangular projection.`
+        : mode === 'live-data'
+          ? `Three-layer world map: ${venues.length} research venues, ${worldEvents.length} curated world events, live GDELT overlay. Equirectangular projection.`
+          : `Three-layer world map: ${venues.length} research venues, ${worldEvents.length} curated world events, ${dedupGdelt.length} GDELT signals (24h). Equirectangular projection.`
     }
     preserveAspectRatio="xMidYMid meet"
   >
@@ -227,30 +248,66 @@ const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circ
       )
     }
 
-    {/* === Layer A — venue cities (amber, weighted) === */}
+    {/* === Layer A : venue cities (amber, weighted) ===
+       v12.W4 Bryllim parity: dense-cluster label collision avoided via
+       per-point `labelAnchor` (left/right/top/bottom) and manual
+       `labelDx`/`labelDy` offsets. Default anchor falls back to the
+       prior rule (home → below, others → above). */}
     {
-      venuePositions.map((c) => (
-        <g class="earth-map__venue">
-          {c.weight >= 1.0 && <circle cx={c.x} cy={c.y} r="2.5" class="earth-map__anchor" />}
-          <circle cx={c.x} cy={c.y} r={c.r} class="earth-map__dot">
-            <title>
-              {c.city} ({c.lat.toFixed(2)}°, {c.lon.toFixed(2)}°) to {c.caption}
-            </title>
-          </circle>
-          <text
-            x={c.x}
-            y={c.weight >= 1.0 ? c.y + c.r + 14 : c.y - c.r - 4}
-            text-anchor="middle"
-            class:list={["earth-map__label", c.weight >= 1.0 && "earth-map__label--home"]}
-          >
-            {c.city}
-          </text>
-        </g>
-      ))
+      venuePositions.map((c) => {
+        // Resolve label position from per-point overrides.
+        let lx = c.x;
+        let ly: number;
+        let anchor: 'middle' | 'start' | 'end' = 'middle';
+        if (typeof c.labelDx === 'number') {
+          lx = c.x + c.labelDx;
+          anchor = c.labelDx > 0 ? 'start' : c.labelDx < 0 ? 'end' : 'middle';
+        }
+        if (typeof c.labelDy === 'number') {
+          ly = c.y + c.labelDy;
+        } else if (c.labelAnchor === 'top') {
+          ly = c.y - c.r - 4;
+        } else if (c.labelAnchor === 'bottom') {
+          ly = c.y + c.r + 14;
+        } else if (c.labelAnchor === 'left') {
+          ly = c.y + 4;
+          if (typeof c.labelDx !== 'number') {
+            lx = c.x - c.r - 6;
+            anchor = 'end';
+          }
+        } else if (c.labelAnchor === 'right') {
+          ly = c.y + 4;
+          if (typeof c.labelDx !== 'number') {
+            lx = c.x + c.r + 6;
+            anchor = 'start';
+          }
+        } else {
+          // Auto: home (weight ≥ 1.0) below, others above.
+          ly = c.weight >= 1.0 ? c.y + c.r + 14 : c.y - c.r - 4;
+        }
+        return (
+          <g class="earth-map__venue">
+            {c.weight >= 1.0 && <circle cx={c.x} cy={c.y} r="2.5" class="earth-map__anchor" />}
+            <circle cx={c.x} cy={c.y} r={c.r} class="earth-map__dot">
+              <title>
+                {c.city} ({c.lat.toFixed(2)}°, {c.lon.toFixed(2)}°) to {c.caption}
+              </title>
+            </circle>
+            <text
+              x={lx}
+              y={ly}
+              text-anchor={anchor}
+              class:list={["earth-map__label", c.weight >= 1.0 && "earth-map__label--home"]}
+            >
+              {c.city}
+            </text>
+          </g>
+        );
+      })
     }
 
     {
-      /* === Layer B — world events (shape-coded by category) ===
+      /* === Layer B : world events (shape-coded by category) ===
         Only rendered in `full` mode (markets.astro). The home-page
         footprint wants pin clarity, not random event dots. */
     }
@@ -307,19 +364,30 @@ const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circ
             );
           })}
 
-          {/* === Layer C — GDELT overlay (polarity-tinted, low alpha) === */}
-          {gdeltPositions.map((e) => (
-            <circle
-              cx={e.x}
-              cy={e.y}
-              r="2"
-              class={`earth-map__gdelt earth-map__gdelt--${e.polarity}`}
-            >
-              <title>
-                {e.title} to {e.city}
-              </title>
-            </circle>
-          ))}
+          {/* === Layer C : GDELT overlay (polarity-tinted, low alpha) ===
+             Suppressed in live-data mode : Layer D below renders live events
+             fetched from /api/worldview/gdelt. === */}
+          {mode !== 'live-data' &&
+            gdeltPositions.map((e) => (
+              <circle
+                cx={e.x}
+                cy={e.y}
+                r="2"
+                class={`earth-map__gdelt earth-map__gdelt--${e.polarity}`}
+              >
+                <title>
+                  {e.title} to {e.city}
+                </title>
+              </circle>
+            ))}
+
+          {/* === Layer D (live-data mode only) : client-rendered live
+             events + the data-source pulling hairline. The hydration
+             script fills this group with `<g data-live-event>` per event.
+             === */}
+          {mode === 'live-data' && (
+            <g class="earth-map__live" data-live-overlay aria-hidden="true" />
+          )}
         </>
       )
     }
@@ -350,11 +418,207 @@ const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circ
         </>
       )
     }
+    {
+      mode === 'live-data' && (
+        <>
+          <span class="earth-map__cap-sep">·</span>
+          <span class="earth-map__cap-section">
+            <span class="earth-map__cap-swatch earth-map__cap-swatch--event" aria-hidden="true" />
+            {worldEvents.length} curated
+          </span>
+          <span class="earth-map__cap-sep">·</span>
+          <span class="earth-map__cap-section">
+            <span
+              class="earth-map__cap-swatch earth-map__cap-swatch--gdelt-pos"
+              aria-hidden="true"
+            />
+            <span data-live-count>live events loading</span>
+          </span>
+        </>
+      )
+    }
     <span class="earth-map__cap-note">
-      {mode === 'pins' ? 'equirectangular · footprint' : 'equirectangular · 24h desk coverage'}
+      {mode === 'pins' ? (
+        'equirectangular · footprint'
+      ) : mode === 'live-data' ? (
+        <>
+          data-source: <span class="earth-map__src">GDELT 2.0</span>
+          <span class="earth-map__cap-sep" aria-hidden="true">·</span>
+          last sync{' '}
+          <time class="earth-map__sync mono" data-live-sync datetime="">
+            pending
+          </time>
+          <span class="earth-map__cap-sep" aria-hidden="true">·</span>
+          <span data-live-window>last 15min</span>
+        </>
+      ) : (
+        'equirectangular · 24h desk coverage'
+      )}
     </span>
   </figcaption>
 </figure>
+
+<script>
+  // Live EarthMap refresh : fetch /api/worldview/gdelt every 5 min,
+  // project events to viewBox coords, render circles + a hairline that
+  // draws from the data-source origin to each city over 1200ms.
+  // Reduced-motion safe : the hairline keyframe is no-op under
+  // prefers-reduced-motion; the static line + dot still convey the
+  // same information.
+
+  type LiveEvent = {
+    id: string;
+    title: string;
+    city: string;
+    lat: number;
+    lon: number;
+    category: string;
+    severity: string;
+    source: string;
+    timestamp: string;
+  };
+
+  type LiveResponse = {
+    ok: true;
+    events: LiveEvent[];
+    lastSync: string;
+  };
+
+  const REFRESH_MS = 5 * 60 * 1000;
+
+  function isLiveEvent(raw: unknown): raw is LiveEvent {
+    if (!raw || typeof raw !== 'object') return false;
+    const o = raw as Record<string, unknown>;
+    return (
+      typeof o.id === 'string' &&
+      typeof o.title === 'string' &&
+      typeof o.lat === 'number' &&
+      typeof o.lon === 'number'
+    );
+  }
+
+  function projectToViewBox(svg: SVGSVGElement, lat: number, lon: number): { x: number; y: number } {
+    // Match the Astro frontmatter projection exactly so server-rendered
+    // venues and client-rendered live events share the same map.
+    const vb = svg.viewBox.baseVal;
+    const width = vb.width || 720;
+    const height = vb.height || 360;
+    return {
+      x: ((lon + 180) / 360) * width,
+      y: ((90 - lat) / 180) * height,
+    };
+  }
+
+  function lastSyncHHMMSS(iso: string): string {
+    const m = iso.match(/T(\d{2}:\d{2}:\d{2})/);
+    return m ? `${m[1]}Z` : iso;
+  }
+
+  function polarityFromSeverity(severity: string): 'pos' | 'neg' | 'neutral' {
+    if (severity === 'critical') return 'neg';
+    if (severity === 'mild') return 'pos';
+    return 'neutral';
+  }
+
+  function renderOverlay(
+    overlay: SVGGElement,
+    svg: SVGSVGElement,
+    events: LiveEvent[],
+  ): void {
+    // The "data-source origin" sits at (-150°, 0°) latlon = the western
+    // edge of the Equirectangular projection, just above the equator.
+    // The hairline draws from that anchor to each event's city.
+    const origin = projectToViewBox(svg, 0, -150);
+    overlay.innerHTML = '';
+    for (const ev of events) {
+      if (!Number.isFinite(ev.lat) || !Number.isFinite(ev.lon)) continue;
+      const xy = projectToViewBox(svg, ev.lat, ev.lon);
+      const polarity = polarityFromSeverity(ev.severity);
+      const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      g.setAttribute('class', `earth-map__live-event earth-map__gdelt--${polarity}`);
+      g.setAttribute('data-live-event', ev.id);
+
+      // The hairline : draws over 1200ms (CSS keyframe owns the
+      // animation; the static endpoint is rendered, animation
+      // interpolates stroke-dashoffset from full length to 0).
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', String(origin.x));
+      line.setAttribute('y1', String(origin.y));
+      line.setAttribute('x2', String(xy.x));
+      line.setAttribute('y2', String(xy.y));
+      line.setAttribute('class', 'earth-map__live-line');
+      const dx = xy.x - origin.x;
+      const dy = xy.y - origin.y;
+      const len = Math.sqrt(dx * dx + dy * dy);
+      line.style.setProperty('--hair-len', String(len));
+      g.appendChild(line);
+
+      // The city pin.
+      const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      dot.setAttribute('cx', String(xy.x));
+      dot.setAttribute('cy', String(xy.y));
+      dot.setAttribute('r', '2');
+      dot.setAttribute('class', `earth-map__live-dot earth-map__gdelt--${polarity}`);
+      const title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+      title.textContent = `${ev.title} to ${ev.city}`;
+      dot.appendChild(title);
+      g.appendChild(dot);
+
+      overlay.appendChild(g);
+    }
+  }
+
+  async function refreshMap(map: HTMLElement): Promise<void> {
+    const url = map.dataset.gdeltUrl;
+    if (!url) return;
+    const svg = map.querySelector<SVGSVGElement>('.earth-map__svg');
+    const overlay = map.querySelector<SVGGElement>('[data-live-overlay]');
+    const syncEl = map.querySelector<HTMLElement>('[data-live-sync]');
+    const countEl = map.querySelector<HTMLElement>('[data-live-count]');
+    if (!svg || !overlay) return;
+    try {
+      const res = await fetch(url, { headers: { Accept: 'application/json' } });
+      if (!res.ok) {
+        if (countEl) countEl.textContent = 'live error';
+        return;
+      }
+      const raw: unknown = await res.json();
+      const data = raw as LiveResponse;
+      if (!data || data.ok !== true || !Array.isArray(data.events)) {
+        if (countEl) countEl.textContent = 'live error';
+        return;
+      }
+      const events = data.events.filter(isLiveEvent);
+      renderOverlay(overlay, svg, events);
+      if (syncEl) {
+        const stamp = lastSyncHHMMSS(data.lastSync);
+        syncEl.textContent = stamp;
+        syncEl.setAttribute('datetime', data.lastSync);
+      }
+      if (countEl) {
+        countEl.textContent = `${events.length} events in last 15min`;
+      }
+    } catch {
+      if (countEl) countEl.textContent = 'live error';
+    }
+  }
+
+  function init(): void {
+    const maps = document.querySelectorAll<HTMLElement>(
+      '[data-component="earth-map"][data-mode="live-data"]',
+    );
+    maps.forEach((map) => {
+      void refreshMap(map);
+      window.setInterval(() => void refreshMap(map), REFRESH_MS);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+</script>
 
 <style>
   .earth-map {
@@ -382,8 +646,8 @@ const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circ
     opacity: 0.18;
   }
 
-  /* === Layer A — venues (amber, weighted) ===
-     v9.4.2 — replaced the blanket halo pulse ring (chrome-contract rule 3
+  /* === Layer A : venues (amber, weighted) ===
+     v9.4.2 : replaced the blanket halo pulse ring (chrome-contract rule 3
      violation; overlapped Manila + Digos labels) with an inner anchor
      dot that only renders on weight >= 1.0 pins (home base). Reads as a
      target reticle, not a halo. */
@@ -410,7 +674,7 @@ const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circ
     fill: var(--c-ink);
   }
 
-  /* === Layer B — world events (shape-coded by category) === */
+  /* === Layer B : world events (shape-coded by category) === */
   .earth-map__event-shape {
     fill: var(--c-amber);
     stroke: var(--c-bg);
@@ -430,7 +694,7 @@ const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circ
     opacity: 0.6;
   }
 
-  /* === Layer C — GDELT (polarity-tinted, low alpha) === */
+  /* === Layer C : GDELT (polarity-tinted, low alpha) === */
   .earth-map__gdelt {
     stroke: none;
     opacity: 0.45;
@@ -443,6 +707,67 @@ const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circ
   }
   .earth-map__gdelt--neutral {
     fill: var(--c-ink-3);
+  }
+
+  /* === Layer D : live-data overlay ===
+     Hairline draws from data-source origin to each event city.
+     Reduced-motion : keyframe is suppressed, static line + dot remain. */
+  .earth-map__live-line {
+    stroke: var(--c-amber);
+    stroke-width: 0.6;
+    fill: none;
+    opacity: 0.6;
+    stroke-dasharray: var(--hair-len, 400);
+    stroke-dashoffset: var(--hair-len, 400);
+    animation: earth-map-hair-draw 1200ms cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+    animation-delay: 80ms;
+  }
+  .earth-map__live-dot {
+    stroke: none;
+    opacity: 0;
+    animation: earth-map-dot-fade 600ms cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+    animation-delay: 1100ms;
+  }
+  .earth-map__live-dot.earth-map__gdelt--pos {
+    fill: var(--c-amber);
+    opacity: 0.85;
+  }
+  .earth-map__live-dot.earth-map__gdelt--neg {
+    fill: var(--c-ink-2);
+    opacity: 0.7;
+  }
+  .earth-map__live-dot.earth-map__gdelt--neutral {
+    fill: var(--c-ink-3);
+    opacity: 0.55;
+  }
+  @keyframes earth-map-hair-draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  @keyframes earth-map-dot-fade {
+    to {
+      opacity: 0.85;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .earth-map__live-line {
+      stroke-dashoffset: 0;
+      animation: none;
+      opacity: 0.45;
+    }
+    .earth-map__live-dot {
+      animation: none;
+      opacity: 0.85;
+    }
+  }
+  .earth-map__src {
+    color: var(--c-phi);
+    font-weight: 600;
+  }
+  .earth-map__sync {
+    color: var(--c-phi);
+    font-weight: 600;
   }
 
   /* === Caption / legend === */

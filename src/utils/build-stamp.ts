@@ -1,5 +1,5 @@
 /**
- * build-stamp.ts — deterministic build-time date helpers.
+ * build-stamp.ts : deterministic build-time date helpers.
  *
  * Standing Order §9 forbids `Date.now()` / `new Date()` in deterministic
  * outputs. This module reads `process.env.BUILD_DATE` (set by `npm run
@@ -69,11 +69,11 @@ export function buildStampUtc8Iso(): string {
   return shifted.toISOString();
 }
 
-// v6.10.28 — `buildStampUtc8Iso` removed (knip reported unused).
-// v6.10.45 — restored; the three feed routes (`feed.xml.ts`, `feed-projects.xml.ts`,
+// v6.10.28 : `buildStampUtc8Iso` removed (knip reported unused).
+// v6.10.45 : restored; the three feed routes (`feed.xml.ts`, `feed-projects.xml.ts`,
 // `feed-solutions.xml.ts`) need a deterministic full ISO8601 string for `<updated>`.
-// They previously called `new Date().toISOString()` directly — a §9 violation.
-// v6.10.52 — `packageVersion()` was added to read package.json at build time
+// They previously called `new Date().toISOString()` directly : a §9 violation.
+// v6.10.52 : `packageVersion()` was added to read package.json at build time
 // and replace the stale `packageVersion = '6.5.0'` literal in index.astro.
-// v9.3.6 — removed: no longer referenced by any consumer. The institution
+// v9.3.6 : removed: no longer referenced by any consumer. The institution
 // footer hard-codes the version string from CI/CD metadata.

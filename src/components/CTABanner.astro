@@ -1,6 +1,6 @@
 ---
 /**
- * CTABanner.astro — terminal call-to-action strip.
+ * CTABanner.astro : terminal call-to-action strip.
  *
  * Two variants:
  *   - 'standard' (default): the original gradient panel with title,
@@ -20,8 +20,8 @@
  *   - Uses `path('/contact')` as the canonical CTA target.
  *   - Honors amber-on-amber hover lift via existing brand tokens.
  *
- * v6.6.0 (Mission UI-X) — `variant="graphic"` for the home page:
- *   Replaces wordy CTA copy with two graphic elements — 80px rail +
+ * v6.6.0 (Mission UI-X) : `variant="graphic"` for the home page:
+ *   Replaces wordy CTA copy with two graphic elements : 80px rail +
  *   14×4 availability matrix. The 14-row×4-col grid matches "next 14
  *   days × 4 time-slot columns". 48/56 amber-light cells convey
  *   "lots of availability"; the 4 green / 2 amber-solid / 2 ink-3
@@ -98,7 +98,7 @@ const grid: { day: string; weekday: string; status: CellStatus[] }[] = (() => {
   // Anchor: parse buildSeed which is an ISO date string ("YYYY-MM-DDTHH:MM:SSZ").
   const seedIso = (() => {
     const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(buildSeed());
-    // Standing Order §9 — never use Date.now() in deterministic outputs.
+    // Standing Order §9 : never use Date.now() in deterministic outputs.
     // buildSeed() is contractually guaranteed to return an ISO-8601
     // string (or the 2026-07-10T00:00:00Z fallback), so the regex
     // above should always match. If it somehow doesn't, fall back to
@@ -137,7 +137,7 @@ const grid: { day: string; weekday: string; status: CellStatus[] }[] = (() => {
 })();
 
 const COL_LABELS = ['09:00', '12:00', '15:00', '18:00'];
-// Legend counts (sum check — must equal 56 and split 48/4/2/2).
+// Legend counts (sum check : must equal 56 and split 48/4/2/2).
 const LEGEND_COUNTS = {
   'amber-light': STATUS_BAG.filter((s) => s === 'amber-light').length,
   open: STATUS_BAG.filter((s) => s === 'open').length,
@@ -168,7 +168,7 @@ const LEGEND_COUNTS = {
     <section class="cta cta--graphic" aria-label="Schedule a conversation">
       {/* 80px CTA rail
         Left: "Ready when you are" 24px serif italic in --c-ink.
-        Right: 44px-tall amber button — all-caps, tracked 0.08em, ink
+        Right: 44px-tall amber button : all-caps, tracked 0.08em, ink
         text. Single-line layout, fully responsive below. */}
       <div class="cta__rail container">
         <p class="cta__rail-headline">Ready when you are.</p>
@@ -330,7 +330,7 @@ const LEGEND_COUNTS = {
     padding-block: var(--sp-3);
   }
 
-  /* v2026-08-02 — bumped to display scale (5vw / 5.5rem max) so the
+  /* v2026-08-02 : bumped to display scale (5vw / 5.5rem max) so the
      graphic-variant rail headline reads as institutional anchor,
      not a tiny tagline next to a 44px amber button. italic serif
      unchanged; line-height tightened to 1.1 to match display
@@ -347,7 +347,7 @@ const LEGEND_COUNTS = {
     text-wrap: balance;
   }
 
-  /* 44px-tall amber button — all-caps, tracked 0.08em, ink text.
+  /* 44px-tall amber button : all-caps, tracked 0.08em, ink text.
      Bracketed form keeps the institutional voice. */
   .cta__rail-btn {
     flex-shrink: 0;
@@ -489,7 +489,7 @@ const LEGEND_COUNTS = {
     text-transform: uppercase;
   }
 
-  /* Slot cell — 1px square border. Filled with a swatch span that
+  /* Slot cell : 1px square border. Filled with a swatch span that
      sits centered inside the 1px box. */
   .cta__cell--slot {
     background: transparent;

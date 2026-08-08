@@ -1,5 +1,5 @@
 /**
- * scroll-progress-driver.ts — v9.3.1 fix
+ * scroll-progress-driver.ts : v9.3.1 fix
  *
  * The static bar element in BaseLayout.astro
  * (`<div class="scroll-progress"><i></i></div>`) reads its inner-bar width

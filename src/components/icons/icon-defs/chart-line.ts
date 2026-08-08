@@ -1,5 +1,5 @@
 /**
- * chart-line — axes + ascending polyline (3 segments, no smooth curve).
+ * chart-line : axes + ascending polyline (3 segments, no smooth curve).
  * Work/case-study category: trend visualisation opener.
  * Pairs with the Sparkline / EquityCurveChart components.
  */

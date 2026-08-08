@@ -1,8 +1,8 @@
 ---
 /**
- * KatexStyles.astro — opt-in KaTeX CSS bundle.
+ * KatexStyles.astro : opt-in KaTeX CSS bundle.
  *
- * v9.2.2 (Gate 12) — Phase 5a fix. The KaTeX minified CSS (≈24 KB
+ * v9.2.2 (Gate 12) : Phase 5a fix. The KaTeX minified CSS (≈24 KB
  * + 25 @font-face rules for math glyphs) was previously imported
  * eagerly in BaseLayout.astro, so every page in the site paid the
  * full cost on first paint. Only `Equation.astro` and `Stat.astro`
@@ -18,7 +18,7 @@
  * unstyled math glyphs. Bundling the CSS with the consumer is
  * the only correctness-preserving split.
  *
- * Body is empty — pure side-effect import. Astro/Vite tree-shake
+ * Body is empty : pure side-effect import. Astro/Vite tree-shake
  * this for pages that don't transitively import Equation/Stat.
  */
 import 'katex/dist/katex.min.css';
