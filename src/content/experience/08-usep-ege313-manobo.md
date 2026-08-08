@@ -27,7 +27,7 @@ proofs:
 
 Delivered to **USeP EGE 313 (Understanding the ICC and Indigenous Group in Mindanao)** for ECE 3A on the 2:30pm MW schedule, AY 2024-2025. 19-slide deck on the Manobo people of Mindanao, indigenous cultural communities (ICCs) and indigenous peoples (IPs), and the cultural-rights framework under the UNDRIP and the Philippine IPRA (RA 8371).
 
-<video src="/proof/usep-lecture.mp4" poster="/proof/usep-lecture.jpg" title="USeP EGE 313 Manobo lecture : live presenter view (Sep 13 2024)" controls preload="metadata" playsinline style="width:100%; aspect-ratio:16/10; margin-block:var(--sp-4);"></video>
+<video src="/portfolio/proof/usep-lecture.mp4" poster="/portfolio/proof/usep-lecture.jpg" title="USeP EGE 313 Manobo lecture : live presenter view (Sep 13 2024)" controls preload="metadata" playsinline style="width:100%; aspect-ratio:16/10; margin-block:var(--sp-4);"></video>
 
 The recording shows the PowerPoint Edit-mode title (`MACION. MANOBO. PIC. ECE3A. 230pm. MW`) and the live webcam feed in the lower-right corner : provenance for both the deck and the speaker.
 
@@ -35,6 +35,6 @@ The recording shows the PowerPoint Edit-mode title (`MACION. MANOBO. PIC. ECE3A.
 
 Three weeks before the lecture, the slide deck was drafted end-to-end via a ChatGPT-assisted authoring pipeline. The recording below shows the AI-engineering workflow that produced the deck : the same precursor pattern that today runs through a 31-gate evaluation harness before any artifact ships.
 
-<video src="/proof/ai-workflow.mp4" poster="/proof/ai-workflow.jpg" title="AI workflow : ChatGPT-assisted slide-deck authoring for the same lecture" controls preload="metadata" playsinline style="width:100%; aspect-ratio:16/10; margin-block:var(--sp-4);"></video>
+<video src="/portfolio/proof/ai-workflow.mp4" poster="/portfolio/proof/ai-workflow.jpg" title="AI workflow : ChatGPT-assisted slide-deck authoring for the same lecture" controls preload="metadata" playsinline style="width:100%; aspect-ratio:16/10; margin-block:var(--sp-4);"></video>
 
 This is the lineage of the eval-first method: a 2024 single-agent drafting flow → the current 11-agent orchestrator + 31-gate harness. Public, NDA-clean, on-disk provenance preserved.

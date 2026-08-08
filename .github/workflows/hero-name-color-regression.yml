@@ -1,42 +1,35 @@
 # .github/workflows/hero-name-color-regression.yml — computed-color guard
-# for the hero name on /. Hard-blocks ship if the three .hero__name-{1,2,3}
-# spans ever ship with different computed colors or italic drift.
+# for the hero name on /. Hard-blocks ship if the hero-flagship__name H1
+# renders with two-tone color or italic drift.
 #
 # Why this exists
 # ---------------
-# The hero on src/pages/index.astro:115-118 is a single <h1 class="hero__name">
-# with three spans: "Christian" / "T." / "Macion". The contract is that all
-# three render in the SAME computed color and SAME font-style. The original
-# bug wrapped "T." and "Macion" in <em> tags which forced italic and pulled
-# --c-ink-2 from a cascade — a visible two-tone name.
+# The hero on src/pages/index.astro:151 is a single
+# `<h1 class="hero-flagship__name" data-words>Quantitative Researcher</h1>`.
+# motion.ts (data-words handler at src/scripts/motion.ts:22) auto-wraps the
+# inner text into `<span class="word">` spans for the per-word cascade.
+# The contract: the H1 + all child word spans must render in the SAME
+# computed color and SAME font-style (no italic-drift, no two-tone).
 #
-# This regression has shipped 4+ times in git history:
-#   - 7c190f3
-#   - 673dc72
-#   - 9a41ec8
-#   - 474f57a  (the most recent re-fix)
+# Pre-v12.W4, the hero was a three-span `<h1 class="hero__name">` with
+# `<em>` wrappers that forced italic + pulled --c-ink-2 from a cascade —
+# a visible two-tone name. That bug shipped 4+ times in git history
+# (7c190f3, 673dc72, 9a41ec8, 474f57a). The v12.W4/W5 rewrite ships a
+# single text node wrapped by JS into .word spans; this workflow guards
+# the same invariant against future regressions.
 #
-# No CI guard previously read computed `color` / `font-style` on the three
-# spans, so the bug slipped past the existing Lighthouse + visual-regression
-# suite. This workflow closes that gap.
+# Single deploy surface (per [[portfolio-no-cf-mirror]] BINDING): the live
+# URL is GitHub Pages. The pre-2026-08-08 Cloudflare Pages mirror trigger
+# has been removed.
 #
 # Test script: scripts/__tests__/hero-name-color-regression.mjs
-# Default URL: https://christianmacion-portfolio.pages.dev/ (production)
-# Override:    workflow_dispatch input `prod_url` (for pre-prod / staging)
-#
-# Strategy:
-#   1. Trigger on `workflow_run` after the Cloudflare Pages deploy completes
-#      (mirrors the deploy-gate.yml pattern).
-#   2. Also trigger on `push: main` as a fast-feedback fallback.
-#   3. Wait 90s after the upstream workflow to let Cloudflare edge cache warm.
-#   4. Install Playwright + chromium browser (reuses the same install step
-#      as lighthouse.yml + deploy-gate.yml — no new infra).
-#   5. Run scripts/__tests__/hero-name-color-regression.mjs against PROD_URL.
+# Default URL: https://christianmacion26.github.io/portfolio/
+# Override:    workflow_dispatch input `prod_url`.
 #
 # Hard rules (per CLAUDE.md §1 + feedback-portfolio-visual-bar-2026-07-31):
 #   - 5-must-have: terminal exit 0/1; idempotent re-run = same result;
-#     dedupe key = `portfolio-hero-name-color-v1`; coverage = all 3 spans
-#     read; AAR = .audit/incident/<date>-hero-name-color/failures.json.
+#     dedupe key = `portfolio-hero-name-color-v2`; coverage = the hero H1
+#     + every descendant node read; AAR = failures.json on FAIL.
 #   - This is the post-deploy sibling of the local `npm run test:hero-name`
 #     command. Both layers must be green to ship.
 
@@ -45,9 +38,7 @@ name: Hero name color regression
 on:
   workflow_run:
     workflows:
-      - 'cloudflare/pages-deploy'
-      - 'Pages'
-      - 'Deploy to Cloudflare Pages'
+      - 'Build & Deploy to GitHub Pages'
     types: [completed]
     branches: [main]
   push:
@@ -57,7 +48,7 @@ on:
   workflow_dispatch:
     inputs:
       prod_url:
-        description: 'Override prod URL (default: https://christianmacion-portfolio.pages.dev)'
+        description: 'Override prod URL (default: https://christianmacion26.github.io/portfolio/)'
         required: false
         default: ''
 
@@ -88,13 +79,13 @@ jobs:
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
 
-      - name: Wait for Cloudflare Pages edge cache warm
+      - name: Wait for GitHub Pages edge cache warm
         if: github.event_name == 'workflow_run'
-        run: sleep 90
+        run: sleep 60
 
       - name: Run hero name color regression test
         env:
-          PROD_URL: ${{ github.event.inputs.prod_url || 'https://christianmacion-portfolio.pages.dev/' }}
+          PROD_URL: ${{ github.event.inputs.prod_url || 'https://christianmacion26.github.io/portfolio/' }}
         run: node scripts/__tests__/hero-name-color-regression.mjs
 
       - name: Upload failure evidence

@@ -10,19 +10,22 @@
 # broken one. No post-deploy check traced the rendered HTML's asset paths
 # back to actual HTTP responses.
 #
-# This workflow closes that gap. After Cloudflare Pages deploys a push to
-# main, this workflow loads the prod URL via Playwright Chromium, extracts
-# every <link href>, <script src>, <img src>, and <source src>, fetches
-# each one, and fails the workflow on any non-200.
+# This workflow closes that gap. After the GitHub Pages deploy completes,
+# this workflow loads the prod URL via Playwright Chromium, extracts every
+# <link href>, <script src>, <img src>, and <source src>, fetches each
+# one, and fails the workflow on any non-200.
 #
 # Strategy:
-#   1. Trigger on `workflow_run` after the Cloudflare Pages deploy completes
-#      (CF Pages' default GH Actions integration is named `cloudflare/pages-deploy`).
-#   2. Also trigger on `push: main` as a fast-feedback fallback in case the
-#      CF Pages integration is misconfigured.
-#   3. Wait 90s after the upstream workflow to let Cloudflare edge cache warm.
+#   1. Trigger on `workflow_run` after the GH Pages deploy completes
+#      (deploy.yml → "Build & Deploy to GitHub Pages").
+#   2. Also trigger on `push: main` as a fast-feedback fallback.
+#   3. Wait 60s after the upstream workflow to let GH Pages edge cache warm.
 #   4. Install Playwright + chromium browser.
 #   5. Run scripts/smoke-test-prod.mjs against PROD_URL.
+#
+# Single deploy surface (per [[portfolio-no-cf-mirror]] BINDING): the live
+# URL is GitHub Pages. The pre-2026-08-08 Cloudflare Pages mirror trigger
+# has been removed.
 #
 # Hard rules (per CLAUDE.md §1 + feedback-portfolio-visual-bar-2026-07-31):
 #   - 5-must-have: terminal exit 0/1; idempotent re-run = same result;
@@ -32,31 +35,23 @@
 #     is the fast-feedback sibling; this GH Actions workflow is the
 #     prod-deployment gate. Per Deming SoPK: the system invariant is "every
 #     prod deploy's asset paths return 200" — enforced at 2 layers.
-#   - The Cloudflare Pages deploy step itself is NOT in this workflow — it
-#     lives in the CF Pages integration. We observe + verify; we do not
-#     redeploy.
 
 name: Deploy Gate (asset 200 sweep)
 
 on:
   workflow_run:
     workflows:
-      # Cloudflare Pages' default GH Actions integration publishes a workflow
-      # named "cloudflare/pages-deploy" or "Pages" or "Deploy to Cloudflare Pages".
-      # Trigger on all known names.
-      - 'cloudflare/pages-deploy'
-      - 'Pages'
-      - 'Deploy to Cloudflare Pages'
+      - 'Build & Deploy to GitHub Pages'
     types: [completed]
     branches: [main]
   push:
     branches: [main]
   workflow_dispatch:
     inputs:
-      prod_url:
-        description: 'Override prod URL (default: https://christianmacion-portfolio.pages.dev)'
-        required: false
-        default: ''
+    prod_url:
+      description: 'Override prod URL (default: https://christianmacion26.github.io/portfolio/)'
+      required: false
+      default: ''
 
 permissions:
   contents: read
@@ -85,13 +80,13 @@ jobs:
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
 
-      - name: Wait for Cloudflare Pages edge cache warm
+      - name: Wait for GitHub Pages edge cache warm
         if: github.event_name == 'workflow_run'
-        run: sleep 90
+        run: sleep 60
 
       - name: Run prod smoke-test (asset 200 sweep)
         env:
-          PROD_URL: ${{ github.event.inputs.prod_url || 'https://christianmacion-portfolio.pages.dev' }}
+          PROD_URL: ${{ github.event.inputs.prod_url || 'https://christianmacion26.github.io/portfolio' }}
         run: node scripts/smoke-test-prod.mjs
 
       - name: Upload failure evidence

@@ -32,9 +32,21 @@
 //   PROD_URL=https://christianmacion-portfolio.pages.dev node scripts/smoke-test-prod.mjs
 //   PROD_URL=http://localhost:4321 node scripts/smoke-test-prod.mjs
 
-import { chromium } from 'playwright';
-import { promises as fs } from 'node:fs';
+import { chromium } from 'playwright-core';
+import { existsSync, promises as fs } from 'node:fs';
 import { join, resolve } from 'node:path';
+
+function findChrome() {
+  const candidates = [
+    process.env.CHROME_PATH,
+    '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+    '/Applications/Chromium.app/Contents/MacOS/Chromium',
+    '/usr/bin/google-chrome',
+    '/usr/bin/google-chrome-stable',
+    '/usr/bin/chromium',
+  ].filter(Boolean);
+  return candidates.find(existsSync);
+}
 
 const PROD = process.env.PROD_URL;
 if (!PROD) {
@@ -109,7 +121,13 @@ async function fetchStatus(url) {
 const ROOT = resolve(import.meta.dirname, '..');
 
 async function main() {
-  const browser = await chromium.launch();
+  const executablePath = findChrome();
+  if (!executablePath) {
+    console.error('smoke-test-prod: no Chrome/Chromium binary found.');
+    console.error('Set CHROME_PATH or install Chrome from https://google.com/chrome');
+    process.exit(2);
+  }
+  const browser = await chromium.launch({ executablePath, headless: true });
   const ctx = await browser.newContext({ ignoreHTTPSErrors: true });
   let checked = 0;
   let failed = 0;

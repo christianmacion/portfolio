@@ -3,53 +3,61 @@
  *
  * Why this exists
  * ---------------
- * The hero on `src/pages/index.astro:115-118` is a single `<h1 class="hero__name">`
- * with three spans:
- *   .hero__name-1 → "Christian"
- *   .hero__name-2 → "T."
- *   .hero__name-3 → "Macion"
+ * The hero on `src/pages/index.astro:151` is a single
+ * `<h1 class="hero-flagship__name" data-words>Quantitative Researcher</h1>`.
+ * `motion.ts` (data-words handler, src/scripts/motion.ts:22) auto-wraps the
+ * inner text into `<span class="word">` spans for the per-word cascade.
  *
- * These three spans must render in the SAME computed color and SAME font-style.
- * The fix that prevents the bug is: parent `.hero__name` sets
- * `color: var(--c-ink)`; the children use `color: inherit` and `font-style: normal`
- * (the original bug wrapped the spans in `<em>` tags which forced italic and
- * pulled `--c-ink-2` from a cascade — a visible two-tone name).
+ * The contract: the H1 + every descendant must render in the SAME computed
+ * color and SAME font-style (no italic-drift, no two-tone, no font-weight
+ * drift). Catches accidental `<em>` re-introductions, cascade leak (e.g.
+ * `.word` pulling `--c-ink-2` instead of `var(--c-ink)`), or hover-only
+ * colour overrides that get caught by computed-style reads.
  *
- * This regression has shipped 4+ times in git history:
- *   - 7c190f3
- *   - 673dc72
- *   - 9a41ec8
- *   - 474f57a  (the most recent re-fix)
- *
- * No CI guard previously read computed `color` / `font-style` on the three
- * spans, so the bug slipped past the existing Lighthouse + visual-regression
- * suite. This script closes that gap.
+ * Pre-v12.W4 the hero was a three-span `<h1 class="hero__name">` with
+ * `<em>` wrappers — that bug shipped 4+ times in git history
+ * (7c190f3, 673dc72, 9a41ec8, 474f57a). The v12.W4/W5 rewrite ships a
+ * single text node wrapped by JS into .word spans; this guard preserves
+ * the same invariant against future regressions.
  *
  * 5-must-have (CLAUDE.md §1):
  *   - Terminal:   exits 0 on PASS, 1 on FAIL, 2 on error. No "running forever".
  *   - Idempotent: re-running against the same prod URL state yields identical
  *                 pass/fail (no Math.random, no Date.now in assertions).
- *   - Dedupe key: `portfolio-hero-name-color-v1`.
- *   - Coverage:   all 3 hero name spans read; all 3 color values asserted
- *                 identical; all 3 font-style values asserted `normal`.
+ *   - Dedupe key: `portfolio-hero-name-color-v2`.
+ *   - Coverage:   the H1 + every descendant node read; all color values
+ *                 asserted identical; all font-style values asserted `normal`;
+ *                 no `<em>` descendants allowed.
  *   - AAR:        writes `.audit/incident/<date>-hero-name-color/failures.json`
  *                 on fail (mirrors the smoke-test-prod.mjs pattern).
  *
  * Usage:
- *   PROD_URL=https://christianmacion-portfolio.pages.dev node scripts/__tests__/hero-name-color-regression.mjs
- *   PROD_URL=http://localhost:4321                  node scripts/__tests__/hero-name-color-regression.mjs
+ *   PROD_URL=https://christianmacion26.github.io/portfolio/ node scripts/__tests__/hero-name-color-regression.mjs
+ *   PROD_URL=http://localhost:4321                            node scripts/__tests__/hero-name-color-regression.mjs
  *   node scripts/__tests__/hero-name-color-regression.mjs    # uses default prod URL
  */
 
-import { chromium } from 'playwright';
+import { chromium } from 'playwright-core';
+import { existsSync } from 'node:fs';
 import { promises as fs } from 'node:fs';
 import { join, resolve } from 'node:path';
 
-const PROD = process.env.PROD_URL || 'https://christianmacion-portfolio.pages.dev/';
-const DEDUPE_KEY = 'portfolio-hero-name-color-v1';
+const PROD = process.env.PROD_URL || 'https://christianmacion26.github.io/portfolio/';
+const DEDUPE_KEY = 'portfolio-hero-name-color-v2';
 const ROOT = resolve(import.meta.dirname, '..', '..');
+const HERO_SELECTOR = 'h1.hero-flagship__name';
 
-const SPAN_KEYS = ['hero__name-1', 'hero__name-2', 'hero__name-3'];
+function findChrome() {
+  const candidates = [
+    process.env.CHROME_PATH,
+    '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+    '/Applications/Chromium.app/Contents/MacOS/Chromium',
+    '/usr/bin/google-chrome',
+    '/usr/bin/google-chrome-stable',
+    '/usr/bin/chromium',
+  ].filter(Boolean);
+  return candidates.find(existsSync);
+}
 
 function fmt(value) {
   if (value === null || value === undefined) return '∅';
@@ -57,7 +65,13 @@ function fmt(value) {
 }
 
 async function main() {
-  const browser = await chromium.launch();
+  const executablePath = findChrome();
+  if (!executablePath) {
+    console.error('hero-name-color: no Chrome/Chromium binary found.');
+    console.error('Set CHROME_PATH or install Chrome from https://google.com/chrome');
+    process.exit(2);
+  }
+  const browser = await chromium.launch({ executablePath, headless: true });
   const ctx = await browser.newContext({
     viewport: { width: 1280, height: 900 },
     reducedMotion: 'no-preference',
@@ -72,38 +86,54 @@ async function main() {
   await page.goto(PROD, { waitUntil: 'domcontentloaded', timeout: 30000 });
   await page.waitForLoadState('networkidle', { timeout: 15000 });
 
-  // Read computed style for all three spans in one DOM round-trip.
-  const samples = await page.evaluate((keys) => {
-    const out = { parent: null, spans: [] };
-    const h1 = document.querySelector('h1.hero__name');
+  // Wait for motion.ts to wrap the H1 text into .word spans (data-words
+  // cascade handler runs on DOMContentLoaded; give it 2s to settle).
+  await page
+    .waitForFunction(
+      (sel) => {
+        const h1 = document.querySelector(sel);
+        return h1 && h1.querySelectorAll('.word').length > 0;
+      },
+      HERO_SELECTOR,
+      { timeout: 5000 }
+    )
+    .catch(() => {
+      // fall through; samples will reflect post-cascade emptiness and the
+      // assertions below will surface it.
+    });
+
+  // Read computed style for the H1 + every descendant in one DOM round-trip.
+  const samples = await page.evaluate((sel) => {
+    const out = { parent: null, descendants: [], emDescendants: 0 };
+    const h1 = document.querySelector(sel);
     if (h1) {
       const cs = getComputedStyle(h1);
       out.parent = {
         tag: h1.tagName.toLowerCase(),
         className: h1.getAttribute('class'),
-        color: cs.color,
-        fontStyle: cs.fontStyle,
-        fontWeight: cs.fontWeight,
-      };
-    }
-    for (const cls of keys) {
-      const el = document.querySelector(`h1.hero__name .${cls}`);
-      if (!el) {
-        out.spans.push({ className: cls, missing: true });
-        continue;
-      }
-      const cs = getComputedStyle(el);
-      out.spans.push({
-        className: cls,
-        text: el.textContent,
+        text: h1.textContent,
         color: cs.color,
         fontStyle: cs.fontStyle,
         fontWeight: cs.fontWeight,
         fontFamily: cs.fontFamily,
+      };
+      out.emDescendants = h1.querySelectorAll('em').length;
+      const all = h1.querySelectorAll('*');
+      all.forEach((el) => {
+        const cs2 = getComputedStyle(el);
+        out.descendants.push({
+          tag: el.tagName.toLowerCase(),
+          className: el.getAttribute('class'),
+          text: el.textContent,
+          color: cs2.color,
+          fontStyle: cs2.fontStyle,
+          fontWeight: cs2.fontWeight,
+          fontFamily: cs2.fontFamily,
+        });
       });
     }
     return out;
-  }, SPAN_KEYS);
+  }, HERO_SELECTOR);
 
   await browser.close();
 
@@ -111,63 +141,61 @@ async function main() {
   const errors = [];
 
   if (!samples.parent) {
-    errors.push('h1.hero__name not found in DOM');
-  }
-  if (samples.spans.length !== SPAN_KEYS.length) {
-    errors.push(`expected ${SPAN_KEYS.length} span samples, got ${samples.spans.length}`);
-  }
-
-  // Missing-span check
-  for (const s of samples.spans) {
-    if (s.missing) errors.push(`span .${s.className} not found inside h1.hero__name`);
-  }
-
-  // Color identity: all three spans must resolve to the same computed color.
-  const colors = samples.spans
-    .filter((s) => !s.missing)
-    .map((s) => s.color);
-  const allColorsIdentical = colors.length > 0 && colors.every((c) => c === colors[0]);
-  if (!allColorsIdentical) {
-    errors.push(
-      `hero name spans have different computed colors: ` +
-        samples.spans
-          .filter((s) => !s.missing)
-          .map((s) => `.${s.className}=${s.color}`)
-          .join(', ')
-    );
-  }
-
-  // Font-style identity: all three must be `normal` (catches the <em> italic-drift bug).
-  for (const s of samples.spans) {
-    if (s.missing) continue;
-    if (s.fontStyle !== 'normal') {
+    errors.push(`${HERO_SELECTOR} not found in DOM`);
+  } else {
+    // No <em> descendants — the original bug wrapped name parts in <em>.
+    if (samples.emDescendants > 0) {
       errors.push(
-        `.${s.className} font-style is "${s.fontStyle}" (expected "normal") — italic-drift regression`
+        `hero H1 contains ${samples.emDescendants} <em> descendant(s) — italic-drift regression`
       );
+    }
+
+    // Collect every computed color across the H1 + its descendants.
+    const colors = [samples.parent.color, ...samples.descendants.map((d) => d.color)];
+    const allColorsIdentical =
+      colors.length > 0 && colors.every((c) => c === colors[0]);
+
+    if (!allColorsIdentical) {
+      const all = [
+        { tag: samples.parent.tag, color: samples.parent.color },
+        ...samples.descendants.map((d) => ({ tag: d.tag, className: d.className, color: d.color })),
+      ];
+      errors.push(
+        `hero name has different computed colors: ` +
+          all.map((n) => `${n.tag}.${n.className || 'parent'}=${n.color}`).join(', ')
+      );
+    }
+
+    // Every font-style must be `normal` (catches the <em> italic-drift bug).
+    const fontStyles = [samples.parent, ...samples.descendants];
+    for (const s of fontStyles) {
+      if (s.fontStyle !== 'normal') {
+        errors.push(
+          `${s.tag}.${s.className || 'parent'} font-style is "${s.fontStyle}" (expected "normal") — italic-drift regression`
+        );
+      }
     }
   }
 
   // === VERDICT ===
-  console.log('=== hero-name-color-regression ===');
+  console.log('=== hero-name-color-regression (v2) ===');
   console.log(`URL:               ${PROD}`);
   console.log(`Dedupe key:        ${DEDUPE_KEY}`);
   if (samples.parent) {
     console.log(
-      `h1.hero__name:     color=${samples.parent.color}  font-style=${samples.parent.fontStyle}  font-weight=${samples.parent.fontWeight}`
+      `${HERO_SELECTOR}: color=${samples.parent.color}  font-style=${samples.parent.fontStyle}  font-weight=${samples.parent.fontWeight}`
     );
-  }
-  for (const s of samples.spans) {
-    if (s.missing) {
-      console.log(`  .${s.className.padEnd(14)}  MISSING`);
-    } else {
+    console.log(`text:              ${JSON.stringify(samples.parent.text)}`);
+    console.log(`descendants:       ${samples.descendants.length} node(s)`);
+    console.log(`<em> descendants:  ${samples.emDescendants}`);
+    for (const d of samples.descendants) {
       console.log(
-        `  .${s.className.padEnd(14)}  text=${JSON.stringify(s.text).padEnd(12)}  color=${s.color}  font-style=${s.fontStyle}  font-weight=${s.fontWeight}`
+        `  ${d.tag}.${(d.className || '').padEnd(8)}  text=${JSON.stringify(d.text).slice(0, 30)}  color=${d.color}  font-style=${d.fontStyle}`
       );
     }
+  } else {
+    console.log(`${HERO_SELECTOR}: MISSING (no h1 found)`);
   }
-  console.log(
-    `Identity check:    all 3 colors identical = ${allColorsIdentical ? 'YES' : 'NO (FAIL)'}`
-  );
 
   if (errors.length > 0) {
     console.error('=== HERO-NAME-COLOR FAIL ===');
@@ -194,8 +222,9 @@ async function main() {
   }
 
   console.log('=== HERO-NAME-COLOR PASS ===');
-  console.log(`  All 3 hero name spans share computed color: ${colors[0]}`);
-  console.log(`  All 3 hero name spans have font-style: normal`);
+  console.log(`  ${HERO_SELECTOR} + ${samples.descendants.length} descendant(s) share computed color: ${samples.parent?.color}`);
+  console.log(`  All font-style: normal`);
+  console.log(`  Zero <em> descendants (italic-drift regression guarded)`);
   console.log(`  Regressions guarded: 7c190f3, 673dc72, 9a41ec8, 474f57a`);
   process.exit(0);
 }
