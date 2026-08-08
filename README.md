@@ -17,6 +17,35 @@ npm run preview    # serve dist/
 npm run audit      # NDA audit on built site
 ```
 
+## Deploy (GH-first, no local build needed)
+
+The deploy pipeline runs on GitHub Actions — you do NOT need to keep a
+local `dist/` to keep the live site current. Source lives on
+`github.com/christianmacion26/portfolio` and the build runs in CI.
+
+```text
+push main  ─►  CI: typecheck + lint + format + audit  ─►  Pages: build dist/  ─►  live
+                                          ▲
+                                          └─ Cloudflare Pages mirror (optional, via wrangler)
+```
+
+- **GH Pages (canonical):** `.github/workflows/deploy.yml` runs `npm ci` +
+  `npm run build` on every push to `main`, uploads `dist/` as the
+  Pages artifact, and deploys. Local `dist/` is NOT used.
+- **Cloudflare Pages mirror:** `wrangler pages deploy dist/ --project-name=christianmacion-portfolio`
+  (after `npm run build`) — only for the live-data functions. The GH
+  Pages canonical is the source of truth.
+- **Functions:** `functions/api/` ships with the repo and is auto-detected
+  by Cloudflare Pages. No adapter, no SSR — Pages Functions handle all
+  dynamic endpoints.
+
+### Local artifact cleanup (free disk)
+
+```bash
+rm -rf dist .astro .wrangler       # rebuildable from source
+# keep node_modules/ until ready to fully clear (run `npm ci` to rebuild)
+```
+
 ## Add a project
 
 ```bash
