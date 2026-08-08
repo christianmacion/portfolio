@@ -102,13 +102,20 @@ const jsonLd = {
         noSep
         hideTenet
       />
-      <h1 class="hero__title" data-words>{fullName}</h1>
+      <h1 class="hero__title" data-words>60-second skim. NDA-clean.</h1>
       <VoiceLine class="hero__voice">
-        60-second skim. NDA-clean. Decide in one read.
+        Decide in one read. Tailored resume within 24 hours of a JD.
       </VoiceLine>
+      <!-- v13.1 (2026-08-09, positioning brief): subhead rewritten to
+           13-word senior-QR + AI engineer register for financial
+           markets. Manual-only posture. UTC+8. Remote-first. -->
       <p class="hero__sub">
-        Quantitative researcher and AI engineer. {loc.display}. Remote QR, QR-rotational, or research-engineer
-        seats with US-premarket or APAC overlap.
+        Senior Quant Researcher and AI Engineer for financial markets. Manual-only posture. UTC+8. Remote-first.
+      </p>
+      <!-- v13.1 (positioning brief): 43-word intro paragraph. Two
+           sentences. Target seats + artifact stack + JD promise. -->
+      <p class="hero__intro mono">
+        Looking for senior QR, QR-rotational, or research-engineer seats with US-premarket or APAC overlap. 6 paper-traded alpha strategies, 6 production AI projects, 25 public GitHub repos, and a 31-gate eval harness with a public kill log. Tailored resume within 24 hours of a JD.
       </p>
 
       <div class="hero__fit">
@@ -345,6 +352,19 @@ const jsonLd = {
     line-height: var(--lh-loose);
     margin-bottom: var(--sp-7);
     max-width: 60ch;
+  }
+  /* v13.1 (2026-08-09, positioning brief): 43-word intro paragraph
+     beneath the hero sub. Mono, ink-3, footnote register. Reads as
+     a citation/evidence claim so it doesn't compete with the subhead. */
+  .hero__intro {
+    font-family: var(--ff-mono, ui-monospace);
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--c-ink-3);
+    margin: -8px 0 var(--sp-7);
+    max-width: 68ch;
+    text-wrap: pretty;
+    letter-spacing: 0.005em;
   }
   .hero__voice {
     margin: 0 0 var(--sp-5);

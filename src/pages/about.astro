@@ -64,6 +64,13 @@ const NGATE = `${profile.stats.evalGates}-gate`;
         Build the eval harness first. Build the work that has to pass it second. Ship the third.
       </VoiceLine>
 
+      <!-- v13.1 (2026-08-09, positioning brief): 49-word intro paragraph.
+           Three sentences. Two hats declared. Artifact stack listed.
+           Manual-only posture surfaced. -->
+      <p class="page-head__intro mono">
+        Eval-first methodology, two hats: senior Quant Researcher designing reproducible alpha on public data and AI Engineer shipping multi-agent LLM systems behind frozen eval harnesses. 6 paper-traded strategies, 6 production AI projects, 25 public GitHub repos, and a 31-gate stack with a public kill log. Manual-only posture on live capital.
+      </p>
+
       <div class="head-eq">
         <Equation
           block
@@ -391,6 +398,19 @@ const NGATE = `${profile.stats.evalGates}-gate`;
   .page-head__voice {
     margin: 0 0 var(--sp-5);
     max-width: 60ch;
+  }
+  /* v13.1 (2026-08-09, positioning brief) · /about/ intro paragraph.
+     49-word intro. Mono, ink-3, footnote register. Same chrome as
+     home / for-recruiters / methodology / now __intro rules. */
+  .page-head__intro {
+    font-family: var(--ff-mono, ui-monospace);
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--c-ink-3);
+    margin: 0 0 var(--sp-6);
+    max-width: 70ch;
+    text-wrap: pretty;
+    letter-spacing: 0.005em;
   }
   .page-head__tenant {
     display: flex;

@@ -36,8 +36,16 @@ const updatedHuman = new Date(updated).toLocaleDateString('en-GB', {
     <div class="container container-narrow">
       <p class="now-head__eyebrow mono">01 — NOW · LAST UPDATED {updated}</p>
       <h1 class="now-head__title">What's shipping this month</h1>
+      <!-- v13.1 (2026-08-09, positioning brief): caption rewritten to
+           11-word subhead register. Manual-only posture surfaced. -->
       <p class="now-head__caption mono">
-        Dated. Honest. Updated only when something changes that matters.
+        Dated. Honest. Manual-only posture. Updated only when something changes that matters.
+      </p>
+      <!-- v13.1 (positioning brief): 44-word intro paragraph. Three
+           sentences. Live terminal running manual-only + Stage 2.5
+           sweep result + Vanguard 2K synthesis + WFO roll-out ETA. -->
+      <p class="now-head__intro mono">
+        Live trading terminal running manual-only on a $2K Upcomer Vanguard account. Stage 2.5 multi-asset sweep: 37 cells scored at 15m resolution, 0 survived FDR at q=0.10. Vanguard 2K synthesis: 0/26 cleared. Walk-forward OOS standardization rolling out across 8 quant projects by end of August.
       </p>
     </div>
   </header>
@@ -153,6 +161,19 @@ const updatedHuman = new Date(updated).toLocaleDateString('en-GB', {
     font-size: 12px;
     letter-spacing: 0.04em;
     color: var(--c-ink-2);
+  }
+  /* v13.1 (2026-08-09, positioning brief) · /now/ intro paragraph.
+     44-word intro. Mono, ink-3, footnote register. Same chrome as
+     other __intro rules on home + for-recruiters + methodology. */
+  .now-head__intro {
+    font-family: var(--ff-mono, ui-monospace);
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--c-ink-3);
+    margin: 0 0 var(--sp-6);
+    max-width: 70ch;
+    text-wrap: pretty;
+    letter-spacing: 0.005em;
   }
 
   .now-h2 {
