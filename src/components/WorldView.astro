@@ -1,0 +1,335 @@
+---
+/**
+ * WorldView.astro — v12.W2 institutional data terminal.
+ *
+ * Opens on ⌘J / Ctrl+J from any page (capture-phase keydown registered
+ * in worldview.client.ts). Modal sibling of CommandPalette.astro, same
+ * chrome contract: cream-on-warm-dim, sharp 0-2px corners, hairline 1px
+ * border + 2px amber top rule, no halo/glow/gradient, mono + Inter only,
+ * WCAG 2.2 AA.
+ *
+ * Three layers:
+ *   1. Globe (d3-geo orthographic, ~360x360 SVG, auto-rotates 90s/full)
+ *   2. Ticker (7-row aria-live list, GDELT events interleaved with ticks)
+ *   3. Footer caption (L1/L2/L3 data-depth legend + last-sync stamp)
+ *
+ * Esc closes. Click outside the panel closes. The script handles all
+ * keyboard + click logic; the trigger button below is the canonical
+ * event-bus target so any caller can dispatch the modal without
+ * importing the script.
+ *
+ * Bundle: ~3KB inline HTML/CSS. The globe + ticker JS is lazy-loaded
+ * when ⌘J first fires (see BaseLayout.astro).
+ */
+---
+
+<button
+  type="button"
+  class="wv-trigger"
+  data-worldview-open
+  aria-label="Open WorldView Live terminal"
+  aria-keyshortcuts="Meta+J Control+J"
+  tabindex="-1"
+></button>
+
+<div
+  class="wv"
+  data-worldview
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="wv-title"
+  hidden
+>
+  <button
+    type="button"
+    class="wv__scrim"
+    data-worldview-close
+    aria-label="Close WorldView Live terminal"
+    tabindex="-1"
+  ></button>
+  <div class="wv__panel" role="document">
+    <header class="wv__header">
+      <p id="wv-title" class="wv__title mono">WORLDVIEW · LIVE · ⌘J</p>
+      <button
+        type="button"
+        class="wv__close"
+        data-worldview-close
+        aria-label="Close"
+      >
+        <span aria-hidden="true">×</span>
+      </button>
+    </header>
+
+    <section class="wv__globe-wrap" aria-labelledby="wv-globe-label">
+      <h2 id="wv-globe-label" class="wv__eyebrow mono">LIVE GLOBE</h2>
+      <div class="wv__globe">
+        <svg
+          class="wv__globe-svg"
+          data-worldview-svg
+          aria-hidden="false"
+        ></svg>
+      </div>
+      <p class="wv__hint mono" data-worldview-hint>DRAG TO PAN</p>
+    </section>
+
+    <section class="wv__ticker-wrap" aria-labelledby="wv-ticker-label">
+      <h2 id="wv-ticker-label" class="wv__eyebrow mono">LIVE FEED</h2>
+      <ul
+        class="wv__ticker"
+        data-worldview-ticker
+        aria-live="polite"
+        aria-relevant="additions text"
+      ></ul>
+    </section>
+
+    <footer class="wv__footer mono">
+      <span class="wv__legend">L1 · L2 · L3</span>
+      <span class="wv__sep" aria-hidden="true">·</span>
+      <span class="wv__legend">GDELT 2.0</span>
+      <span class="wv__sep" aria-hidden="true">·</span>
+      <span class="wv__legend">refresh 15min</span>
+      <span class="wv__sep" aria-hidden="true">·</span>
+      <span class="wv__status" data-worldview-status>last sync --:--:--Z</span>
+    </footer>
+  </div>
+</div>
+
+<style>
+  .wv-trigger {
+    display: none;
+  }
+
+  .wv {
+    position: fixed;
+    inset: 0;
+    z-index: calc(var(--z-nav) + 10);
+    display: grid;
+    place-items: start center;
+    padding-top: 8vh;
+  }
+  .wv[hidden] {
+    display: none;
+  }
+
+  .wv__scrim {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(13, 17, 23, 0.85);
+    cursor: pointer;
+    border: 0;
+    padding: 0;
+  }
+
+  .wv__panel {
+    position: relative;
+    width: min(720px, 94vw);
+    max-height: 84vh;
+    background: var(--c-bg);
+    color: var(--c-ink);
+    border: 1px solid var(--c-rule);
+    border-top: 2px solid var(--c-amber);
+    border-radius: 0;
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    font-family: var(--ff-sans);
+  }
+
+  .wv__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px 8px;
+    border-bottom: 1px solid var(--c-rule);
+  }
+
+  .wv__title {
+    margin: 0;
+    font-size: 10.5px;
+    letter-spacing: 0.16em;
+    color: var(--c-amber);
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+
+  .wv__close {
+    background: transparent;
+    border: 1px solid var(--c-rule);
+    color: var(--c-ink-2);
+    width: 22px;
+    height: 22px;
+    line-height: 1;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 0;
+    border-radius: 0;
+    font-family: var(--ff-mono);
+  }
+  .wv__close:hover,
+  .wv__close:focus-visible {
+    border-color: var(--c-amber);
+    color: var(--c-amber);
+    outline: none;
+  }
+
+  .wv__globe-wrap {
+    padding: 14px 16px 8px;
+    border-bottom: 1px solid var(--c-rule);
+  }
+
+  .wv__eyebrow {
+    margin: 0 0 8px;
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    color: var(--c-ink-3);
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .wv__globe {
+    display: grid;
+    place-items: center;
+    background: var(--c-bg-2);
+    border: 1px solid var(--c-rule);
+    padding: 12px;
+  }
+
+  .wv__globe-svg {
+    width: min(360px, 70vw);
+    height: min(360px, 70vw);
+    display: block;
+    cursor: grab;
+    touch-action: none;
+  }
+  .wv__globe-svg:active {
+    cursor: grabbing;
+  }
+
+  .wv__globe-svg :global(.wv-globe__land-shape) {
+    fill: var(--c-amber);
+    fill-opacity: 0.85;
+    stroke: var(--c-amber);
+    stroke-opacity: 0.4;
+    stroke-width: 0.3;
+  }
+
+  .wv__hint {
+    margin: 6px 0 0;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: var(--c-ink-3);
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  .wv__ticker-wrap {
+    padding: 10px 16px 12px;
+    border-bottom: 1px solid var(--c-rule);
+    flex: 1;
+    min-height: 0;
+  }
+
+  .wv__ticker {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: 240px;
+    overflow-y: auto;
+    border: 1px solid var(--c-rule);
+    background: var(--c-bg-2);
+  }
+
+  .wv__ticker :global(.wv-ticker__row) {
+    display: grid;
+    grid-template-columns: 64px 48px 96px 1fr 32px;
+    gap: 8px;
+    padding: 5px 10px;
+    font-family: var(--ff-sans);
+    font-size: 11.5px;
+    color: var(--c-ink-2);
+    border-bottom: 1px solid var(--c-rule-soft);
+    align-items: center;
+  }
+  .wv__ticker :global(.wv-ticker__row:last-child) {
+    border-bottom: 0;
+  }
+  .wv__ticker :global(.wv-ticker__time) {
+    color: var(--c-ink-3);
+    font-size: 10px;
+    letter-spacing: 0.04em;
+  }
+  .wv__ticker :global(.wv-ticker__src) {
+    color: var(--c-amber);
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .wv__ticker :global(.wv-ticker__region) {
+    color: var(--c-ink-3);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+  }
+  .wv__ticker :global(.wv-ticker__head) {
+    color: var(--c-ink);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .wv__ticker :global(.wv-ticker__badge) {
+    color: var(--c-amber);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    border: 1px solid var(--c-amber-decor);
+    text-align: center;
+    padding: 1px 0;
+  }
+
+  .wv__footer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-top: 1px solid var(--c-rule);
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--c-ink-3);
+  }
+  .wv__legend {
+    color: var(--c-amber);
+  }
+  .wv__sep {
+    color: var(--c-ink-3);
+    opacity: 0.6;
+  }
+  .wv__status {
+    margin-left: auto;
+    color: var(--c-ink-2);
+  }
+
+  @media (max-width: 720px) {
+    .wv {
+      padding-top: 4vh;
+    }
+    .wv__panel {
+      width: 96vw;
+    }
+    .wv__globe-svg {
+      width: min(280px, 80vw);
+      height: min(280px, 80vw);
+    }
+    .wv__ticker :global(.wv-ticker__row) {
+      grid-template-columns: 56px 44px 72px 1fr 30px;
+      font-size: 10.5px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wv__globe-svg {
+      cursor: default;
+    }
+  }
+</style>

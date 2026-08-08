@@ -21,7 +21,6 @@ import { Image } from 'astro:assets';
 import headshot from '../assets/portrait/headshot-source.jpg';
 import { path } from '@utils/url';
 import { profile } from '@utils/profile';
-import { subpages } from '@data/subpages';
 
 const { pathname } = Astro.url;
 const isActive = (href: string) => {
@@ -29,43 +28,33 @@ const isActive = (href: string) => {
   return pathname === suffix || pathname.startsWith(suffix + '/');
 };
 
-// v9.5 IA — same links as Nav.astro primary + secondary, flattened into
-// one scrollable rail. No dropdowns. Icon-first.
-// v9.7.2 — added 5 orphan pages per audit: screening-call (highest inbound),
-// work, glossary, publications, talks. Each gets a new SVG icon below.
-// v9.8 Wave B appends 4 light-content subpages below the work row:
-// notes / stack / repos / engagement. Each is wired through the
-// SubpageMapping registry (src/data/subpages.ts) so the nav label
-// stays in sync with the page H1 / chip.
-const staticLinks: Array<{ href: string; label: string; icon: string }> = [
-  { href: path('/'),                label: 'Home',            icon: 'home' },
-  { href: path('/now'),             label: 'Now',             icon: 'now' },
-  { href: path('/for-recruiters'),  label: 'For recruiters',  icon: 'recruit' },
-  { href: path('/screening-call'),  label: 'Screening call',  icon: 'phone' },
-  { href: path('/proof'),           label: 'Proof',           icon: 'proof' },
-  { href: path('/projects'),        label: 'Projects',        icon: 'project' },
-  { href: path('/work'),            label: 'Work',            icon: 'briefcase' },
-  { href: path('/experience'),      label: 'Experience',      icon: 'experience' },
-  { href: path('/skills'),          label: 'Skills',          icon: 'skill' },
-  { href: path('/glossary'),        label: 'Glossary',        icon: 'book' },
-  { href: path('/certifications'),  label: 'Certifications',  icon: 'cert' },
-  { href: path('/positions'),       label: 'Positions',       icon: 'pos' },
-  { href: path('/publications'),    label: 'Publications',    icon: 'doc' },
-  { href: path('/methodology'),     label: 'Methodology',     icon: 'method' },
-  { href: path('/talks'),           label: 'Talks',           icon: 'mic' },
-  { href: path('/contact'),         label: 'Contact',         icon: 'contact' },
+// v12.W1.5 — SIDE-RAIL 6-HUB REDUCTION.
+// Bryllim parity: 20 nav items collapsed to 6 institutional hubs.
+// Absorption map (orphan-but-live: pages stay reachable at their URLs,
+// just hidden from this primary rail):
+//   1. Home                              — landing
+//   2. Now                               — current focus / availability
+//   3. Proof                             — absorbs /proof + /projects + /work
+//                                          + /experience + /certifications
+//                                          + /publications + /talks + /repos
+//   4. Methodology                       — absorbs /methodology + /skills
+//                                          + /glossary + /notes + /stack
+//   5. For hiring managers               — absorbs /for-recruiters
+//                                          + /screening-call + /positions
+//                                          + /engagement
+//   6. Contact                           — direct handoff
+// Orphan URLs (/projects, /work, /experience, /certifications,
+// /publications, /talks, /repos, /skills, /glossary, /notes,
+// /stack, /screening-call, /positions, /engagement) remain live and
+// indexed but are not surfaced in this rail.
+const links: Array<{ href: string; label: string; icon: string }> = [
+  { href: path('/'),                label: 'Home',                 icon: 'home' },
+  { href: path('/now'),             label: 'Now',                  icon: 'now' },
+  { href: path('/proof'),           label: 'Proof',                icon: 'proof' },
+  { href: path('/methodology'),     label: 'Methodology',          icon: 'method' },
+  { href: path('/for-recruiters'),  label: 'For hiring managers',  icon: 'recruit' },
+  { href: path('/contact'),         label: 'Contact',              icon: 'contact' },
 ];
-
-// v9.8 Wave B adds 4 subpages from src/data/subpages.ts. Each gets an SVG
-// icon below; the registry is the single source of truth so the nav
-// label can never drift from the page <h1>.
-const subpageLinks = subpages.map((s) => ({
-  href: path(`/${s.slug}`),
-  label: s.label,
-  icon: s.icon,
-}));
-
-const links = [...staticLinks, ...subpageLinks];
 
 // Inline SVG path strings keyed by icon name (1px stroke, 16×16 viewBox).
 const ICONS: Record<string, string> = {

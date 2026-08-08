@@ -1141,22 +1141,6 @@
   border-left-color: var(--c-amber);
 }
 
-/* === 29d. SITEHEADER ⌘K PILL — amber bg wash on hover, 120ms.
-       The .site-header__cmdk-pill (§SiteHeader.astro) already has
-       color + border-color shift on 200ms ease. This rule adds
-       a soft amber background wash (--c-amber-soft) so the pill
-       reads as "interactive surface, click me" rather than just
-       "link with an arrow". Snappy easing. === */
-.site-header__cmdk-pill {
-  transition:
-    color var(--j-dur-fast) var(--j-ease-snappy),
-    border-color var(--j-dur-fast) var(--j-ease-snappy),
-    background-color var(--j-dur-fast) var(--j-ease-snappy);
-}
-.site-header__cmdk-pill:hover {
-  background-color: var(--c-amber-soft);
-}
-
 /* === 29e. FOCUS — Bryllim 1px focus ring on every focusable.
        Downgrades the universal *:focus-visible (global.css §218)
        from 2px → 1px for chrome elements. Snappy feel without
@@ -1242,7 +1226,6 @@ main > section.footprint.is-revealed {
   .repo-card,
   .manifesto-item,
   .side-rail__link,
-  .site-header__cmdk-pill,
   .home-section,
   main > section.broadside,
   main > section.hero-flagship,
@@ -1269,9 +1252,6 @@ main > section.footprint.is-revealed {
   }
   .side-rail__link:hover {
     border-left-color: transparent;
-  }
-  .site-header__cmdk-pill:hover {
-    background-color: transparent;
   }
   .home-section,
   main > section.broadside,

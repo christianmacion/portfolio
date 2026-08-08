@@ -414,9 +414,9 @@
      restraint. Warm cream paper (less bright than #fff, no eye-strain),
      deep navy ink (institutional, never pure black), muted institutional amber + cobalt accents.
      All light-mode contrast pairs measured for WCAG AA at body-text sizes. */
-  --j-bg: #ece5d4; /* v7 — warm cream paper (warmth bias toward Citadel/Bridgewater, brightness ~94% — comfortable for 4h+ sessions) */
-  --j-bg-elev: #f3ede1; /* panel cream — slightly lighter */
-  --j-bg-elev-2: #f9f4e9; /* chips, hover surfaces */
+  --j-bg: #ffffff; /* v12.W1.5 — pure white institutional (Bryllim register). Was #ece5d4 cream which read as cardboard box on /now/ + /for-recruiters/. */
+  --j-bg-elev: #f7f7f7; /* panel surface — neutral light gray, preserves panel differentiation against pure white */
+  --j-bg-elev-2: #fafafa; /* chips, hover surfaces */
   --j-paper: #1a1714; /* dark callout panel */
   --j-paper-ink: #ece5d4;
 
@@ -496,10 +496,10 @@
  * ============================================================================ */
 @media (prefers-color-scheme: light) {
   :root[data-surface='v6-13']:not(:has(body.theme-dark)) {
-    /* === v7 — Quant hedge-fund palette (matches explicit .theme-light block) === */
-    --j-bg: #ece5d4;
-    --j-bg-elev: #f3ede1;
-    --j-bg-elev-2: #f9f4e9;
+    /* === v12.W1.5 — Pure white institutional palette (Bryllim register) === */
+    --j-bg: #ffffff;
+    --j-bg-elev: #f7f7f7;
+    --j-bg-elev-2: #fafafa;
     --j-paper: #1a1714;
     --j-paper-ink: #ece5d4;
 

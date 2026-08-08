@@ -49,8 +49,11 @@ interface Props {
 const DEFAULT_CHIP = 'QUANT · AI · OPS';
 const DEFAULT_EYEBROW = 'OPERATOR + RESEARCHER';
 const DEFAULT_TENANT = 'CHRISTIAN.T.MACION · UTC+8 · REMOTE-OK · 5-SHIP SPRINT · OWNER-VERIFIED';
-const DEFAULT_TENET =
-  'No Math.random() · No argless new Date() · No fabricated metrics · No NDA-protected employers on this site';
+// v12.W1.5 — trust-strip REMOVED per Owner directive (no-defensive-trust-strips BINDING).
+// Internal compliance rules (no fabricated metrics, no NDA leaks) remain ACTIVE
+// INTERNALLY — they just don't render in chrome. Bryllim doesn't say "I won't lie."
+// Bryllim doesn't lie.
+const DEFAULT_TENET = '';
 
 const {
   chip = DEFAULT_CHIP,

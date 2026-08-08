@@ -1,0 +1,120 @@
+{
+  "fetchedAt": "2026-08-08T12:00:00Z",
+  "source": "fallback",
+  "events": [
+    {
+      "id": "WV-001",
+      "title": "ECB holds refi rate at 4.25% · Frankfurt press conference",
+      "category": "central-bank",
+      "severity": "moderate",
+      "lat": 50.1109,
+      "lon": 8.6821,
+      "city": "Frankfurt",
+      "source": "GDELT 2.0",
+      "timestamp": "2026-08-08T11:42:00Z",
+      "goldstein": 1.2
+    },
+    {
+      "id": "WV-002",
+      "title": "PBOC sets USD/CNY fix at 7.1312 · strongest fix in two weeks",
+      "category": "fx",
+      "severity": "mild",
+      "lat": 39.9042,
+      "lon": 116.4074,
+      "city": "Beijing",
+      "source": "GDELT 2.0",
+      "timestamp": "2026-08-08T10:15:00Z",
+      "goldstein": 0.4
+    },
+    {
+      "id": "WV-003",
+      "title": "BoE minutes show 7-2 vote split on hold vs cut · Sterling volatile",
+      "category": "central-bank",
+      "severity": "moderate",
+      "lat": 51.5074,
+      "lon": -0.1278,
+      "city": "London",
+      "source": "GDELT 2.0",
+      "timestamp": "2026-08-08T09:32:00Z",
+      "goldstein": -0.8
+    },
+    {
+      "id": "WV-004",
+      "title": "Fed Williams signals patience on September cut · data dependent",
+      "category": "central-bank",
+      "severity": "moderate",
+      "lat": 40.7128,
+      "lon": -74.006,
+      "city": "New York",
+      "source": "GDELT 2.0",
+      "timestamp": "2026-08-08T14:05:00Z",
+      "goldstein": -0.3
+    },
+    {
+      "id": "WV-005",
+      "title": "BoJ maintains ultra-loose policy · intervention watch on USD/JPY",
+      "category": "central-bank",
+      "severity": "moderate",
+      "lat": 35.6762,
+      "lon": 139.6503,
+      "city": "Tokyo",
+      "source": "GDELT 2.0",
+      "timestamp": "2026-08-08T07:50:00Z",
+      "goldstein": 0.2
+    },
+    {
+      "id": "WV-006",
+      "title": "OPEC+ extends voluntary cuts through Q4 · Brent bid at $82.40",
+      "category": "data-release",
+      "severity": "moderate",
+      "lat": 24.4539,
+      "lon": 54.3773,
+      "city": "Abu Dhabi",
+      "source": "GDELT 2.0",
+      "timestamp": "2026-08-08T13:18:00Z",
+      "goldstein": 1.6
+    }
+  ],
+  "ticks": [
+    {
+      "id": "T-001",
+      "timestamp": "2026-08-08T14:32:08Z",
+      "symbol": "EUR/USD",
+      "price": 1.0842,
+      "change": -0.0012,
+      "changePct": -0.11,
+      "level": "L1",
+      "source": "ECB"
+    },
+    {
+      "id": "T-002",
+      "timestamp": "2026-08-08T14:30:01Z",
+      "symbol": "XAU/USD",
+      "price": 2392.4,
+      "change": 17.5,
+      "changePct": 0.74,
+      "level": "L2",
+      "source": "Spot"
+    },
+    {
+      "id": "T-003",
+      "timestamp": "2026-08-08T14:28:42Z",
+      "symbol": "USD/JPY",
+      "price": 161.84,
+      "change": 0.42,
+      "changePct": 0.26,
+      "level": "L1",
+      "source": "ECB"
+    },
+    {
+      "id": "T-004",
+      "timestamp": "2026-08-08T14:25:11Z",
+      "symbol": "BTC/USD",
+      "price": 61280.0,
+      "change": -820.0,
+      "changePct": -1.32,
+      "level": "L3",
+      "source": "CoinGecko"
+    }
+  ]
+}

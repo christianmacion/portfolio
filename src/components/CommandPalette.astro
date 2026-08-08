@@ -80,6 +80,19 @@ const fmTagJson = JSON.stringify(financialMarketsTag);
   tabindex="-1"
 ></button>
 
+<!-- v12.W2 — WorldView Live sibling trigger. The actual <WorldView />
+     modal is mounted by BaseLayout.astro; this trigger is the event-bus
+     target so any caller (SiteHeader pill, footer link, etc.) can open
+     the terminal without touching the script API. -->
+<button
+  type="button"
+  class="wv-trigger-cm"
+  data-worldview-open
+  aria-label="Open WorldView Live terminal"
+  aria-keyshortcuts="Meta+J Control+J"
+  tabindex="-1"
+></button>
+
 <!-- Modal: role=dialog, aria-modal=true, hidden until ⌘K. -->
 <div
   class="cmdk"
@@ -129,7 +142,8 @@ const fmTagJson = JSON.stringify(financialMarketsTag);
      visible chrome; this button is the canonical click target so any
      caller (pill, footer link, etc.) can open the palette without
      touching the script API. */
-  .cmdk-trigger {
+  .cmdk-trigger,
+  .wv-trigger-cm {
     display: none;
   }
 

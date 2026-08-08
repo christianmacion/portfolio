@@ -319,39 +319,25 @@ li {
   color: var(--c-ink-4);
   font-weight: 400;
 }
+/* v12.W1.5 — TRUST-STRIP REMOVED. Per feedback-no-defensive-trust-strips
+   BINDING, the "No Math.random / No fabricated metrics / No NDA-protected
+   employers" strip is REMOVED from chrome. Internal compliance rules
+   remain active INTERNALLY (Standing Order §9). This rule is intentionally
+   a no-op so any stale reference does not reintroduce the chrome. */
 .page__tenet {
-  margin: var(--sp-6) 0 0;
-  padding: var(--sp-3) 0 0;
-  border-top: 1px solid var(--c-rule);
-  font: 400 10.5px / 1.55 var(--ff-mono);
-  color: var(--c-ink-3);
-  letter-spacing: 0.06em;
-  text-align: center;
+  /* no-op — tenet removed in v12.W1.5 */
 }
 .page__tenet--block-end {
-  display: block;
-  text-align: left;
-  border-top: 1px solid var(--c-rule);
-  border-bottom: 1px solid var(--c-rule);
-  padding: var(--sp-3) var(--sp-4);
-  margin: var(--sp-7) 0 0;
+  /* no-op — variant removed in v12.W1.5 */
 }
 
-/* v9.9 — FOOTER REMOVAL: single-line treasury at the bottom of every
-   full-chrome page. No links, no chrome, no CTAs — just identity +
-   UTC offset + deploy marker. Reads as a printed letterhead colophon,
-   not as a footer. Inherits --c-ink-3 muted chrome so it never
-   competes with the page body. 10.5px mono + 0.06em letter-spacing
-   matches the page__tenet line above it; the pair reads as one
-   two-line chrome strip (operating principles + identity). */
+/* v12.W1.5 — TREASURY FOOTER REMOVED. The .page__treasury rule
+   is intentionally no-op (empty body) so any stale reference does
+   not reintroduce the chrome. The dark "CHRISTIAN T. MACION · UTC+8
+   · DEPLOYED" strip is removed entirely per Bryllim parity — Bryllim
+   has no footer. */
 .page__treasury {
-  margin: var(--sp-3) 0 0;
-  padding: var(--sp-3) 0 var(--sp-4);
-  font: 500 10.5px / 1.55 var(--ff-mono);
-  color: var(--c-ink-3);
-  letter-spacing: 0.06em;
-  text-align: center;
-  border-top: 1px solid var(--c-rule);
+  /* no-op — treasury removed in v12.W1.5 */
 }
 
 /* W2.7a a11y — landmark wrappers added to give rail-toggle and
@@ -360,9 +346,6 @@ li {
    chrome. No margin/padding so layout-grid stays intact. */
 .layout-rail {
   display: contents;
-}
-.layout-tail {
-  display: block;
 }
 
 /* v8.4 — page-head chrome variants used by pages that wrap the

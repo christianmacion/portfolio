@@ -71,12 +71,19 @@ const stages: Stage[] = [
   },
 ];
 
+// v12.W1.5 — defensive trust-strip BULLETS REMOVED. Per
+// feedback-no-defensive-trust-strips BINDING: external-facing "no Math.random /
+// no fabricated metrics" claims introduce doubt rather than removing it.
+// Internal compliance rules remain ACTIVE INTERNALLY (Standing Order §9 no
+// Math.random / argless Date, NDA-scrub at build, no-fabrication discipline).
+// Bullets below read as neutral engagement terms — what the lane is, not what
+// it isn't.
 const nonNegotiables = [
-  'No Math.random() in deterministic outputs.',
-  'No argless new Date() in reproducible artifacts.',
-  'No fabricated metrics :  every number traces to a fixture or a run.',
-  'No NDA-protected employers referenced in public artifacts.',
-  'No scope drift without a written re-scoping note in the AAR.',
+  'Quant research on institutional data',
+  'Markets across APAC, EU, and US sessions',
+  'Open-source pipelines with reproducible scorecards',
+  'Async-first cadence with weekly 30-minute sync',
+  'Postmortem on every engagement, kill or ship',
 ];
 ---
 
