@@ -203,6 +203,11 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
     <script is:inline>
       (() => {
         const tagScrollables = () => {
+          // Known overflow containers + generic fallback for bare <table> /
+          // .katex-display that overflow horizontally. Axe 4.12 flags any
+          // element where scrollWidth > clientWidth and the element is not
+          // keyboard-focusable, regardless of whether a parent .table-wrap
+          // exists. The generic pass catches the long-tail.
           const sel =
             '.katex-display, .table-wrap > table, .table-wrap > pre, pre.scroll, .ribbon__track, .prob-decay__table, .card__table, .desk-table, .colophon__table, .solutions-ribbon, .solutions-head__ribbon, .scroll-x, .motion-wrap > table, .desk-events__table';
           const els = document.querySelectorAll(sel);
@@ -214,6 +219,22 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
               el.setAttribute('role', el.getAttribute('role') || 'group');
             }
           });
+
+          // Generic fallback: scan every <table>, <pre>, .katex-display in
+          // the document. If any overflow and are not yet focusable, mark
+          // them. This catches tables without a `.table-wrap` parent.
+          try {
+            const generic = document.querySelectorAll('table, pre, .katex-display');
+            generic.forEach((el) => {
+              if (el.hasAttribute('tabindex')) return;
+              if (el.scrollWidth > el.clientWidth + 1 || el.scrollHeight > el.clientHeight + 1) {
+                el.setAttribute('tabindex', '0');
+                el.setAttribute('role', el.getAttribute('role') || 'group');
+              }
+            });
+          } catch (_) {
+            /* defensive: never let a11y bridge break the page */
+          }
         };
         if (document.readyState === 'loading') {
           document.addEventListener('DOMContentLoaded', tagScrollables, { once: true });
