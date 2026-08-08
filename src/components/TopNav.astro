@@ -16,6 +16,12 @@
  *                                         Proof, Contact, Resources
  * Row 2 (5 evidence pages): Projects, Experience, Stack, Certifications, AI Timeline
  *
+ * v13.1 (cross-site bridge, 2026-08-09): "Personal site" link to the
+ * sibling site at https://christianmacion.github.io/. Marked with the
+ * amber accent so visitors see it as a sibling surface, not a sibling
+ * page. Absolute URL because the two sites sit at different GH Pages
+ * paths (/portfolio/ vs /).
+ *
  * a11y: aria-label="Primary navigation", aria-current="page" on active item.
  */
 import { path } from '@utils/url';
@@ -30,9 +36,11 @@ const isActive = (href: string) => {
 interface NavLink {
   href: string;
   label: string;
+  external?: boolean;
 }
 
 const primary: NavLink[] = [
+  { href: 'https://christianmacion.github.io/', label: 'Personal site', external: true } as NavLink,
   { href: path('/now'), label: 'Now' },
   { href: path('/for-recruiters'), label: 'For hiring managers' },
   { href: path('/methodology'), label: 'Methodology' },
@@ -83,14 +91,19 @@ const brandSubtitle = 'QUANT × AI × GRAPH · DIGOS CITY, PH (UTC+8)';
       <nav class="nav__row nav__row--primary" aria-label="Primary navigation">
         <ul class="nav__list" role="list">
           {
-            primary.map(({ href, label }) => (
+            primary.map(({ href, label, external }) => (
               <li>
                 <a
                   href={href}
-                  class:list={['nav__link', { 'nav__link--active': isActive(href) }]}
+                  class:list={[
+                    'nav__link',
+                    { 'nav__link--active': isActive(href), 'nav__link--external': external },
+                  ]}
                   aria-current={isActive(href) ? 'page' : undefined}
+                  rel={external ? 'noopener' : undefined}
                 >
                   {label}
+                  {external && <span class="nav__link-arrow" aria-hidden="true">↗</span>}
                 </a>
               </li>
             ))
@@ -223,6 +236,26 @@ const brandSubtitle = 'QUANT × AI × GRAPH · DIGOS CITY, PH (UTC+8)';
     color: var(--ink-1);
     border-bottom-color: var(--ink-1);
     font-weight: 500;
+  }
+
+  /* Cross-site sibling link (e.g. personal site). Amber accent +
+     outgoing arrow so visitors see it as a sibling surface, not a
+     sibling page. */
+  .nav__link--external {
+    color: var(--amber, #B45309) !important;
+    font-weight: 500;
+  }
+  .nav__link--external .nav__link-arrow {
+    display: inline-block;
+    margin-left: 4px;
+    font-size: 11px;
+    transition: transform var(--mv-dur-1, 120ms) var(--mv-ease, ease);
+  }
+  .nav__link--external:hover .nav__link-arrow {
+    transform: translate(2px, -2px);
+  }
+  .nav__link--external:hover {
+    opacity: 1;
   }
 
   /* Row 2: secondary evidence — mono, smaller, muted */
