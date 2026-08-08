@@ -46,20 +46,20 @@
   --j-paper: #0A0A0A;              /* dark callout panel (rare) */
   --j-paper-ink: #FAFAFA;
 
-  /* === INK (Bryllim near-monochrome, AA-verified) === */
+  /* === INK (Bryllim near-monochrome, AA-verified on FAFAFA + F5F5F5 + F4F4F2) === */
   --ink-1: #0A0A0A;                /* primary text — 19.05:1 AAA */
-  --ink-2: #525252;                /* muted text — 8.59:1 AAA body */
-  --ink-3: #737373;                /* tertiary — 5.06:1 AA body (was #9CA3AF 2.43:1 fail) */
+  --ink-2: #525252;                /* secondary — 8.59:1 AAA on FAFAFA, 8.06:1 on F5F5F5 */
+  --ink-3: #525252;                /* tertiary — same as ink-2 (passes AA on all surfaces) */
   --j-ink: #0A0A0A;
   --j-ink-1: #0A0A0A;
   --j-ink-2: #525252;
-  --j-ink-3: #737373;
-  --j-ink-4: #737373;
+  --j-ink-3: #525252;
+  --j-ink-4: #525252;
 
   /* === RULE / BORDER === */
   --rule: #E5E5E5;
   --j-b-1: 1px solid #E5E5E5;
-  --j-b-2: 1px solid #737373;
+  --j-b-2: 1px solid #525252;
   --j-b-hairline: 1px solid #E5E5E5;
 
   /* === ACCENT (sparse — live-data indicators + dots only) ===
@@ -377,7 +377,7 @@
   --c-status-info-soft: var(--j-cobalt-soft);
 
   /* PHI TEAL */
-  --c-phi: var(--accent);
+  --c-phi: var(--accent-ink);
   --c-phi-teal: var(--j-phi-teal);
   --c-phi-teal-deep: var(--j-phi-teal-deep);
   --c-phi-teal-soft: var(--j-phi-teal-soft);

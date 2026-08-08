@@ -542,7 +542,12 @@
   /* Ink : monochrome. */
   --c-ink: #0A0A0A;
   --c-ink-2: #6B7280;
-  --c-ink-3: #9CA3AF;
+  /* v12.W5 a11y: lift --c-ink-3 from #9CA3AF (2.85:1 on #FAFAFA, fails
+     WCAG AA) to #6B7280 (4.83:1, passes AA). Collapses --c-ink-2 and
+     --c-ink-3 to the same value; the differentiation was always
+     borderline and the contrast gate was firing on .page__tenant +
+     .ai-card__msub which use this token at 10–12px.  */
+  --c-ink-3: #6B7280;
   --c-ink-mute: color-mix(in oklab, var(--c-ink) 70%, transparent);
   --c-ink-soft: color-mix(in oklab, var(--c-ink) 78%, transparent);
   --c-ink-faint: color-mix(in oklab, var(--c-ink) 65%, transparent);
