@@ -1,9 +1,9 @@
 {
-  "generated": "2026-08-08T17:39:09.339Z",
+  "generated": "2026-08-08T19:06:57.224Z",
   "counts": {
     "agents": 148,
-    "skills": 179,
-    "relations": 11565
+    "skills": 215,
+    "relations": 14340
   },
   "agents": [
     {
@@ -1070,6 +1070,11 @@
       "type": "skill"
     },
     {
+      "id": "skill:ai-corpus-local",
+      "name": "ai-corpus-local",
+      "type": "skill"
+    },
+    {
       "id": "skill:architecture-builder",
       "name": "architecture-builder",
       "type": "skill"
@@ -1135,6 +1140,11 @@
       "type": "skill"
     },
     {
+      "id": "skill:building-market-regimes",
+      "name": "building-market-regimes",
+      "type": "skill"
+    },
+    {
       "id": "skill:capability-cluster",
       "name": "capability-cluster",
       "type": "skill"
@@ -1187,6 +1197,11 @@
     {
       "id": "skill:convexity-profiler",
       "name": "convexity-profiler",
+      "type": "skill"
+    },
+    {
+      "id": "skill:corpus-local-stress-test",
+      "name": "corpus-local-stress-test",
       "type": "skill"
     },
     {
@@ -1270,8 +1285,173 @@
       "type": "skill"
     },
     {
+      "id": "skill:firecrawl",
+      "name": "firecrawl",
+      "type": "skill"
+    },
+    {
+      "id": "skill:firecrawl-agent",
+      "name": "firecrawl-agent",
+      "type": "skill"
+    },
+    {
+      "id": "skill:firecrawl-build",
+      "name": "firecrawl-build",
+      "type": "skill"
+    },
+    {
+      "id": "skill:firecrawl-build-interact",
+      "name": "firecrawl-build-interact",
+      "type": "skill"
+    },
+    {
+      "id": "skill:firecrawl-build-onboarding",
+      "name": "firecrawl-build-onboarding",
+      "type": "skill"
+    },
+    {
+      "id": "skill:firecrawl-build-scrape",
+      "name": "firecrawl-build-scrape",
+      "type": "skill"
+    },
+    {
+      "id": "skill:firecrawl-build-search",
+      "name": "firecrawl-build-search",
+      "type": "skill"
+    },
+    {
+      "id": "skill:firecrawl-company-directories",
+      "name": "firecrawl-company-directories",
+      "type": "skill"
+    },
+    {
+      "id": "skill:firecrawl-competitive-intel",
+      "name": "firecrawl-competitive-intel",
+      "type": "skill"
+    },
+    {
+      "id": "skill:firecrawl-crawl",
+      "name": "firecrawl-crawl",
+      "type": "skill"
+    },
+    {
+      "id": "skill:firecrawl-dashboard-reporting",
+      "name": "firecrawl-dashboard-reporting",
+      "type": "skill"
+    },
+    {
+      "id": "skill:firecrawl-deep-research",
+      "name": "firecrawl-deep-research",
+      "type": "skill"
+    },
+    {
+      "id": "skill:firecrawl-demo-walkthrough",
+      "name": "firecrawl-demo-walkthrough",
+      "type": "skill"
+    },
+    {
+      "id": "skill:firecrawl-developer-index",
+      "name": "firecrawl-developer-index",
+      "type": "skill"
+    },
+    {
+      "id": "skill:firecrawl-download",
+      "name": "firecrawl-download",
+      "type": "skill"
+    },
+    {
+      "id": "skill:firecrawl-interact",
+      "name": "firecrawl-interact",
+      "type": "skill"
+    },
+    {
+      "id": "skill:firecrawl-knowledge-base",
+      "name": "firecrawl-knowledge-base",
+      "type": "skill"
+    },
+    {
+      "id": "skill:firecrawl-knowledge-ingest",
+      "name": "firecrawl-knowledge-ingest",
+      "type": "skill"
+    },
+    {
+      "id": "skill:firecrawl-lead-gen",
+      "name": "firecrawl-lead-gen",
+      "type": "skill"
+    },
+    {
+      "id": "skill:firecrawl-lead-research",
+      "name": "firecrawl-lead-research",
+      "type": "skill"
+    },
+    {
+      "id": "skill:firecrawl-map",
+      "name": "firecrawl-map",
+      "type": "skill"
+    },
+    {
+      "id": "skill:firecrawl-market-research",
+      "name": "firecrawl-market-research",
+      "type": "skill"
+    },
+    {
+      "id": "skill:firecrawl-monitor",
+      "name": "firecrawl-monitor",
+      "type": "skill"
+    },
+    {
+      "id": "skill:firecrawl-parse",
+      "name": "firecrawl-parse",
+      "type": "skill"
+    },
+    {
+      "id": "skill:firecrawl-qa",
+      "name": "firecrawl-qa",
+      "type": "skill"
+    },
+    {
+      "id": "skill:firecrawl-research-index",
+      "name": "firecrawl-research-index",
+      "type": "skill"
+    },
+    {
+      "id": "skill:firecrawl-research-papers",
+      "name": "firecrawl-research-papers",
+      "type": "skill"
+    },
+    {
+      "id": "skill:firecrawl-scrape",
+      "name": "firecrawl-scrape",
+      "type": "skill"
+    },
+    {
+      "id": "skill:firecrawl-search",
+      "name": "firecrawl-search",
+      "type": "skill"
+    },
+    {
+      "id": "skill:firecrawl-seo-audit",
+      "name": "firecrawl-seo-audit",
+      "type": "skill"
+    },
+    {
+      "id": "skill:firecrawl-shop",
+      "name": "firecrawl-shop",
+      "type": "skill"
+    },
+    {
       "id": "skill:firecrawl-tradecraft",
       "name": "firecrawl-tradecraft",
+      "type": "skill"
+    },
+    {
+      "id": "skill:firecrawl-website-design-clone",
+      "name": "firecrawl-website-design-clone",
+      "type": "skill"
+    },
+    {
+      "id": "skill:firecrawl-workflows",
+      "name": "firecrawl-workflows",
       "type": "skill"
     },
     {
@@ -1362,186 +1542,6 @@
     {
       "id": "skill:graph-org",
       "name": "graph-org",
-      "type": "skill"
-    },
-    {
-      "id": "skill:graph-query",
-      "name": "graph-query",
-      "type": "skill"
-    },
-    {
-      "id": "skill:graph-resolve",
-      "name": "graph-resolve",
-      "type": "skill"
-    },
-    {
-      "id": "skill:graph-schema-evolve",
-      "name": "graph-schema-evolve",
-      "type": "skill"
-    },
-    {
-      "id": "skill:graph-scope",
-      "name": "graph-scope",
-      "type": "skill"
-    },
-    {
-      "id": "skill:graph-snapshot",
-      "name": "graph-snapshot",
-      "type": "skill"
-    },
-    {
-      "id": "skill:graph-verify",
-      "name": "graph-verify",
-      "type": "skill"
-    },
-    {
-      "id": "skill:graph-write-loop",
-      "name": "graph-write-loop",
-      "type": "skill"
-    },
-    {
-      "id": "skill:hr-audit",
-      "name": "hr-audit",
-      "type": "skill"
-    },
-    {
-      "id": "skill:hugo-integration",
-      "name": "hugo-integration",
-      "type": "skill"
-    },
-    {
-      "id": "skill:idea-validator",
-      "name": "idea-validator",
-      "type": "skill"
-    },
-    {
-      "id": "skill:incident",
-      "name": "incident",
-      "type": "skill"
-    },
-    {
-      "id": "skill:institutional-document-standard",
-      "name": "institutional-document-standard",
-      "type": "skill"
-    },
-    {
-      "id": "skill:library-catalog",
-      "name": "library-catalog",
-      "type": "skill"
-    },
-    {
-      "id": "skill:live-mirror",
-      "name": "live-mirror",
-      "type": "skill"
-    },
-    {
-      "id": "skill:loop-discipline",
-      "name": "loop-discipline",
-      "type": "skill"
-    },
-    {
-      "id": "skill:loop-engineer",
-      "name": "loop-engineer",
-      "type": "skill"
-    },
-    {
-      "id": "skill:loop-optimizer",
-      "name": "loop-optimizer",
-      "type": "skill"
-    },
-    {
-      "id": "skill:mechanism-orthogonality-audit",
-      "name": "mechanism-orthogonality-audit",
-      "type": "skill"
-    },
-    {
-      "id": "skill:medium-article",
-      "name": "medium-article",
-      "type": "skill"
-    },
-    {
-      "id": "skill:memo-cache-pattern",
-      "name": "memo-cache-pattern",
-      "type": "skill"
-    },
-    {
-      "id": "skill:memory-capture",
-      "name": "memory-capture",
-      "type": "skill"
-    },
-    {
-      "id": "skill:mexc-tradeability-scorer",
-      "name": "mexc-tradeability-scorer",
-      "type": "skill"
-    },
-    {
-      "id": "skill:mission-queue",
-      "name": "mission-queue",
-      "type": "skill"
-    },
-    {
-      "id": "skill:mission-resume",
-      "name": "mission-resume",
-      "type": "skill"
-    },
-    {
-      "id": "skill:model-eval",
-      "name": "model-eval",
-      "type": "skill"
-    },
-    {
-      "id": "skill:monthly-close",
-      "name": "monthly-close",
-      "type": "skill"
-    },
-    {
-      "id": "skill:multi-version-audit",
-      "name": "multi-version-audit",
-      "type": "skill"
-    },
-    {
-      "id": "skill:nda-drafter",
-      "name": "nda-drafter",
-      "type": "skill"
-    },
-    {
-      "id": "skill:ojp-application-format",
-      "name": "ojp-application-format",
-      "type": "skill"
-    },
-    {
-      "id": "skill:osint-source-fallback",
-      "name": "osint-source-fallback",
-      "type": "skill"
-    },
-    {
-      "id": "skill:osint-source-registry",
-      "name": "osint-source-registry",
-      "type": "skill"
-    },
-    {
-      "id": "skill:osint-verification-ladder",
-      "name": "osint-verification-ladder",
-      "type": "skill"
-    },
-    {
-      "id": "skill:osint-workflow",
-      "name": "osint-workflow",
-      "type": "skill"
-    },
-    {
-      "id": "skill:parallel-dispatch",
-      "name": "parallel-dispatch",
-      "type": "skill"
-    },
-    {
-      "id": "skill:performance-review",
-      "name": "performance-review",
-      "type": "skill"
-    },
-    {
-      "id": "skill:pilot-runner",
-      "name": "pilot-runner",
       "type": "skill"
     }
   ],
