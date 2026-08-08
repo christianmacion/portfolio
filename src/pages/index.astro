@@ -111,7 +111,10 @@ const liveCounters = [
          System-2 (numbers + evidence + tenure), Sagan Standard (every
          number verified or removed), Goldratt constraint (proof beats
          chrome, chrome never delays the proof beat). -->
-    <section class="hero-flagship" aria-label="Quantitative researcher and AI engineer for financial markets">
+    <section
+      class="hero-flagship"
+      aria-label="Quantitative researcher and AI engineer for financial markets"
+    >
       <!-- v12.W4 Bryllim parity : headshot is the FIRST element of the home
            hero. The landing-page owns the "this is me" first-impression
            beat. Source is 755x1200 portrait (aspect 0.629); we honor the
@@ -131,7 +134,9 @@ const liveCounters = [
           decoding="async"
           class="hero-flagship__headshot-img"
         />
-        <figcaption class="hero-flagship__headshot-credit mono">{profile.headshot.credit}</figcaption>
+        <figcaption class="hero-flagship__headshot-credit mono">
+          {profile.headshot.credit}
+        </figcaption>
       </figure>
 
       <div class="hero-flagship__copy">
@@ -139,7 +144,8 @@ const liveCounters = [
           CHRISTIAN T. MACION · DIGOS CITY, DAVAO DEL SUR, PHILIPPINES · REMOTE (UTC+8)
         </p>
         <p class="hero-flagship__availability mono" data-stagger="2">
-          OPEN TO QUANT RESEARCH + AI ENGINEER ROLES FOR FINANCIAL MARKETS · REMOTE 30 HRS/WK · UTC+8
+          OPEN TO QUANT RESEARCH + AI ENGINEER ROLES FOR FINANCIAL MARKETS · REMOTE 30 HRS/WK ·
+          UTC+8
         </p>
         <!-- v12.W4 : removed pixel-display class so the H1 renders in
              Inter display (var(--j-ff-display)) instead of JetBrains Mono.
@@ -148,9 +154,7 @@ const liveCounters = [
              Bloomberg register), not bitmap mono. data-words fires the
              motion.ts word-wrap so "Quantitative Researcher" cascades
              into view on load (80ms cadence, see motion.css §3). -->
-        <h1 class="hero-flagship__name" data-stagger="3" data-words>
-          Quantitative Researcher
-        </h1>
+        <h1 class="hero-flagship__name" data-stagger="3" data-words>Quantitative Researcher</h1>
         <!-- v13.1 (2026-08-09, positioning brief): subhead rewritten to
              14-word eval-first register. AI Engineer. 31-gate eval stack.
              Live systems on public data, reproducible by a stranger. -->
@@ -160,7 +164,9 @@ const liveCounters = [
         <!-- v13.1 (positioning brief): 42-word intro paragraph. Two
              sentences. Eval-first methodology + two lanes + verifiability. -->
         <p class="hero-flagship__intro mono" data-stagger="4b">
-          I design alpha that survives the 31-gate stack and ship the eval harness behind it. Same methodology, two lanes: systematic strategies on public data and multi-agent LLM systems behind frozen specs. Every claim traces to a shipped repo or a verifiable measurement.
+          I design alpha that survives the 31-gate stack and ship the eval harness behind it. Same
+          methodology, two lanes: systematic strategies on public data and multi-agent LLM systems
+          behind frozen specs. Every claim traces to a shipped repo or a verifiable measurement.
         </p>
         <!-- v11.W1.2 : 60-second path. Kahneman WYSIATI: front-load proof,
              not adjectives. Tetlock calibration: name a Brier-style grade
@@ -169,9 +175,10 @@ const liveCounters = [
              chrome as one cross-validated practice, not five siloed skills. -->
         <p class="hero-flagship__60s mono" data-stagger="5">If you are hiring - 60-second path:</p>
         <p class="hero-flagship__sixty" data-stagger="6">
-          A fox across 5 era buckets, not a hedgehog on one story. 31-gate eval stack. Brier near 0.72
-          (70% CI 0.64 to 0.79) against the 0.50 base rate for self-reported practitioner claims. The proof sits
-          one click below: strategy workbooks, trade logs, and the G1 to G31 gate stack.
+          A fox across 5 era buckets, not a hedgehog on one story. 31-gate eval stack. Brier near
+          0.72 (70% CI 0.64 to 0.79) against the 0.50 base rate for self-reported practitioner
+          claims. The proof sits one click below: strategy workbooks, trade logs, and the G1 to G31
+          gate stack.
         </p>
         <!-- v12.W4 quant-aesthetic : unified CTA treatment. ONE consistent
              institutional pattern across all five buttons (no three-style
@@ -187,18 +194,10 @@ const liveCounters = [
           >
             Download the 1-page resume
           </a>
-          <a href={path('/proof')} class="hero-flagship__cta-btn">
-            See the shipped work
-          </a>
-          <a href={path('/contact')} class="hero-flagship__cta-btn">
-            Book a 30-minute call
-          </a>
-          <a href={path('/methodology')} class="hero-flagship__cta-btn">
-            Method (G1-G31)
-          </a>
-          <a href={path('/for-recruiters')} class="hero-flagship__cta-btn">
-            Recruiter brief
-          </a>
+          <a href={path('/proof')} class="hero-flagship__cta-btn"> See the shipped work </a>
+          <a href={path('/contact')} class="hero-flagship__cta-btn"> Book a 30-minute call </a>
+          <a href={path('/methodology')} class="hero-flagship__cta-btn"> Method (G1-G31) </a>
+          <a href={path('/for-recruiters')} class="hero-flagship__cta-btn"> Recruiter brief </a>
         </div>
         <!-- v11.W1: financial-markets evidence rail. Sits directly below the
              60-second CTA strip so the domain frame is the last thing read
@@ -231,15 +230,20 @@ const liveCounters = [
               {/* Bryllim-style diagonal arrow in upper-right of each cell.
                   Decorative only : aria-hidden so screen-readers get the
                   numeric value from data-countup without competing chrome. */}
-              <span class="strip__arrow" aria-hidden="true">↗</span>
-              <p class="strip__num" data-countup={c.value}>{c.value}</p>
+              <span class="strip__arrow" aria-hidden="true">
+                ↗
+              </span>
+              <p class="strip__num" data-countup={c.value}>
+                {c.value}
+              </p>
               <p class="strip__label mono">{c.label}</p>
             </div>
           ))
         }
       </div>
       <p class="strip__sub mono">
-        {profile.stats.certCount} certs in the last {profile.stats.ageMonths} months. AWS, GCP, quant, AI.
+        {profile.stats.certCount} certs in the last {profile.stats.ageMonths} months. AWS, GCP, quant,
+        AI.
       </p>
     </aside>
 
@@ -260,15 +264,17 @@ const liveCounters = [
       <SectionMark index="01" title="projects" />
       <h2 class="lede__mark mono">§ 01. The Work</h2>
       <p class="lede__body">
-        Quant research, production AI engineering, and the chrome discipline that makes the work legible to a hiring
-        reader are not adjacent skills. They are one cross-validated practice. A trading edge cleared by the 31-gate
-        stack is the same artifact audited for accessibility, indexed in a workbook, and rendered as recruiter-facing
-        proof on this site. Each discipline stress-tests the others.
+        Quant research, production AI engineering, and the chrome discipline that makes the work
+        legible to a hiring reader are not adjacent skills. They are one cross-validated practice. A
+        trading edge cleared by the 31-gate stack is the same artifact audited for accessibility,
+        indexed in a workbook, and rendered as recruiter-facing proof on this site. Each discipline
+        stress-tests the others.
       </p>
       <p class="lede__body">
-        Below: 9 quant strategies with published methodology, 6 production AI projects, 25 public repositories, and
-        a 31-gate eval harness with a public kill log. Every claim is dated. Every commit is referenced. Every closed
-        backtest carries its drawdown window. Client-confidential work is omitted.
+        Below: 9 quant strategies with published methodology, 6 production AI projects, 25 public
+        repositories, and a 31-gate eval harness with a public kill log. Every claim is dated. Every
+        commit is referenced. Every closed backtest carries its drawdown window. Client-confidential
+        work is omitted.
       </p>
     </section>
 
@@ -292,8 +298,8 @@ const liveCounters = [
       <SectionMark index="02" title="proof" />
       <h2 class="artifacts__mark mono">§ 02. What I Ship</h2>
       <p class="artifacts__sub">
-        9 quant strategies with published methodology. 6 production AI projects. 31-gate eval harness with public
-        kill log. Numbers below are counted at deploy time, not rounded.
+        9 quant strategies with published methodology. 6 production AI projects. 31-gate eval
+        harness with public kill log. Numbers below are counted at deploy time, not rounded.
       </p>
       <table class="artifacts__table">
         <thead>
@@ -333,7 +339,9 @@ const liveCounters = [
           </tr>
           <tr>
             <td>Research validation methods (G1-G31)</td>
-            <td>Walk-forward validation · block bootstrap · deflated Sharpe · regime conditioning</td>
+            <td
+              >Walk-forward validation · block bootstrap · deflated Sharpe · regime conditioning</td
+            >
             <td class="num">31</td>
             <td><a href={path('/methodology')}>/methodology</a></td>
           </tr>
@@ -351,12 +359,16 @@ const liveCounters = [
           </tr>
         </tbody>
       </table>
-      {/* Bryllim-style overflow link: right-aligned "ALL X →" anchors
+      {
+        /* Bryllim-style overflow link: right-aligned "ALL X →" anchors
           the artifacts table back to the canonical /projects index.
           Decorative arrow ↗ already lives in the strip; this is the
-          section-end overflow that points to the full page. */}
+          section-end overflow that points to the full page. */
+      }
       <p class="artifacts__overflow">
-        <a href={path('/projects')} class="bryllim-overflow mono">ALL {profile.stats.strategyCount + profile.stats.aiProjectCount} PROJECTS →</a>
+        <a href={path('/projects')} class="bryllim-overflow mono"
+          >ALL {profile.stats.strategyCount + profile.stats.aiProjectCount} PROJECTS →</a
+        >
       </p>
     </section>
 
@@ -375,7 +387,9 @@ const liveCounters = [
       <CertWall />
     </section>
     <p class="certwall__overflow">
-      <a href={path('/certifications')} class="bryllim-overflow mono">ALL {profile.stats.certCount} CERTS →</a>
+      <a href={path('/certifications')} class="bryllim-overflow mono"
+        >ALL {profile.stats.certCount} CERTS →</a
+      >
     </p>
 
     <!-- ============= § 04 : READING LIST ============= -->
@@ -383,44 +397,48 @@ const liveCounters = [
       <SectionMark index="04" title="now" />
       <h2 class="help__mark mono">§ 04. What I Ship</h2>
       <p class="reading__sub">
-        Four engagement shapes. Not services I list. Live systems built, deployed, kept honest with verifiable
-        evidence.
+        Four engagement shapes. Not services I list. Live systems built, deployed, kept honest with
+        verifiable evidence.
       </p>
       <div class="help__grid help__grid--inline">
         <article class="help__card">
           <p class="help__kicker mono">QUANT RESEARCH</p>
           <h3 class="help__title">Statistical-arb pipelines that survive live deployment</h3>
           <p class="help__body">
-            Walk-forward backtests, deflated Sharpe, regime conditioning. The 31-gate stack filters out edges that
-            only looked good in-sample. Each pipeline ships with a paper-trade leg and a postmortem.
+            Walk-forward backtests, deflated Sharpe, regime conditioning. The 31-gate stack filters
+            out edges that only looked good in-sample. Each pipeline ships with a paper-trade leg
+            and a postmortem.
           </p>
         </article>
         <article class="help__card">
           <p class="help__kicker mono">AI ENGINEERING</p>
           <h3 class="help__title">Multi-agent build systems with eval-first discipline</h3>
           <p class="help__body">
-            Production agents behind a frozen eval harness and a kill-switch. Failures banked into postmortems;
-            wins banked into the next eval set. Ship behind metrics, not vibes.
+            Production agents behind a frozen eval harness and a kill-switch. Failures banked into
+            postmortems; wins banked into the next eval set. Ship behind metrics, not vibes.
           </p>
         </article>
         <article class="help__card">
           <p class="help__kicker mono">AI EVAL</p>
           <h3 class="help__title">Statistical gates for LLM claims</h3>
           <p class="help__body">
-            Deflated Sharpe, block-bootstrap CIs, walk-forward stability. Same tools you use on backtests, applied
-            to LLM eval scores. Built when the metric is too pretty.
+            Deflated Sharpe, block-bootstrap CIs, walk-forward stability. Same tools you use on
+            backtests, applied to LLM eval scores. Built when the metric is too pretty.
           </p>
         </article>
         <article class="help__card">
           <p class="help__kicker mono">REPRODUCIBILITY</p>
           <h3 class="help__title">Reproducible artifacts with audit trails</h3>
           <p class="help__body">
-            Frozen-spec eval, idempotent re-run, one-page AAR. Verifiable by a stranger, not just an insider.
+            Frozen-spec eval, idempotent re-run, one-page AAR. Verifiable by a stranger, not just an
+            insider.
           </p>
         </article>
       </div>
-      {/* Bryllim overflow: section list ends with right-aligned "ALL X →"
-          to the proof page where every capability claim is anchored. */}
+      {
+        /* Bryllim overflow: section list ends with right-aligned "ALL X →"
+          to the proof page where every capability claim is anchored. */
+      }
       <p class="help__overflow">
         <a href={path('/proof')} class="bryllim-overflow mono">ALL PROOFS →</a>
       </p>
@@ -430,7 +448,8 @@ const liveCounters = [
     <section class="footprint" aria-label="Footprint">
       <h2 class="footprint__mark mono">§ 05. Footprint</h2>
       <p class="footprint__sub">
-        20 venues across 3 regions. Real counterparts, real exchanges, real alt-data feeds. Verifiable, not decorative.
+        20 venues across 3 regions. Real counterparts, real exchanges, real alt-data feeds.
+        Verifiable, not decorative.
       </p>
       <Footprint />
     </section>
@@ -448,8 +467,8 @@ const liveCounters = [
         <a href={path('/for-recruiters')}>Recruiter brief</a>
       </p>
       <p class="contact__sub">
-        Open to quant research and AI engineer roles in financial markets. Selective contract engagements with
-        publishable methodology. Reply within 24 hours.
+        Open to quant research and AI engineer roles in financial markets. Selective contract
+        engagements with publishable methodology. Reply within 24 hours.
       </p>
       <p class="contact__line mono">
         <a href={path('/methodology')}>Method (G1-G31)</a>
@@ -686,7 +705,9 @@ const liveCounters = [
     text-decoration: none;
     border-bottom: 1px solid var(--c-amber);
     padding-bottom: 1px;
-    transition: border-color 120ms ease, color 120ms ease;
+    transition:
+      border-color 120ms ease,
+      color 120ms ease;
   }
   .bryllim-overflow:hover {
     color: var(--c-ink);
@@ -886,8 +907,7 @@ const liveCounters = [
     /* Bryllim-style entrance : opacity + slight scale on load. */
     opacity: 0;
     transform: translateY(6px) scale(0.985);
-    animation: hero-flagship__headshot-enter 720ms
-      cubic-bezier(0.16, 1, 0.3, 1) 120ms forwards;
+    animation: hero-flagship__headshot-enter 720ms cubic-bezier(0.16, 1, 0.3, 1) 120ms forwards;
     will-change: opacity, transform;
   }
   /* Subtle hover lift, color-shift only (no transform per chrome

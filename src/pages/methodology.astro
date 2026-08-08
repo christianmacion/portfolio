@@ -60,7 +60,11 @@ const routing = [
     role: 'judgment / hardest autonomous decisions',
     ratio: '~1 dispatch per analysis chain',
   },
-  { tier: 'Sonnet', role: 'assembly / structured generation', ratio: '~3 to 5 dispatches per chain' },
+  {
+    tier: 'Sonnet',
+    role: 'assembly / structured generation',
+    ratio: '~3 to 5 dispatches per chain',
+  },
   {
     tier: 'Haiku',
     role: 'mechanical / fast deterministic steps',
@@ -90,16 +94,45 @@ const charter = [
     '@context': 'https://schema.org',
     '@type': 'HowTo',
     name: 'How to ship what has passed a G1 to G31 statistical gate',
-    description: 'The eval-first discipline: every shipped primitive passes through 31 statistical gates covering mechanical validity, statistical significance, robustness, and economic validity.',
+    description:
+      'The eval-first discipline: every shipped primitive passes through 31 statistical gates covering mechanical validity, statistical significance, robustness, and economic validity.',
     step: [
-      { '@type': 'HowToStep', name: 'Frame the primitive', text: 'Define the loop as a finite-state machine with terminal state, idempotent write, dedupe key, coverage filter, and AAR.' },
-      { '@type': 'HowToStep', name: 'Run G1 to G7 pre-flight', text: 'Mechanical-validity checks (fire-unit n, screen unit-of-analysis, joint-set sizing, regime-sign, n-aware t-stat floor, source-shift sanity, live-book overlap).' },
-      { '@type': 'HowToStep', name: 'Run G8 to G31 full stack', text: 'Statistical-significance, robustness, and economic-validity gates including walk-forward, block-bootstrap, deflated Sharpe, Monte Carlo ruin probability, and regime-conditional deployment.' },
-      { '@type': 'HowToStep', name: 'Write the AAR', text: 'One-page After-Action Report at ~/.claude/cache/corporate/aars/<id>.md with goal, decomposition, cost, critique, and doctrine reflection.' },
-      { '@type': 'HowToStep', name: 'Ship or kill', text: 'Verdict derives from gates. PASS → ship. FAIL → kill or iterate with documented scope. No in-between.' },
+      {
+        '@type': 'HowToStep',
+        name: 'Frame the primitive',
+        text: 'Define the loop as a finite-state machine with terminal state, idempotent write, dedupe key, coverage filter, and AAR.',
+      },
+      {
+        '@type': 'HowToStep',
+        name: 'Run G1 to G7 pre-flight',
+        text: 'Mechanical-validity checks (fire-unit n, screen unit-of-analysis, joint-set sizing, regime-sign, n-aware t-stat floor, source-shift sanity, live-book overlap).',
+      },
+      {
+        '@type': 'HowToStep',
+        name: 'Run G8 to G31 full stack',
+        text: 'Statistical-significance, robustness, and economic-validity gates including walk-forward, block-bootstrap, deflated Sharpe, Monte Carlo ruin probability, and regime-conditional deployment.',
+      },
+      {
+        '@type': 'HowToStep',
+        name: 'Write the AAR',
+        text: 'One-page After-Action Report at ~/.claude/cache/corporate/aars/<id>.md with goal, decomposition, cost, critique, and doctrine reflection.',
+      },
+      {
+        '@type': 'HowToStep',
+        name: 'Ship or kill',
+        text: 'Verdict derives from gates. PASS → ship. FAIL → kill or iterate with documented scope. No in-between.',
+      },
     ],
-    author: { '@type': 'Person', name: profile.fullName, url: 'https://christianmacion-portfolio.pages.dev/' },
-    publisher: { '@type': 'WebSite', name: 'Christian T. Macion Portfolio', url: 'https://christianmacion-portfolio.pages.dev/' },
+    author: {
+      '@type': 'Person',
+      name: profile.fullName,
+      url: 'https://christianmacion-portfolio.pages.dev/',
+    },
+    publisher: {
+      '@type': 'WebSite',
+      name: 'Christian T. Macion Portfolio',
+      url: 'https://christianmacion-portfolio.pages.dev/',
+    },
   }}
 >
   <header class="method-head">
@@ -115,13 +148,18 @@ const charter = [
         Don’t ship what hasn’t passed a <span class="hl">measurable gate</span>.
       </h1>
       <VoiceLine class="method-head__voice">
-        Five stages. Each kills 70%+ of the work. Same gate stack rates systematic strategies and LLM outputs.
+        Five stages. Each kills 70%+ of the work. Same gate stack rates systematic strategies and
+        LLM outputs.
       </VoiceLine>
 
       <ul class="method-head__pipeline">
-        <li><strong>Regime.</strong> Classify market state. Trend / range / vol regime before any signal.</li>
+        <li>
+          <strong>Regime.</strong> Classify market state. Trend / range / vol regime before any signal.
+        </li>
         <li><strong>Pre-flight.</strong> Mechanical validity. Schema, parse, dedupe, exit-0.</li>
-        <li><strong>Research.</strong> Walk-forward, deflated Sharpe, block-bootstrap, orthogonality.</li>
+        <li>
+          <strong>Research.</strong> Walk-forward, deflated Sharpe, block-bootstrap, orthogonality.
+        </li>
         <li><strong>Backtest.</strong> OOS, regime conditioning, Monte-Carlo ruin probability.</li>
         <li><strong>Scribe.</strong> One-page memo + kill log. Verdict derives from gates.</li>
       </ul>
@@ -131,7 +169,9 @@ const charter = [
            claim: same gate IDs mean the same thing whether the artifact
            is a trading strategy or an LLM output. -->
       <p class="method-head__intro mono">
-        Every shipped primitive passes through 31 gates: mechanical validity, statistical nulls, walk-forward OOS, multiple testing, look-ahead discipline, economic and cost realism. Same gate IDs mean the same thing whether the artifact is a trading strategy or an LLM output.
+        Every shipped primitive passes through 31 gates: mechanical validity, statistical nulls,
+        walk-forward OOS, multiple testing, look-ahead discipline, economic and cost realism. Same
+        gate IDs mean the same thing whether the artifact is a trading strategy or an LLM output.
       </p>
 
       <div class="method-head__eq-block">
@@ -154,17 +194,22 @@ const charter = [
     ]}
   />
 
-  <section class="section" data-toc-id="gates" data-toc-label={`${GATE_RANGE} gate stack`} data-section-id="methodology">
+  <section
+    class="section"
+    data-toc-id="gates"
+    data-toc-label={`${GATE_RANGE} gate stack`}
+    data-section-id="methodology"
+  >
     <div class="container">
       <header class="section__head">
         <SectionMark index="00" title="methodology" />
         <p class="section__eyebrow">The gate stack</p>
         <h2 class="section__title" id="gates">{GATE_RANGE}. Six families. One contract.</h2>
         <p class="section__sub">
-          Every candidate (LLM output, systematic strategy, content artifact) passes through the same gate stack.
-          Gates are mechanical (exit-0 contract), not opinionated. A pass means the candidate is allowed to
-          surface; a fail means it isn't. Gate IDs are load-bearing: a "G16" means the same thing across the
-          corpus.
+          Every candidate (LLM output, systematic strategy, content artifact) passes through the
+          same gate stack. Gates are mechanical (exit-0 contract), not opinionated. A pass means the
+          candidate is allowed to surface; a fail means it isn't. Gate IDs are load-bearing: a "G16"
+          means the same thing across the corpus.
         </p>
       </header>
 
@@ -177,44 +222,48 @@ const charter = [
         {
           gates.map((g, i) => (
             <div class="gates__row" id={`family-${i + 1}`} role="row">
-              <span class="gates__cell gates__cell--range mono" role="cell">{g.range}</span>
-              <span class="gates__cell gates__cell--name" role="cell">{g.name}</span>
+              <span class="gates__cell gates__cell--range mono" role="cell">
+                {g.range}
+              </span>
+              <span class="gates__cell gates__cell--name" role="cell">
+                {g.name}
+              </span>
               <p class="gates__cell gates__cell--desc" role="cell" set:html={g.desc} />
             </div>
           ))
         }
       </div>
 
-      {/* v11.W3 : 31-cell lattice visualisation wired to theatre.js.
+      {
+        /* v11.W3 : 31-cell lattice visualisation wired to theatre.js.
            Sits below the 6-row summary as a deeper view of every
            individual gate. W4 will replace this with the interactive
-           data-viz (per-cell hover + click-through to glossary). */}
+           data-viz (per-cell hover + click-through to glossary). */
+      }
       <GatesLattice />
     </div>
   </section>
 
-  {/* v12.W4 : AI HISTORY TIMELINE mounted as evidence of trend-tracking.
+  {
+    /* v12.W4 : AI HISTORY TIMELINE mounted as evidence of trend-tracking.
       The methodology isn't a static document :  it tracks the AI arc in
       real time. The 31-gate stack was assembled on the HARNESS + LOOPS
       rungs and the GRAPHS rung is now wiring multi-agent orchestration
       into the gate tests. Renders as a vertical stack on this page to
-      fit the reading rhythm. */}
+      fit the reading rhythm. */
+  }
   <section class="section section--trend" data-section-id="methodology">
     <div class="container container-wide">
       <SectionMark index="01" title="trend arc" ariaHidden={false} />
       <p class="section__eyebrow">Why the gate stack tracks the curve</p>
-      <h2 class="section__title">
-        The methodology is not a static document.
-      </h2>
+      <h2 class="section__title">The methodology is not a static document.</h2>
       <p class="section__sub">
-        Each rung of the AI arc changed how the gate stack is wired.
-        PROMPTS gave the eval family; SKILLS gave the structured-output
-        contract; AGENTS gave the run-loop schema; HARNESS gave the
-        sandbox; LOOPS gave the AAR pattern; GRAPHS gave the
-        shared-memory graph that connects every gate test to every shipped
-        artefact. OFFICES is where the gate stack now runs: 14 squads,
-        112 agents, every gate test attached to a graph node. Below:
-        the dated record of adoption versus mainstream emergence.
+        Each rung of the AI arc changed how the gate stack is wired. PROMPTS gave the eval family;
+        SKILLS gave the structured-output contract; AGENTS gave the run-loop schema; HARNESS gave
+        the sandbox; LOOPS gave the AAR pattern; GRAPHS gave the shared-memory graph that connects
+        every gate test to every shipped artefact. OFFICES is where the gate stack now runs: 14
+        squads, 112 agents, every gate test attached to a graph node. Below: the dated record of
+        adoption versus mainstream emergence.
       </p>
 
       <AIHistoryTimeline
@@ -230,14 +279,19 @@ const charter = [
     </div>
   </section>
 
-  <section class="section section--alt" data-toc-id="routing" data-toc-label="Model routing" data-section-id="methodology">
+  <section
+    class="section section--alt"
+    data-toc-id="routing"
+    data-toc-label="Model routing"
+    data-section-id="methodology"
+  >
     <div class="container">
       <header class="section__head">
         <p class="section__eyebrow">Model routing</p>
         <h2 class="section__title" id="routing">Tiered dispatch, not single-agent.</h2>
         <p class="section__sub">
-          A multi-agent system runs at ~15× the token cost of a single agent. Route by what the step needs to
-          compute, not by default. Every dispatch has a per-step budget.
+          A multi-agent system runs at ~15× the token cost of a single agent. Route by what the step
+          needs to compute, not by default. Every dispatch has a per-step budget.
         </p>
       </header>
 
@@ -282,7 +336,12 @@ const charter = [
     </div>
   </section>
 
-  <section class="section" data-toc-id="dsr" data-toc-label="DSR calculator" data-section-id="methodology">
+  <section
+    class="section"
+    data-toc-id="dsr"
+    data-toc-label="DSR calculator"
+    data-section-id="methodology"
+  >
     <div class="container">
       <header class="section__head">
         <p class="section__eyebrow">Interactive · G16</p>
@@ -290,8 +349,8 @@ const charter = [
           Try the <a href={path('/glossary/deflated-sharpe')}>deflated Sharpe</a> calculator.
         </h2>
         <p class="section__sub">
-          Same in-sample <a href={path('/glossary/sharpe')}>Sharpe</a>, different DSR, depending on how many
-          strategies you tried. This is the gate that turns "1.14 looks great" into
+          Same in-sample <a href={path('/glossary/sharpe')}>Sharpe</a>, different DSR, depending on
+          how many strategies you tried. This is the gate that turns "1.14 looks great" into
           <a href={path('/glossary/deflated-sharpe')}>"DSR 0.70, fail."</a>
         </p>
       </header>
@@ -300,13 +359,19 @@ const charter = [
     </div>
   </section>
 
-  <section class="section" data-toc-id="charter" data-toc-label="Agent charter" data-section-id="methodology">
+  <section
+    class="section"
+    data-toc-id="charter"
+    data-toc-label="Agent charter"
+    data-section-id="methodology"
+  >
     <div class="container">
       <header class="section__head">
         <p class="section__eyebrow">Agent charter</p>
         <h2 class="section__title" id="charter">{charter.length} required fields per agent.</h2>
         <p class="section__sub">
-          A charter is a contract, not a prompt. Same six fields, same semantics, every agent. No exceptions.
+          A charter is a contract, not a prompt. Same six fields, same semantics, every agent. No
+          exceptions.
         </p>
       </header>
 
