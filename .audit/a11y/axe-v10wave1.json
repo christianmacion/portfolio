@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "dedupeKey": "portfolio-wcag22-aa-route-audit-v1",
+  "standard": "WCAG 2.2 AA",
+  "axeVersion": "4.12.1",
+  "timestamp": "2026-08-07T16:09:00.097Z",
+  "routes": [
+    {
+      "route": "/",
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "html": "<a href=\"/resume-quant-onepage.pdf\" class=\"hero-flagship__cta-primary\" download=\"\" data-astro-cid-lcdefpme=\"\">Download the 1-page resume<span aria-hidden=\"true\" data-astro-cid-lcdefpme=\"\">↓</span></a>",
+              "target": [
+                ".hero-flagship__cta-primary"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.08 (foreground color: #1c2538, background color: #6b5220, font size: 8.6pt (11.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "route": "/about/",
+      "violations": []
+    },
+    {
+      "route": "/methodology/",
+      "violations": []
+    },
+    {
+      "route": "/proof/",
+      "violations": []
+    },
+    {
+      "route": "/work/",
+      "violations": []
+    },
+    {
+      "route": "/skills/",
+      "violations": []
+    },
+    {
+      "route": "/certifications/",
+      "violations": []
+    },
+    {
+      "route": "/projects/",
+      "violations": []
+    },
+    {
+      "route": "/projects/quant/01-deflated-sharpe/",
+      "violations": []
+    },
+    {
+      "route": "/research/",
+      "violations": []
+    },
+    {
+      "route": "/now/",
+      "violations": []
+    },
+    {
+      "route": "/for-recruiters/",
+      "violations": []
+    }
+  ]
+}

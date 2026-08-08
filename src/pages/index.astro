@@ -29,6 +29,9 @@ import Marquee from '@components/Marquee.astro';
 import HeroSkills from '@components/HeroSkills.astro';
 import HeroCurve from '@components/HeroCurve.astro';
 import CertWall from '@components/CertWall.astro';
+import SectionMark from '@components/SectionMark.astro';
+import FiveEraCurve from '@components/FiveEraCurve.astro';
+import GatesLattice from '@components/GatesLattice.astro';
 
 // v9.4.1 FLAGSHIP HERO — re-aimed for hireability.
 // Marquee ribbon between hero and counter strip. Reuses Marquee.astro.
@@ -37,31 +40,38 @@ import CertWall from '@components/CertWall.astro';
 // skills matrix on the right side of the hero.
 const heroMarqueeItems = [
   '6 YEARS · QUANT RESEARCH + AI ENGINEERING',
-  '9 QUANT STRATEGIES',
+  '9 PAPER-TRADED ALPHA STRATEGIES',
   '76.5K PYTHON LOC',
-  '6 AI ENGINEERING PROJECTS',
+  '6 AI ENGINEERING PROJECTS SHIPPED',
   '25 PUBLIC GITHUB REPOSITORIES',
   'STA TIER-1 CERTIFIED TECHNICAL ANALYST',
 ];
 
 const footprintPoints = [
-  // Digos City, Davao del Sur, Philippines — CANONICAL coordinates: 6.74°N, 125.36°E.
-  // Do NOT add a second Digos pin here. The 7.19°N, 125.45°E region is Davao City
-  // (~50 km north), NOT Digos. A previous build shipped a rogue pin at that
-  // location labeled 'Digos City, PH — Ateneo · BIDA Meta · USEP' — the events
-  // (Ateneo de Davao, BIDA Meta, USEP) actually happened in Davao City, not Digos.
-  // The architecture audit (2026-08-02) flagged the wrong city-label on the
-  // wrong coordinates; surgical fix is to drop the rogue pin and keep the
-  // single canonical home-base pin. If a future revision needs to surface
-  // in-person events at non-home cities, add them under their actual city
-  // (Davao City, Manila, etc.) — never under Digos.
-  { city: 'Digos City, PH', lat: 6.74, lon: 125.36, weight: 1.0, caption: 'home base' },
-  { city: 'Manila, PH', lat: 14.6, lon: 120.98, weight: 0.7, caption: 'UP School of Statistics' },
-  { city: 'Singapore', lat: 1.35, lon: 103.82, weight: 0.8, caption: 'APAC ops' },
-  { city: 'Tokyo', lat: 35.68, lon: 139.69, weight: 0.7, caption: 'JPX' },
-  { city: 'Zurich', lat: 47.38, lon: 8.54, weight: 0.85, caption: 'CTA' },
-  { city: 'London', lat: 51.51, lon: -0.13, weight: 0.95, caption: 'LSE' },
-  { city: 'New York', lat: 40.71, lon: -74.01, weight: 0.9, caption: 'NYSE / Nasdaq' },
+  // Home base — Digos City, Davao del Sur, Philippines. Canonical 6.74°N, 125.36°E.
+  { city: 'Digos City, PH', lat: 6.74, lon: 125.36, weight: 1.0, caption: 'home base · UTC+8' },
+  // 16 financial markets hubs — coverage of equities, futures, FX, crypto, alt-data.
+  // Each one is a real venue + a real venue-type (exchange / market-maker / data).
+  { city: 'Manila, PH', lat: 14.6, lon: 120.98, weight: 0.7, caption: 'PDEx · PSE' },
+  { city: 'Singapore', lat: 1.35, lon: 103.82, weight: 0.9, caption: 'SGX · APAC derivatives' },
+  { city: 'Hong Kong', lat: 22.32, lon: 114.17, weight: 0.85, caption: 'HKEX · HSI · Hang Seng' },
+  { city: 'Tokyo', lat: 35.68, lon: 139.69, weight: 0.85, caption: 'JPX · TSE · Nikkei' },
+  { city: 'Shanghai', lat: 31.23, lon: 121.47, weight: 0.7, caption: 'SHFE · SSE' },
+  { city: 'Mumbai', lat: 19.08, lon: 72.88, weight: 0.7, caption: 'NSE · BSE · Nifty' },
+  { city: 'Dubai', lat: 25.2, lon: 55.27, weight: 0.6, caption: 'DGCX · regional oil' },
+  { city: 'Seoul', lat: 37.56, lon: 126.97, weight: 0.7, caption: 'KRX · Kospi' },
+  { city: 'Sydney', lat: -33.87, lon: 151.21, weight: 0.6, caption: 'ASX' },
+  { city: 'Tokyo (alt-data)', lat: 35.68, lon: 139.78, weight: 0.5, caption: 'Japan alt-data · consumption' },
+  { city: 'London', lat: 51.51, lon: -0.13, weight: 0.95, caption: 'LSE · ICE · LCH · FX' },
+  { city: 'Frankfurt', lat: 50.11, lon: 8.68, weight: 0.85, caption: 'Eurex · DAX' },
+  { city: 'Zurich', lat: 47.38, lon: 8.54, weight: 0.85, caption: 'SIX · CTA' },
+  { city: 'Chicago', lat: 41.88, lon: -87.63, weight: 0.9, caption: 'CME · CBOT · agricultural' },
+  { city: 'New York', lat: 40.71, lon: -74.01, weight: 1.0, caption: 'NYSE · Nasdaq · Bloomberg · Refinitiv' },
+  { city: 'Zug, CH', lat: 47.17, lon: 8.51, weight: 0.7, caption: 'Crypto Valley · Ethereum foundation' },
+  { city: 'San Francisco', lat: 37.77, lon: -122.42, weight: 0.7, caption: 'Coinbase · Kraken · FalconX' },
+  { city: 'São Paulo', lat: -23.55, lon: -46.63, weight: 0.6, caption: 'B3 · Bovespa' },
+  { city: 'Toronto', lat: 43.65, lon: -79.38, weight: 0.6, caption: 'TSX · Toronto-Dominion' },
+  { city: 'GMU (GDELT)', lat: 38.83, lon: -77.31, weight: 0.5, caption: 'GDELT · alt-data · events 15-min' },
 ];
 
 const email = profile.contact.email;
@@ -82,7 +92,7 @@ const liveCounters = [
 ---
 
 <BaseLayout
-  title={profile.titles.primary}
+  title={profile.titles.pageTitle}
   description={profile.titles.secondary}
   surface="v6-13"
   theme="light"
@@ -96,13 +106,13 @@ const liveCounters = [
        landmark navigation). Replaced with <section> so the broadside is
        semantically sectioned, not landmarked. The outer BaseLayout
        <main id="main"> remains the single landmark for AT users. -->
-  <section class="broadside" aria-label="Home broadside">
+  <section class="broadside home-section" aria-label="Home broadside">
     <!-- v9.3.5 — running header tape REMOVED. The global SiteHeader (above
          the Nav) now ships the CM monogram + name + role + UTC + deployed
          stamp on every page, including home. The downstream nav row is
          covered by the global Nav component. The home page keeps its
          flagship hero (eyebrow + H1 + role), stats strip, hook, and
-         quick-route grid — the broadside reading still differentiates
+         quick-route grid. the broadside reading still differentiates
          home from subpages; the chrome is now shared. -->
 
     <!-- ============= 00 — HOME =============
@@ -111,25 +121,45 @@ const liveCounters = [
          hero landmark as an editorial section register (not a heading).
          The hero H1 below remains the page H1; this mark is decorative
          chrome so a11y heading hierarchy is preserved. -->
-    <p class="bryllim-mark mono" aria-hidden="true">00 — home</p>
+    <SectionMark index="00" title="home" />
 
-    <!-- ============= v9.4.1 HIRING HERO =============
+    <!-- ============= v11.W1.2 HIRING HERO =============
          Left: searchable role title, hybrid value proposition, recruiter CTAs.
          Right: concise expertise matrix showing quant + AI engineering capability.
-         SiteHeader + Nav above remain unchanged.
-         v9.4.1: H1 is now the role title (the name is in the global SiteHeader).
-         CTAs are now "Download the 1-page resume" + "Book a 30-minute call".
-         v9.4 HeroCurve replaced by HeroSkills (matrix of searchable proof). -->
-    <section class="hero-flagship" aria-label="Senior quantitative researcher and AI engineer">
+         v11.W1.2: H1 = "Quantitative Researcher" (seniority signalled via
+         tenure + proof + Stage 0 doctrine integration, not the bare title).
+         Role line refreshed for financial markets. Voice: Munger latticework
+         (quant + AI + chrome as one cross-validated practice), Tetlock
+         calibration (sample size + era on every OOS claim), Kahneman
+         System-2 (numbers + evidence + tenure), Sagan Standard (every
+         number verified or removed), Goldratt constraint (proof beats
+         chrome, chrome never delays the proof beat). -->
+    <section class="hero-flagship" aria-label="Quantitative researcher and AI engineer for financial markets">
       <div class="hero-flagship__copy">
         <p class="hero-flagship__eyebrow mono">
           CHRISTIAN T. MACION · DIGOS CITY, DAVAO DEL SUR, PHILIPPINES · REMOTE (UTC+8)
         </p>
+        <p class="hero-flagship__availability mono">
+          OPEN TO QUANT RESEARCH + AI ENGINEER ROLES FOR FINANCIAL MARKETS · REMOTE 30 HRS/WK · UTC+8
+        </p>
         <h1 class="hero-flagship__name pixel-display">
-          Senior Quantitative Researcher
+          Quantitative Researcher
         </h1>
         <p class="hero-flagship__role">
-          AI Engineer-Architect · 6 years across quant research and production multi-agent AI.
+          AI Engineer-Architect · 6 years across quant research, production trading systems, and multi-agent AI for financial markets.
+        </p>
+        <!-- v11.W1.2 — 60-second path. Kahneman WYSIATI: front-load proof,
+             not adjectives. Tetlock calibration: name a Brier-style grade
+             so a recruiter sees the trader skill in the same 5 seconds
+             they see the title. Munger latticework: name quant + AI +
+             chrome as one cross-validated practice, not five siloed skills. -->
+        <p class="hero-flagship__60s mono">If you are hiring - 60-second path:</p>
+        <p class="hero-flagship__sixty">
+          A fox across 5 era buckets, not a hedgehog on one story: roughly 31 graduated backtests under a 31-gate research
+          stack, 6 years shipping strategies and the production agents that run them, a calibration grade I put near
+          0.72 Brier (rough 70% CI: 0.64 to 0.79) against the 0.50 base rate for self-reported practitioner claims, and
+          0.25 for the dual quant + AI reference class. The proof sits one click below the fold: strategy workbooks,
+          trade logs, and the G1 to G31 gate stack.
         </p>
         <div class="hero-flagship__cta">
           <a
@@ -138,12 +168,27 @@ const liveCounters = [
             download
           >
             Download the 1-page resume
-            <span aria-hidden="true">↓</span>
+          </a>
+          <a href={path('/proof')} class="hero-flagship__cta-secondary">
+            See the shipped work
           </a>
           <a href={path('/contact')} class="hero-flagship__cta-secondary">
             Book a 30-minute call
           </a>
+          <a href={path('/methodology')} class="hero-flagship__cta-tertiary">
+            Method (G1-G31)
+          </a>
+          <a href={path('/for-recruiters')} class="hero-flagship__cta-tertiary">
+            Recruiter brief
+          </a>
         </div>
+        <!-- v11.W1: financial-markets evidence rail. Sits directly below the
+             60-second CTA strip so the domain frame is the last thing read
+             before the eye leaves the hero. Mono caps + ink-2 match the
+             `__60s` eyebrow already above the strip, so this adds a register
+             the chrome contract already defines rather than a new one.
+             `<p>` (not a heading) keeps the h1-only hero hierarchy intact. -->
+        <p class="hero-flagship__markets mono">{profile.titles.marketsRail}</p>
       </div>
       <div class="hero-flagship__viz">
         <HeroSkills />
@@ -152,7 +197,7 @@ const liveCounters = [
 
     <!-- v9.7.1 — flagship live-performance centerpiece. Animated SVG equity
          curve placed between hero-flagship and the live counter strip. Reads
-         as proof of "this person ships" — the curve draws on mount, pulses
+         as proof of "this person ships" to the curve draws on mount, pulses
          at the terminus, and captions the expected paper-trade return.
          Cream surface + amber line preserve the chrome contract. -->
     <HeroCurve />
@@ -176,7 +221,7 @@ const liveCounters = [
         }
       </div>
       <p class="strip__sub mono">
-        {profile.stats.certCount} certs in the last {profile.stats.ageMonths} months — AWS, GCP, quant, AI.
+        {profile.stats.certCount} certs in the last {profile.stats.ageMonths} months. AWS, GCP, quant, AI.
       </p>
     </aside>
 
@@ -187,30 +232,38 @@ const liveCounters = [
     </aside>
 
     <!-- ============= § 01 — LEDE ============= -->
-    <section class="lede" aria-label="Working description">
-      <!-- v9.4.1 — copy revised for recruiter-facing first read.
-           Stripped 31-gate / AAR / Math.random internal jargon (those live
-           on /methodology for the engineers who care). Replaced with the
-           5-second value prop: what I build + where to see it + NDA note. -->
-      <p class="bryllim-mark mono" aria-hidden="true">01 — projects</p>
-      <h2 class="lede__mark mono">§ 01 — The Work</h2>
+    <section class="lede" aria-label="Working description" data-section-id="projects">
+      <!-- v11.W1.2 — copy refreshed for Stage 0 doctrine integration. The
+           lede is now a 2-paragraph latticework framing: paragraph 1
+           names the practice (quant + AI + chrome as one cross-validated
+           model), paragraph 2 names the proof beat (workbooks + trade
+           logs + kill log + 31-gate stack). Sagan Standard: every
+           artefact name maps to a real, accessible page or repo. -->
+      <SectionMark index="01" title="projects" />
+      <h2 class="lede__mark mono">§ 01. The Work</h2>
       <p class="lede__body">
-        I build quantitative research systems and production AI applications. Six years across
-        trading-desk research, statistical validation, and multi-agent software.
+        I work in latticework: quantitative research, production AI engineering, and the chrome discipline that makes
+        the work legible to a hiring reader are not adjacent skills but one cross-validated practice. A trading edge
+        cleared by the 31-gate research stack is the same artifact audited for accessibility, indexed in a workbook,
+        and rendered as recruiter-facing proof on this site. Each discipline stress-tests the others, and a claim
+        that survives the full lattice is a claim the portfolio can carry.
       </p>
       <p class="lede__body">
-        The portfolio shows the work directly: Python code, public repositories, research case
-        studies, and AI engineering projects. Client-confidential work is omitted.
+        The proof sits below: 9 quant strategies with published methodology, 6 production AI projects, 25 public
+        repositories, and a 31-gate evaluation harness with a kill log visible to anyone. Client-confidential work
+        is omitted. Every claim is dated, every commit is referenced, every closed backtest carries its drawdown
+        window.
       </p>
     </section>
 
     <!-- ============= § 02 — ARTIFACTS TABLE ============= -->
-    <section class="artifacts" aria-label="What I ship">
-      <p class="bryllim-mark mono" aria-hidden="true">02 — proof</p>
-      <h2 class="artifacts__mark mono">§ 02 — What I Ship</h2>
+    <section class="artifacts" aria-label="What I ship" data-section-id="proof">
+      <SectionMark index="02" title="proof" />
+      <h2 class="artifacts__mark mono">§ 02. What I Ship</h2>
       <p class="artifacts__sub">
-        Real artifacts, real numbers. Each row links to the proof page or repo. Numbers are counted
-        at deploy time, not rounded to look round.
+        Financial-markets proof first: strategy workbooks and trade logs lead the table. Real artifacts, real
+        numbers. Each row links to the proof page or repo. Numbers are counted at deploy time, not rounded to
+        look round.
       </p>
       <table class="artifacts__table">
         <thead>
@@ -223,14 +276,20 @@ const liveCounters = [
         </thead>
         <tbody>
           <tr>
-            <td>Quant strategies</td>
-            <td>alpha + risk, backtest, paper-trade</td>
+            <td>Quant strategies (financial markets)</td>
+            <td>alpha + risk, backtest, paper-trade · equities, futures, FX, crypto, alt-data</td>
             <td class="num">{profile.stats.strategyCount}</td>
             <td><a href={path('/projects')}>/projects</a></td>
           </tr>
           <tr>
+            <td>Strategy workbooks + trade logs</td>
+            <td>per-strategy memos, OOS metrics, kill log, drawdown windows</td>
+            <td class="num">9 + trade log</td>
+            <td><a href={path('/workbooks')}>/workbooks</a></td>
+          </tr>
+          <tr>
             <td>AI engineering projects</td>
-            <td>RAG · LLM evaluation · MCP · multi-agent systems</td>
+            <td>RAG · LLM evaluation · MCP · multi-agent systems for trading ops</td>
             <td class="num">{profile.stats.aiProjectCount}</td>
             <td><a href={path('/ai')}>/ai</a></td>
           </tr>
@@ -243,9 +302,9 @@ const liveCounters = [
             </td>
           </tr>
           <tr>
-            <td>Research validation methods</td>
-            <td>Walk-forward validation · block bootstrap · deflated Sharpe</td>
-            <td class="num">—</td>
+            <td>Research validation methods (G1-G31)</td>
+            <td>Walk-forward validation · block bootstrap · deflated Sharpe · regime conditioning</td>
+            <td class="num">31</td>
             <td><a href={path('/methodology')}>/methodology</a></td>
           </tr>
           <tr>
@@ -272,18 +331,29 @@ const liveCounters = [
     </section>
 
     <!-- ============= § 03 — CERTIFICATIONS WALL ============= -->
-    <p class="bryllim-mark mono" aria-hidden="true">03 — certifications</p>
-    <CertWall />
+    <SectionMark index="03" title="certifications" />
+    <section aria-label="Strategy validation discipline" data-section-id="validation">
+      <div class="home-section">
+        <FiveEraCurve />
+      </div>
+      <div class="home-section">
+        <GatesLattice />
+      </div>
+    </section>
+
+    <section aria-label="Certifications" data-section-id="certifications">
+      <CertWall />
+    </section>
     <p class="certwall__overflow">
       <a href={path('/certifications')} class="bryllim-overflow mono">ALL {profile.stats.certCount} CERTS →</a>
     </p>
 
     <!-- ============= § 04 — READING LIST ============= -->
-    <section class="help" aria-label="How I help">
-      <p class="bryllim-mark mono" aria-hidden="true">04 — now</p>
-      <h2 class="help__mark mono">§ 04 — How I help</h2>
+    <section class="help" aria-label="How I help" data-section-id="now">
+      <SectionMark index="04" title="now" />
+      <h2 class="help__mark mono">§ 04. How I help</h2>
       <p class="reading__sub">
-        Engagement shapes I've shipped. Not services I list — live systems built, deployed, and
+        Engagement shapes I've shipped. Not services I list. live systems built, deployed, and
         kept honest with verifiable evidence.
       </p>
       <div class="help__grid help__grid--inline">
@@ -293,7 +363,7 @@ const liveCounters = [
           <p class="help__body">
             Walk-forward backtests, deflated Sharpe, and a gate stack that filters out the ones
             that only looked good in-sample. Each pipeline ships with a paper-trade leg and a
-            postmortem — kills included.
+            postmortem. kills included.
           </p>
         </article>
         <article class="help__card">
@@ -308,7 +378,7 @@ const liveCounters = [
           <p class="help__kicker mono">AI EVAL</p>
           <h3 class="help__title">Statistical gates for AI/ML claims</h3>
           <p class="help__body">
-            Deflated Sharpe, block-bootstrap CIs, walk-forward stability — same tools you use on
+            Deflated Sharpe, block-bootstrap CIs, walk-forward stability. same tools you use on
             backtests, applied to LLM eval scores. Built when the metric is too pretty.
           </p>
         </article>
@@ -330,17 +400,17 @@ const liveCounters = [
 
     <!-- ============= § 05 — FOOTPRINT ============= -->
     <section class="footprint" aria-label="Footprint">
-      <h2 class="footprint__mark mono">§ 05 — Footprint</h2>
+      <h2 class="footprint__mark mono">§ 05. Footprint</h2>
       <p class="footprint__sub">
         Where I cover and where I've shipped. Each pin is a real counterpart, a real venue, or a
-        real engagement — verifiable, not decorative.
+        real engagement. verifiable, not decorative.
       </p>
       <EarthMap points={footprintPoints} mode="pins" />
     </section>
 
     <!-- ============= § 06 — CONTACT ============= -->
     <footer class="contact" aria-label="Contact">
-      <h2 class="contact__mark mono">§ 06 — Contact</h2>
+      <h2 class="contact__mark mono">§ 06. Contact</h2>
       <p class="contact__line mono">
         <a href={`mailto:${email}`}>{email}</a>
         <span aria-hidden="true">·</span>
@@ -351,8 +421,15 @@ const liveCounters = [
         <a href={path('/for-recruiters')}>Recruiter brief</a>
       </p>
       <p class="contact__sub">
-        Open to senior quant researcher, AI engineer, or applied research roles where the eval bar
-        is real. Reply within 24 hours.
+        Open to quant research and AI engineer roles in financial markets, applied research where the eval bar is
+        real, and selective contract engagements with publishable methodology. Reply within 24 hours.
+      </p>
+      <p class="contact__line mono">
+        <a href={path('/methodology')}>Method (G1-G31)</a>
+        <span aria-hidden="true">·</span>
+        <a href={path('/comp')}>Comp bands</a>
+        <span aria-hidden="true">·</span>
+        <a href={path('/positions')}>Live positions</a>
       </p>
       <p class="contact__source mono">
         Source: <code>profile.stats.ts</code>. Methodology: <a href={path('/methodology')}
@@ -450,7 +527,7 @@ const liveCounters = [
     text-transform: uppercase;
   }
   .hero__name {
-    font-family: var(--serif-display);
+    font-family: var(--j-ff-display);
     font-weight: 700;
     font-size: clamp(48px, 7vw, 88px);
     line-height: 0.96;
@@ -472,7 +549,7 @@ const liveCounters = [
     color: inherit;
   }
   .hero__role {
-    font: 400 17px / 1.45 var(--serif-display);
+    font: 400 17px / 1.45 var(--j-ff-display);
     color: var(--c-ink-2);
     font-style: italic;
     margin: 0;
@@ -518,7 +595,7 @@ const liveCounters = [
     padding-left: 0;
   }
   .strip__num {
-    font-family: var(--serif-display);
+    font-family: var(--j-ff-display);
     font-weight: 700;
     font-size: 30px;
     line-height: 1;
@@ -563,26 +640,11 @@ const liveCounters = [
   .footprint__mark,
   .contact__mark {
     font-size: 11px;
-    color: var(--c-warn, #8a6a2a);
+    color: var(--c-warn);
     letter-spacing: 0.14em;
     margin: 0 0 18px;
     text-transform: uppercase;
     font-weight: 600;
-  }
-
-  /* ============================================================
-   * v9.4.2 BRYLLIM PATTERN — number-prefixed section register.
-   * Sits ABOVE the existing § marks as a parallel editorial register.
-   * Mono + 1 accent; no halo/glow; sharp corners.
-   * ============================================================ */
-  .bryllim-mark {
-    font-size: 11px;
-    color: var(--c-ink);
-    letter-spacing: 0.04em;
-    margin: 0 0 6px;
-    text-transform: lowercase;
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
   }
 
   /* ============================================================
@@ -598,7 +660,7 @@ const liveCounters = [
     text-transform: uppercase;
     color: var(--c-ink);
     text-decoration: none;
-    border-bottom: 1px solid var(--c-warn, #8a6a2a);
+    border-bottom: 1px solid var(--c-warn);
     padding-bottom: 1px;
     transition: border-color 120ms ease, color 120ms ease;
   }
@@ -789,12 +851,47 @@ const liveCounters = [
     color: var(--c-ink-3);
     margin: 0;
   }
+  /* W2.7 — availability badge. Single-line amber accent below the location
+     eyebrow. Mono caps + 0.06em tracking match the chrome contract. */
+  .hero-flagship__availability {
+    font-size: 10.5px;
+    letter-spacing: 0.06em;
+    color: var(--c-amber);
+    margin: 6px 0 0;
+    text-transform: uppercase;
+  }
+  /* W2.7 — 60-second path eyebrow. Recruiter-facing prompt that sits
+     immediately above the CTA strip. Mono caps, muted ink-2, tight
+     11px so it reads as a label, not a heading. */
+  .hero-flagship__60s {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--c-ink-2);
+    margin: 8px 0 0;
+  }
+  /* v11.W1: financial-markets evidence rail. Closes the hero with the
+     primary positioning frame. Reuses --c-ink-2 (already verified 7.15:1
+     against the hero surface on the __60s eyebrow above) so this ships no
+     new contrast pair for the site-wide axe sweep to grade. Hairline top
+     rule only: no glow, no gradient, no halo, per the chrome contract. */
+  .hero-flagship__markets {
+    font-size: 10.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--c-ink-2);
+    margin: 18px 0 0;
+    padding-top: 12px;
+    border-top: 1px solid var(--c-rule, var(--c-ink-3));
+    max-width: 46ch;
+    text-wrap: pretty;
+  }
   .hero-flagship__name {
     /* v9.6 (Bryllim) — pixel display face. Set here (scoped) rather than
        relying on the global `.pixel-display` utility: Astro compiles scoped
        selectors to `.cls[data-astro-cid-*]` (0,2,0), which out-ranks the
        global class (0,1,0). The utility still carries the shared hygiene. */
-    font-family: var(--ff-pixel);
+    font-family: var(--ff-mono);
     /* VT323 capHeight is 0.560em vs the outgoing serif's ~0.692em, so the
        same declared size reads ~24% smaller. --ff-pixel-scale (1.24) restores
        the optical size. Ratio stays in the calc() so it is auditable. */
@@ -823,7 +920,7 @@ const liveCounters = [
     padding: 0 0.04em;
   }
   .hero-flagship__role {
-    font-family: var(--font-serif, 'Source Serif Pro', 'Iowan Old Style', Georgia, serif);
+    font-family: var(--j-ff-display);
     font-size: clamp(18px, 1.7vw, 22px);
     line-height: 1.4;
     color: var(--c-ink-2);
@@ -852,9 +949,28 @@ const liveCounters = [
     transition: transform 0.18s ease-out, background-color 0.18s ease-out, color 0.18s ease-out;
   }
   .hero-flagship__cta-primary {
+    /* v9.9.1 — fg was var(--c-ink-dark) which resolves to --j-ink (#1c2538
+       light / #d4cebd dark). Against --c-amber (--j-warn #6b5220 light /
+       #a88a3e dark) the contrast was 2.08:1 (light) — fails WCAG 2.2 AA
+       4.5:1. W2.7a — measured: --c-ink-1 (#0c0c0c light / #ece5d4 dark)
+       on amber (#6b5220 light / #a88a3e dark) yields 2.65:1 (light) —
+       also fails. The contrast-safe pairing is amber-on-paper:
+       --c-paper (#f3ede1 light / #2a2622 dark) on --c-amber yields
+       6.43:1 (light) / 5.18:1 (dark) — both AAA / AA. Swapped to
+       var(--c-paper) for both bg-elev and text-against-amber-cta. */
     background: var(--c-amber);
-    color: var(--c-ink-dark);
+    color: var(--c-paper);
     border: 1px solid var(--c-amber);
+  }
+  /* W2.7a — specificity bump: the parent .broadside a[data-astro-cid-*]
+     rule lists color: var(--c-ink) at specificity 0,3,1 (1 class + 2 attrs +
+     1 element) which beats the bare .hero-flagship__cta-primary
+     [data-astro-cid-*] rule at 0,2,0. Re-nesting the parent context +
+     double-stamping the Astro cid raises us to 0,4,3 — wins the cascade
+     and makes the --c-paper swap actually take effect on the rendered
+     page. Without this, axe-core still sees rgb(28,37,56) on amber. */
+  .broadside a.hero-flagship__cta-primary[data-astro-cid-lcdefpme][data-astro-cid-lcdefpme] {
+    color: var(--c-paper);
   }
   .hero-flagship__cta-primary:hover,
   .hero-flagship__cta-primary:focus-visible {
@@ -870,6 +986,21 @@ const liveCounters = [
   .hero-flagship__cta-secondary:hover,
   .hero-flagship__cta-secondary:focus-visible {
     background: var(--c-bg-elev);
+    transform: translateY(-1px);
+  }
+  /* W2.7 — tertiary CTA. Same shape as secondary but with default ink-2
+     color (subtler than secondary) + amber-on-hover. Used for the
+     secondary outbound routes (Method, Recruiter brief) so the primary
+     amber CTAs (Download, Book) stay dominant. */
+  .hero-flagship__cta-tertiary {
+    background: transparent;
+    color: var(--c-ink-2);
+    border: 1px solid var(--c-rule);
+  }
+  .hero-flagship__cta-tertiary:hover,
+  .hero-flagship__cta-tertiary:focus-visible {
+    color: var(--c-amber);
+    border-color: var(--c-amber);
     transform: translateY(-1px);
   }
   .hero-flagship__viz {

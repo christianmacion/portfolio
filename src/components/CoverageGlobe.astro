@@ -132,7 +132,7 @@ const primeX = project(0, 0).x;
     aria-label="Coverage map: research and operations nodes"
     preserveAspectRatio="xMidYMid meet"
   >
-    <title>Coverage map — equirectangular world dot map with city markers</title>
+    <title>Coverage map. equirectangular world dot map with city markers</title>
 
     {/* Background grid lines (equator, prime meridian) — very faint. */}
     <line x1="0" y1={equatorY} x2={width} y2={equatorY} class="globe__eq"></line>
@@ -157,14 +157,14 @@ const primeX = project(0, 0).x;
             <circle cx={c.x} cy={c.y} r={c.r} class="globe__dot">
               <title>
                 {c.city} ({c.lat.toFixed(2)}°, {c.lon.toFixed(2)}°)
-                {c.caption ? ` — ${c.caption}` : ''}
+                {c.caption ? ` to ${c.caption}` : ''}
               </title>
             </circle>
           ) : (
             <circle cx={c.x} cy={c.y} r={c.r} class="globe__dot">
               <title>
                 {c.city} ({c.lat.toFixed(2)}°, {c.lon.toFixed(2)}°)
-                {c.caption ? ` — ${c.caption}` : ''}
+                {c.caption ? ` to ${c.caption}` : ''}
               </title>
             </circle>
           )}

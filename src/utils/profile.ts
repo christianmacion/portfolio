@@ -15,7 +15,7 @@ const stats = {
   aiAgentCount: '11', // orchestrator + workers
   locPython: '76.5k', // ~76,500 LOC
   evalGates: '31', // 31-gate evaluation harness
-  pagesBuilt: '84', // built pages — update on route add/remove
+  pagesBuilt: '84', // built pages. update on route add/remove
   // v9.4.1 — hireability-facing chrome stats. Add `yearsExperience` + `aiProjectCount`
   // so the home counter strip (and any future recruiter-facing surface) can render
   // the exact figures a recruiter needs in 5 seconds. Internal-only counters
@@ -28,7 +28,7 @@ const stats = {
   repoCount: '25', // GitHub public repos (api.github.com/users/christianmacion26 → public_repos=25)
   targetSeats: '5', // /positions conversation cards (lines 248-374)
   offTableSeats: '3', // /positions "off the table" bullets (lines 388-392)
-  strategyCount: '9', // /projects quant files (01-…mdx) — update on strategy add/remove
+  strategyCount: '9', // /projects quant files (01-…mdx) to update on strategy add/remove
   positionsStartDate: '2026-04-21', // /positions paper-trading series start (BTC/USDT 1d klines)
   // v6.11.33 — resume variants count. Drives /resume, /for-recruiters, /contact chrome.
   resumeCount: '3', // unified / AI-only / Quant one-pager (resumes[] in resume.astro)
@@ -94,24 +94,39 @@ export const profile = {
   shortName: 'Christian Macion',
   initials: 'CM',
   titles: {
-    // v9.4.1 — home H1 is now `Senior Quantitative Researcher` (search-keyword
-    // match for Tier-1 quant recruiters). The primary title drives the page
-    // <title> + nav brand + JSON-LD schema.org — all of which should match
-    // the visible H1 to avoid contradicting the recruiter's first impression.
-    primary: 'Senior Quantitative Researcher · AI Engineer-Architect',
+    // v11.W1 (2026-08-08): dropped 'Senior' from every visible title. Two
+    // reasons: (1) 'Senior' is a seniority claim the recruiter grades, not a
+    // search keyword they query, so it spends H1 width without buying reach;
+    // (2) the ATS keyword that matches Tier-1 quant reqs is the bare role
+    // string 'Quantitative Researcher'. Primary drives the page <title> +
+    // nav brand + JSON-LD schema.org, all of which track the visible H1 so
+    // the recruiter's first impression is never contradicted.
+    primary: 'Quantitative Researcher · AI Engineer-Architect',
     // v6.10.47 — compact form for the Nav brand slot (36px logo). Uses
     // 'Quant' (not 'Quantitative') so the word fits the available width
     // without ellipsis at the smallest desktop breakpoint. Kept distinct
     // from `primary` so the visual hierarchy at H1 size still reads
     // 'Quantitative Researcher' in full.
-    short: 'Senior Quant Researcher · AI Engineer',
-    secondary: `Christian T. Macion — Senior Quantitative Researcher and AI Engineer-Architect with 6 years building quantitative research systems and production AI applications. 76.5k LOC Python, 25 public repositories, and 102 professional certifications. NDA-safe by construction.`,
-    tagline: 'Quantitative research and production AI engineering.',
+    short: 'Quant Researcher · AI Engineer',
+    // v11.W1: full <title> string. Name leads (brand recall on a SERP row),
+    // then role, then the financial-markets frame. buildMeta() detects the
+    // leading site name and does NOT re-append it, so this renders verbatim.
+    pageTitle:
+      'Christian T. Macion · Quantitative Researcher + AI Engineer-Architect for financial markets',
+    // v11.W1: meta description. Financial markets is the primary frame:
+    // the asset-class breadth sits ahead of the volume metrics because a
+    // hiring desk filters on domain first and on throughput second.
+    secondary: `Christian T. Macion. Quantitative Researcher and AI Engineer-Architect with 6 years across quant research, production trading systems, and multi-agent AI for financial markets. Equities, futures, FX, crypto, and alt-data. 76.5k LOC Python, 25 public repositories, and 102 professional certifications. NDA-safe by construction.`,
+    // v11.W1: role line rendered under the home H1.
+    role: 'AI Engineer-Architect · 6 years across quant research, production trading systems, and multi-agent AI for financial markets.',
+    // v11.W1: mono evidence rail under the 60-second CTA strip.
+    marketsRail: 'FINANCIAL MARKETS · EQUITIES · FUTURES · FX · CRYPTO · ALT-DATA',
+    tagline: 'Quantitative research and production AI engineering for financial markets.',
   },
   headshot: {
     src: '/headshot.jpg',
-    alt: 'Christian T. Macion, dark blazer over graphic tee, three-quarter view, neutral background. Photographed February 2026.',
-    credit: 'Photo · Feb 2026',
+    alt: 'Christian T. Macion, professional portrait, three-quarter view. Photographed January 2026.',
+    credit: 'Photo · Jan 2026',
   },
   location: {
     city: 'Digos City',
@@ -160,8 +175,8 @@ export const profile = {
   alumniOf: [
     'University of Mindanao (UM)',
     'Southern Technical Academy (STA)',
-    'Philippine Science High School — Southern Mindanao Campus (PSHS-SMC)',
-    'University of Southeastern Philippines (USeP) — units',
+    'Philippine Science High School. Southern Mindanao Campus (PSHS-SMC)',
+    'University of Southeastern Philippines (USeP) to units',
   ],
   awards: [
     // [VERIFY] date-range-mismatch with ageMonths: stats.ageMonths is '11'
@@ -178,7 +193,7 @@ export const profile = {
     'STA Tier-1 Certified Technical Analyst · cert #260197 · Jan 2026' /* v6.18 — dropped ® and "Society of Technical Analysts" claim; renamed to PH STA Tier-1 (the actual program). UK STA / IFTA CTA® chartered designation is a separate credential not held. */,
     'Galactic Problem Solver · NASA Space Apps Challenge 2025 (Zurich cohort)',
     'AI for the Modern Workforce · Ateneo de Davao + US Embassy · Nov 8 2025',
-    'AIccelerate 2025 · BIDA × Bayan Academy × Meta · Nov 12–21 2025',
+    'AIccelerate 2025 · BIDA × Bayan Academy × Meta · Nov 12 to 21 2025',
     'Blockchain4Youth B4Y-2026-000701 · Bitget · 2026',
   ],
   availability: {

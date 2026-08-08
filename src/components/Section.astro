@@ -1,0 +1,185 @@
+---
+/**
+ * Section.astro — v11.W6 · canonical Section component.
+ *
+ * Replaces ad-hoc `<section>` blocks scattered across pages with one
+ * predictable anatomy: id + eyebrow + title + lede + body + footer.
+ *
+ * Variants:
+ *   - variant="default"  · cream canvas, navy ink, hairline rule
+ *   - variant="paper"    · dark callout panel (--j-paper), cream ink
+ *   - variant="flush"    · no padding, no rule (for hero strips)
+ *
+ * Width:
+ *   - width="narrow"     · 720px  · lede + body
+ *   - width="reading"    · 880px  · long-form prose
+ *   - width="wide"       · 1080px · default content
+ *   - width="full"       · 1280px · data-dense surfaces
+ *
+ * Pass `toc={true}` to opt this section into the auto-TOC discovery
+ * (SectionTOC will pick up data-toc-id + data-toc-label from this element).
+ *
+ * The H2 is the section heading. The eyebrow + title sit inside <header>
+ * so the heading hierarchy remains canonical. The eyebrow is rendered
+ * with `aria-hidden="true"` so AT does not double-announce.
+ *
+ * Usage:
+ *   <Section id="roster" variant="default" width="wide"
+ *            eyebrow="01 / the office" title="9-squad roster"
+ *            lede="The office runs as nine squads plus a cross-workspace bridge."
+ *            toc={true}>
+ *     <table>...</table>
+ *     <p slot="footer">Last updated 2026-08-08.</p>
+ *   </Section>
+ */
+
+interface Props {
+  /** Anchor id for TOC + deep-link. */
+  id?: string;
+  /** Section variant — default, paper (dark callout), or flush. */
+  variant?: 'default' | 'paper' | 'flush';
+  /** Inner width — narrow, reading, wide, full. */
+  width?: 'narrow' | 'reading' | 'wide' | 'full';
+  /** Small uppercase eyebrow above the title (decorative). */
+  eyebrow?: string;
+  /** H2 title — the section's heading. */
+  title?: string;
+  /** Lede paragraph under the title (max-width auto-constrains). */
+  lede?: string;
+  /** Auto-register this section in SectionTOC's sticky nav. */
+  toc?: boolean;
+  /** Optional accessible label override (defaults to title). */
+  ariaLabel?: string;
+  /** Optional additional class. */
+  class?: string;
+}
+
+const {
+  id,
+  variant = 'default',
+  width = 'wide',
+  eyebrow,
+  title,
+  lede,
+  toc = false,
+  ariaLabel,
+  class: extraClass = '',
+} = Astro.props;
+
+const headingId = id ? `${id}-title` : undefined;
+const sectionAriaProps = ariaLabel ? { 'aria-label': ariaLabel } : {};
+const tocDataset = toc
+  ? { 'data-toc-id': id, 'data-toc-label': title ?? eyebrow ?? id ?? '' }
+  : {};
+---
+
+<section
+  class:list={['section', `section--${variant}`, `section--${width}`, extraClass]}
+  id={id}
+  aria-labelledby={title ? headingId : undefined}
+  {...sectionAriaProps}
+  {...tocDataset}
+>
+  {(eyebrow || title || lede) && (
+    <header class="section__head">
+      {eyebrow && (
+        <p class="section__eyebrow mono" aria-hidden="true">{eyebrow}</p>
+      )}
+      {title && (
+        <h2 class="section__title" id={headingId}>{title}</h2>
+      )}
+      {lede && (
+        <p class="section__lede">{lede}</p>
+      )}
+    </header>
+  )}
+  <div class="section__body">
+    <slot />
+  </div>
+  <div class="section__foot">
+    <slot name="footer" />
+  </div>
+</section>
+
+<style>
+  .section {
+    padding: 56px 24px;
+    border-bottom: 1px solid var(--c-rule, var(--j-rule, #d4cdb9));
+  }
+  .section--flush {
+    padding: 0;
+    border-bottom: none;
+  }
+  .section--paper {
+    background: var(--j-paper, #2a2622);
+    color: var(--j-paper-ink, #d4cebd);
+    border-color: var(--j-ink-4, #4a4438);
+  }
+  .section__head {
+    margin: 0 auto 32px;
+    max-width: 720px;
+  }
+  .section--wide .section__head,
+  .section--full .section__head {
+    max-width: 880px;
+  }
+  .section--narrow .section__head,
+  .section--reading .section__head {
+    max-width: 100%;
+  }
+  .section__eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--c-ink-2, #5a5a5a);
+    margin: 0 0 12px;
+    padding-left: 8px;
+    border-left: 2px solid var(--c-amber, #c98a16);
+  }
+  .section--paper .section__eyebrow {
+    color: var(--j-paper-ink-2, #c4bfb1);
+  }
+  .section__title {
+    font-family: Inter, system-ui, sans-serif;
+    font-size: clamp(20px, 2.4vw, 30px);
+    font-weight: 600;
+    line-height: 1.2;
+    margin: 0 0 12px;
+    color: var(--c-ink, #0c1014);
+  }
+  .section--paper .section__title {
+    color: var(--j-paper-ink, #d4cebd);
+  }
+  .section__lede {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--c-ink-2, #5a5a5a);
+    margin: 0;
+  }
+  .section--paper .section__lede {
+    color: var(--j-paper-ink-2, #c4bfb1);
+  }
+  .section__body {
+    margin: 0 auto;
+    max-width: var(--section-body-w, 1080px);
+  }
+  .section--narrow .section__body { max-width: 720px; --section-body-w: 720px; }
+  .section--reading .section__body { max-width: 880px; --section-body-w: 880px; }
+  .section--wide .section__body { max-width: 1080px; --section-body-w: 1080px; }
+  .section--full .section__body { max-width: 1280px; --section-body-w: 1280px; }
+  .section__foot {
+    margin: 32px auto 0;
+    max-width: var(--section-body-w, 1080px);
+    font-size: 12px;
+    color: var(--c-ink-3, #8a8a8a);
+  }
+  .section--paper .section__foot {
+    color: var(--j-paper-ink-3, #9a9486);
+  }
+  @media (max-width: 640px) {
+    .section { padding: 40px 16px; }
+    .section__head { margin-bottom: 24px; }
+  }
+</style>
+</content>
+</invoke>

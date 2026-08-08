@@ -6,47 +6,49 @@
 import BaseLayout from '@layouts/BaseLayout.astro';
 import Equation from '@components/Equation.astro';
 import CTABanner from '@components/CTABanner.astro';
+import GatesLattice from '@components/GatesLattice.astro';
 import DSRCalculator from '@components/DSRCalculator.astro';
 import SectionTOC from '@components/SectionTOC.astro';
 import PipelineDiagram from '@components/PipelineDiagram.astro';
 import ChromeHeader from '@components/ChromeHeader.astro';
 import { path } from '@utils/url';
 import VoiceLine from '@components/VoiceLine.astro';
+import SectionMark from '@components/SectionMark.astro';
 import { profile } from '@utils/profile';
 
 // Gate-count chrome: derives from profile.stats.evalGates. Used in
 // SectionTOC label, data-toc-label, headline H2, voice sub line,
 // and other "G1–G31" references on this page.
-const GATE_RANGE = `G1–G${profile.stats.evalGates}`;
+const GATE_RANGE = `G1 to G${profile.stats.evalGates}`;
 
 const gates = [
   {
-    range: 'G1–G5',
+    range: 'G1 to G5',
     name: 'Mechanical validity',
     desc: 'Schema conformance, exit-0 contract, structured output parse, JSON Schema strict-mode, byte-length budget.',
   },
   {
-    range: 'G6–G10',
+    range: 'G6 to G10',
     name: 'Statistical nulls',
     desc: `<a href="${path('/glossary/block-bootstrap')}">block-bootstrap</a> CIs, random-timing nulls, <a href="${path('/glossary/regime')}">regime</a>-shuffle, parameter-prior sensitivity, Monte-Carlo coverage.`,
   },
   {
-    range: 'G11–G15',
+    range: 'G11 to G15',
     name: 'Walk-forward & OOS',
     desc: `Locked <a href="${path('/glossary/oos')}">OOS</a> windows, 5-era stability, expanding/rolling <a href="${path('/glossary/walk-forward')}">walk-forward</a> windows, frozen-spec evaluation, <a href="${path('/glossary/embargo')}">embargoed</a> test set.`,
   },
   {
-    range: 'G16–G20',
+    range: 'G16 to G20',
     name: 'Multiple testing',
-    desc: `<a href="${path('/glossary/deflated-sharpe')}">Deflated Sharpe Ratio</a> (DSR), <a href="${path('/glossary/cscv-pbo')}">CSCV-based Probability of Backtest Overfit</a> (PBO), <a href="${path('/glossary/minbtl')}">Minimum Backtest Length</a> (MinBTL), <a href="${path('/glossary/bonferroni-holm')}">Bonferroni–Holm</a>, BH-FDR.`,
+    desc: `<a href="${path('/glossary/deflated-sharpe')}">Deflated Sharpe Ratio</a> (DSR), <a href="${path('/glossary/cscv-pbo')}">CSCV-based Probability of Backtest Overfit</a> (PBO), <a href="${path('/glossary/minbtl')}">Minimum Backtest Length</a> (MinBTL), <a href="${path('/glossary/bonferroni-holm')}">Bonferroni-Holm</a>, BH-FDR.`,
   },
   {
-    range: 'G21–G25',
+    range: 'G21 to G25',
     name: 'Look-ahead discipline',
     desc: `Point-in-time dataset verification, <a href="${path('/glossary/survivorship-bias')}">survivorship-bias</a> check, rebalance-vs-signal timing, frozen-spec, no-leakage to scoring.`,
   },
   {
-    range: 'G26–G31',
+    range: 'G26 to G31',
     name: 'Economic & cost realism',
     desc: `Spread/<a href="${path('/glossary/slippage')}">slippage</a>/latency per asset class, capacity-constraint report, funding-carry, borrow cost, vol-targeted sizing, <a href="${path('/glossary/regime')}">regime</a> overlay.`,
   },
@@ -58,11 +60,11 @@ const routing = [
     role: 'judgment / hardest autonomous decisions',
     ratio: '~1 dispatch per analysis chain',
   },
-  { tier: 'Sonnet', role: 'assembly / structured generation', ratio: '~3–5 dispatches per chain' },
+  { tier: 'Sonnet', role: 'assembly / structured generation', ratio: '~3 to 5 dispatches per chain' },
   {
     tier: 'Haiku',
     role: 'mechanical / fast deterministic steps',
-    ratio: '~10–30 dispatches per chain',
+    ratio: '~10 to 30 dispatches per chain',
   },
   { tier: 'Fable', role: 'long-horizon autonomous research', ratio: 'one off, overnight' },
 ];
@@ -87,12 +89,12 @@ const charter = [
   extraJsonLd={{
     '@context': 'https://schema.org',
     '@type': 'HowTo',
-    name: 'How to ship what has passed a G1–G31 statistical gate',
+    name: 'How to ship what has passed a G1 to G31 statistical gate',
     description: 'The eval-first discipline: every shipped primitive passes through 31 statistical gates covering mechanical validity, statistical significance, robustness, and economic validity.',
     step: [
       { '@type': 'HowToStep', name: 'Frame the primitive', text: 'Define the loop as a finite-state machine with terminal state, idempotent write, dedupe key, coverage filter, and AAR.' },
-      { '@type': 'HowToStep', name: 'Run G1–G7 pre-flight', text: 'Mechanical-validity checks (fire-unit n, screen unit-of-analysis, joint-set sizing, regime-sign, n-aware t-stat floor, source-shift sanity, live-book overlap).' },
-      { '@type': 'HowToStep', name: 'Run G8–G31 full stack', text: 'Statistical-significance, robustness, and economic-validity gates including walk-forward, block-bootstrap, deflated Sharpe, Monte Carlo ruin probability, and regime-conditional deployment.' },
+      { '@type': 'HowToStep', name: 'Run G1 to G7 pre-flight', text: 'Mechanical-validity checks (fire-unit n, screen unit-of-analysis, joint-set sizing, regime-sign, n-aware t-stat floor, source-shift sanity, live-book overlap).' },
+      { '@type': 'HowToStep', name: 'Run G8 to G31 full stack', text: 'Statistical-significance, robustness, and economic-validity gates including walk-forward, block-bootstrap, deflated Sharpe, Monte Carlo ruin probability, and regime-conditional deployment.' },
       { '@type': 'HowToStep', name: 'Write the AAR', text: 'One-page After-Action Report at ~/.claude/cache/corporate/aars/<id>.md with goal, decomposition, cost, critique, and doctrine reflection.' },
       { '@type': 'HowToStep', name: 'Ship or kill', text: 'Verdict derives from gates. PASS → ship. FAIL → kill or iterate with documented scope. No in-between.' },
     ],
@@ -148,22 +150,23 @@ const charter = [
     ]}
   />
 
-  <section class="section" data-toc-id="gates" data-toc-label={`${GATE_RANGE} gate stack`}>
+  <section class="section" data-toc-id="gates" data-toc-label={`${GATE_RANGE} gate stack`} data-section-id="methodology">
     <div class="container">
       <header class="section__head">
+        <SectionMark index="00" title="methodology" />
         <p class="section__eyebrow">The gate stack</p>
         <h2 class="section__title" id="gates">{GATE_RANGE}. Six families. One contract.</h2>
         <p class="section__sub">
-          Every candidate — LLM output, systematic strategy, content artifact — passes through the
+          Every candidate (LLM output, systematic strategy, content artifact) passes through the
           same gate stack. Gates are mechanical (exit-0 contract), not opinionated. A pass means the
-          candidate is allowed to surface; a fail means it isn't. Gate IDs are load-bearing — they
+          candidate is allowed to surface; a fail means it isn't. Gate IDs are load-bearing: they
           appear in the AAR footer, in the eval-harness CI run, and in the per-candidate
           permission-to-publish decision, so a "G16" means the same thing across the corpus. The
           table below shows one family per row; the gate ID is the row's first column.
         </p>
       </header>
 
-      <div class="gates" role="table" aria-label={`${GATE_RANGE} gate stack — six families`}>
+      <div class="gates" role="table" aria-label={`${GATE_RANGE} gate stack: six families`}>
         <div class="gates__row gates__row--head" role="row">
           <span class="gates__cell gates__cell--range mono" role="columnheader">Gate ID</span>
           <span class="gates__cell gates__cell--name" role="columnheader">Family</span>
@@ -171,24 +174,30 @@ const charter = [
         </div>
         {
           gates.map((g, i) => (
-            <article class="gates__row" id={`family-${i + 1}`} role="row">
+            <div class="gates__row" id={`family-${i + 1}`} role="row">
               <span class="gates__cell gates__cell--range mono" role="cell">{g.range}</span>
-              <h3 class="gates__cell gates__cell--name" role="cell">{g.name}</h3>
+              <span class="gates__cell gates__cell--name" role="cell">{g.name}</span>
               <p class="gates__cell gates__cell--desc" role="cell" set:html={g.desc} />
-            </article>
+            </div>
           ))
         }
       </div>
+
+      {/* v11.W3 — 31-cell lattice visualisation wired to theatre.js.
+           Sits below the 6-row summary as a deeper view of every
+           individual gate. W4 will replace this with the interactive
+           data-viz (per-cell hover + click-through to glossary). */}
+      <GatesLattice />
     </div>
   </section>
 
-  <section class="section section--alt" data-toc-id="routing" data-toc-label="Model routing">
+  <section class="section section--alt" data-toc-id="routing" data-toc-label="Model routing" data-section-id="methodology">
     <div class="container">
       <header class="section__head">
         <p class="section__eyebrow">Model routing</p>
         <h2 class="section__title" id="routing">Tiered dispatch, not single-agent.</h2>
         <p class="section__sub">
-          A multi-agent system runs at ~15× the token cost of a single agent. The cost is real — the
+          A multi-agent system runs at ~15× the token cost of a single agent. The cost is real: the
           answer is to route by what the step actually needs to compute, not by default. Every
           dispatch has a per-step budget.
         </p>
@@ -235,7 +244,7 @@ const charter = [
     </div>
   </section>
 
-  <section class="section" data-toc-id="dsr" data-toc-label="DSR calculator">
+  <section class="section" data-toc-id="dsr" data-toc-label="DSR calculator" data-section-id="methodology">
     <div class="container">
       <header class="section__head">
         <p class="section__eyebrow">Interactive · G16</p>
@@ -245,7 +254,7 @@ const charter = [
         <p class="section__sub">
           See how the same in-sample <a href={path('/glossary/sharpe')}>Sharpe</a> can pass or fail G16
           depending on how many strategies you actually tried. This is the gate that turns "1.14 looks
-          great" into <a href={path('/glossary/deflated-sharpe')}>"DSR 0.70 — fail."</a>
+          great" into <a href={path('/glossary/deflated-sharpe')}>"DSR 0.70, fail."</a>
         </p>
       </header>
 
@@ -253,7 +262,7 @@ const charter = [
     </div>
   </section>
 
-  <section class="section" data-toc-id="charter" data-toc-label="Agent charter">
+  <section class="section" data-toc-id="charter" data-toc-label="Agent charter" data-section-id="methodology">
     <div class="container">
       <header class="section__head">
         <p class="section__eyebrow">Agent charter</p>
@@ -277,7 +286,7 @@ const charter = [
     </div>
   </section>
 
-  <section class="section section--alt" data-toc-id="neg" data-toc-label="Negative space">
+  <section class="section section--alt" data-toc-id="neg" data-toc-label="Negative space" data-section-id="methodology">
     <div class="container">
       <header class="section__head">
         <p class="section__eyebrow">What I will not do</p>
@@ -286,7 +295,7 @@ const charter = [
       <ul class="neg">
         <li>
           I will not claim current employment at any NDA-protected firm. The systematic-strategy
-          desk engagement is a <strong>closed past contract</strong> (03/2026 – 06/2026).
+          desk engagement is a <strong>closed past contract</strong> (03/2026 to 06/2026).
         </li>
         <li>
           I will not reference proprietary data sources, fund renames, or per-strategy t-stats from
@@ -306,20 +315,20 @@ const charter = [
     </div>
   </section>
 
-  <section class="section section--alt" data-toc-id="hire" data-toc-label="If you hired me">
+  <section class="section section--alt" data-toc-id="hire" data-toc-label="If you hired me" data-section-id="methodology">
     <div class="container">
       <header class="section__head">
         <p class="section__eyebrow">What I'd build first</p>
         <h2 class="section__title" id="hire">If you hired me onto a quant desk.</h2>
         <p class="section__sub">
-          These are the first 90 days, ordered by leverage. A new QR on a 2–5 person pod doesn't
-          start with alpha — they start by making the existing book defensible to a risk manager and
+          These are the first 90 days, ordered by leverage. A new QR on a 2 to 5 person pod doesn't
+          start with alpha. they start by making the existing book defensible to a risk manager and
           a PM. The discipline compounds; the alpha is downstream.
         </p>
       </header>
       <ol class="plan">
         <li class="plan__row">
-          <div class="plan__week mono">WK 1–2</div>
+          <div class="plan__week mono">WK 1 to 2</div>
           <div class="plan__body">
             <h3 class="plan__title">Backtest-engine audit + look-ahead scan</h3>
             <p class="plan__body-p">
@@ -327,11 +336,11 @@ const charter = [
               phantom-Sharpe gap. This is the gate that catches the most expensive error class
               first.
             </p>
-            <div class="plan__gates mono">G21–G25 · look-ahead discipline</div>
+            <div class="plan__gates mono">G21 to G25 · look-ahead discipline</div>
           </div>
         </li>
         <li class="plan__row">
-          <div class="plan__week mono">WK 3–4</div>
+          <div class="plan__week mono">WK 3 to 4</div>
           <div class="plan__body">
             <h3 class="plan__title">Cost-model calibration + break-even turnaround</h3>
             <p class="plan__body-p">
@@ -339,11 +348,11 @@ const charter = [
               For every strategy, ship the break-even turnaround cost (project 08). Strategies that win
               gross and lose net come off the book.
             </p>
-            <div class="plan__gates mono">G26–G31 · economic & cost realism</div>
+            <div class="plan__gates mono">G26 to G31 · economic & cost realism</div>
           </div>
         </li>
         <li class="plan__row">
-          <div class="plan__week mono">WK 5–8</div>
+          <div class="plan__week mono">WK 5 to 8</div>
           <div class="plan__body">
             <h3 class="plan__title">Multiple-testing correction across the book</h3>
             <p class="plan__body-p">
@@ -354,11 +363,11 @@ const charter = [
               (prob. of backtest overfit). The book's "best strategy" is rarely the strategy with the
               highest raw Sharpe.
             </p>
-            <div class="plan__gates mono">G16–G20 · multiple testing</div>
+            <div class="plan__gates mono">G16 to G20 · multiple testing</div>
           </div>
         </li>
         <li class="plan__row">
-          <div class="plan__week mono">WK 9–12</div>
+          <div class="plan__week mono">WK 9 to 12</div>
           <div class="plan__body">
             <h3 class="plan__title">Walk-forward OOS window standardization</h3>
             <p class="plan__body-p">
@@ -367,7 +376,7 @@ const charter = [
               evaluation. <a href={path('/glossary/walk-forward')}>Walk-forward</a> standardization. The
               book becomes reproducible from cold start.
             </p>
-            <div class="plan__gates mono">G11–G15 · walk-forward & OOS</div>
+            <div class="plan__gates mono">G11 to G15 · walk-forward & OOS</div>
           </div>
         </li>
       </ol>
@@ -379,7 +388,7 @@ const charter = [
     </div>
   </section>
 
-  <section class="section" data-toc-id="incidents" data-toc-label="Where the method broke">
+  <section class="section" data-toc-id="incidents" data-toc-label="Where the method broke" data-section-id="methodology">
     <div class="container">
       <header class="section__head">
         <p class="section__eyebrow">Methodology incidents</p>
@@ -387,7 +396,7 @@ const charter = [
         <p class="section__sub">
           Three cases where the gate stack caught a real bug, plus one where the gate stack was
           wrong and got amended. The discipline holds because the gate stack has been
-          falsified — by its author's own work, not by a benchmark.
+          falsified: by its author's own work, not by a benchmark.
         </p>
       </header>
 
@@ -398,7 +407,7 @@ const charter = [
             <h3 class="incidents__title">Bid-ask bounce vs. stitched-OHLCV</h3>
             <p class="incidents__prose">
               A backtest on a stitched MEXC mirror of Binance bars showed a +5.6 Sharpe "weekend-gap
-              fade" signal. The signal was a stitching artifact — the mirror overlapped weekend
+              fade" signal. The signal was a stitching artifact; the mirror overlapped weekend
               bars with the next Monday's open, and the bounce was a phantom mean-reversion. Gate
               G37 (data-source-stitch audit) caught the overlap; the signal was killed. The gate
               was codified after this incident, not before. AAR: corrections.md entry 2026-08-02
@@ -412,7 +421,7 @@ const charter = [
             <h3 class="incidents__title">One-bar shift on the BTC funding-carry book</h3>
             <p class="incidents__prose">
               The funding-carry candidate cleared pre-flight and the cheap n-aware t-stat gate. G21
-              (one-bar shift) collapsed the Sharpe from 2.4 to 0.31 on the same fixture panel — the
+              (one-bar shift) collapsed the Sharpe from 2.4 to 0.31 on the same fixture panel; the
               edge was a look-ahead in the funding-rate timestamp. The candidate was killed; the
               methodology was not amended, because G21 is exactly the gate designed to catch this.
               AAR: 2026-08-01-idea19-btc-funding-carry-deep-preflight.md.
@@ -426,7 +435,7 @@ const charter = [
             <p class="incidents__prose">
               A "BTC Friday short" candidate cleared with raw Sharpe 1.14 across 9 sweeps, then
               failed G16 (deflated Sharpe) once the sweep count was raised to 30. The same in-sample
-              Sharpe with the corrected multiple-testing penalty became DSR 0.70 — a fail. The
+              Sharpe with the corrected multiple-testing penalty became DSR 0.70, a fail. The
               discipline is the gate, not the headline number. AAR:
               2026-08-01-afk-strategy-mining-v2.md.
             </p>
@@ -449,7 +458,7 @@ const charter = [
     </div>
   </section>
 
-  <section class="section section--alt" data-toc-id="oss" data-toc-label="Open-source record">
+  <section class="section section--alt" data-toc-id="oss" data-toc-label="Open-source record" data-section-id="methodology">
     <div class="container">
       <header class="section__head">
         <p class="section__eyebrow">Open-source implementation record</p>
@@ -476,7 +485,7 @@ const charter = [
             >
           </span>
           <span class="oss-table__cell oss-table__cell--role" role="cell"
-            >Pattern — autonomous research loop</span
+            >Pattern: autonomous research loop</span
           >
           <span class="oss-table__cell oss-table__cell--license mono" role="cell">MIT</span>
           <span class="oss-table__cell oss-table__cell--verified mono" role="cell">2026-07-31</span>
@@ -488,7 +497,7 @@ const charter = [
             >
           </span>
           <span class="oss-table__cell oss-table__cell--role" role="cell"
-            >Pattern — skill authoring methodology</span
+            >Pattern: skill authoring methodology</span
           >
           <span class="oss-table__cell oss-table__cell--license mono" role="cell">MIT</span>
           <span class="oss-table__cell oss-table__cell--verified mono" role="cell">2026-07-31</span>
@@ -500,7 +509,7 @@ const charter = [
             >
           </span>
           <span class="oss-table__cell oss-table__cell--role" role="cell"
-            >Pattern — ui-ux-pro-max, chrome governance reference</span
+            >Pattern: ui-ux-pro-max, chrome governance reference</span
           >
           <span class="oss-table__cell oss-table__cell--license mono" role="cell">MIT</span>
           <span class="oss-table__cell oss-table__cell--verified mono" role="cell">2026-07-31</span>
@@ -512,7 +521,7 @@ const charter = [
             >
           </span>
           <span class="oss-table__cell oss-table__cell--role" role="cell"
-            >Pattern — research-writing methodology</span
+            >Pattern: research-writing methodology</span
           >
           <span class="oss-table__cell oss-table__cell--license mono" role="cell">MIT</span>
           <span class="oss-table__cell oss-table__cell--verified mono" role="cell">2026-07-31</span>
@@ -524,7 +533,7 @@ const charter = [
             >
           </span>
           <span class="oss-table__cell oss-table__cell--role" role="cell"
-            >Reference — animation primitive for /desk motion</span
+            >Reference: animation primitive for /desk motion</span
           >
           <span class="oss-table__cell oss-table__cell--license mono" role="cell">MIT</span>
           <span class="oss-table__cell oss-table__cell--verified mono" role="cell">2026-07-31</span>
@@ -536,7 +545,7 @@ const charter = [
             >
           </span>
           <span class="oss-table__cell oss-table__cell--role" role="cell"
-            >Reference — animation core; studio AGPL-3.0 (dev-only)</span
+            >Reference: animation core; studio AGPL-3.0 (dev-only)</span
           >
           <span class="oss-table__cell oss-table__cell--license mono" role="cell"
             >Apache-2.0 / AGPL-3.0</span
@@ -550,7 +559,7 @@ const charter = [
             >
           </span>
           <span class="oss-table__cell oss-table__cell--role" role="cell"
-            >Pattern-only — no portfolio embed (AGPL-3.0)</span
+            >Pattern-only: no portfolio embed (AGPL-3.0)</span
           >
           <span class="oss-table__cell oss-table__cell--license mono" role="cell">AGPL-3.0</span>
           <span class="oss-table__cell oss-table__cell--verified mono" role="cell">2026-07-31</span>

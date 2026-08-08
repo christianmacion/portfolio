@@ -8,7 +8,7 @@ import { profile } from '@utils/profile';
 import { path } from '@utils/url';
 import VoiceLine from '@components/VoiceLine.astro';
 
-const GATE_RANGE = `G1–G${profile.stats.evalGates}`;
+const GATE_RANGE = `G1 to G${profile.stats.evalGates}`;
 
 const channels = [
   {
@@ -48,7 +48,7 @@ const channels = [
     sub: 'Sync, after email',
     value: profile.contact.phoneDisplay,
     href: `tel:${profile.contact.phone}`,
-    use: 'UTC+8 · best 9 AM – 6 PM PHT.',
+    use: 'UTC+8 · best 9 AM to 6 PM PHT.',
   },
 ];
 
@@ -77,7 +77,7 @@ const platforms = [
   ]}
   surface="v6-13"
 >
-  <header class="contact-head">
+  <header class="contact-head" id="contact">
     <div class="container">
       <div class="contact-head__top">
         <div class="contact-head__copy">
@@ -91,7 +91,7 @@ const platforms = [
             {channels.length} channels. <span class="hl">Pick the one that fits.</span>
           </h1>
           <VoiceLine class="contact-head__voice">
-            Email-with-JD gets the richest reply. LinkedIn DM for casual. Phone after email — never
+            Email-with-JD gets the richest reply. LinkedIn DM for casual. Phone after email. never
             first.
           </VoiceLine>
           <p class="contact-head__sub">
@@ -160,8 +160,8 @@ const platforms = [
             Research Assistant roles
           </li>
           <li>
-            <strong>Overlap with</strong> US East (UTC-5) = 21:00 – 02:00 PHT · EU (UTC+1) = 15:00 – 23:00
-            PHT · APAC (UTC+9) = 09:00 – 18:00 PHT
+            <strong>Overlap with</strong> US East (UTC-5) = 21:00 to 02:00 PHT · EU (UTC+1) = 15:00 to 23:00
+            PHT · APAC (UTC+9) = 09:00 to 18:00 PHT
           </li>
         </ul>
       </aside>
@@ -174,7 +174,7 @@ const platforms = [
         <p class="section__eyebrow">Book directly</p>
         <h2 class="section__title">Four open slots per week. 14-day rolling window. UTC+8.</h2>
         <p class="section__sub">
-          Pick a slot that works — or reach me by any channel above if you'd rather start in
+          Pick a slot that works. or reach me by any channel above if you'd rather start in
           writing. The screening agenda is pre-curated at
           <a href={path('/screening-call')}>/screening-call</a> so the first call starts with context,
           not discovery.
@@ -284,7 +284,7 @@ const platforms = [
           <div class="how-i-reply__body">
             <h3>Business OSINT pass (on request)</h3>
             <p>
-              Open-source intelligence on your business before we talk — public filings, posts,
+              Open-source intelligence on your business before we talk. public filings, posts,
               product surface, team footprint. So the first call starts with context, not discovery.
             </p>
           </div>

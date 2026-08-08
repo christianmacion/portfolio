@@ -46,9 +46,9 @@ const tokens = {
     '--sp-1 0.25rem · --sp-2 0.5rem · --sp-3 0.75rem · --sp-4 1rem · --sp-5 1.5rem · --sp-6 2rem · --sp-7 3rem · --sp-8 4rem · --sp-9 6rem · --sp-10 8rem',
   ],
   motion: [
-    '--ease-snappy: cubic-bezier(0.4, 0, 0.2, 1) — hover, click',
-    '--ease-out: cubic-bezier(0.16, 1, 0.3, 1) — reveal, fade',
-    '--transition: 150ms ease — default transition budget',
+    '--ease-snappy: cubic-bezier(0.4, 0, 0.2, 1) to hover, click',
+    '--ease-out: cubic-bezier(0.16, 1, 0.3, 1) to reveal, fade',
+    '--transition: 150ms ease. default transition budget',
     'prefers-reduced-motion: all transitions and animations → 0ms',
   ],
 };
@@ -82,13 +82,13 @@ const licenses = [
     name: 'LICENSE-COPY',
     label: 'CC-BY-SA 4.0',
     href: 'https://creativecommons.org/licenses/by-sa/4.0/',
-    desc: ' — for the prose, the methodology write-up, the working memos, and the rest of the human-readable content.',
+    desc: ' to for the prose, the methodology write-up, the working memos, and the rest of the human-readable content.',
   },
   {
     name: 'LICENSE-CODE',
     label: 'MIT',
     href: 'https://opensource.org/licenses/MIT',
-    desc: ' — for the code: the design tokens, the components, the /proof scripts, and the OSS repos on GitHub.',
+    desc: ' to for the code: the design tokens, the components, the /proof scripts, and the OSS repos on GitHub.',
   },
 ];
 ---
@@ -160,7 +160,7 @@ const licenses = [
         {
           tokens.color.map((c) => (
             <li>
-              <code class="mono">{c.name}</code> <span class="faint mono">{c.value}</span> —{' '}
+              <code class="mono">{c.name}</code> <span class="faint mono">{c.value}</span>n/a {' '}
               {c.role}
             </li>
           ))
@@ -172,7 +172,7 @@ const licenses = [
         {
           tokens.type.map((t) => (
             <li>
-              <strong>{t.name}</strong> — {t.role}
+              <strong>{t.name}</strong>n/a {t.role}
             </li>
           ))
         }
@@ -238,7 +238,7 @@ const licenses = [
           <span class="guard__value">
             <span class="pill pill--accent">0 violations</span>
             <span class="faint"
-              >— checked against the nine NDA rules defined in the script (location,
+              >n/a checked against the nine NDA rules defined in the script (location,
               present-employment framing, fund rename, proprietary data sources, two vendor-specific
               exclusions, and three past-employer / PM-name redactions for resume PDFs and
               humans.md)</span

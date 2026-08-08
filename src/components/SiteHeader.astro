@@ -6,6 +6,13 @@
  * the rollout. Do not import from new code. Remove after 2026-09-06 if
  * no rollback occurs.
  *
+ * v6.18 W2 note (2026-08-08): The SiteHeader running tape + ⌘K contact
+ * pill are STILL RENDERED on every page via BaseLayout.astro's <SiteHeader />
+ * invocation. The deprecation window is still active (Owner has not yet
+ * confirmed removal); deleting the component now would orphan the ⌘K
+ * shortcut + remove the only running-tape chrome. W2 audit rank #9
+ * (IA decision) is DEFERRED to a future wave.
+ *
  * SiteHeader.astro — v9.3.5 SITE-WIDE RUNNING TAPE.
  *
  * The signature chrome lifted from the home broadside (geometric CM monogram +
@@ -26,8 +33,21 @@
  * away with the page. The Nav still owns the sticky contract. This keeps
  * the running tape feeling like a "letterhead" (printed-on-top-and-done),
  * not a "scratchpad" (always-visible).
+ *
+ * v9.8 Wave B (2026-08-07) adds the inline ⌘K contact pill at the
+ * right edge of the running tape. Press ⌘K (or Ctrl+K) anywhere on
+ * the page and the pill scrolls to /contact/#contact. The keydown
+ * handler uses the capture phase + stopImmediatePropagation so it
+ * takes precedence over SideRail's existing ⌘K → /search handler,
+ * keeping ⌘K semantics consistent across the chrome (one shortcut,
+ * one destination).
+ *
+ * v6.18 W2 polish (2026-08-08): .site-header__cmdk-pill-kbd border-radius
+ * dropped from 3px → 0px to stay within the 0-2px chrome corner window
+ * (chrome contract: terminal-austere, no pill vocabulary).
  */
 import { profile } from '@utils/profile';
+import { path } from '@utils/url';
 ---
 
 <header class="site-header" aria-label="Site identity">
@@ -51,8 +71,37 @@ import { profile } from '@utils/profile';
     <span class="site-header__role mono">QUANT × AI × GRAPH</span>
     <span class="site-header__sep site-header__sep--hide" aria-hidden="true">·</span>
     <span class="site-header__loc mono">DIGOS&nbsp;CITY,&nbsp;PH&nbsp;(UTC+8)</span>
+
+    <!-- v11.W2 — ⌘K palette trigger. Replaces the v9.8 contact-pill:
+         click (or ⌘K / Ctrl+K from anywhere) opens CommandPalette.
+         The pill stays in the same chrome slot (right of the running
+         tape) so the layout rhythm is unchanged. -->
+    <button
+      type="button"
+      class="site-header__cmdk-pill mono"
+      data-cmdk-open
+      aria-label="Open command palette (press Command K)"
+      aria-keyshortcuts="Meta+K Control+K"
+    >
+      <span class="site-header__cmdk-pill-label" aria-hidden="true">JUMP</span>
+      <kbd class="site-header__cmdk-pill-kbd" aria-hidden="true">⌘K</kbd>
+    </button>
   </div>
 </header>
+
+<script>
+  /* v11.W2 — pill click is now delegated via [data-cmdk-open] (any
+     element with that attribute opens CommandPalette). The
+     CommandPalette component owns the ⌘K / Ctrl+K keydown
+     listener (capture phase + stopImmediatePropagation). This
+     file no longer binds a keydown handler — SiteHeader.astro
+     is a pure chrome component now. Idempotent: no listeners
+     attached here. */
+  // No-op block — the pill's click handler is delegated inside
+  // CommandPalette.astro. Kept as a slot for future per-pill
+  // analytics hooks (e.g. dispatching a custom event on click).
+  void document.querySelector('[data-cmdk-open]');
+</script>
 
 <style>
   .site-header {
@@ -120,6 +169,67 @@ import { profile } from '@utils/profile';
     }
     .site-header__loc {
       flex: 1;
+    }
+    .site-header__cmdk-pill {
+      margin-left: auto;
+    }
+  }
+
+  /* === v9.8 Wave B adds the �K contact pill (chrome feature #2) ===
+     Sits at the right edge of the running tape. Mono + 1 amber
+     accent per chrome contract; sharp 0-2px corners; no
+     halo/glow/gradient. The kbd glyph reads ⌘K on Mac, Ctrl K
+     on Windows/Linux (label updated by JS, default ⌘K). */
+  .site-header__cmdk-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
+    padding: 4px 8px 3px;
+    border: 1px solid var(--c-rule);
+    border-radius: var(--radius-sm, 0px);
+    background: transparent;
+    color: var(--c-ink-2);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 600;
+    text-decoration: none;
+    transition:
+      color 200ms ease,
+      border-color 200ms ease;
+  }
+  .site-header__cmdk-pill:hover {
+    color: var(--c-amber);
+    border-color: var(--c-amber);
+  }
+  .site-header__cmdk-pill:focus-visible {
+    outline: 2px solid var(--c-amber);
+    outline-offset: 2px;
+  }
+  .site-header__cmdk-pill-label {
+    line-height: 1;
+  }
+  .site-header__cmdk-pill-kbd {
+    font-size: 9.5px;
+    padding: 1px 5px;
+    border: 1px solid var(--c-rule);
+    /* v6.18 W2 lock (2026-08-08): border-radius 3px → 0px to stay within
+       the 0-2px chrome corner window (terminal-austere). */
+    border-radius: 0;
+    color: var(--c-ink-3);
+    background: var(--c-bg);
+    line-height: 1;
+    letter-spacing: 0.04em;
+  }
+  .site-header__cmdk-pill:hover .site-header__cmdk-pill-kbd {
+    color: var(--c-amber);
+    border-color: var(--c-amber);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .site-header__cmdk-pill {
+      transition: none;
     }
   }
 </style>

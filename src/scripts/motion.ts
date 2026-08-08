@@ -258,6 +258,78 @@ function init(): void {
   initRevealStagger();
   initNavAndScroll();
   initSectionRail();
+  initHomeSectionReveal();
+}
+
+/* === v11.W3 — single site-wide IntersectionObserver for home-section
+ * reveal stagger. CSS in motion.css §29f owns the transition (240ms
+ * ease-out, 12px translateY, --reveal-stagger-i * 80ms delay). This
+ * function:
+ *   1. collects every .home-section in document order
+ *   2. assigns --reveal-stagger-i = <index> as a CSS custom property
+ *   3. observes them via a single IO (one observer, all targets)
+ *   4. fires .is-revealed once when 12% of the element enters view
+ *   5. unobserves after firing (one-shot per section)
+ *
+ * Reduced-motion: returns early; CSS keeps .home-section opacity:0 +
+ * transform off the page, but the global reduced-motion media query
+ * in motion.css §29g forces opacity:1 + transform:none so the page
+ * reads correctly without a JS special-case.
+ *
+ * Idempotent: re-running init() is a no-op because the IO flag on
+ * documentElement prevents double-bind. */
+function initHomeSectionReveal(): void {
+  if (document.documentElement.dataset.homeSectionRevealBound === 'true') return;
+  document.documentElement.dataset.homeSectionRevealBound = 'true';
+  // Selector covers both the explicit .home-section class AND the
+  // home page's existing top-level section classes (.broadside,
+  // .hero-flagship, .lede, .artifacts, .help, .footprint). This
+  // means a single site-wide IO drives the entire home page reveal
+  // stagger without touching index.astro beyond the two .home-section
+  // tags already added.
+  const sections = document.querySelectorAll<HTMLElement>(
+    '.home-section, main > section.broadside, main > section.hero-flagship, main > section.lede, main > section.artifacts, main > section.help, main > section.footprint',
+  );
+  if (sections.length === 0) return;
+
+  // De-dupe (in case both .home-section and a positional class match)
+  // and assign stagger index in DOM order.
+  const seen = new Set<HTMLElement>();
+  const list: HTMLElement[] = [];
+  sections.forEach((s) => {
+    if (!seen.has(s)) {
+      seen.add(s);
+      list.push(s);
+    }
+  });
+  list.forEach((s, i) => {
+    s.style.setProperty('--reveal-stagger-i', String(i));
+  });
+
+  if (reduced || !('IntersectionObserver' in window)) {
+    list.forEach((s) => s.classList.add('is-revealed'));
+    return;
+  }
+
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-revealed');
+          io.unobserve(entry.target);
+        }
+      });
+    },
+    // Threshold lowered from 0.12 → 0.001: the .broadside container is
+    // 8209px tall (whole page wrapped in one section on home), so 12% of
+    // it (985px) exceeds the 900px viewport height. The previous threshold
+    // never fired for full-page screenshots or for the home broadside in
+    // any viewport < 985px. 0.001 ≈ "any pixel visible" matches the
+    // intent ("section enters view") without spamming the callback.
+    // rootMargin '0px 0px -8% 0px' keeps the trigger inside the fold.
+    { threshold: 0.001, rootMargin: '0px 0px -8% 0px' },
+  );
+  list.forEach((s) => io.observe(s));
 }
 
 if (document.readyState === 'loading') {

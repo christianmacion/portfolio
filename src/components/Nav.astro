@@ -80,7 +80,7 @@ const secondary = [
          aria-label must include the visible text "Christian T. Macion" verbatim
          (Lighthouse label-content-name-mismatch). Em-dash separator matches
          institutional register; "home" suffix preserves the link-purpose cue. -->
-    <a href={path('/')} class="nav__brand" aria-label="Christian T. Macion — home">
+    <a href={path('/')} class="nav__brand" aria-label="Christian T. Macion. home">
       {
         /* v7.2 2026-07-24 — logo legibility fix. The prior <picture> chose the
            mark asset by OS `prefers-color-scheme`, but the nav background follows
@@ -173,7 +173,7 @@ const secondary = [
         <details class="nav__resume-split nav__resume-split--mobile">
           <summary
             class="btn btn--primary btn--sm nav__cta nav__cta--resume"
-            aria-label="Download resume — choose variant"
+            aria-label="Download resume. choose variant"
             aria-controls="resume-pills-mobile"
           >
             <span>Resume</span>
@@ -195,12 +195,14 @@ const secondary = [
           <div
             class="nav__resume-pills nav__resume-pills--mobile"
             id="resume-pills-mobile"
-            role="menu"
+            /* v6.18 W2 lock (2026-08-08): drop role="menu" — the parent
+               <details><summary> provides native disclosure semantics;
+               ARIA menu role is reserved for real `role="menubar"` parents.
+               Per [[v10-w2-a11y-polish-audit]] rank #4. */
           >
             <a
               href={path('/resume-quant-onepage.pdf')}
               class="nav__resume-pill binding-stripe binding-stripe--handoff"
-              role="menuitem"
               download
             >
               <span class="nav__resume-pill-kicker mono">QUANT</span>
@@ -209,7 +211,6 @@ const secondary = [
             <a
               href={path('/resume-ai-only.pdf')}
               class="nav__resume-pill binding-stripe binding-stripe--iterate"
-              role="menuitem"
               download
             >
               <span class="nav__resume-pill-kicker mono">AI</span>
@@ -218,11 +219,10 @@ const secondary = [
             <a
               href={path('/resume-tailored.pdf')}
               class="nav__resume-pill binding-stripe binding-stripe--ship"
-              role="menuitem"
               download
             >
               <span class="nav__resume-pill-kicker mono">UNIFIED</span>
-              <span class="nav__resume-pill-body">Senior QR + AI Engineer flagship</span>
+              <span class="nav__resume-pill-body">QR + AI Engineer flagship</span>
             </a>
           </div>
         </details>
@@ -321,7 +321,7 @@ const secondary = [
       <details class="nav__resume-split nav__resume-split--desktop">
         <summary
           class="btn btn--primary btn--sm nav__cta nav__cta--resume"
-          aria-label="Download resume — choose variant"
+          aria-label="Download resume. choose variant"
           aria-controls="resume-pills-desktop"
         >
           <span>Resume</span>
@@ -340,11 +340,10 @@ const secondary = [
             <path d="M2 3.5l3 3 3-3"></path>
           </svg>
         </summary>
-        <div class="nav__resume-pills" id="resume-pills-desktop" role="menu">
+        <div class="nav__resume-pills" id="resume-pills-desktop">
           <a
             href={path('/resume-quant-onepage.pdf')}
             class="nav__resume-pill binding-stripe binding-stripe--handoff"
-            role="menuitem"
             download
           >
             <span class="nav__resume-pill-kicker mono">QUANT</span>
@@ -353,7 +352,6 @@ const secondary = [
           <a
             href={path('/resume-ai-only.pdf')}
             class="nav__resume-pill binding-stripe binding-stripe--iterate"
-            role="menuitem"
             download
           >
             <span class="nav__resume-pill-kicker mono">AI</span>
@@ -362,11 +360,10 @@ const secondary = [
           <a
             href={path('/resume-tailored.pdf')}
             class="nav__resume-pill binding-stripe binding-stripe--ship"
-            role="menuitem"
             download
           >
             <span class="nav__resume-pill-kicker mono">UNIFIED</span>
-            <span class="nav__resume-pill-body">Senior QR + AI Engineer flagship</span>
+            <span class="nav__resume-pill-body">QR + AI Engineer flagship</span>
           </a>
         </div>
       </details>

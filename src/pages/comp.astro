@@ -40,19 +40,19 @@ const email = profile.contact.email;
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebPage',
-  name: 'Compensation & engagement bands — Christian T. Macion',
+  name: 'Compensation & engagement bands. Christian T. Macion',
   description:
     'Defensible institutional comp bands for Senior Quant Researcher, AI Engineer / Architect, contract, and advisory engagements.',
   about: {
     '@type': 'Person',
     name: fullName,
-    jobTitle: 'Senior Quantitative Researcher and AI Engineer',
+    jobTitle: 'Quantitative Researcher and AI Engineer',
   },
   mainEntity: compCategories.flatMap((cat) =>
     cat.bands.map((band) => ({
       '@type': 'PriceSpecification',
       name: band.label,
-      description: `${band.target} — ${band.conditions}`,
+      description: `${band.target} to ${band.conditions}`,
       priceCurrency: 'USD',
       // Range surfaced as two prices for the PriceSpecification. Falls
       // back to a single lower bound if parsing fails; the visible band
@@ -94,7 +94,7 @@ const jsonLd = {
       <p class="hero__sub">
         Defensible institutional defaults for Senior Quant Researcher, AI Engineer / Architect,
         contract, and advisory engagements. Bands are placeholder until confirmed at first
-        screening — the page exists so the conversation starts with the right filter.
+        screening. the page exists so the conversation starts with the right filter.
       </p>
 
       <p class="hero__placeholder mono">{placeholderFlag}</p>
@@ -102,7 +102,7 @@ const jsonLd = {
       <div class="hero__actions">
         <a
           class="btn btn--primary"
-          href={`mailto:${email}?subject=${encodeURIComponent('[Comp] Engagement scoping — Christian Macion')}`}
+          href={`mailto:${email}?subject=${encodeURIComponent('[Comp] Engagement scoping. Christian Macion')}`}
           >Email scoping note →</a
         >
         <a class="btn btn--ghost" href={path('/for-recruiters')}>Recruiter brief →</a>
@@ -200,7 +200,7 @@ const jsonLd = {
       <div class="hero__actions">
         <a
           class="btn btn--primary"
-          href={`mailto:${email}?subject=${encodeURIComponent('[Engage] Engagement scoping — Christian Macion')}&body=${encodeURIComponent('Role type:\nComp range:\nHours/wk:\nStart date:\nDuration:\nLocation/timezone overlap:\nNDA requirements:\n\n— sent from /comp')}`}
+          href={`mailto:${email}?subject=${encodeURIComponent('[Engage] Engagement scoping. Christian Macion')}&body=${encodeURIComponent('Role type:\nComp range:\nHours/wk:\nStart date:\nDuration:\nLocation/timezone overlap:\nNDA requirements:\n\n— sent from /comp')}`}
           >Email scoping note →</a
         >
         <a class="btn btn--ghost" href={path('/for-recruiters')}>Recruiter brief →</a>
@@ -226,7 +226,7 @@ const jsonLd = {
           Six-year eval-first discipline: every shipped artifact is reproducible from public
           data, gated by a statistical evaluation harness, and audited against look-ahead bias
           before promotion. The 31-gate eval stack is documented at
-          <a href={path('/methodology')}>{path('/methodology')}</a> — bring it to the screening call
+          <a href={path('/methodology')}>{path('/methodology')}</a>n/a bring it to the screening call
           if you want to pressure-test fit.
         </p>
         <p class="recruiter-notes__p">

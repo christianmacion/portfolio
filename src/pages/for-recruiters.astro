@@ -27,7 +27,7 @@ const NGATE = `${profile.stats.evalGates}-gate`;
 // literal text (the recruiter is supposed to copy-paste then fill them),
 // not as JSX expressions. Stored as a string in the frontmatter and
 // rendered via <pre>{...}</pre> so Astro doesn't try to evaluate them.
-const emailTemplate = `Subject: [{role-tag}] {seniority} · JD attached — {company}
+const emailTemplate = `Subject: [{role-tag}] {seniority} · JD attached to {company}
 
 Hi Christian —
 
@@ -38,7 +38,7 @@ The JD is attached. Highlights:
   - {JD bullet 3}
 
 If you’re open, I’d like a 30-min screening this {Tue|Wed|Thu}
-between 18:00–22:00 PHT (UTC+8). Full agenda: christianmacion-portfolio.pages.dev/screening-call
+between 18:00 to 22:00 PHT (UTC+8). Full agenda: christianmacion-portfolio.pages.dev/screening-call
 If not, who do you recommend?
 
 — {name}`;
@@ -50,7 +50,7 @@ const emailBody = `Hi Christian —\n\nI'm a {your-role} at {company}, sourcing 
 const faqs = [
   {
     q: 'Who is this candidate?',
-    a: `${fullName} — a quantitative researcher and AI engineer based in ${loc.display}. ${profile.stats.aiAgentCount}-agent research platform, ${profile.stats.evalGates}-gate statistical eval harness, ${profile.stats.locPython} LOC Python, ${profile.stats.certCount} professional certifications across AI, finance, math, and events.`,
+    a: `${fullName} to a quantitative researcher and AI engineer based in ${loc.display}. ${profile.stats.aiAgentCount}-agent research platform, ${profile.stats.evalGates}-gate statistical eval harness, ${profile.stats.locPython} LOC Python, ${profile.stats.certCount} professional certifications across AI, finance, math, and events.`,
   },
   {
     q: 'What is their current availability?',
@@ -66,7 +66,7 @@ const faqs = [
   },
   {
     q: 'Do they have a one-page resume PDF?',
-    a: `Yes. ${profile.stats.resumeCount} tailored one-page resumes are linked at /resume — Quant (one-page), AI-only, and Unified. Each lists the same identity block and ${NGATE} methodology but weights different evidence.`,
+    a: `Yes. ${profile.stats.resumeCount} tailored one-page resumes are linked at /resume. Quant (one-page), AI-only, and Unified. Each lists the same identity block and ${NGATE} methodology but weights different evidence.`,
   },
   {
     q: 'Is the work NDA-clean by construction?',
@@ -78,7 +78,7 @@ const faqs = [
   },
   {
     q: 'Do they require sponsorship?',
-    a: 'No sponsorship is required for remote engagements; the candidate works as an independent contractor from the Philippines. For full-time W-2 roles, visa sponsorship is the employer-side question — the candidate holds a Philippine passport and is open to globally remote (EOR) arrangements.',
+    a: 'No sponsorship is required for remote engagements; the candidate works as an independent contractor from the Philippines. For full-time W-2 roles, visa sponsorship is the employer-side question. the candidate holds a Philippine passport and is open to globally remote (EOR) arrangements.',
   },
 ];
 
@@ -200,7 +200,7 @@ const jsonLd = {
     <div class="container container--narrow">
       <header class="section__head">
         <p class="section__eyebrow mono">intro/</p>
-        <h2 class="section__title">Cold-email template — paste, fill, send.</h2>
+        <h2 class="section__title">Cold-email template. paste, fill, send.</h2>
         <p class="section__sub">
           Copy the block below. Two mailto links pre-fill subject + body. Reply SLA: 4 business
           hours during UTC+8 day.
@@ -213,7 +213,7 @@ const jsonLd = {
           <li>
             <a
               class="btn btn--primary"
-              href={`mailto:${email}?subject=${encodeURIComponent('[QR] Senior · JD attached — {role}')}&body=${encodeURIComponent(emailBody)}`}
+              href={`mailto:${email}?subject=${encodeURIComponent('[QR] Senior · JD attached to {role}')}&body=${encodeURIComponent(emailBody)}`}
             >
               Email [QR] track →
             </a>
@@ -221,7 +221,7 @@ const jsonLd = {
           <li>
             <a
               class="btn btn--ghost"
-              href={`mailto:${email}?subject=${encodeURIComponent('[AI] Eval-first · JD attached — {role}')}&body=${encodeURIComponent(emailBody)}`}
+              href={`mailto:${email}?subject=${encodeURIComponent('[AI] Eval-first · JD attached to {role}')}&body=${encodeURIComponent(emailBody)}`}
             >
               Email [AI] track →
             </a>
@@ -238,7 +238,7 @@ const jsonLd = {
     <div class="container container--narrow">
       <header class="section__head">
         <p class="section__eyebrow mono">paths/</p>
-        <h2 class="section__title">Reading paths — choose by role.</h2>
+        <h2 class="section__title">Reading paths. choose by role.</h2>
         <p class="section__sub">Two ways to skim. Same site. Same eval gates. Different subset.</p>
       </header>
 
@@ -276,7 +276,7 @@ const jsonLd = {
           <ul class="persona-card__links">
             <li>
               <a href={path('/methodology')}>
-                {`G1–G4: regime · PSL · p-hacking · deflated Sharpe`}
+                {`G1 to G4: regime · PSL · p-hacking · deflated Sharpe`}
               </a>
             </li>
             <li>
@@ -299,7 +299,7 @@ const jsonLd = {
   <section class="section">
     <div class="container container--narrow">
       <header class="section__head">
-        <h2 class="section__title">FAQ — what hiring managers usually ask</h2>
+        <h2 class="section__title">FAQ. what hiring managers usually ask</h2>
         <p class="section__sub">
           {faqs.length} canonical questions. Each answer is short, factual, and verifiable from the rest
           of the site.

@@ -65,7 +65,7 @@ const {
     `${profile.stats.certCount} certs. ↦ One discipline.`,
   ] as string[],
   intervalMs = 3000,
-  label = 'Discipline statements — rotating',
+  label = 'Discipline statements. rotating',
   variant = 'inline',
 } = Astro.props;
 
@@ -226,7 +226,7 @@ const ROMAN = ['i', 'ii', 'iii', 'iv', 'v', 'vi'];
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: var(--serif-display);
+    font-family: var(--j-ff-display);
     font-style: italic;
     font-size: clamp(1.05rem, 2.2vw, 1.4rem);
     line-height: 1.4;
@@ -431,7 +431,7 @@ const ROMAN = ['i', 'ii', 'iii', 'iv', 'v', 'vi'];
     border: 1px solid var(--c-ink);
     padding: 2px;
     box-sizing: border-box;
-    font-family: var(--serif-display);
+    font-family: var(--j-ff-display);
     font-style: italic;
     font-weight: 500;
     font-size: 24px;
@@ -459,7 +459,7 @@ const ROMAN = ['i', 'ii', 'iii', 'iv', 'v', 'vi'];
   .stmt-card__text {
     grid-area: text;
     margin: 0;
-    font-family: var(--serif-display);
+    font-family: var(--j-ff-display);
     font-style: italic;
     font-size: clamp(2rem, 4vw, 3rem);
     line-height: 1.4;

@@ -83,14 +83,14 @@
           <span class="dsr-calc__verdict-text">computing…</span>
         </div>
         <div class="dsr-calc__num">
-          <span class="mono dsr-calc__dsr" data-dsr-dsr>—</span>
+          <span class="mono dsr-calc__dsr" data-dsr-dsr>n/a</span>
           <span class="dsr-calc__dsr-label mono">DSR</span>
         </div>
         <div class="dsr-calc__gates mono">
-          <span>denominator <b data-dsr-den>—</b></span>
-          <span>expected SR <b data-dsr-exp>—</b></span>
-          <span>γ₃ <b data-dsr-g3>—</b></span>
-          <span>γ₄ <b data-dsr-g4>—</b></span>
+          <span>denominator <b data-dsr-den>n/a</b></span>
+          <span>expected SR <b data-dsr-exp>n/a</b></span>
+          <span>γ₃ <b data-dsr-g3>n/a</b></span>
+          <span>γ₄ <b data-dsr-g4>n/a</b></span>
         </div>
       </div>
 
@@ -113,14 +113,14 @@
 
   <details class="dsr-calc__why">
     <summary class="dsr-calc__why-summary"
-      >Why 0.95? — reading the z-score and the numerator</summary
+      >Why 0.95? to reading the z-score and the numerator</summary
     >
     <div class="dsr-calc__why-body">
       <p>
         The number the calculator prints is a <strong>z-score</strong> on the null H₀: "your IS Sharpe
         is just the best of N i.i.d. N(0,1) draws." Pass at <strong>DSR ≥ 1.645</strong> = one-sided 95%
         test (the standard frequentist threshold; equivalent to 0.05 significance). Anything below is
-        inconclusive or fail — not because 0.05 is sacred, but because 1.645σ is the conventional bar
+        inconclusive or fail. not because 0.05 is sacred, but because 1.645σ is the conventional bar
         for "I tried many things and this one still looks unlikely to be noise."
       </p>
       <p>
@@ -130,7 +130,7 @@
         > the expected best of N random strategies);
         <strong>denominator</strong> = σ_SR̂ · √(1 − γ₃·SR + (γ₄−1)·SR²/4) (how noisy the Sharpe estimate
         is, with the higher-moment correction for non-normal returns). A DSR of 0.70 means "the gap is
-        0.70 noise-units wide" — not a 70% pass rate.
+        0.70 noise-units wide" to not a 70% pass rate.
       </p>
       <p class="dsr-calc__why-mono">
         Ref: Bailey &amp; López de Prado, "The Deflated Sharpe Ratio: Correcting for Selection Bias,
@@ -210,10 +210,10 @@
     if (dsrZ >= 0)
       return {
         dot: 'warn',
-        text: 'inconclusive — better Sharpe needed',
+        text: 'inconclusive. better Sharpe needed',
         pct: Math.max(0.1, dsrZ / 3),
       };
-    return { dot: 'fail', text: 'fails — likely overfit or noise', pct: 0 };
+    return { dot: 'fail', text: 'fails. likely overfit or noise', pct: 0 };
   }
 
   // Wire up
@@ -244,9 +244,9 @@
 
       const r = dsr(n, sr, T);
       const v = verdict(r.dsr);
-      out.dsr.textContent = isFinite(r.dsr) ? r.dsr.toFixed(2) : '—';
-      out.den.textContent = isFinite(r.denom) ? r.denom.toFixed(3) : '—';
-      out.exp.textContent = isFinite(r.exp) ? r.exp.toFixed(2) : '—';
+      out.dsr.textContent = isFinite(r.dsr) ? r.dsr.toFixed(2) : 'n/a';
+      out.den.textContent = isFinite(r.denom) ? r.denom.toFixed(3) : 'n/a';
+      out.exp.textContent = isFinite(r.exp) ? r.exp.toFixed(2) : 'n/a';
       out.g3.textContent = String(r.g3);
       out.g4.textContent = String(r.g4);
 

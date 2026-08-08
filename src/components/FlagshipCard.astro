@@ -77,6 +77,14 @@ const {
   .flagship:hover {
     border-color: var(--c-primary);
     box-shadow: var(--shadow-sm);
+    /* v6.18 W2 polish (2026-08-08): Bryllim card-hover-lift. Subtle 1px
+       translateY gives the flagship card tactile weight. */
+    transform: translateY(-1px);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .flagship:hover {
+      transform: none;
+    }
   }
 
   .flagship__head {

@@ -14,9 +14,10 @@ import ChromeHeader from '@components/ChromeHeader.astro';
 import { path } from '@utils/url';
 import { terms } from '../data/glossary-terms';
 import VoiceLine from '@components/VoiceLine.astro';
+import SectionMark from '@components/SectionMark.astro';
 import { profile } from '@utils/profile';
 
-const GATE_RANGE = `G1–G${profile.stats.evalGates}`;
+const GATE_RANGE = `G1 to G${profile.stats.evalGates}`;
 
 // Group by category for layout
 const quantTerms = terms
@@ -59,6 +60,7 @@ const aiTerms = terms
   <section class="section">
     <div class="container container--narrow">
       <header class="section__head">
+        <SectionMark index="00" title="glossary" />
         <h2 class="section__title" id="quant">Quant terms · {quantTerms.length}</h2>
         <p class="section__sub">
           Statistical-evaluation vocabulary. Where possible, terms link to the methodology page

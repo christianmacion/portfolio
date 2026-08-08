@@ -14,7 +14,7 @@ import { profile } from '../utils/profile';
 // names (G2, G9, G11, G18, G21, G22, G24, G25, G30) stay inline —
 // they're stable identifiers, not count-derived.
 const GATES = profile.stats.evalGates;
-const GATE_RANGE = `G1–G${GATES}`;
+const GATE_RANGE = `G1 to G${GATES}`;
 const NGATE = `${GATES}-gate`;
 
 export type GlossaryCategory = 'Quant' | 'AI';
@@ -50,7 +50,7 @@ export const terms: GlossaryTerm[] = [
     category: 'Quant',
     short:
       "The portion of an investment's return that is not explained by exposure to broad market risk. The signal beyond the benchmark.",
-    extended: `Alpha is the residual return after stripping out beta, sector, style, and factor exposure. In a systematic book, alpha is what the strategy is supposed to produce in excess of its benchmark. The qualitative question — does this strategy actually have alpha? — is the question the ${GATE_RANGE} evaluation stack on /methodology is designed to answer honestly. A positive expected alpha that survives walk-forward, multiple-testing correction, and out-of-sample testing is what counts as 'real' alpha on this site.`,
+    extended: `Alpha is the residual return after stripping out beta, sector, style, and factor exposure. In a systematic book, alpha is what the strategy is supposed to produce in excess of its benchmark. The qualitative question. does this strategy actually have alpha? to is the question the ${GATE_RANGE} evaluation stack on /methodology is designed to answer honestly. A positive expected alpha that survives walk-forward, multiple-testing correction, and out-of-sample testing is what counts as 'real' alpha on this site.`,
     related: ['sharpe', 'deflated-sharpe', 'pbo', 'cscv-pbo', 'walk-forward'],
   },
   {
@@ -59,16 +59,16 @@ export const terms: GlossaryTerm[] = [
     category: 'Quant',
     short:
       'A resampling method that preserves short-term autocorrelation in time-series by sampling contiguous blocks rather than individual data points. Used to build honest confidence intervals.',
-    extended: `A block bootstrap draws resamples by sampling whole contiguous blocks of observations, then concatenating them, instead of drawing individual points independently. The block length is chosen to exceed the longest horizon over which the strategy's returns are autocorrelated (look-ahead, position-holding period, signal-half-life). This preserves the variance and clustering of the original series, which ordinary i.i.d. bootstrap destroys. On this site, block-bootstrap is one of the ${GATE_RANGE} evaluation gates — gate G18 uses it to build confidence intervals on Sharpe, drawdown, and turnover without breaking the time-series structure of returns.`,
+    extended: `A block bootstrap draws resamples by sampling whole contiguous blocks of observations, then concatenating them, instead of drawing individual points independently. The block length is chosen to exceed the longest horizon over which the strategy's returns are autocorrelated (look-ahead, position-holding period, signal-half-life). This preserves the variance and clustering of the original series, which ordinary i.i.d. bootstrap destroys. On this site, block-bootstrap is one of the ${GATE_RANGE} evaluation gates. gate G18 uses it to build confidence intervals on Sharpe, drawdown, and turnover without breaking the time-series structure of returns.`,
     related: ['walk-forward', 'deflated-sharpe', 'sharpe', 'embargo'],
   },
   {
     id: 'bonferroni-holm',
-    term: 'Bonferroni–Holm correction',
+    term: 'Bonferroni to Holm correction',
     category: 'Quant',
     short:
       'A multiple-testing correction applied when many hypothesis tests are run at once. Prevents the probability of any false positive from inflating as the number of tests grows.',
-    extended: `When a strategy search runs hundreds or thousands of hypothesis tests in parallel — backtests, factor regressions, parameter sweeps — the family-wise error rate (probability of at least one false positive) inflates with the number of tests. The Bonferroni–Holm correction adjusts each test's p-value by a step-down procedure that controls the family-wise error rate while staying less conservative than the plain Bonferroni. On this site, Bonferroni–Holm is gate G24 of the ${GATE_RANGE} evaluation stack: every quantitative project reports the corrected p-value for its headline test, not the raw one.`,
+    extended: `When a strategy search runs hundreds or thousands of hypothesis tests in parallel. backtests, factor regressions, parameter sweeps. the family-wise error rate (probability of at least one false positive) inflates with the number of tests. The Bonferroni to Holm correction adjusts each test's p-value by a step-down procedure that controls the family-wise error rate while staying less conservative than the plain Bonferroni. On this site, Bonferroni to Holm is gate G24 of the ${GATE_RANGE} evaluation stack: every quantitative project reports the corrected p-value for its headline test, not the raw one.`,
     related: ['deflated-sharpe', 'pbo', 'cscv-pbo', 'minbtl'],
   },
   {
@@ -87,7 +87,7 @@ export const terms: GlossaryTerm[] = [
     short:
       'A statistical property of two or more time-series that move together in the long run even though each one individually wanders. The basis for pairs and stat-arb strategies.',
     extended:
-      "Two price series are cointegrated if a linear combination of them is stationary (mean-reverting) even though each series is itself non-stationary. The Engle–Granger test and the Johansen test are the standard estimators. Cointegration is the statistical foundation of pairs trading, statistical arbitrage, and spread trading: it lets you bet on the spread returning to its mean rather than on either leg's absolute direction. On this site, cointegration is the statistical primitive behind at least one of the 9 quant projects listed on /projects.",
+      "Two price series are cointegrated if a linear combination of them is stationary (mean-reverting) even though each series is itself non-stationary. The Engle to Granger test and the Johansen test are the standard estimators. Cointegration is the statistical foundation of pairs trading, statistical arbitrage, and spread trading: it lets you bet on the spread returning to its mean rather than on either leg's absolute direction. On this site, cointegration is the statistical primitive behind at least one of the 9 quant projects listed on /projects.",
     related: ['regime', 'walk-forward', 'block-bootstrap', 'drawdown'],
   },
   {
@@ -96,7 +96,7 @@ export const terms: GlossaryTerm[] = [
     category: 'Quant',
     short:
       'A correction to the Sharpe ratio that adjusts for the number of trials, the distribution of returns, and the skew/kurtosis of the strategy. Tells you whether a high Sharpe is real or a multiple-testing artifact.',
-    extended: `The Deflated Sharpe Ratio (Bailey & López de Prado, 2014) adjusts the observed Sharpe for: (1) the number of trials run (multiple-testing correction), (2) the non-normality of returns (skew and kurtosis), and (3) the correlation between strategies in the trial set. A backtest Sharpe of 1.5 that emerged from a 50-trial search is much less impressive than the same Sharpe from a single test. On this site, DSR is gate G21 of the ${GATE_RANGE} evaluation stack — every quant project reports DSR alongside the raw Sharpe so the recruiter can tell signal from search.`,
+    extended: `The Deflated Sharpe Ratio (Bailey & López de Prado, 2014) adjusts the observed Sharpe for: (1) the number of trials run (multiple-testing correction), (2) the non-normality of returns (skew and kurtosis), and (3) the correlation between strategies in the trial set. A backtest Sharpe of 1.5 that emerged from a 50-trial search is much less impressive than the same Sharpe from a single test. On this site, DSR is gate G21 of the ${GATE_RANGE} evaluation stack. every quant project reports DSR alongside the raw Sharpe so the recruiter can tell signal from search.`,
     related: ['sharpe', 'pbo', 'cscv-pbo', 'bonferroni-holm', 'minbtl'],
   },
   {
@@ -105,7 +105,7 @@ export const terms: GlossaryTerm[] = [
     category: 'Quant',
     short:
       'The peak-to-trough decline of an equity curve over a specified window. The most-cited measure of risk in a systematic book.',
-    extended: `Maximum drawdown is the largest peak-to-trough percentage decline of a strategy's equity curve. Average drawdown and drawdown duration (time to recovery) are also standard. Drawdown is the risk measure most clients and recruiters actually care about — even a high-Sharpe strategy with a 60% max drawdown is unsellable. On this site, every quant project reports max DD, average DD, and recovery time at the OOS sample. Gate G9 of the ${GATE_RANGE} evaluation stack requires DD reporting on a transaction-cost-adjusted basis.`,
+    extended: `Maximum drawdown is the largest peak-to-trough percentage decline of a strategy's equity curve. Average drawdown and drawdown duration (time to recovery) are also standard. Drawdown is the risk measure most clients and recruiters actually care about. even a high-Sharpe strategy with a 60% max drawdown is unsellable. On this site, every quant project reports max DD, average DD, and recovery time at the OOS sample. Gate G9 of the ${GATE_RANGE} evaluation stack requires DD reporting on a transaction-cost-adjusted basis.`,
     related: ['sharpe', 'deflated-sharpe', 'slippage', 'walk-forward'],
   },
   {
@@ -135,7 +135,7 @@ export const terms: GlossaryTerm[] = [
     short:
       'A pinned version of a model, prompt, and tool set used inside an eval. The spec is immutable for the duration of the eval so scores are reproducible.',
     extended:
-      'A frozen spec is the AI-equivalent of a fixed backtest universe. It pins: the model id and version, the system prompt, the tool schema, the temperature and seed, and the JSON-schema validators. Once frozen, no spec element may change for the duration of the eval — any change forces a new eval version. On this site, every published eval ships its frozen-spec manifest as a JSON sidecar so the scores can be reproduced by a third party.',
+      'A frozen spec is the AI-equivalent of a fixed backtest universe. It pins: the model id and version, the system prompt, the tool schema, the temperature and seed, and the JSON-schema validators. Once frozen, no spec element may change for the duration of the eval. any change forces a new eval version. On this site, every published eval ships its frozen-spec manifest as a JSON sidecar so the scores can be reproduced by a third party.',
     related: ['eval-harness', 'agent-charter', 'json-schema'],
   },
   {
@@ -143,7 +143,7 @@ export const terms: GlossaryTerm[] = [
     term: `${GATE_RANGE} (evaluation gates)`,
     category: 'Quant',
     short: `A ${NGATE} statistical evaluation stack applied to every quantitative project on this site. Covers leakage, multiple-testing, walk-forward, DSR, PBO, transaction-cost modelling, and OOS paper-trade.`,
-    extended: `${GATE_RANGE} is the canonical evaluation stack used on this site. Every quant project passes through all ${GATES} gates before being published. Gates cover: (G1–G6) data hygiene and PIT discipline, (G7–G10) leakage and embargo, (G11–G15) walk-forward and OOS, (G16–G20) block-bootstrap and variance estimation, (G21) deflated Sharpe, (G22) CSCV/PBO, (G23) Bonferroni–Holm, (G24) MinBTL, (G25–G28) transaction-cost and slippage modelling, (G29) OOS paper-trade gate, (G30) regime stratification, (G31) reproducibility. The full gate list and per-project compliance is on /methodology.`,
+    extended: `${GATE_RANGE} is the canonical evaluation stack used on this site. Every quant project passes through all ${GATES} gates before being published. Gates cover: (G1 to G6) data hygiene and PIT discipline, (G7 to G10) leakage and embargo, (G11 to G15) walk-forward and OOS, (G16 to G20) block-bootstrap and variance estimation, (G21) deflated Sharpe, (G22) CSCV/PBO, (G23) Bonferroni to Holm, (G24) MinBTL, (G25 to G28) transaction-cost and slippage modelling, (G29) OOS paper-trade gate, (G30) regime stratification, (G31) reproducibility. The full gate list and per-project compliance is on /methodology.`,
     related: ['deflated-sharpe', 'pbo', 'cscv-pbo', 'walk-forward', 'block-bootstrap', 'minbtl'],
   },
   {
@@ -163,7 +163,7 @@ export const terms: GlossaryTerm[] = [
     short:
       'Using a language model to grade the outputs of another model on dimensions that are hard to express as a deterministic check (tone, completeness, faithfulness).',
     extended:
-      'LLM-as-judge uses one language model to score the outputs of another. It is the only practical way to grade open-ended qualities (faithfulness, tone, completeness, qualitative correctness). The technique is biased — the judge model shares failure modes with the candidate — so it must be paired with at least one deterministic ground-truth check and a panel of at least two judge models for high-stakes scoring. On this site, LLM-as-judge appears in the numerical-faithfulness-eval as one of three scoring lanes alongside exact-match and calculator grounding.',
+      'LLM-as-judge uses one language model to score the outputs of another. It is the only practical way to grade open-ended qualities (faithfulness, tone, completeness, qualitative correctness). The technique is biased. the judge model shares failure modes with the candidate. so it must be paired with at least one deterministic ground-truth check and a panel of at least two judge models for high-stakes scoring. On this site, LLM-as-judge appears in the numerical-faithfulness-eval as one of three scoring lanes alongside exact-match and calculator grounding.',
     related: ['eval-harness', 'frozen-spec', 'json-schema'],
   },
   {
@@ -201,7 +201,7 @@ export const terms: GlossaryTerm[] = [
     category: 'Quant',
     short:
       'Data the model has never seen during training or parameter selection. The closest a backtest gets to a real test of generalisation.',
-    extended: `Out-of-sample (OOS) data is the held-out portion of the historical record that the model was neither trained on nor used to select hyperparameters against. A backtest's OOS performance is the most honest signal of how the strategy would have behaved live. On this site, OOS is gated by G11–G15 of the ${GATE_RANGE} evaluation stack: every published project reports its OOS window start, end, and embargo separately from its in-sample window.`,
+    extended: `Out-of-sample (OOS) data is the held-out portion of the historical record that the model was neither trained on nor used to select hyperparameters against. A backtest's OOS performance is the most honest signal of how the strategy would have behaved live. On this site, OOS is gated by G11 to G15 of the ${GATE_RANGE} evaluation stack: every published project reports its OOS window start, end, and embargo separately from its in-sample window.`,
     related: ['walk-forward', 'embargo', 'block-bootstrap'],
   },
   {
@@ -211,7 +211,7 @@ export const terms: GlossaryTerm[] = [
     short:
       'The probability that the best backtest winner, selected by in-sample performance, underperforms the median out-of-sample. Estimated by CSCV.',
     extended:
-      "PBO is the probability that a backtest search overfits — i.e. that the 'best' in-sample strategy underperforms the median OOS strategy, implying the selection was driven by chance rather than signal. PBO is estimated by Combinatorially Symmetric Cross-Validation (CSCV). A PBO below 25% is conventionally acceptable; above 50% means the search has produced more losers than winners regardless of which one looked best in-sample. On this site, PBO is reported as a per-project transparency metric on /proof.",
+      "PBO is the probability that a backtest search overfits. i.e. that the 'best' in-sample strategy underperforms the median OOS strategy, implying the selection was driven by chance rather than signal. PBO is estimated by Combinatorially Symmetric Cross-Validation (CSCV). A PBO below 25% is conventionally acceptable; above 50% means the search has produced more losers than winners regardless of which one looked best in-sample. On this site, PBO is reported as a per-project transparency metric on /proof.",
     related: ['cscv-pbo', 'deflated-sharpe', 'walk-forward', 'bonferroni-holm'],
   },
   {

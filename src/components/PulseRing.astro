@@ -1,27 +1,26 @@
 ---
 /**
- * PulseRing.astro — v7.4 INSTITUTIONAL PULSE RING
+ * PulseRing.astro — v7.4 INSTITUTIONAL PULSE RING (RETIRED v6.18 W2)
  *
- * Variant of the v7.3 status-dot. Two variants:
- *   - "status" — the v7.3 contact eyebrow pulse (amber, 1.1s cadence).
- *   - "live"   — a faster, square indicator for "LIVE TRADE" / "PAPER" badges.
+ * v6.18 W2 lock (2026-08-08): the pulse-ring animation is RETIRED
+ * per [[feedback-no-status-indicators-signal-lights]] BINDING.
+ * Components that previously used <PulseRing> should swap to a plain
+ * static `<span class="pulse-ring pulse-ring--static">` element with
+ * no animation. The component is preserved here for back-compat with
+ * any page that hasn't migrated yet — it now renders a STATIC dot
+ * (no infinite pulse, no opacity oscillation, no scale animation).
  *
- * Both rings are bordered (no `box-shadow` halo) — passes the no-bulbs
- * CI guard. The ring color is `currentColor` so the parent can tint it
- * via `color: var(--c-*)`.
+ * The variant prop is still accepted but ignored; the dot is always
+ * a 6×6 amber square. The label, color, and ariaLabel props still
+ * apply (semantic a11y, not animation).
  *
- * v2026-08-02 — pulse durations shortened (1.1s / 1.5s) and units
- * switched to `s` so the ring feels present-from-t=0 rather than
- * waiting for a long cycle to complete. Keyframe still starts at the
- * visible state (opacity 1 / scale 1) so the entrance is instant;
- * the cycle duration now lives under 1s.
- *
- * No JS. Pure CSS keyframes.
+ * NO JS. NO keyframes. NO infinite animations.
  */
 
 interface Props {
+  /** Deprecated — variant ignored post-W2. Kept for back-compat. */
   variant?: 'status' | 'live';
-  /** Color override. Auto-defaults to amber for status / teal for live. */
+  /** Color override. Auto-defaults to amber. */
   color?: 'warn' | 'cobalt' | 'sage' | 'terracotta' | 'teal' | 'violet' | 'ink';
   /** Accessible label. */
   label?: string;
@@ -31,13 +30,13 @@ interface Props {
   ariaLabel?: string;
 }
 
-const { variant = 'status', color, label, silent = false, ariaLabel } = Astro.props;
+const { color, label, silent = false, ariaLabel } = Astro.props;
 
-const colorClass = color ? `is-${color}` : variant === 'live' ? 'is-teal' : 'is-warn';
+const colorClass = color ? `is-${color}` : 'is-warn';
 ---
 
 <span
-  class:list={['pulse-ring', `pulse-ring--${variant}`, colorClass]}
+  class:list={['pulse-ring', 'pulse-ring--static', colorClass]}
   role={ariaLabel ? 'img' : undefined}
   aria-label={ariaLabel}
 >
@@ -53,45 +52,20 @@ const colorClass = color ? `is-${color}` : variant === 'live' ? 'is-teal' : 'is-
     line-height: 1;
   }
 
+  /* === v6.18 W2 lock (2026-08-08): STATIC dot. NO animation.
+     All previous infinite pulse keyframes are removed. The dot is
+     a plain 6×6 square in currentColor. === */
   .pulse-ring__dot {
-    position: relative;
     display: inline-block;
     width: 6px;
     height: 6px;
     background: currentColor;
     border-radius: 0;
     flex-shrink: 0;
-    /* v2026-08-02 — pulse cycle shortened to 1.1s (was 1.1s pre-sweep
-       — 4-digit ms units mis-flagged by the audit's `\d{4,}ms`
-       pattern even though they are durations, not delays) so the
-       ring settles into its rhythm instead of feeling like a long
-       first-pulse wait. Units in `s` to bypass the audit regex. */
-    animation: pulse-dot var(--j-dur-cursor, 1.1s) var(--j-ease-out) infinite;
-  }
-  .pulse-ring--live .pulse-ring__dot {
-    width: 7px;
-    height: 7px;
+    /* No transform-origin, no animation. Static. */
   }
 
-  .pulse-ring__dot::before {
-    content: '';
-    position: absolute;
-    inset: -3px;
-    border: 1px solid currentColor;
-    border-radius: 0;
-    opacity: 0;
-    /* v2026-08-02 — paired with the dot above; ring grows with the dot. */
-    animation: pulse-ring-key var(--j-dur-cursor, 1.1s) var(--j-ease-out) infinite;
-  }
-  .pulse-ring--live .pulse-ring__dot::before {
-    inset: -4px;
-  }
-
-  /* === Color tints — pass through to the dot via currentColor. ===
-     v9.4.1 — chrome-contract rule 6: reserve --c-warn for semantic
-     status only. The .is-warn tint here is decorative chrome
-     (pulse-ring default when no color/variant is set); collapse to
-     canonical --c-amber. */
+  /* === Color tints — pass through to the dot via currentColor. === */
   .pulse-ring.is-warn {
     color: var(--c-amber);
   }
@@ -122,49 +96,12 @@ const colorClass = color ? `is-${color}` : variant === 'live' ? 'is-teal' : 'is-
     font-weight: 600;
   }
 
-  /* Cadence — status is faster (1.1s, was 2.4s pre-2026-08-02), live is faster still (1.5s).
-     Shorter cycles + keyframe starting at opacity:1 mean the ring reads
-     as present-from-t=0 rather than waiting for a long first cycle. */
-  @keyframes pulse-dot {
-    0%,
-    100% {
-      opacity: 1;
-      transform: scale(1);
-    }
-    50% {
-      opacity: 0.55;
-      transform: scale(0.78);
-    }
-  }
-  @keyframes pulse-ring-key {
-    0% {
-      opacity: 0.6;
-      transform: scale(0.6);
-    }
-    80% {
-      opacity: 0;
-      transform: scale(2.4);
-    }
-    100% {
-      opacity: 0;
-      transform: scale(2.4);
-    }
-  }
-  /* Live variant — 1.5s cycle (was 1.8s pre-2026-08-02). */
-  .pulse-ring--live .pulse-ring__dot {
-    animation-duration: 1.5s;
-  }
-  .pulse-ring--live .pulse-ring__dot::before {
-    animation-duration: 1.5s;
-  }
-
-  /* Reduced-motion: solid dot, no ring. */
+  /* === Belt-and-suspender: even though the dot is static, declare
+     prefers-reduced-motion neutral so any future regression that
+     re-introduces an animation is nilled at the source. === */
   @media (prefers-reduced-motion: reduce) {
-    .pulse-ring__dot,
-    .pulse-ring__dot::before {
+    .pulse-ring__dot {
       animation: none !important;
-      opacity: 1;
-      transform: none;
     }
   }
 </style>

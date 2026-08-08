@@ -22,7 +22,7 @@ export const GET: APIRoute = async ({ site }) => {
     baseUrl,
     stream: 'project',
     selfHref: `${baseUrl}/feed-projects.xml`,
-    title: `${profile.fullName} — Projects`,
+    title: `${profile.fullName} to Projects`,
     subtitle: 'Quant research, AI systems, OSS. Newest first.',
     items,
     now,

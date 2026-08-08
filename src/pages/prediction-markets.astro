@@ -31,7 +31,7 @@ import { buildStampUtc8 } from '@utils/build-stamp';
 import { path } from '@utils/url';
 import { profile } from '@utils/profile';
 
-const GATE_RANGE = `G1–G${profile.stats.evalGates}`;
+const GATE_RANGE = `G1 to G${profile.stats.evalGates}`;
 
 type PredictionEntry = CollectionEntry<'predictionEvent'>;
 const allEvents: PredictionEntry[] = await getCollection('predictionEvent');
@@ -118,7 +118,7 @@ const decayPoints = events.map((e) => ({
 
 <BaseLayout
   title={`Binary event markets · ${n} events · 0 platforms named`}
-  description={`${n} binary event contracts — implied probability, model-implied fair value, and edge over the market. NDA-positive by construction.`}
+  description={`${n} binary event contracts. implied probability, model-implied fair value, and edge over the market. NDA-positive by construction.`}
 >
   {
     /* ============================================================
@@ -151,7 +151,7 @@ const decayPoints = events.map((e) => ({
       <VoiceLine class="hero__voice" ruled={true} size="md">
         Every metric on this page is a public-data probability, derived from the same seed-time
         fixture pattern that gates the equity curves and the order book. No proprietary feeds, no
-        platform labels, no counterparty leakage — by construction.
+        platform labels, no counterparty leakage. by construction.
       </VoiceLine>
       <div class="hero__meta mono">
         <span>{n} events</span>
@@ -213,7 +213,7 @@ const decayPoints = events.map((e) => ({
         <p class="section__eyebrow">Top 3 by edge</p>
         <h2 class="section__title">Where the model disagrees most.</h2>
         <p class="section__sub">
-          The three events with the largest absolute edge — the spots where the model-implied fair
+          The three events with the largest absolute edge. the spots where the model-implied fair
           value diverges from the market price by the widest margin. Each polyline starts at today's
           implied probability and converges toward fair at the tenor endpoint.
         </p>
@@ -238,7 +238,7 @@ const decayPoints = events.map((e) => ({
           Each card is one binary event contract. <strong>Implied</strong> is the market-quoted probability
           in cents. <strong>Fair</strong> is the model-implied probability from the methodology noted
           in the footer.
-          <strong>Edge</strong> is the gap — positive means the model thinks the market under-prices the
+          <strong>Edge</strong> is the gap. positive means the model thinks the market under-prices the
           event. All decimals derive from a single build-time seed so two visitors loading the same build
           see the same numbers.
         </p>
@@ -274,7 +274,7 @@ const decayPoints = events.map((e) => ({
         <p class="section__sub">
           Each polyline starts at today's implied probability and converges toward the model-implied
           fair value at the event's tenor endpoint. A positive-edge event drifts up; a negative-edge
-          event drifts down. The seeded perturbation is purely visual — it does not change the
+          event drifts down. The seeded perturbation is purely visual. it does not change the
           anchor points.
         </p>
       </header>
@@ -298,7 +298,7 @@ const decayPoints = events.map((e) => ({
         <h2 class="disclosure__title">No platform names. No bookmaker.</h2>
         <ul class="disclosure__list">
           <li>
-            <strong>No proprietary feeds.</strong> Every input is a public-data aggregate — FRED-equivalent
+            <strong>No proprietary feeds.</strong> Every input is a public-data aggregate. FRED-equivalent
             macro series, Yahoo Finance for equities and crypto, public polling aggregators for political
             events, and CBOE-equivalent vol surfaces for volatility.
           </li>
@@ -318,7 +318,7 @@ const decayPoints = events.map((e) => ({
           <li>
             <strong>Audit gate.</strong> A regulatory shop can verify with one command:
             <code class="mono">curl /prediction-markets/ | grep -i platform</code>
-            — the response is empty. The page names zero venues, zero counterparties, zero proprietary
+ to the response is empty. The page names zero venues, zero counterparties, zero proprietary
             feeds by construction.
           </li>
         </ul>

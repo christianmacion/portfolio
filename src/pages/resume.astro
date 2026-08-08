@@ -159,7 +159,7 @@ const formatCount = allFormatKinds.size;
       <p class="page-head__sub">
         Pick the version that matches the role you're hiring for. The unified variant covers both
         lanes simultaneously (best for the combined seat); the AI Engineer and Quant Researcher
-        variants go lane-by-lane. Each ships in three formats — PDF for human reviewers, Markdown
+        variants go lane-by-lane. Each ships in three formats (PDF for human reviewers, Markdown
         for LLM-based recruiter agents, plain text for Workday-classic / Greenhouse / Taleo ATS
         pipelines. All three are NDA-safe, free of proprietary data sources, and reference only
         public-data methodology or open-source work.
@@ -208,15 +208,15 @@ const formatCount = allFormatKinds.size;
         }
       </div>
 
-      <aside class="resume-note">
-        <h3 class="resume-note__title">If you'd rather a different shape</h3>
+      <aside class="resume-note" aria-label="If you'd rather a different shape">
+        <h2 class="resume-note__title">If you'd rather a different shape</h2>
         <p>
           I keep a <strong>bullet-bank resume materials</strong> package (~80 bullet variants) for tailored
           one-pagers per JD. Email me the JD and I'll send back a tailored version within 24 hours.
         </p>
         <p class="resume-note__mono">
           Assembled with the same HIRED-FlowCV builder used for OnlineJobs.ph and Upwork
-          applications — ATS-safe, single-column, no tables-for-layout. Source JSONs live in
+          applications: ATS-safe, single-column, no tables-for-layout. Source JSONs live in
           <code>scripts/resumes/</code>; PDFs regenerate via <code>npm run resumes:build</code>, MD
           + TXT via <code>npm run resumes:build:md</code>.
         </p>

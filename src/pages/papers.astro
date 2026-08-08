@@ -40,12 +40,12 @@ const memos = [
       'Six cost components (spread, slippage, funding, borrow, exchange fees, latency penalty) account for ~92% of the cost-induced pass/fail movement. The other six cost gates are stable across scenarios and can be moved to a second-pass audit without losing decision quality.',
   },
   {
-    title: 'Walk-forward vs. embargoed OOS — when to use which',
+    title: 'Walk-forward vs. embargoed OOS. when to use which',
     date: '2026-06-18',
     abstract:
       'Walk-forward validation leaks information through the parameter grid; embargoed OOS is statistically clean but discards data. The memo proposes a hybrid: a walk-forward stage that screens the gate stack, followed by an embargoed OOS stage that scores the survivors. The hybrid is cheaper to run and harder to game than either alone.',
     method:
-      'Replay the deflated-Sharpe sweep (project 01) under three protocols — walk-forward only, embargoed OOS only, and the proposed hybrid. Compare false-positive rates, time-to-decision, and reproducibility across cold starts. The reproducibility test is the load-bearing one.',
+      'Replay the deflated-Sharpe sweep (project 01) under three protocols. walk-forward only, embargoed OOS only, and the proposed hybrid. Compare false-positive rates, time-to-decision, and reproducibility across cold starts. The reproducibility test is the load-bearing one.',
     finding:
       'Hybrid reduces false-positive rate from ~24% (walk-forward alone) to ~6% (hybrid) and only adds ~15% to time-to-decision. Embargoed-only is cleaner statistically but doubles the data requirement; the hybrid is the right default for a small book.',
   },
@@ -62,9 +62,9 @@ const memos = [
     date: '2026-05-04',
     abstract:
       'The same gate stack that defends a quant book (mechanical-validity, OOS discipline, multiple-testing correction) defends a multi-agent LLM system. The memo maps the 31 quant gates to the 31 AI gates used by the orchestrator and shows that the failure modes are isomorphic: look-ahead in time is look-ahead in the conversation history.',
-    method: `Replay the /solutions/01–11 agent logs through the ${NGATE} evaluation harness. Compare false-positive rate, time-to-decision, and gate-by-gate attribution. Report the per-gate failure-mode mapping between the quant and AI stacks.`,
+    method: `Replay the /solutions/01 to 11 agent logs through the ${NGATE} evaluation harness. Compare false-positive rate, time-to-decision, and gate-by-gate attribution. Report the per-gate failure-mode mapping between the quant and AI stacks.`,
     finding:
-      '22 of 31 gates map 1:1 across stacks. The 9 non-trivial mappings are precisely the gates that the 11-agent platform was designed to enforce mechanically — they are the ones that fail closed in production and pass in tests.',
+      '22 of 31 gates map 1:1 across stacks. The 9 non-trivial mappings are precisely the gates that the 11-agent platform was designed to enforce mechanically. they are the ones that fail closed in production and pass in tests.',
   },
 ];
 const memoStatus = 'Draft in flight · not yet on the public PDF queue';
@@ -84,7 +84,7 @@ const shelf: Book[] = [
     author: 'Marcos López de Prado',
     year: 2018,
     blurb:
-      "The reference for backtest-overfitting, combinatorial purged cross-validation, and meta-labeling. Re-read at chapter 16 quarterly — the chapter is the gate stack's backbone.",
+      "The reference for backtest-overfitting, combinatorial purged cross-validation, and meta-labeling. Re-read at chapter 16 quarterly. the chapter is the gate stack's backbone.",
     href: 'https://www.wiley.com/en-us/Advances+in+Financial+Machine+Learning-p-9781119482086',
   },
   {
@@ -115,7 +115,7 @@ const shelf: Book[] = [
     author: 'Gregory Zuckerman',
     year: 2019,
     blurb:
-      'Institutional history of Jim Simons and Medallion. The methodological lesson — that research integrity compounds the way alpha does — is the one that survived the book.',
+      'Institutional history of Jim Simons and Medallion. The methodological lesson. that research integrity compounds the way alpha does. is the one that survived the book.',
     href: 'https://www.penguinrandomhouse.com/books/566837/the-man-who-solved-the-market-by-gregory-zuckerman/',
   },
 ];
@@ -132,17 +132,17 @@ const shelf: Book[] = [
   <header class="papers-head">
     <div class="container">
       {/* Bryllim pattern — number-prefixed section header before page H1. */}
-      <p class="bryllim-mark mono" aria-hidden="true">01 — papers</p>
+      <p class="bryllim-mark mono" aria-hidden="true">01. papers</p>
       <p class="papers-head__eyebrow mono">
         <span class="papers-head__eyebrow-chip">PAPERS · MEMOS + BOOKSHELF</span>
         <span class="papers-head__eyebrow-line">WORKING MEMOS · PUBLIC PDFS · NDA-SAFE</span>
       </p>
       <h1 class="papers-head__title" data-words>Papers, memos, and long-form notes.</h1>
       <VoiceLine class="papers-head__voice">
-        The {shelf.length} references /methodology is downstream of — and the working memos in flight.
+        The {shelf.length} references /methodology is downstream of. and the working memos in flight.
       </VoiceLine>
       <p class="papers-head__sub">
-        Section A is the working-memo queue — drafts in flight, no public PDF links yet. Section B
+        Section A is the working-memo queue. drafts in flight, no public PDF links yet. Section B
         is the bookshelf: the {shelf.length} references that
         <a href={path('/methodology')}>/methodology</a> is downstream of. All public sources.
       </p>

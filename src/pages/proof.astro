@@ -12,6 +12,12 @@
  *
  * Data sources for sections P.4 below are loaded from content collections.
  * Sub-page routing anchors at #identity / #credentials / #code / #research / #track.
+ *
+ * v6.18 W2 deferral (2026-08-08): SectionMark + SectionTOC components
+ * are NOT YET APPLIED on this long page. Wave 5 (#88) owns the
+ * canonical <Section> wrapper + TOC strip per
+ * [[portfolio-v10-bryllim-structure-strategy]] — 11 canonical
+ * Section components required. Out of W2 scope per Owner directive.
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
 import ProofCard from '@components/ProofCard.astro';
@@ -22,6 +28,7 @@ import CTABanner from '@components/CTABanner.astro';
 import SectionTOC from '@components/SectionTOC.astro';
 import VoiceLine from '@components/VoiceLine.astro';
 import ChromeHeader from '@components/ChromeHeader.astro';
+import SectionMark from '@components/SectionMark.astro';
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { path } from '@utils/url';
 import { profile } from '@utils/profile';
@@ -90,7 +97,7 @@ const codeArtifacts = [
     title: 'numerical-faithfulness-eval',
     kind: 'Eval harness' as const,
     tagline:
-      'Verify LLM numerical claims against deterministic fixtures. Catches the most common LLM failure mode — wrong numbers — in under one second.',
+      'Verify LLM numerical claims against deterministic fixtures. Catches the most common LLM failure mode. wrong numbers. in under one second.',
     metric: '10 demo claims · 5 pass · 5 fail by design',
     preview: `$ python -m eval_harness
 [FAIL] btc_2024_sma_cross_20_50 / sharpe: claimed=5.0,
@@ -110,7 +117,7 @@ const codeArtifacts = [
     title: 'eval-mcp-server',
     kind: 'MCP server' as const,
     tagline:
-      'Slop-evaluation gate exposed as an MCP tool. Tools / Resources / Prompts — 20/20 conformance, 100% round-trip parity.',
+      'Slop-evaluation gate exposed as an MCP tool. Tools / Resources / Prompts. 20/20 conformance, 100% round-trip parity.',
     metric: 'MCP conformance 20/20 · round-trip parity 100% · primitives 3/3',
     preview: `$ uv run eval_mcp_server.py
 # MCP server with the slop-evaluation gate
@@ -219,7 +226,7 @@ const paginate = (items: any[]) => {
 
 <BaseLayout
   title="Proof"
-  description={`Decision-grade artefacts that back the claims on /experience, /certifications, and /now. Tier-1 credentials, ${codeArtifacts.length} open-source artifacts, ${quantProjects.length} quant projects, ${aiProjects.length} AI projects, ${solutions.length} case studies — all NDA-clean by construction.`}
+  description={`Decision-grade artefacts that back the claims on /experience, /certifications, and /now. Tier-1 credentials, ${codeArtifacts.length} open-source artifacts, ${quantProjects.length} quant projects, ${aiProjects.length} AI projects, ${solutions.length} case studies. all NDA-clean by construction.`}
   type="profile"
   breadcrumbs={[
     { name: 'Home', href: '/' },
@@ -228,12 +235,12 @@ const paginate = (items: any[]) => {
   extraJsonLd={{
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: `${profile.fullName} — Proof`,
+    name: `${profile.fullName} to Proof`,
     description:
       'Six-tier proof spine: P.1 identity · P.2 flagship credentials · P.3 shipped code · P.4 research artifacts · P.5 public track record · P.6 NDA-positive disclosure.',
     isPartOf: {
       '@type': 'WebSite',
-      name: `${profile.fullName} — Portfolio`,
+      name: `${profile.fullName} to Portfolio`,
       url: 'https://christianmacion-portfolio.pages.dev/',
     },
     hasPart: [
@@ -293,7 +300,7 @@ const paginate = (items: any[]) => {
       </VoiceLine>
 
       <p class="proof-head__sub">
-        A gallery of public, NDA-clean artifacts — records, charts, co-signed certificates — that
+        A gallery of public, NDA-clean artifacts. records, charts, co-signed certificates. that
         back up the claims on
         <a href={path('/experience')}>/experience</a>,
         <a href={path('/certifications')}>/certifications</a>, and <a href={path('/now')}>/now</a>.
@@ -303,7 +310,7 @@ const paginate = (items: any[]) => {
         index. Each Tier-1 cert links to its issuer, every shipped repo runs offline with no LLM
         dependency, every metric traces to a project frontmatter, every testimonial slot is held
         back until a third-party paper trail is on file, and every NDA-protected engagement is a
-        closed past contract (systematic-strategy desk, 03–06/2026).
+        closed past contract (systematic-strategy desk, 03 to 06/2026).
       </p>
     </div>
   </header>
@@ -342,10 +349,12 @@ const paginate = (items: any[]) => {
     id="credentials"
     data-toc-id="credentials"
     data-toc-label="Flagship credentials"
+    data-section-id="proof"
     data-reveal
   >
     <div class="container">
       <header class="section__head">
+        <SectionMark index="00" title="proof" />
         <p class="section__eyebrow">P.2 · Flagship credentials</p>
         <h2 class="section__title">Tier-1 certs. Co-signed by name.</h2>
         <p class="section__sub">
@@ -386,11 +395,11 @@ const paginate = (items: any[]) => {
       </div>
 
       <p class="proof-prose">
-        The four Tier-1s above (CTA – Chicago Trading Academy, Ateneo + US Embassy Civic Tech,
+        The four Tier-1s above (CTA to Chicago Trading Academy, Ateneo + US Embassy Civic Tech,
         BIDA × Meta Cohort 2, Bitget Blockchain4Youth) are the credentials an institutional reviewer
         can verify in under three minutes. Each maps to a public, dated issuer surface. They back
         the <a href={path('/experience')}>/experience</a> page's claim that Christian operates at the
-        intersection of systematic trading, civic data, and applied AI — not three separate
+        intersection of systematic trading, civic data, and applied AI. not three separate
         personas, one evidence spine.
       </p>
     </div>
@@ -409,6 +418,7 @@ const paginate = (items: any[]) => {
     id="code"
     data-toc-id="code"
     data-toc-label="Shipped code"
+    data-section-id="proof"
     data-reveal
   >
     <div class="container">
@@ -420,7 +430,7 @@ const paginate = (items: any[]) => {
           <strong>offline-runnable</strong>, and <strong>dependency-light</strong>. Each one is a
           small, auditable artifact that demonstrates the eval-first methodology in code rather than
           prose. The four repos below back the methodology on
-          <a href={path('/methodology')}>/methodology</a> — same gate stack, different
+          <a href={path('/methodology')}>/methodology</a>n/a same gate stack, different
           domain.
         </p>
       </header>
@@ -444,10 +454,10 @@ const paginate = (items: any[]) => {
 
       <p class="proof-prose">
         The four repos cover the three failure modes that bite agent-built work most often: tool
-        correctness (mcp-backtest-server — backtest functions over MCP, deterministic from a symbol
-        seed), retrieval correctness (qfin-rag-harness — citation-grounded TF-IDF over 16 canonical
+        correctness (mcp-backtest-server. backtest functions over MCP, deterministic from a symbol
+        seed), retrieval correctness (qfin-rag-harness. citation-grounded TF-IDF over 16 canonical
         q-fin papers, zero LLM call, zero API key), and numerics correctness
-        (numerical-faithfulness-eval — fails any LLM claim whose number differs from a deterministic
+        (numerical-faithfulness-eval. fails any LLM claim whose number differs from a deterministic
         fixture beyond a per-metric tolerance). eval-mcp-server exposes the slop-evaluation gate as
         a MCP tool so other agents can call it; it passes the MCP conformance suite 20/20 and
         round-trips across all three MCP primitives (Tools, Resources, Prompts).
@@ -466,6 +476,7 @@ const paginate = (items: any[]) => {
     id="research"
     data-toc-id="research"
     data-toc-label="Research artifacts"
+    data-section-id="proof"
     data-reveal
     data-filter-host
     data-active-topic="all"
@@ -556,7 +567,7 @@ const paginate = (items: any[]) => {
 
       {/* Quant projects */}
       {/* v6.10.27 — counts derived from the actual collection, not hand-written */}
-      <h3 class="proof-list__heading">Quant projects — {heroQuantCount}</h3>
+      <h3 class="proof-list__heading">Quant projects to {heroQuantCount}</h3>
       <ol
         class="proof-list proof-list--paged"
         aria-label="Quant research projects"
@@ -625,7 +636,7 @@ const paginate = (items: any[]) => {
       <nav class="proof-pager" aria-label="Quant projects pagination" data-pager hidden></nav>
 
       {/* AI projects */}
-      <h3 class="proof-list__heading">AI projects — {heroAiCount}</h3>
+      <h3 class="proof-list__heading">AI projects to {heroAiCount}</h3>
       <ol
         class="proof-list proof-list--paged"
         aria-label="AI engineering projects"
@@ -694,7 +705,7 @@ const paginate = (items: any[]) => {
       <nav class="proof-pager" aria-label="AI projects pagination" data-pager hidden></nav>
 
       {/* Solutions */}
-      <h3 class="proof-list__heading">Solutions — {heroSolutionCount} case studies</h3>
+      <h3 class="proof-list__heading">Solutions to {heroSolutionCount} case studies</h3>
       <ol
         class="proof-list proof-list--paged"
         aria-label="Solution case studies"
@@ -758,6 +769,7 @@ const paginate = (items: any[]) => {
     id="track"
     data-toc-id="track"
     data-toc-label="Track record"
+    data-section-id="proof"
     data-reveal
   >
     <div class="container">
@@ -774,7 +786,7 @@ const paginate = (items: any[]) => {
         <VideoEmbed
           src={path('/proof/usep-lecture.mp4')}
           poster={path('/proof/usep-lecture.jpg')}
-          title="USeP EGE 313 Manobo lecture — live presenter view"
+          title="USeP EGE 313 Manobo lecture. live presenter view"
           duration={55}
           caption="Live Presenter-view delivery, Sep 13 2024. Webcam lower-right; deck filename 'MACION. MANOBO. PIC. ECE3A. 230pm. MW' visible in the PPT Edit-mode frame."
           mode="gallery"
@@ -782,7 +794,7 @@ const paginate = (items: any[]) => {
         <VideoEmbed
           src={path('/proof/ai-workflow.mp4')}
           poster={path('/proof/ai-workflow.jpg')}
-          title="AI workflow — same lecture, authored via ChatGPT-assisted drafting"
+          title="AI workflow. same lecture, authored via ChatGPT-assisted drafting"
           duration={55}
           caption={`Three weeks before the lecture: same deck, drafted end-to-end via a ChatGPT session. The precursor pattern to the current ${NGATE} authoring harness.`}
           mode="gallery"
@@ -798,7 +810,7 @@ const paginate = (items: any[]) => {
         aspect="16/9"
       />
 
-      <h3 class="proof-list__heading">Atom feeds — 3 streams</h3>
+      <h3 class="proof-list__heading">Atom feeds. 3 streams</h3>
       <ul class="proof-feeds mono">
         <li><a href={path('/feed.xml')}>{path('/feed.xml')}</a> · portfolio updates</li>
         <li>
@@ -821,6 +833,7 @@ const paginate = (items: any[]) => {
     id="public-track"
     data-toc-id="public-track"
     data-toc-label="Public track record"
+    data-section-id="proof"
     data-reveal
   >
     <div class="container">
@@ -920,6 +933,7 @@ const paginate = (items: any[]) => {
     id="testimonials"
     data-toc-id="testimonials"
     data-toc-label="Testimonials (pending)"
+    data-section-id="proof"
     data-reveal
   >
     <div class="container container-narrow">
@@ -927,14 +941,14 @@ const paginate = (items: any[]) => {
         <p class="section__eyebrow">P.5c · Testimonials</p>
         <h2 class="section__title">Pending attestation.</h2>
       </header>
-      <div class="testimonials-pending" role="region" aria-label="Testimonials gap — honest, not fabricated">
+      <div class="testimonials-pending" role="region" aria-label="Testimonials gap. honest, not fabricated">
         <p class="testimonials-pending__rule mono">
           <span class="testimonials-pending__rule-n">05</span>Every testimonial is an attestable paper
           trail, not a quote.
         </p>
         <p class="testimonials-pending__note">
-          The discipline holds. No third-party paper trail — email, call summary, signed reference,
-          or attested transcript — is on file yet, so no quote ships in this block. Three attestee
+          The discipline holds. No third-party paper trail. email, call summary, signed reference,
+          or attested transcript. is on file yet, so no quote ships in this block. Three attestee
           types are queued and gated on real evidence, not on volume: a portfolio v3 owner
           reference, an Upwork client reference, and a recruiter / OJP-channel reference. Each
           will be published as a dated, verifiable attachment the moment the paper trail lands —
@@ -966,6 +980,7 @@ const paginate = (items: any[]) => {
     id="evidence"
     data-toc-id="evidence"
     data-toc-label="Evidence index"
+    data-section-id="proof"
     data-reveal
   >
     <div class="container">
@@ -980,7 +995,7 @@ const paginate = (items: any[]) => {
         </p>
       </header>
 
-      <div class="evidence" role="table" aria-label="AAR evidence index — 12 AARs in last 30 days">
+      <div class="evidence" role="table" aria-label="AAR evidence index. 12 AARs in last 30 days">
         <div class="evidence__row evidence__row--head" role="row">
           <span class="evidence__cell evidence__cell--date mono" role="columnheader">Date</span>
           <span class="evidence__cell evidence__cell--aar mono" role="columnheader">AAR</span>
@@ -992,7 +1007,7 @@ const paginate = (items: any[]) => {
             >portfolio-v9-3-wave-2-ship</span
           >
           <span class="evidence__cell evidence__cell--subject" role="cell"
-            >Wave-2 ship: chrome, motion, a11y, IA — the v9.3 baseline this page sits on</span
+            >Wave-2 ship: chrome, motion, a11y, IA. the v9.3 baseline this page sits on</span
           >
         </div>
         <div class="evidence__row" role="row">
@@ -1064,7 +1079,7 @@ const paginate = (items: any[]) => {
             >accion-thesis-b-triage</span
           >
           <span class="evidence__cell evidence__cell--subject" role="cell"
-            >Quant strategy triage · Lane C gates applied (G40–G45 + K13)</span
+            >Quant strategy triage · Lane C gates applied (G40 to G45 + K13)</span
           >
         </div>
         <div class="evidence__row" role="row">
@@ -1108,6 +1123,7 @@ const paginate = (items: any[]) => {
     id="disclosure"
     data-toc-id="disclosure"
     data-toc-label="NDA disclosure"
+    data-section-id="proof"
     data-reveal
   >
     <div class="container container-narrow">
@@ -1119,8 +1135,8 @@ const paginate = (items: any[]) => {
         <strong>What's not here:</strong> photos of NDA-protected offices. Screenshots of proprietary
         strategy outputs. Calendar entries with client names. The systematic-strategy desk role is a <strong
           >closed past contract</strong
-        > (03/2026 – 06/2026), and everything on this page is public-data or self-owned. If the proof
-        you need isn't on this page, email me — if it's public, I'll send it within 24 hours.
+        > (03/2026 to 06/2026), and everything on this page is public-data or self-owned. If the proof
+        you need isn't on this page, email me. if it's public, I'll send it within 24 hours.
       </p>
     </div>
   </section>

@@ -89,15 +89,15 @@ const strings = isFrameSet ? null : (items as string[]);
     mask-image: linear-gradient(
       to right,
       transparent 0,
-      #000 24px,
-      #000 calc(100% - 24px),
+      var(--c-bg) 24px,
+      var(--c-bg) calc(100% - 24px),
       transparent 100%
     );
     -webkit-mask-image: linear-gradient(
       to right,
       transparent 0,
-      #000 24px,
-      #000 calc(100% - 24px),
+      var(--c-bg) 24px,
+      var(--c-bg) calc(100% - 24px),
       transparent 100%
     );
   }
@@ -129,7 +129,7 @@ const strings = isFrameSet ? null : (items as string[]);
     line-height: 1;
   }
   .marquee__frame-head {
-    font-family: var(--serif-display);
+    font-family: var(--j-ff-display);
     font-style: italic;
     font-weight: 500;
     font-size: 16px;
@@ -143,7 +143,9 @@ const strings = isFrameSet ? null : (items as string[]);
     color: var(--c-ink-2);
   }
   .marquee__frame-sep {
-    color: var(--c-ink-4);
+    /* v9.9.1 — was var(--c-ink-4) (2.49:1 light / 1.93:1 dark) — fails AA.
+       Lifted to --c-ink-3 (5.19:1 / 5.62:1) — both AA. */
+    color: var(--c-ink-3);
     font-weight: 600;
   }
   /* v9.4.1 — chrome-contract rule 6: reserve --c-warn for semantic
@@ -156,7 +158,7 @@ const strings = isFrameSet ? null : (items as string[]);
     color: var(--c-amber);
   }
   .marquee__frame.is-sage .marquee__frame-head {
-    color: var(--j-sage);
+    color: var(--c-ink-2);
   }
   .marquee__frame.is-terracotta .marquee__frame-head {
     color: var(--j-terracotta);

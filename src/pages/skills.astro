@@ -11,6 +11,7 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import Equation from '@components/Equation.astro';
 import Stat from '@components/Stat.astro';
 import ChromeHeader from '@components/ChromeHeader.astro';
+import SectionMark from '@components/SectionMark.astro';
 import { profile } from '@utils/profile';
 import { getCollection, type CollectionEntry } from 'astro:content';
 
@@ -62,7 +63,7 @@ const levelLabel: Record<1 | 2 | 3 | 4 | 5, string> = {
     <div class="container">
       <ChromeHeader
         chip={`SKILLS · ${groups.length} DOMAINS · ONE STACK`}
-        eyebrow="SELF-RATED · LADDER 1–5 · YEARS OF PRACTICE"
+        eyebrow="SELF-RATED · LADDER 1 to 5 · YEARS OF PRACTICE"
         tenant={`CHRISTIAN.T.MACION · UTC+8 · ${groups.length} DOMAINS · SELF-RATED · OWNER-VERIFIED`}
         noSep
         hideTenet
@@ -150,9 +151,10 @@ const levelLabel: Record<1 | 2 | 3 | 4 | 5, string> = {
 
   {
     groups.map((group: SkillGroupEntry, idx: number) => (
-      <section class:list={['section', { 'section--alt': idx % 2 === 1 }]}>
+      <section class:list={['section', { 'section--alt': idx % 2 === 1 }]} data-section-id="skills">
         <div class="container">
           <header class="section__head">
+            {idx === 0 && <SectionMark index="00" title="skills" />}
             <p class="section__eyebrow">Domain {idx + 1}</p>
             <h2 class="section__title">{group.data.title}</h2>
             <p class="section__sub">{group.data.blurb}</p>
@@ -168,7 +170,7 @@ const levelLabel: Record<1 | 2 | 3 | 4 | 5, string> = {
                     {level !== null && (
                       <span
                         class:list={['skill__chip', `skill__chip--lvl-${level}`]}
-                        title={`Proficiency: ${level}/5 — ${levelLabel[level as 1 | 2 | 3 | 4 | 5]}`}
+                        title={`Proficiency: ${level}/5 to ${levelLabel[level as 1 | 2 | 3 | 4 | 5]}`}
                       >
                         <span class="mono">{level}</span>
                         <span class="muted">/5</span>
@@ -182,7 +184,7 @@ const levelLabel: Record<1 | 2 | 3 | 4 | 5, string> = {
                     <div
                       class="skill__ladder"
                       role="img"
-                      aria-label={`Proficiency ${level} of 5 — ${levelLabel[level as 1 | 2 | 3 | 4 | 5]}`}
+                      aria-label={`Proficiency ${level} of 5 to ${levelLabel[level as 1 | 2 | 3 | 4 | 5]}`}
                     >
                       {Array.from({ length: 5 }).map((_, i) => (
                         <span

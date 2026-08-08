@@ -48,14 +48,21 @@ const revealId = `reveal-${fnv1a(`${delayMs}:${rise}:${once}`)}`;
 </div>
 
 <style>
+  /* Progressive enhancement: visible by default. Only hidden when JS is on
+     AND the observer hasn't fired yet. If JS fails, the content stays visible.
+     Mirrors the [data-reveal] pattern in src/styles/global.css §Phase D. */
   .scroll-reveal {
-    opacity: 0;
-    transform: translateY(var(--reveal-rise, 12px));
+    opacity: 1;
+    transform: none;
     transition:
       opacity 600ms var(--j-ease-out, ease-out),
       transform 600ms var(--j-ease-out, ease-out);
     transition-delay: var(--reveal-delay, 0ms);
     will-change: transform, opacity;
+  }
+  :root.js .scroll-reveal:not(.is-revealed) {
+    opacity: 0;
+    transform: translateY(var(--reveal-rise, 12px));
   }
   .scroll-reveal.is-revealed {
     opacity: 1;
@@ -72,6 +79,10 @@ const revealId = `reveal-${fnv1a(`${delayMs}:${rise}:${once}`)}`;
 </style>
 
 <script>
+  // Mark JS-on so the CSS can hide un-revealed elements only when JS is live.
+  // If JS fails to load, content stays visible by default (progressive enhancement).
+  document.documentElement.classList.add('js');
+
   class ScrollReveal {
     root: HTMLElement;
     obs: IntersectionObserver | null = null;

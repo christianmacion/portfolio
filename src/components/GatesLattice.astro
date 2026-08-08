@@ -1,0 +1,260 @@
+---
+/**
+ * GatesLattice.astro — v11.W3 · 31-cell G1-G31 gate lattice visualization.
+ *
+ * Composes the existing 6-family gate definitions from [[profile]] into a
+ * flat 31-cell lattice: 6 family headers + 31 individual gate pills.
+ * Wired to [[scripts/motion/theatre-gates.client.ts]] for choreographed
+ * stagger-reveal (50ms per cell, 1.6s total, fade-in + 0.5px scale-up).
+ *
+ * Chrome contract:
+ *   - 1px hairline grid lines (no glow, no halo)
+ *   - mono caps + Inter body
+ *   - single 1px amber accent on family separators
+ *   - sharp 0-2px corners
+ *   - prefers-reduced-motion: snap to terminal state via CSS override
+ *
+ * W4 (data-viz) will replace this with a richer per-cell interactive viz.
+ * This component is the W3 motion library SHOWCASE — it proves theatre.js
+ * integrates cleanly with the chrome contract without disrupting a11y.
+ */
+import { profile } from '@utils/profile';
+
+type Gate = {
+  id: string;
+  family: string;
+  name: string;
+};
+
+const families: Array<{ range: string; name: string; gates: Gate[] }> = [
+  {
+    range: 'G1 to G5',
+    name: 'Mechanical validity',
+    gates: [
+      { id: 'G1', family: 'mechanical', name: 'Schema conformance' },
+      { id: 'G2', family: 'mechanical', name: 'Exit-0 contract' },
+      { id: 'G3', family: 'mechanical', name: 'Structured-output parse' },
+      { id: 'G4', family: 'mechanical', name: 'JSON Schema strict-mode' },
+      { id: 'G5', family: 'mechanical', name: 'Byte-length budget' },
+    ],
+  },
+  {
+    range: 'G6 to G10',
+    name: 'Statistical nulls',
+    gates: [
+      { id: 'G6', family: 'statistical', name: 'Block-bootstrap CIs' },
+      { id: 'G7', family: 'statistical', name: 'Random-timing nulls' },
+      { id: 'G8', family: 'statistical', name: 'Regime-shuffle' },
+      { id: 'G9', family: 'statistical', name: 'Prior sensitivity' },
+      { id: 'G10', family: 'statistical', name: 'Monte-Carlo coverage' },
+    ],
+  },
+  {
+    range: 'G11 to G15',
+    name: 'Walk-forward & OOS',
+    gates: [
+      { id: 'G11', family: 'walkforward', name: 'Locked OOS windows' },
+      { id: 'G12', family: 'walkforward', name: '5-era stability' },
+      { id: 'G13', family: 'walkforward', name: 'Expanding walk-forward' },
+      { id: 'G14', family: 'walkforward', name: 'Frozen-spec evaluation' },
+      { id: 'G15', family: 'walkforward', name: 'Embargoed test set' },
+    ],
+  },
+  {
+    range: 'G16 to G20',
+    name: 'Multiple testing',
+    gates: [
+      { id: 'G16', family: 'multipletest', name: 'Deflated Sharpe Ratio' },
+      { id: 'G17', family: 'multipletest', name: 'CSCV PBO' },
+      { id: 'G18', family: 'multipletest', name: 'MinBTL' },
+      { id: 'G19', family: 'multipletest', name: 'Bonferroni-Holm' },
+      { id: 'G20', family: 'multipletest', name: 'BH-FDR' },
+    ],
+  },
+  {
+    range: 'G21 to G25',
+    name: 'Look-ahead discipline',
+    gates: [
+      { id: 'G21', family: 'lookahead', name: 'Point-in-time dataset' },
+      { id: 'G22', family: 'lookahead', name: 'Survivorship-bias check' },
+      { id: 'G23', family: 'lookahead', name: 'Rebalance-vs-signal timing' },
+      { id: 'G24', family: 'lookahead', name: 'Frozen-spec replay' },
+      { id: 'G25', family: 'lookahead', name: 'No-leakage to scoring' },
+    ],
+  },
+  {
+    range: 'G26 to G31',
+    name: 'Economic & cost realism',
+    gates: [
+      { id: 'G26', family: 'economic', name: 'Spread & slippage' },
+      { id: 'G27', family: 'economic', name: 'Capacity-constraint report' },
+      { id: 'G28', family: 'economic', name: 'Funding-carry' },
+      { id: 'G29', family: 'economic', name: 'Borrow cost' },
+      { id: 'G30', family: 'economic', name: 'Vol-targeted sizing' },
+      { id: 'G31', family: 'economic', name: 'Regime overlay' },
+    ],
+  },
+];
+
+const totalGates = families.reduce((sum, f) => sum + f.gates.length, 0);
+const GATE_RANGE = `G1 to G${profile.stats.evalGates}`;
+---
+
+<section class="gates-lattice" data-gates-lattice aria-label={`${GATE_RANGE} gate lattice: ${totalGates} individual gates`}>
+  <header class="gates-lattice__head">
+    <p class="bryllim-mark mono" aria-hidden="true">00. gate lattice</p>
+    <p class="gates-lattice__caption mono">
+      {totalGates} INDIVIDUAL GATES · 6 FAMILIES · ONE CONTRACT
+    </p>
+  </header>
+
+  <div class="gates-lattice__grid" role="list">
+    {
+      families.map((fam) => (
+        <Fragment>
+          <div class="gates-lattice__family" role="listitem">
+            <span class="gates-lattice__family-range mono">{fam.range}</span>
+            <span class="gates-lattice__family-name">{fam.name}</span>
+          </div>
+          {fam.gates.map((g) => (
+            <article
+              class="gates-lattice__cell"
+              role="listitem"
+              data-gate-id={g.id}
+              data-family={g.family}
+            >
+              <span class="gates-lattice__cell-id mono">{g.id}</span>
+              <span class="gates-lattice__cell-name">{g.name}</span>
+            </article>
+          ))}
+        </Fragment>
+      ))
+    }
+  </div>
+</section>
+
+<script>
+  import '../scripts/motion/theatre-gates.client.ts';
+</script>
+
+<style>
+  /* ============================================================
+   * v11.W3 — G1-G31 gate lattice, Bryllim-grade register.
+   * Cream surface + 1px hairlines + mono caps + amber accent.
+   * No halo, no glow, no gradient, no rotation.
+   * ============================================================ */
+  .gates-lattice {
+    display: grid;
+    gap: 14px;
+    padding: 22px 24px 20px;
+    margin: 8px 0 0;
+    border-top: 1px solid var(--c-rule);
+    border-bottom: 1px solid var(--c-rule);
+    background: var(--c-bg);
+  }
+
+  .gates-lattice__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .gates-lattice__caption {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--c-ink-3);
+    margin: 0;
+    text-transform: uppercase;
+  }
+
+  .gates-lattice__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 0;
+    border: 1px solid var(--c-rule);
+  }
+
+  /* Family header cell — spans the full row, 1px amber bottom border */
+  .gates-lattice__family {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    padding: 10px 14px;
+    background: var(--c-bg-2);
+    border-bottom: 1px solid var(--c-amber, #f4c430);
+    font-size: 11px;
+  }
+
+  .gates-lattice__family-range {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--c-ink-3);
+    text-transform: uppercase;
+  }
+
+  .gates-lattice__family-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--c-ink);
+  }
+
+  /* Individual gate cell — fades + scales in via theatre.js */
+  .gates-lattice__cell {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px 14px;
+    border-right: 1px solid var(--c-rule-soft);
+    border-bottom: 1px solid var(--c-rule-soft);
+    background: var(--c-bg);
+    transition:
+      background 200ms var(--j-ease-out-soft, cubic-bezier(0.16, 1, 0.3, 1));
+    transform-origin: top left;
+  }
+
+  .gates-lattice__cell:hover {
+    background: var(--c-paper, #fafaf7);
+  }
+
+  .gates-lattice__cell:nth-child(7n) {
+    border-right: 0;
+  }
+
+  .gates-lattice__cell-id {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--c-amber, #f4c430);
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .gates-lattice__cell-name {
+    font-size: 12px;
+    color: var(--c-ink-2);
+    line-height: 1.4;
+  }
+
+  /* ====== REDUCED MOTION — snap to terminal state ====== */
+  @media (prefers-reduced-motion: reduce) {
+    .gates-lattice__cell {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+
+  /* ====== RESPONSIVE ====== */
+  @media (max-width: 760px) {
+    .gates-lattice {
+      padding: 18px 16px 16px;
+    }
+    .gates-lattice__grid {
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    }
+    .gates-lattice__cell {
+      padding: 10px 12px;
+    }
+  }
+</style>

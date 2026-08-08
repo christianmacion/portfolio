@@ -114,7 +114,7 @@ const nodes: Node[] = [
   {
     id: 'mid2',
     label: 'Eval-Gate',
-    sub: `G1–G${profile.stats.evalGates} · ${profile.stats.evalGates} gates`,
+    sub: `G1 to G${profile.stats.evalGates} · ${profile.stats.evalGates} gates`,
     cx: COL_X_MID,
     cy: 220,
     w: BOX_W,
@@ -542,7 +542,10 @@ const activeLength = activeEdges.reduce((acc, e) => acc + dist(e.x1, e.y1, e.x2,
     font-weight: 500;
   }
   .ag-node--highlight .ag-node-label {
-    fill: #fff;
+    /* v6.18 W2 lock (2026-08-08): fill: #fff → var(--j-bg). The highlight
+       node reads "ink on amber" — --j-bg is the canonical ink token for
+       chrome on amber surfaces (dark/light theme-invariant). */
+    fill: var(--j-bg);
   }
   .ag-node--highlight .ag-node-sub {
     fill: var(--c-amber);

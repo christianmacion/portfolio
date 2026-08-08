@@ -26,7 +26,7 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 import { path } from '@utils/url';
 import { profile } from '@utils/profile';
 
-const GATE_RANGE = `G1–G${profile.stats.evalGates}`;
+const GATE_RANGE = `G1 to G${profile.stats.evalGates}`;
 const NGATE = `${profile.stats.evalGates}-gate`;
 
 interface AIProject {
@@ -105,7 +105,7 @@ const platformInputs = [
 ---
 
 <BaseLayout
-  title={`AI lane — ${profile.stats.aiAgentCount} agents, ${profile.stats.evalGates} gates`}
+  title={`AI lane to ${profile.stats.aiAgentCount} agents, ${profile.stats.evalGates} gates`}
   description={`The ${profile.stats.aiAgentCount}-agent platform and the ${profile.stats.evalGates}-gate eval console behind every AI artifact. Every LLM output passes the same statistical gate stack as a published systematic strategy.`}
   breadcrumbs={[
     { name: 'Home', href: '/' },
@@ -139,7 +139,7 @@ const platformInputs = [
         <Stat
           value={profile.stats.evalGates}
           label="eval gates"
-          sub={`G1–G${profile.stats.evalGates} · 6 families · exit-0 contract`}
+          sub={`G1 to G${profile.stats.evalGates} · 6 families · exit-0 contract`}
           size="md"
           variant="primary"
         />
@@ -177,7 +177,7 @@ const platformInputs = [
         <p class="section__sub">
           {platformInputs.length} inputs feed the orchestrator. The orchestrator dispatches to RAG-Recall,
           Eval-Gate, and Router. The middles publish to Artifact, Metric, and Feedback. Feedback loops
-          back to the orchestrator — that loop is the entire system.
+          back to the orchestrator. that loop is the entire system.
         </p>
       </header>
 
@@ -198,7 +198,7 @@ const platformInputs = [
         </li>
         <li>
           <span class="ai-cap-list__k">loop</span>
-          <span class="ai-cap-list__v">Feedback → Orchestrator — this is the system</span>
+          <span class="ai-cap-list__v">Feedback → Orchestrator. this is the system</span>
         </li>
       </ul>
     </div>
@@ -211,7 +211,7 @@ const platformInputs = [
         <p class="section__eyebrow">Live graph · public-safe slice</p>
         <h2 class="section__title">The graph is the spine.</h2>
         <p class="section__sub">
-          Every claim, every artifact, every agent — wired through one knowledge graph that ships at
+          Every claim, every artifact, every agent. wired through one knowledge graph that ships at
           compile time. T1 (5px) {'>'} T2 (3.5px) {'>'} T3 (2.5px). Squad color marks the channel. NDA-protected
           entities are filtered out before public.
         </p>
@@ -265,7 +265,7 @@ const platformInputs = [
         <p class="section__eyebrow">Beyond the loop · STELLA Office</p>
         <h2 class="section__title">The next rung: graphs as shared memory.</h2>
         <p class="section__sub">
-          The 5-rung spine — <b>prompt → skills → agents → loops → graphs</b> — is what STELLA's {
+          The 5-rung spine to <b>prompt → skills → agents → loops → graphs</b>n/a is what STELLA's {
             profile.stats.aiAgentCount
           }-agent office runs on. The graph layer is the productivity unlock: typed entities +
           relations + provenance, queryable, shared across every agent so the corpus isn't
@@ -279,7 +279,7 @@ const platformInputs = [
           <h3 class="stella-cell__name">Multi-agent office</h3>
           <p class="stella-cell__sub">
             {profile.stats.aiAgentCount} agents in 6 sub-teams. 4 doctrinal corpora. 5-must-have compliance
-            on every loop primitive. NDA-safe by construction — counts and taxonomy only, never officer
+            on every loop primitive. NDA-safe by construction. counts and taxonomy only, never officer
             names.
           </p>
           <a href={path('/methodology')} class="stella-cell__link">Methodology →</a>
@@ -289,7 +289,7 @@ const platformInputs = [
           <p class="stella-cell__num mono">B</p>
           <h3 class="stella-cell__name">Knowledge graph layer</h3>
           <p class="stella-cell__sub">
-            9 entity types. 9 predicates. Four-stage pipeline — Extract · Resolve · Assemble ·
+            9 entity types. 9 predicates. Four-stage pipeline. Extract · Resolve · Assemble ·
             Query. The AAR → graph contract: every mission writes its findings, every AAR mutates
             the graph.
           </p>
@@ -300,7 +300,7 @@ const platformInputs = [
           <p class="stella-cell__num mono">C</p>
           <h3 class="stella-cell__name">5-rung spine</h3>
           <p class="stella-cell__sub">
-            Most teams plateau at the loop. STELLA runs at the graph rung — and ships the
+            Most teams plateau at the loop. STELLA runs at the graph rung. and ships the
             public-facing narrative via two workbooks (<em>AI Engineering from the Ground Up</em>, <em
               >Graph Engineering for Everyone</em
             >).
@@ -386,7 +386,7 @@ const platformInputs = [
 
       <p class="ai-disclosure mono">
         Open-source on GitHub · {NGATE} enforced by CI · same gate stack as a published systematic strategy
-        · stdlib-only Python at the core · the one FAIL on <span class="hl">G26</span> is real — slippage
+        · stdlib-only Python at the core · the one FAIL on <span class="hl">G26</span> is real. slippage
         budget overrun caught by the harness, not a model that guessed.
       </p>
     </div>
@@ -738,7 +738,7 @@ const platformInputs = [
     color: var(--c-violet);
   }
   .stella-cell__name {
-    font: 600 1.25rem / 1.2 var(--serif-display);
+    font: 600 1.25rem / 1.2 var(--j-ff-display);
     color: var(--c-ink);
     margin: 4px 0 6px;
     letter-spacing: -0.01em;

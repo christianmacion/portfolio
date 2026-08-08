@@ -174,7 +174,7 @@ function extractPdfText(pdfPath: string): string {
   const r = spawnSync('pdftotext', ['-q', pdfPath, '-'], { encoding: 'utf8' });
   if (r.status === 0) return r.stdout;
   if (r.error && (r.error as NodeJS.ErrnoException).code === 'ENOENT') {
-    console.warn(`[nda-audit] warn: pdftotext not found — skipping ${pdfPath}`);
+    console.warn(`[nda-audit] warn: pdftotext not found. skipping ${pdfPath}`);
     return '';
   }
   return r.stdout || '';
@@ -221,11 +221,11 @@ async function audit(): Promise<number> {
   }
 
   if (violations.length === 0) {
-    console.log(`[nda-audit] OK — 0 violations in ${files.length} files.`);
+    console.log(`[nda-audit] OK. 0 violations in ${files.length} files.`);
     return 0;
   }
 
-  console.error(`[nda-audit] FAIL — ${violations.length} violation(s) in ${files.length} files:`);
+  console.error(`[nda-audit] FAIL to ${violations.length} violation(s) in ${files.length} files:`);
   for (const v of violations) {
     console.error(`  ✗ [${v.rule}] ${v.file}`);
     console.error(`      match:    ${v.match}`);

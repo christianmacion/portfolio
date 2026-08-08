@@ -1,0 +1,286 @@
+---
+/**
+ * engagement.astro :  /engagement/ · v9.8 Wave B engagement model.
+ *
+ * How we work together: scope, cadence, deliverables, and the parts of
+ * the loop that are non-negotiable. Maps to the contact page's "use
+ * this for X" guidance at the channel level :  this page is the model,
+ * /contact is the directory.
+ *
+ * Section layout (4 numbered stages + 4 non-negotiables):
+ *   04 :  engagement model   (SectionMark)
+ *   §    :  4 stages: scope → cadence → deliverables → closeout
+ *   §    :  non-negotiables (5 bullets)
+ *   §    :  CTA → contact
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import SectionMark from '@components/SectionMark.astro';
+import SubpageHero from '@components/SubpageHero.astro';
+import { path } from '@utils/url';
+import { buildStampUtc8 } from '@utils/build-stamp';
+
+const subpage = {
+  slug: 'engagement',
+  index: '04',
+  title: 'engagement model',
+  pageTitle: 'Engagement',
+  description:
+    'Engagement model: how to work together :  scope, cadence, deliverables, and the parts of the loop that are non-negotiable.',
+  chip: 'ENGAGEMENT · HOW WE WORK · NON-NEGOTIABLES',
+  // v11.W2 : financial-markets tag (task #4).
+  roleLine: 'Engagement model for financial markets, quant research, and AI engineering',
+};
+
+const lastUpdated = buildStampUtc8();
+
+interface Stage {
+  index: string;
+  title: string;
+  body: string;
+  output: string;
+}
+
+const stages: Stage[] = [
+  {
+    index: '01',
+    title: 'Scope · first 24 hours',
+    body:
+      'Send the JD or the brief. I reply within 24 hours with a structured read: problem frame, proposed approach, evidence I would look at, expected output, and what would be a clean kill criterion. The first reply is the cheapest signal :  if the framing is off, both sides save a week.',
+    output: 'problem → approach → evidence → outcome → kill',
+  },
+  {
+    index: '02',
+    title: 'Cadence · weekly + on-demand',
+    body:
+      'Weekly 30-minute sync: status against the loop, blockers surfaced early, scope drift named in writing. Async between syncs. Hard-stop Friday afternoon for new requests :  that signal is honored. If the work needs a daily stand-up, the engagement has a scope problem and we should renegotiate.',
+    output: 'weekly sync · async in between · Friday lock',
+  },
+  {
+    index: '03',
+    title: 'Deliverables · proof-first',
+    body:
+      'Every deliverable ships with a runnable scorecard or reproducible methodology. Headline metrics are real. If a number can be falsified by running the code, the code is in the repo. If a claim depends on a private dataset, the claim is rewritten or removed.',
+    output: 'code · scorecard · methodology · falsifiable claim',
+  },
+  {
+    index: '04',
+    title: 'Closeout · the postmortem',
+    body:
+      'Every engagement ends with a written postmortem :  what worked, what did not, what we would do differently. KILLs are banked, not buried. The postmortem is short (1 page), dated, and lives in the methodology. If the work was a KILL, the postmortem still ships.',
+    output: '1-page postmortem · dated · banked',
+  },
+];
+
+const nonNegotiables = [
+  'No Math.random() in deterministic outputs.',
+  'No argless new Date() in reproducible artifacts.',
+  'No fabricated metrics :  every number traces to a fixture or a run.',
+  'No NDA-protected employers referenced in public artifacts.',
+  'No scope drift without a written re-scoping note in the AAR.',
+];
+---
+
+<BaseLayout
+  title={subpage.pageTitle}
+  description={subpage.description}
+  breadcrumbs={[
+    { name: 'Home', href: '/' },
+    { name: subpage.pageTitle, href: `/${subpage.slug}` },
+  ]}
+>
+  <SubpageHero slug={subpage.slug} label={subpage.pageTitle} roleLine={subpage.roleLine}>
+    <p class="page-head__eyebrow mono">
+      <span class="page-head__eyebrow-chip">{subpage.chip}</span>
+      <span class="page-head__eyebrow-line">{stages.length} STAGES · {nonNegotiables.length} NON-NEGOTIABLES · 1 POSTMORTEM</span>
+    </p>
+    <SectionMark index={subpage.index} title={subpage.title} ariaHidden={false} />
+    <h2 class="page-head__title" data-words>
+      Four stages. <span class="hl">Five non-negotiables</span>.
+    </h2>
+    <p class="page-head__lede">
+      The model is the same whether the engagement is a 2-week audit, a 6-month research
+      lane, or a fixed-scope build. Each stage has a named output. Each non-negotiable is
+      short enough to quote in the kickoff doc.
+    </p>
+  </SubpageHero>
+
+  <div class="engage-body container container-narrow">
+    <ol class="engage-stages" role="list">
+      {
+        stages.map((s) => (
+          <li class="engage-stage">
+            <div class="engage-stage__head">
+              <span class="engage-stage__index mono">{s.index}</span>
+              <h2 class="engage-stage__title">{s.title}</h2>
+            </div>
+            <p class="engage-stage__body">{s.body}</p>
+            <p class="engage-stage__output mono">OUTPUT · {s.output}</p>
+          </li>
+        ))
+      }
+    </ol>
+
+    <section class="engage-nn" aria-labelledby="engage-nn-h" data-section-id="engagement">
+      <h2 class="engage-nn__title" id="engage-nn-h">Non-negotiables</h2>
+      <ul class="engage-nn__list" role="list">
+        {
+          nonNegotiables.map((rule) => (
+            <li class="engage-nn__item">
+              <span class="engage-nn__mark mono" aria-hidden="true">×</span>
+              <span class="engage-nn__text">{rule}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <aside class="engage-cta">
+      <p class="engage-cta__lede">Ready to scope an engagement?</p>
+      <a class="engage-cta__btn mono" href={path('/contact')}>EMAIL WITH JD →</a>
+    </aside>
+
+    <p class="engage-stamp mono" aria-label="Last updated">
+      LAST UPDATED · {lastUpdated} · UTC+8
+    </p>
+  </div>
+</BaseLayout>
+
+<style>
+  .engage-body {
+    padding-block: var(--sp-8);
+  }
+  .engage-stages {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--sp-10);
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-7);
+  }
+  .engage-stage {
+    padding-bottom: var(--sp-7);
+    border-bottom: 1px solid var(--c-rule);
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+  }
+  .engage-stage:last-child {
+    border-bottom: 0;
+  }
+  .engage-stage__head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+  .engage-stage__index {
+    font-size: 11px;
+    color: var(--c-amber);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .engage-stage__title {
+    font-size: var(--text-lg, 1.125rem);
+    font-weight: var(--font-weight-semibold, 600);
+    color: var(--c-ink);
+    margin: 0;
+    line-height: 1.3;
+  }
+  .engage-stage__body {
+    font-size: 15px;
+    color: var(--c-ink-2);
+    line-height: 1.6;
+    max-width: 70ch;
+  }
+  .engage-stage__output {
+    font-size: 10.5px;
+    color: var(--c-ink-3);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding-top: 8px;
+    border-top: 1px dashed var(--c-rule);
+    margin-top: 4px;
+  }
+  .engage-nn {
+    margin-top: var(--sp-10);
+    padding: var(--sp-5);
+    background: var(--c-bg-2);
+    border: 1px solid var(--c-rule);
+    border-left: 2px solid var(--c-amber);
+  }
+  .engage-nn__title {
+    font-size: 11px;
+    color: var(--c-amber);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: var(--sp-4);
+    font-weight: 700;
+  }
+  .engage-nn__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .engage-nn__item {
+    display: flex;
+    gap: 12px;
+    font-size: 14px;
+    color: var(--c-ink-2);
+    line-height: 1.55;
+  }
+  .engage-nn__mark {
+    color: var(--c-amber);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .engage-nn__text {
+    flex: 1;
+  }
+  .engage-cta {
+    margin-top: var(--sp-10);
+    padding: var(--sp-7) var(--sp-5);
+    text-align: center;
+    border-top: 1px solid var(--c-rule);
+    border-bottom: 1px solid var(--c-rule);
+  }
+  .engage-cta__lede {
+    font-size: 18px;
+    color: var(--c-ink);
+    margin-bottom: var(--sp-4);
+    font-weight: 500;
+  }
+  .engage-cta__btn {
+    display: inline-block;
+    padding: 12px 24px;
+    border: 1px solid var(--c-amber);
+    color: var(--c-amber);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 600;
+    transition:
+      background 200ms ease,
+      color 200ms ease;
+  }
+  .engage-cta__btn:hover {
+    background: var(--c-amber);
+    color: var(--c-bg);
+  }
+  .engage-stamp {
+    margin-top: var(--sp-7);
+    font-size: 10.5px;
+    color: var(--c-ink-3);
+    letter-spacing: 0.06em;
+    text-align: right;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .engage-cta__btn {
+      transition: none;
+    }
+  }
+</style>

@@ -4,22 +4,22 @@
 
 christianmacion26@gmail.com · +63-991-616-2630 · Digos City, Davao del Sur, Philippines (UTC+8) · LinkedIn
 
-> **FIT FOR: Two Sigma · Citadel Securities · Jane Street · Hudson River Trading · Balyasny · Jump Trading — QR / Research Engineer seat**
+> **FIT FOR: Two Sigma · Citadel Securities · Jane Street · Hudson River Trading · Balyasny · Jump Trading :  QR / Research Engineer seat**
 
 ## SUMMARY
 
-Quant Researcher who builds, statistically validates, and honestly retires systematic strategies under a pre-registration-aware, multiple-testing-controlled framework. I treat false positives as enforced methodology — banking each one into a reusable research-integrity playbook — and ship an automated monthly forward-out-of-sample monitoring pipeline so the live track record is un-gameable.
+Quant Researcher who builds, statistically validates, and honestly retires systematic strategies under a pre-registration-aware, multiple-testing-controlled framework. I treat false positives as enforced methodology :  banking each one into a reusable research-integrity playbook :  and ship an automated monthly forward-out-of-sample monitoring pipeline so the live track record is un-gameable.
 
-I previously served as an AI Systems Engineer / Quantitative Researcher on the systematic-strategy desk (NDA-protected; closed past contract 03/2026 – 06/2026) (PM with publicly attributable initials, NDA-protected desk), where I evaluated 40+ strategy families across 5 asset classes (equity-index, crypto, energy, metals, agriculture) under a 31-gate statistical filter; built 10+ point-in-time, look-ahead-disciplined data pipelines from scratch on free public sources; and implemented the modern selection-bias stack — Deflated Sharpe Ratio, Probability of Backtest Overfitting via CSCV, Minimum Backtest Length — scipy-free in numpy.
+I previously served as an AI Systems Engineer / Quantitative Researcher on the systematic-strategy desk (NDA-protected; closed past contract 03/2026 - 06/2026) (PM with publicly attributable initials, NDA-protected desk), where I evaluated 40+ strategy families across 5 asset classes (equity-index, crypto, energy, metals, agriculture) under a 31-gate statistical filter; built 10+ point-in-time, look-ahead-disciplined data pipelines from scratch on free public sources; and implemented the modern selection-bias stack :  Deflated Sharpe Ratio, Probability of Backtest Overfitting via CSCV, Minimum Backtest Length :  scipy-free in numpy.
 
-I design with reproducibility and adversarial verification as the first-class concern, not the final step. My strategies carry a cost-routed multi-agent AI research architecture (11 agents) alongside them — used to compress expert time and to keep an honest, versioned audit trail of how the research was actually run. Available 30 hrs/wk for a Tier-1 systematic-strategy desk that values bank-the-lesson honesty over headline Sharpe.
+I design with reproducibility and adversarial verification as the first-class concern, not the final step. My strategies carry a cost-routed multi-agent AI research architecture (11 agents) alongside them :  used to compress expert time and to keep an honest, versioned audit trail of how the research was actually run. Available 30 hrs/wk for a Tier-1 systematic-strategy desk that values bank-the-lesson honesty over headline Sharpe.
 
 ## Core Skills
 
 - Systematic Strategy Research (momentum · mean-reversion · vol carry · stat-arb)
 - Pre-Registration & Multiple-Testing Control
 - Deflated Sharpe Ratio (Bailey & López de Prado)
-- Probability of Backtest Overfitting — CSCV
+- Probability of Backtest Overfitting :  CSCV
 - Minimum Backtest Length (MinBTL)
 - Walk-Forward · Block-Bootstrap CIs · Monte-Carlo
 - Random-Timing & Regime-Shuffle Nulls
@@ -41,11 +41,11 @@ I design with reproducibility and adversarial verification as the first-class co
 
 ## EDUCATION
 
-- **Financial Management Studies (current)** — University of Mindanao (UM) (1st Semester, AY 2026–27 (enrolled))
+- **Financial Management Studies (current)** — University of Mindanao (UM) (1st Semester, AY 2026-27 (enrolled))
 
-- **Engineering Studies (units completed)** — University of Southeastern Philippines (USeP) (2022 – 2024)
+- **Engineering Studies (units completed)** — University of Southeastern Philippines (USeP) (2022 - 2024)
 
-- **Philippine Science High School (PSHS)** — PSHS System — Southern Mindanao Campus (Graduated 2022)
+- **Philippine Science High School (PSHS)** — PSHS System :  Southern Mindanao Campus (Graduated 2022)
 
 - **Certified Technical Analyst Program** — Society of Technical Analysts of the Philippines (Tier-1) (Dec 2025)
 
@@ -63,59 +63,59 @@ I design with reproducibility and adversarial verification as the first-class co
 
 ## RELEVANT EXPERIENCE
 
-### AI Systems Engineer / Quantitative Researcher (contract) — systematic-strategy desk (NDA-protected; closed past contract 03/2026 – 06/2026)
+### AI Systems Engineer / Quantitative Researcher (contract) — systematic-strategy desk (NDA-protected; closed past contract 03/2026 - 06/2026)
 
-*Remote · 03/2026 – 06/2026*
+*Remote · 03/2026 - 06/2026*
 
 - Evaluated 40+ systematic-strategy families across 5 asset classes (equity-index, crypto, energy, metals, agriculture) under a 31-gate statistical filter; advanced candidates through paper-shadow and live forward out-of-sample testing under pre-registration and frozen-spec evaluation.
-- Implemented modern selection-bias statistics from scratch in numpy — Deflated Sharpe Ratio, PBO via CSCV, Minimum Backtest Length — plus block-bootstrap CIs, random-timing nulls, walk-forward, and Monte-Carlo suites; the methodological spine of every shipped number.
-- Built 10+ point-in-time, look-ahead-disciplined data pipelines from scratch on free public sources ($0 budget) — byte-range subsetting, completeness guards, gap logging, and idempotent incremental pulls to produce reproducible research-grade datasets.
-- Caught and documented false positives as enforced methodology — banking each into a reusable research-integrity playbook — and designed an automated monthly forward-OOS monitoring fleet (scheduled data pull → S3 sync → frozen-spec evaluation → ledger) that produces un-gameable live performance evidence.
+- Implemented modern selection-bias statistics from scratch in numpy :  Deflated Sharpe Ratio, PBO via CSCV, Minimum Backtest Length :  plus block-bootstrap CIs, random-timing nulls, walk-forward, and Monte-Carlo suites; the methodological spine of every shipped number.
+- Built 10+ point-in-time, look-ahead-disciplined data pipelines from scratch on free public sources ($0 budget) :  byte-range subsetting, completeness guards, gap logging, and idempotent incremental pulls to produce reproducible research-grade datasets.
+- Caught and documented false positives as enforced methodology :  banking each into a reusable research-integrity playbook :  and designed an automated monthly forward-OOS monitoring fleet (scheduled data pull → S3 sync → frozen-spec evaluation → ledger) that produces un-gameable live performance evidence.
 - Designed a cost-routed multi-agent AI research architecture (11 agents + 22-module skills library) and authored an institutional operating standard plus 16 research studies / teaching workbooks adopted across the desk.
 
 ### Independent Quant Researcher — Self-Directed Practice
 
-*Remote · 01/2025 – 05/2026*
+*Remote · 01/2025 - 05/2026*
 
 - Designed, backtested, and statistically-validated systematic strategies on crypto and equity-index universes using Python; evaluated via Sharpe, drawdown, win-rate, and profit factor under pre-registration-aware discipline.
 - Read and summarized 20+ academic and practitioner papers on momentum, mean-reversion, volatility carry, statistical arbitrage, and multi-agent AI architectures into structured one-page research notes.
-- Maintained a research journal documenting hypotheses, methodology, statistical tests, and outcomes — building a personal library of structured quant knowledge that fed into a subsequent research-desk engagement.
+- Maintained a research journal documenting hypotheses, methodology, statistical tests, and outcomes :  building a personal library of structured quant knowledge that fed into a subsequent research-desk engagement.
 
 ### Crypto Trading Systems Research Assistant — Ledger51 Trading Community
 
-*Davao Region, Philippines · 10/2025 – 04/2026*
+*Davao Region, Philippines · 10/2025 - 04/2026*
 
-- Supported structured analysis of crypto trading workflows: order-execution systems, trading bots, and platform mechanics — translating operational behavior into research-graded breakdowns.
+- Supported structured analysis of crypto trading workflows: order-execution systems, trading bots, and platform mechanics :  translating operational behavior into research-graded breakdowns.
 - Documented execution friction and platform inconsistencies affecting trading accuracy and consistency; contributed to a structured documentation pass used for research and training purposes.
 
 ## CERTIFICATIONS
 
 ### Finance, Trading & Economics
 
-- Certified Technical Analyst Program — STA Philippines (Tier-1)
-- Certified Technical Analyst — CertifyMe
-- Financial Trading in Python — DataCamp
-- Math for Finance Professionals — DataCamp
-- Foundations of Growth Equity — Goldman Sachs
-- JPMorgan Chase Investment Banking Job Simulation — Forage
+- Certified Technical Analyst Program :  STA Philippines (Tier-1)
+- Certified Technical Analyst :  CertifyMe
+- Financial Trading in Python :  DataCamp
+- Math for Finance Professionals :  DataCamp
+- Foundations of Growth Equity :  Goldman Sachs
+- JPMorgan Chase Investment Banking Job Simulation :  Forage
 
 ### Mathematics, Statistics & Programming
 
-- Getting Started with Python for Finance — LinkedIn
-- SQL for Finance Professionals — LinkedIn
-- Understanding Data Science — DataCamp
+- Getting Started with Python for Finance :  LinkedIn
+- SQL for Finance Professionals :  LinkedIn
+- Understanding Data Science :  DataCamp
 
 ### AI, Data Science & Technology
 
-- Introduction to AI Agents — DataCamp
-- AI Fundamentals — DataCamp
-- Artificial Intelligence Fundamentals — IBM
-- Introduction to AI — Google
-- AI for the Modern Workforce — Ateneo de Davao University
+- Introduction to AI Agents :  DataCamp
+- AI Fundamentals :  DataCamp
+- Artificial Intelligence Fundamentals :  IBM
+- Introduction to AI :  Google
+- AI for the Modern Workforce :  Ateneo de Davao University
 
 ### Selected Events, Hackathons & Programs
 
-- Galactic Problem Solver — NASA Space Apps Challenge (Zurich) — Oct 2025
-- BIDA META AICCELERATE 2025 — Meta & Bayan Academy — Dec 2025
-- UP Data Science Society — ACLE 2026 — Feb 2026
-- Speedrun Ethereum — ETHPH Mindanao — Aug 2025
+- Galactic Problem Solver :  NASA Space Apps Challenge (Zurich) :  Oct 2025
+- BIDA META AICCELERATE 2025 :  Meta & Bayan Academy :  Dec 2025
+- UP Data Science Society :  ACLE 2026 :  Feb 2026
+- Speedrun Ethereum :  ETHPH Mindanao :  Aug 2025

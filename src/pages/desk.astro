@@ -58,7 +58,7 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
 
 <BaseLayout
   title="The Desk"
-  description={`24h multi-asset coverage — ${events.length} curated world events, ${archSafe.agentCount}-agent office, ${profile.stats.evalGates}-gate eval harness. NDA-positive by construction.`}
+  description={`24h multi-asset coverage to ${events.length} curated world events, ${archSafe.agentCount}-agent office, ${profile.stats.evalGates}-gate eval harness. NDA-positive by construction.`}
   surface="v6-13"
   theme="light"
   breadcrumbs={[
@@ -82,19 +82,19 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
         The world, in <span class="hl">24 hours</span>.
       </h1>
       <VoiceLine class="desk-head__voice">
-        Coverage that proves it can be defended in interview — venue dots, scheduled events, and a
+        Coverage that proves it can be defended in interview. venue dots, scheduled events, and a
         24-hour signal overlay on the same equirectangular map.
       </VoiceLine>
       <p class="desk-head__sub">
         A backtest is what a strategy <em>would have done</em>. A paper-trade is what it <em
           >actually does</em
-        >. The desk is what the multi-agent office <em>actually watches</em> — six research venues spanning
+        >. The desk is what the multi-agent office <em>actually watches</em>n/a six research venues spanning
         APAC and the western exchanges, ten curated world events pinned to the calendar, and a rolling
         24-hour signal overlay so the office sees what is moving before the position-book reacts.
       </p>
 
       <div class="desk-head__cta">
-        <a class="cta cta--primary" href={mailto}>EMAIL — HIRING INQUIRY</a>
+        <a class="cta cta--primary" href={mailto}>EMAIL. HIRING INQUIRY</a>
         <a class="cta cta--ghost" href={path('/ai')}>READ THE LOOP →</a>
       </div>
 
@@ -192,9 +192,9 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
   {/* === 6. CTA banner === */}
   <CTABanner
     title="Hire the operator, not the dashboard."
-    sub={`${archSafe.agentCount}-agent multi-agent office · ${profile.stats.evalGates}-gate eval harness · ${profile.stats.locPython} LOC Python · NDA-clean by construction. Email below — reply within 24h.`}
+    sub={`${archSafe.agentCount}-agent multi-agent office · ${profile.stats.evalGates}-gate eval harness · ${profile.stats.locPython} LOC Python · NDA-clean by construction. Email below. reply within 24h.`}
     primaryHref={mailto}
-    primaryLabel="EMAIL — HIRING INQUIRY"
+    primaryLabel="EMAIL. HIRING INQUIRY"
     secondaryHref={path('/ai')}
     secondaryLabel="READ THE LOOP →"
   />
@@ -256,7 +256,7 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     font-weight: 600;
   }
   .desk-head__title {
-    font: 600 48px / 1 var(--serif-display);
+    font: 600 48px / 1 var(--j-ff-display);
     color: var(--c-ink);
     letter-spacing: -0.024em;
     margin: 0 0 24px;
@@ -267,7 +267,7 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     color: var(--c-amber);
   }
   .desk-head__voice {
-    font: 500 16px / 1.5 var(--serif-display);
+    font: 500 16px / 1.5 var(--j-ff-display);
     color: var(--c-ink-2);
     font-style: italic;
     margin: 0 0 24px;
@@ -280,7 +280,7 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     max-width: 64ch;
   }
   .desk-head__sub em {
-    font-family: var(--serif-display);
+    font-family: var(--j-ff-display);
     font-style: italic;
     color: var(--c-warn);
     font-weight: 600;
@@ -354,7 +354,7 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     margin: 0 0 16px;
   }
   .desk-events__title {
-    font: 600 28px / 1.2 var(--serif-display);
+    font: 600 28px / 1.2 var(--j-ff-display);
     color: var(--c-ink);
     letter-spacing: -0.018em;
     margin: 0 0 32px;
@@ -454,7 +454,7 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     padding-top: 16px;
   }
   .desk-stats__num {
-    font: 600 32px / 1 var(--serif-display);
+    font: 600 32px / 1 var(--j-ff-display);
     color: var(--c-ink);
     letter-spacing: -0.022em;
     margin: 0 0 6px;

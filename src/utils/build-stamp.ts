@@ -37,7 +37,7 @@ function readBuildDate(): Date {
   return parsed;
 }
 
-const TZ_OFFSET_HOURS = 8; // UTC+8 — Asia/Manila
+const TZ_OFFSET_HOURS = 8; // UTC+8. Asia/Manila
 
 /**
  * Returns the build date as a YYYY-MM-DD string in UTC+8.

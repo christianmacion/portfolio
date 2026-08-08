@@ -1,0 +1,285 @@
+---
+/**
+ * stella.astro · v11.W5 — STELLA showcase page.
+ *
+ * The office behind this portfolio. 9 squads + 8 doctrine-corpus owners +
+ * 5-must-have loop contract + knowledge-graph stats. Surfaces the institutional
+ * pipeline that ships the work without overwhelming the visitor.
+ *
+ * NDA-clean: no employer names. No protected paths. Public-facing only.
+ * Senior QR register. No em-dashes. No signal lights. No halo.
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { profile } from '@utils/profile';
+import { path } from '@utils/url';
+import Section from '@components/Section.astro';
+import SectionTOC from '@components/SectionTOC.astro';
+import AgentGraph from '@components/AgentGraph.astro';
+
+const title = 'STELLA — the office that builds the work';
+const description = '9 squads. 8 doctrine-corpus owners. 142 skills. 5-must-have loop contract. The office behind this portfolio.';
+
+const squads = [
+  { code: 'G', name: 'IT and Web Engineering', pm: 'tech_lead', specialists: 8, mission: 'Build, harden, audit, and ship the production surfaces that publish every artifact.', ship: 'Portfolio v9.x chrome contract · WCAG 2.2 AA site-wide axe sweep · 47 routes clean' },
+  { code: 'A', name: 'Public Surface', pm: 'communications_officer', specialists: 3, mission: 'Hold the institutional voice, the positioning, and the recruiter-read of every public artifact.', ship: 'v9.4.1 hireability hero · H1 as role title, not name' },
+  { code: 'B', name: 'AI Engineering', pm: 'eval_harness_lead', specialists: 1, mission: 'Operate the eval harness that gates every claim before it ships.', ship: 'Deflated Sharpe · walk-forward validation · block bootstrap' },
+  { code: 'C', name: 'Quant Research', pm: 'alpha_researcher', specialists: 1, mission: 'Mine, prototype, and reject alpha ideas before capital sees them.', ship: 'Strategy Workbook v1 · 8 strategies · 4 READY · $164.50 deployable' },
+  { code: 'D', name: 'Platform and Infra', pm: 'logistics_officer', specialists: 1, mission: 'Data plumbing, ETL, cron hygiene, silent-cap regressions.', ship: 'MEXC L1/L2/L3 data pull · 5.5y · 36 files' },
+  { code: 'E', name: 'Research and Intelligence', pm: 'intelligence_officer', specialists: 1, mission: 'Market scan, web fetch, OSINT, source verification.', ship: 'Coinglass panel · Deribit options chain · 19 OSINT specialists' },
+  { code: 'F', name: 'Pedagogy and Doctrine', pm: 'strategist_consultant', specialists: 11, mission: 'Sharpen every recommendation against a named corpus and a named operator.', ship: '8 doctrine-corpus owners · 3 specialists · 6-corpus synthesis rule' },
+  { code: 'H', name: 'HR and Talent', pm: 'hr_director', specialists: 5, mission: 'Agent health, performance review, weekly roster audit.', ship: 'Self-improvement cycle · 14 of 14 surfacings closed · 2 audit cycles' },
+  { code: 'K', name: 'Knowledge and Graph', pm: 'graph_engineer', specialists: 2, mission: 'Own the shared graph · gate every loop primitive on verify_graph.', ship: 'Reflection journal repair · 3 to 1 component · 56+ new rows' },
+];
+
+const corpora = [
+  { name: 'Sagan', icon: '🌌', work: 'Demon-Haunted World · Cosmos · Pale Blue Dot', keyword: 'extraordinary-claims · baloney-detection · primary-source-verification', sharpened: 'Forced admiralty rating + accessed-date + confidence tag on every claim. Refused to ship "this strategy works" without a walk-forward evidence chain.' },
+  { name: 'Arendt', icon: '🪞', work: 'The Human Condition · The Life of the Mind · Between Past and Future', keyword: 'plurality · action-vs-labor · public-realm · common-world', sharpened: 'Forced the multi-agent office into a plural-system design. Each squad is a distinct perspective that defends by disagreeing.' },
+  { name: 'Kahneman', icon: '⚓', work: 'Thinking, Fast and Slow · Noise', keyword: 'system-1-system-2 · wysiati · anchoring · planning-fallacy', sharpened: 'Forced the 5-stage kill ladder and 4-stage pre-flight on every strategy. The kill rule is not optional because planning fallacy will produce a winner if you let it.' },
+  { name: 'Deming', icon: '🔁', work: 'Out of the Crisis · The New Economics · The Essential Deming', keyword: 'system-of-profound-knowledge · pdsa · appreciation-of-a-system', sharpened: 'Forced every fix to land in one place. One mechanism per lesson. One rule per decision. Producer-correct, not symptom-correct.' },
+  { name: 'Tetlock', icon: '🎯', work: 'Superforecasting · Expert Political Judgment', keyword: 'superforecasting · brier-score · reference-class · calibration', sharpened: 'Forced the 10-step forecasting pipeline and 5-bin calibration ladder on every strategy thesis. Capital allocation assigns confidence bins, not vibes.' },
+  { name: 'Munger', icon: '🌉', work: "Poor Charlie's Almanack · Berkshire Hathaway letters · Wesco transcripts", keyword: 'latticework · mental-model · inversion · circle-of-competence', sharpened: 'Forced the inversion step on every ship: "what would guarantee this strategy fails?" before "what would guarantee it works?" RP1 was cargo-cult KILLED by this discipline.' },
+  { name: 'Goldratt', icon: '⚙️', work: 'The Goal · The Haystack Syndrome · Critical Chain · Necessary But Not Sufficient', keyword: 'theory-of-constraints · 5-focusing-steps · drum-buffer-rope · throughput-accounting', sharpened: 'Forced one fix per root cause. RP1 failed because it was treated as six fixes; RP6 succeeded because the constraint was identified before the instrument was rebuilt.' },
+  { name: 'Strategist Consultant', icon: '📜', work: 'Sun Tzu · Machiavelli · Greene 48 Laws · 33 Strategies · Mastery', keyword: 'reputation · position · deterrence · accomplishment-over-talent', sharpened: 'Forced the voice discipline on every public surface. The portfolio is the reputation; the chrome is the contract.' },
+];
+
+const fiveMustHaves = [
+  { n: 1, name: 'Terminal state', desc: 'Every run ends in done | partial | blocked | converged. No indefinite loops.' },
+  { n: 2, name: 'Idempotent write', desc: 'Running the primitive twice produces the same end state. Re-runs are safe.' },
+  { n: 3, name: 'Dedupe key', desc: 'Each record has a unique key. Re-runs of the same key are NOOPs, not duplicate writes.' },
+  { n: 4, name: 'Coverage filter', desc: 'Explicit inclusion and exclusion criteria. Did this loop cover everything it should?' },
+  { n: 5, name: 'AAR', desc: 'Every mission writes a 1-page After-Action Report at ~/.claude/cache/corporate/aars/.' },
+];
+
+const graphStats = [
+  { label: 'Journal entries', value: '700+' },
+  { label: 'Entities', value: '4,004' },
+  { label: 'Relations', value: '9,750' },
+  { label: 'verify_graph', value: 'daily' },
+];
+---
+
+<BaseLayout title={title} description={description}>
+  <main class="stella" id="main">
+    <section class="hero" aria-labelledby="stella-hero">
+      <p class="kicker mono">STELLA · THE OFFICE BEHIND THIS PORTFOLIO</p>
+      <h1 id="stella-hero" class="title">The work is not built by hand. It is built by an office.</h1>
+      <p class="lede">Nine squads. Eight doctrine-corpus owners. One loop contract. Every page on this site has a STELLA provenance. Every chart, every gate, every workbook row was produced by a named agent, sharpened against a named corpus, written back to a shared graph, and verified before it shipped.</p>
+      <div class="hero__cta">
+        <a class="cta cta--primary" href={path('/')}>Back to the portfolio</a>
+        <a class="cta cta--secondary" href={path('/methodology')}>See the validation moat</a>
+        <a class="cta cta--secondary" href={path('/strategies')}>Strategy Workbook</a>
+      </div>
+    </section>
+
+    <SectionTOC label="On the stella page" />
+
+    <Section id="roster" variant="paper" width="full"
+      eyebrow="01 / the office"
+      title="The 9-squad roster"
+      lede="The office runs as nine squads plus a cross-workspace bridge. Each squad has one PM, a named specialist count, a single-line mission, and at least one financial-markets ship on its record."
+      toc={true}>
+      <div class="table-wrap">
+        <table class="roster-table">
+          <thead>
+            <tr>
+              <th>Squad</th>
+              <th>PM</th>
+              <th class="num">Specialists</th>
+              <th>Mission</th>
+              <th>Financial-markets ship</th>
+            </tr>
+          </thead>
+          <tbody>
+            {squads.map((s) => (
+              <tr>
+                <td><span class="squad-code mono">{s.code}</span> · {s.name}</td>
+                <td><code class="pm">{s.pm}</code></td>
+                <td class="num mono">{s.specialists}</td>
+                <td>{s.mission}</td>
+                <td>{s.ship}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </Section>
+
+    <Section id="corpora" variant="paper" width="full"
+      eyebrow="02 / the corpus"
+      title="The 8 doctrine-corpus owners"
+      lede="Squad F does not paraphrase. Every recommendation is sharpened against one of eight classical corpora, owned by one named agent, with an auto-fire keyword the brain matches before the recommendation writes. The v11 financial-markets positioning was sharpened by all eight in sequence."
+      toc={true}>
+      <div class="table-wrap">
+        <table class="corpora-table">
+          <thead>
+            <tr>
+              <th>Corpus owner</th>
+              <th>Signature work</th>
+              <th>Auto-fire keyword</th>
+              <th>What it sharpened in v11 financial-markets positioning</th>
+            </tr>
+          </thead>
+          <tbody>
+            {corpora.map((c) => (
+              <tr>
+                <td><span class="corpus-icon" aria-hidden="true">{c.icon}</span> <strong>{c.name}</strong></td>
+                <td>{c.work}</td>
+                <td><code class="keyword mono">{c.keyword}</code></td>
+                <td>{c.sharpened}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </Section>
+
+    <Section id="graph" variant="paper" width="wide"
+      eyebrow="03 / the map"
+      title="The agent graph"
+      lede="Static force-directed layout. The 9 squads as clusters. Edges: member-of, uses, bridge-of. Default node color: navy ink. Amber accent for the 8 doctrine-corpus owners. Animations respect prefers-reduced-motion."
+      toc={true}>
+      <div class="graph-wrap">
+        <AgentGraph />
+      </div>
+    </Section>
+
+    <Section id="contract" variant="paper" width="wide"
+      eyebrow="04 / the contract"
+      title="5-must-have loop contract"
+      lede="The system behind the system. Every loop primitive in this office satisfies all five. A loop primitive that misses any one is not deployable."
+      toc={true}>
+      <ol class="must-haves">
+        {fiveMustHaves.map((m) => (
+          <li>
+            <span class="must-n mono">0{m.n}</span>
+            <div>
+              <h3 class="must-name">{m.name}</h3>
+              <p class="must-desc">{m.desc}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </Section>
+
+    <Section id="knowledge" variant="paper" width="wide"
+      eyebrow="05 / the memory"
+      title="Knowledge graph · daily sample"
+      lede="Every dispatch writes a 1-line journal entry. Every ship passes verify_graph. The graph is the shared memory that lets 30+ agents coordinate without re-running the same problem."
+      toc={true}>
+      <div class="graph-stats">
+        {graphStats.map((s) => (
+          <div class="stat">
+            <span class="stat__value mono">{s.value}</span>
+            <span class="stat__label mono">{s.label}</span>
+          </div>
+        ))}
+      </div>
+    </Section>
+
+    <Section id="lineage" variant="paper" width="wide"
+      eyebrow="06 / the lineage"
+      title="Strategy-workbook provenance"
+      lede="The strategy workbooks on this site were not written by a single author. They were produced by an office. Each row carries a lineage: which agent drafted it, which corpus sharpened it, which gate verified it."
+      toc={true}>
+      <ul class="lineage-list">
+        <li><strong>Drafted by</strong> Squad C (alpha_researcher) + Squad F (corpus owners)</li>
+        <li><strong>Sharpened by</strong> doctrine corpus owners (Sagan · Tetlock · Deming · Munger · Goldratt)</li>
+        <li><strong>Verified by</strong> Squad B (eval_harness_lead) + Squad G (qa_engineer) via the 5-must-have loop contract</li>
+        <li><strong>Audited by</strong> Squad K (graph_engineer) via verify_graph daily sample</li>
+        <li><strong>Published by</strong> Squad A (communications_officer) via the chrome contract</li>
+      </ul>
+    </Section>
+
+    <Section id="receipts" variant="paper" width="wide"
+      eyebrow="07 / the receipts"
+      title="Receipts"
+      lede="If you came here from the home page, you already saw the work. This page is the receipt. The work is verifiable. The validation is gated. The chrome is bound. The office is documented."
+      toc={true}>
+      <div class="out__cta">
+        <a class="cta cta--primary" href={path('/')}>Back to home</a>
+        <a class="cta cta--secondary" href={path('/methodology')}>Validation methodology</a>
+        <a class="cta cta--secondary" href={path('/strategies')}>Strategy workbooks</a>
+      </div>
+    </Section>
+  </main>
+</BaseLayout>
+
+<style>
+  /* /stella page is a dark-paper callout panel that works in both chrome themes.
+     Use --j-paper (dark in both modes) directly so the page stays dark regardless
+     of the system / explicit light theme. */
+  .stella {
+    --stella-bg: var(--j-paper, #2a2622);
+    --stella-ink: var(--j-paper-ink, #d4cebd);
+    --stella-ink-2: #c4bfb1;
+    --stella-ink-3: #9a9486;
+    --stella-rule: var(--j-ink-4, #4a4438);
+    --stella-amber: var(--c-amber);
+  }
+  .stella { background: var(--stella-bg); color: var(--stella-ink); }
+
+  .hero { padding: 80px 24px 56px; max-width: 1080px; margin: 0 auto; border-bottom: 1px solid var(--stella-rule); }
+  .hero .kicker { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--stella-ink-2); border-left: 2px solid var(--stella-amber); padding-left: 8px; margin: 0 0 16px; }
+  .hero .title { font-family: Inter, system-ui, sans-serif; font-size: clamp(28px, 4vw, 48px); font-weight: 700; line-height: 1.1; margin: 0 0 16px; color: var(--stella-ink); }
+  .hero .lede { font-size: 16px; line-height: 1.6; color: var(--stella-ink-2); margin: 0 0 32px; max-width: 720px; }
+  .hero__cta { display: flex; gap: 12px; flex-wrap: wrap; }
+
+  .cta { display: inline-block; padding: 10px 16px; font-size: 13px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em; text-decoration: none; border: 1px solid var(--stella-ink); color: var(--stella-ink); transition: all 160ms cubic-bezier(0.2, 0, 0, 1); }
+  .cta--primary { background: var(--stella-amber); color: var(--j-bg, #1a1714); border-color: var(--stella-amber); }
+  .cta--primary:hover { background: var(--stella-ink); color: var(--j-bg, #1a1714); border-color: var(--stella-ink); }
+  .cta--secondary { background: transparent; color: var(--stella-ink); }
+  .cta--secondary:hover { background: var(--stella-ink); color: var(--j-bg, #1a1714); }
+
+  /* SectionTOC override — match dark-paper panel */
+  .stella :global(.toc) {
+    background: rgba(0, 0, 0, 0.18);
+    border-bottom: 1px solid var(--stella-rule);
+  }
+  .stella :global(.toc__label) { color: var(--stella-ink-3); }
+  .stella :global(.toc__link) { color: var(--stella-ink-2); }
+  .stella :global(.toc__link:hover) { color: var(--stella-amber); background: rgba(255, 255, 255, 0.04); }
+  .stella :global(.toc__link--active) { color: var(--stella-amber); background: rgba(201, 138, 22, 0.12); font-weight: 600; }
+
+  /* Section component overrides — match dark-paper panel chrome.
+     The .stella wrapper already provides the dark background, so the
+     Section variant=paper overrides need transparent bg + stella rules. */
+  .stella :global(.section--paper) {
+    background: transparent;
+    border-color: var(--stella-rule);
+  }
+  .stella :global(.section--paper .section__eyebrow) {
+    color: var(--stella-ink-2);
+    border-left-color: var(--stella-amber);
+  }
+  .stella :global(.section--paper .section__title) { color: var(--stella-ink); }
+  .stella :global(.section--paper .section__lede) { color: var(--stella-ink-2); }
+
+  .table-wrap { overflow-x: auto; }
+  .roster-table, .corpora-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .roster-table th, .roster-table td, .corpora-table th, .corpora-table td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--stella-rule); vertical-align: top; color: var(--stella-ink); }
+  .roster-table th, .corpora-table th { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--stella-ink-2); font-weight: 500; background: rgba(255, 255, 255, 0.03); }
+  .roster-table .num, .corpora-table .num { text-align: right; }
+  .squad-code { display: inline-block; padding: 2px 6px; background: var(--stella-amber); color: var(--j-bg, #1a1714); font-size: 11px; font-weight: 700; }
+  .pm, .keyword { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--stella-ink-2); background: rgba(255, 255, 255, 0.04); padding: 1px 4px; }
+  .corpus-icon { font-size: 16px; margin-right: 4px; }
+
+  .graph-wrap { margin: 0 auto; max-width: 960px; padding: 24px; background: rgba(0, 0, 0, 0.18); border: 1px solid var(--stella-rule); }
+
+  .must-haves { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1px; background: var(--stella-rule); border: 1px solid var(--stella-rule); }
+  .must-haves li { background: rgba(0, 0, 0, 0.18); padding: 20px 24px; display: flex; gap: 16px; align-items: flex-start; }
+  .must-n { font-family: 'JetBrains Mono', monospace; font-size: 24px; color: var(--stella-amber); font-weight: 700; line-height: 1; }
+  .must-name { font-family: Inter, system-ui, sans-serif; font-size: 15px; font-weight: 600; margin: 0 0 4px; color: var(--stella-ink); }
+  .must-desc { font-size: 13px; color: var(--stella-ink-2); margin: 0; line-height: 1.5; }
+
+  .graph-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1px; background: var(--stella-rule); border: 1px solid var(--stella-rule); }
+  .stat { padding: 24px; background: rgba(0, 0, 0, 0.18); display: flex; flex-direction: column; gap: 4px; align-items: flex-start; }
+  .stat__value { font-family: 'JetBrains Mono', monospace; font-size: 28px; font-weight: 700; color: var(--stella-ink); }
+  .stat__label { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--stella-ink-2); }
+
+  .lineage-list { list-style: none; padding: 0; margin: 0; }
+  .lineage-list li { padding: 12px 16px; border-bottom: 1px solid var(--stella-rule); font-size: 14px; line-height: 1.6; color: var(--stella-ink-2); }
+  .lineage-list li:last-child { border-bottom: none; }
+  .lineage-list strong { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.04em; color: var(--stella-amber); margin-right: 8px; }
+
+  .out__cta { display: flex; gap: 12px; flex-wrap: wrap; }
+</style>

@@ -24,33 +24,33 @@ import { countProjectsByRole } from '@utils/project-helpers';
 const quantProjectCount = await countProjectsByRole('quant');
 
 // v6.10.47 — derive gate-count chrome from profile.stats.evalGates.
-const GATE_RANGE = `G1–G${profile.stats.evalGates}`;
+const GATE_RANGE = `G1 to G${profile.stats.evalGates}`;
 
 const mistakes = [
   {
     id: 'M01',
     title: 'Shipped a backtest with a 1-bar forward shift. Looked like a 5.07 Sharpe.',
-    project: 'Project 09 — Look-ahead bias audit',
+    project: 'Project 09. Look-ahead bias audit',
     date: '2026-06-18',
     severity: 'critical',
     summary:
-      'While refactoring a momentum signal pipeline, I accidentally left a `.shift(-1)` on the signal column for two days. The "result" Sharpe was 5.07. The strategy was nonsense — every "trade" was using tomorrow\'s signal today.',
-    caught_by: 'G21–G25 (look-ahead discipline, point-in-time verification)',
+      'While refactoring a momentum signal pipeline, I accidentally left a `.shift(-1)` on the signal column for two days. The "result" Sharpe was 5.07. The strategy was nonsense. every "trade" was using tomorrow\'s signal today.',
+    caught_by: 'G21 to G25 (look-ahead discipline, point-in-time verification)',
     repair:
       'Wrote project 09 as the canonical one-line shift test. The leaked-Sharpe was 5.07; the real Sharpe after removing the shift was 0.55. The phantom edge was 88% of the apparent alpha. The test now runs as a pre-ship gate on every backtest.',
     lesson:
-      'A 5.07 Sharpe is not a feature. A 5.07 Sharpe that survives a one-line shift test is not, in fact, surviving — it is lying. The shift test is now mandatory. There is no "we\'ll just be careful next time."',
+      'A 5.07 Sharpe is not a feature. A 5.07 Sharpe that survives a one-line shift test is not, in fact, surviving. it is lying. The shift test is now mandatory. There is no "we\'ll just be careful next time."',
     formula: '\\text{phantom} = \\text{leaked} - \\text{real}',
   },
   {
     id: 'M02',
     title: 'In-sample Sharpe 0.91 in cross-sectional momentum. Out-of-sample Sharpe −0.03.',
-    project: 'Project 02 — Cross-sectional momentum (18 coins)',
+    project: 'Project 02. Cross-sectional momentum (18 coins)',
     date: '2025-10-15',
     severity: 'high',
     summary:
-      '18 BTC-correlated altcoins, ranked by 14-day return, long top decile, short bottom decile. IS Sharpe 0.91. The OOS Sharpe was −0.03. Bootstrap CI [−0.12, +0.18] straddles zero — cannot reject the null.',
-    caught_by: 'G11–G15 (locked OOS windows, pre-registration, frozen-spec evaluation)',
+      '18 BTC-correlated altcoins, ranked by 14-day return, long top decile, short bottom decile. IS Sharpe 0.91. The OOS Sharpe was −0.03. Bootstrap CI [−0.12, +0.18] straddles zero. cannot reject the null.',
+    caught_by: 'G11 to G15 (locked OOS windows, pre-registration, frozen-spec evaluation)',
     repair:
       'Reported both numbers, side by side. The "honest decay" framing in the project writeup replaced what would have been a published-only-IS-Sharpe story. The bootstrap CI was reported with the bound, not as a one-sided significance test.',
     lesson:
@@ -60,12 +60,12 @@ const mistakes = [
   {
     id: 'M03',
     title: 'BTC/ETH spread: looked like a textbook stat-arb. ADF said no.',
-    project: 'Project 05 — Pairs via cointegration',
+    project: 'Project 05. Pairs via cointegration',
     date: '2026-02-18',
     severity: 'medium',
     summary:
       'BTC and ETH are the most obvious pair in crypto. The textbook trade is to hedge, fade the spread, collect mean-reversion. The ADF test statistic was −2.11. Critical value at 5% is ≈ −2.86. Spread has a unit root; the trade is not stationary. Half-life 208 days. OOS Sharpe ≈ 0.',
-    caught_by: 'G1–G5 (mechanical validity), G6–G10 (statistical nulls)',
+    caught_by: 'G1 to G5 (mechanical validity), G6 to G10 (statistical nulls)',
     repair:
       'Did not ship the trade. Shipped the rejection, with the ADF statistic and the half-life. The project is a published counter-example to the assumption "BTC and ETH are cointegrated."',
     lesson:
@@ -75,27 +75,27 @@ const mistakes = [
   {
     id: 'M04',
     title: 'Fade-funding trade IS Sharpe 1.11. OOS Sharpe −0.05. Alpha decayed post-2023.',
-    project: 'Project 06 — Crypto funding carry',
+    project: 'Project 06. Crypto funding carry',
     date: '2026-04-05',
     severity: 'medium',
     summary:
       'The textbook perpetual-swap carry trade is to fade funding (short when funding > 0). IS Sharpe was 1.11. OOS Sharpe was −0.05. The carry was real (+11.9% annualized), but the trade that captured it was systematically arbitraged away as the participant mix shifted.',
-    caught_by: 'G11–G15 (locked OOS windows, 5-era stability)',
+    caught_by: 'G11 to G15 (locked OOS windows, 5-era stability)',
     repair:
-      'The OOS window was locked before data was touched. The decay was visible in the rolling OOS-Sharpe trace — Sharpe 1.11 → 0.91 → 0.71 → 0.42 → 0.04 → −0.05 over the rolling window. The "carry is real, trade is dead" conclusion was honest.',
+      'The OOS window was locked before data was touched. The decay was visible in the rolling OOS-Sharpe trace. Sharpe 1.11 → 0.91 → 0.71 → 0.42 → 0.04 → −0.05 over the rolling window. The "carry is real, trade is dead" conclusion was honest.',
     lesson:
-      'Carry signals are observable, regularly-paid, and visible to anyone with the data — which means they crowd fast. Pre-registering the OOS window before touching the data is what makes this a study and not a justification.',
+      'Carry signals are observable, regularly-paid, and visible to anyone with the data. which means they crowd fast. Pre-registering the OOS window before touching the data is what makes this a study and not a justification.',
     formula: '\\mathrm{IS} \\neq \\mathrm{OOS} \\;\\Rightarrow\\; \\alpha \\text{ decayed}',
   },
   {
     id: 'M05',
     title: 'First DSR pass on project 01: forgot γ₃·SR̂ term. Decoy result.',
-    project: 'Project 01 — Multiple testing / deflated Sharpe',
+    project: 'Project 01. Multiple testing / deflated Sharpe',
     date: '2025-09-20',
     severity: 'low',
     summary:
       "When implementing the Deflated Sharpe Ratio from the Bailey & López de Prado 2014 paper, I first wrote the simpler form: DSR = (SR̂ − E[max SR]) / σ_SR̂. The paper's full form has the higher-moment correction: (1 − γ₃·SR̂ + (γ₄·SR̂² − 1)/4) under the radical. Without it, returns with non-zero skew/kurtosis inflate the denominator and DSR is overstated.",
-    caught_by: 'G6–G10 (parameter-prior sensitivity, Monte-Carlo coverage)',
+    caught_by: 'G6 to G10 (parameter-prior sensitivity, Monte-Carlo coverage)',
     repair:
       "Re-derived the formula from the paper's full expression. Added γ₃ and γ₄ to the calculator inputs as defaults (0, 3) with a comment that real-data estimates are recommended. The interactive DSR calculator on /methodology ships the full form.",
     lesson:
@@ -128,7 +128,7 @@ const mistakes = [
       </VoiceLine>
       <p class="mistakes-head__sub">
         A research book that ships {quantProjectCount} winners and hides the failure modes is a book primed
-        for selection bias. Below are five real failures from the quant pipeline — what was wrong, which
+        for selection bias. Below are five real failures from the quant pipeline. what was wrong, which
         gate caught it, what I repaired, and what the discipline is for. NDA-safe. Public data.
       </p>
 
@@ -214,24 +214,24 @@ const mistakes = [
           This page is not self-flagellation, and it is not a humility performance. It is a record
           of the failure modes the gate stack is built to catch. If a gate didn't catch the failure,
           the gate gets updated; the failure gets logged. There is no "we'll be more careful next
-          time" — there is a pre-ship test.
+          time" to there is a pre-ship test.
         </p>
       </header>
       <ul class="neg">
         <li>
-          I am not above shipping a 5.07 phantom Sharpe — that is exactly the failure mode the gates
+          I am not above shipping a 5.07 phantom Sharpe. that is exactly the failure mode the gates
           exist to prevent.
         </li>
         <li>
-          I am not claiming the gate stack catches everything — there are {profile.stats.evalGates} gates
+          I am not claiming the gate stack catches everything. there are {profile.stats.evalGates} gates
           and they fail closed on the obvious ones; the subtle ones come later.
         </li>
         <li>
-          I am not hiding any failures that I am aware of — if a postmortem would change your
+          I am not hiding any failures that I am aware of. if a postmortem would change your
           hire/no-hire, it is on this page.
         </li>
         <li>
-          I am not interested in "fake failure" stories — these are real failures from the actual
+          I am not interested in "fake failure" stories. these are real failures from the actual
           pipeline, with the actual numbers.
         </li>
       </ul>

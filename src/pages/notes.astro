@@ -1,0 +1,281 @@
+---
+/**
+ * notes.astro :  /notes/ · v9.8 Wave B research log.
+ *
+ * A working notebook: short-form entries, postmortems, and the parts
+ * of the work that survive review. No editorial calendar, no
+ * publishing pipeline :  entries are written when the work has
+ * something to teach.
+ *
+ * Section layout (single column, editorial register):
+ *   01 :  research log   (SectionMark)
+ *   H1   :  The notes page is not a blog.
+ *   §    :  six sample entries (3 quant, 3 AI) with date + chip + body
+ *   CTA  :  read the methodology / contact
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import SectionMark from '@components/SectionMark.astro';
+import SubpageHero from '@components/SubpageHero.astro';
+import { path } from '@utils/url';
+import { buildStampUtc8 } from '@utils/build-stamp';
+
+const subpage = {
+  slug: 'notes',
+  index: '01',
+  title: 'research log',
+  pageTitle: 'Notes',
+  description:
+    'Research log: a working notebook of quant + AI thinking, postmortems, and what survived review.',
+  chip: 'NOTES · RESEARCH LOG · WORKING NOTEBOOK',
+  // v11.W2 : financial-markets tag (task #4).
+  roleLine: 'Notes on financial markets, quant research, and AI engineering',
+};
+
+const lastUpdated = buildStampUtc8();
+
+interface NoteEntry {
+  date: string;
+  lane: 'quant' | 'ai';
+  title: string;
+  body: string;
+  href?: string;
+  hrefLabel?: string;
+}
+
+const notes: NoteEntry[] = [
+  {
+    date: '2026-08-04',
+    lane: 'quant',
+    title: 'PBO is a multiple-testing tax, not a model-fitting tax.',
+    body:
+      'The combinatorial-symmetric-cross-validation (CSCV) result is best read as a tax on the search procedure, not on the strategy itself. When the search is narrow (one model, one feature set, one decay), PBO stays low. When the search is wide (50 candidates, all backtested with full hyperparameter sweep), PBO eats the headline Sharpe before fees. The cleanest way to deflate it is to pre-register the candidate count BEFORE running the backtests :  that one line of process collapses the false-discovery tax by half on a typical quant funnel.',
+    href: path('/methodology'),
+    hrefLabel: 'Methodology · multiple-testing layer',
+  },
+  {
+    date: '2026-08-01',
+    lane: 'quant',
+    title: 'Regime-conditional deployment > a single Sharpe ratio.',
+    body:
+      'A 0.6 Sharpe over 4 regimes is not the same artifact as a 0.6 Sharpe over one regime with 3 silent failures. Splitting the equity curve by regime (carry / momentum / vol / macro) and shipping a strategy only when every regime clears its own threshold is the cheapest insurance a quant book can buy. The hard part is naming the regimes :  most "regime detectors" are just lagged rolling z-scores on the wrong variable.',
+  },
+  {
+    date: '2026-07-29',
+    lane: 'quant',
+    title: 'Deflated Sharpe is a backtest validator, not a forward-edge oracle.',
+    body:
+      'Deflated Sharpe tells you whether the headline number is consistent with the number of trials you ran. It does NOT tell you the strategy will work out-of-sample. The two are often confused, and the confusion costs real money. Treat deflated Sharpe as a sanity gate: if it fails, you definitely have a curve-fit. If it passes, you still need walk-forward + paper + live evidence before capital.',
+    href: path('/proof'),
+    hrefLabel: 'Proof · ship gates',
+  },
+  {
+    date: '2026-08-03',
+    lane: 'ai',
+    title: 'The eval harness is the product. The LLM is the demo.',
+    body:
+      'Most "AI products" are demos. The product is the eval harness :  the deterministic suite that scores the LLM on its own claim, catches regressions, and freezes the spec so the prompt engineer knows what success looks like. Without that suite, every prompt change is a coin flip. With it, every change has a P95 latency, a pass-rate, and a regression budget. The 30 hours spent building the harness beat the 300 hours spent iterating prompts blind.',
+  },
+  {
+    date: '2026-07-31',
+    lane: 'ai',
+    title: 'Multi-agent ≠ faster. Multi-agent = more checks per minute.',
+    body:
+      'A common failure mode is "we have 5 agents, so we ship 5× faster." In practice, the agents spend most of their time waiting for the orchestrator, and the orchestrator spends most of its time reconciling. The win is not throughput :  it is coverage: each agent independently checks a different failure mode (numerical faithfulness, citation grounding, schema conformance, tone drift, hallucinated entities). The harness stays the bottleneck; the agents are just additional lenses.',
+  },
+  {
+    date: '2026-07-27',
+    lane: 'ai',
+    title: 'Citation grounding > "look at the source."',
+    body:
+      'Asking an LLM to "look at the source" is not grounding. Grounding is: every claim is followed by a (chunk_id, relevance) tuple from a deterministic retriever, and the tuple is checked at eval time. Without the tuple, "grounded" is a vibe. With the tuple, you can audit which chunks the model actually used and which it ignored, which is the only signal that survives a real-world corpus.',
+    href: path('/ai'),
+    hrefLabel: 'AI page · eval layer',
+  },
+];
+
+const lanes = {
+  quant: { label: 'Quant', tone: 'quant' },
+  ai: { label: 'AI', tone: 'ai' },
+};
+---
+
+<BaseLayout
+  title={subpage.pageTitle}
+  description={subpage.description}
+  breadcrumbs={[
+    { name: 'Home', href: '/' },
+    { name: subpage.pageTitle, href: `/${subpage.slug}` },
+  ]}
+>
+  <SubpageHero slug={subpage.slug} label={subpage.pageTitle} roleLine={subpage.roleLine}>
+    <p class="page-head__eyebrow mono">
+      <span class="page-head__eyebrow-chip">{subpage.chip}</span>
+      <span class="page-head__eyebrow-line">{notes.length} ENTRIES · 2 LANES · UPDATED ON SHIP</span>
+    </p>
+    <SectionMark index={subpage.index} title={subpage.title} ariaHidden={false} />
+    <h2 class="page-head__title" data-words>
+      The notes page is <span class="hl">not a blog</span>.
+    </h2>
+    <p class="page-head__lede">
+      A working notebook. Entries are written when the work has something to teach :  a
+      postmortem, a sharp observation, or a small lesson that survived the loop. No
+      editorial calendar, no publishing pipeline.
+    </p>
+  </SubpageHero>
+
+  <div class="notes-body container container-narrow">
+    <ol class="notes-list" role="list">
+      {
+        notes.map((n) => (
+          <li class="note-entry">
+            <header class="note-entry__head">
+              <time class="note-entry__date mono" datetime={n.date}>{n.date}</time>
+              <span class={`note-entry__lane note-entry__lane--${n.lane} mono`}>
+                {lanes[n.lane].label}
+              </span>
+            </header>
+            <h2 class="note-entry__title">{n.title}</h2>
+            <p class="note-entry__body">{n.body}</p>
+            {
+              n.href && (
+                <a class="note-entry__link mono" href={n.href}>
+                  {n.hrefLabel ?? 'Read more'} →
+                </a>
+              )
+            }
+          </li>
+        ))
+      }
+    </ol>
+
+    <aside class="notes-cta" aria-label="Further reading">
+      <p class="notes-cta__lede mono">FURTHER READING</p>
+      <ul class="notes-cta__list" role="list">
+        <li><a class="notes-cta__link" href={path('/methodology')}>Methodology · the 5-stage loop</a></li>
+        <li><a class="notes-cta__link" href={path('/proof')}>Proof · the ship gates</a></li>
+        <li><a class="notes-cta__link" href={path('/ai')}>AI · the eval-first lane</a></li>
+      </ul>
+    </aside>
+
+    <p class="notes-stamp mono" aria-label="Last updated">
+      LAST UPDATED · {lastUpdated} · UTC+8
+    </p>
+  </div>
+</BaseLayout>
+
+<style>
+  .notes-body {
+    padding-block: var(--sp-8);
+  }
+  .notes-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--sp-10);
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-7);
+  }
+  .note-entry {
+    padding-bottom: var(--sp-7);
+    border-bottom: 1px solid var(--c-rule);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm, 0.5rem);
+  }
+  .note-entry:last-child {
+    border-bottom: 0;
+  }
+  .note-entry__head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 4px;
+  }
+  .note-entry__date {
+    font-size: var(--fs-xs, 11px);
+    color: var(--c-ink-3);
+    letter-spacing: 0.06em;
+  }
+  .note-entry__lane {
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border: 1px solid var(--c-rule);
+    border-radius: var(--radius-sm, 0px);
+    color: var(--c-ink-2);
+  }
+  .note-entry__lane--quant {
+    color: var(--c-amber);
+    border-color: var(--c-amber-decor-deep);
+  }
+  .note-entry__lane--ai {
+    color: var(--c-accent-cyan);
+    border-color: var(--c-rule);
+  }
+  .note-entry__title {
+    font-size: var(--text-lg, 1.125rem);
+    font-weight: var(--font-weight-semibold, 600);
+    color: var(--c-ink);
+    line-height: 1.3;
+  }
+  .note-entry__body {
+    font-size: var(--text-base, 1rem);
+    color: var(--c-ink-2);
+    line-height: var(--line-height-relaxed, 1.6);
+    max-width: 70ch;
+  }
+  .note-entry__link {
+    font-size: var(--fs-xs, 11px);
+    color: var(--c-amber);
+    text-decoration: none;
+    letter-spacing: 0.06em;
+  }
+  .note-entry__link:hover {
+    text-decoration: underline;
+  }
+  .notes-cta {
+    margin-top: var(--sp-10);
+    padding: var(--sp-5);
+    background: var(--c-bg-2);
+    border: 1px solid var(--c-rule);
+    border-radius: var(--radius-sm, 0px);
+  }
+  .notes-cta__lede {
+    font-size: 10.5px;
+    color: var(--c-ink-3);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: var(--sp-3);
+  }
+  .notes-cta__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .notes-cta__link {
+    color: var(--c-ink-2);
+    text-decoration: none;
+    font-size: 14px;
+  }
+  .notes-cta__link:hover {
+    color: var(--c-amber);
+  }
+  .notes-stamp {
+    margin-top: var(--sp-7);
+    font-size: 10.5px;
+    color: var(--c-ink-3);
+    letter-spacing: 0.06em;
+    text-align: right;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .note-entry__link,
+    .notes-cta__link {
+      transition: none;
+    }
+  }
+</style>

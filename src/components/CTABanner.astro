@@ -214,7 +214,7 @@ const LEGEND_COUNTS = {
                   <div
                     class:list={['cta__cell', 'cta__cell--slot', `cta__cell--${status}`]}
                     role="cell"
-                    aria-label={`${row.day} ${row.weekday} ${COL_LABELS[cellIdx]} UTC+8 — ${status}`}
+                    aria-label={`${row.day} ${row.weekday} ${COL_LABELS[cellIdx]} UTC+8 to ${status}`}
                     data-status={status}
                     data-row={row.day}
                     data-col={COL_LABELS[cellIdx]}
@@ -337,7 +337,7 @@ const LEGEND_COUNTS = {
      cadence. */
   .cta__rail-headline {
     margin: 0;
-    font-family: var(--serif-display);
+    font-family: var(--j-ff-display);
     font-style: italic;
     font-weight: 400;
     font-size: clamp(2.5rem, 5vw, 5.5rem);
@@ -474,7 +474,7 @@ const LEGEND_COUNTS = {
     width: 92px;
     height: var(--cell);
     padding-right: var(--sp-3);
-    font-family: var(--serif-display);
+    font-family: var(--j-ff-display);
     color: var(--c-ink);
   }
   .cta__day {

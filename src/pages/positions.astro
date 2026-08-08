@@ -19,6 +19,7 @@ import { profile } from '@utils/profile';
 import { path } from '@utils/url';
 import { buildStampUtc8 } from '@utils/build-stamp';
 import VoiceLine from '@components/VoiceLine.astro';
+import SectionMark from '@components/SectionMark.astro';
 
 const lastRefreshed = buildStampUtc8();
 const email = profile.contact.email;
@@ -59,7 +60,7 @@ const tradingDays = equitySeries.length;
         What I'm <span class="hl">currently running</span>.
       </h1>
       <VoiceLine class="positions-head__voice">
-        Paper-trade first. Real capital only after the gates pass — never before.
+        Paper-trade first. Real capital only after the gates pass. never before.
       </VoiceLine>
       <p class="positions-head__sub">
         A backtest is what a strategy <em>would have done</em>. A paper-trade is what it
@@ -91,6 +92,7 @@ const tradingDays = equitySeries.length;
     <div class="container">
       <header class="positions-card__head">
         <div>
+          <SectionMark index="00" title="positions" />
           <p class="section__eyebrow mono">POSITION 01 · ACTIVE</p>
           <h2 class="positions-card__title">Vol-target time-series momentum · BTC/USDT</h2>
           <p class="positions-card__sub mono">
@@ -109,9 +111,9 @@ const tradingDays = equitySeries.length;
           <p class="mono positions-chart__title">Equity curve · drawdown · vol-regime</p>
           <p class="mono positions-chart__sub">
             Live paper-trade series, normalized to 100. Top panel: equity. Bottom panel: running
-            drawdown (red fill). Background tint: rolling 5-day vol quantiles — calm / normal /
+            drawdown (red fill). Background tint: rolling 5-day vol quantiles. calm / normal /
             stress. Net of 5 bps/side slippage. 12% return over {tradingDays} trading days ≈ 0.39 Sharpe
-            annualized, matching the IS backtest. Vol-target sizing held max DD under 4% — lower than
+            annualized, matching the IS backtest. Vol-target sizing held max DD under 4% to lower than
             the 30% headline because the live period has been a calm regime.
           </p>
         </div>
@@ -151,7 +153,7 @@ const tradingDays = equitySeries.length;
         </div>
         <div class="positions-metric">
           <div class="positions-metric__label mono">Capacity est.</div>
-          <div class="positions-metric__value mono">$3–5M</div>
+          <div class="positions-metric__value mono">$3 to 5M</div>
           <div class="positions-metric__sub">Notional at &lt;5 bps impact</div>
         </div>
       </div>
@@ -183,7 +185,7 @@ const tradingDays = equitySeries.length;
         <h3 class="positions-changes__title">What I'd change before going live</h3>
         <ol class="positions-changes__list">
           <li>
-            Add a kill-switch on &gt;20% weekly drawdown (current code has none — this is a
+            Add a kill-switch on &gt;20% weekly drawdown (current code has none. this is a
             backtest-engineering gap, not a strategy gap).
           </li>
           <li>
@@ -216,15 +218,15 @@ const tradingDays = equitySeries.length;
         <p class="section__eyebrow">Open conversations · the live book</p>
         <h2 class="section__title">Conversations I'd pick up the phone for.</h2>
         <p class="section__sub">
-          {profile.stats.targetSeats} seats that fit my operating constraints — quant, AI, eval, OSS.
+          {profile.stats.targetSeats} seats that fit my operating constraints. quant, AI, eval, OSS.
           Not a JD wishlist; a list of the conversations I'd actually take a 30-min call about. If your
-          role isn't on the list, email me anyway with the JD — I read every one.
+          role isn't on the list, email me anyway with the JD. I read every one.
         </p>
       </header>
 
       <aside class="positions-cal" aria-label="Intro-call availability">
         <p class="positions-cal__note mono">
-          I do 30-min intro calls on Tue/Wed/Thu 18:00–22:00 PHT (10:00–14:00 UTC). Email first —
+          I do 30-min intro calls on Tue/Wed/Thu 18:00 to 22:00 PHT (10:00 to 14:00 UTC). Email first —
           booking link in reply.
         </p>
         <p class="positions-cal__agenda">
@@ -241,7 +243,7 @@ const tradingDays = equitySeries.length;
       <div class="role-grid">
         <article class="role-card">
           <p class="role-card__eyebrow mono">CONVERSATION 01</p>
-          <h3 class="role-card__title">Senior Quantitative Researcher</h3>
+          <h3 class="role-card__title">Quantitative Researcher</h3>
           <p class="role-card__sub">
             Hedge fund or family office · remote-first · US-premarket or APAC overlap
           </p>
@@ -350,7 +352,7 @@ const tradingDays = equitySeries.length;
             <div>
               <p class="role-card__label mono">Looking for</p>
               <p class="role-card__text">
-                Public, evaluable, reproducible artifacts — not private magic.
+                Public, evaluable, reproducible artifacts. not private magic.
               </p>
             </div>
             <div>
@@ -376,7 +378,7 @@ const tradingDays = equitySeries.length;
         <h2 class="section__title">Not currently looking for.</h2>
         <p class="section__sub">
           {profile.stats.offTableSeats} seat types that don't fit my operating constraints. No judgment
-          if you run one — just not where I'm spending the year ahead.
+          if you run one. just not where I'm spending the year ahead.
         </p>
       </header>
       <ul class="neg">
@@ -396,7 +398,7 @@ const tradingDays = equitySeries.length;
         <h2 class="section__title">Negative space as design.</h2>
         <p class="section__sub">
           A single live paper-trade is honest. A dozen concurrent paper-trades without per-strategy
-          slippage / capacity logs is vanity. This page is short on purpose — one position, fully
+          slippage / capacity logs is vanity. This page is short on purpose. one position, fully
           documented, beats six positions hand-waved.
         </p>
       </header>

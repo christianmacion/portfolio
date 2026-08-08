@@ -91,8 +91,23 @@
   --j-paper: #2a2622; /* v6.17.1 — paper is now a slightly elevated dark (NOT bright cream) — used as rare callout panel inside dark canvas */
   --j-paper-ink: #c4bfb1; /* v6.17.1 — lifted from #1a1714 for legibility on the new --j-paper */
 
+  /* === v6.18 — BLOOMBERG-BRYLLIM THEME PALETTE (W2 lock, 2026-08-08)
+   * Bloomberg-equity-terminal dark canvas + warm cream content surface.
+   * Used as theme anchors for institutional surfaces; per-token
+   * indirection means every --c-* consumer picks them up automatically.
+   * Single accent (--j-warn amber) preserved per W1.5 lockout — sage /
+   * terracotta / teal / violet are DATA semantics only, NOT chrome. */
+  --c-bloomberg-navy: #0c1014;       /* primary dark canvas (Bloomberg-equity-terminal) */
+  --c-bloomberg-navy-2: #15191f;     /* slightly lighter dark surface */
+  --c-bloomberg-cream: #ece5d4;      /* content surface — matches --j-ink-1 in dark mode */
+  --c-bloomberg-hairline: #2a2e35;   /* hairline rule on dark canvas */
+  --c-bloomberg-mid: #a8a8a8;        /* mid-gray secondary text */
+  --c-bloomberg-positive: #5cb85c;   /* quant delta up (sparingly) */
+  --c-bloomberg-negative: #c0392b;   /* quant delta down (sparingly) */
+
   /* === INK === */
   --j-ink: #d4cebd; /* v6.17.1 — softened from #ebe5d4 (94% L → 84% L) — warmer, less eye-strain */
+  --j-ink-1: #ece5d4; /* v9.9 — deep primary ink on dark surfaces (cream-on-tape AAA) */
   --j-ink-2: #c4bfb1; /* secondary text on dark — 9.72:1 AAA */
   --j-ink-3: #9a9486; /* tertiary / meta on dark — 5.62:1 AA (v6.18 contrast fix; was #8a857a 4.85:1, fails 4.47 on bg-elev) */
   --j-ink-4: #4a4742; /* quaternary, hairline-on-dark — 1.93:1 */
@@ -169,13 +184,21 @@
    * --c-amber-deep / --c-ink-3 etc. */
   --font-sans: var(--ff-sans);
   --font-mono: var(--ff-mono);
-  --font-display: var(--serif-display);
+  /* v6.18 W2 lock (2026-08-08): --font-display now aliases --j-ff-display
+     (Inter, post W1.5 lockout). Was var(--serif-display) which resolved to
+     Source Serif 4. */
+  --font-display: var(--j-ff-display);
   --c-cobalt: var(--c-primary-2);
   --c-warn-deep: var(--c-amber-deep);
   --c-ink-4: var(--j-ink-4);
 
-  /* === TYPE — unchanged from v6.13 === */
-  --j-ff-display: 'Source Serif 4', 'Iowan Old Style', 'Charter', Georgia, serif;
+  /* === TYPE — W2 Bloomberg-Bryllim lock (2026-08-08) ===
+   * Inter (display + body) + JetBrains Mono (mono) ONLY per
+   * [[portfolio-v10-bryllim-structure-strategy]] + W1.5 lockout. Source
+   * Serif 4 / VT323 / Press Start 2P are retired — every legacy alias
+   * (--serif-display, --font-serif, --ff-source-serif, --ff-pixel) now
+   * routes through Inter or JetBrains Mono. */
+  --j-ff-display: 'Inter', 'Inter Fallback', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --j-ff-body: 'Inter', 'Inter Fallback', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --j-ff-mono: 'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace;
 
@@ -266,6 +289,7 @@
   --c-bg-3: var(--j-bg-elev-2);
   --c-paper: var(--j-bg-elev);
   --c-ink: var(--j-ink);
+  --c-ink-1: var(--j-ink-1); /* v9.9 — deep primary ink for chrome on amber surfaces */
   --c-ink-2: var(--j-ink-2);
   --c-ink-3: var(--j-ink-3);
   --c-rule: var(--j-ink-4);
@@ -286,11 +310,9 @@
   --c-proof-stripe: 4px; /* v8.3 — proof-card top stripe */
   --ff-sans: var(--j-ff-body);
   --ff-mono: var(--j-ff-mono);
-  /* v9.5 — Bryllim side-rail pixel-logo font stack. Falls back to
-     Courier New when Press Start 2P / VT323 aren't loaded (no remote
-     font added to keep bundle small; the chunky monospace fallback
-     still reads as pixel-register). */
-  --ff-pixel: 'Press Start 2P', 'VT323', 'Courier New', ui-monospace, monospace;
+  /* v6.18 — W2 lock: --ff-pixel → JetBrains Mono chain (was Press Start 2P /
+     VT323). Pixel/bitmap face retired per W1.5 lockout. */
+  --ff-pixel: 'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace;
   --serif-display: var(--j-ff-display);
   --fs-3xs: var(--j-t-xs);
   --fs-2xs: var(--j-t-xs);
@@ -482,6 +504,7 @@
     --j-paper-ink: #ece5d4;
 
     --j-ink: #1c2538;
+    --j-ink-1: #0c0c0c; /* v9.9 — deep primary ink on cream (15:1 AAA on --j-warn bg) */
     --j-ink-2: #3d4a5e;
     --j-ink-3: #525f72;
     --j-ink-4: #8a92a3;
@@ -608,6 +631,7 @@
   --c-active-ink: var(--j-ink);
   --c-active-surface: var(--j-bg-elev-2);
   --c-ink: var(--j-ink);
+  --c-ink-1: var(--j-ink-1); /* v9.9 — deep primary ink for chrome on amber surfaces */
   --c-ink-2: var(--j-ink-2);
   --c-ink-3: var(--j-ink-3);
   --c-ink-faint: var(--j-ink-3);
@@ -731,6 +755,12 @@
   --c-status-premium-soft: var(--j-violet-soft);
   --c-status-info: var(--j-cobalt);
   --c-status-info-soft: var(--j-cobalt-soft);
+
+  /* === v6.18 — W2 Bloomberg-Bryllim surface aliases
+   * --c-bg-1 → Bloomberg navy (institutional dark canvas)
+   * --c-rule → Bloomberg hairline (institutional divider tone) */
+  --c-bg-1: var(--c-bloomberg-navy);
+  --c-rule: var(--c-bloomberg-hairline);
 
   /* === TYPE FAMILY OVERRIDE === */
   --ff-sans: var(--j-ff-body);

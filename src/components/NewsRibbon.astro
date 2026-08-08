@@ -235,15 +235,15 @@ const frames = (methodology ?? defaultMethodology).map((it) => ({ ...it }));
     mask-image: linear-gradient(
       to right,
       transparent 0,
-      #000 24px,
-      #000 calc(100% - 24px),
+      var(--c-bg) 24px,
+      var(--c-bg) calc(100% - 24px),
       transparent 100%
     );
     -webkit-mask-image: linear-gradient(
       to right,
       transparent 0,
-      #000 24px,
-      #000 calc(100% - 24px),
+      var(--c-bg) 24px,
+      var(--c-bg) calc(100% - 24px),
       transparent 100%
     );
   }
@@ -330,7 +330,11 @@ const frames = (methodology ?? defaultMethodology).map((it) => ({ ...it }));
   }
 
   .ribbon__sep {
-    color: var(--c-ink-4);
+    /* v9.9.1 — was var(--c-ink-4) (#8a92a3 light / #4a4742 dark) which gave
+       2.49:1 (light) / 1.93:1 (dark) — fails WCAG 2.2 AA 4.5:1 and is the
+       source of 2 contrast violations on /projects/. Lifted to --c-ink-3
+       (#525f72 light / #9a9486 dark) → 5.19:1 / 5.62:1 — both AA. */
+    color: var(--c-ink-3);
     margin-inline-start: var(--sp-2);
     font-weight: 600;
   }
@@ -346,7 +350,7 @@ const frames = (methodology ?? defaultMethodology).map((it) => ({ ...it }));
     color: var(--c-ink);
   }
   .ribbon__frame-head {
-    font-family: var(--serif-display);
+    font-family: var(--j-ff-display);
     font-style: italic;
     font-weight: 500;
     font-size: 14px;
@@ -360,7 +364,9 @@ const frames = (methodology ?? defaultMethodology).map((it) => ({ ...it }));
     color: var(--c-ink-2);
   }
   .ribbon__frame-sep {
-    color: var(--c-ink-4);
+    /* v9.9.1 — was var(--c-ink-4) (2.49:1 light / 1.93:1 dark) — fails AA.
+       Lifted to --c-ink-3 (5.19:1 / 5.62:1) — both AA. */
+    color: var(--c-ink-3);
     font-weight: 600;
   }
   /* v9.4.1 — chrome-contract rule 6: reserve --c-warn for semantic

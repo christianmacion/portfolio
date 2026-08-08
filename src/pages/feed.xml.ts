@@ -31,7 +31,7 @@ export const GET: APIRoute = async ({ site }) => {
     baseUrl,
     stream: 'all',
     selfHref: `${baseUrl}/feed.xml`,
-    title: `${profile.fullName} — Portfolio Updates`,
+    title: `${profile.fullName} to Portfolio Updates`,
     subtitle: 'Newest projects, research artifacts, and client solutions. Quant, AI, OSS.',
     items,
     now,

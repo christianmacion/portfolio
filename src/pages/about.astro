@@ -82,7 +82,7 @@ const NGATE = `${profile.stats.evalGates}-gate`;
         <Stat
           value={profile.stats.evalGates}
           label="gates"
-          sub={`G1–G${profile.stats.evalGates}`}
+          sub={`G1 to G${profile.stats.evalGates}`}
         />
         <Stat value={profile.stats.aiAgentCount} label="agents" sub="orch + workers" />
         <Stat value={profile.stats.locPython} label="LOC" sub="light-dep" />
@@ -105,7 +105,7 @@ const NGATE = `${profile.stats.evalGates}-gate`;
       <header class="section__head">
         <p class="section__eyebrow">Proof</p>
         <h2 class="section__title">
-          What I built and shipped<span class="muted"> — not what I am.</span>
+          What I built and shipped<span class="muted">n/a not what I am.</span>
         </h2>
         <p class="section__lede">
           {proofStrip.length} decision-grade artefacts from the long record. Each one links to a public-data
@@ -174,9 +174,9 @@ const NGATE = `${profile.stats.evalGates}-gate`;
           />
         </div>
         <ul class="method-ribbon__list mono">
-          <li><strong>G1–G12</strong> · single-strategy guardrails</li>
-          <li><strong>G16–G20</strong> · multiple-testing layer</li>
-          <li><strong>{`G23–G${profile.stats.evalGates}`}</strong> · LLM-output validation</li>
+          <li><strong>G1 to G12</strong> · single-strategy guardrails</li>
+          <li><strong>G16 to G20</strong> · multiple-testing layer</li>
+          <li><strong>{`G23 to G${profile.stats.evalGates}`}</strong> · LLM-output validation</li>
         </ul>
       </div>
 
@@ -247,9 +247,9 @@ const NGATE = `${profile.stats.evalGates}-gate`;
 
         <p>
           Most recently I shipped the same {NGATE} harness against LLM outputs and systematic strategies
-          on a closed past contract (systematic-strategy desk, 03/2026 – 06/2026, NDA-protected). Before
+          on a closed past contract (systematic-strategy desk, 03/2026 to 06/2026, NDA-protected). Before
           that: a 7-agent venture-incubation pipeline under Macion Ventures, an 8-agent content-production
-          pipeline for editorial automation, and a portfolio of runnable AI projects — RAG scorecard,
+          pipeline for editorial automation, and a portfolio of runnable AI projects. RAG scorecard,
           ReAct tool-calling agent, MCP eval server, LLM-as-judge harness, reflection agent, AI-slop evaluation
           gate.
         </p>
@@ -266,7 +266,7 @@ const NGATE = `${profile.stats.evalGates}-gate`;
         <p>
           Based in {profile.location.display} (UTC+8). {profile.availability.hours} remote, APAC + US-premarket
           overlap. {profile.stats.certCount} professional certifications across AI, finance, math/statistics,
-          and event flagships — built up in {profile.stats.ageMonths} months. I write about what I'm learning
+          and event flagships. built up in {profile.stats.ageMonths} months. I write about what I'm learning
           and ship the things I'm building.
         </p>
       </div>
@@ -288,10 +288,10 @@ const NGATE = `${profile.stats.evalGates}-gate`;
       </header>
 
       <p class="long-form-prose">
-        Graduate of the Philippine Science High School — Southern Mindanao Campus (2022, national
+        Graduate of the Philippine Science High School. Southern Mindanao Campus (2022, national
         competitive exam). Engineering units at the University of Southeastern Philippines
-        (2022–2024, did not complete). Currently enrolled in Financial Management at the University
-        of Mindanao (1st Semester, AY 2026–27). Completed the Certified Technical Analyst Program at
+        (2022 to 2024, did not complete). Currently enrolled in Financial Management at the University
+        of Mindanao (1st Semester, AY 2026 to 27). Completed the Certified Technical Analyst Program at
         the Society of Technical Analysts of the Philippines (Tier-1, December 2025).
       </p>
     </div>
@@ -313,7 +313,7 @@ const NGATE = `${profile.stats.evalGates}-gate`;
 
       <p class="long-form-prose">
         All work shown here is NDA-safe. The systematic-strategy desk role is a closed past contract
-        (03/2026 – 06/2026) under a PM with publicly attributable initials. I do not reference
+        (03/2026 to 06/2026) under a PM with publicly attributable initials. I do not reference
         per-strategy t-stats, bps figures, live Sharpe numbers, proprietary data sources,
         fund-renames, or any desk-internal terms. Headline metrics cite public-data work or
         open-source runnable projects. If a proof you need is missing, email me the JD and I'll send
@@ -323,7 +323,7 @@ const NGATE = `${profile.stats.evalGates}-gate`;
       <nav class="orphan-crosslinks" aria-label="Related surfaces">
         <p class="mono orphan-crosslinks__eyebrow">Source code + failure log</p>
         <a href={path('/mistakes')}>Mistakes (5 postmortems)</a>
-        <a href={path('/methodology')}>Methodology (G1–G31)</a>
+        <a href={path('/methodology')}>Methodology (G1 to G31)</a>
         <a href={path('/proof')}>Proof (Tier-1 certs)</a>
         <a href={path('/colophon')}>Colophon (design system)</a>
         <a href={path('/for-recruiters')}>For recruiters</a>
@@ -333,14 +333,14 @@ const NGATE = `${profile.stats.evalGates}-gate`;
 
   <CTABanner
     title="Hiring for an AI Engineer or Quant Researcher seat?"
-    sub={`Email me at ${profile.contact.email} with the JD — tailored resume within 24 hours. Or grab the matching PDF below.`}
+    sub={`Email me at ${profile.contact.email} with the JD. tailored resume within 24 hours. Or grab the matching PDF below.`}
     primaryLabel="Get in touch"
     primaryHref={`mailto:${profile.contact.email}?subject=Role%20inquiry%20—%20%5Btailored%20resume%5D`}
     secondaryLabel="Download resume ↓"
     secondaryHref={path('/resume')}
   />
   <p class="about-canref mono">
-    References the open-source canon — see
+    References the open-source canon. see
     <a href={path('/methodology')}>{path('/methodology')} → References &amp; licenses</a>.
   </p>
 </BaseLayout>
@@ -599,7 +599,10 @@ const NGATE = `${profile.stats.evalGates}-gate`;
     padding: var(--sp-5) var(--sp-6);
     background: var(--c-bg);
     border: 1px solid var(--c-rule);
-    border-left: 4px solid var(--c-primary);
+    /* v6.18 W2 lock (2026-08-08): 4px → 3px editorial left-strip in amber
+       (chrome contract: editorial 3px amber is the documented exception
+       to the 1px hairline rule). */
+    border-left: 3px solid var(--c-amber);
     border-radius: var(--radius);
     margin-block: var(--sp-5);
   }

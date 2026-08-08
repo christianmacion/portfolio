@@ -33,7 +33,7 @@ import { dataSourceCount } from '@utils/data-sources';
 
 // Gate-count chrome: derives from profile.stats.evalGates. Used in
 // voice-line sub lines and CTA primary labels.
-const GATE_RANGE = `G1–G${profile.stats.evalGates}`;
+const GATE_RANGE = `G1 to G${profile.stats.evalGates}`;
 const NGATE = `${profile.stats.evalGates}-gate`;
 
 // --- Quant content: sorted by `order` (1..9 in frontmatter).
@@ -193,7 +193,7 @@ statsRow[3].spark = sparkFor(2, 14, 0.5, 24);
         {`${quantProjects.length} strategies. Four factors. ${dataSourceCount} sources.`}
       </h1>
       <p class="r-hero__sub">
-        A market-data view of the research book. No narrative — the table is the narrative. Every
+        A market-data view of the research book. No narrative. the table is the narrative. Every
         number on this page traces back to a public dataset and a reproducible notebook.
       </p>
       <VoiceLine class="r-hero__voice" ruled={false} size="md">

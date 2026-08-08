@@ -11,16 +11,15 @@
    the `surface="v6-13"` prop on this layout. Pages that don't opt in
    (F14-amber surfaces) keep the v6.9.15 zero-cost behavior. Pages that
    opt in load these two fonts via the `v6-13-fonts.astro` component
-   rendered conditionally below the body. */
+   rendered conditionally below the body.
+   v6.18 (W2 Bloomberg-Bryllim lock, 2026-08-08) — Source Serif 4 + VT323
+   RETIRED per W1.5 lockout. Only Inter + JetBrains Mono remain in the
+   font budget. @fontsource/source-serif-4 + @fontsource/vt323 imports
+   removed; preloads for those faces removed. */
 import '@fontsource/inter/latin-400.css';
 import '@fontsource/inter/latin-500.css';
 import '@fontsource/inter/latin-600.css';
 import '@fontsource/inter/latin-700.css';
-// v9.6 (Bryllim) — pixel display face for flagship H1 surfaces. VT323 is the
-// design register's declared fallback and the only self-hostable option:
-// Departure Mono has no npm distribution (404 on all three package names).
-// Single weight, latin subset, 17.9 KB woff2, OFL-1.1, font-display: swap.
-import '@fontsource/vt323/latin-400.css';
 import '@styles/tokens.css';
 import '@styles/tokens-v6.13.css';
 import '@styles/status-binding-color.css';
@@ -32,29 +31,23 @@ import '@styles/back-to-top.css';
 import '@styles/print.css';
 
 import SideRail from '@components/SideRail.astro';
-import Footer from '@components/Footer.astro';
+import SiteHeader from '@components/SiteHeader.astro';
+import CommandPalette from '@components/CommandPalette.astro';
 import V613Fonts from '@components/V613Fonts.astro';
 import { profile } from '@utils/profile';
 import { buildMeta, personJsonLd, websiteJsonLd, breadcrumbJsonLd } from '@utils/seo';
 import { path } from '@utils/url';
 
 // v9.2.2 (Gate 12) — LCP font preloading. The v6-13 surface renders
-// the LCP element (`.hero__name`, `.hero__role`) in Source Serif 4,
-// with Inter as the body font. Preloading the woff2 of the 400
-// weights of both families cuts the LCP element's font-swap time.
+// the LCP element (`.hero__name`, `.hero__role`) in Inter (display +
+// body, post-W2 lock), with JetBrains Mono for tabular/mono surfaces.
+// Preloading the Inter 400 woff2 cuts the LCP element's font-swap time.
 // `font-display: swap` is preserved on the @font-face rules (see
 // tokens.css) so non-preloaded weights still render with the system
 // font and swap in without a visible reload. We preload only on the
-// v6-13 surface where the serif display is the LCP font; legacy
-// surfaces use Inter only and are already covered by the body
-// stylesheet.
+// v6-13 surface where Inter is the LCP font.
+// v6.18 (W2 lock) — Source Serif 4 + VT323 imports + preloads removed.
 import inter400Url from '@fontsource/inter/files/inter-latin-400-normal.woff2?url';
-import sourceSerif400Url from '@fontsource/source-serif-4/files/source-serif-4-latin-400-normal.woff2?url';
-// v9.6 (Bryllim) — VT323 400 is the pixel display face on the flagship H1.
-// Preloaded only when `pixelDisplay` is set so it never blocks pages that
-// don't paint it. 17.9 KB, same-origin; combined with the metric-matched
-// 'VT323 Fallback' face in fonts.css this makes the swap geometry-neutral.
-import vt323400Url from '@fontsource/vt323/files/vt323-latin-400-normal.woff2?url';
 // v9.2.3 (Gate 12) — Phase 5a fix. motion.css (27 KB, 6 @keyframes, 13 animation
 // rules, 44 transition rules, reduced-motion overrides) is referenced by ZERO
 // `.stl-*` or `.bind-*` classes on slim-chrome pages (home, /for-recruiters,
@@ -74,7 +67,7 @@ interface Props {
   className?: string;
   extraJsonLd?: unknown; // optional page-specific JSON-LD (e.g. ItemList, CreativeWork)
   breadcrumbs?: Array<{ name: string; href: string }>; // optional BreadcrumbList JSON-LD
-  surface?: 'v6-13'; // v6.13.0 — opt-in redesign surface (Jane Street × Noir). Default = legacy.
+  surface?: 'v6-13'; // v6.13.0. opt-in redesign surface (Jane Street × Noir). Default = legacy.
   // v9.6 (Bryllim) — opt in to the VT323 pixel display face for this page's
   // flagship H1. Gates the woff2 <link rel="preload"> ONLY; the @font-face is
   // in the shared bundle either way. Default false so the other ~35 pages pay
@@ -157,45 +150,19 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
     <meta name="description" content={meta.description} />
     <link rel="canonical" href={meta.canonical} />
     {
-      /* v9.2.2 (Gate 12) — LCP font preload. Source Serif 4 400 is the
-         display font on the v6-13 surface; Inter 400 is the body font.
-         Preload both woff2 files. `crossorigin` is required because
-         font requests are always CORS. Reduced-motion + per-component
-         contract are unaffected (these are preloads, not content). */
+      /* v9.2.2 (Gate 12) — LCP font preload. Inter 400 is the display + body
+         font on the v6-13 surface (W2 lock). Preload the woff2 file.
+         `crossorigin` is required because font requests are always CORS.
+         Reduced-motion + per-component contract are unaffected (these are
+         preloads, not content). */
     }
     {
       surface === 'v6-13' && (
-        <>
-          <link
-            rel="preload"
-            as="font"
-            type="font/woff2"
-            href={sourceSerif400Url}
-            crossorigin="anonymous"
-          />
-          <link
-            rel="preload"
-            as="font"
-            type="font/woff2"
-            href={inter400Url}
-            crossorigin="anonymous"
-          />
-        </>
-      )
-    }
-    {
-      /* v9.6 (Bryllim) — pixel display preload. Gated on the `pixelDisplay`
-         prop, not `surface` (which is on by default everywhere). Fetching the
-         face at parse time is what keeps the H1 from painting in the fallback
-         and re-painting in VT323. */
-    }
-    {
-      pixelDisplay && (
         <link
           rel="preload"
           as="font"
           type="font/woff2"
-          href={vt323400Url}
+          href={inter400Url}
           crossorigin="anonymous"
         />
       )
@@ -259,7 +226,7 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
     <link
       rel="alternate"
       type="application/rss+xml"
-      title={`${profile.fullName} — Portfolio Updates`}
+      title={`${profile.fullName} to Portfolio Updates`}
       href={path('/feed.xml')}
     />
     {
@@ -271,13 +238,13 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
     <link
       rel="alternate"
       type="text/markdown"
-      title={`${profile.fullName} — llms.txt (curated index)`}
+      title={`${profile.fullName} to llms.txt (curated index)`}
       href={path('/llms.txt')}
     />
     <link
       rel="alternate"
       type="text/markdown"
-      title={`${profile.fullName} — llms-full.txt (full content)`}
+      title={`${profile.fullName} to llms-full.txt (full content)`}
       href={path('/llms-full.txt')}
     />
     {
@@ -314,6 +281,16 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
         without an explicit prop dance. Falls back to nothing if unused. */
     }
     <slot name="head" />
+    {/*
+      v6.18 W2 deferral (2026-08-08): Cross-page entity registry
+      (entities.ts + EntityLink.astro + JSON-LD + auto-linker) is
+      NOT YET WIRED. Wave 6 (#89) owns this per
+      [[portfolio-v10-bryllim-structure-strategy]]. The 5 canonical
+      entities (Christian T. Macion, Acion Capital, Macion Ventures,
+      Bookkeeper v1, Operator Cockpit) currently render as plain
+      text mentions on every page; the auto-linker will thread them
+      through 47 routes. Out of W2 scope per Owner directive.
+    */}
   </head>
   <body class={bodyClass}>
     <!-- v6.13.2 a11y fix (Lighthouse 95→100, 2026-07-31):
@@ -368,8 +345,22 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
          inside SideRail.astro itself. */
     }
     <div class="layout-grid">
-      <SideRail />
+      {/* W2.7a a11y — wrap <SideRail /> so the rail-toggle input and
+         its <label> (rendered by SideRail.astro BEFORE the inner <aside>)
+         sit inside a landmark; otherwise axe-core flags them as page
+         content not contained by any region. The internal <aside> is
+         preserved (axe allows nested landmarks of the same type). */}
+      <aside class="layout-rail" aria-label="Site navigation rail">
+        <SideRail />
+      </aside>
       <main id="main" class="layout-main">
+        {/* v9.8 Wave B renders the SiteHeader running tape (with the new
+            inline ⌘K contact pill) above the page content. SiteHeader is
+            technically deprecated but kept for the 30-day rollback window;
+            we re-enable it here so the contact pill + ⌘K behavior is
+            visible and functional on every page. The pill is positioned
+            at the top of <main> so the side-rail layout is unaffected. */}
+        <SiteHeader />
         <slot />
       {
         /* v8.4 — tenet line chrome contract. Injected by BaseLayout so
@@ -389,21 +380,49 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
       }
       </main>
     </div>
-    {chrome === 'full' && <Footer />}
+    {
+      /* v9.9 — FOOTER REMOVAL. The v9.x four-column / CTA-strip /
+         base-strip Footer is retired. Replaced by a single
+         treasury line: identity + UTC offset + deploy stamp, no
+         links, no chrome. No footer import is needed (removed at
+         the top of the file); this is the entire bottom-of-page
+         chrome contract going forward. The page__tenet line above
+         carries the operating-principles contract. */
+    }
 
-    <button id="back-to-top" type="button" aria-label="Back to top" hidden>
-      <svg
-        width="14"
-        height="14"
-        viewBox="0 0 14 14"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        aria-hidden="true"><polyline points="12,9 7,4 2,9"></polyline></svg
-      >
-    </button>
+    {/* v11.W2 — ⌘K command palette mounted site-wide. Vanilla TS,
+        no new deps; the capture-phase keydown listener inside
+        CommandPalette.astro stops propagation so it wins against
+        any other ⌘K handler. Hidden until the SiteHeader pill (or
+        any [data-cmdk-open] trigger) is activated. */}
+    <CommandPalette />
+    {/* W2.7a a11y — wrap the treasury line + back-to-top button in a
+       single <footer> landmark so axe-core finds them inside a region.
+       Previously both lived outside <main>, triggering "page content
+       not contained by landmarks" (region rule) on every route. */}
+    <footer class="layout-tail" aria-label="Site status and navigation">
+      {
+        chrome === 'full' && (
+          <p class="page__treasury mono" aria-label="Site treasury line">
+            CHRISTIAN&nbsp;T.&nbsp;MACION · UTC+8 · DEPLOYED
+          </p>
+        )
+      }
+
+      <button id="back-to-top" type="button" aria-label="Back to top" hidden>
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 14 14"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"><polyline points="12,9 7,4 2,9"></polyline></svg
+        >
+      </button>
+    </footer>
 
     <script is:inline>
       (() => {

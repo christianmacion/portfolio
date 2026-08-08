@@ -104,6 +104,13 @@ if (formula) {
   .stat:hover {
     border-color: var(--c-ink-3);
     box-shadow: var(--shadow-sm);
+    /* v6.18 W2 polish (2026-08-08): Bryllim card-hover-lift. */
+    transform: translateY(-1px);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .stat:hover {
+      transform: none;
+    }
   }
   .stat__head {
     display: flex;
@@ -119,9 +126,12 @@ if (formula) {
     font-weight: 600;
   }
   .stat__formula {
+    /* v9.9.1 — was var(--c-amber) + opacity:0.85, which alpha-blends to
+       #7e683b over --c-bg-2 (#f3ede1) → 4.25:1 (light theme) — fails
+       WCAG 2.2 AA 4.5:1. Swapped to var(--c-ink-2) (#3d4a5e light /
+       #c4bfb1 dark) with full opacity → 7.18:1 / 7.71:1 — both AAA. */
     font-size: var(--fs-sm);
-    color: var(--c-amber);
-    opacity: 0.85;
+    color: var(--c-ink-2);
     line-height: 1;
   }
   .stat__value-row {

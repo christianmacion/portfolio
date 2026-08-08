@@ -1,0 +1,51 @@
+---
+/**
+ * SectionMark.astro — v9.6 Bryllim editorial register.
+ *
+ * Renders a number-prefixed section mark in the Bryllim design register:
+ *   <p class="bryllim-mark mono" aria-hidden="true">NN — title</p>
+ *
+ * The mark is decorative chrome — it sits above the H2 as an editorial
+ * section register, not as a heading. The H2 remains the heading for
+ * the section. By default, `aria-hidden="true"` so assistive tech skips
+ * the mark (it would be redundant with the H2).
+ *
+ * Pass `ariaHidden={false}` to expose the mark to assistive tech — for
+ * pages where the mark is the primary editorial register (e.g.
+ * work.astro, where the mark is the sole heading in each section).
+ *
+ * The title is auto-lowercased to match the canonical 'NN — title' format.
+ * The CSS `text-transform: lowercase` is a safety net for display; the
+ * underlying text is always lowercase per the v9.6 design contract.
+ *
+ * Usage:
+ *   <SectionMark index="01" title="projects" />
+ *   <SectionMark index="00" title="home" ariaHidden={false} />
+ */
+interface Props {
+  /** Two-digit zero-padded section index (e.g. "00", "01", "02"). */
+  index: string;
+  /** Section title. Auto-lowercased on render. */
+  title: string;
+  /** When true (default), the mark is decorative and hidden from AT. */
+  ariaHidden?: boolean;
+}
+
+const { index, title, ariaHidden = true } = Astro.props;
+const a11yProps = ariaHidden ? { 'aria-hidden': 'true' as const } : {};
+const displayTitle = title.toLowerCase();
+---
+
+<p class="bryllim-mark mono" {...a11yProps}>{index} / {displayTitle}</p>
+
+<style>
+  .bryllim-mark {
+    font-size: 11px;
+    color: var(--c-ink);
+    letter-spacing: 0.04em;
+    margin: 0 0 6px;
+    text-transform: lowercase;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+</style>

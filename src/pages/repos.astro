@@ -1,0 +1,241 @@
+---
+/**
+ * repos.astro :  /repos/ · v9.8 Wave B GitHub portfolio grid.
+ *
+ * Public repos from the GitHub portfolio. Each repo card binds name +
+ * one-line purpose + language + link to the live repo. The grid is
+ * the public surface :  every entry has a runnable scorecard or
+ * reproducible methodology behind it.
+ *
+ * Section layout (single grid of repo-cards):
+ *   03 :  github portfolio   (SectionMark)
+ *   §    :  8 public repos (4 quant + 4 ai/infra)
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import SectionMark from '@components/SectionMark.astro';
+import SubpageHero from '@components/SubpageHero.astro';
+import { buildStampUtc8 } from '@utils/build-stamp';
+
+const subpage = {
+  slug: 'repos',
+  index: '03',
+  title: 'github portfolio',
+  pageTitle: 'Repos',
+  description:
+    'GitHub portfolio: runnable code, reproducible scorecards, and the public record of shipped work.',
+  chip: 'REPOS · GITHUB PORTFOLIO · RUNNABLE',
+  // v11.W2 : financial-markets tag (task #4).
+  roleLine: 'Repos for financial markets, quant research, and AI engineering',
+};
+
+const lastUpdated = buildStampUtc8();
+
+interface RepoCard {
+  name: string;
+  lane: 'quant' | 'ai' | 'infra';
+  language: string;
+  purpose: string;
+  href: string;
+}
+
+const repos: RepoCard[] = [
+  {
+    name: 'mcp-backtest-server',
+    lane: 'quant',
+    language: 'Python',
+    purpose: 'IP-clean backtest tools over the Model Context Protocol. 4 strategies · 0 market data.',
+    href: 'https://github.com/christianmacion26/portfolio_v2/tree/master/mcp-backtest-server',
+  },
+  {
+    name: 'qfin-rag-harness',
+    lane: 'quant',
+    language: 'Python',
+    purpose: 'Citation-grounded retrieval over a 16-paper q-fin corpus. 0 LLM calls · 0 API keys.',
+    href: 'https://github.com/christianmacion26/portfolio_v2/tree/master/qfin-rag-harness',
+  },
+  {
+    name: 'numerical-faithfulness-eval',
+    lane: 'ai',
+    language: 'Python',
+    purpose: 'Verify LLM numerical claims against deterministic fixtures. 10 demo · 5 pass · 5 fail.',
+    href: 'https://github.com/christianmacion26/portfolio_v2/tree/master/numerical-faithfulness-eval',
+  },
+  {
+    name: 'eval-mcp-server',
+    lane: 'ai',
+    language: 'Python',
+    purpose: 'Slop-evaluation gate as MCP. Primitives 3/3 · round-trip parity 100%.',
+    href: 'https://github.com/christianmacion26/portfolio_v2/tree/master/eval-mcp-server',
+  },
+  {
+    name: 'factor-table-research',
+    lane: 'quant',
+    language: 'Python',
+    purpose: 'Cross-sectional factor model with multiple-testing layer. PBO + CSCV + walk-forward.',
+    href: 'https://github.com/christianmacion26/portfolio_v2/tree/master/factor-table',
+  },
+  {
+    name: 'regime-conditional-deploy',
+    lane: 'quant',
+    language: 'Python',
+    purpose: '10-regime × 8-archetype deployment grid. Carry ~95% · vol rare <0.5%.',
+    href: 'https://github.com/christianmacion26/portfolio_v2/tree/master/regime-grid',
+  },
+  {
+    name: 'portfolio-site',
+    lane: 'infra',
+    language: 'TypeScript',
+    purpose: 'This site. Astro 7 · 91 routes · Lighthouse ≥ 95 · WCAG 2.2 AA 100%.',
+    href: 'https://github.com/christianmacion26/christianmacion.github.io',
+  },
+  {
+    name: 'doctrine-corpus',
+    lane: 'infra',
+    language: 'Markdown',
+    purpose: '8-corpus + 3-specialist doctrine pack. Sagan · Arendt · Kahneman · Goldratt · Tetlock · Munger · Deming.',
+    href: 'https://github.com/christianmacion26/doctrine-corpus',
+  },
+];
+---
+
+<BaseLayout
+  title={subpage.pageTitle}
+  description={subpage.description}
+  breadcrumbs={[
+    { name: 'Home', href: '/' },
+    { name: subpage.pageTitle, href: `/${subpage.slug}` },
+  ]}
+>
+  <SubpageHero slug={subpage.slug} label={subpage.pageTitle} roleLine={subpage.roleLine}>
+    <p class="page-head__eyebrow mono">
+      <span class="page-head__eyebrow-chip">{subpage.chip}</span>
+      <span class="page-head__eyebrow-line">{repos.length} REPOS · 3 LANES · PUBLIC + RUNNABLE</span>
+    </p>
+    <SectionMark index={subpage.index} title={subpage.title} ariaHidden={false} />
+    <h2 class="page-head__title" data-words>
+      {repos.length} repos. <span class="hl">3 lanes</span>.
+    </h2>
+    <p class="page-head__lede">
+      The public record of shipped work. Every repo either ships a runnable scorecard, a
+      reproducible methodology, or a chrome contract that survives review. Click through for
+      the README and the source.
+    </p>
+  </SubpageHero>
+
+  <div class="repos-body container">
+    <ul class="repo-grid" role="list">
+      {
+        repos.map((r) => (
+          <li class="repo-card">
+            <a class="repo-card__link" href={r.href} target="_blank" rel="noopener">
+              <div class="repo-card__head">
+                <span class={`repo-card__lane repo-card__lane--${r.lane} mono`}>{r.lane}</span>
+                <span class="repo-card__lang mono">{r.language}</span>
+              </div>
+              <h2 class="repo-card__name">{r.name}</h2>
+              <p class="repo-card__purpose">{r.purpose}</p>
+              <span class="repo-card__cta mono" aria-hidden="true">VIEW ON GITHUB →</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <p class="repos-stamp mono" aria-label="Last updated">
+      LAST UPDATED · {lastUpdated} · UTC+8
+    </p>
+  </div>
+</BaseLayout>
+
+<style>
+  .repos-body {
+    padding-block: var(--sp-8);
+  }
+  .repo-grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+    gap: var(--sp-4);
+  }
+  .repo-card {
+    background: var(--c-bg-2);
+    border: 1px solid var(--c-rule);
+    border-radius: var(--radius-sm, 0px);
+    transition:
+      transform 200ms ease,
+      border-color 200ms ease;
+  }
+  .repo-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--c-amber);
+  }
+  .repo-card__link {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: var(--sp-4);
+    text-decoration: none;
+    color: inherit;
+    min-height: 132px;
+  }
+  .repo-card__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .repo-card__lane {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 1px 6px;
+    border: 1px solid var(--c-rule);
+    color: var(--c-ink-2);
+  }
+  .repo-card__lane--quant {
+    color: var(--c-amber);
+    border-color: var(--c-amber-decor-deep);
+  }
+  .repo-card__lane--ai {
+    color: var(--c-ink-2);
+    border-color: var(--c-rule);
+  }
+  .repo-card__lane--infra {
+    color: var(--c-ink-3);
+  }
+  .repo-card__lang {
+    font-size: 10.5px;
+    color: var(--c-ink-3);
+    letter-spacing: 0.04em;
+  }
+  .repo-card__name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--c-ink);
+    margin: 0;
+    font-family: var(--ff-mono, ui-monospace, monospace);
+  }
+  .repo-card__purpose {
+    font-size: 13px;
+    color: var(--c-ink-2);
+    line-height: 1.45;
+    flex: 1;
+  }
+  .repo-card__cta {
+    font-size: 10.5px;
+    color: var(--c-amber);
+    letter-spacing: 0.08em;
+    margin-top: auto;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .repo-card {
+      transition: none;
+    }
+    .repo-card:hover {
+      transform: none;
+    }
+  }
+</style>

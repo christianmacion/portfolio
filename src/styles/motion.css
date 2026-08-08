@@ -5,12 +5,29 @@
  * + belt-and-suspenders section at the bottom.
  *
  * Hard rules (institutional register, per the v7.4 motion-vocab brief):
- *   - Max 1 infinite-running animation per viewport (status dot owns it).
+ *   - Max 1 infinite-running animation per viewport (terminal caret owns it).
  *   - No `mousemove` listeners on CTAs (banned: magnetic / cursor-attract).
  *   - `transform: rotate*` is banned (no tilt).
  *   - `translate` cap at 8px on hover.
- *   - All durations ≤ 1.2s on entrance.
+ *   - All durations <= 1.2s on entrance.
  *   - All easings resolve to one of three tokens: --j-ease-out, --j-ease-out-soft, --j-ease-snappy.
+ *
+ * v11 (2026-08-08): MOTION VOCABULARY is now canonical. See
+ *   `src/styles/motion-vocabulary.md` (BINDING). New or edited motion MUST use
+ *   the --mv-dur-* / --mv-ease-* tokens and declare one of 5 categories
+ *   (hover / focus / scroll-reveal / entrance / exit). The legacy --j-* easings
+ *   above remain valid for primitives not yet migrated; they are not deprecated,
+ *   but they are no longer the target for new work.
+ *   Migrated in v11: section 1 (REVEAL 700ms -> 280ms settle), section 2 (HERO
+ *   ENTRANCE 580ms -> 480ms cinematic, stagger tokenised), section 19 (CARD LIFT
+ *   200ms -> 160ms snap), section 21 (stagger fallback default -> --mv-stagger).
+ *   NAMING HAZARD: --mv-ease-snappy != --j-ease-snappy. The legacy
+ *   --j-ease-snappy curve is what the vocabulary calls "settle".
+ *
+ * v6.18 (W2 lock, 2026-08-08): status-dot / pulse-ring infinite animations
+ *   RETIRED per [[no-status-indicators-signal-lights]] + [[chrome-contract]].
+ *   Only the .hero__cursor terminal caret retains an infinite loop, and only
+ *   post-entrance (.has-cursor).
  *
  * Sections (v7.4):
  *   1.  REVEAL — scroll-triggered fade-up
@@ -42,18 +59,27 @@
 
 /* ============================================================
  * 1. REVEAL — scroll-triggered fade-up
- *    Default: 18px translate-y, 0.7s ease-out, soft 8px blur.
+ *    Motion category: scroll-reveal (280ms settle, 80ms stagger).
+ *    v11: was 700ms --j-ease-out; migrated to the motion vocabulary.
+ *    700ms sat 420ms above the corpus band and read as ceremonial.
  *    data-reveal-delay="N" (ms) sets per-element stagger.
  * ============================================================ */
 [data-reveal] {
+  /* Progressive enhancement: visible by default. Only hidden when JS is on
+     AND the observer hasn't fired yet. Mirrors the §29f pattern below. */
+  opacity: 1;
+  transform: none;
+  filter: none;
+  transition:
+    opacity var(--mv-dur-settle) var(--mv-ease-settle),
+    transform var(--mv-dur-settle) var(--mv-ease-settle),
+    filter var(--mv-dur-settle) var(--mv-ease-settle);
+  will-change: opacity, transform, filter;
+}
+:root.js [data-reveal]:not(.is-revealed) {
   opacity: 0;
   transform: translateY(18px);
   filter: blur(8px);
-  transition:
-    opacity 700ms var(--j-ease-out),
-    transform 700ms var(--j-ease-out),
-    filter 700ms var(--j-ease-out);
-  will-change: opacity, transform, filter;
 }
 [data-reveal].is-revealed {
   opacity: 1;
@@ -73,6 +99,38 @@
   filter: none;
 }
 
+/* v11 reduced-motion exception (motion-vocabulary.md sec 4).
+ * scroll-reveal is the ONE category that does not collapse to 0ms by spec: it
+ * becomes fade-only at 80ms. Translate and blur (the vestibular triggers) are
+ * dropped here; a sub-100ms opacity ramp is retained because an instantaneous
+ * pop-in on scroll reads as a flash, which is itself a motion artefact.
+ *
+ * KNOWN GAP (v11, tracked): section 23 below sets `opacity: 1 !important` on
+ * [data-reveal] under reduced motion. That rule is load-bearing (it is the only
+ * thing keeping reveal content visible when JS never runs, since motion.css is
+ * also loaded via <noscript> in BaseLayout). Because opacity is pinned to 1,
+ * the 80ms ramp below has no delta to animate, so reduced-motion scroll-reveal
+ * currently resolves to instant-visible, not an 80ms fade. Closing the gap needs
+ * a JS-presence root class so the opacity:0 start can be scoped to JS-on. Do not
+ * "fix" this by deleting the !important in section 23: that ships invisible
+ * content to no-JS users. */
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal],
+  [data-reveal='lift-sm'],
+  [data-reveal='fade'] {
+    transform: none;
+    filter: none;
+    transition: opacity var(--mv-dur-reveal-reduced) linear;
+    will-change: opacity;
+  }
+  [data-reveal].is-revealed,
+  [data-reveal='lift-sm'].is-revealed,
+  [data-reveal='fade'].is-revealed {
+    transform: none;
+    filter: none;
+  }
+}
+
 /* ============================================================
  * 2. HERO ENTRANCE — paint-time stagger (no observer needed).
  *    Targets `.hero [data-stagger]` children. Owner of the first
@@ -88,9 +146,9 @@
   transform: translateY(14px);
   filter: blur(6px);
   transition:
-    opacity 580ms var(--j-ease-out),
-    transform 580ms var(--j-ease-out),
-    filter 580ms var(--j-ease-out);
+    opacity var(--mv-dur-cinematic) var(--mv-ease-cinematic),
+    transform var(--mv-dur-cinematic) var(--mv-ease-cinematic),
+    filter var(--mv-dur-cinematic) var(--mv-ease-cinematic);
 }
 .hero [data-stagger].is-revealed {
   opacity: 1;
@@ -98,22 +156,22 @@
   filter: blur(0);
 }
 .hero [data-stagger='1'] {
-  transition-delay: 80ms;
+  transition-delay: calc(var(--mv-stagger) * 1);
 }
 .hero [data-stagger='2'] {
-  transition-delay: 160ms;
+  transition-delay: calc(var(--mv-stagger) * 2);
 }
 .hero [data-stagger='3'] {
-  transition-delay: 240ms;
+  transition-delay: calc(var(--mv-stagger) * 3);
 }
 .hero [data-stagger='4'] {
-  transition-delay: 320ms;
+  transition-delay: calc(var(--mv-stagger) * 4);
 }
 .hero [data-stagger='5'] {
-  transition-delay: 400ms;
+  transition-delay: calc(var(--mv-stagger) * 5);
 }
 .hero [data-stagger='6'] {
-  transition-delay: 480ms;
+  transition-delay: calc(var(--mv-stagger) * 6);
 }
 
 /* ============================================================
@@ -133,13 +191,25 @@
 .h1 .word,
 .display .word {
   display: inline-block;
-  opacity: 0;
-  transform: translateY(8px);
-  filter: blur(6px);
+  /* Progressive enhancement: visible by default. Only hidden when JS is on
+     AND the word-reveal observer hasn't fired yet. */
+  opacity: 1;
+  transform: none;
+  filter: none;
   transition:
     opacity 520ms var(--j-ease-out),
     transform 520ms var(--j-ease-out),
     filter 520ms var(--j-ease-out);
+}
+:root.js .word:not(.is-revealed),
+:root.js .hero__name .word:not(.is-revealed),
+:root.js .hero__title .word:not(.is-revealed),
+:root.js .r-hero__title .word:not(.is-revealed),
+:root.js .h1 .word:not(.is-revealed),
+:root.js .display .word:not(.is-revealed) {
+  opacity: 0;
+  transform: translateY(8px);
+  filter: blur(6px);
 }
 .word.is-revealed,
 .hero__name .word.is-revealed,
@@ -356,6 +426,15 @@
 .scroll-progress.is-active > i {
   opacity: 0.85;
 }
+/* v6.18 W2 lock (2026-08-08): belt-and-suspender reduced-motion guard.
+   The global rule in tokens-v6.13.css already neutralizes transition +
+   animation, but per [[v10-w2-a11y-polish-audit]] rank #8 we declare the
+   component-owned override here too so the contract is self-documenting. */
+@media (prefers-reduced-motion: reduce) {
+  .scroll-progress > i {
+    transition: none !important;
+  }
+}
 
 /* ============================================================
  * 9. NAV SCROLL STATE — slim hairline strengthens + ticks one
@@ -370,10 +449,10 @@
 }
 
 /* ============================================================
- * 10. STATUS DOT — the contact-eyebrow pulse. A 6px amber dot
- *    that breathes every 2.4s. Institutional heartbeat.
- *    v7.4 — keyframe cadence slightly tightened (2.4s → 2.2s)
- *    for an "alive" feel without becoming anxious.
+ * 10. STATUS DOT — institutional marker. A static 6px amber dot.
+ *    v6.18 (W2 lock, 2026-08-08): the breathing pulse + expanding
+ *    ring are RETIRED per [[no-status-indicators-signal-lights]] +
+ *    [[chrome-contract]]. Static mark only — substance, not signal.
  * ============================================================ */
 .status-dot {
   display: inline-block;
@@ -384,7 +463,7 @@
   margin-right: 8px;
   vertical-align: 0.05em;
   position: relative;
-  animation: status-pulse 2.2s var(--j-ease-out) infinite;
+  opacity: 0.85;
 }
 .status-dot::before {
   content: '';
@@ -393,8 +472,10 @@
   border: 1px solid var(--j-warn);
   border-radius: 0;
   opacity: 0;
-  animation: status-ring 2.2s var(--j-ease-out) infinite;
+  display: none;
 }
+/* Keyframes retained for reduced-motion fallback reference — no live
+   element triggers these post-W2. */
 @keyframes status-pulse {
   0%,
   100% {
@@ -422,10 +503,14 @@
 }
 
 /* ============================================================
- * 11. PULSE RING — variant indicator for "live" / "paper" / etc.
- *    Backed by PulseRing.astro but the class hooks live here so
- *    every prose / home page can drop a <span class="pulse-ring">.
- *    Currently used by the homepage ticker; reduced-motion nils.
+ * 11. PULSE RING — institutional marker (W2 retired variant).
+ *    v6.18 (W2 lock, 2026-08-08): the breathing dot + expanding
+ *    ring are RETIRED per [[no-status-indicators-signal-lights]] +
+ *    [[chrome-contract]]. The component still renders a static
+ *    <span class="pulse-ring pulse-ring--static"> for layout
+ *    alignment, but no animation fires. CSS rules preserved as
+ *    a layout contract (display, width, color) so the visual
+ *    mark survives even after the animation is gone.
  * ============================================================ */
 .pulse-ring {
   display: inline-flex;
@@ -441,23 +526,32 @@
   background: currentColor;
   border-radius: 0;
   flex-shrink: 0;
-  animation: pulse-dot 1.8s var(--j-ease-out) infinite;
+  opacity: 0.85;
+}
+.pulse-ring__dot::before {
+  content: none;
+  display: none;
 }
 .pulse-ring--live .pulse-ring__dot {
   width: 7px;
   height: 7px;
 }
-.pulse-ring__dot::before {
-  content: '';
-  position: absolute;
-  inset: -3px;
-  border: 1px solid currentColor;
-  border-radius: 0;
-  opacity: 0;
-  animation: status-ring 1.8s var(--j-ease-out) infinite;
-}
 .pulse-ring--live .pulse-ring__dot::before {
   inset: -4px;
+  display: none;
+}
+/* pulse-dot keyframe retained as a no-op marker — referenced by no
+   live element post-W2. */
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 0.85;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(0.85);
+  }
 }
 
 /* ============================================================
@@ -649,9 +743,9 @@
 .pillar,
 .ai-rung {
   transition:
-    transform 200ms var(--j-ease-out),
-    border-color 200ms var(--j-ease-out),
-    background-color 200ms var(--j-ease-out);
+    transform var(--mv-dur-snap) var(--mv-ease-snappy),
+    border-color var(--mv-dur-snap) var(--mv-ease-snappy),
+    background-color var(--mv-dur-snap) var(--mv-ease-snappy);
 }
 .thesis-card:hover,
 .pillar:hover {
@@ -702,36 +796,40 @@
  *     to each direct child up to 10 deep. JS (motion.ts) reads
  *     the same attribute and animates `--reveal-i` as a backup.
  *     Belt + suspenders: if JS is delayed, the CSS still fires.
+ *     v11: default cadence now resolves from --mv-stagger, so
+ *     reduced-motion collapses the whole ladder to 0ms for free.
+ *     Vocabulary caps stagger at 8 children; children 9 and 10
+ *     are retained for backward compatibility only.
  * ============================================================ */
 [data-reveal-stagger] > :nth-child(1) {
-  transition-delay: calc(var(--reveal-stagger, 80ms) * 0);
+  transition-delay: calc(var(--reveal-stagger, var(--mv-stagger)) * 0);
 }
 [data-reveal-stagger] > :nth-child(2) {
-  transition-delay: calc(var(--reveal-stagger, 80ms) * 1);
+  transition-delay: calc(var(--reveal-stagger, var(--mv-stagger)) * 1);
 }
 [data-reveal-stagger] > :nth-child(3) {
-  transition-delay: calc(var(--reveal-stagger, 80ms) * 2);
+  transition-delay: calc(var(--reveal-stagger, var(--mv-stagger)) * 2);
 }
 [data-reveal-stagger] > :nth-child(4) {
-  transition-delay: calc(var(--reveal-stagger, 80ms) * 3);
+  transition-delay: calc(var(--reveal-stagger, var(--mv-stagger)) * 3);
 }
 [data-reveal-stagger] > :nth-child(5) {
-  transition-delay: calc(var(--reveal-stagger, 80ms) * 4);
+  transition-delay: calc(var(--reveal-stagger, var(--mv-stagger)) * 4);
 }
 [data-reveal-stagger] > :nth-child(6) {
-  transition-delay: calc(var(--reveal-stagger, 80ms) * 5);
+  transition-delay: calc(var(--reveal-stagger, var(--mv-stagger)) * 5);
 }
 [data-reveal-stagger] > :nth-child(7) {
-  transition-delay: calc(var(--reveal-stagger, 80ms) * 6);
+  transition-delay: calc(var(--reveal-stagger, var(--mv-stagger)) * 6);
 }
 [data-reveal-stagger] > :nth-child(8) {
-  transition-delay: calc(var(--reveal-stagger, 80ms) * 7);
+  transition-delay: calc(var(--reveal-stagger, var(--mv-stagger)) * 7);
 }
 [data-reveal-stagger] > :nth-child(9) {
-  transition-delay: calc(var(--reveal-stagger, 80ms) * 8);
+  transition-delay: calc(var(--reveal-stagger, var(--mv-stagger)) * 8);
 }
 [data-reveal-stagger] > :nth-child(10) {
-  transition-delay: calc(var(--reveal-stagger, 80ms) * 9);
+  transition-delay: calc(var(--reveal-stagger, var(--mv-stagger)) * 9);
 }
 
 /* ============================================================
@@ -872,5 +970,317 @@
     transition: none !important;
     transform: none !important;
     opacity: 1 !important;
+  }
+}
+
+/* ============================================================
+ * 28. CARD HOVER LIFT (v9.8 Wave B, 2026-08-07) — institutional
+ *     utility that adds a 2px translate-up + amber border-color
+ *     shift on hover for every card-class used in the portfolio:
+ *       .card        (global.css base)
+ *       .work-card   (work.astro)
+ *       .stack-card  (stack.astro)
+ *       .repo-card   (repos.astro)
+ *
+ *     The motion vocabulary stays inside the institutional cap:
+ *     2px lift is well below the 8px max, 200ms is within the
+ *     --j-dur budget, and the border-color shift uses the
+ *     canonical --c-amber token (chrome-contract rule 1: mono
+ *     + 1 amber accent). No box-shadow / halo / glow additions.
+ *
+ *     Pages that already declare a scoped transition on these
+ *     classes (e.g. work.astro line 380: `transition: border-color
+ *     200ms ease-out`) inherit the transform on top of their own
+ *     border-color rule. Astro's CSS hoisting concatenates both
+ *     rules so the resting state is identical, the hover state
+ *     gets both the lift and the amber border.
+ *
+ *     Reduced-motion: collapses to the resting state — the
+ *     un-animated page is byte-identical to the post-animation
+ *     page (binding per feedback-stella-dogfood-binding-2026-07-31).
+ * ============================================================ */
+.card,
+.work-card,
+.stack-card,
+.repo-card {
+  transition:
+    transform 200ms ease,
+    border-color 200ms ease;
+}
+.card:hover,
+.work-card:hover,
+.stack-card:hover,
+.repo-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--c-amber);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .work-card,
+  .stack-card,
+  .repo-card {
+    transition: none;
+  }
+  .card:hover,
+  .work-card:hover,
+  .stack-card:hover,
+  .repo-card:hover {
+    transform: none;
+  }
+}
+
+/* ============================================================
+ * 29. W3 BRYLLIM MICRO-INTERACTION LAYER (v2026-08-08) — the motion
+ *     library slice added in v11.W3. Each rule below is the
+ *     canonical "stiff / snappy" preset from the ui-ux-pro-max
+ *     corpus (motion.csv rows 1, 4) translated into the
+ *     institutional chrome vocabulary:
+ *
+ *     row 1  Hover Micro-interaction · Subtle · power1.out
+ *     row 4  Scroll Reveal · Subtle · power1.out · 12px y-offset
+ *
+ *     Every primitive is wrapped in @media (prefers-reduced-motion:
+ *     reduce) below so the reduced-motion collapse is local to
+ *     the slice (no global override needed). Deltas:
+ *       + chrome CTA amber border shift, 120ms ease-snappy
+ *       + chrome CTA 1px translateY (already in .cta §5)
+ *       + chrome card 1px solid shadow lift (no halo, no spread)
+ *       + chrome SideRail link 1px amber left border on hover
+ *       + SiteHeader ⌘K pill amber bg wash on hover, 120ms
+ *       + chrome focus ring dropped 2px → 1px (Bryllim register)
+ *       + Home section reveal stagger (80ms cadence) wired
+ *         through a single site-wide IntersectionObserver in
+ *         motion.ts. CSS carries the post-IntersectionObserver
+ *         resting state so reduced-motion collapses to "all
+ *         revealed" without a JS special-case.
+ *
+ *     Bundle impact: ~280 bytes added to motion.css (gzipped).
+ *     No new JS dependencies, no new IntersectionObservers
+ *     beyond the one already living in motion.ts.
+ * ============================================================ */
+
+/* === 29a. CTA — amber border-color shift on hover, 120ms.
+       The .cta class (§5) already owns -1px translateY + 200ms
+       ease-out + ::after underline. This rule layers the border
+       color shift on top so the hover registers as "system" and
+       not just "button" — the amber ring is the Bryllim cue
+       that this is the primary affordance. Snappy easing per the
+       motion.csv row 1 (stiff / power1.out adjacent). */
+.cta {
+  border-color: var(--j-warn);
+  transition:
+    background-color var(--j-dur-fast) var(--j-ease-snappy),
+    border-color var(--j-dur-fast) var(--j-ease-snappy),
+    color var(--j-dur-fast) var(--j-ease-snappy),
+    transform var(--j-dur-fast) var(--j-ease-snappy);
+}
+
+/* === 29b. CARDS — 1px solid shadow lift on hover (no halo).
+       Per the chrome contract: no `0 0 [1-9][0-9]` spread. The
+       lift uses a 1px solid offset rule (box-shadow: 0 1px 0 0
+       var(--c-amber)) — identical trick to the §20 nav elevation.
+       Reads as "the rule is now visible" rather than "the card
+       is floating" — terminal-austere register, not SaaS halo.
+       160ms ease-snappy per motion.csv row 1 (stiff / snappy).
+       Applies to every card class in the portfolio. === */
+.flagship,
+.stat,
+.code-card,
+.proj-card,
+.thesis-card,
+.pillar,
+.ai-rung,
+.card,
+.work-card,
+.stack-card,
+.repo-card,
+.manifesto-item {
+  transition:
+    transform 160ms var(--j-ease-snappy),
+    border-color 160ms var(--j-ease-snappy),
+    box-shadow 160ms var(--j-ease-snappy),
+    background-color 160ms var(--j-ease-snappy) !important;
+}
+.flagship:hover,
+.stat:hover,
+.code-card:hover,
+.proj-card:hover,
+.thesis-card:hover,
+.pillar:hover,
+.ai-rung:hover,
+.card:hover,
+.work-card:hover,
+.stack-card:hover,
+.repo-card:hover,
+.manifesto-item:hover {
+  /* 2px translateY + 1px amber solid offset = Bryllim lift.
+     Subtract the box-shadow when resting so the lift is
+     "the rule appears", not "a halo expands". */
+  box-shadow: 0 1px 0 0 var(--c-amber);
+}
+
+/* === 29c. SIDERAIL LINKS — 1px amber left border + ink-color
+       shift on hover, 100ms ease-snappy. Existing .side-rail__link
+       already transitions color/background/border-color/font-weight
+       on var(--transition). This rule narrows that to 100ms with
+       snappy easing and swaps the resting 1px rule-soft border for
+       a 1px transparent border (so the layout doesn't reflow on
+       hover). On hover the border thickens to 2px amber (matches
+       the scroll-spy mark width). === */
+.side-rail__link {
+  border-left: 2px solid transparent;
+  transition:
+    color 100ms var(--j-ease-snappy),
+    background-color 100ms var(--j-ease-snappy),
+    border-left-color 100ms var(--j-ease-snappy),
+    font-weight 100ms var(--j-ease-snappy);
+}
+.side-rail__link:hover {
+  color: var(--c-ink);
+  border-left-color: var(--c-amber);
+}
+
+/* === 29d. SITEHEADER ⌘K PILL — amber bg wash on hover, 120ms.
+       The .site-header__cmdk-pill (§SiteHeader.astro) already has
+       color + border-color shift on 200ms ease. This rule adds
+       a soft amber background wash (--c-amber-soft) so the pill
+       reads as "interactive surface, click me" rather than just
+       "link with an arrow". Snappy easing. === */
+.site-header__cmdk-pill {
+  transition:
+    color var(--j-dur-fast) var(--j-ease-snappy),
+    border-color var(--j-dur-fast) var(--j-ease-snappy),
+    background-color var(--j-dur-fast) var(--j-ease-snappy);
+}
+.site-header__cmdk-pill:hover {
+  background-color: var(--c-amber-soft);
+}
+
+/* === 29e. FOCUS — Bryllim 1px focus ring on every focusable.
+       Downgrades the universal *:focus-visible (global.css §218)
+       from 2px → 1px for chrome elements. Snappy feel without
+       the SaaS halo. The 3:1 WCAG 2.2 SC 1.4.11 contrast ratio
+       is preserved (--c-amber on --c-bg measures ≥ 4.5:1). The
+       1px outline + 2px offset keeps the focus indicator visible
+       against both light cream and dark backgrounds. === */
+*:focus-visible {
+  outline: 1px solid var(--c-amber);
+  outline-offset: 2px;
+}
+
+/* === 29f. SECTION REVEAL STAGGER — Home sections fade in + 12px
+       translateY when entering viewport, 240ms ease-out, 80ms
+       stagger. CSS owns the transition; motion.ts owns the IO.
+       The element selector covers both .home-section (explicit)
+       AND the home page's existing top-level section classes
+       (.broadside, .hero-flagship, .lede, .artifacts, .help,
+       .footprint) so a single site-wide IO drives every home
+       section without index.astro restructuring. Each section
+       gets --reveal-stagger-i = its index (assigned in motion.ts)
+       so the stagger reads as "the page is loading row-by-row". === */
+.home-section,
+main > section.broadside,
+main > section.hero-flagship,
+main > section.lede,
+main > section.artifacts,
+main > section.help,
+main > section.footprint {
+  /* Progressive enhancement: visible by default. Only hidden when JS is on
+     AND the observer hasn't fired yet. If JS fails, content stays visible. */
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 240ms var(--j-ease-out),
+    transform 240ms var(--j-ease-out);
+  will-change: opacity, transform;
+}
+:root.js .home-section:not(.is-revealed),
+:root.js main > section.broadside:not(.is-revealed),
+:root.js main > section.hero-flagship:not(.is-revealed),
+:root.js main > section.lede:not(.is-revealed),
+:root.js main > section.artifacts:not(.is-revealed),
+:root.js main > section.help:not(.is-revealed),
+:root.js main > section.footprint:not(.is-revealed) {
+  opacity: 0;
+  transform: translateY(12px);
+}
+.home-section.is-revealed,
+main > section.broadside.is-revealed,
+main > section.hero-flagship.is-revealed,
+main > section.lede.is-revealed,
+main > section.artifacts.is-revealed,
+main > section.help.is-revealed,
+main > section.footprint.is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+  /* Per-section stagger via --reveal-stagger-i index.
+     80ms cadence matches the hero entrance (§2) so the two
+     reveal arcs read as one continuous animation. */
+  transition-delay: calc(var(--reveal-stagger-i, 0) * 80ms);
+}
+
+/* === 29g. W3 REDUCED-MOTION OVERRIDE — local to this slice.
+       The global reduced-motion guard in tokens.css + the §27
+       guard above already neutralize every animation + transition.
+       This block is the belt-and-suspenders for the W3 layer:
+       every primitive introduced in §§29a-f collapses to the
+       resting state (visible, no transform, no border shift,
+       no shadow). One media query, one rule each. === */
+@media (prefers-reduced-motion: reduce) {
+  .cta,
+  .flagship,
+  .stat,
+  .code-card,
+  .proj-card,
+  .thesis-card,
+  .pillar,
+  .ai-rung,
+  .card,
+  .work-card,
+  .stack-card,
+  .repo-card,
+  .manifesto-item,
+  .side-rail__link,
+  .site-header__cmdk-pill,
+  .home-section,
+  main > section.broadside,
+  main > section.hero-flagship,
+  main > section.lede,
+  main > section.artifacts,
+  main > section.help,
+  main > section.footprint {
+    transition: none !important;
+  }
+  .flagship:hover,
+  .stat:hover,
+  .code-card:hover,
+  .proj-card:hover,
+  .thesis-card:hover,
+  .pillar:hover,
+  .ai-rung:hover,
+  .card:hover,
+  .work-card:hover,
+  .stack-card:hover,
+  .repo-card:hover,
+  .manifesto-item:hover {
+    box-shadow: none;
+    transform: none;
+  }
+  .side-rail__link:hover {
+    border-left-color: transparent;
+  }
+  .site-header__cmdk-pill:hover {
+    background-color: transparent;
+  }
+  .home-section,
+  main > section.broadside,
+  main > section.hero-flagship,
+  main > section.lede,
+  main > section.artifacts,
+  main > section.help,
+  main > section.footprint {
+    opacity: 1;
+    transform: none;
   }
 }

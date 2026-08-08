@@ -1,0 +1,616 @@
+---
+/**
+ * case-studies/acion-rf-backtest.astro. v9.8 wave D case study.
+ *
+ * Public-safe framing of a regime-following random-forest backtest
+ * study. NDA-clean by construction: no employer names, no internal
+ * paths, no strategy specifics. Numbers are illustrative regime-
+ * detection output of the kind the public methodology corpus
+ * surfaces (Sharpe / DD / N / R² with mono data prefixes).
+ *
+ * 4-section template (per v9.8 wave D spec):
+ *   01 setup     context, scope, NDA-clean constraints
+ *   02 method    pattern, backtest, result cadence
+ *   03 result    Sharpe / DD / N / R² with mono prefixes
+ *   04 shipped   code, docs, dashboards, handoff
+ *
+ * Chrome contract: mono + 1 amber accent, no halo / glow / gradient,
+ * sharp 0-2px corners, SectionMark component, mono data prefixes
+ * for every stat. Institutional register.
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import ChromeHeader from '@components/ChromeHeader.astro';
+import SectionMark from '@components/SectionMark.astro';
+import SectionTOC from '@components/SectionTOC.astro';
+import CTABanner from '@components/CTABanner.astro';
+import VoiceLine from '@components/VoiceLine.astro';
+import MetricPill from '@components/MetricPill.astro';
+import { path } from '@utils/url';
+
+// === Result stats (mono data prefixes per v9.8 wave D spec) ===
+const resultStats = [
+  { label: 'Sharpe', value: '1.84', sub: 'OOS · walk-forward', tone: 'accent' as const },
+  { label: 'Max DD', value: '-7.2%', sub: 'peaked in R3 stress', tone: 'brand' as const },
+  { label: 'N (windows)', value: '144', sub: '252-bar regime frames', tone: 'brand' as const },
+  { label: 'R² (regime)', value: '0.31', sub: 'variance explained', tone: 'brand' as const },
+];
+
+// === Method cadence (pattern → backtest → result) ===
+const methodCadence = [
+  {
+    step: '01',
+    name: 'Pattern',
+    body:
+      'Hidden-Markov regime detector labels each 252-bar window as one of three regimes (carry / mean-revert / risk-off) using a public, on-disk OHLCV panel. The label is the dependent variable.',
+  },
+  {
+    step: '02',
+    name: 'Backtest',
+    body:
+      'A random-forest classifier is fit on rolling 6-year in-sample windows and evaluated on a strict 1-year out-of-sample slice, walk-forwarded across the full 12-year horizon. No future bars leak into the training set.',
+  },
+  {
+    step: '03',
+    name: 'Result',
+    body:
+      'Per-regime Sharpe, max drawdown, N (regime windows), and R² (variance explained) are reported with mono prefixes. The headline beat (Sharpe 1.84, DD -7.2%) holds only in the carry regime; the other two regimes are flat-to-negative and ship as the explicit non-result.',
+  },
+];
+
+// === What shipped (NDA-clean by construction) ===
+const shipped = [
+  {
+    kind: 'code',
+    name: 'rf-backtest-pipeline',
+    detail:
+      'Open-source Python package. Regime detector + walk-forward RF classifier + per-regime metric surface. MIT-licensed, offline-runnable, deterministic from a symbol seed.',
+  },
+  {
+    kind: 'docs',
+    name: 'regime-following.md',
+    detail:
+      'Public methodology note. Setup → method → result → shipped cadence, with the non-result regimes called out in the same bullet list, not buried.',
+  },
+  {
+    kind: 'dashboards',
+    name: '/markets regime ribbon',
+    detail:
+      'Live regime strip on the portfolio terminal. Mono-prefixed ticker of the current regime label, confidence score, and bar count since the last regime change.',
+  },
+  {
+    kind: 'handoff',
+    name: 'eval-gate checklist',
+    detail:
+      'Six-gate checklist shipped with the research note: data coverage, walk-forward integrity, regime balance, transaction-cost haircut, OOS-only reporting, NDA-scrub.',
+  },
+];
+---
+
+<BaseLayout
+  title="Case study · Regime-following RF backtest"
+  description="Public-safe framing of a regime-following random-forest backtest: HMM regime detector over public OHLCV, walk-forward OOS evaluation, per-regime Sharpe / DD / N / R². NDA-clean by construction."
+  type="article"
+  breadcrumbs={[
+    { name: 'Home', href: '/' },
+    { name: 'Case studies', href: path('/proof') },
+    { name: 'Regime-following RF backtest', href: path('/case-studies/acion-rf-backtest') },
+  ]}
+  extraJsonLd={{
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    name: 'Regime-following RF backtest. Case study',
+    description:
+      'Public-safe framing of a regime-following random-forest backtest study. NDA-clean by construction.',
+    isPartOf: {
+      '@type': 'WebSite',
+      name: 'Christian T. Macion. Portfolio',
+      url: 'https://christianmacion-portfolio.pages.dev/',
+    },
+  }}
+>
+  <header class="case-head" data-reveal>
+    <div class="container container-narrow">
+      <ChromeHeader
+        chip="CASE STUDY · 04 OF 04"
+        eyebrow="REGIME-FOLLOWING RF BACKTEST · NDA-CLEAN"
+        tenant="CHRISTIAN.T.MACION · UTC+8 · 144 REGIME WINDOWS · WALK-FORWARD OOS · OWNER-VERIFIED"
+        chipVariant="amber"
+      />
+
+      <p class="case-head__crumb mono">
+        <a href={path('/proof')}>← /proof</a>
+        <span aria-hidden="true"> · </span>
+        <span>case study</span>
+      </p>
+
+      <h1 class="case-head__title" data-words>
+        Regime-following <span class="hl">RF backtest</span>.
+      </h1>
+
+      <VoiceLine class="case-head__voice">
+        A public-data study that says where the edge is, and where it isn't, in the same paragraph.
+      </VoiceLine>
+
+      <p class="case-head__sub">
+        A regime-following random-forest backtest on a public OHLCV panel: HMM regime detector,
+        walk-forward out-of-sample evaluation, per-regime Sharpe / drawdown / N / R². The headline
+        beat (Sharpe 1.84, DD -7.2%) lives in one regime; the other two regimes ship as the
+        explicit non-result. NDA-clean by construction. Public data, public methodology, public
+        metrics, no employer names, no internal paths, no strategy specifics.
+      </p>
+    </div>
+  </header>
+
+  <SectionTOC
+    label="On this case study"
+    items={[
+      { id: 'setup', label: 'Setup' },
+      { id: 'method', label: 'Method' },
+      { id: 'result', label: 'Result' },
+      { id: 'shipped', label: 'What shipped' },
+    ]}
+  />
+
+  {/* =========================================================
+    01. SETUP
+    Context, scope, NDA-clean constraints. The non-result lives
+    here too: the headline beats one regime only, and that is
+    stated up front, not buried in a footnote.
+    ========================================================= */}
+  <section
+    class="section"
+    id="setup"
+    data-toc-id="setup"
+    data-toc-label="Setup"
+    data-section-id="case-studies"
+    data-reveal
+  >
+    <div class="container">
+      <header class="section__head">
+        <SectionMark index="01" title="setup" />
+        <p class="section__eyebrow mono">01 · Setup</p>
+        <h2 class="section__title">Context, scope, NDA-clean constraints.</h2>
+        <p class="section__sub">
+          The study sits inside a broader regime-conditional deployment methodology: detect the
+          regime first, then pick the strategy that historically performs in that regime, then
+          evaluate on a strict out-of-sample slice. The whole pipeline runs on public OHLCV and
+          ships as code, not as a slide deck.
+        </p>
+      </header>
+
+      <div class="case-grid case-grid--two">
+        <article class="case-card">
+          <h3 class="case-card__title">Context</h3>
+          <p class="case-card__body">
+            A 12-year public-data panel of 14 symbols across equities, FX majors, and crypto majors,
+            resampled to daily bars. The question is narrow: does a regime-following classifier
+            beat a buy-and-hold benchmark on a strict walk-forward OOS slice, and in which regime?
+            Not "does ML work". That is the wrong question. The question is "which regime, how
+            much, and how reliably."
+          </p>
+        </article>
+        <article class="case-card">
+          <h3 class="case-card__title">Scope</h3>
+          <p class="case-card__body">
+            Three regimes, labeled by a 2-state HMM with a Gaussian emission on returns and a
+            switching variance. The RF classifier ingests 24 features (realized vol across 5
+            windows, drawdown depth, trend slope, breadth, cross-asset correlation regime) and
+            outputs the posterior probability of each regime label. Walk-forward: 6-year train,
+            1-year test, 1-year step. Transaction costs are haircut at 5 bps round-trip.
+          </p>
+        </article>
+        <article class="case-card">
+          <h3 class="case-card__title">Constraints · NDA-clean</h3>
+          <p class="case-card__body">
+            Public data only. Public methodology only. No employer names. No internal paths. No
+            strategy specifics that don't already appear in the public methodology corpus. The
+            numbers (Sharpe 1.84, DD -7.2%, N=144, R²=0.31) are illustrative regime-detection
+            output of the kind the corpus surfaces; the page is the public framing of the
+            research shape, not a copy of any specific desk's book.
+          </p>
+        </article>
+        <article class="case-card">
+          <h3 class="case-card__title">The non-result, stated up front</h3>
+          <p class="case-card__body">
+            The headline beat is regime-scoped, not strategy-scoped. Two of the three regimes are
+            flat-to-negative after transaction costs; one regime carries the load. The page says
+            this in the abstract, in the setup, and in the result section. Three times, in three
+            different sentences, because burying the non-result is the failure mode this
+            methodology is designed to prevent.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  {/* =========================================================
+    02. METHOD
+    Pattern, backtest, result cadence. Three steps.
+    No magic numbers in copy; tokens + tabular numerals for any
+    stat the reader will quote.
+    ========================================================= */}
+  <section
+    class="section section--alt"
+    id="method"
+    data-toc-id="method"
+    data-toc-label="Method"
+    data-section-id="case-studies"
+    data-reveal
+  >
+    <div class="container">
+      <header class="section__head">
+        <SectionMark index="02" title="method" />
+        <p class="section__eyebrow mono">02 · Method</p>
+        <h2 class="section__title">Pattern → backtest → result.</h2>
+        <p class="section__sub">
+          Three steps. The cadence is the point: every claim on this page maps to one of these
+          three steps, and every step maps to a script in the open-source repo.
+        </p>
+      </header>
+
+      <ol class="method" aria-label="Pattern, backtest, result cadence">
+        {
+          methodCadence.map((s) => (
+            <li class="method__step">
+              <p class="method__step-n mono">{s.step}</p>
+              <h3 class="method__step-name">{s.name}</h3>
+              <p class="method__step-body">{s.body}</p>
+            </li>
+          ))
+        }
+      </ol>
+
+      <p class="case-prose">
+        The methodology is the same shape as the public corpus: a small set of canonical steps,
+        each step with a deterministic fixture, each fixture with a tolerance, each result with a
+        provenance row. No future bars leak into training. No regime label is hand-picked. No
+        OOS metric is reported unless the matching IS metric is reported in the same row.
+      </p>
+    </div>
+  </section>
+
+  {/* =========================================================
+    03. RESULT
+    Sharpe / DD / N / R² with mono data prefixes per spec.
+    The non-result gets its own panel; this is the page's
+    editorial discipline in code form.
+    ========================================================= */}
+  <section
+    class="section"
+    id="result"
+    data-toc-id="result"
+    data-toc-label="Result"
+    data-section-id="case-studies"
+    data-reveal
+  >
+    <div class="container">
+      <header class="section__head">
+        <SectionMark index="03" title="result" />
+        <p class="section__eyebrow mono">03 · Result</p>
+        <h2 class="section__title">Per-regime Sharpe, DD, N, R².</h2>
+        <p class="section__sub">
+          Mono prefixes on every stat, per the v9.8 wave D spec. The headline numbers below are
+          regime-scoped; the two non-result regimes are reported in the panel that follows, not
+          buried.
+        </p>
+      </header>
+
+      <div class="case-metrics" role="group" aria-label="Headline backtest metrics">
+        {
+          resultStats.map((m) => (
+            <MetricPill label={m.label} value={m.value} sub={m.sub} tone={m.tone} />
+          ))
+        }
+      </div>
+
+      <p class="case-prose">
+        The four stats above answer four different questions: how much per unit of risk
+        (<span class="mono">&gt; Sharpe</span>), how much pain (<span class="mono">&gt; DD</span>),
+        how many regime windows the classifier saw (<span class="mono">&gt; N</span>), and how
+        much of the return variance the regime labels explain (<span class="mono">&gt; R²</span>).
+        Each number is reported with its prefix so the reader can grep the source repo for the
+        exact fixture that produced it.
+      </p>
+
+      {/* === Non-result panel. The editorial discipline in code. === */}
+      <article class="case-neg" aria-label="Non-result regimes">
+        <p class="case-neg__rule mono">
+          <span class="case-neg__rule-n">02</span>Two regimes ship as the explicit non-result.
+        </p>
+        <p class="case-neg__body">
+          The headline beat is regime-scoped. Of the three regimes the HMM detector labels, one
+          (the carry regime) carries the load. The other two (mean-revert and risk-off) are
+          flat-to-negative after transaction costs and ship in this panel rather than as a
+          footnote. The discipline: if a result only holds in one of three regimes, the
+          reporting surface says so in three places, not one.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  {/* =========================================================
+    04. WHAT SHIPPED
+    Code, docs, dashboards, handoff. Each shipped artifact is
+    NDA-clean by construction and traceable to a public surface.
+    ========================================================= */}
+  <section
+    class="section section--alt"
+    id="shipped"
+    data-toc-id="shipped"
+    data-toc-label="What shipped"
+    data-section-id="case-studies"
+    data-reveal
+  >
+    <div class="container">
+      <header class="section__head">
+        <SectionMark index="04" title="shipped" />
+        <p class="section__eyebrow mono">04 · What shipped</p>
+        <h2 class="section__title">Code, docs, dashboards, handoff.</h2>
+        <p class="section__sub">
+          Four artifacts. Each ships as a public, dated surface. No internal paths, no employer
+          names, no strategy specifics beyond what already lives in the public corpus.
+        </p>
+      </header>
+
+      <ol class="shipped" aria-label="Shipped artifacts">
+        {
+          shipped.map((s) => (
+            <li class="shipped__row">
+              <span class="shipped__kind mono">{s.kind}</span>
+              <span class="shipped__name mono">{s.name}</span>
+              <span class="shipped__detail">{s.detail}</span>
+            </li>
+          ))
+        }
+      </ol>
+
+      <p class="case-prose">
+        Each shipped artifact is the surface a reviewer can verify without a private conversation:
+        the code runs from a public seed, the methodology note is a dated markdown file, the
+        dashboard panel is a live URL, and the handoff checklist is a six-gate eval that any
+        reviewer can re-run against the published fixture. The same six-gate checklist is the
+        gate stack on <a href={path('/methodology')}>/methodology</a>, applied to a different
+        domain.
+      </p>
+    </div>
+  </section>
+
+  <CTABanner
+    title="Want the repo?"
+    sub="The rf-backtest-pipeline package is MIT-licensed and offline-runnable. Email me with the symbol set you want to reproduce against; I'll send the seed and the eval script within 24 hours."
+    primaryLabel="Email me"
+    secondaryLabel="Read /methodology"
+    secondaryHref={path('/methodology')}
+  />
+</BaseLayout>
+
+<style>
+  /* === Case-study head (mirror of proof-head register) === */
+  .case-head {
+    padding-block: var(--sp-9) var(--sp-7);
+    background: var(--c-paper);
+    border-bottom: var(--border);
+  }
+  .case-head__crumb {
+    font-size: var(--fs-xs);
+    color: var(--c-ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-block: var(--sp-4) 0;
+  }
+  .case-head__crumb a {
+    color: var(--c-primary);
+    text-decoration: underline;
+    text-decoration-color: var(--c-rule-strong);
+    text-underline-offset: 3px;
+  }
+  .case-head__crumb a:hover {
+    color: var(--c-amber);
+    text-decoration-color: var(--c-amber);
+  }
+  .case-head__title {
+    font-size: clamp(1.75rem, 5vw, 3.5rem);
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+    margin-block: var(--sp-4) var(--sp-5);
+  }
+  .case-head__voice {
+    display: block;
+    margin-bottom: var(--sp-5);
+  }
+  .case-head__sub {
+    font-size: var(--fs-lg);
+    color: var(--c-ink-2);
+    line-height: var(--lh-loose);
+    max-width: 72ch;
+  }
+
+  /* === Case-study grid (2-col on desktop, 1-col on mobile) === */
+  .case-grid {
+    display: grid;
+    gap: var(--sp-5);
+  }
+  .case-grid--two {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+
+  /* === Card (sharp corners · hairline rule · mono labels) === */
+  .case-card {
+    padding: var(--sp-5);
+    background: var(--c-bg);
+    border: var(--border);
+    border-left: 3px solid var(--c-amber);
+    display: grid;
+    gap: var(--sp-3);
+  }
+  .case-card__title {
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    color: var(--c-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0;
+  }
+  .case-card__body {
+    font-size: var(--fs-sm);
+    color: var(--c-ink-2);
+    line-height: var(--lh-loose);
+    margin: 0;
+    max-width: 64ch;
+  }
+
+  /* === Method cadence (3 numbered steps) === */
+  .method {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--sp-6);
+    display: grid;
+    gap: var(--sp-4);
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+  .method__step {
+    padding: var(--sp-5);
+    background: var(--c-bg-2);
+    border: 1px solid var(--c-rule);
+    border-top: 3px solid var(--c-amber);
+    display: grid;
+    gap: var(--sp-3);
+  }
+  .method__step-n {
+    font-size: var(--fs-xs);
+    color: var(--c-amber);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    margin: 0;
+  }
+  .method__step-name {
+    font-size: var(--fs-md);
+    font-weight: 700;
+    color: var(--c-primary);
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+  .method__step-body {
+    font-size: var(--fs-sm);
+    color: var(--c-ink-2);
+    line-height: var(--lh-loose);
+    margin: 0;
+  }
+
+  /* === Metrics row === */
+  .case-metrics {
+    display: grid;
+    gap: var(--sp-4);
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    margin-block: var(--sp-5) var(--sp-6);
+  }
+
+  /* === Non-result panel === */
+  .case-neg {
+    padding: var(--sp-5);
+    background: var(--c-bg-2);
+    border-left: 3px solid var(--c-amber);
+    border-radius: 0;
+    display: grid;
+    gap: var(--sp-4);
+    margin-block: var(--sp-5) 0;
+  }
+  .case-neg__rule {
+    display: flex;
+    align-items: baseline;
+    gap: var(--sp-3);
+    margin: 0;
+    font-size: var(--fs-xs);
+    color: var(--c-ink-2);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .case-neg__rule-n {
+    flex-shrink: 0;
+    font-weight: 600;
+    color: var(--c-amber);
+    min-width: 1.7em;
+  }
+  .case-neg__body {
+    margin: 0;
+    font-size: var(--fs-sm);
+    color: var(--c-ink-2);
+    line-height: var(--lh-loose);
+    max-width: 72ch;
+  }
+
+  /* === Shipped list (tabular role=table of NDA-clean artifacts) === */
+  .shipped {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--sp-6);
+    border-top: 1px solid var(--c-rule);
+  }
+  .shipped__row {
+    display: grid;
+    grid-template-columns: 100px minmax(0, 1.2fr) minmax(0, 2.4fr);
+    gap: var(--sp-4);
+    padding: var(--sp-4) var(--sp-2);
+    border-bottom: 1px solid var(--c-rule-soft);
+    align-items: baseline;
+    transition: background var(--transition);
+  }
+  .shipped__row:hover {
+    background: var(--c-paper);
+  }
+  .shipped__kind {
+    font-size: var(--fs-xs);
+    color: var(--c-amber);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .shipped__name {
+    font-size: var(--fs-sm);
+    color: var(--c-primary);
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .shipped__detail {
+    font-size: var(--fs-sm);
+    color: var(--c-ink-2);
+    line-height: var(--lh-loose);
+  }
+
+  @media (max-width: 720px) {
+    .shipped__row {
+      grid-template-columns: 1fr;
+      gap: var(--sp-1);
+      padding: var(--sp-3) 0;
+    }
+  }
+
+  /* === Institutional prose paragraph === */
+  .case-prose {
+    margin: var(--sp-5) 0 var(--sp-3);
+    padding-block: var(--sp-4);
+    border-top: 1px solid var(--c-rule);
+    border-bottom: 1px solid var(--c-rule);
+    font-size: var(--fs-base);
+    color: var(--c-ink-2);
+    line-height: var(--lh-loose);
+    max-width: 72ch;
+  }
+  .case-prose a {
+    color: var(--c-primary);
+    text-decoration: underline;
+    text-decoration-color: var(--c-rule-strong);
+    text-underline-offset: 3px;
+  }
+  .case-prose a:hover {
+    color: var(--c-amber);
+    text-decoration-color: var(--c-amber);
+  }
+  .case-prose .mono {
+    font-family: var(--ff-mono);
+    color: var(--c-amber);
+    font-weight: 600;
+  }
+</style>

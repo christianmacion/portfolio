@@ -1,0 +1,706 @@
+---
+/**
+ * case-studies/phase-e-cockpit.astro :  v9.8 Wave D case study #2.
+ *
+ * 4-section template per waveD_spec.caseStudies[1] :
+ *   01 setup       context, scope, constraints (NDA-clean by construction)
+ *   02 method      pattern → backtest → result cadence
+ *   03 result      metrics with mono data prefixes
+ *   04 shipped     code, docs, dashboards, handoff
+ *
+ * Chrome contract (binding per v9.9 chrome-token refresh) :
+ *   mono + 1 amber accent (--c-amber / --c-amber-soft / --c-amber-decor-deep)
+ *   no halo, no glow, no gradient, no drop-shadow, no backdrop-blur
+ *   sharp 0 to 2px corners, 1px hairlines via --c-rule / --c-rule-soft
+ *   SectionMark component for section registers
+ *   every stat binds to a mono prefix (>, ≥, ~, Δ, σ, etc.)
+ *
+ * NDA-scrubbed : no employer names, no internal paths, no strategy specifics.
+ * Framed as a public-safe pattern study of an operator cockpit for a
+ * systematic crypto-alpha desk. Public venues (TradingView, MEXC) are
+ * named because they are public exchanges.
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import SectionMark from '@components/SectionMark.astro';
+import { path } from '@utils/url';
+import { buildStampUtc8 } from '@utils/build-stamp';
+
+const caseStudy = {
+  slug: 'phase-e-cockpit',
+  title: 'phase-e-cockpit',
+  pageTitle: 'Phase E operator cockpit',
+  abstract:
+    'An operator cockpit for a systematic crypto-alpha desk: live chart, strategy registry, entry finder, 7-timeframe switcher. Built under a 5-gate ship contract, NDA-clean by construction.',
+  shipDate: '2026-08-01',
+  lane: 'engineering · quant-ui',
+  stack: ['Astro', 'TypeScript', 'Python parser', 'TradingView widget', 'CSP-tight iframe', 'JSON contract'],
+};
+
+const lastUpdated = buildStampUtc8();
+
+// === Mono-prefixed metrics for the RESULT section ===
+// Every stat uses a mono prefix per the chrome contract (>, ≥, ~, Δ, σ).
+const headlineMetrics = [
+  { prefix: '>', label: 'gates passed', value: '4 / 5', sub: 'gate 4 PARTIAL ship-acceptable' },
+  { prefix: '≥', label: 'strategies wired', value: '4', sub: 'registry rows live, signal hook ready' },
+  { prefix: '≥', label: 'timeframes', value: '7', sub: '1m / 5m / 15m / 1h / 4h / 1d / 1w' },
+  { prefix: '=', label: 'chart reload on switch', value: 'true', sub: 'fresh frameElementId per switch, no stale state' },
+  { prefix: '<', label: 'registry TTL', value: '5 min', sub: 'TTL + mtime invalidate, never stale' },
+  { prefix: '!', label: 'hard guard', value: 'no auto-submit', sub: 'assert "submit_order" not in dir() at parse time' },
+];
+
+const methodBeats = [
+  {
+    n: '01',
+    title: 'Surface the constraint, not the chrome.',
+    body:
+      'A cockpit with 12 widgets is a cockpit nobody uses. The first move is the operator\'s question: "where do I enter?" Everything else (chart, registry, timeframes) is in service of that one question.',
+  },
+  {
+    n: '02',
+    title: 'Ship under a gate contract, not a vibe.',
+    body:
+      'Five gates (build · a11y · quality · graph · chrome). Each gate is a binary pass / fail. PARTIAL is acceptable only with a named precedent in the mission ledger. No gate skipped.',
+  },
+  {
+    n: '03',
+    title: 'Static widget, dynamic signal.',
+    body:
+      'The TradingView widget is the only iframe on the surface. CSP is tightened to a single host (frame-src https://s.tradingview.com). Everything else is server-rendered HTML + a tiny parser-driven JSON contract.',
+  },
+  {
+    n: '04',
+    title: 'Empty state is a feature.',
+    body:
+      'The entry finder ships empty by default. role="status" + aria-live="polite" so screen readers narrate the load. The first fire is a single, deterministic, audit-able event.',
+  },
+];
+
+const shippedArtifacts = [
+  {
+    kind: 'endpoint',
+    label: '/api/trading/strategies',
+    detail: 'strategy registry feed · 4 rows · status + signal + G-progress + confidence + CTA',
+  },
+  {
+    kind: 'endpoint',
+    label: '/api/trading/entries',
+    detail: 'normalized entry-ticket schema · empty-state-aware · deep-linkable',
+  },
+  {
+    kind: 'endpoint',
+    label: '/api/trading/strategies/{id}/signal',
+    detail: 'per-strategy signal poll · graceful 200 with signal_value: null until bars land',
+  },
+  {
+    kind: 'parser',
+    label: 'build/strategy/strategy_registry.py',
+    detail: '573 lines · 5-min TTL + mtime invalidate · hard guard assert "submit_order" not in dir()',
+  },
+  {
+    kind: 'component',
+    label: 'TradingView widget',
+    detail: 'MEXC BTCUSDT.P · dark theme · watchlist BTC / ETH / SOL · allow_symbol_change=true · CSP single-host',
+  },
+  {
+    kind: 'component',
+    label: '7-timeframe switcher',
+    detail: '1m / 5m / 15m / 1h / 4h / 1d / 1w · default 1d · fresh frameElementId on switch',
+  },
+  {
+    kind: 'component',
+    label: 'strategy registry panel',
+    detail: 'P10 · status chips · signal · G-progress · confidence · Open MEXC CTA',
+  },
+  {
+    kind: 'component',
+    label: 'entry finder panel',
+    detail: 'P11 · empty-state-aware · role="status" · aria-live="polite" · ready for first fire',
+  },
+];
+
+const gateVerdict = [
+  { n: '1', label: 'qa', verdict: 'PASS', note: 'smoke · 5 routes · 0 fail' },
+  { n: '2', label: 'a11y', verdict: 'PASS', note: 'axe-core · 0 color-contrast · 0 landmark' },
+  { n: '3', label: 'quality', verdict: 'PASS', note: 'visual contract · chrome invariants · 0 regression' },
+  { n: '4', label: 'graph', verdict: 'PARTIAL', note: 'ship-acceptable per pair-trade precedent; 2-component fragmentation filed for follow-up' },
+  { n: '5', label: 'chrome', verdict: 'PASS', note: 'mono + 1 amber · no halo · no gradient · 0 hex literal' },
+];
+
+const riskRegister = [
+  { id: 'R1', text: 'bars data path pending : graceful 200 with signal_value: null until data population.' },
+  { id: 'R2', text: 'script-src single-host carve (TradingView) : acknowledged; SRI follow-up RFC.' },
+  { id: 'R3', text: 'CSP-block heuristic : offsetHeight === 0 + 4s watchdog; no silent failures.' },
+  { id: 'R4', text: 'upstream_error info-disclosure : internal-only; redact before any external surface.' },
+  { id: 'R5', text: 'seed_graph.py --verify re-introduces 2 orphan skill nodes : soft regression owned by seed script.' },
+];
+---
+
+<BaseLayout
+  title={caseStudy.pageTitle}
+  description={caseStudy.abstract}
+  breadcrumbs={[
+    { name: 'Home', href: '/' },
+    { name: 'Case studies', href: '/case-studies/' },
+    { name: caseStudy.pageTitle, href: `/${caseStudy.slug}` },
+  ]}
+>
+  <article class="case">
+    <header class="page-head">
+      <div class="container container-narrow">
+        <p class="page-head__eyebrow mono">
+          <span class="page-head__eyebrow-chip">{caseStudy.lane}</span>
+          <span class="page-head__eyebrow-line">SHIPPED {caseStudy.shipDate} · UTC+8</span>
+        </p>
+        <SectionMark index="00" title="case study" ariaHidden={false} />
+        <h1 class="page-head__title" data-words>
+          Operator cockpit for a systematic crypto-alpha desk.
+        </h1>
+        <p class="page-head__lede">
+          {caseStudy.abstract}
+        </p>
+      </div>
+    </header>
+
+    <div class="case-body container container-narrow">
+      {/* === SECTION 01 :  SETUP ============================================ */}
+      <section class="case-section" id="cs-setup" aria-labelledby="cs-setup-h">
+        <SectionMark index="01" title="setup" ariaHidden={false} />
+        <h2 class="case-section__title" id="cs-setup-h">
+          Context, scope, and the constraint that bound the design.
+        </h2>
+
+        <div class="case-section__lede">
+          <p>
+            The desk runs systematic crypto-alpha strategies on BTC, ETH, and SOL perpetual futures.
+            Strategies are pre-registered, signal-only (manual execution), and gate-validated before
+            any capital is risked. The cockpit is the operator\'s view: live chart, registry of
+            valid strategies, a normalized entry-ticket surface, and a 7-timeframe switcher. Nothing
+            here auto-fires. The hard guard is part of the parser, not a UI affordance.
+          </p>
+        </div>
+
+        <dl class="case-meta">
+          <div class="case-meta__row">
+            <dt class="case-meta__label mono">VENUE</dt>
+            <dd class="case-meta__value">TradingView widget (BTCUSDT.P · MEXC perpetuals)</dd>
+          </div>
+          <div class="case-meta__row">
+            <dt class="case-meta__label mono">DESK</dt>
+            <dd class="case-meta__value">systematic crypto-alpha · 4 wired strategies</dd>
+          </div>
+          <div class="case-meta__row">
+            <dt class="case-meta__label mono">EXECUTION</dt>
+            <dd class="case-meta__value">manual only · no algo · no auto-submit</dd>
+          </div>
+          <div class="case-meta__row">
+            <dt class="case-meta__label mono">GATE CONTRACT</dt>
+            <dd class="case-meta__value">5 gates · 4 PASS · 1 PARTIAL (ship-acceptable)</dd>
+          </div>
+          <div class="case-meta__row">
+            <dt class="case-meta__label mono">NDA</dt>
+            <dd class="case-meta__value">clean by construction · no employer names · no internal paths</dd>
+          </div>
+        </dl>
+      </section>
+
+      {/* === SECTION 02 :  METHOD =========================================== */}
+      <section class="case-section" id="cs-method" aria-labelledby="cs-method-h">
+        <SectionMark index="02" title="method" ariaHidden={false} />
+        <h2 class="case-section__title" id="cs-method-h">
+          Pattern → build → gate. Every cycle, the same 5-beat cadence.
+        </h2>
+
+        <p class="case-section__body">
+          Four design beats, each a constraint that shaped a different part of the surface. No beat is
+          optional; the order is the cheapest sequence that converges.
+        </p>
+
+        <ol class="case-beats" role="list">
+          {methodBeats.map((b) => (
+            <li class="case-beat">
+              <p class="case-beat__n mono">{b.n}</p>
+              <div class="case-beat__body">
+                <h3 class="case-beat__title">{b.title}</h3>
+                <p class="case-beat__text">{b.body}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      {/* === SECTION 03 :  RESULT =========================================== */}
+      <section class="case-section" id="cs-result" aria-labelledby="cs-result-h">
+        <SectionMark index="03" title="result" ariaHidden={false} />
+        <h2 class="case-section__title" id="cs-result-h">
+          Six mono-prefixed metrics. Gate verdict table. Live risk register.
+        </h2>
+
+        <p class="case-section__body">
+          Every metric below binds to a mono prefix (>, ≥, =, &lt;, !) so the reader can audit at a
+          glance whether the number is a floor, a ceiling, an exact claim, or a guard.
+        </p>
+
+        <ul class="case-metrics" role="list">
+          {headlineMetrics.map((m) => (
+            <li class="case-metric">
+              <p class="case-metric__prefix mono">{m.prefix}</p>
+              <div class="case-metric__body">
+                <p class="case-metric__label mono">{m.label}</p>
+                <p class="case-metric__value">{m.value}</p>
+                <p class="case-metric__sub mono">{m.sub}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+
+        <h3 class="case-subhead">5-gate verdict</h3>
+        <table class="case-gate" aria-label="5-gate ship verdict">
+          <thead>
+            <tr>
+              <th class="case-gate__th mono" scope="col">#</th>
+              <th class="case-gate__th mono" scope="col">gate</th>
+              <th class="case-gate__th mono" scope="col">verdict</th>
+              <th class="case-gate__th mono" scope="col">note</th>
+            </tr>
+          </thead>
+          <tbody>
+            {gateVerdict.map((g) => (
+              <tr class={`case-gate__row case-gate__row--${g.verdict.toLowerCase()}`}>
+                <td class="case-gate__cell mono">{g.n}</td>
+                <td class="case-gate__cell">{g.label}</td>
+                <td class="case-gate__cell mono case-gate__verdict">{g.verdict}</td>
+                <td class="case-gate__cell">{g.note}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        <h3 class="case-subhead">Risk register (post-ship)</h3>
+        <ul class="case-risks" role="list">
+          {riskRegister.map((r) => (
+            <li class="case-risk">
+              <span class="case-risk__id mono">{r.id}</span>
+              <span class="case-risk__text">{r.text}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* === SECTION 04 :  WHAT SHIPPED ===================================== */}
+      <section class="case-section" id="cs-shipped" aria-labelledby="cs-shipped-h">
+        <SectionMark index="04" title="shipped" ariaHidden={false} />
+        <h2 class="case-section__title" id="cs-shipped-h">
+          Endpoints, parser, components. Every artifact is on disk.
+        </h2>
+
+        <p class="case-section__body">
+          Eight artifacts shipped. Each has a kind (endpoint · parser · component), a label, and a
+          one-line detail. The hard guard is in the parser, not the UI: if any strategy file ships
+          a <code>submit_order</code> callable, the registry refuses to load.
+        </p>
+
+        <ul class="case-artifacts" role="list">
+          {shippedArtifacts.map((a) => (
+            <li class="case-artifact">
+              <span class={`case-artifact__kind case-artifact__kind--${a.kind} mono`}>{a.kind}</span>
+              <div class="case-artifact__body">
+                <p class="case-artifact__label mono">{a.label}</p>
+                <p class="case-artifact__detail">{a.detail}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+
+        <h3 class="case-subhead">Handoff + follow-ups</h3>
+        <p class="case-section__body">
+          Two follow-ups are filed, both owned: a data-engineer mission to populate the bars path
+          so the entry finder fires its first signal, and a graph-ratchet mission to repair the
+          2-component fragmentation surfaced at gate 4. Neither blocks ship. Both are in the
+          mission ledger under <code>money-by-next-week · phase-e</code>.
+        </p>
+      </section>
+
+      <aside class="case-cta" aria-label="Further reading">
+        <p class="case-cta__lede mono">FURTHER READING</p>
+        <ul class="case-cta__list" role="list">
+          <li><a class="case-cta__link" href={path('/methodology')}>Methodology · the 5-stage loop</a></li>
+          <li><a class="case-cta__link" href={path('/proof')}>Proof · the ship gates</a></li>
+          <li><a class="case-cta__link" href={path('/work')}>Work · the active book</a></li>
+        </ul>
+      </aside>
+
+      <p class="case-stamp mono" aria-label="Last updated">
+        LAST UPDATED · {lastUpdated} · UTC+8
+      </p>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  /* === Case study chrome :  editorial register, mono + 1 amber ========= */
+  .case-body {
+    padding-block: var(--sp-8);
+  }
+
+  .case-section {
+    padding-block: var(--sp-10);
+    border-bottom: 1px solid var(--c-rule);
+  }
+  .case-section:last-of-type {
+    border-bottom: 0;
+  }
+
+  .case-section__title {
+    font-size: var(--text-2xl, 1.5rem);
+    font-weight: var(--font-weight-bold, 700);
+    color: var(--c-ink);
+    line-height: 1.25;
+    margin-bottom: var(--sp-3);
+    letter-spacing: -0.01em;
+  }
+
+  .case-section__lede,
+  .case-section__body {
+    font-size: 1rem;
+    color: var(--c-ink-2);
+    line-height: 1.65;
+    max-width: 70ch;
+    margin-bottom: var(--sp-5);
+  }
+
+  .case-subhead {
+    font-size: 0.75rem;
+    color: var(--c-ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin: var(--sp-7) 0 var(--sp-3);
+    font-weight: 600;
+  }
+
+  /* === SETUP · dl.meta ================================================= */
+  .case-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: 1px solid var(--c-rule);
+    border-radius: 0;
+    margin-top: var(--sp-5);
+  }
+  .case-meta__row {
+    display: grid;
+    grid-template-columns: 9rem 1fr;
+    gap: var(--sp-4);
+    padding: 10px var(--sp-4);
+    border-bottom: 1px solid var(--c-rule-soft);
+  }
+  .case-meta__row:last-child {
+    border-bottom: 0;
+  }
+  .case-meta__label {
+    font-size: 10.5px;
+    color: var(--c-ink-3);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .case-meta__value {
+    font-size: 14px;
+    color: var(--c-ink);
+    line-height: 1.4;
+  }
+
+  /* === METHOD · 4-beat cadence ========================================== */
+  .case-beats {
+    list-style: none;
+    padding: 0;
+    margin: var(--sp-6) 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-5);
+  }
+  .case-beat {
+    display: grid;
+    grid-template-columns: 3rem 1fr;
+    gap: var(--sp-4);
+    padding-bottom: var(--sp-5);
+    border-bottom: 1px solid var(--c-rule-soft);
+  }
+  .case-beat:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+  .case-beat__n {
+    font-size: 1.5rem;
+    color: var(--c-amber);
+    font-weight: 700;
+    line-height: 1;
+  }
+  .case-beat__title {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: var(--c-ink);
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+  .case-beat__text {
+    font-size: 14px;
+    color: var(--c-ink-2);
+    line-height: 1.6;
+    max-width: 65ch;
+  }
+
+  /* === RESULT · mono-prefixed metrics =================================== */
+  .case-metrics {
+    list-style: none;
+    padding: 0;
+    margin: var(--sp-5) 0 var(--sp-7);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1px;
+    background: var(--c-rule);
+    border: 1px solid var(--c-rule);
+  }
+  .case-metric {
+    display: grid;
+    grid-template-columns: 1.75rem 1fr;
+    gap: var(--sp-3);
+    padding: var(--sp-4);
+    background: var(--c-bg-2);
+  }
+  .case-metric__prefix {
+    font-size: 1rem;
+    color: var(--c-amber);
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    padding-top: 2px;
+  }
+  .case-metric__label {
+    font-size: 10px;
+    color: var(--c-ink-3);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .case-metric__value {
+    font-size: 1.25rem;
+    color: var(--c-ink);
+    font-weight: 700;
+    line-height: 1.15;
+    font-variant-numeric: tabular-nums;
+    margin-bottom: 4px;
+  }
+  .case-metric__sub {
+    font-size: 10.5px;
+    color: var(--c-ink-3);
+    line-height: 1.4;
+    letter-spacing: 0.04em;
+  }
+
+  /* === RESULT · 5-gate table ============================================ */
+  .case-gate {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid var(--c-rule);
+    font-size: 14px;
+    margin-top: var(--sp-3);
+  }
+  .case-gate__th,
+  .case-gate__cell {
+    text-align: left;
+    padding: 10px var(--sp-3);
+    border-bottom: 1px solid var(--c-rule-soft);
+    vertical-align: top;
+  }
+  .case-gate__th {
+    font-size: 10.5px;
+    color: var(--c-ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    background: var(--c-bg-2);
+    font-weight: 600;
+  }
+  .case-gate__cell {
+    color: var(--c-ink);
+    line-height: 1.4;
+  }
+  .case-gate__verdict {
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+  }
+  .case-gate__row--pass .case-gate__verdict {
+    color: var(--c-amber);
+  }
+  .case-gate__row--partial .case-gate__verdict {
+    color: var(--c-ink);
+    background: var(--c-amber-soft);
+    padding: 2px 6px;
+    border: 1px solid var(--c-amber-decor-deep);
+    border-radius: 0;
+    display: inline-block;
+  }
+  .case-gate__row:last-child .case-gate__cell {
+    border-bottom: 0;
+  }
+
+  /* === RESULT · risk register =========================================== */
+  .case-risks {
+    list-style: none;
+    padding: 0;
+    margin: var(--sp-3) 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .case-risk {
+    display: grid;
+    grid-template-columns: 2.25rem 1fr;
+    gap: var(--sp-3);
+    align-items: baseline;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--c-rule-soft);
+  }
+  .case-risk:last-child {
+    border-bottom: 0;
+  }
+  .case-risk__id {
+    font-size: 11px;
+    color: var(--c-amber);
+    letter-spacing: 0.06em;
+    font-weight: 700;
+  }
+  .case-risk__text {
+    font-size: 13.5px;
+    color: var(--c-ink-2);
+    line-height: 1.5;
+  }
+
+  /* === SHIPPED · artifact list ========================================= */
+  .case-artifacts {
+    list-style: none;
+    padding: 0;
+    margin: var(--sp-5) 0 var(--sp-6);
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: 1px solid var(--c-rule);
+  }
+  .case-artifact {
+    display: grid;
+    grid-template-columns: 7rem 1fr;
+    gap: var(--sp-3);
+    padding: var(--sp-3) var(--sp-4);
+    border-bottom: 1px solid var(--c-rule-soft);
+  }
+  .case-artifact:last-child {
+    border-bottom: 0;
+  }
+  .case-artifact__kind {
+    font-size: 10px;
+    color: var(--c-ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 2px 0;
+    align-self: start;
+    margin-top: 2px;
+    font-weight: 600;
+  }
+  .case-artifact__kind--endpoint,
+  .case-artifact__kind--parser {
+    color: var(--c-amber);
+  }
+  .case-artifact__kind--component {
+    color: var(--c-ink-2);
+  }
+  .case-artifact__label {
+    font-size: 13px;
+    color: var(--c-ink);
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+  .case-artifact__detail {
+    font-size: 12.5px;
+    color: var(--c-ink-3);
+    line-height: 1.5;
+  }
+
+  /* === Inline code ===================================================== */
+  .case-body code {
+    font-family: var(--ff-mono, ui-monospace, monospace);
+    font-size: 0.9em;
+    padding: 1px 5px;
+    background: var(--c-bg-elev);
+    border: 1px solid var(--c-rule-soft);
+    color: var(--c-amber);
+    border-radius: 0;
+  }
+
+  /* === CTA + stamp ===================================================== */
+  .case-cta {
+    margin-top: var(--sp-10);
+    padding: var(--sp-5);
+    background: var(--c-bg-2);
+    border: 1px solid var(--c-rule);
+    border-radius: 0;
+  }
+  .case-cta__lede {
+    font-size: 10.5px;
+    color: var(--c-ink-3);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: var(--sp-3);
+    font-weight: 600;
+  }
+  .case-cta__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .case-cta__link {
+    color: var(--c-ink-2);
+    text-decoration: none;
+    font-size: 14px;
+  }
+  .case-cta__link:hover {
+    color: var(--c-amber);
+  }
+  .case-stamp {
+    margin-top: var(--sp-7);
+    font-size: 10.5px;
+    color: var(--c-ink-3);
+    letter-spacing: 0.06em;
+    text-align: right;
+  }
+
+  /* === Reduced motion + responsive ===================================== */
+  @media (prefers-reduced-motion: reduce) {
+    .case-cta__link {
+      transition: none;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .case-meta__row {
+      grid-template-columns: 1fr;
+      gap: 4px;
+    }
+    .case-meta__label {
+      font-size: 9.5px;
+    }
+    .case-artifact {
+      grid-template-columns: 1fr;
+      gap: 4px;
+    }
+    .case-artifact__kind {
+      margin-top: 0;
+    }
+    .case-metrics {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

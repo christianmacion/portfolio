@@ -32,7 +32,7 @@ function formatDate(iso: string): string {
   const date = new Date(Number(y), Number(m) - 1, 1);
   return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
 }
-const dateRange = `${formatDate(startDate)} — ${formatDate(endDate)}`;
+const dateRange = `${formatDate(startDate)} to ${formatDate(endDate)}`;
 ---
 
 <article class="tl">

@@ -53,7 +53,7 @@ export const compCategories: CompCategory[] = [
         label: 'Senior Quant Researcher · remote (US/EU employer)',
         target:
           'Funds, prop shops, and trading firms staffing a senior QR seat with public-data discipline.',
-        band: '$200–280k base + 30–100% target bonus',
+        band: '$200 to 280k base + 30 to 100% target bonus',
         conditions:
           'Remote-first (Digos City, PH / UTC+8). US-premarket or APAC overlap. Full-time W-2 (EOR-OK) or independent contractor. Visa sponsorship is employer-side.',
         structure:
@@ -64,7 +64,7 @@ export const compCategories: CompCategory[] = [
         label: 'AI Engineer / Architect · remote (US/EU)',
         target:
           'Funds, AI labs, and platform teams staffing a senior AI Engineer or Architect seat with eval-first discipline.',
-        band: '$220–300k base + 0.05–0.50% equity',
+        band: '$220 to 300k base + 0.05 to 0.50% equity',
         conditions:
           'Remote-first (Digos City, PH / UTC+8). US-premarket or APAC overlap. Full-time W-2 (EOR-OK) or independent contractor.',
         structure:
@@ -82,8 +82,8 @@ export const compCategories: CompCategory[] = [
         id: 'hourly',
         label: 'Hourly contract · consulting',
         target:
-          'Teams needing senior QR / AI engineering capacity for a bounded workstream — eval harness build, RAG pipeline, backtest infrastructure, MCP server.',
-        band: '$150–220/hr',
+          'Teams needing senior QR / AI engineering capacity for a bounded workstream. eval harness build, RAG pipeline, backtest infrastructure, MCP server.',
+        band: '$150 to 220/hr',
         conditions:
           'Minimum 30 hr/wk. 3-month engagement minimum. NDAs on request. NDA-clean by construction (public-data only).',
         structure:
@@ -93,8 +93,8 @@ export const compCategories: CompCategory[] = [
         id: 'retainer',
         label: 'Project-based retainer',
         target:
-          'Funds or teams scoping a single 4-week project — eval harness, RAG pipeline, multi-agent demo, MCP server build, strategy research sprint.',
-        band: '$25–60k / 4-week project',
+          'Funds or teams scoping a single 4-week project. eval harness, RAG pipeline, multi-agent demo, MCP server build, strategy research sprint.',
+        band: '$25 to 60k / 4-week project',
         conditions:
           'Discovery call (no-fee, 30 min) → fixed-scope SOW → ship-ready deliverable. NDA on request. Public-data only by default.',
         structure:
@@ -113,32 +113,32 @@ export const compCategories: CompCategory[] = [
         label: 'Advisory · squad / portfolio',
         target:
           'Early-stage funds, ventures, or research teams needing senior QR / AI counsel on a recurring cadence.',
-        band: '$8–15k / engagement',
+        band: '$8 to 15k / engagement',
         conditions:
-          '1–2 calls/wk · async review of memos / artifacts · 3-month minimum. NDA on request. Public-data only.',
+          '1 to 2 calls/wk · async review of memos / artifacts · 3-month minimum. NDA on request. Public-data only.',
         structure:
-          'Quarterly invoice · kill-fee on 30-day notice · standard advisory agreement (no equity by default — equity requires separate term sheet).',
+          'Quarterly invoice · kill-fee on 30-day notice · standard advisory agreement (no equity by default. equity requires separate term sheet).',
       },
     ],
   },
 ];
 
 export const outOfScope = [
-  'Commodity work — $50/hr one-off scripts, generic "junior Python dev" briefs, or anything below the senior practitioner register.',
-  'Equity-only at seed — no cash component. Comp must include a defensible cash floor to be in scope.',
-  'Below-30-hr/wk token-of-gratitude engagements — the candidate reserves capacity for senior practitioner work.',
-  'Algorithm-only mandates without manual-edge-of-honesty disciplines — every engagement includes eval gates + reproducibility by default.',
-  'Non-public signals / proprietary-data work — every shipped artifact uses public-data only (NDA-clean by construction).',
+  'Commodity work to $50/hr one-off scripts, generic "junior Python dev" briefs, or anything below the senior practitioner register.',
+  'Equity-only at seed. no cash component. Comp must include a defensible cash floor to be in scope.',
+  'Below-30-hr/wk token-of-gratitude engagements. the candidate reserves capacity for senior practitioner work.',
+  'Algorithm-only mandates without manual-edge-of-honesty disciplines. every engagement includes eval gates + reproducibility by default.',
+  'Non-public signals / proprietary-data work. every shipped artifact uses public-data only (NDA-clean by construction).',
 ] as const;
 
 export const engagementChecklist = [
-  'Role type — Senior QR / AI Engineer / Architect / Advisory',
-  'Comp range — your band or range, including base / bonus / equity / carry split',
-  'Hours per week — full-time or bounded engagement',
-  'Start date — when you need the seat filled',
-  'Duration — permanent, fixed-term, or project-bounded',
+  'Role type. Senior QR / AI Engineer / Architect / Advisory',
+  'Comp range. your band or range, including base / bonus / equity / carry split',
+  'Hours per week. full-time or bounded engagement',
+  'Start date. when you need the seat filled',
+  'Duration. permanent, fixed-term, or project-bounded',
   'Location / timezone overlap required',
-  'NDA requirements — counter-party form or firm-standard',
+  'NDA requirements. counter-party form or firm-standard',
 ] as const;
 
 /** OWNER ACTION on wake — confirm / adjust the exact bands per row. */

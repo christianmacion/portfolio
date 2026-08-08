@@ -20,6 +20,7 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import VoiceLine from '@components/VoiceLine.astro';
 import CTABanner from '@components/CTABanner.astro';
 import ChromeHeader from '@components/ChromeHeader.astro';
+import SectionMark from '@components/SectionMark.astro';
 import { profile } from '@utils/profile';
 import { path } from '@utils/url';
 import { getCollection, type CollectionEntry } from 'astro:content';
@@ -43,7 +44,7 @@ const buildDate = new Date().toISOString().slice(0, 10);
 
 <BaseLayout
   title="Work"
-  description="A working archive of the shipped record — case studies, project briefs, signal posts. Quant-research cases, AI-engineering cases, and what is live in production."
+  description="A working archive of the shipped record: case studies, project briefs, and signal posts. Quant-research cases, AI-engineering cases, and what is live in production."
   breadcrumbs={[
     { name: 'Home', href: '/' },
     { name: 'Work', href: '/work' },
@@ -67,7 +68,7 @@ const buildDate = new Date().toISOString().slice(0, 10);
       <p class="page-head__lede">
         The portfolio index for the work-as-shipped. Quant-research cases across five asset classes;
         AI-engineering cases with reproducible scorecards; the live production strip; and the
-        frontier — graph engineering, pedagogy, and the doctrine corpus that anchors the voice.
+        frontier: graph engineering, pedagogy, and the doctrine corpus that anchors the voice.
       </p>
     </div>
   </header>
@@ -77,30 +78,30 @@ const buildDate = new Date().toISOString().slice(0, 10);
        Replaced with <div> so BaseLayout remains the single main landmark. -->
   <div class="work-body container container-narrow">
     <!-- § 01 — The Work Loop -->
-    <section class="work-section" id="work-loop" aria-labelledby="work-loop-h">
+    <section class="work-section" id="work-loop" aria-labelledby="work-loop-h" data-section-id="work">
       <!-- v9.7.2 — migrated non-canonical `.work-section__mark` → canonical
            `.bryllim-mark` (Bryllim design register). Stripped leading `§`
-           glyph + uppercase to match the lowercase 'NN — title' format
+           glyph + uppercase to match the lowercase 'NN. title' format
            used on home + 4 v9.6 priority pages. CSS rule updated below. -->
-      <p class="bryllim-mark mono">01 — the work loop</p>
+      <SectionMark index="01" title="the work loop" ariaHidden={false} />
       <h2 class="work-section__title" id="work-loop-h">
         Hypothesis → backtest → paper → live → postmortem.
       </h2>
       <p class="work-section__body">
         The work runs on a five-stage loop. A hypothesis is registered with a pre-declared fire rule
         and a frozen-spec evaluation window. The backtest is run behind the {NGATE} statistical filter
-        — block-bootstrap CIs, deflated Sharpe, CSCV-based PBO, walk-forward stability, and the multiple-testing
+        to compute block-bootstrap CIs, deflated Sharpe, CSCV-based PBO, walk-forward stability, and the multiple-testing
         layer that prevents the funnel from manufacturing fake winners. Survivors move to paper trading
         with a capped notional and a pre-registered risk overlay. A live leg is opened only after the
         paper leg produces un-gameable forward out-of-sample evidence. The postmortem is always written
-        — KILLs included — and banked into the methodology as enforced discipline.
+        with KILLs included and banked into the methodology as enforced discipline.
       </p>
       <p class="work-section__body">
         The AI-engineering work follows the same loop with different primitives. A prompt or
         scaffold is the hypothesis. The eval harness (faithfulness, hallucination flags, retrieval
         recall@k) is the backtest. A staging deployment with a frozen eval set is the paper leg.
         Production rollout behind a kill-switch is the live leg. The postmortem captures the failure
-        modes — not the wins — because the wins tend to be self-promoting while the failures
+        modes, not the wins, because the wins tend to be self-promoting while the failures
         compound.
       </p>
       <p class="work-section__body">
@@ -111,8 +112,8 @@ const buildDate = new Date().toISOString().slice(0, 10);
     </section>
 
     <!-- § 02 — Quant Case Studies -->
-    <section class="work-section" id="work-quant" aria-labelledby="work-quant-h">
-      <p class="bryllim-mark mono">02 — quant case studies</p>
+    <section class="work-section" id="work-quant" aria-labelledby="work-quant-h" data-section-id="work">
+      <SectionMark index="02" title="quant case studies" ariaHidden={false} />
       <h2 class="work-section__title" id="work-quant-h">Five public-data case studies.</h2>
       <p class="work-section__body">
         Each card links to a public-data project brief. Every project ships with the data source,
@@ -120,10 +121,10 @@ const buildDate = new Date().toISOString().slice(0, 10);
         None of the projects rely on proprietary data sources. Every line is reproducible on a fresh install.
       </p>
 
-      <div class="work-grid" role="list">
+      <ul class="work-grid" role="list">
         {
           quantProjects.map((p) => (
-            <article class="work-card" role="listitem">
+            <li class="work-card" role="listitem">
               <p class="work-card__chip mono">
                 QUANT · {p.data.tags?.[0]?.toUpperCase() ?? 'PUBLIC'}
               </p>
@@ -146,26 +147,26 @@ const buildDate = new Date().toISOString().slice(0, 10);
               >
                 Read the brief →
               </a>
-            </article>
+            </li>
           ))
         }
-      </div>
+      </ul>
     </section>
 
     <!-- § 03 — AI Engineering Case Studies -->
-    <section class="work-section" id="work-ai" aria-labelledby="work-ai-h">
-      <p class="bryllim-mark mono">03 — AI engineering case studies</p>
+    <section class="work-section" id="work-ai" aria-labelledby="work-ai-h" data-section-id="work">
+      <SectionMark index="03" title="AI engineering case studies" ariaHidden={false} />
       <h2 class="work-section__title" id="work-ai-h">Three reproducible eval-first cases.</h2>
       <p class="work-section__body">
         Every AI case ships with a reproducible scorecard. The eval harness is the headline artifact
-        — not the demo. Each project below commits to an in-repo labeled set, runs the harness, and
+ to not the demo. Each project below commits to an in-repo labeled set, runs the harness, and
         reports the numbers in a single PDF.
       </p>
 
-      <div class="work-grid" role="list">
+      <ul class="work-grid" role="list">
         {
           aiProjects.map((p) => (
-            <article class="work-card" role="listitem">
+            <li class="work-card" role="listitem">
               <p class="work-card__chip mono">AI · {p.data.tags?.[0]?.toUpperCase() ?? 'EVAL'}</p>
               <h3 class="work-card__title">
                 <a href={`/projects/ai/${p.slug}/`}>{p.data.title}</a>
@@ -186,15 +187,15 @@ const buildDate = new Date().toISOString().slice(0, 10);
               >
                 Read the brief →
               </a>
-            </article>
+            </li>
           ))
         }
-      </div>
+      </ul>
     </section>
 
     <!-- § 04 — Live In Production -->
-    <section class="work-section" id="work-live" aria-labelledby="work-live-h">
-      <p class="bryllim-mark mono">04 — live in production</p>
+    <section class="work-section" id="work-live" aria-labelledby="work-live-h" data-section-id="work">
+      <SectionMark index="04" title="live in production" ariaHidden={false} />
       <h2 class="work-section__title" id="work-live-h">What is running right now.</h2>
       <p class="work-section__body">
         Production surfaces that survive the omit-this-if-stale rule. Each is byte-deterministic at
@@ -235,27 +236,27 @@ const buildDate = new Date().toISOString().slice(0, 10);
     </section>
 
     <!-- § 05 — What Ships Next -->
-    <section class="work-section" id="work-frontier" aria-labelledby="work-frontier-h">
-      <p class="bryllim-mark mono">05 — what ships next</p>
+    <section class="work-section" id="work-frontier" aria-labelledby="work-frontier-h" data-section-id="work">
+      <SectionMark index="05" title="what ships next" ariaHidden={false} />
       <h2 class="work-section__title" id="work-frontier-h">
         Three solution tracks compounding right now.
       </h2>
       <p class="work-section__body">
         The shipped record is downstream of the build rhythm. Three workstreams compound
-        upstream. Each ships with a real artifact you can verify — not a claim backed only by a
+        upstream. Each ships with a real artifact you can verify. not a claim backed only by a
         name. The discipline is the same in every lane: ship behind a gate, widen the funnel
         second, log the postmortem.
       </p>
       <p class="work-section__body">
         <strong>Quant lane.</strong> The statistical-arb pipeline grows toward live deployment with
         new asset classes (FX, commodities), tighter gate thresholds, and a regime-aware
-        deployment layer. The compounding asset is the postmortem library — every KILL becomes
+        deployment layer. The compounding asset is the postmortem library. every KILL becomes
         capital for the next candidate.
       </p>
       <p class="work-section__body">
         <strong>AI lane.</strong> The eval harness grows the same way. Every shipped agent adds a
         frozen eval set, a kill-switch, and a behavioral test plan. The compounding asset is the
-        eval-set library — every failure pattern is now a regression test for the next build.
+        eval-set library. every failure pattern is now a regression test for the next build.
       </p>
       <p class="work-section__body">
         <strong>Build-discipline lane.</strong> The pattern that survives a regime flip is the
@@ -290,7 +291,7 @@ const buildDate = new Date().toISOString().slice(0, 10);
   }
 
   .page-head__title {
-    font-family: var(--ff-source-serif, var(--ff-sans));
+    font-family: var(--j-ff-display);
     font-size: var(--text-5xl, 3rem);
     font-weight: var(--font-weight-extrabold, 800);
     line-height: var(--line-height-tight, 1.05);
@@ -318,7 +319,7 @@ const buildDate = new Date().toISOString().slice(0, 10);
   }
   .page-head__eyebrow-chip {
     background: var(--c-amber);
-    color: var(--c-on-amber-deep, #fff);
+    color: var(--c-on-amber-deep);
     padding: 0.18rem 0.5rem;
     border-radius: var(--radius-pill, 9999px);
     font-size: var(--text-2xs, 0.6875rem);
@@ -342,20 +343,12 @@ const buildDate = new Date().toISOString().slice(0, 10);
   .work-section:first-of-type {
     border-top: 0;
   }
-  /* v9.7.2 — `.work-section__mark` renamed → `.bryllim-mark` (canonical
-     Bryllim register). Kept color + spacing identical to v9.4.2 home
-     scoped style so the visual register matches flagship pages. */
-  .bryllim-mark {
-    font-size: 11px;
-    color: var(--c-ink);
-    letter-spacing: 0.04em;
-    margin: 0 0 6px;
-    text-transform: lowercase;
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
-  }
+  /* v9.7.2 — `.bryllim-mark` style migrated to <SectionMark> component
+     (src/components/SectionMark.astro). The scoped rule is now resolved
+     by the component's own scoped style so the visual register matches
+     flagship pages without per-page duplication. */
   .work-section__title {
-    font-family: var(--ff-source-serif, var(--ff-sans));
+    font-family: var(--j-ff-display);
     font-size: var(--text-2xl, 1.5rem);
     font-weight: var(--font-weight-bold, 700);
     line-height: var(--line-height-tight, 1.1);
@@ -375,6 +368,8 @@ const buildDate = new Date().toISOString().slice(0, 10);
     grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
     gap: var(--space-md, 1rem);
     margin-top: var(--space-lg, 1.5rem);
+    list-style: none;
+    padding: 0;
   }
   .work-card {
     background: var(--c-paper);
@@ -464,7 +459,7 @@ const buildDate = new Date().toISOString().slice(0, 10);
     font-size: var(--text-2xs, 0.6875rem);
     color: var(--c-amber);
     background: var(--c-amber);
-    color: var(--c-on-amber-deep, #fff);
+    color: var(--c-on-amber-deep);
     padding: 0.18rem 0.5rem;
     border-radius: var(--radius-pill, 9999px);
     align-self: flex-start;

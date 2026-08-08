@@ -1,13 +1,13 @@
 {
   "metadata": {
     "generated_at": "2026-07-09",
-    "for_job": "Master pack — AI Engineer + Quantitative Researcher (unified lane)",
+    "for_job": "Master pack :  AI Engineer + Quantitative Researcher (unified lane)",
     "framing": "researcher_ai_hybrid",
     "voice_formula": "V4 Researcher / AI",
     "layout": "D (HIRED FlowCV pattern: 2-col Skills|Education+Tools, single-col Experience, 2-col Certificates)",
     "skill_pattern": "S5 (28 skills, bullet-dense)",
     "cert_structure": "4-group (Finance + Math/Stats/Programming + AI + Events)",
-    "nda_protections_applied": "role-level only — no per-strategy names, no per-strategy t-stats/Sharpe/bps numbers, no proprietary data-source specifics, no fund rename; systematic-strategy desk (NDA-protected; closed past contract 03/2026 – 06/2026)",
+    "nda_protections_applied": "role-level only :  no per-strategy names, no per-strategy t-stats/Sharpe/bps numbers, no proprietary data-source specifics, no fund rename; systematic-strategy desk (NDA-protected; closed past contract 03/2026 - 06/2026)",
     "jd_keyword_mirror_target": ">= 70% of typical OJP AI+Quant JD vocabulary"
   },
   "header": {
@@ -19,7 +19,7 @@
     {
       "heading": "SUMMARY",
       "layout_cols": 1,
-      "content": "AI Engineer and Quantitative Researcher with hands-on experience operating at the intersection of multi-agent LLM systems and systematic trading research. I previously served as an AI Systems Engineer / Quantitative Researcher on the systematic-strategy desk (NDA-protected; closed past contract 03/2026 – 06/2026) (PM with publicly attributable initials, NDA-protected desk), where the AI platform did the quant work — eleven agents in an orchestrator-worker topology, a 31-gate statistical evaluation harness, tiered model routing, and ~76,500 LOC of light-dependency Python — and the eval harness served both the LLM outputs and the systematic strategies running through it.\n\nIn that engagement I evaluated 40+ strategy families across 5 asset classes (equity-index, crypto, energy, metals, agriculture) on a 31-gate statistical-filter platform, built 10+ point-in-time data pipelines from scratch on free public sources, and implemented modern selection-bias statistics (Deflated Sharpe Ratio, PBO via CSCV, Minimum Backtest Length) in pure numpy. I shipped the same multi-agent architecture to a venture-incubation system and a content pipeline with a literature-grounded quality gate, and authored the curriculum that teaches others how to build and audit their own.\n\nSkilled in Python for finance and AI engineering (numpy, pandas, matplotlib, boto3), statistical modeling and AI evaluation harnesses, multi-agent orchestration (Claude Agent SDK / MCP), structured-output contracts, RAG with measured retrieval quality, model routing, and cost-aware LLM deployment. Strong understanding of pre-registration, walk-forward testing, block-bootstrap CIs, Monte-Carlo, Sharpe ratios, drawdowns, risk management, eval-gate design, and adversarial verification across equities, forex, commodities, and cryptocurrency markets.\n\nRecognized for combining analytical thinking, eval-first engineering, structured research methodologies, AI-assisted workflows, and clear technical writing to support data-driven decision-making, research accuracy, and team velocity. Available 30 hrs/wk for an AI Engineer / Quantitative Researcher role that lets me apply the same ship-it / kill-it-honestly / bank-the-lesson workflow to a new domain."
+      "content": "AI Engineer and Quantitative Researcher with hands-on experience operating at the intersection of multi-agent LLM systems and systematic trading research. I previously served as an AI Systems Engineer / Quantitative Researcher on the systematic-strategy desk (NDA-protected; closed past contract 03/2026 - 06/2026) (PM with publicly attributable initials, NDA-protected desk), where the AI platform did the quant work :  eleven agents in an orchestrator-worker topology, a 31-gate statistical evaluation harness, tiered model routing, and ~76,500 LOC of light-dependency Python :  and the eval harness served both the LLM outputs and the systematic strategies running through it.\n\nIn that engagement I evaluated 40+ strategy families across 5 asset classes (equity-index, crypto, energy, metals, agriculture) on a 31-gate statistical-filter platform, built 10+ point-in-time data pipelines from scratch on free public sources, and implemented modern selection-bias statistics (Deflated Sharpe Ratio, PBO via CSCV, Minimum Backtest Length) in pure numpy. I shipped the same multi-agent architecture to a venture-incubation system and a content pipeline with a literature-grounded quality gate, and authored the curriculum that teaches others how to build and audit their own.\n\nSkilled in Python for finance and AI engineering (numpy, pandas, matplotlib, boto3), statistical modeling and AI evaluation harnesses, multi-agent orchestration (Claude Agent SDK / MCP), structured-output contracts, RAG with measured retrieval quality, model routing, and cost-aware LLM deployment. Strong understanding of pre-registration, walk-forward testing, block-bootstrap CIs, Monte-Carlo, Sharpe ratios, drawdowns, risk management, eval-gate design, and adversarial verification across equities, forex, commodities, and cryptocurrency markets.\n\nRecognized for combining analytical thinking, eval-first engineering, structured research methodologies, AI-assisted workflows, and clear technical writing to support data-driven decision-making, research accuracy, and team velocity. Available 30 hrs/wk for an AI Engineer / Quantitative Researcher role that lets me apply the same ship-it / kill-it-honestly / bank-the-lesson workflow to a new domain."
     },
     {
       "heading": "Core Skills",
@@ -63,16 +63,16 @@
         {
           "degree": "Financial Management Studies (current)",
           "institution": "University of Mindanao (UM)",
-          "year": "1st Semester, AY 2026–27 (enrolled)"
+          "year": "1st Semester, AY 2026-27 (enrolled)"
         },
         {
           "degree": "Engineering Studies (units completed)",
           "institution": "University of Southeastern Philippines (USeP)",
-          "year": "2022 – 2024"
+          "year": "2022 - 2024"
         },
         {
           "degree": "Philippine Science High School (PSHS)",
-          "institution": "Philippine Science High School System — Southern Mindanao Campus",
+          "institution": "Philippine Science High School System :  Southern Mindanao Campus",
           "year": "Graduated 2022"
         },
         {
@@ -109,23 +109,23 @@
       "items": [
         {
           "role": "AI Systems Engineer / Quantitative Researcher (contract)",
-          "company": "systematic-strategy desk (NDA-protected; closed past contract 03/2026 – 06/2026)",
+          "company": "systematic-strategy desk (NDA-protected; closed past contract 03/2026 - 06/2026)",
           "location": "Remote",
-          "dates": "03/2026 – 06/2026",
+          "dates": "03/2026 - 06/2026",
           "bullets": [
-            "Built a 31-gate statistical evaluation harness (G1–G31) — block-bootstrap CIs, random-timing nulls, walk-forward, 5-era stability, plus a multiple-testing layer (Deflated Sharpe, CSCV-based PBO, MinBTL) — implemented scipy-free in numpy and used to validate both LLM outputs and systematic-trading strategies.",
-            "Designed and operated an 11-agent orchestrator-worker AI research platform (~27,500 words of role-scoped agent charters) with contracted hand-off packets, few-shot routing, and separation-of-duties between generation, validation, and documentation agents — ~76,500 LOC of light-dependency Python supporting it.",
-            "Architected a tiered model-routing policy (Opus = judgment / Sonnet = assembly / Haiku = mechanical / Fable = hardest autonomous) with per-dispatch token budgeting — the cost layer that keeps a multi-agent system (measured at ~15× single-agent token cost) economical to run continuously — plus structured-output contracts gated by a mechanical validator (must exit 0).",
+            "Built a 31-gate statistical evaluation harness (G1-G31) :  block-bootstrap CIs, random-timing nulls, walk-forward, 5-era stability, plus a multiple-testing layer (Deflated Sharpe, CSCV-based PBO, MinBTL) :  implemented scipy-free in numpy and used to validate both LLM outputs and systematic-trading strategies.",
+            "Designed and operated an 11-agent orchestrator-worker AI research platform (~27,500 words of role-scoped agent charters) with contracted hand-off packets, few-shot routing, and separation-of-duties between generation, validation, and documentation agents :  ~76,500 LOC of light-dependency Python supporting it.",
+            "Architected a tiered model-routing policy (Opus = judgment / Sonnet = assembly / Haiku = mechanical / Fable = hardest autonomous) with per-dispatch token budgeting :  the cost layer that keeps a multi-agent system (measured at ~15× single-agent token cost) economical to run continuously :  plus structured-output contracts gated by a mechanical validator (must exit 0).",
             "Researched and validated systematic trading strategies across 5 asset classes (equity-index, crypto, energy, metals, agriculture) on the desk's statistical-filter platform; shipped candidates through paper-shadow and live forward out-of-sample testing under pre-registration and frozen-spec evaluation.",
             "Built point-in-time, look-ahead-disciplined data pipelines from scratch on free public sources; implemented byte-range subsetting, completeness guards, gap logging, and idempotent incremental pulls to produce reproducible research-grade datasets.",
-            "Caught and documented false positives as enforced methodology — banking each into the desk's reusable research-integrity playbook — and designed an automated monthly forward-out-of-sample monitoring fleet (scheduled data pull → S3 sync → frozen-spec evaluation → ledger) that produces un-gameable live performance evidence."
+            "Caught and documented false positives as enforced methodology :  banking each into the desk's reusable research-integrity playbook :  and designed an automated monthly forward-out-of-sample monitoring fleet (scheduled data pull → S3 sync → frozen-spec evaluation → ledger) that produces un-gameable live performance evidence."
           ]
         },
         {
           "role": "Trading Platform Testing & Execution Research Analyst (contract)",
           "company": "AI-engineering consultancy (closed past contract)",
           "location": "Remote",
-          "dates": "04/2026 – 06/2026",
+          "dates": "04/2026 - 06/2026",
           "bullets": [
             "Conducted structured testing of trading platform onboarding flows to evaluate execution clarity, workflow logic, and system usability from a trader-first perspective.",
             "Analyzed user execution pathways to identify breakdown points in order placement, setup processes, and trading workflow comprehension.",
@@ -139,19 +139,19 @@
           "role": "Independent AI Systems Engineer & Quantitative Researcher",
           "company": "Personal Investing & Self-Directed Study",
           "location": "Remote",
-          "dates": "01/2025 – 05/2026",
+          "dates": "01/2025 - 05/2026",
           "bullets": [
-            "Designed and shipped multi-agent LLM systems end-to-end: agent charters, eval harnesses, model-routing policy, structured-output contracts, persistent memory, and Python tooling — for content automation, venture incubation, and personal-knowledge workflows.",
+            "Designed and shipped multi-agent LLM systems end-to-end: agent charters, eval harnesses, model-routing policy, structured-output contracts, persistent memory, and Python tooling :  for content automation, venture incubation, and personal-knowledge workflows.",
             "Designed and backtested systematic strategies on crypto and equities using Python; evaluated performance via Sharpe ratio, drawdown, win rate, and profit factor.",
             "Read and summarized 20+ academic and practitioner papers on momentum, mean-reversion, volatility carry, statistical arbitrage, and multi-agent AI architectures into structured one-page research notes.",
-            "Maintained a research journal documenting hypotheses, methodology, statistical tests, and outcomes — building a personal library of structured AI + quant knowledge that fed into a subsequent AI Engineer / Quant Researcher desk engagement."
+            "Maintained a research journal documenting hypotheses, methodology, statistical tests, and outcomes :  building a personal library of structured AI + quant knowledge that fed into a subsequent AI Engineer / Quant Researcher desk engagement."
           ]
         },
         {
           "role": "Crypto Trading Systems & Workflow Research Assistant",
           "company": "Ledger51 Trading Community",
           "location": "Digos City, Philippines",
-          "dates": "10/2025 – 04/2026",
+          "dates": "10/2025 - 04/2026",
           "bullets": [
             "Supported structured analysis of crypto trading workflows, including order execution systems, trading bots, and platform mechanics.",
             "Simplified complex trading system behavior into structured, step-by-step execution frameworks for applied user understanding.",
@@ -164,7 +164,7 @@
           "role": "Financial Market Educator & AI Integration Specialist (ongoing side)",
           "company": "Independent / Various Universities and Communities",
           "location": "Remote / Davao Region",
-          "dates": "12/2024 – Ongoing",
+          "dates": "12/2024 - Ongoing",
           "bullets": [
             "Delivered workshops, webinars, and presentations on financial markets, trading systems, AI applications, and emerging technologies.",
             "Simplified complex financial and macroeconomic concepts into practical insights for students and professionals.",
@@ -203,43 +203,43 @@
         {
           "name": "Finance, Trading & Economics",
           "items": [
-            "Certified Technical Analyst Program — Society of Technical Analysts of the Philippines (Tier-1)",
-            "Certified Technical Analyst — CertifyMe",
-            "Financial Trading in Python — DataCamp",
-            "Foundations of Growth Equity — Goldman Sachs",
-            "JPMorgan Chase Investment Banking Job Simulation — Forage"
+            "Certified Technical Analyst Program :  Society of Technical Analysts of the Philippines (Tier-1)",
+            "Certified Technical Analyst :  CertifyMe",
+            "Financial Trading in Python :  DataCamp",
+            "Foundations of Growth Equity :  Goldman Sachs",
+            "JPMorgan Chase Investment Banking Job Simulation :  Forage"
           ]
         },
         {
           "name": "Mathematics, Statistics & Programming",
           "items": [
-            "Getting Started with Python for Finance — LinkedIn",
-            "SQL for Finance Professionals — LinkedIn",
-            "Understanding Data Science — DataCamp",
-            "Data Literacy — DataCamp"
+            "Getting Started with Python for Finance :  LinkedIn",
+            "SQL for Finance Professionals :  LinkedIn",
+            "Understanding Data Science :  DataCamp",
+            "Data Literacy :  DataCamp"
           ]
         },
         {
           "name": "AI, Data Science & Technology",
           "items": [
-            "Introduction to AI Agents — DataCamp",
-            "AI Fundamentals — DataCamp",
-            "Artificial Intelligence Fundamentals — IBM",
-            "Introduction to AI — Google",
-            "AI for Business Professionals — HP LIFE"
+            "Introduction to AI Agents :  DataCamp",
+            "AI Fundamentals :  DataCamp",
+            "Artificial Intelligence Fundamentals :  IBM",
+            "Introduction to AI :  Google",
+            "AI for Business Professionals :  HP LIFE"
           ]
         },
         {
           "name": "Selected Events, Hackathons & Programs",
           "items": [
-            "Galactic Problem Solver — NASA Space Apps Challenge (Zurich, CH) — Oct 2025",
-            "BIDA META AICCELERATE 2025 (5-day intensive) — Meta & Bayan Academy — Dec 2025",
-            "UP Data Science Society — Alternative Classroom Learning Experience 2026 — Feb 2026",
-            "LimitlessBiz: AIM ASEAN Training Programme — Limitless Lab — Mar 2026",
-            "Sui Builders Program Davao — Sui Foundation — Apr 2026",
-            "Blockchain4Youth Learning Hub Program — Bitget — Apr 2026",
-            "Speedrun Ethereum — ETHPH Mindanao — Aug 2025",
-            "Guest Speaker — USeP CBA Annual Business Expo 2026 — Feb 2026"
+            "Galactic Problem Solver :  NASA Space Apps Challenge (Zurich, CH) :  Oct 2025",
+            "BIDA META AICCELERATE 2025 (5-day intensive) :  Meta & Bayan Academy :  Dec 2025",
+            "UP Data Science Society :  Alternative Classroom Learning Experience 2026 :  Feb 2026",
+            "LimitlessBiz: AIM ASEAN Training Programme :  Limitless Lab :  Mar 2026",
+            "Sui Builders Program Davao :  Sui Foundation :  Apr 2026",
+            "Blockchain4Youth Learning Hub Program :  Bitget :  Apr 2026",
+            "Speedrun Ethereum :  ETHPH Mindanao :  Aug 2025",
+            "Guest Speaker :  USeP CBA Annual Business Expo 2026 :  Feb 2026"
           ]
         }
       ]
@@ -248,13 +248,13 @@
   "ats_check_required": true,
   "nda_check_passed": true,
   "notes": [
-    "Master pack — AI Engineer + Quantitative Researcher (unified lane). Use this as the default starting point for any OJP application where the JD accepts both AI and quant signals.",
+    "Master pack :  AI Engineer + Quantitative Researcher (unified lane). Use this as the default starting point for any OJP application where the JD accepts both AI and quant signals.",
     "Mirrors the HIRED Financial Trading Research Assistant PDF style: header on one line, 4-para flowing SUMMARY, 2-col Skills|Education+Tools, single-col Experience, 2-col Certificates.",
-    "systematic-strategy desk (NDA-protected; closed past contract 03/2026 – 06/2026) leads the resume as a PAST engagement — to avoid conflict with potential current employers. Framed as 'previously served' and 'have hands-on experience' rather than 'currently employed'.",
-    "All desk bullets are NDA-safe at the role level: methodology, tools, scale, architecture, false-positive-integrity narrative — no per-strategy names, no per-strategy t-stats/Sharpe/bps numbers, no proprietary data-source specifics (Polymarket/Kalshi/NOAA/USDA), no fund rename.",
-    "PM with publicly attributable initials (NDA-protected desk) — generic phrasing used to preserve HR verification cue while removing exact PM name.",
+    "systematic-strategy desk (NDA-protected; closed past contract 03/2026 - 06/2026) leads the resume as a PAST engagement :  to avoid conflict with potential current employers. Framed as 'previously served' and 'have hands-on experience' rather than 'currently employed'.",
+    "All desk bullets are NDA-safe at the role level: methodology, tools, scale, architecture, false-positive-integrity narrative :  no per-strategy names, no per-strategy t-stats/Sharpe/bps numbers, no proprietary data-source specifics (Polymarket/Kalshi/NOAA/USDA), no fund rename.",
+    "PM with publicly attributable initials (NDA-protected desk) :  generic phrasing used to preserve HR verification cue while removing exact PM name.",
     "Skill list combines the 28-skill HIRED list with 4 AI additions (Multi-Agent Orchestration, LLM Evaluation Harness Design, Model Routing & Token-Cost Optimization, Context Engineering) to lift the AI angle to the top of the list.",
-    "Certs lead with Finance + AI groups (10 + 9), Math/Stats + Events as support (7 + 10) — dual-positioning ordering.",
+    "Certs lead with Finance + AI groups (10 + 9), Math/Stats + Events as support (7 + 10) :  dual-positioning ordering.",
     "Education arc per baseline-truths: PSHS-SMC (2022) → USeP engineering units (2022-2024, not completed) → UM Financial Management (current 1st Sem AY 2026-27) + STA Tier-1 CTA (Dec 2025)."
   ]
 }

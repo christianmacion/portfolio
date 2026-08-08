@@ -173,7 +173,7 @@ const clip = (s: string, n: number) => (s.length <= n ? s : s.slice(0, n - 1).tr
       y={feedbackBottom + 10}
       text-anchor="middle"
     >
-      ↻ this loops — feedback from deliverable revises intent
+      ↻ this loops. feedback from deliverable revises intent
     </text>
   </svg>
 
@@ -328,7 +328,8 @@ const clip = (s: string, n: number) => (s.length <= n ? s : s.slice(0, n - 1).tr
     letter-spacing: -0.01em;
   }
   .pipeline--tape .pd-box-title {
-    fill: #fff;
+    /* v6.18 W2 lock (2026-08-08): fill: #fff → var(--j-bg). */
+    fill: var(--j-bg);
   }
 
   .pd-box-sub {

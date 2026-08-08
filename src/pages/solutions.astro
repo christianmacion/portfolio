@@ -57,14 +57,14 @@ const eduSolutions: SolutionEntry[] = solutions.filter(
             'No proprietary data sources. Ever.',
             'PBO-tested. Walk-forward validated.',
           ]}
-          label="Solutions discipline — six rules, rotating"
+          label="Solutions discipline. six rules, rotating"
           intervalMs={3000}
         />
       </div>
 
       <p class="solutions-head__sub">
         Each entry below is a real engagement or self-directed project: the problem, the approach,
-        the evidence, the outcome, and the proof — in that order. Public data only, NDA-safe by
+        the evidence, the outcome, and the proof. in that order. Public data only, NDA-safe by
         construction.
       </p>
 
@@ -110,7 +110,7 @@ const eduSolutions: SolutionEntry[] = solutions.filter(
         <Stat
           value={profile.stats.evalGates}
           label="eval gates"
-          sub={`G1–G${profile.stats.evalGates} statistical`}
+          sub={`G1 to G${profile.stats.evalGates} statistical`}
           size="md"
         />
       </div>
@@ -349,7 +349,8 @@ const eduSolutions: SolutionEntry[] = solutions.filter(
     padding: var(--sp-5) var(--sp-6);
     background: var(--c-bg);
     border: 1px solid var(--c-rule);
-    border-left: 4px solid var(--c-primary);
+    /* v6.18 W2 lock (2026-08-08): 4px → 3px editorial left-strip in amber. */
+    border-left: 3px solid var(--c-amber);
     border-radius: var(--radius);
     margin-bottom: var(--sp-7);
     overflow-x: auto;

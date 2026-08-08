@@ -32,7 +32,7 @@
 
 <section class="hero-curve" aria-label="Live performance indicator (paper-trading, placeholders)">
   <header class="hero-curve__head">
-    <p class="bryllim-mark mono" aria-hidden="true">00 — live performance</p>
+    <p class="bryllim-mark mono" aria-hidden="true">00. live performance</p>
     <p class="hero-curve__caption mono">
       PAPER-TRADE LEDGER · EXPECTED · NOT HISTORICAL
     </p>
@@ -105,11 +105,13 @@
       stroke-linejoin="miter"
     />
 
-    <!-- ====== TERMINUS PULSE DOT — single amber dot at the curve's end.
-           2px outer ring + opacity pulse (1.6s, infinite). No halo,
-           no glow blur. The pulse signals "live" without chrome violation. -->
+    <!-- ====== TERMINUS DOT — single amber dot at the curve's end.
+           v6.18 W2 lock (2026-08-08): pulse-ring animation removed
+           (signal-light BINDING). Static dot only. no infinite pulse,
+           no opacity oscillation, no scale animation. The draw-on-mount
+           animation above carries the entrance; the terminus reads as
+           a static marker, not a "live" signal. -->
     <circle class="hero-curve__pulse" cx="580" cy="80" r="3" fill="var(--c-amber)" />
-    <circle class="hero-curve__pulse-ring" cx="580" cy="80" r="6" fill="none" stroke="var(--c-amber)" stroke-width="1" />
 
     <!-- ====== CURRENT-VALUE TAG — small mono label at the terminus ====== -->
     <g class="hero-curve__tag" aria-hidden="true">
@@ -126,10 +128,20 @@
     <span class="hero-curve__sep" aria-hidden="true">·</span>
     <span class="hero-curve__stat">Sharpe 1.84</span>
     <span class="hero-curve__caveat" aria-label="Source caveat">
-      — paper-trade, expected, not historical
+ to paper-trade, expected, not historical
     </span>
   </footer>
 </section>
+
+<script>
+  /**
+   * v11.W3 — viewport-entry scrub driver (240ms ease-in-out).
+   * Replaces the paint-time 2.4s CSS keyframe so the curve only animates
+   * when it enters the viewport, never before. Reduced-motion: CSS
+   * override in <style> snaps stroke-dashoffset to 0 immediately.
+   */
+  import '../scripts/motion/hero-curve-scrub.client.ts';
+</script>
 
 <style>
   /* ============================================================
@@ -145,7 +157,7 @@
     margin: 8px 0 0;
     border-top: 1px solid var(--c-rule);
     border-bottom: 1px solid var(--c-rule);
-    background: var(--c-bg, var(--c-paper, #faf6ee));
+    background: var(--c-bg);
   }
 
   .hero-curve__head {
@@ -189,45 +201,34 @@
     letter-spacing: 0.08em;
   }
 
-  /* ====== CURVE LINE — draw-on-mount animation ======
-     stroke-dasharray = path length (~700 units); stroke-dashoffset
-     starts at 700 (line invisible), transitions to 0 (line drawn).
-     2.4s ease-out. Reduced-motion: snap to drawn state. */
+  /* ====== CURVE LINE — viewport-entry scrub ======
+     v11.W3: the actual draw animation is now driven by
+     [[src/scripts/motion/hero-curve-scrub.client.ts]] — 240ms ease-in-out
+     cubic, single playback when 12% of the section enters the viewport.
+     CSS just holds the initial stroke-dashoffset = 720 (invisible) so the
+     page doesn't flash a drawn line before JS attaches. Reduced-motion:
+     the override below snaps stroke-dashoffset to 0 immediately (no JS
+     code path runs). */
   .hero-curve__line {
     stroke-dasharray: 720;
     stroke-dashoffset: 720;
-    animation: hero-curve-draw 2.4s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
   }
 
-  @keyframes hero-curve-draw {
-    to {
-      stroke-dashoffset: 0;
-    }
-  }
-
-  /* ====== TERMINUS PULSE — opacity + scale pulse, 1.6s loop ====== */
+  /* ====== TERMINUS DOT — v6.18 W2 lock (2026-08-08) — static only.
+     Pulse-ring + opacity oscillation animations removed per
+     [[feedback-no-status-indicators-signal-lights]] BINDING. The
+     terminus is a static amber dot; the draw-on-mount keyframe above
+     carries the entrance. No infinite animations on the chrome. */
   .hero-curve__pulse {
-    transform-origin: 580px 80px;
-    animation: hero-curve-pulse 1.6s ease-in-out infinite;
-  }
-  .hero-curve__pulse-ring {
-    transform-origin: 580px 80px;
-    animation: hero-curve-pulse-ring 1.6s ease-in-out infinite;
+    /* Static. No animation. Reduced-motion override below is also a no-op
+       but kept for explicitness. */
+    opacity: 1;
   }
 
-  @keyframes hero-curve-pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50%      { opacity: 0.55; transform: scale(0.85); }
-  }
-  @keyframes hero-curve-pulse-ring {
-    0%, 100% { opacity: 0.6; transform: scale(1); }
-    50%      { opacity: 0;   transform: scale(1.6); }
-  }
-
-  /* ====== TAG — fade-in after the line draws (delay 2.4s) ====== */
+  /* ====== TAG — fade-in 240ms after the line draws (scrub = 240ms) ====== */
   .hero-curve__tag {
     opacity: 0;
-    animation: hero-curve-tag-in 0.4s ease-out 2.5s forwards;
+    animation: hero-curve-tag-in 0.4s ease-out 0.6s forwards;
   }
   .hero-curve__tag-text {
     fill: var(--c-amber);
@@ -272,8 +273,7 @@
       stroke-dashoffset: 0;
       animation: none;
     }
-    .hero-curve__pulse,
-    .hero-curve__pulse-ring {
+    .hero-curve__pulse {
       animation: none;
     }
     .hero-curve__tag {

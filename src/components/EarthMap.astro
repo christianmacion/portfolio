@@ -214,7 +214,7 @@ const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circ
     }
     preserveAspectRatio="xMidYMid meet"
   >
-    <title>Three-layer world map — venues · world events · GDELT 24h</title>
+    <title>Three-layer world map. venues · world events · GDELT 24h</title>
 
     {/* === Background grid lines (equator + prime meridian) === */}
     <line x1="0" y1={equatorY} x2={width} y2={equatorY} class="earth-map__eq"></line>
@@ -234,7 +234,7 @@ const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circ
           {c.weight >= 1.0 && <circle cx={c.x} cy={c.y} r="2.5" class="earth-map__anchor" />}
           <circle cx={c.x} cy={c.y} r={c.r} class="earth-map__dot">
             <title>
-              {c.city} ({c.lat.toFixed(2)}°, {c.lon.toFixed(2)}°) — {c.caption}
+              {c.city} ({c.lat.toFixed(2)}°, {c.lon.toFixed(2)}°) to {c.caption}
             </title>
           </circle>
           <text
@@ -269,7 +269,7 @@ const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circ
                     class="earth-map__event-shape"
                   >
                     <title>
-                      {e.title} — {e.city}
+                      {e.title} to {e.city}
                     </title>
                   </polygon>
                 )}
@@ -282,7 +282,7 @@ const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circ
                     class="earth-map__event-shape"
                   >
                     <title>
-                      {e.title} — {e.city}
+                      {e.title} to {e.city}
                     </title>
                   </rect>
                 )}
@@ -292,14 +292,14 @@ const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circ
                     class="earth-map__event-shape"
                   >
                     <title>
-                      {e.title} — {e.city}
+                      {e.title} to {e.city}
                     </title>
                   </polygon>
                 )}
                 {shape === 'circle' && (
                   <circle cx={e.x} cy={e.y} r="3.5" class="earth-map__event-shape">
                     <title>
-                      {e.title} — {e.city}
+                      {e.title} to {e.city}
                     </title>
                   </circle>
                 )}
@@ -316,7 +316,7 @@ const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circ
               class={`earth-map__gdelt earth-map__gdelt--${e.polarity}`}
             >
               <title>
-                {e.title} — {e.city}
+                {e.title} to {e.city}
               </title>
             </circle>
           ))}

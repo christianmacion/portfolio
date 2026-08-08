@@ -33,7 +33,7 @@ export const dataSources: DataSource[] = [
   {
     name: 'FRED-equivalent (public macro time-series)',
     category: 'macro',
-    urlPattern: 'https://fred.stlouisfed.org/ — public CSV download per series',
+    urlPattern: 'https://fred.stlouisfed.org/ to public CSV download per series',
     license: 'Public domain (US Federal Reserve release)',
     note: 'US macro series, daily/quarterly frequency.',
   },
@@ -42,7 +42,7 @@ export const dataSources: DataSource[] = [
     category: 'equity-deriv',
     urlPattern: 'https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX_History.csv',
     license: 'Free for non-commercial redistribution',
-    note: 'Used by project 04 and 07 — variance risk premium + regime classifier.',
+    note: 'Used by project 04 and 07. variance risk premium + regime classifier.',
   },
   {
     name: 'Yahoo Finance (delayed quotes, free tier)',
@@ -54,7 +54,7 @@ export const dataSources: DataSource[] = [
   {
     name: 'CFTC Commitment of Traders (COT)',
     category: 'cftc',
-    urlPattern: 'https://www.cftc.gov/dea/newdeacom.html — annual + weekly disaggregated reports',
+    urlPattern: 'https://www.cftc.gov/dea/newdeacom.html. annual + weekly disaggregated reports',
     license: 'Public domain (US Government publication)',
     note: 'Positioning baseline for any carry/liquidity signal.',
   },
@@ -68,7 +68,7 @@ export const dataSources: DataSource[] = [
   {
     name: 'Public-domain academic datasets (Bailey, López de Prado, Chan)',
     category: 'macro',
-    urlPattern: 'https://www.quantresearch.org/ — published companion data',
+    urlPattern: 'https://www.quantresearch.org/ to published companion data',
     license: 'Academic use, attribution required',
     note: 'Replicated baselines for DSR / multiple-testing papers.',
   },
@@ -104,7 +104,7 @@ export const dataSources: DataSource[] = [
   {
     name: 'FRED-equivalent: World Bank open data (macro cross-country)',
     category: 'macro',
-    urlPattern: 'https://data.worldbank.org/indicator — open data API',
+    urlPattern: 'https://data.worldbank.org/indicator. open data API',
     license: 'Open licence (CC-BY 4.0)',
     note: 'Cross-country macro for sanity-checking single-country signals.',
   },

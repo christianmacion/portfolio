@@ -72,7 +72,7 @@ const verifyByKey: Record<string, string> = {
   // v1.0 active (4)
   'Goldman Sachs::Completed Goldman Sachs Asset Management educational module: Foundations of Growth Equity (GS Alternatives University, 2025)':
     'https://am.gs.com/en-us/advisors/insights/education/foundations-of-growth-equity',
-  'Forage::JPMorganChase — Investment Banking Job Simulation':
+  'Forage::JPMorganChase. Investment Banking Job Simulation':
     'https://www.theforage.com/virtual-internships/prototype/YD2kY95RQxQtXxFTS/JPM-IB-Virtual-Experience-Program',
   'Civil Service Commission (Philippines)::Career Service Professional Eligibility':
     'https://verification.csc.gov.ph/coe/coe.asp',
@@ -81,7 +81,7 @@ const verifyByKey: Record<string, string> = {
 
   // v2.0 OSINT additions (10) — primarily issuer landing pages where no per-cert permalink exists
   // A2 (per-person URL exists) — NASA Space Apps Zurich 2025 cohort
-  'NASA::Galactic Problem Solver — NASA Space Apps Challenge (Zurich, CH)':
+  'NASA::Galactic Problem Solver. NASA Space Apps Challenge (Zurich, CH)':
     'https://www.spaceappschallenge.org/people/christian-macion/',
 
   // B2 (issuer program page) — Bayan Academy AIccelerate program landing
@@ -97,7 +97,7 @@ const verifyByKey: Record<string, string> = {
     'https://staphilippines.org/',
 
   // B2 (issuer course page; free course, no per-holder URL) — Marginal Revolution University
-  'Marginal Revolution University::Principles of Economics — Macroeconomics':
+  'Marginal Revolution University::Principles of Economics. Macroeconomics':
     'https://learn.mru.org/courses/principles-of-macroeconomics',
 
   // B2 (issuer landing page; per-cert code requires Owner pull) — Basel Institute on Governance
@@ -133,13 +133,13 @@ const monogram = (issuer: string) =>
 ---
 
 <section class="cert-wall" aria-label="Verified certifications">
-  <p class="cert-wall__mark mono">§ 03 — Certifications</p>
+  <p class="cert-wall__mark mono">§ 03. Certifications</p>
   <h2 class="cert-wall__title">
     <span class="mono">{claimedTotal}</span> certifications · top 10 below.
   </h2>
   <p class="cert-wall__sub">
     Tier-1 and flagship issuers only. Each row links to a verifiable issuer registry or credential
-    page where available. The full list — every issuer, every date, every cert ID — lives on the
+    page where available. The full list. every issuer, every date, every cert ID. lives on the
     <a href={path('/certifications')}>certifications page</a>.
   </p>
 
@@ -298,7 +298,7 @@ const monogram = (issuer: string) =>
     margin: 0 0 var(--sp-3);
   }
   .cert-wall__title {
-    font-family: var(--font-serif, 'Source Serif Pro', 'Iowan Old Style', Georgia, serif);
+    font-family: var(--j-ff-display);
     font-size: clamp(22px, 2.6vw, 32px);
     line-height: 1.15;
     letter-spacing: -0.015em;
@@ -425,8 +425,8 @@ const monogram = (issuer: string) =>
     margin-left: 4px;
   }
   .cert-wall__chip--gold {
-    color: var(--c-amber, #b88500);
-    border-color: var(--c-amber, #b88500);
+    color: var(--c-amber);
+    border-color: var(--c-amber);
     background: transparent;
   }
   .cert-wall__verify {

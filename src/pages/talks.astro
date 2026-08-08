@@ -16,6 +16,7 @@ import CTABanner from '@components/CTABanner.astro';
 import { profile } from '@utils/profile';
 import { path } from '@utils/url';
 import VoiceLine from '@components/VoiceLine.astro';
+import SectionMark from '@components/SectionMark.astro';
 
 const fullName = profile.fullName.split(',')[0];
 const NGATE = `${profile.stats.evalGates}-gate`;
@@ -23,7 +24,7 @@ const NGATE = `${profile.stats.evalGates}-gate`;
 // === Public lectures (VideoEmbed, 2-up) =====================================
 const lectures = [
   {
-    title: 'USeP EGE 313 Manobo lecture — live presenter view',
+    title: 'USeP EGE 313 Manobo lecture. live presenter view',
     date: '2024-09-13',
     audience: 'USeP · College of Engineering · EGE 313',
     description:
@@ -33,7 +34,7 @@ const lectures = [
     duration: 55,
   },
   {
-    title: 'AI workflow — same lecture, drafted via ChatGPT-assisted authoring',
+    title: 'AI workflow. same lecture, drafted via ChatGPT-assisted authoring',
     date: '2024-08-22',
     audience: 'USeP · EGE 313 (deck precursor)',
     description: `Three weeks before the lecture: same deck, drafted end-to-end via a single ChatGPT session. The precursor pattern to the current ${NGATE} authoring harness.`,
@@ -57,7 +58,7 @@ const appearances: Appearance[] = [
   {
     date: '2024-10-05',
     dateLabel: 'Oct 5 2024',
-    title: 'NASA Space Apps Challenge 2024 — Galactic Problem Solver',
+    title: 'NASA Space Apps Challenge 2024. Galactic Problem Solver',
     audience: 'NASA Space Apps · Zurich global cohort',
     description:
       'Forty-eight-hour global hackathon; awarded the Galactic Problem Solver distinction for the open-data space-physics challenge track.',
@@ -66,15 +67,15 @@ const appearances: Appearance[] = [
   {
     date: '2024-09-15',
     dateLabel: 'Sep 15 2024',
-    title: 'PSHS-SMC alumni speaker — AI engineering and the PSHS → quant path',
-    audience: 'Philippine Science High School — Southern Mindanao Campus',
+    title: 'PSHS-SMC alumni speaker. AI engineering and the PSHS → quant path',
+    audience: 'Philippine Science High School. Southern Mindanao Campus',
     description:
       'Alumni talk on AI engineering, the math curriculum, and the educational path from PSHS-SMC to AI and quant careers. ~80 attendees, alumni and current students.',
   },
   {
     date: '2025-03-22',
     dateLabel: 'Mar 22 2025',
-    title: 'USeP guest lecture — systematic trading research and AI for engineers',
+    title: 'USeP guest lecture. systematic trading research and AI for engineers',
     audience: 'University of Southeastern Philippines · College of Engineering',
     description:
       'Guest lecture on systematic trading research, multiple-testing discipline, and applied AI for engineering students. CpE / EE 5th-year elective cohort.',
@@ -82,7 +83,7 @@ const appearances: Appearance[] = [
   {
     date: '2025-11-08',
     dateLabel: 'Nov 8 2025',
-    title: 'AI for the Modern Workforce — Ateneo de Davao × US Embassy',
+    title: 'AI for the Modern Workforce. Ateneo de Davao × US Embassy',
     audience: 'Ateneo de Davao University · US Embassy Manila',
     description:
       'Selected cohort for the AI for the Modern Workforce program; co-hosted by Ateneo de Davao and the US Embassy. AI-literacy curriculum for working professionals.',
@@ -90,7 +91,7 @@ const appearances: Appearance[] = [
   },
   {
     date: '2025-11-12',
-    dateLabel: 'Nov 12–21 2025',
+    dateLabel: 'Nov 12 to 21 2025',
     title: 'BIDA × Bayan Academy × Meta AIccelerate 2025',
     audience: 'Board of Investments × Bayan Academy × Meta Philippines',
     description:
@@ -100,7 +101,7 @@ const appearances: Appearance[] = [
   {
     date: '2026-01-19',
     dateLabel: 'Jan 19 2026',
-    title: 'CTA program graduate — Society of Technical Analysts of the Philippines',
+    title: 'CTA program graduate. Society of Technical Analysts of the Philippines',
     audience: 'STA Philippines · Tier-1 CTA program',
     description:
       'Tier-1 Certified Technical Analyst program, completed Jan 19 2026 (cert #260197). Final capstone: regime-classification case study on ASEAN equities.',
@@ -111,7 +112,7 @@ const appearances: Appearance[] = [
 
 <BaseLayout
   title="Talks"
-  description="Public lectures, conference appearances, and meetup talks — sourced from the /proof archive. NDA-safe."
+  description="Public lectures, conference appearances, and meetup talks. sourced from the /proof archive. NDA-safe."
   breadcrumbs={[
     { name: 'Home', href: '/' },
     { name: 'Talks', href: '/talks' },
@@ -128,7 +129,7 @@ const appearances: Appearance[] = [
         Every entry is on disk, named to the event, and linkable to the organizer.
       </VoiceLine>
       <p class="talks-head__sub">
-        Every entry below is a public artifact — a video on disk, a named event with an
+        Every entry below is a public artifact. a video on disk, a named event with an
         institutional record, or a co-signed certificate. The {lectures.length} video lectures are surfaced
         from <a href={path('/proof')}>/proof</a>; the conference and meetup list names the rest.
       </p>
@@ -151,14 +152,15 @@ const appearances: Appearance[] = [
       Section 1 — Public lectures (VideoEmbed, 2-up)
       ========================================================= */
   }
-  <section class="section" data-reveal>
+  <section class="section" data-reveal data-section-id="talks">
     <div class="container">
       <header class="section__head">
+        <SectionMark index="00" title="talks" />
         <p class="section__eyebrow">Section 1 · Public lectures</p>
         <h2 class="section__title">{lectures.length} recorded lectures on disk.</h2>
         <p class="section__sub">
           Both files are the canonical USeP EGE 313 delivery from late 2024. The second is the
-          deck-authoring session three weeks prior — the precursor pattern to the current {NGATE} authoring
+          deck-authoring session three weeks prior. the precursor pattern to the current {NGATE} authoring
           harness.
         </p>
       </header>
@@ -201,7 +203,7 @@ const appearances: Appearance[] = [
       Section 2 — Conference & meetup appearances (tight list)
       ========================================================= */
   }
-  <section class="section section--alt" data-reveal>
+  <section class="section section--alt" data-reveal data-section-id="talks">
     <div class="container">
       <header class="section__head">
         <p class="section__eyebrow">Section 2 · Conference & meetup appearances</p>

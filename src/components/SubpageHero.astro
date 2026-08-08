@@ -1,0 +1,191 @@
+---
+/**
+ * SubpageHero.astro : v11.W2 subpage chrome.
+ *
+ * Renders the consistent hero strip at the top of each subpage:
+ *   - Mono eyebrow: financial markets role line
+ *   - H1: "Quantitative Researcher" (identity H1, consistent across subpages)
+ *   - Amber rule (1px hairline)
+ *   - Visible breadcrumb (Home › {label})
+ *   - CTA strip back to home
+ *   - <slot /> for page-specific content (eyebrow chip, SectionMark, H2, lede)
+ *
+ * v11.W2 chrome contract:
+ *   - sharp 0-2px corners
+ *   - hairline 1px borders
+ *   - mono eyebrow + amber accent
+ *   - Inter + JetBrains Mono
+ *   - no halo/glow/gradient
+ *
+ * Replaces the previous ad-hoc hero per page so the four subpages read
+ * as one register. Page-specific H1s are demoted to H2 in the slot
+ * (single H1 per page per WCAG 1.3.1).
+ */
+import { path } from '@utils/url';
+
+interface Props {
+  /** Subpage slug (e.g. "notes"). Used for the breadcrumb label. */
+  slug: string;
+  /** Display label (e.g. "Notes"). */
+  label: string;
+  /** Financial-markets role line in mono eyebrow (e.g.
+   *  "Notes on financial markets, quant research, and AI engineering"). */
+  roleLine: string;
+}
+
+const { slug, label, roleLine } = Astro.props;
+const homeHref = path('/');
+const subpageHref = path(`/${slug}/`);
+---
+
+<header class="subpage-hero" aria-labelledby="subpage-hero-id">
+  <div class="container container-narrow">
+    <p class="subpage-hero__eyebrow mono" id="subpage-hero-id">
+      QUANTITATIVE RESEARCHER · FOR FINANCIAL MARKETS
+    </p>
+    <h1 class="subpage-hero__identity">Quantitative Researcher</h1>
+    <p class="subpage-hero__role mono">{roleLine}</p>
+    <hr class="subpage-hero__rule" aria-hidden="true" />
+
+    <nav class="subpage-hero__crumbs" aria-label="Breadcrumb">
+      <ol class="subpage-hero__crumb-list" role="list">
+        <li><a class="subpage-hero__crumb" href={homeHref}>Home</a></li>
+        <li aria-hidden="true" class="subpage-hero__crumb-sep">›</li>
+        <li aria-current="page"><span class="subpage-hero__crumb-current mono">{label}</span></li>
+      </ol>
+      <a class="subpage-hero__cta mono" href={homeHref} aria-label={`Back to home from ${label}`}>← Back to home</a>
+    </nav>
+
+    <div class="subpage-hero__content">
+      <slot />
+    </div>
+  </div>
+</header>
+
+<style>
+  /* === Subpage hero (v11.W2 Bryllim chrome) ===
+     Identity strip at the top of every subpage. The page-specific
+     H1 lives inside the slot (as an H2 : see component header). */
+  .subpage-hero {
+    padding-block: var(--sp-7) var(--sp-6);
+    border-bottom: 1px solid var(--c-rule);
+  }
+  .subpage-hero__eyebrow {
+    margin: 0 0 8px;
+    font-size: 10.5px;
+    letter-spacing: 0.16em;
+    color: var(--c-amber);
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .subpage-hero__identity {
+    margin: 0 0 6px;
+    font-family: var(--ff-sans);
+    font-size: clamp(1.75rem, 3.6vw, 2.4rem);
+    line-height: 1.1;
+    font-weight: 600;
+    color: var(--c-ink);
+    letter-spacing: -0.01em;
+  }
+  .subpage-hero__role {
+    margin: 0;
+    font-size: 12.5px;
+    letter-spacing: 0.04em;
+    color: var(--c-ink-2);
+    line-height: 1.45;
+    max-width: 64ch;
+  }
+  /* Amber rule : 1px hairline, sharp 0px radius, no halo. */
+  .subpage-hero__rule {
+    margin: 14px 0 14px;
+    border: 0;
+    border-top: 1px solid var(--c-amber);
+    height: 0;
+    width: 48px;
+    max-width: 100%;
+  }
+
+  /* Breadcrumb + back-to-home CTA strip. Mono + hairline 1px. */
+  .subpage-hero__crumbs {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px 14px;
+    margin: 0 0 var(--sp-6);
+    font-size: 10.5px;
+  }
+  .subpage-hero__crumb-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--c-ink-3);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .subpage-hero__crumb {
+    color: var(--c-ink-2);
+    text-decoration: none;
+    font-family: var(--ff-mono);
+  }
+  .subpage-hero__crumb:hover {
+    color: var(--c-amber);
+  }
+  .subpage-hero__crumb-sep {
+    color: var(--c-ink-3);
+    margin: 0 2px;
+    font-family: var(--ff-mono);
+  }
+  .subpage-hero__crumb-current {
+    color: var(--c-ink);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+  }
+
+  .subpage-hero__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border: 1px solid var(--c-rule);
+    border-radius: 0;
+    color: var(--c-ink-2);
+    text-decoration: none;
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 600;
+    transition:
+      color 160ms ease,
+      border-color 160ms ease;
+  }
+  .subpage-hero__cta:hover {
+    color: var(--c-amber);
+    border-color: var(--c-amber);
+  }
+  .subpage-hero__cta:focus-visible {
+    outline: 2px solid var(--c-amber);
+    outline-offset: 2px;
+  }
+
+  .subpage-hero__content {
+    margin-top: var(--sp-5);
+  }
+
+  @media (max-width: 640px) {
+    .subpage-hero__crumbs {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .subpage-hero__cta,
+    .subpage-hero__crumb {
+      transition: none;
+    }
+  }
+</style>

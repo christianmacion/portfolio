@@ -77,7 +77,7 @@ function mapMetric(metrics: MetricRow[], matchers: RegExp[]): Cell | null {
   return null;
 }
 
-const empty: Cell = { display: '—' };
+const empty: Cell = { display: 'n/a' };
 
 const sharpeCols = projects.map((p) => mapMetric(p.data.metrics, [/sharpe/]));
 const psrCols = projects.map((p) => mapMetric(p.data.metrics, [/psr/, /probabilistic sharpe/]));
@@ -115,7 +115,7 @@ function shortTitle(t: string): string {
     <p class="factor__sub">
       Each strategy is scored against the four most-borrowed multiple-testing diagnostics: raw
       Sharpe, Probabilistic Sharpe Ratio (PSR), Deflated Sharpe Ratio (DSR), and Probability of
-      Backtest Overfitting (PBO). Empty cells report <span class="mono">—</span> — the metric was not
+      Backtest Overfitting (PBO). Empty cells report <span class="mono">n/a</span>n/a the metric was not
       computed in the source notebook, not omitted to hide a bad number.
     </p>
   </header>
@@ -139,7 +139,7 @@ function shortTitle(t: string): string {
             const pCell = psrCols[i] ?? empty;
             const dCell = dsrCols[i] ?? empty;
             const bCell = pboCols[i] ?? empty;
-            const filled = [sCell, pCell, dCell, bCell].filter((c) => c.display !== '—').length;
+            const filled = [sCell, pCell, dCell, bCell].filter((c) => c.display !== 'n/a').length;
             return (
               <tr class="factor__row">
                 <th scope="row" class="factor__name">
@@ -158,7 +158,7 @@ function shortTitle(t: string): string {
                     class:list={[
                       'factor__cell',
                       'mono',
-                      { 'factor__cell--empty': cell.display === '—' },
+                      { 'factor__cell--empty': cell.display === 'n/a' },
                     ]}
                   >
                     <span class="factor__cell-val">{cell.display}</span>
@@ -178,9 +178,9 @@ function shortTitle(t: string): string {
 
   <footer class="factor__legend">
     <p class="factor__legend-line">
-      <span class="mono">—</span>
+      <span class="mono">n/a</span>
       <span class="factor__legend-text">
-        metric not computed in source notebook. Cells are deliberately empty — the discipline is
+        metric not computed in source notebook. Cells are deliberately empty. the discipline is
         reporting only what was actually measured, not what would look balanced in a marketing
         table.
       </span>
@@ -327,8 +327,7 @@ function shortTitle(t: string): string {
     line-height: 1.25;
   }
   .factor__cell--empty {
-    color: var(--c-ink-3);
-    opacity: 0.7;
+    color: var(--c-ink-2);
   }
   .factor__cell--empty .factor__cell-val {
     font-weight: 400;

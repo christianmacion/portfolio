@@ -35,12 +35,12 @@ const links = [
       <p class="page-head__sub">
         Static sites nearly never hit a 500. If you are seeing this, it is either a mirror-deploy
         issue or a stray client-side error. The underlying HTML, RSS, sitemap, and asset bundles are
-        still served — retry, or pick a known-good route.
+        still served. retry, or pick a known-good route.
       </p>
       <div class="page-head__eq">
         <Equation
           block
-          latex={`\\text{status}(t) = \\begin{cases} 200 & t \\in \\text{healthy routes} \\\\ 500 & t \\in \\text{(none — this is a static site)} \\end{cases}`}
+          latex={`\\text{status}(t) = \\begin{cases} 200 & t \\in \\text{healthy routes} \\\\ 500 & t \\in \\text{(none. this is a static site)} \\end{cases}`}
           size="md"
         />
       </div>

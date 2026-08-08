@@ -214,9 +214,14 @@ a.skip-link {
    v9.3 IA wave 2 (2026-08-01) a11y baseline — switched to --c-amber
    because --c-amber (#475891 on #1a1714) measured 2.61:1 in
    dark theme, failing WCAG 1.4.11 (3:1 UI). --c-amber (#c98a16)
-   passes in both themes. */
+   passes in both themes.
+   v11.W3 (2026-08-08) Bryllim motion library — ring tightened
+   from 2px → 1px to match the chrome micro-interaction layer in
+   motion.css §29e. Still WCAG 2.2 SC 1.4.11 compliant (3:1
+   contrast vs --c-amber on --c-bg). The offset stays at 2px so
+   the focus indicator clears adjacent borders. */
 *:focus-visible {
-  outline: 2px solid var(--c-amber);
+  outline: 1px solid var(--c-amber);
   outline-offset: 2px;
 }
 /* Hide focus outline for mouse users (heuristic: only show on :focus-visible, not :focus) */
@@ -330,6 +335,34 @@ li {
   border-bottom: 1px solid var(--c-rule);
   padding: var(--sp-3) var(--sp-4);
   margin: var(--sp-7) 0 0;
+}
+
+/* v9.9 — FOOTER REMOVAL: single-line treasury at the bottom of every
+   full-chrome page. No links, no chrome, no CTAs — just identity +
+   UTC offset + deploy marker. Reads as a printed letterhead colophon,
+   not as a footer. Inherits --c-ink-3 muted chrome so it never
+   competes with the page body. 10.5px mono + 0.06em letter-spacing
+   matches the page__tenet line above it; the pair reads as one
+   two-line chrome strip (operating principles + identity). */
+.page__treasury {
+  margin: var(--sp-3) 0 0;
+  padding: var(--sp-3) 0 var(--sp-4);
+  font: 500 10.5px / 1.55 var(--ff-mono);
+  color: var(--c-ink-3);
+  letter-spacing: 0.06em;
+  text-align: center;
+  border-top: 1px solid var(--c-rule);
+}
+
+/* W2.7a a11y — landmark wrappers added to give rail-toggle and
+   page__treasury a containing region. Rendered as transparent
+   wrappers; the inner <aside> + content preserve all visual
+   chrome. No margin/padding so layout-grid stays intact. */
+.layout-rail {
+  display: contents;
+}
+.layout-tail {
+  display: block;
 }
 
 /* v8.4 — page-head chrome variants used by pages that wrap the
@@ -681,13 +714,15 @@ li {
   font-variant-numeric: tabular-nums lining-nums;
 }
 
-/* Italic serif "voice line" — used on the home hero and the manifesto.
- * This is the Anthropic / Schonfeld signature move: a single editorial
- * sentence in italic serif that re-anchors the page. */
+/* Italic "voice line" — used on the home hero and the manifesto.
+ * W2 lock (2026-08-08): Inter italic replaces --serif-display (was Source
+ * Serif 4). The institutional voice-line register reads as italic
+ * editorial weight 500 — Inter handles this natively without serif
+ * dependency. */
 .voice-line {
-  font-family: var(--serif-display);
+  font-family: var(--j-ff-display);
   font-style: italic;
-  font-weight: 400;
+  font-weight: 500;
   letter-spacing: -0.005em;
   line-height: 1.4;
   color: var(--c-ink-2);

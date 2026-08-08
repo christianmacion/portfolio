@@ -121,7 +121,7 @@ export function walk(rng: () => number, base: number, sigma: number, n: number):
  * rather than `NaN` or `Infinity`.
  */
 export function formatPx(px: number, decimals = 2): string {
-  if (!Number.isFinite(px)) return '—';
+  if (!Number.isFinite(px)) return 'n/a';
   const sign = px < 0 ? '-' : '';
   const abs = Math.abs(px);
   const fixed = abs.toFixed(decimals);
@@ -137,7 +137,7 @@ export function formatPx(px: number, decimals = 2): string {
  * MarketTape, StatCell delta column, and order-book delta.
  */
 export function formatPct(pct: number): string {
-  if (!Number.isFinite(pct)) return '—';
+  if (!Number.isFinite(pct)) return 'n/a';
   const sign = pct > 0 ? '+' : pct < 0 ? '' : ' ';
   return `${sign}${pct.toFixed(2)}%`;
 }

@@ -41,7 +41,7 @@ interface Gate {
 }
 
 interface Family {
-  range: string; // "G1–G5"
+  range: string; // "G1 to G5"
   name: string; // family header (system-area voice, e.g. "Retrieval")
   source: string; // methodology family name (e.g. "Mechanical validity")
   gates: Gate[];
@@ -49,9 +49,9 @@ interface Family {
 
 const families: Family[] = [
   {
-    range: 'G1–G5',
+    range: 'G1 to G5',
     name: 'Retrieval',
-    source: 'Mechanical validity — schema, exit codes, byte budgets',
+    source: 'Mechanical validity. schema, exit codes, byte budgets',
     gates: [
       { id: 'G1', label: 'schema conformance', value: '100 %', result: 'PASS' },
       { id: 'G2', label: 'exit-0 contract', value: '0.997', result: 'PASS' },
@@ -61,9 +61,9 @@ const families: Family[] = [
     ],
   },
   {
-    range: 'G6–G10',
+    range: 'G6 to G10',
     name: 'Generation',
-    source: 'Statistical nulls — bootstrap, regime-shuffle, priors',
+    source: 'Statistical nulls. bootstrap, regime-shuffle, priors',
     gates: [
       { id: 'G6', label: 'block-bootstrap CIs', value: 'n=10 000', result: 'CHECK' },
       { id: 'G7', label: 'random-timing nulls', value: 'p = 0.41', result: 'PASS' },
@@ -73,9 +73,9 @@ const families: Family[] = [
     ],
   },
   {
-    range: 'G11–G15',
+    range: 'G11 to G15',
     name: 'Eval',
-    source: 'Walk-forward & OOS — frozen spec, embargoed test set',
+    source: 'Walk-forward & OOS. frozen spec, embargoed test set',
     gates: [
       { id: 'G11', label: 'Locked OOS windows', value: '24 mo', result: 'CHECK' },
       { id: 'G12', label: '5-era stability', value: '4 / 5', result: 'PASS' },
@@ -85,21 +85,21 @@ const families: Family[] = [
     ],
   },
   {
-    range: 'G16–G20',
+    range: 'G16 to G20',
     name: 'Deploy',
-    source: 'Multiple testing — DSR, PBO, Bonferroni–Holm, BH-FDR',
+    source: 'Multiple testing. DSR, PBO, Bonferroni to Holm, BH-FDR',
     gates: [
       { id: 'G16', label: 'Deflated Sharpe Ratio (DSR)', value: '0.70', result: 'PASS' },
       { id: 'G17', label: 'CSCV-based PBO', value: '0.18', result: 'PASS' },
       { id: 'G18', label: 'Minimum Backtest Length (MinBTL)', value: '8.4 yr', result: 'PASS' },
-      { id: 'G19', label: 'Bonferroni–Holm', value: 'p = 0.04', result: 'PASS' },
+      { id: 'G19', label: 'Bonferroni to Holm', value: 'p = 0.04', result: 'PASS' },
       { id: 'G20', label: 'BH-FDR', value: 'q = 0.07', result: 'PASS' },
     ],
   },
   {
-    range: 'G21–G25',
+    range: 'G21 to G25',
     name: 'Monitoring',
-    source: 'Look-ahead discipline — PIT datasets, survivorship, no leakage',
+    source: 'Look-ahead discipline. PIT datasets, survivorship, no leakage',
     gates: [
       { id: 'G21', label: 'point-in-time dataset', value: 'refresh Q', result: 'CHECK' },
       { id: 'G22', label: 'survivorship-bias check', value: 'verified', result: 'PASS' },
@@ -109,9 +109,9 @@ const families: Family[] = [
     ],
   },
   {
-    range: 'G26–G31',
+    range: 'G26 to G31',
     name: 'Feedback',
-    source: 'Economic & cost realism — spread, capacity, regime overlay',
+    source: 'Economic & cost realism. spread, capacity, regime overlay',
     gates: [
       // Honest FAIL — slippage overrun is the most common budget miss in
       // real backtests. A console showing 100% green is a credibility
@@ -161,12 +161,12 @@ const passRateStr = passRate.toFixed(3);
 
 <section
   class="eval-console"
-  aria-label={`Eval console — G1 through G${profile.stats.evalGates}, ${counts.pass} pass, ${counts.check} under review, ${counts.fail} fail out of ${counts.total}`}
+  aria-label={`Eval console. G1 through G${profile.stats.evalGates}, ${counts.pass} pass, ${counts.check} under review, ${counts.fail} fail out of ${counts.total}`}
 >
   <header class="eval-console__head">
     <div class="eval-console__head-cap">
       <span class="eval-console__cap mono"
-        >eval console · G1–G{profile.stats.evalGates} · 6 families</span
+        >eval console · G1 to G{profile.stats.evalGates} · 6 families</span
       >
     </div>
     <div class="eval-console__head-summary">
@@ -195,7 +195,7 @@ const passRateStr = passRate.toFixed(3);
         <header class="eval-family__head">
           <span class="eval-family__range mono">{f.range}</span>
           <h3 class="eval-family__name">{f.name}</h3>
-          <span class="eval-family__source">— {f.source}</span>
+          <span class="eval-family__source">n/a {f.source}</span>
         </header>
         <table class="eval-table" tabindex="0" aria-label={`Evaluation gates: ${f.name}`}>
           <colgroup>

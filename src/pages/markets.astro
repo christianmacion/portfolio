@@ -121,13 +121,13 @@ const secondarySymbol = 'BTC-USD';
         An institutional terminal for a portfolio that ships systems, not screenshots.
       </h1>
       <VoiceLine class="mk-hero__voice" ruled={false} size="md">
-        Every number on this page is reproducible from <code>BUILD_DATE</code> — same seed, same series,
+        Every number on this page is reproducible from <code>BUILD_DATE</code>n/a same seed, same series,
         every render. The order book doesn't move because the data isn't moving.
       </VoiceLine>
       <p class="mk-hero__sub">
         A research view of what a quant desk reads in the first five minutes of the session: the
         tape, the book, the term structure, and the coverage map. All four primitives are reusable
-        components — they ship on <a href={path('/research')}>research</a>,
+        components. they ship on <a href={path('/research')}>research</a>,
         <a href={path('/positions')}>positions</a>, and the
         <a href={path('/prediction-markets')}>prediction page</a> too.
       </p>
@@ -173,7 +173,7 @@ const secondarySymbol = 'BTC-USD';
         <p class="section__eyebrow">Book · Strategy · Book</p>
         <h2 class="mk-terminal__title">Live microstructure, three panels.</h2>
         <p class="section__sub">
-          The center column is a real series, not a screenshot — drawn from a 60-day Gaussian walk
+          The center column is a real series, not a screenshot. drawn from a 60-day Gaussian walk
           with a 6% annualized vol target. The book columns share the seed string so the ladders
           move coherently with the index tape above.
         </p>
@@ -220,7 +220,7 @@ const secondarySymbol = 'BTC-USD';
           <TermStructure
             points={yieldCurve}
             spot={yieldCurve[0].yld}
-            caption="SOFR term structure · 1M–10Y tenors · spot anchored at 1M"
+            caption="SOFR term structure · 1M to 10Y tenors · spot anchored at 1M"
             yFormat={(v) => `${v.toFixed(2)}%`}
           />
         </div>
@@ -274,12 +274,12 @@ const secondarySymbol = 'BTC-USD';
       data-license="Apache-2.0"
       target="_blank">theatre.js</a
     >
-    (Apache-2.0 core / AGPL-3.0 studio) — reference-only.
+    (Apache-2.0 core / AGPL-3.0 studio) to reference-only.
   </p>
 
   <CTABanner
     title="Want to see the eval harness behind the numbers?"
-    sub="Every primitive here ships as a reusable Astro component. The PRNG, the book ladder, the term-structure curve — all of it is the same code on /research and /positions."
+    sub="Every primitive here ships as a reusable Astro component. The PRNG, the book ladder, the term-structure curve. all of it is the same code on /research and /positions."
     primaryLabel="Read methodology"
     primaryHref={path('/methodology')}
     secondaryLabel="See research projects"

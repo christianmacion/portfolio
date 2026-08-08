@@ -31,35 +31,35 @@ import { buildStampUtc8 } from '@utils/build-stamp';
 const email = profile.contact.email;
 const fullName = profile.fullName;
 const agendaVersion = buildStampUtc8();
-const NGATE = `G1–G${profile.stats.evalGates}`;
+const NGATE = `G1 to G${profile.stats.evalGates}`;
 
 const agenda = [
   {
-    mins: '00:00–05:00',
+    mins: '00:00 to 05:00',
     seconds: 'PT5M',
     title: 'Context',
     body: 'You pitch the role, comp range, target start. I share the seat-shape I’d fit (QR / QR-rotational / Quant Research Engineer / Research Engineer). 5 minutes, no fluff.',
   },
   {
-    mins: '05:00–15:00',
+    mins: '05:00 to 15:00',
     seconds: 'PT10M',
     title: 'Walk through /proof',
     body: 'You pick which flagship to drill into. Most recruiters ask for the deflated-Sharpe walkthrough or the MCP eval-server demo. I bring the artifact open in another tab.',
   },
   {
-    mins: '15:00–25:00',
+    mins: '15:00 to 25:00',
     seconds: 'PT10M',
     title: 'Live Q&A',
-    body: 'Your team’s turn. Five prompts I’d love to be asked below — pick any. Bring your own; I’ll answer either way.',
+    body: 'Your team’s turn. Five prompts I’d love to be asked below. pick any. Bring your own; I’ll answer either way.',
   },
   {
-    mins: '25:00–28:00',
+    mins: '25:00 to 28:00',
     seconds: 'PT3M',
     title: 'Compensation framework',
     body: 'Cash + equity mix, base location, EOR / IC arrangement. I’ll say what I’m targeting and what would change my answer.',
   },
   {
-    mins: '28:00–30:00',
+    mins: '28:00 to 30:00',
     seconds: 'PT2M',
     title: 'Next steps',
     body: 'If mutual: I send the artifact handoff (see below) within 24h, you loop in the HM, second call within the week. If not: I name two people I’d recommend.',
@@ -67,23 +67,23 @@ const agenda = [
 ];
 
 const questions = [
-  'Walk me through a strategy you shipped and abandoned — what changed your mind?',
+  'Walk me through a strategy you shipped and abandoned. what changed your mind?',
   'How do you prove an LLM eval is not overfit to its prompt set?',
   'Show me a backtest result where the methodology changed your conclusion.',
   'What’s a recent paper you read that changed how you think?',
-  'What stack would you reach for day 1 — and why that over the default?',
+  'What stack would you reach for day 1. and why that over the default?',
 ];
 
 const artifacts = [
   {
     label: 'Tailored resume PDF',
     href: path('/resume'),
-    sub: 'Unified · AI-only · Quant one-pager — pick the lane you want.',
+    sub: 'Unified · AI-only · Quant one-pager. pick the lane you want.',
   },
   {
     label: 'Three flagship proof URLs',
     href: path('/proof'),
-    sub: 'Pre-curated artifact bundle — deflated Sharpe, MCP eval server, look-ahead bias audit.',
+    sub: 'Pre-curated artifact bundle. deflated Sharpe, MCP eval server, look-ahead bias audit.',
   },
   {
     label: 'Eval-gate map',
@@ -99,7 +99,7 @@ const artifacts = [
   {
     label: 'References',
     href: undefined,
-    sub: 'Available on request — three names, NDA-cleared for hiring. Email to start.',
+    sub: 'Available on request. three names, NDA-cleared for hiring. Email to start.',
     external: false,
   },
 ];
@@ -114,7 +114,7 @@ const itemListJsonLd = {
   itemListElement: agenda.map((a, i) => ({
     '@type': 'ListItem',
     position: i + 1,
-    name: `${a.mins} — ${a.title}`,
+    name: `${a.mins} to ${a.title}`,
     description: a.body,
   })),
 };
@@ -122,7 +122,7 @@ const itemListJsonLd = {
 
 <BaseLayout
   title="Screening call"
-  description={`The 30-minute screening call agenda with ${fullName}. Tue/Wed/Thu 18:00–22:00 PHT (10:00–14:00 UTC). 5 phases, 5 prompts, 5 artifact handoff surfaces. NDA-clean.`}
+  description={`The 30-minute screening call agenda with ${fullName}. Tue/Wed/Thu 18:00 to 22:00 PHT (10:00 to 14:00 UTC). 5 phases, 5 prompts, 5 artifact handoff surfaces. NDA-clean.`}
   breadcrumbs={[
     { name: 'Home', href: '/' },
     { name: 'Screening call', href: '/screening-call' },
@@ -135,18 +135,18 @@ const itemListJsonLd = {
     <div class="container container--narrow">
       <ChromeHeader
         chip="FOR HIRING MANAGERS · 30-MIN AGENDA · NDA-CLEAN"
-        eyebrow={`${agendaVersion} · TUE/WED/THU · 18:00–22:00 PHT (10:00–14:00 UTC)`}
+        eyebrow={`${agendaVersion} · TUE/WED/THU · 18:00 to 22:00 PHT (10:00 to 14:00 UTC)`}
         tenant="CHRISTIAN.T.MACION · 30-MIN HARD CAP · 5 PHASES · 5 PROMPTS · 5 ARTIFACTS"
         chipVariant="amber"
         noSep
         hideTenet
       />
-      <h1 class="hero__title" data-words>Screening call — what the 30 minutes look like.</h1>
+      <h1 class="hero__title" data-words>Screening call. what the 30 minutes look like.</h1>
       <VoiceLine class="hero__voice">
         Thirty minutes. Five phases. Bring a JD; bring the eval-harness map.
       </VoiceLine>
       <p class="hero__sub">
-        Tue / Wed / Thu · 18:00–22:00 PHT (10:00–14:00 UTC) · 30 minutes ·
+        Tue / Wed / Thu · 18:00 to 22:00 PHT (10:00 to 14:00 UTC) · 30 minutes ·
         <a href={`mailto:${email}`}>{email}</a>
       </p>
 
@@ -158,7 +158,7 @@ const itemListJsonLd = {
           </tr>
           <tr>
             <th scope="row">Window</th>
-            <td>Tue / Wed / Thu · 18:00–22:00 PHT (10:00–14:00 UTC)</td>
+            <td>Tue / Wed / Thu · 18:00 to 22:00 PHT (10:00 to 14:00 UTC)</td>
           </tr>
           <tr>
             <th scope="row">Duration</th>
@@ -195,7 +195,7 @@ const itemListJsonLd = {
     <div class="container container--narrow">
       <header class="section__head">
         <p class="section__eyebrow mono">agenda/</p>
-        <h2 class="section__title">Five phases, five minutes each — except the middle one.</h2>
+        <h2 class="section__title">Five phases, five minutes each. except the middle one.</h2>
         <p class="section__sub">
           {agenda.length} phases. The middle one is where the second-call decision lands.
         </p>

@@ -264,7 +264,7 @@ const stations = [
     href: '/research/',
     title: 'Which strategies pass the gates?',
     numHtml: String(quantCount),
-    caption: `strategies · G1–G${profile.stats.evalGates}`,
+    caption: `strategies · G1 to G${profile.stats.evalGates}`,
     stats: [
       ['gates', parseInt(profile.stats.evalGates, 10)],
       ['categories', 4],
@@ -275,7 +275,7 @@ const stations = [
     mini: rsMini,
     tape: rsTape,
     flowIn: 'ideas',
-    flowOut: `G1–G${profile.stats.evalGates}`,
+    flowOut: `G1 to G${profile.stats.evalGates}`,
   },
   {
     n: '04',
@@ -300,7 +300,7 @@ const stations = [
 ];
 ---
 
-<section class="entry-stations" aria-label="Entry points — institutional stations grid">
+<section class="entry-stations" aria-label="Entry points. institutional stations grid">
   <div class="container entry-stations__inner">
     <header class="entry-stations__head">
       <p class="entry-stations__eyebrow mono">Entry points · stations grid</p>

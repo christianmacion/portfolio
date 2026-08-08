@@ -46,7 +46,14 @@ function absUrl(p: string): string {
 }
 
 export function buildMeta({ title, description, image, type = 'website', pathname = '/' }: SEO) {
-  const fullTitle = title === SITE_NAME ? title : `${title} · ${SITE_NAME}`;
+  // v11.W1 (2026-08-08): a page may pass a fully-composed title that already
+  // leads with the site name (the home page does, so the SERP row reads
+  // "Christian T. Macion · Quantitative Researcher ..." rather than burying
+  // the name at the end). Suffixing SITE_NAME in that case would print the
+  // name twice. `startsWith` covers it and is idempotent: composing an
+  // already-composed title is a NOOP, so re-runs cannot double-suffix.
+  const fullTitle =
+    title === SITE_NAME || title.startsWith(SITE_NAME) ? title : `${title} · ${SITE_NAME}`;
   const canonical = new URL(pathname, SITE_URL).toString();
   const imageUrl = image ? new URL(image, SITE_URL).toString() : undefined;
   return {
@@ -120,7 +127,7 @@ export function websiteJsonLd() {
     '@type': 'WebSite',
     name: SITE_NAME,
     url: SITE_URL,
-    description: `Portfolio of ${profile.fullName} — ${profile.titles.primary}.`,
+    description: `Portfolio of ${profile.fullName} to ${profile.titles.primary}.`,
     inLanguage: 'en',
     potentialAction: {
       '@type': 'SearchAction',

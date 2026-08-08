@@ -251,10 +251,13 @@
   /* === tabular numerals === */
   --tnum: 'tnum' 1, 'lnum' 1;
 
-  /* === serif voice-line role === */
-  --serif-display:
-    'Iowan Old Style', 'Source Serif 4', 'Georgia', 'Charter', 'Iowan Old Style W01', 'Sitka Text',
-    'Cambria', serif;
+  /* === serif voice-line role ===
+   * v6.18 (W2 lock, 2026-08-08): --serif-display is REASSIGNED to
+   * Inter chain in tokens-v6.13.css (the binding source of truth).
+   * The legacy Source Serif 4 / Iowan Old Style stack is removed
+   * per [[v10-w2-typography-lock]] — only Inter + JetBrains Mono
+   * remain in the live font surface. */
+  --serif-display: var(--j-ff-display);
 
   /* === v6.5 · INSTITUTIONAL ACCENT TOKENS (HUD chrome, gridlines, data signal) ===
    * Additive — does NOT replace any existing brand color.
@@ -409,22 +412,63 @@
   /* All shadows: negative-spread, large-blur, low-alpha. NEVER positive-spread bloom. */
 }
 
-/* === Reduced-motion-aware transition durations === */
+/* === MOTION VOCABULARY v11 (canonical) ===================================
+ * Spec: src/styles/motion-vocabulary.md  ::  BINDING for every chrome change.
+ * 4 duration tiers + 3 easing curves + 1 stagger. Nothing else ships.
+ *
+ * NAMING HAZARD: --mv-ease-snappy is NOT the same curve as the legacy
+ * --j-ease-snappy. Legacy --j-ease-snappy == --mv-ease-settle. The --mv-
+ * prefix exists so the two families never collide; do not rename --j-*
+ * (19 live call sites).
+ * ======================================================================== */
 :root {
-  --dur-1: 120ms; /* hover / state */
-  --dur-2: 200ms; /* small component enter */
-  --dur-3: 320ms; /* hero entrance step */
-  --dur-4: 480ms; /* hero entrance arc */
-  --dur-5: 800ms; /* overshoot cap (per T3-M5) */
+  /* Duration tiers */
+  --mv-dur-instant: 80ms; /* focus, toggle, tooltip */
+  --mv-dur-snap: 160ms; /* hover, press, underline, arrow shift */
+  --mv-dur-settle: 280ms; /* scroll reveal, accordion, tab, drawer */
+  --mv-dur-cinematic: 480ms; /* first-paint entrance. Once per page load. */
+  --mv-dur-exit: 240ms; /* exit is faster than its entrance, by contract */
+
+  /* Easing curves */
+  --mv-ease-snappy: cubic-bezier(0.2, 0, 0, 1); /* leaves fast, lands hard */
+  --mv-ease-settle: cubic-bezier(0.4, 0, 0.2, 1); /* symmetric, composed */
+  --mv-ease-cinematic: cubic-bezier(0.65, 0, 0.35, 1); /* deliberate */
+
+  /* Stagger cadence. Cap at 8 children (see motion-vocabulary.md sec 3). */
+  --mv-stagger: 80ms;
+
+  /* Reduced-motion scroll-reveal fade. Constant across both modes: it is the
+   * value scroll-reveal collapses TO, so it must survive the reduce block. */
+  --mv-dur-reveal-reduced: 80ms;
+}
+
+/* Legacy aliases. --dur-1..5 had 0 call sites at v11; kept as thin shims so
+ * any future reference resolves into the vocabulary rather than a dead value. */
+:root {
+  --dur-1: var(--mv-dur-snap);
+  --dur-2: var(--mv-dur-settle);
+  --dur-3: var(--mv-dur-settle);
+  --dur-4: var(--mv-dur-cinematic);
+  --dur-5: var(--mv-dur-cinematic);
 }
 
 @media (prefers-reduced-motion: reduce) {
   :root {
-    --dur-1: 0ms;
-    --dur-2: 0ms;
-    --dur-3: 0ms;
-    --dur-4: 0ms;
-    --dur-5: 0ms;
+    /* Every tier collapses to 0ms. The single exception is scroll-reveal,
+     * which keeps an 80ms opacity-only fade via --mv-dur-reveal-reduced
+     * (a hard pop-in on scroll is itself a motion artefact). Translate and
+     * blur are the vestibular triggers and are neutralised at the primitive,
+     * not here. See motion-vocabulary.md sec 4. */
+    --mv-dur-instant: 0ms;
+    --mv-dur-snap: 0ms;
+    --mv-dur-settle: 0ms;
+    --mv-dur-cinematic: 0ms;
+    --mv-dur-exit: 0ms;
+    --mv-stagger: 0ms;
+    --mv-ease-snappy: linear;
+    --mv-ease-settle: linear;
+    --mv-ease-cinematic: linear;
+
     --ease-snappy: linear;
     --ease-out: linear;
     --ease-overshoot-constrained: linear;

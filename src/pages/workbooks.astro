@@ -128,7 +128,7 @@ const workbooks = [
       <header class="section__head">
         <p class="section__eyebrow">The spine</p>
         <h2 class="section__title">
-          Five compounding layers<span class="muted"> — pick your rung.</span>
+          Five compounding layers<span class="muted">n/a pick your rung.</span>
         </h2>
         <p class="section__lede">
           Every layer is a force multiplier on the one below it. Most teams stop at the loop. The
@@ -166,7 +166,7 @@ const workbooks = [
         <p class="section__eyebrow">Shareable</p>
         <h2 class="section__title">Two workbooks, one claim.</h2>
         <p class="section__lede">
-          One big claim — the 5-rung spine. Two levels of audience — beginner, technical. Each one
+          One big claim. the 5-rung spine. Two levels of audience. beginner, technical. Each one
           is a self-contained PDF + shareable HTML.
         </p>
       </header>
@@ -279,7 +279,7 @@ const workbooks = [
     font-weight: 600;
   }
   .spine__name {
-    font-family: var(--font-display, serif);
+    font-family: var(--j-ff-display);
     font-size: 1.5rem;
     font-weight: 600;
     margin: 0;
@@ -342,9 +342,11 @@ const workbooks = [
     background: var(--c-teal);
   }
   .workbook-card:hover {
-    transform: translateY(-2px);
+    /* v6.18 W2 lock (2026-08-08): drop decorative box-shadow halo per
+       chrome contract (no-bulbs). Bryllim hover-lift keeps the
+       translateY for tactile weight without the glow blur. */
+    transform: translateY(-1px);
     border-color: var(--c-amber);
-    box-shadow: 0 6px 24px var(--c-shadow-card);
   }
   .workbook-card--teal:hover {
     border-color: var(--c-teal);
@@ -374,7 +376,7 @@ const workbooks = [
     letter-spacing: 0.08em;
   }
   .workbook-card__title {
-    font-family: var(--font-display, serif);
+    font-family: var(--j-ff-display);
     font-size: 1.5rem;
     font-weight: 600;
     margin: 0;

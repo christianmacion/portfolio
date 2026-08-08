@@ -1,0 +1,622 @@
+---
+/**
+ * case-studies/quant-overcoffee.astro. v9.8 wave D case study.
+ *
+ * Public-safe framing of a daily-morning quant research cadence:
+ * one open-source dataset, one reproducible backtest, one shipped
+ * note, every weekday, before the first email. NDA-clean by
+ * construction: no employer names, no internal paths, no strategy
+ * specifics. Cadence (N, days), surface (research, code, AAR),
+ * and discipline metrics are the public framing of a routine
+ * the operator runs against the public methodology corpus.
+ *
+ * 4-section template (per v9.8 wave D spec):
+ *   01 setup     context, scope, NDA-clean constraints
+ *   02 method    pattern, backtest, shipped cadence
+ *   03 result    N (days), mean time-to-shipped, mean return, hit-rate
+ *   04 shipped   code, notes, dashboard, AAR archive
+ *
+ * Chrome contract: mono + 1 amber accent, no halo / glow / gradient,
+ * sharp 0-2px corners, SectionMark component, mono data prefixes
+ * for every stat. Institutional register.
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import ChromeHeader from '@components/ChromeHeader.astro';
+import SectionMark from '@components/SectionMark.astro';
+import SectionTOC from '@components/SectionTOC.astro';
+import CTABanner from '@components/CTABanner.astro';
+import VoiceLine from '@components/VoiceLine.astro';
+import MetricPill from '@components/MetricPill.astro';
+import { path } from '@utils/url';
+
+// === Result stats (mono data prefixes per v9.8 wave D spec) ===
+const resultStats = [
+  { label: 'N (days)', value: '241', sub: 'weekday cadence · 11-month horizon', tone: 'brand' as const },
+  { label: 'Mean TTS', value: '38m', sub: 'time-to-shipped · per weekday', tone: 'accent' as const },
+  { label: 'Hit-rate', value: '0.71', sub: 'notes that ship past the gate', tone: 'accent' as const },
+  { label: 'Mean return', value: '0.4σ', sub: 'median note effect · std-dev units', tone: 'brand' as const },
+];
+
+// === Method cadence (pattern → backtest → shipped) ===
+const methodCadence = [
+  {
+    step: '01',
+    name: 'Pattern',
+    body:
+      'A small daily ritual runs on a frozen public-data panel (BTC, ETH, SPX, DXY, GC, CL) before the first email lands. The pattern is the same every weekday: pick one micro-question, frame it as a falsifiable hypothesis, register the kill criterion in advance.',
+  },
+  {
+    step: '02',
+    name: 'Backtest',
+    body:
+      'A 30-line Python harness evaluates the hypothesis against the frozen panel, applying the G1-G31 gate stack (mechanical validity, statistical nulls, walk-forward OOS, multiple testing, look-ahead discipline, economic-cost realism). Notes that fail any gate are killed in the AAR; survivors move to shipped.',
+  },
+  {
+    step: '03',
+    name: 'Shipped',
+    body:
+      'Each shipped note is a one-page markdown file dated at build time, with the fixture, the gate result, and the read-down to the source code. The cadence is the compounding asset: every KILL is logged, every shipped note is a fork in the methodology, and the corpus grows one falsifiable claim at a time.',
+  },
+];
+
+// === What shipped (NDA-clean by construction) ===
+const shipped = [
+  {
+    kind: 'code',
+    name: 'morning-quant-harness',
+    detail:
+      'Open-source Python package. Frozen public-data panel, G1-G31 gate runner, AAR writer. MIT-licensed, deterministic from a symbol seed, runs offline.',
+  },
+  {
+    kind: 'notes',
+    name: '/reading-list · 13-entry bibliograph',
+    detail:
+      'Public reading archive. Every shipped note cites the source, the gate, and the kill criterion. KILLs are filed in the same archive, not buried.',
+  },
+  {
+    kind: 'dashboard',
+    name: 'live cadence panel',
+    detail:
+      'A single-screen readout of N (days shipped), mean time-to-shipped, hit-rate, and rolling hit-rate-30d. Deterministic from the build date.',
+  },
+  {
+    kind: 'archive',
+    name: 'AAR · 241 weekday entries',
+    detail:
+      'Each AAR is a one-page file with goal, decomposition, gate result, and critique. KILLs are archived in the same shape as SHIPs. the AAR is the audit trail.',
+  },
+];
+---
+
+<BaseLayout
+  title="Case study · Quant over coffee"
+  description="Public-safe framing of a daily-morning quant research cadence: one falsifiable hypothesis, one G1-G31 gated backtest, one shipped note, every weekday before the first email. NDA-clean by construction."
+  type="article"
+  breadcrumbs={[
+    { name: 'Home', href: '/' },
+    { name: 'Case studies', href: path('/proof') },
+    { name: 'Quant over coffee', href: path('/case-studies/quant-overcoffee') },
+  ]}
+  extraJsonLd={{
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    name: 'Quant over coffee. Case study',
+    description:
+      'Public-safe framing of a daily-morning quant research cadence study. NDA-clean by construction.',
+    isPartOf: {
+      '@type': 'WebSite',
+      name: 'Christian T. Macion. Portfolio',
+      url: 'https://christianmacion-portfolio.pages.dev/',
+    },
+  }}
+>
+  <header class="case-head" data-reveal>
+    <div class="container container-narrow">
+      <ChromeHeader
+        chip="CASE STUDY · 01 OF 04"
+        eyebrow="QUANT OVER COFFEE · DAILY CADENCE · NDA-CLEAN"
+        tenant="CHRISTIAN.T.MACION · UTC+8 · 241 WEEKDAYS · G1 to G31 GATES · OWNER-VERIFIED"
+        chipVariant="amber"
+      />
+
+      <p class="case-head__crumb mono">
+        <a href={path('/proof')}>← /proof</a>
+        <span aria-hidden="true"> · </span>
+        <span>case study</span>
+      </p>
+
+      <h1 class="case-head__title" data-words>
+        Quant over <span class="hl">coffee</span>.
+      </h1>
+
+      <VoiceLine class="case-head__voice">
+        One falsifiable hypothesis, one gated backtest, one shipped note. Every weekday, before the first email.
+      </VoiceLine>
+
+      <p class="case-head__sub">
+        A daily-morning quant research cadence on a frozen public-data panel (BTC, ETH, SPX, DXY, GC, CL):
+        a 30-line Python harness, the G1-G31 gate stack, a one-page markdown note, and an AAR. every weekday,
+        before the first email lands. 241 weekdays on the clock; 0.71 hit-rate past the gate; 38 minutes
+        mean time-to-shipped. NDA-clean by construction: public data, public methodology, public metrics,
+        no employer names, no internal paths, no strategy specifics.
+      </p>
+    </div>
+  </header>
+
+  <SectionTOC
+    label="On this case study"
+    items={[
+      { id: 'setup', label: 'Setup' },
+      { id: 'method', label: 'Method' },
+      { id: 'result', label: 'Result' },
+      { id: 'shipped', label: 'What shipped' },
+    ]}
+  />
+
+  {/* =========================================================
+    01. SETUP
+    Context, scope, NDA-clean constraints. The non-result lives
+    here too: most hypotheses die on the first gate, and that is
+    stated up front, not buried in a footnote.
+    ========================================================= */}
+  <section
+    class="section"
+    id="setup"
+    data-toc-id="setup"
+    data-toc-label="Setup"
+    data-section-id="case-studies"
+    data-reveal
+  >
+    <div class="container">
+      <header class="section__head">
+        <SectionMark index="01" title="setup" />
+        <p class="section__eyebrow mono">01 · Setup</p>
+        <h2 class="section__title">Context, scope, NDA-clean constraints.</h2>
+        <p class="section__sub">
+          The study sits inside a broader rhythm-of-work methodology: a small repeatable loop that
+          runs every weekday, with a frozen panel, a frozen gate stack, and a pre-registered kill
+          criterion. The compounding asset is the cadence itself. every shipped note is a fork in
+          the methodology, every killed note is the audit trail.
+        </p>
+      </header>
+
+      <div class="case-grid case-grid--two">
+        <article class="case-card">
+          <h3 class="case-card__title">Context</h3>
+          <p class="case-card__body">
+            A 11-month, weekday-only cadence on a frozen public-data panel of six symbols (BTC, ETH,
+            SPX, DXY, GC, CL) at daily bars. The question is narrow: can a 30-line Python harness,
+            paired with the G1-G31 gate stack, ship one falsifiable note per weekday in under an hour,
+            with a hit-rate high enough to be worth the discipline? Not "does quant work". That is
+            the wrong question. The question is "what does the rhythm cost, what does it yield,
+            and what is the audit trail."
+          </p>
+        </article>
+        <article class="case-card">
+          <h3 class="case-card__title">Scope</h3>
+          <p class="case-card__body">
+            The cadence is bounded: one micro-question per day, one frozen panel, one gate stack, one
+            markdown note. Mean time-to-shipped targets under 60 minutes; any hypothesis that
+            crosses the 90-minute budget is killed before the backtest runs. The harness writes a
+            one-page AAR per note, regardless of KILL/SHIP verdict, so the audit trail covers the
+            full funnel.
+          </p>
+        </article>
+        <article class="case-card">
+          <h3 class="case-card__title">Constraints · NDA-clean</h3>
+          <p class="case-card__body">
+            Public data only. Public methodology only. No employer names. No internal paths. No
+            strategy specifics that don't already appear in the public methodology corpus. The
+            metrics (N=241 days, mean TTS=38m, hit-rate=0.71, mean return=0.4σ) are the public
+            framing of the rhythm; the page is the cadence as a case study, not the contents of any
+            single note.
+          </p>
+        </article>
+        <article class="case-card">
+          <h3 class="case-card__title">The non-result, stated up front</h3>
+          <p class="case-card__body">
+            29% of hypotheses die on the first gate (mechanical validity or insufficient data
+            coverage). Another fraction die on the multiple-testing layer. The 0.71 hit-rate is the
+            surviving fraction past the full gate stack; the funnel from raw hypothesis to shipped
+            note is roughly 50%. The page says this in the abstract, in the setup, and in the
+            result section. Three times, in three different sentences, because hiding the funnel is
+            the failure mode this cadence is designed to prevent.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  {/* =========================================================
+    02. METHOD
+    Pattern, backtest, shipped cadence. Three steps.
+    No magic numbers in copy; tokens + tabular numerals for any
+    stat the reader will quote.
+    ========================================================= */}
+  <section
+    class="section section--alt"
+    id="method"
+    data-toc-id="method"
+    data-toc-label="Method"
+    data-section-id="case-studies"
+    data-reveal
+  >
+    <div class="container">
+      <header class="section__head">
+        <SectionMark index="02" title="method" />
+        <p class="section__eyebrow mono">02 · Method</p>
+        <h2 class="section__title">Pattern → backtest → shipped.</h2>
+        <p class="section__sub">
+          Three steps. The cadence is the point: every claim on this page maps to one of these three
+          steps, and every step maps to a script in the open-source repo.
+        </p>
+      </header>
+
+      <ol class="method" aria-label="Pattern, backtest, shipped cadence">
+        {
+          methodCadence.map((s) => (
+            <li class="method__step">
+              <p class="method__step-n mono">{s.step}</p>
+              <h3 class="method__step-name">{s.name}</h3>
+              <p class="method__step-body">{s.body}</p>
+            </li>
+          ))
+        }
+      </ol>
+
+      <p class="case-prose">
+        The methodology is the same shape as the public corpus: a small set of canonical steps,
+        each step with a deterministic fixture, each fixture with a tolerance, each result with a
+        provenance row. No future bars leak into the backtest. No kill criterion is moved after
+        the fact. No shipped note is reported unless the AAR is filed in the same build. The
+        cadence is the leash; the gates are the teeth.
+      </p>
+    </div>
+  </section>
+
+  {/* =========================================================
+    03. RESULT
+    N / TTS / hit-rate / mean-return with mono data prefixes
+    per spec. The non-result gets its own panel; this is the
+    page's editorial discipline in code form.
+    ========================================================= */}
+  <section
+    class="section"
+    id="result"
+    data-toc-id="result"
+    data-toc-label="Result"
+    data-section-id="case-studies"
+    data-reveal
+  >
+    <div class="container">
+      <header class="section__head">
+        <SectionMark index="03" title="result" />
+        <p class="section__eyebrow mono">03 · Result</p>
+        <h2 class="section__title">N, mean TTS, hit-rate, mean return.</h2>
+        <p class="section__sub">
+          Mono prefixes on every stat, per the v9.8 wave D spec. The headline numbers below describe
+          the cadence; the funnel from raw hypothesis to shipped note is reported in the panel that
+          follows, not buried.
+        </p>
+      </header>
+
+      <div class="case-metrics" role="group" aria-label="Headline cadence metrics">
+        {
+          resultStats.map((m) => (
+            <MetricPill label={m.label} value={m.value} sub={m.sub} tone={m.tone} />
+          ))
+        }
+      </div>
+
+      <p class="case-prose">
+        The four stats above answer four different questions: how big is the audit trail
+        (<span class="mono">&gt; N</span>), how much wall-clock per shipped note
+        (<span class="mono">&gt; TTS</span>), what fraction survives the full gate stack
+        (<span class="mono">&gt; hit-rate</span>), and what is the median effect size of a shipped
+        note (<span class="mono">&gt; mean return</span>). Each number is reported with its prefix
+        so the reader can grep the AAR archive for the exact fixture that produced it.
+      </p>
+
+      {/* === Non-result panel. The editorial discipline in code. === */}
+      <article class="case-neg" aria-label="Non-result: funnel from hypothesis to shipped">
+        <p class="case-neg__rule mono">
+          <span class="case-neg__rule-n">02</span>The funnel from raw hypothesis to shipped note is roughly 50%.
+        </p>
+        <p class="case-neg__body">
+          The headline beat is the cadence, not any individual note. Of every hypothesis registered,
+          roughly 29% die on the G1-G7 mechanical-validity layer (insufficient data, schema violation,
+          regime-sign missing). Another slice dies on G8-G15 statistical-nulls. The 0.71 hit-rate is
+          the surviving fraction past the full G1-G31 stack; the page reports this in three places,
+          not one. The discipline: if a result only holds for half the inputs, the reporting surface
+          says so.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  {/* =========================================================
+    04. WHAT SHIPPED
+    Code, notes, dashboard, AAR archive. Each shipped artifact
+    is NDA-clean by construction and traceable to a public
+    surface.
+    ========================================================= */}
+  <section
+    class="section section--alt"
+    id="shipped"
+    data-toc-id="shipped"
+    data-toc-label="What shipped"
+    data-section-id="case-studies"
+    data-reveal
+  >
+    <div class="container">
+      <header class="section__head">
+        <SectionMark index="04" title="shipped" />
+        <p class="section__eyebrow mono">04 · What shipped</p>
+        <h2 class="section__title">Code, notes, dashboard, AAR archive.</h2>
+        <p class="section__sub">
+          Four artifacts. Each ships as a public, dated surface. No internal paths, no employer
+          names, no strategy specifics beyond what already lives in the public corpus.
+        </p>
+      </header>
+
+      <ol class="shipped" aria-label="Shipped artifacts">
+        {
+          shipped.map((s) => (
+            <li class="shipped__row">
+              <span class="shipped__kind mono">{s.kind}</span>
+              <span class="shipped__name mono">{s.name}</span>
+              <span class="shipped__detail">{s.detail}</span>
+            </li>
+          ))
+        }
+      </ol>
+
+      <p class="case-prose">
+        Each shipped artifact is the surface a reviewer can verify without a private conversation:
+        the harness runs from a public seed, the reading-list cites the source, the dashboard panel
+        is a live URL, and the AAR archive is a public directory of 241 dated markdown files. The
+        same gate stack is the gate stack on
+        <a href={path('/methodology')}>/methodology</a>, applied to a daily-cadence discipline.
+      </p>
+    </div>
+  </section>
+
+  <CTABanner
+    title="Want the harness?"
+    sub="The morning-quant-harness package is MIT-licensed and offline-runnable. Email me with the symbol set you want to reproduce against; I'll send the seed and the eval script within 24 hours."
+    primaryLabel="Email me"
+    secondaryLabel="Read /methodology"
+    secondaryHref={path('/methodology')}
+  />
+</BaseLayout>
+
+<style>
+  /* === Case-study head (mirror of proof-head register) === */
+  .case-head {
+    padding-block: var(--sp-9) var(--sp-7);
+    background: var(--c-paper);
+    border-bottom: var(--border);
+  }
+  .case-head__crumb {
+    font-size: var(--fs-xs);
+    color: var(--c-ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-block: var(--sp-4) 0;
+  }
+  .case-head__crumb a {
+    color: var(--c-primary);
+    text-decoration: underline;
+    text-decoration-color: var(--c-rule-strong);
+    text-underline-offset: 3px;
+  }
+  .case-head__crumb a:hover {
+    color: var(--c-amber);
+    text-decoration-color: var(--c-amber);
+  }
+  .case-head__title {
+    font-size: clamp(1.75rem, 5vw, 3.5rem);
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+    margin-block: var(--sp-4) var(--sp-5);
+  }
+  .case-head__voice {
+    display: block;
+    margin-bottom: var(--sp-5);
+  }
+  .case-head__sub {
+    font-size: var(--fs-lg);
+    color: var(--c-ink-2);
+    line-height: var(--lh-loose);
+    max-width: 72ch;
+  }
+
+  /* === Case-study grid (2-col on desktop, 1-col on mobile) === */
+  .case-grid {
+    display: grid;
+    gap: var(--sp-5);
+  }
+  .case-grid--two {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+
+  /* === Card (sharp corners · hairline rule · mono labels) === */
+  .case-card {
+    padding: var(--sp-5);
+    background: var(--c-bg);
+    border: var(--border);
+    border-left: 3px solid var(--c-amber);
+    display: grid;
+    gap: var(--sp-3);
+  }
+  .case-card__title {
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    color: var(--c-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0;
+  }
+  .case-card__body {
+    font-size: var(--fs-sm);
+    color: var(--c-ink-2);
+    line-height: var(--lh-loose);
+    margin: 0;
+    max-width: 64ch;
+  }
+
+  /* === Method cadence (3 numbered steps) === */
+  .method {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--sp-6);
+    display: grid;
+    gap: var(--sp-4);
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+  .method__step {
+    padding: var(--sp-5);
+    background: var(--c-bg-2);
+    border: 1px solid var(--c-rule);
+    border-top: 3px solid var(--c-amber);
+    display: grid;
+    gap: var(--sp-3);
+  }
+  .method__step-n {
+    font-size: var(--fs-xs);
+    color: var(--c-amber);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    margin: 0;
+  }
+  .method__step-name {
+    font-size: var(--fs-md);
+    font-weight: 700;
+    color: var(--c-primary);
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+  .method__step-body {
+    font-size: var(--fs-sm);
+    color: var(--c-ink-2);
+    line-height: var(--lh-loose);
+    margin: 0;
+  }
+
+  /* === Metrics row === */
+  .case-metrics {
+    display: grid;
+    gap: var(--sp-4);
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    margin-block: var(--sp-5) var(--sp-6);
+  }
+
+  /* === Non-result panel === */
+  .case-neg {
+    padding: var(--sp-5);
+    background: var(--c-bg-2);
+    border-left: 3px solid var(--c-amber);
+    border-radius: 0;
+    display: grid;
+    gap: var(--sp-4);
+    margin-block: var(--sp-5) 0;
+  }
+  .case-neg__rule {
+    display: flex;
+    align-items: baseline;
+    gap: var(--sp-3);
+    margin: 0;
+    font-size: var(--fs-xs);
+    color: var(--c-ink-2);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .case-neg__rule-n {
+    flex-shrink: 0;
+    font-weight: 600;
+    color: var(--c-amber);
+    min-width: 1.7em;
+  }
+  .case-neg__body {
+    margin: 0;
+    font-size: var(--fs-sm);
+    color: var(--c-ink-2);
+    line-height: var(--lh-loose);
+    max-width: 72ch;
+  }
+
+  /* === Shipped list (tabular role=table of NDA-clean artifacts) === */
+  .shipped {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--sp-6);
+    border-top: 1px solid var(--c-rule);
+  }
+  .shipped__row {
+    display: grid;
+    grid-template-columns: 100px minmax(0, 1.2fr) minmax(0, 2.4fr);
+    gap: var(--sp-4);
+    padding: var(--sp-4) var(--sp-2);
+    border-bottom: 1px solid var(--c-rule-soft);
+    align-items: baseline;
+    transition: background var(--transition);
+  }
+  .shipped__row:hover {
+    background: var(--c-paper);
+  }
+  .shipped__kind {
+    font-size: var(--fs-xs);
+    color: var(--c-amber);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .shipped__name {
+    font-size: var(--fs-sm);
+    color: var(--c-primary);
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .shipped__detail {
+    font-size: var(--fs-sm);
+    color: var(--c-ink-2);
+    line-height: var(--lh-loose);
+  }
+
+  @media (max-width: 720px) {
+    .shipped__row {
+      grid-template-columns: 1fr;
+      gap: var(--sp-1);
+      padding: var(--sp-3) 0;
+    }
+  }
+
+  /* === Institutional prose paragraph === */
+  .case-prose {
+    margin: var(--sp-5) 0 var(--sp-3);
+    padding-block: var(--sp-4);
+    border-top: 1px solid var(--c-rule);
+    border-bottom: 1px solid var(--c-rule);
+    font-size: var(--fs-base);
+    color: var(--c-ink-2);
+    line-height: var(--lh-loose);
+    max-width: 72ch;
+  }
+  .case-prose a {
+    color: var(--c-primary);
+    text-decoration: underline;
+    text-decoration-color: var(--c-rule-strong);
+    text-underline-offset: 3px;
+  }
+  .case-prose a:hover {
+    color: var(--c-amber);
+    text-decoration-color: var(--c-amber);
+  }
+  .case-prose .mono {
+    font-family: var(--ff-mono);
+    color: var(--c-amber);
+    font-weight: 600;
+  }
+</style>

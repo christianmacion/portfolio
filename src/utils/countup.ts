@@ -53,9 +53,20 @@ export interface CountUpOptions {
 export function animateCountUp(el: HTMLElement, opts: CountUpOptions = {}): void {
   const target = el.dataset.countup ?? el.textContent ?? '';
   const parsed = parseNumeric(target);
-  if (!parsed) return; // not numeric — leave alone
+  if (!parsed) return; // not numeric. leave alone
 
   const { duration = 1400 } = opts;
+
+  // v6.18 W2 lock (2026-08-08): aria-live="polite" on count-up targets
+  // so screen readers announce the final numeric value when the
+  // animation completes (per WCAG 4.1.3 live-region requirement).
+  // Idempotent — only sets if not already present.
+  if (!el.hasAttribute('aria-live')) {
+    el.setAttribute('aria-live', 'polite');
+  }
+  if (!el.hasAttribute('aria-atomic')) {
+    el.setAttribute('aria-atomic', 'true');
+  }
 
   if (REDUCED_MOTION) {
     el.textContent = target;

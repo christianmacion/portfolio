@@ -58,7 +58,7 @@ const {
     )
   }
 
-  <footer class="code-card__foot">
+  <footer class="code-card__foot" aria-label={`${title} source reference`}>
     <span class="mono code-card__path">{repoPath}</span>
     {
       href && (
@@ -88,6 +88,13 @@ const {
     border-color: var(--c-primary);
     border-left-color: var(--c-amber);
     box-shadow: var(--shadow-sm);
+    /* v6.18 W2 polish (2026-08-08): Bryllim card-hover-lift. */
+    transform: translateY(-1px);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .code-card:hover {
+      transform: none;
+    }
   }
   .code-card__head {
     display: flex;

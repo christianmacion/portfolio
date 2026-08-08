@@ -1,0 +1,214 @@
+---
+/**
+ * stack.astro :  /stack/ · v9.8 Wave B tools + tech stack.
+ *
+ * What runs in production, what runs in dev, what is on the bench.
+ * Single-source for the chrome that the /skills page references at a
+ * higher level (this page is the inventory; /skills is the proficiency
+ * matrix).
+ *
+ * Section layout (grid of stack-cards, 4 categories):
+ *   02 :  tools and stack   (SectionMark)
+ *   §    :  4 categories: language, data, infra, ai
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import SectionMark from '@components/SectionMark.astro';
+import SubpageHero from '@components/SubpageHero.astro';
+import { buildStampUtc8 } from '@utils/build-stamp';
+
+const subpage = {
+  slug: 'stack',
+  index: '02',
+  title: 'tools and stack',
+  pageTitle: 'Stack',
+  description:
+    'Tools, libraries, and infrastructure: what runs in production, what runs in dev, and what is on the bench.',
+  chip: 'STACK · TOOLS · WHAT IS INSTALLED',
+  // v11.W2 : financial-markets tag (task #4).
+  roleLine: 'Stack for financial markets, quant research, and AI engineering',
+};
+
+const lastUpdated = buildStampUtc8();
+
+interface StackCard {
+  category: string;
+  items: Array<{ name: string; tag: string; note: string }>;
+}
+
+const stack: StackCard[] = [
+  {
+    category: 'language & runtime',
+    items: [
+      { name: 'TypeScript', tag: 'lang', note: 'Portfolio · Astro · front-end · eval harness glue.' },
+      { name: 'Python', tag: 'lang', note: 'Backtests · RAG · MCP servers · data plumbing.' },
+      { name: 'Astro 7', tag: 'framework', note: 'Static-first portfolio; per-route islands <100KB gz.' },
+      { name: 'Node 22', tag: 'runtime', note: 'Astro SSR · local script glue · GitHub API helpers.' },
+    ],
+  },
+  {
+    category: 'data + retrieval',
+    items: [
+      { name: 'Postgres', tag: 'db', note: 'Production ledger · strategy state · audit log.' },
+      { name: 'SQLite', tag: 'db', note: 'Eval fixtures · local scorecards · portable snapshots.' },
+      { name: 'TF-IDF cosine', tag: 'rag', note: 'Citation-grounded retrieval over curated corpus.' },
+      { name: 'KaTeX', tag: 'math', note: 'In-line equations on /skills, /methodology, /markets.' },
+    ],
+  },
+  {
+    category: 'infra + deploy',
+    items: [
+      { name: 'Cloudflare Pages', tag: 'host', note: 'Static + Functions + Pages CI from main.' },
+      { name: 'GitHub Actions', tag: 'ci', note: 'Lighthouse, axe-core, NDA-guard, asset audit.' },
+      { name: 'Wrangler', tag: 'deploy', note: 'Pages deploy via npm run deploy:mirror.' },
+      { name: 'Workers', tag: 'edge', note: 'Functions middleware: CSP, security headers.' },
+    ],
+  },
+  {
+    category: 'ai + eval',
+    items: [
+      { name: 'MCP', tag: 'protocol', note: 'Backtest server · eval-mcp-server · primitives 3/3.' },
+      { name: 'RAG harness', tag: 'eval', note: '16-paper corpus · 0 LLM calls · deterministic.' },
+      { name: 'numerical-faithfulness', tag: 'eval', note: '10 demo claims · 5 pass · 5 fail-by-design.' },
+      { name: 'Axe-core', tag: 'a11y', note: 'WCAG 2.2 AA · CI gate · lighthouse ≥ 95 floor.' },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title={subpage.pageTitle}
+  description={subpage.description}
+  breadcrumbs={[
+    { name: 'Home', href: '/' },
+    { name: subpage.pageTitle, href: `/${subpage.slug}` },
+  ]}
+>
+  <SubpageHero slug={subpage.slug} label={subpage.pageTitle} roleLine={subpage.roleLine}>
+    <p class="page-head__eyebrow mono">
+      <span class="page-head__eyebrow-chip">{subpage.chip}</span>
+      <span class="page-head__eyebrow-line">{stack.length} CATEGORIES · {stack.reduce((s, c) => s + c.items.length, 0)} ITEMS · UPDATED ON SHIP</span>
+    </p>
+    <SectionMark index={subpage.index} title={subpage.title} ariaHidden={false} />
+    <h2 class="page-head__title" data-words>
+      What runs in prod. <span class="hl">What is on the bench</span>.
+    </h2>
+    <p class="page-head__lede">
+      The inventory. Production tools ship with a tag and a one-line note explaining why
+      the choice, not the alternative. The bench list is the next-iteration pipeline :  what
+      is installed but not yet load-bearing.
+    </p>
+  </SubpageHero>
+
+  <div class="stack-body container">
+    {
+      stack.map((cat) => (
+        <section class="stack-category" aria-labelledby={`stack-${cat.category.replace(/\s+/g, '-')}`} data-section-id="stack">
+          <h2 class="stack-category__title" id={`stack-${cat.category.replace(/\s+/g, '-')}`}>
+            {cat.category}
+          </h2>
+          <ul class="stack-grid" role="list">
+            {
+              cat.items.map((it) => (
+                <li class="stack-card">
+                  <div class="stack-card__head">
+                    <h3 class="stack-card__name">{it.name}</h3>
+                    <span class="stack-card__tag mono">{it.tag}</span>
+                  </div>
+                  <p class="stack-card__note">{it.note}</p>
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+      ))
+    }
+
+    <p class="stack-stamp mono" aria-label="Last updated">
+      LAST UPDATED · {lastUpdated} · UTC+8
+    </p>
+  </div>
+</BaseLayout>
+
+<style>
+  .stack-body {
+    padding-block: var(--sp-8);
+  }
+  .stack-category {
+    margin-bottom: var(--sp-10);
+  }
+  .stack-category__title {
+    font-size: var(--text-base, 1rem);
+    font-weight: var(--font-weight-semibold, 600);
+    color: var(--c-ink);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding-bottom: var(--sp-3);
+    border-bottom: 1px solid var(--c-rule);
+    margin-bottom: var(--sp-5);
+  }
+  .stack-grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    gap: var(--sp-4);
+  }
+  .stack-card {
+    background: var(--c-bg-2);
+    border: 1px solid var(--c-rule);
+    border-radius: var(--radius-sm, 0px);
+    padding: var(--sp-4);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition:
+      transform 200ms ease,
+      border-color 200ms ease;
+  }
+  .stack-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--c-amber);
+  }
+  .stack-card__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .stack-card__name {
+    font-size: 14.5px;
+    font-weight: 600;
+    color: var(--c-ink);
+    margin: 0;
+  }
+  .stack-card__tag {
+    font-size: 10px;
+    color: var(--c-ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 1px 6px;
+    border: 1px solid var(--c-rule);
+  }
+  .stack-card__note {
+    font-size: 13px;
+    color: var(--c-ink-2);
+    line-height: 1.45;
+  }
+  .stack-stamp {
+    margin-top: var(--sp-10);
+    font-size: 10.5px;
+    color: var(--c-ink-3);
+    letter-spacing: 0.06em;
+    text-align: right;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .stack-card {
+      transition: none;
+    }
+    .stack-card:hover {
+      transform: none;
+    }
+  }
+</style>
