@@ -116,22 +116,24 @@ const ICONS: Record<string, string> = {
 ---
 
 <!-- Mobile drawer toggle (visible < 980px only).
-     v13.1.4 polish-7i (2026-08-09): aria-expanded moved off the
-     display:none input (which is invisible to screen readers) onto the
-     visible label. The JS sync() now mirrors state onto the label so
-     assistive tech announces "expanded/collapsed" correctly per WCAG
-     4.1.2. The input keeps its own aria-expanded as a redundant
-     signal for any non-standard AT engine that reads it. -->
-<input
-  type="checkbox"
+     v13.1.4 polish-7m (2026-08-09): checkbox-hack removed. The previous
+     <input type="checkbox" id="rail-toggle"> + <label for="rail-toggle">
+     pattern silently failed on iOS Safari + Chromium mobile : display:none
+     on the input broke native label-input click delegation, so the tap
+     registered (focus border visible) but checkbox.checked never flipped
+     and the :checked ~ .side-rail selector never matched. Drawer stayed
+     at translateX(-100%) on every mobile viewport : BLOCKER, 100% of
+     mobile users could not navigate.
+
+     Fix: single native <button type="button"> with aria-expanded="true|false"
+     as the single source of truth. CSS selectors key off
+     .side-rail__toggle[aria-expanded="true"]; JS listens for `click`,
+     flips the attribute, and mirrors state into <main inert> + body.no-scroll.
+     Pattern matches the React/ARIA community consensus for this exact
+     failure mode (WCAG 4.1.2 name/role/value). -->
+<button
+  type="button"
   id="rail-toggle"
-  class="side-rail__toggle-input"
-  aria-hidden="false"
-  aria-expanded="false"
-  aria-controls="primary-rail"
-/>
-<label
-  for="rail-toggle"
   class="side-rail__toggle"
   aria-label="Toggle navigation"
   aria-expanded="false"
@@ -140,7 +142,7 @@ const ICONS: Record<string, string> = {
   <span class="side-rail__toggle-bar"></span>
   <span class="side-rail__toggle-bar"></span>
   <span class="side-rail__toggle-bar"></span>
-</label>
+</button>
 
 <!-- v13.1.4 polish-7i (2026-08-09): backdrop element.
      Visible only on mobile <980px AND only when drawer is open. Sits
@@ -912,12 +914,17 @@ const ICONS: Record<string, string> = {
 
   /* === Mobile drawer (< 980px) ===
      The rail collapses to a slide-down drawer at the top of the page,
-     toggled by the .side-rail__toggle hamburger. The CSS uses the
-     checkbox :checked sibling selector to swap visibility; the inline
-     script at the bottom mirrors state into aria-expanded. */
-  .side-rail__toggle-input {
-    display: none;
-  }
+     toggled by the .side-rail__toggle hamburger button. The CSS uses the
+     [aria-expanded="true"] attribute selector on the button (single
+     source of truth) to swap visibility; the inline script at the bottom
+     mirrors state into <main inert> + body.no-scroll.
+
+     v13.1.4 polish-7m (2026-08-09): the previous checkbox-hack
+     pattern (.side-rail__toggle-input:checked ~ .side-rail) silently
+     failed on iOS Safari + Chromium mobile because the input was
+     display:none and the browser-native label-input click delegation
+     never fired. Replaced with a single <button> + aria-expanded
+     attribute selector that works on every device. */
   .side-rail__toggle {
     display: none;
     position: fixed;
@@ -931,7 +938,12 @@ const ICONS: Record<string, string> = {
        28x22 inside via the ::after padding trick below.
        v13.1.4 polish-7i (2026-08-09): chrome contract — border-radius
        capped at 2px (was var(--radius-sm) which is 0 in this file but
-       2px in tokens.css). 2px is the chrome-contract max. */
+       2px in tokens.css). 2px is the chrome-contract max.
+       v13.1.4 polish-7m (2026-08-09): button reset (font/color/text-align
+       inherit + tap-highlight transparent). Required because the toggle
+       was a <label> previously and is now a <button> : user-agent button
+       styles differ across browsers, and -webkit-tap-highlight would
+       otherwise flash a gray overlay on every tap. */
     width: 44px;
     height: 44px;
     cursor: pointer;
@@ -939,6 +951,10 @@ const ICONS: Record<string, string> = {
     border: 1px solid var(--rule);
     border-radius: 2px;
     padding: 11px 8px;
+    font: inherit;
+    color: inherit;
+    text-align: inherit;
+    -webkit-tap-highlight-color: transparent;
     transition:
       background-color var(--mv-dur-snap) var(--mv-ease-settle),
       border-color var(--mv-dur-snap) var(--mv-ease-settle);
@@ -974,14 +990,16 @@ const ICONS: Record<string, string> = {
   }
   /* Open state : animate the 3 bars into an X. The middle bar fades,
      the top + bottom bars rotate 45deg in opposite directions. Driven
-     by :checked sibling selector (input is the state-holder). */
-  .side-rail__toggle-input:checked ~ .side-rail__toggle .side-rail__toggle-bar:nth-child(1) {
+     by [aria-expanded="true"] on the button (the state-holder).
+     v13.1.4 polish-7m (2026-08-09): selector is now a descendant of the
+     button itself rather than the previous input ~ label ~ bar chain. */
+  .side-rail__toggle[aria-expanded="true"] .side-rail__toggle-bar:nth-child(1) {
     transform: translateY(7px) rotate(45deg);
   }
-  .side-rail__toggle-input:checked ~ .side-rail__toggle .side-rail__toggle-bar:nth-child(2) {
+  .side-rail__toggle[aria-expanded="true"] .side-rail__toggle-bar:nth-child(2) {
     opacity: 0;
   }
-  .side-rail__toggle-input:checked ~ .side-rail__toggle .side-rail__toggle-bar:nth-child(3) {
+  .side-rail__toggle[aria-expanded="true"] .side-rail__toggle-bar:nth-child(3) {
     transform: translateY(-7px) rotate(-45deg);
   }
 
@@ -1031,10 +1049,10 @@ const ICONS: Record<string, string> = {
       transition: transform var(--mv-dur-snap) var(--mv-ease-settle);
       box-shadow: var(--shadow-md);
     }
-    .side-rail__toggle-input:checked ~ .side-rail {
+    .side-rail__toggle[aria-expanded="true"] ~ .side-rail {
       transform: translateX(0);
     }
-    .side-rail__toggle-input:checked ~ .side-rail__backdrop {
+    .side-rail__toggle[aria-expanded="true"] ~ .side-rail__backdrop {
       opacity: 1;
       pointer-events: auto;
     }
@@ -1097,87 +1115,75 @@ const ICONS: Record<string, string> = {
 </style>
 
 <script>
-  /* v9.5 a11y : keep aria-expanded in sync with the checkbox state.
-     The CSS uses :checked ~ .side-rail to slide the drawer; this
-     mirrors that state into aria-expanded so screen readers announce
-     "expanded" / "collapsed". Idempotent: only mutates when the
-     attribute would actually change.
+  /* v9.5 a11y : keep aria-expanded in sync with the toggle state.
+     The CSS uses [aria-expanded="true"] ~ .side-rail to slide the
+     drawer; this script is the writer of that attribute. Idempotent:
+     only mutates when the attribute would actually change.
      v6.18 W2 lock (2026-08-08): Escape-key handler added. When the
-     mobile drawer is open and the user presses Escape, the checkbox
-     is toggled off and focus returns to the hamburger label. Closes
-     the WCAG 2.1.1 / 4.1.2 disclosure-pattern gap.
+     mobile drawer is open and the user presses Escape, the toggle is
+     closed and focus returns to the hamburger button. Closes the
+     WCAG 2.1.1 / 4.1.2 disclosure-pattern gap.
 
      v13.1.4 polish-7i (2026-08-09): full disclosure-pattern coverage.
-     - aria-expanded mirrored onto the visible LABEL (the input is
-       display:none and invisible to AT, so its aria-expanded never
-       fires for screen readers). The label is what gets announced.
-     - Click-outside-to-close: clicking the backdrop, or anywhere
-       outside the rail, closes the drawer.
-     - Focus trap via `inert`: when the drawer is open, every element
-       outside the rail is marked `inert`, which removes them from
-       the focus order AND the a11y tree. This matches the visual
-       reality (the drawer covers the page content) and prevents Tab
-       from leaking into the hidden content behind the drawer.
-     - Body scroll lock: when the drawer is open, body.no-scroll
-       prevents the page from scrolling behind it. Lock lifts on
-       close. The `overflow:hidden` rule ships in global.css.
-     - Focus restore on close: when the drawer closes, focus returns
-       to the hamburger toggle so keyboard users don't get lost. */
+     - aria-expanded mirrored onto the visible BUTTON (single source
+       of truth). Click-outside-to-close, focus trap via `inert`,
+       body scroll lock, focus restore on close all preserved.
+
+     v13.1.4 polish-7m (2026-08-09): checkbox-hack removed. The toggle
+     was a hidden <input type="checkbox"> + visible <label> pair, and
+     the display:none input broke native label-input click delegation
+     on iOS Safari + Chromium mobile. Replaced with a single
+     <button type="button"> + `click` listener; aria-expanded on the
+     button is the only state. Pattern matches the React/ARIA
+     community consensus for this exact failure mode (WCAG 4.1.2). */
   const toggle = document.getElementById('rail-toggle');
-  if (toggle instanceof HTMLInputElement) {
-    const label = document.querySelector<HTMLLabelElement>('label[for="rail-toggle"]');
+  if (toggle instanceof HTMLButtonElement) {
     const backdrop = document.querySelector<HTMLElement>('.side-rail__backdrop');
     const rail = document.getElementById('primary-rail');
     const main = document.querySelector<HTMLElement>('main.layout-main');
 
-    const setExpanded = (open: boolean) => {
+    const setOpen = (open: boolean) => {
+      // Button is the single source of truth for state.
       const next = open ? 'true' : 'false';
       if (toggle.getAttribute('aria-expanded') !== next) {
         toggle.setAttribute('aria-expanded', next);
       }
-      if (label && label.getAttribute('aria-expanded') !== next) {
-        label.setAttribute('aria-expanded', next);
-      }
-    };
-
-    const setInert = (open: boolean) => {
-      // Inert on <main> + everything else outside the rail. The rail
-      // itself is the only focusable region when the drawer is open.
-      // Browser-native focus trap; works with all modern screen readers.
+      // Inert on <main> : the rail itself is the only focusable region
+      // when the drawer is open. Browser-native focus trap; works with
+      // all modern screen readers.
       if (main) {
         if (open) main.setAttribute('inert', '');
         else main.removeAttribute('inert');
       }
-    };
-
-    const setScrollLock = (open: boolean) => {
+      // Body scroll lock : prevents the page from scrolling behind the
+      // drawer. Lock lifts on close. The overflow:hidden rule ships in
+      // global.css.
       if (open) document.body.classList.add('no-scroll');
       else document.body.classList.remove('no-scroll');
     };
 
     const closeDrawer = (returnFocus: boolean) => {
-      toggle.checked = false;
-      setExpanded(false);
-      setInert(false);
-      setScrollLock(false);
-      if (returnFocus) label?.focus();
+      setOpen(false);
+      if (returnFocus) toggle.focus();
     };
 
-    const sync = () => {
-      const open = toggle.checked;
-      setExpanded(open);
-      setInert(open);
-      setScrollLock(open);
-    };
+    // Initial sync : aria-expanded="false" is set in the markup, but
+    // ensure the side effects (inert / body class) match.
+    setOpen(false);
 
-    toggle.addEventListener('change', sync);
-    sync();
+    // Toggle button : click flips aria-expanded. Native button click
+    // works on every browser (the previous label-input delegation did
+    // NOT, on iOS Safari + Chromium mobile).
+    toggle.addEventListener('click', () => {
+      const open = toggle.getAttribute('aria-expanded') === 'true';
+      setOpen(!open);
+    });
 
     /* Escape close + return-focus on drawer. Listener is bound to
        keydown at the document level so it catches Escape regardless
        of focus location inside the drawer. */
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && toggle.checked) {
+      if (e.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
         e.preventDefault();
         closeDrawer(true);
       }
@@ -1186,15 +1192,14 @@ const ICONS: Record<string, string> = {
     /* Click-outside-to-close. The backdrop element is the primary
        click target. As a defensive backup, a document-level click
        listener closes the drawer when the click target is outside
-       both the rail AND the toggle label (clicks on the toggle
-       itself are handled by the browser via label/input linkage). */
+       both the rail AND the toggle button itself. */
     backdrop?.addEventListener('click', () => closeDrawer(false));
     document.addEventListener('click', (e) => {
-      if (!toggle.checked) return;
+      if (toggle.getAttribute('aria-expanded') !== 'true') return;
       const target = e.target as Node | null;
       if (!target) return;
       if (rail && rail.contains(target)) return;
-      if (label && label.contains(target)) return;
+      if (toggle.contains(target)) return;
       // Click landed outside the rail + outside the toggle : close.
       closeDrawer(false);
     });
