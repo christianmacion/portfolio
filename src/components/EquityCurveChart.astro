@@ -440,4 +440,23 @@ const regimeFill: Record<'calm' | 'normal' | 'stress', string> = (() => {
       flex-basis: 100%;
     }
   }
+
+  /* v13.1.4p1 : mobile label legibility. 9px viewBox font scales to 4.7-5.2px
+     effective at sub-500px viewports (e.g. 375x167px rendered SVG on iPhone SE).
+     Below 6px effective, glyphs anti-alias to illegible blobs. Bump to 14px in
+     viewBox coords so 14 * (375/720) = 7.3px effective on the narrowest target.
+     Letter-spacing tightened on panel labels because the larger glyphs widen the
+     "EQ"/"DD" pair toward the plot edge. */
+  @media (max-width: 500px) {
+    .eq-chart__tick,
+    .eq-chart__panel {
+      font-size: 14px;
+    }
+    .eq-chart__panel {
+      letter-spacing: 0.04em;
+    }
+    .eq-chart__xlabel {
+      font-size: 12px;
+    }
+  }
 </style>
