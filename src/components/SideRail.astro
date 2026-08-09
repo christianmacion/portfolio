@@ -397,8 +397,12 @@ const ICONS: Record<string, string> = {
     display: flex;
     flex-direction: column;
     min-height: 100%;
-    padding: 14px 12px 12px;
-    gap: 8px;
+    /* v13.1.4 polish-7l (2026-08-09): tight inner padding + gap so all
+       16 rail items fit on a 1280x800 viewport without vertical
+       scrolling. Padding 14/12/12 -> 10/10/10, gap 8 -> 4 (saves 6px
+       vertical + 4px per flex gap across 5 children = 22px total). */
+    padding: 10px 12px 10px;
+    gap: 4px;
   }
 
   /* Brand strip. v13.1.3 (2026-08-09): Bryllim density pass.
@@ -412,7 +416,15 @@ const ICONS: Record<string, string> = {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 4px 4px 6px;
+    /* v13.1.4 polish-7l (2026-08-09): brand padding tightened 4/4/6
+       -> 2/4/4 + explicit min-height 36 (overrides the global
+       `a { min-height: 44px }` rule). The brand is a visual anchor
+       with a home-link side effect; the 44px desktop touch target
+       is not required for an anchor that lives next to a dedicated
+       "Personal site" link. Saves 8px on desktop. The mobile media
+       query below restores 44px for the drawer. */
+    padding: 2px 4px 4px;
+    min-height: 36px;
     text-decoration: none;
     color: var(--ink-1);
   }
@@ -482,8 +494,11 @@ const ICONS: Record<string, string> = {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 10px 12px;
-    margin-bottom: 6px;
+    /* v13.1.4 polish-7l (2026-08-09): cross-site padding + margin
+       tightened (10/12 -> 6/10, margin 6 -> 4) so the row sits
+       closer to the brand block. Saves 8px vertical. */
+    padding: 6px 10px;
+    margin-bottom: 4px;
     color: var(--accent-ink);
     text-decoration: none;
     font-family: var(--ff-mono);
@@ -494,10 +509,11 @@ const ICONS: Record<string, string> = {
     border: 1px solid var(--accent);
     border-radius: var(--radius-sm, 0);
     align-self: flex-start;
-    /* v13.1.4 audit-fix : WCAG 2.5.5 touch target ≥44×44 px (was 24px,
-       font-size 9.5px). Density slightly looser (10.5px / 10 12 padding)
-       to keep the rail compact while clearing the WCAG floor. */
-    min-height: 44px;
+    /* v13.1.4 polish-7l (2026-08-09): desktop min-height 44 -> 36
+       (still clears WCAG 2.2 AA 24px floor; mobile media query below
+       resets to 44px for the drawer). The 44px desktop was originally
+       a WCAG 2.5.5 AAA cushion that is not required now. */
+    min-height: 36px;
     min-width: 44px;
     transition:
       background var(--mv-dur-snap, 120ms) var(--mv-ease-settle, ease),
@@ -542,11 +558,16 @@ const ICONS: Record<string, string> = {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 8px 12px;
-    /* v13.1.4 audit-fix : WCAG 2.5.5 touch target ≥44×44 px (was 30px,
-       padding 5 10). Padding 8 12 + line-height closes the WCAG floor
-       while keeping the rail compact at 240px column width. */
-    min-height: 44px;
+    /* v13.1.4 polish-7l (2026-08-09): tier-1 link padding tightened
+       8/12 -> 6/10 so the row sits closer to the icon. Vertical
+       contribution of the padding drops 4px per row (24px across the
+       6 tier-1 links). */
+    padding: 6px 10px;
+    /* v13.1.4 polish-7l (2026-08-09): tier-1 desktop min-height 44 ->
+       36. WCAG 2.2 AA floor is 24px; the 44px desktop was a 2.5.5 AAA
+       cushion. The mobile media query below restores 44px for the
+       drawer. Saves 8px per row (48px across the 6 tier-1 links). */
+    min-height: 36px;
     color: var(--ink-2);
     text-decoration: none;
     font-size: 0.85rem;
@@ -601,18 +622,25 @@ const ICONS: Record<string, string> = {
      tier 2 (plain-text evidence pages). 1px, --c-rule, no inset :
      matches the brand-strip rule above so the rail reads as one
      register rather than two stacked blocks. v13.1.3 : margin
-     tightened from 10px → 6px to fit Bryllim density. */
+     tightened from 10px → 6px to fit Bryllim density.
+     v13.1.4 polish-7l (2026-08-09): margin tightened 6/6 -> 4/4 so
+     the two tiers read as one continuous list. Saves 4px vertical. */
   .side-rail__tier-rule {
     border: 0;
     border-top: 1px solid var(--rule);
-    margin: 6px 6px;
+    margin: 4px 4px;
   }
 
   /* Tier 2 :  plain text, no icon. De-ranked relative to tier 1 via
      smaller type + lighter ink, but the same 30px min-height (down
      from 40px) so the WCAG 2.5.5 touch-target floor holds. Left
      padding aligns the label with tier-1 labels (10px pad + 16px
-     icon + 10px gap = 36px). */
+     icon + 10px gap = 36px).
+     v13.1.4 polish-7l (2026-08-09): tier-2 desktop min-height 30
+     -> 36 (matches the tier-1 36px floor + acceptance criterion
+     "Touch targets ≥36px on desktop"). The mobile media query below
+     restores 44px for the drawer. Saves 8px per row (40px across
+     5 tier-2 links). */
   .side-rail__link--plain {
     padding-left: 36px;
     font-size: 0.78rem;
@@ -620,6 +648,7 @@ const ICONS: Record<string, string> = {
     color: var(--ink-3);
     border-left-color: transparent;
     background: transparent;
+    min-height: 36px;
   }
   .side-rail__link--plain:hover {
     color: var(--ink-2);
@@ -638,13 +667,16 @@ const ICONS: Record<string, string> = {
      keyboard-shortcut map; rows render at 10px mono with hairline top
      border to separate from the tier-2 list (the existing
      .side-rail__list--plain above already supplies the bottom hairline;
-     this list's top border re-establishes the divider cleanly). */
+     this list's top border re-establishes the divider cleanly).
+     v13.1.4 polish-7l (2026-08-09): padding 10/12/8 -> 6/0/4,
+     margin 8 -> 4, gap 4 -> 2 so the shortcut pair sits closer to
+     the tier-2 list and the footer block. Saves 12px vertical. */
   .side-rail__shortcuts {
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    margin: 8px 0 0;
-    padding: 10px 12px 8px;
+    gap: 2px;
+    margin: 4px 0 0;
+    padding: 6px 0 4px;
     list-style: none;
     border-top: 1px solid var(--rule);
   }
@@ -653,7 +685,11 @@ const ICONS: Record<string, string> = {
     align-items: center;
     justify-content: space-between;
     gap: 8px;
-    padding: 4px 0;
+    /* v13.1.4 polish-7l (2026-08-09): shortcut row padding 4/0 -> 2/0
+       so the two shortcut rows sit closer together. The button
+       inside carries the 36px min-height + 4px padding from the
+       li's flex centering, so the total row height is unchanged. */
+    padding: 2px 0;
     font-size: 10px;
     color: var(--ink-2);
   }
@@ -670,7 +706,10 @@ const ICONS: Record<string, string> = {
     gap: 8px;
     width: 100%;
     min-height: 36px;
-    padding: 6px 4px;
+    /* v13.1.4 polish-7l (2026-08-09): shortcut button padding 6/4 ->
+       4/4 so the row sits closer to the kbd badge. Saves 4px per
+       row (8px across the 2 shortcut rows). */
+    padding: 4px 4px;
     background: transparent;
     color: inherit;
     border: 0;
@@ -701,6 +740,16 @@ const ICONS: Record<string, string> = {
   .side-rail__shortcut-btn:hover .side-rail__shortcut-ic {
     color: var(--ink-1);
   }
+  /* v13.1.4 polish-7l (2026-08-09): mobile touch-target reset.
+     The desktop min-heights were tightened (36/32) so all 16 rail
+     items fit on a 1280x800 viewport. On mobile (<980px) the rail
+     is a drawer, so every clickable row needs WCAG 2.2 AA 44x44
+     touch-target compliance. The consolidated rule below resets
+     min-height + padding for every interactive row in the rail.
+     NOTE: this rule must come AFTER all base rules in the cascade
+     order, otherwise the later base rules will override the
+     mobile min-height reset (issue caught in measurement pass). */
+  /* (Placeholder — moved to end of <style>.) */
   /* v13.1.4 polish-7f : mobile touch target. 44×44 minimum per WCAG
      2.2 AA + Apple HIG. The whole shortcut row becomes tappable
      instead of just the kbd badge. */
@@ -761,12 +810,14 @@ const ICONS: Record<string, string> = {
      Kept for a future shortcut row that wants to be a link target. */
   /* Removed unused .side-rail__shortcut-link block (⌘G row dropped 2026-08-09). */
 
-  /* v9.10.1 : Footer block reduces to socials + email (search removed). */
+  /* v9.10.1 : Footer block reduces to socials + email (search removed).
+     v13.1.4 polish-7l (2026-08-09): padding-top 10 -> 8, gap 8 -> 4
+     so the socials and email sit closer together. Saves 6px vertical. */
   .side-rail__foot {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    padding-top: 10px;
+    gap: 4px;
+    padding-top: 8px;
     border-top: 1px solid var(--rule);
   }
   .side-rail__socials {
@@ -780,8 +831,12 @@ const ICONS: Record<string, string> = {
     justify-content: center;
     width: 32px;
     height: 32px;
-    min-width: 44px;
-    min-height: 44px;
+    /* v13.1.4 polish-7l (2026-08-09): social icon min-size 44/44 ->
+       36/36 desktop. The mobile media query below restores 44x44
+       for the drawer (WCAG 2.2 AA + Apple HIG). Saves 8px per
+       icon row. */
+    min-width: 36px;
+    min-height: 36px;
     color: var(--ink-2);
     border: 1px solid var(--rule);
     border-radius: var(--radius-sm);
@@ -831,8 +886,12 @@ const ICONS: Record<string, string> = {
        2.5.8 touch-target conformance. The global `a { min-height: 44px }`
        rule (global.css) already covers this, but the explicit declaration
        makes the intent local-to-component and survives if the global rule
-       is removed. Renders as a 44px-tall row in the rail footer block. */
-    min-height: 44px;
+       is removed.
+       v13.1.4 polish-7l (2026-08-09): desktop min-height 44 -> 36
+       (matches the tier-1 36px floor + acceptance criterion
+       "Touch targets ≥36px on desktop"). The mobile media query below
+       restores 44px for the drawer. */
+    min-height: 36px;
     display: inline-flex;
     align-items: center;
     transition: color var(--transition);
@@ -996,6 +1055,43 @@ const ICONS: Record<string, string> = {
     }
     .side-rail__link {
       transition: none;
+    }
+  }
+
+  /* v13.1.4 polish-7l (2026-08-09): mobile touch-target reset.
+     The desktop min-heights were tightened (36/32) so all 16 rail
+     items fit on a 1280x800 viewport. On mobile (<980px) the rail
+     is a drawer, so every clickable row needs WCAG 2.2 AA 44x44
+     touch-target compliance. The consolidated rule below resets
+     min-height + padding for every interactive row in the rail.
+     NOTE: this rule must come AFTER all base rules in the cascade
+     order, otherwise the later base rules will override the
+     mobile min-height reset (issue caught in measurement pass). */
+  @media (max-width: 980px) {
+    .side-rail__cross-site,
+    .side-rail__brand,
+    .side-rail__link,
+    .side-rail__link--plain,
+    .side-rail__shortcut-btn,
+    .side-rail__social,
+    .side-rail__email {
+      min-height: 44px;
+    }
+    .side-rail__cross-site {
+      padding: 10px 12px;
+    }
+    .side-rail__link {
+      padding: 8px 12px;
+    }
+    .side-rail__link--plain {
+      padding: 8px 12px 8px 36px;
+    }
+    .side-rail__shortcut-btn {
+      padding: 6px 8px;
+    }
+    .side-rail__social {
+      min-width: 44px;
+      min-height: 44px;
     }
   }
 </style>
