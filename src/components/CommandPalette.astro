@@ -50,6 +50,32 @@ const dynamicRoutes = subpages.map((s) => ({
   tag: 'SUBPAGE',
 }));
 
+// v13.1.4 polish : per-route icon glyphs. 14x14 stroke-only svg, matches
+// the SideRail icon vocabulary. Unknown routes fall back to a chevron
+// so the column never feels empty.
+const ICON_MAP: Record<string, string> = {
+  '/':                '<path d="M3 9 L9 3 L15 9 M5 8 V14 H13 V8"/>',
+  '/now/':            '<circle cx="9" cy="9" r="5.5"/><path d="M9 6 V9 L11 11"/>',
+  '/for-recruiters/': '<path d="M3 7 H15 M3 11 H15 M5 4 H13 M5 14 H13"/>',
+  '/screening-call/': '<path d="M4 5 H14 V13 H4 Z M4 8 H14 M7 5 V13"/>',
+  '/proof/':          '<path d="M9 2 L14 5 V11 L9 14 L4 11 V5 Z"/>',
+  '/projects/':       '<rect x="3" y="3" width="5" height="5"/><rect x="10" y="3" width="5" height="5"/><rect x="3" y="10" width="5" height="5"/><rect x="10" y="10" width="5" height="5"/>',
+  '/work/':           '<path d="M3 4 H15 V12 H3 Z M3 7 H15 M6 4 V12"/>',
+  '/experience/':     '<path d="M3 6 L9 2 L15 6 V14 H3 Z M7 14 V9 H11 V14"/>',
+  '/skills/':         '<path d="M3 9 L9 3 L15 9 M9 3 V14"/>',
+  '/glossary/':       '<path d="M3 4 H10 V14 H3 Z M11 4 H15 V14 H11"/>',
+  '/certifications/': '<circle cx="9" cy="9" r="5.5"/><path d="M6 9 L8.5 11.5 L12 7"/>',
+  '/positions/':      '<rect x="3" y="4" width="12" height="10" rx="1"/><path d="M6 8 H12 M6 11 H10"/>',
+  '/publications/':   '<path d="M4 3 H10 L13 6 V14 H4 Z M10 3 V6 H13"/>',
+  '/methodology/':    '<path d="M3 9 H7 M11 9 H15 M3 5 H15 M3 13 H15"/>',
+  '/talks/':          '<path d="M3 6 H13 V12 H3 Z M13 8 L16 6 V12 L13 10"/>',
+  '/contact/':        '<rect x="3" y="5" width="12" height="9" rx="0.5"/><path d="M3 6 L9 10 L15 6"/>',
+};
+const DEFAULT_ICON = '<path d="M6 4 L12 9 L6 14"/>';
+function iconFor(href: string): string {
+  return ICON_MAP[href] ?? DEFAULT_ICON;
+}
+
 // v11.W2 : financial-markets tag for each subpage (W2 task #4).
 const financialMarketsTag: Record<string, string> = {
   notes: 'Notes on financial markets, quant research, and AI engineering',
@@ -224,41 +250,84 @@ const fmTagJson = JSON.stringify(financialMarketsTag);
   .cmdk__list {
     list-style: none;
     margin: 0;
-    padding: 4px 0;
+    padding: 6px 0;
     overflow-y: auto;
     flex: 1;
   }
+  /* v13.1.4 polish : item chip-tag pattern.
+     Each item is a flex row [icon · label · meta · tag-chip], with a
+     hairline divider below (except the last item). The tag is a
+     bordered chip (1px ink-3, 4px padding, mono 9px uppercase) so it
+     reads as a separate UI element instead of being concatenated
+     with the label. The active item gets an amber chip border +
+     amber label color + a 2px amber left rule. */
   .cmdk__item {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 8px 16px;
+    gap: 12px;
+    padding: 9px 16px;
+    margin: 0 8px;
+    width: calc(100% - 16px);
     color: var(--c-ink-2);
     font-family: var(--ff-sans);
     font-size: 13.5px;
     cursor: pointer;
-    border-left: 1px solid transparent;
+    border-left: 2px solid transparent;
+    border-bottom: 1px solid var(--c-rule-soft);
+    border-radius: 2px;
     transition:
-      color 120ms ease,
-      background 120ms ease,
-      border-color 120ms ease;
+      color 100ms ease,
+      background 100ms ease,
+      border-color 100ms ease;
+  }
+  .cmdk__item:last-child {
+    border-bottom: 0;
   }
   .cmdk__item[aria-selected='true'] {
     background: var(--c-bg-2);
     color: var(--c-amber);
     border-left-color: var(--c-amber);
-    border-left-width: 1px;
+  }
+  .cmdk__item-icon {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    color: var(--c-ink-3);
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 1.5;
+  }
+  .cmdk__item[aria-selected='true'] .cmdk__item-icon {
+    color: var(--c-amber);
+  }
+  .cmdk__item-label {
+    flex: 1;
+    font-weight: 500;
+  }
+  .cmdk__item-meta {
+    font-family: var(--ff-mono);
+    font-size: 9px;
+    letter-spacing: 0.06em;
+    color: var(--c-ink-3);
+    text-transform: uppercase;
+    margin-right: 4px;
   }
   .cmdk__item-tag {
-    margin-left: auto;
     font-family: var(--ff-mono);
-    font-size: 9.5px;
-    color: var(--c-ink-3);
-    letter-spacing: 0.08em;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: var(--c-ink-2);
     text-transform: uppercase;
+    padding: 2px 6px;
+    border: 1px solid var(--c-rule);
+    border-radius: 2px;
+    background: transparent;
+    white-space: nowrap;
+    line-height: 1;
   }
   .cmdk__item[aria-selected='true'] .cmdk__item-tag {
     color: var(--c-amber);
+    border-color: var(--c-amber);
   }
   .cmdk__item-empty {
     padding: 14px 16px;
@@ -405,12 +474,18 @@ const fmTagJson = JSON.stringify(financialMarketsTag);
         li.id = 'cmdk-opt-' + i;
         li.dataset.href = r.href;
         li.dataset.inPage = r.inPage ? '1' : '0';
+        const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        icon.setAttribute('class', 'cmdk__item-icon');
+        icon.setAttribute('viewBox', '0 0 18 18');
+        icon.setAttribute('aria-hidden', 'true');
+        icon.innerHTML = iconFor(r.href);
         const label = document.createElement('span');
         label.className = 'cmdk__item-label';
         label.textContent = r.label;
         const tag = document.createElement('span');
         tag.className = 'cmdk__item-tag';
         tag.textContent = r.tag;
+        li.appendChild(icon);
         li.appendChild(label);
         li.appendChild(tag);
         li.addEventListener('click', () => navigate(r));

@@ -307,10 +307,16 @@ class Globe {
         const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         p.setAttribute('d', d);
         p.setAttribute('class', 'wv-globe__land-shape');
-        p.setAttribute('fill', 'var(--c-bg)');
-        p.setAttribute('stroke', 'var(--c-ink-3)');
-        p.setAttribute('stroke-width', '0.35');
-        p.setAttribute('stroke-opacity', '0.55');
+        // Land fill : warm cream that contrasts with the panel bg
+        // (#FAFAFA). The previous polish pass set this to var(--c-bg)
+        // which equalled the page bg, so countries disappeared into the
+        // surface (visitor saw dots floating on a UFO outline, not a
+        // globe). Bumping to a tinted beige + amber-ink stroke at
+        // higher opacity makes the earth read as earth.
+        p.setAttribute('fill', '#E8E4DC');
+        p.setAttribute('stroke', '#8B7355');
+        p.setAttribute('stroke-width', '0.45');
+        p.setAttribute('stroke-opacity', '0.75');
         p.setAttribute('stroke-linejoin', 'round');
         this.landGroup.appendChild(p);
       }
