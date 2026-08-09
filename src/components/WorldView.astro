@@ -70,6 +70,7 @@ const buildStamp = new Date().toISOString().slice(11, 19) + 'Z';
     tabindex="-1"
   ></button>
   <div class="wv__panel" role="document">
+    <a class="wv__skip" href="#wv-ticker-list">Skip to ticker</a>
     <header class="wv__header">
       <p id="wv-title" class="wv__title mono">LIVE COVERAGE · L1 / L2 / L3 · ⌘J</p>
       <button
@@ -103,13 +104,43 @@ const buildStamp = new Date().toISOString().slice(11, 19) + 'Z';
             viewBox="0 0 360 360"
             preserveAspectRatio="xMidYMid meet"
             role="img"
-            aria-label="Live coverage globe. 12 venues across 5 continents."
+            aria-label="Live coverage globe. 12 venues across 5 continents (L1 top-of-book, L2 consolidated tape, L3 full depth-of-book). Drag to rotate, hover for venue detail."
           ></svg>
+          {/* v13.1.4 polish : inline marker-tier legend in the globe pane so
+              visitors can read what each ring count means without leaving
+              the modal. svg-native, mono, hairline-stroked dots only
+              (no halo / no glow per portfolio visual bar). */}
+          <ul class="wv__key mono" role="list" aria-label="Marker tier key">
+            <li class="wv__key-item">
+              <svg class="wv__key-mark" viewBox="0 0 16 16" aria-hidden="true">
+                <circle cx="8" cy="8" r="3" class="wv__key-fill" />
+              </svg>
+              <span class="wv__key-label">L1</span>
+              <span class="wv__key-desc">top-of-book</span>
+            </li>
+            <li class="wv__key-item">
+              <svg class="wv__key-mark" viewBox="0 0 16 16" aria-hidden="true">
+                <circle cx="8" cy="8" r="6" class="wv__key-ring" fill="none" stroke-width="0.6" />
+                <circle cx="8" cy="8" r="3" class="wv__key-fill" />
+              </svg>
+              <span class="wv__key-label">L2</span>
+              <span class="wv__key-desc">consolidated tape</span>
+            </li>
+            <li class="wv__key-item">
+              <svg class="wv__key-mark" viewBox="0 0 16 16" aria-hidden="true">
+                <circle cx="8" cy="8" r="7" class="wv__key-ring" fill="none" stroke-width="0.5" />
+                <circle cx="8" cy="8" r="4.5" class="wv__key-ring" fill="none" stroke-width="0.6" />
+                <circle cx="8" cy="8" r="2" class="wv__key-fill" />
+              </svg>
+              <span class="wv__key-label">L3</span>
+              <span class="wv__key-desc">full depth-of-book</span>
+            </li>
+          </ul>
           <p class="wv__globe-hint mono" data-worldview-hint aria-live="polite">drag to rotate · hover pauses</p>
         </div>
         <div class="wv__ticker-pane" aria-labelledby="wv-ticker-label">
           <h3 id="wv-ticker-label" class="wv__ticker-label mono">TICKER</h3>
-          <ul class="wv__ticker" data-worldview-ticker role="list"></ul>
+          <ul id="wv-ticker-list" class="wv__ticker" data-worldview-ticker role="list"></ul>
         </div>
       </div>
     </section>
@@ -283,6 +314,82 @@ const buildStamp = new Date().toISOString().slice(11, 19) + 'Z';
     text-transform: uppercase;
     color: var(--c-ink-3);
     text-align: center;
+  }
+
+  /* v13.1.4 polish : skip-link. Hidden by default; only visible when
+     keyboard-focused at the top of the modal. Same chrome as the
+     SideRail shortcuts kbd tokens (hairline + ink + mono). */
+  .wv__skip {
+    position: absolute;
+    top: 8px;
+    left: 12px;
+    padding: 4px 8px;
+    font-family: var(--font-mono, ui-monospace, SFMono-Regular, monospace);
+    font-size: 9.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--c-ink-1, #0a0a0a);
+    background: var(--c-bg, #fafafa);
+    border: 1px solid var(--c-ink-2, #1f1f1f);
+    text-decoration: none;
+    transform: translateY(-200%);
+    transition: transform 120ms ease-out;
+    z-index: 2;
+  }
+  .wv__skip:focus,
+  .wv__skip:focus-visible {
+    transform: translateY(0);
+    outline: 1px solid var(--c-amber, #b45309);
+    outline-offset: 2px;
+  }
+
+  /* v13.1.4 polish : marker-tier key (L1 / L2 / L3). Inline svg so it
+     scales with the modal. Flat amber dots, hairline stroke on the
+     rings — no halo, no glow (portfolio visual bar). */
+  .wv__key {
+    list-style: none;
+    margin: 0;
+    padding: 6px 0 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--c-ink-3);
+  }
+  .wv__key-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    justify-content: center;
+  }
+  .wv__key-mark {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+  }
+  .wv__key-fill {
+    fill: var(--c-amber, #b45309);
+  }
+  .wv__key-ring {
+    stroke: var(--c-amber, #b45309);
+  }
+  .wv__key-label {
+    color: var(--c-ink-1, #0a0a0a);
+    font-weight: 500;
+  }
+  .wv__key-desc {
+    color: var(--c-ink-3);
+    font-size: 8px;
+    letter-spacing: 0.06em;
+    text-transform: lowercase;
+    display: none;
+  }
+  @media (min-width: 720px) {
+    .wv__key-desc {
+      display: inline;
+    }
   }
   .wv__ticker-pane {
     display: flex;

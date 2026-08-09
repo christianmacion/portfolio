@@ -71,6 +71,8 @@ class Globe {
   private path: any; // d3 GeoPath : lazy typed to avoid static d3-geo import
   private landPaths: string[] = [];
   private graticulePath: string;
+  private equatorPath: SVGPathElement;
+  private meridianPath: SVGPathElement;
   private oceanRect: SVGRectElement;
   private landGroup: SVGGElement;
   private graticuleGroup: SVGGElement;
@@ -102,7 +104,8 @@ class Globe {
     this.svg.setAttribute('role', 'img');
     this.svg.setAttribute('aria-label', 'Spinning earth with global event pins (institutional data terminal)');
 
-    // Ocean disc
+    // Ocean disc (transparent — the limb circle below supplies the visible
+    // ocean fill so the disc edge carries the hairline outline).
     this.oceanRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
     this.oceanRect.setAttribute('x', '0');
     this.oceanRect.setAttribute('y', '0');
@@ -111,7 +114,8 @@ class Globe {
     this.oceanRect.setAttribute('fill', 'transparent');
     this.svg.appendChild(this.oceanRect);
 
-    // Limb circle (the visible disc edge)
+    // Limb circle : the visible disc edge + ocean fill. Subtle warm
+    // cream so the landmasses have readable contrast against the ocean.
     const limb = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
     limb.setAttribute('cx', String(this.width / 2));
     limb.setAttribute('cy', String(this.height / 2));
@@ -121,7 +125,9 @@ class Globe {
     limb.setAttribute('stroke-width', '1');
     this.svg.appendChild(limb);
 
-    // Graticule layer
+    // Graticule layer (lat/lon grid) — hairline 0.4px at 45% opacity so
+    // it reads as background context, never competing with the landmasses
+    // or venue markers. d3-geo's geoGraticule10() = 10° spacing.
     this.graticuleGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
     this.graticuleGroup.setAttribute('class', 'wv-globe__graticule');
     const gratPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
@@ -131,6 +137,24 @@ class Globe {
     gratPath.setAttribute('stroke-width', '0.4');
     gratPath.setAttribute('stroke-opacity', '0.45');
     this.graticuleGroup.appendChild(gratPath);
+
+    // Equator + prime meridian accents : 1px amber at 25% opacity, drawn
+    // over the graticule so they read as institutional reference lines
+    // (Bloomberg terminal touches them). Helps the globe anchor visually.
+    // Paths are populated in reframe() once the projection is wired.
+    this.equatorPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    this.equatorPath.setAttribute('fill', 'none');
+    this.equatorPath.setAttribute('stroke', AMBER);
+    this.equatorPath.setAttribute('stroke-width', '0.6');
+    this.equatorPath.setAttribute('stroke-opacity', '0.25');
+    this.graticuleGroup.appendChild(this.equatorPath);
+    this.meridianPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    this.meridianPath.setAttribute('fill', 'none');
+    this.meridianPath.setAttribute('stroke', AMBER);
+    this.meridianPath.setAttribute('stroke-width', '0.6');
+    this.meridianPath.setAttribute('stroke-opacity', '0.25');
+    this.graticuleGroup.appendChild(this.meridianPath);
+
     this.svg.appendChild(this.graticuleGroup);
 
     // Land layer
@@ -283,9 +307,25 @@ class Globe {
         const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         p.setAttribute('d', d);
         p.setAttribute('class', 'wv-globe__land-shape');
+        p.setAttribute('fill', 'var(--c-bg)');
+        p.setAttribute('stroke', 'var(--c-ink-3)');
+        p.setAttribute('stroke-width', '0.35');
+        p.setAttribute('stroke-opacity', '0.55');
+        p.setAttribute('stroke-linejoin', 'round');
         this.landGroup.appendChild(p);
       }
     }
+    // Equator + prime meridian : drawn after land so they render on top.
+    // Built from a single line (equator) + great circle (prime meridian)
+    // sampled in lon/lat space. Cheap (~24 segments each).
+    const equatorCoords: [number, number][] = [];
+    for (let i = 0; i <= 72; i++) equatorCoords.push([i * 5 - 180, 0]);
+    const meridianCoords: [number, number][] = [];
+    for (let i = 0; i <= 36; i++) meridianCoords.push([0, i * 5 - 90]);
+    const eqD = this.path({ type: 'LineString', coordinates: equatorCoords });
+    const meD = this.path({ type: 'LineString', coordinates: meridianCoords });
+    this.equatorPath.setAttribute('d', eqD ?? '');
+    this.meridianPath.setAttribute('d', meD ?? '');
     this.renderPins();
     this.renderVenues();
   }
