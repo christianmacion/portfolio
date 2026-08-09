@@ -224,6 +224,81 @@ async function loadYahooQuotes(): Promise<YahooQuote[]> {
   }
 }
 
+// === Binance 24hr ticker =============================================
+// v13.1.4 polish-7d : wire Binance public API as the LIVE source for
+// BTC + ETH. Binance updates every ~1s, way more "live" than CoinGecko's
+// 30s+ lag. CORS-enabled (Access-Control-Allow-Origin: *), no auth.
+// We pull the 24hr ticker for the configured USDT-M perp pairs (the
+// perpetual trades 24/7 so the 24hr window is always meaningful — unlike
+// cash equity 24hr windows that close on weekends).
+interface BinanceTicker24 {
+  symbol: string;
+  priceChange: string;
+  priceChangePercent: string;
+  lastPrice: string;
+  openPrice: string;
+  highPrice: string;
+  lowPrice: string;
+  volume: string;
+  quoteVolume: string;
+}
+
+interface BinanceQuote {
+  id: string;          // 'bitcoin' / 'ethereum' — matches CoinGecko ids
+  symbol: 'BTC/USD' | 'ETH/USD';
+  name: string;
+  price: number;
+  change: number;
+  changePct: number;
+  level: 'L1';
+}
+
+const BINANCE_SYMBOLS: Array<{ pair: string; id: string; symbol: 'BTC/USD' | 'ETH/USD'; name: string }> = [
+  { pair: 'BTCUSDT', id: 'bitcoin', symbol: 'BTC/USD', name: 'Bitcoin' },
+  { pair: 'ETHUSDT', id: 'ethereum', symbol: 'ETH/USD', name: 'Ethereum' },
+];
+
+let binanceCache: { fetchedAt: number; quotes: BinanceQuote[] } | null = null;
+const BINANCE_TTL_MS = 15_000; // 15s — Binance updates every ~1s but no need to hammer it
+
+async function loadBinance24hr(): Promise<BinanceQuote[]> {
+  if (binanceCache && Date.now() - binanceCache.fetchedAt < BINANCE_TTL_MS) {
+    return binanceCache.quotes;
+  }
+  try {
+    const pairs = BINANCE_SYMBOLS.map((s) => `"${s.pair}"`).join(',');
+    const u = `https://api.binance.com/api/v3/ticker/24hr?symbols=[${pairs}]`;
+    const res = await fetch(u, { cache: 'no-store' });
+    if (!res.ok) return binanceCache?.quotes ?? [];
+    const json = (await res.json()) as BinanceTicker24[];
+    const quotes: BinanceQuote[] = [];
+    for (const row of json) {
+      const spec = BINANCE_SYMBOLS.find((s) => s.pair === row.symbol);
+      if (!spec) continue;
+      const price = parseFloat(row.lastPrice);
+      const changePct = parseFloat(row.priceChangePercent);
+      const change = parseFloat(row.priceChange);
+      if (!Number.isFinite(price) || !Number.isFinite(changePct)) continue;
+      quotes.push({
+        id: spec.id,
+        symbol: spec.symbol,
+        name: spec.name,
+        price,
+        change,
+        changePct,
+        level: 'L1',
+      });
+    }
+    if (quotes.length > 0) {
+      binanceCache = { fetchedAt: Date.now(), quotes };
+    }
+    return binanceCache?.quotes ?? [];
+  } catch {
+    // CORS / network / parse : fall back to last-known cache, then empty
+    return binanceCache?.quotes ?? [];
+  }
+}
+
 /** Fetch CoinGecko simple/price for BTC, ETH, SOL vs USD. Cached 30s. */
 async function loadCoinGecko(): Promise<CoinGeckoQuote[]> {
   if (coingeckoCache && Date.now() - coingeckoCache.fetchedAt < COINGECKO_TTL_MS) {
@@ -333,6 +408,21 @@ function coingeckoTick(q: CoinGeckoQuote, now: string): MarketTick {
   };
 }
 
+/** Convert a Binance 24hr quote into a MarketTick. */
+function binanceTick(q: BinanceQuote, now: string): MarketTick {
+  return {
+    id: 'BINANCE-' + q.id + '-' + now.slice(0, 13),
+    timestamp: now,
+    symbol: q.symbol,
+    name: q.name,
+    price: q.price,
+    change: q.change,
+    changePct: q.changePct,
+    level: q.level,
+    source: 'Binance',
+  };
+}
+
 export interface MarketTicksPayload {
   ticks: MarketTick[];
   bySource: Record<string, string>;
@@ -389,6 +479,28 @@ export async function loadMarketTicksWithMeta(): Promise<MarketTicksPayload> {
     }
   } catch {
     // CORS / network : fall through to static fallback.
+  }
+
+  // v13.1.4 polish-7d : Binance 24hr ticker. PRIMARY source for BTC + ETH
+  // (sub-second cadence vs CoinGecko's 30s+ lag). Skips any coin Binance
+  // already covered so we don't double-list. Falls back to CoinGecko / static
+  // when Binance CORS / network fails.
+  try {
+    const bz = await loadBinance24hr();
+    if (bz.length > 0) {
+      bySource.Binance = now;
+      const covered = new Set(bz.map((q) => q.id));
+      // Remove any CoinGecko tick that Binance just overrode.
+      for (let i = ticks.length - 1; i >= 0; i--) {
+        const id = ticks[i].source + ':' + ticks[i].symbol;
+        if (covered.has('bitcoin') && ticks[i].source === 'CoinGecko' && ticks[i].symbol === 'BTC/USD') ticks.splice(i, 1);
+        if (covered.has('ethereum') && ticks[i].source === 'CoinGecko' && ticks[i].symbol === 'ETH/USD') ticks.splice(i, 1);
+        void id;
+      }
+      for (const q of bz) ticks.push(binanceTick(q, now));
+    }
+  } catch {
+    // Binance failure is non-fatal : CoinGecko BTC/ETH stays in the ticker.
   }
 
   // If ALL live sources failed, use the static fallback so the ticker never

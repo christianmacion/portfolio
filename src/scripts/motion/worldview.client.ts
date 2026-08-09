@@ -170,6 +170,7 @@ interface WorldViewRefs {
   hint: HTMLElement;
   syncGdelt: HTMLElement;
   syncCoinGecko: HTMLElement;
+  syncBinance: HTMLElement;
   syncYahoo: HTMLElement;
   regimeChip: HTMLElement | null;
   provenance: HTMLElement | null;
@@ -203,12 +204,8 @@ class Globe {
   private reduceMotion: boolean;
   private path: any; // d3 GeoPath : lazy typed to avoid static d3-geo import
   private landPaths: string[] = [];
-  private graticulePath: string;
-  private equatorPath: SVGPathElement;
-  private meridianPath: SVGPathElement;
   private oceanRect: SVGRectElement;
   private landGroup: SVGGElement;
-  private graticuleGroup: SVGGElement;
   private pinGroup: SVGGElement;
   private venueGroup: SVGGElement;
   private labelGroup: SVGGElement;
@@ -238,8 +235,6 @@ class Globe {
         .rotate(this.rotation)
         .clipAngle(90),
     );
-    this.graticulePath = this.path(d3.geoGraticule10()) ?? '';
-
     this.svg.setAttribute('viewBox', `0 0 ${this.width} ${this.height}`);
     this.svg.setAttribute('role', 'img');
     this.svg.setAttribute('aria-label', 'Spinning earth with global event pins (institutional data terminal)');
@@ -342,37 +337,9 @@ class Globe {
     limb.setAttribute('stroke-opacity', '0.7');
     this.svg.appendChild(limb);
 
-    // Graticule layer (lat/lon grid) — hairline 0.4px at 45% opacity so
-    // it reads as background context, never competing with the landmasses
-    // or venue markers. d3-geo's geoGraticule10() = 10° spacing.
-    this.graticuleGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    this.graticuleGroup.setAttribute('class', 'wv-globe__graticule');
-    const gratPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    gratPath.setAttribute('d', this.graticulePath);
-    gratPath.setAttribute('fill', 'none');
-    gratPath.setAttribute('stroke', 'var(--c-rule)');
-    gratPath.setAttribute('stroke-width', '0.4');
-    gratPath.setAttribute('stroke-opacity', '0.45');
-    this.graticuleGroup.appendChild(gratPath);
-
-    // Equator + prime meridian accents : 1px amber at 25% opacity, drawn
-    // over the graticule so they read as institutional reference lines
-    // (Bloomberg terminal touches them). Helps the globe anchor visually.
-    // Paths are populated in reframe() once the projection is wired.
-    this.equatorPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    this.equatorPath.setAttribute('fill', 'none');
-    this.equatorPath.setAttribute('stroke', AMBER);
-    this.equatorPath.setAttribute('stroke-width', '0.6');
-    this.equatorPath.setAttribute('stroke-opacity', '0.25');
-    this.graticuleGroup.appendChild(this.equatorPath);
-    this.meridianPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    this.meridianPath.setAttribute('fill', 'none');
-    this.meridianPath.setAttribute('stroke', AMBER);
-    this.meridianPath.setAttribute('stroke-width', '0.6');
-    this.meridianPath.setAttribute('stroke-opacity', '0.25');
-    this.graticuleGroup.appendChild(this.meridianPath);
-
-    this.svg.appendChild(this.graticuleGroup);
+    // v13.1.4 polish-7e : graticule removed (Owner directive). Earth reads
+    // as institutional satellite imagery + venue markers + country borders,
+    // not as globe-decor with lat/lon grid lines.
 
     // Land layer
     this.landGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
@@ -490,6 +457,19 @@ class Globe {
     title.textContent = label;
     circle.appendChild(title);
     this.pinGroup.appendChild(circle);
+    // v13.1.4 polish-7e Beat 1 : pin pop — fresh GDELT event lands with a
+    // single overshoot (Reuters wire-tick set-piece). 240ms, transform-
+    // composited. Reduced-motion: pin appears at rest immediately.
+    if (!this.reduceMotion && typeof circle.animate === 'function') {
+      circle.animate(
+        [
+          { transform: 'scale(0)' },
+          { transform: 'scale(1.08)', offset: 0.7 },
+          { transform: 'scale(1)' },
+        ],
+        { duration: 240, easing: 'cubic-bezier(0.34, 1.30, 0.50, 1)', fill: 'forwards' },
+      );
+    }
     this.pins.set(id, { el: circle, born: performance.now(), lat, lon });
     this.renderPins();
   }
@@ -563,17 +543,9 @@ class Globe {
         this.landGroup.appendChild(p);
       }
     }
-    // Equator + prime meridian : drawn after land so they render on top.
-    // Built from a single line (equator) + great circle (prime meridian)
-    // sampled in lon/lat space. Cheap (~24 segments each).
-    const equatorCoords: [number, number][] = [];
-    for (let i = 0; i <= 72; i++) equatorCoords.push([i * 5 - 180, 0]);
-    const meridianCoords: [number, number][] = [];
-    for (let i = 0; i <= 36; i++) meridianCoords.push([0, i * 5 - 90]);
-    const eqD = this.path({ type: 'LineString', coordinates: equatorCoords });
-    const meD = this.path({ type: 'LineString', coordinates: meridianCoords });
-    this.equatorPath.setAttribute('d', eqD ?? '');
-    this.meridianPath.setAttribute('d', meD ?? '');
+    // v13.1.4 polish-7e : graticule removed (Owner directive). No equator
+    // or prime-meridian reference lines; the globe reads as institutional
+    // satellite imagery + venue markers + country borders, no lat/lon decor.
     this.renderPins();
     this.renderVenues();
     this.renderDisplayCities();
@@ -984,6 +956,11 @@ class Ticker {
   }
 
   private render(): void {
+    // v13.1.4 polish-7e Beat 4 : diff previous ticks vs incoming. Symbols
+    // whose price or changePct moved get a one-shot tint sweep on render.
+    const prevBySymbol = new Map<string, { price: number; changePct: number }>();
+    for (const t of this.ticks) prevBySymbol.set(t.symbol, { price: t.price, changePct: t.changePct });
+
     const items: { ts: string; src: string; region: string; head: string; signal: string; badge?: string }[] = [];
     for (const ev of this.events) {
       // GDELT rows read as alpha signals: critical = L3 with HIGH-conviction tag,
@@ -1019,7 +996,28 @@ class Ticker {
     }
     items.sort((a, b) => (a.ts < b.ts ? 1 : a.ts > b.ts ? -1 : 0));
     const visible = items.slice(0, TICKER_MAX_ROWS);
-    this.list.replaceChildren(...visible.map((v) => this.row(v.ts, v.src, v.region, v.head, v.signal, v.badge)));
+    // Build the row nodes first, then tag them with motion classes.
+    const freshestRegion = visible[0]?.region;
+    const tickedRegions = new Set<string>();
+    for (const t of this.ticks) {
+      const prev = prevBySymbol.get(t.symbol);
+      if (!prev) continue;
+      if (prev.price !== t.price || prev.changePct !== t.changePct) {
+        tickedRegions.add(t.symbol);
+      }
+    }
+    this.list.replaceChildren(
+      ...visible.map((v) => {
+        const row = this.row(v.ts, v.src, v.region, v.head, v.signal, v.badge);
+        // Beat 2 : newest row lands with slide + fade.
+        if (v.region === freshestRegion) row.classList.add('wv-ticker__row--fresh');
+        // Beat 4 : ticks whose price/% changed get a one-shot tint sweep.
+        if (v.src === 'TICK' && tickedRegions.has(v.region)) {
+          row.classList.add('wv-ticker__row--ticked');
+        }
+        return row;
+      }),
+    );
     // Update the regime chip in the footer on every render so it tracks
     // the live distribution. Cheap; runs on the same cadence as render().
     this.computeRegime();
@@ -1065,21 +1063,28 @@ class Ticker {
   private lastBySource: Record<string, string> = {};
   private syncGdelt: HTMLElement | null = null;
   private syncCoinGecko: HTMLElement | null = null;
+  private syncBinance: HTMLElement | null = null;
   private syncYahoo: HTMLElement | null = null;
 
   setSyncTargets(refs: {
     syncGdelt: HTMLElement;
     syncCoinGecko: HTMLElement;
+    syncBinance: HTMLElement;
     syncYahoo: HTMLElement;
   }): void {
     this.syncGdelt = refs.syncGdelt;
     this.syncCoinGecko = refs.syncCoinGecko;
+    this.syncBinance = refs.syncBinance;
     this.syncYahoo = refs.syncYahoo;
   }
 
   private paintSync(target: HTMLElement | null, iso: string | undefined): void {
     if (!target) return;
     target.textContent = iso ? iso.slice(11, 16) + 'Z' : '--:--Z';
+    // v13.1.4 polish-7e Beat 3 : one-shot acknowledgment dip when a
+    // sync stamp refreshes. No loop, no color — just a quiet opacity dip.
+    target.classList.add('wv__legend--flash');
+    window.setTimeout(() => target.classList.remove('wv__legend--flash'), 240);
   }
 
   start(globe: Globe, status: HTMLElement, regimeChip: HTMLElement | null = null): void {
@@ -1103,6 +1108,7 @@ class Ticker {
     this.refreshTimer = window.setInterval(() => {
       void this.refreshTicks().then(() => {
         this.paintSync(this.syncCoinGecko, this.lastBySource.CoinGecko);
+        this.paintSync(this.syncBinance, this.lastBySource.Binance);
         this.paintSync(this.syncYahoo, this.lastBySource.Yahoo);
       });
     }, 30_000);
@@ -1236,6 +1242,7 @@ function init(): void {
   const hint = document.querySelector<HTMLElement>('[data-worldview-hint]');
   const syncGdelt = document.querySelector<HTMLElement>('[data-worldview-sync-gdelt]');
   const syncCoinGecko = document.querySelector<HTMLElement>('[data-worldview-sync-coingecko]');
+  const syncBinance = document.querySelector<HTMLElement>('[data-worldview-sync-binance]');
   const syncYahoo = document.querySelector<HTMLElement>('[data-worldview-sync-yahoo]');
   const regimeChip = document.querySelector<HTMLElement>('[data-worldview-regime]');
   const provenance = document.querySelector<HTMLElement>('[data-worldview-provenance]');
@@ -1275,6 +1282,7 @@ function init(): void {
     hint: hint ?? status,
     syncGdelt: syncGdelt ?? status,
     syncCoinGecko: syncCoinGecko ?? status,
+    syncBinance: syncBinance ?? status,
     syncYahoo: syncYahoo ?? status,
     regimeChip,
     provenance,

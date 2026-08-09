@@ -182,21 +182,26 @@ const buildStamp = new Date().toISOString().slice(11, 19) + 'Z';
       </span>
       <span class="wv__sep" aria-hidden="true">·</span>
       <span class="wv__legend">
+        Binance <span data-worldview-sync-binance>{buildStamp}</span>
+      </span>
+      <span class="wv__sep" aria-hidden="true">·</span>
+      <span class="wv__legend">
         CoinGecko <span data-worldview-sync-coingecko>{buildStamp}</span>
       </span>
     </footer>
 
     {/* v13.1.4 Phase 1 showcase : provenance strip just above the footer
          so visitors read the data plumbing as ground truth. Yahoo 6 +
-         CoinGecko 4 + ECB FX + GDELT 15m. Mono, hairline, 9px. */}
+         Binance 2 + CoinGecko 1 + ECB FX + GDELT 15m. Mono, hairline, 9px. */}
     <p class="wv__provenance mono" data-worldview-provenance>
-      data · Yahoo 6 + CoinGecko 4 + ECB FX + GDELT 15m · L1 = top-of-book · L2 = consolidated tape · L3 = full depth · 12 venues · 5 continents · UTC+8 home base
+      data · Yahoo 6 + Binance 2 + CoinGecko 1 + ECB FX + GDELT 15m · L1 = top-of-book · L2 = consolidated tape · L3 = full depth · 12 venues · 5 continents · UTC+8 home base
     </p>
 
     {/* Legacy data-attribute targets preserved so the existing
          worldview.client.ts script can still bind (no-op when
          the corresponding selectors are absent). */}
     <span hidden data-worldview-sync-coingecko aria-hidden="true"></span>
+    <span hidden data-worldview-sync-binance aria-hidden="true"></span>
   </div>
 </div>
 
@@ -614,6 +619,65 @@ const buildStamp = new Date().toISOString().slice(11, 19) + 'Z';
   @media (prefers-reduced-motion: reduce) {
     .wv__close {
       transition: none;
+    }
+  }
+
+  /* v13.1.4 polish-7e : live-data motion beats. Four quiet arrival cues
+     that signal "data is fresh" without violating the chrome contract
+     (no halo / no glow / no pulse rings / no decorative gradients).
+     Chrome contract: feedback-portfolio-visual-bar + feedback-no-status-
+     indicators-signal-lights + feedback-motion-vocabulary-v11.
+     All beats resolve through prefers-reduced-motion (below). */
+
+  /* Beat 1 — pin pop (single set-piece overshoot, 240ms). */
+  @keyframes wv-pin-pop {
+    from { transform: scale(0); }
+    70%  { transform: scale(1.08); }
+    to   { transform: scale(1); }
+  }
+  [data-pin-id] {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  /* Beat 2 — ticker row lands (slide + fade, 200ms). */
+  @keyframes wv-row-land {
+    from { transform: translateY(-4px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+  }
+  :global(.wv-ticker__row--fresh) {
+    animation: wv-row-land 200ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  /* Beat 3 — sync stamp acknowledgment dip (opacity only, 200ms). */
+  @keyframes wv-stamp-flash {
+    0%   { opacity: 1; }
+    50%  { opacity: 0.55; }
+    100% { opacity: 1; }
+  }
+  :global(.wv__legend--flash) {
+    animation: wv-stamp-flash 200ms cubic-bezier(0.22, 0.85, 0.30, 1) both;
+  }
+
+  /* Beat 4 — tick update tint sweep on the signal cell (240ms). */
+  @keyframes wv-tick-tint {
+    0%   { background-color: transparent; }
+    50%  { background-color: rgba(180, 83, 9, 0.06); }
+    100% { background-color: transparent; }
+  }
+  :global(.wv-ticker__row--ticked .wv-ticker__signal) {
+    animation: wv-tick-tint 240ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-pin-id],
+    :global(.wv-ticker__row--fresh),
+    :global(.wv__legend--flash),
+    :global(.wv-ticker__row--ticked .wv-ticker__signal) {
+      animation: none !important;
+      transform: none !important;
+      opacity: 1 !important;
+      background-color: transparent !important;
     }
   }
 </style>
