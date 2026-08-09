@@ -98,14 +98,31 @@ const buildStamp = new Date().toISOString().slice(11, 19) + 'Z';
       <h2 id="wv-globe-label" class="wv__eyebrow mono">LIVE COVERAGE · L1 / L2 / L3</h2>
       <div class="wv__panes">
         <div class="wv__globe-pane">
-          <svg
-            data-worldview-svg
-            class="wv-globe"
-            viewBox="0 0 360 360"
-            preserveAspectRatio="xMidYMid meet"
-            role="img"
-            aria-label="Live coverage globe. 12 venues across 5 continents (L1 top-of-book, L2 consolidated tape, L3 full depth-of-book). Drag to rotate, hover for venue detail."
-          ></svg>
+          {/* v13.1.4 polish-7 : real NASA Blue Marble satellite texture.
+             Stage wraps the canvas (NASA texture, behind) and the SVG
+             (country borders + cities + labels + GDELT pins, on top).
+             The client renders the projected Earth texture to the
+             canvas each frame via d3.geoOrthographic invert, so the
+             satellite imagery rotates with the globe. Texture source:
+             NASA Earth Observatory "Blue Marble" (Reto Stöckli, NASA
+             GSFC) — public domain. */}
+          <div class="wv-globe__stage">
+            <canvas
+              data-worldview-canvas
+              class="wv-globe__canvas"
+              width="360"
+              height="360"
+              aria-hidden="true"
+            ></canvas>
+            <svg
+              data-worldview-svg
+              class="wv-globe"
+              viewBox="0 0 360 360"
+              preserveAspectRatio="xMidYMid meet"
+              role="img"
+              aria-label="Live coverage globe. 12 venues across 5 continents (L1 top-of-book, L2 consolidated tape, L3 full depth-of-book). Drag to rotate, hover for venue detail."
+            ></svg>
+          </div>
           {/* v13.1.4 polish : inline marker-tier legend in the globe pane so
               visitors can read what each ring count means without leaving
               the modal. svg-native, mono, hairline-stroked dots only
@@ -300,12 +317,37 @@ const buildStamp = new Date().toISOString().slice(11, 19) + 'Z';
     border-right: 1px solid var(--c-rule);
     background: var(--c-bg);
   }
+  /* v13.1.4 polish-7 : globe stage. Canvas (NASA Blue Marble texture)
+     sits behind, SVG (borders + cities + labels) sits on top. Stage
+     preserves a square aspect ratio so the canvas + SVG align
+     pixel-perfect. */
+  .wv-globe__stage {
+    position: relative;
+    width: 100%;
+    max-width: 360px;
+    aspect-ratio: 1 / 1;
+    display: block;
+  }
+  .wv-globe__canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    border-radius: 50%;
+    /* Initial pre-load background so the canvas is visibly Earth-blue
+       before the texture finishes downloading. Matches the ocean color
+       so the swap is invisible. */
+    background: var(--c-ink-deep, #0a1825);
+  }
   .wv-globe {
+    position: relative;
     width: 100%;
     max-width: 360px;
     height: auto;
     aspect-ratio: 1 / 1;
     display: block;
+    z-index: 1;
   }
   .wv__globe-hint {
     margin: 0;

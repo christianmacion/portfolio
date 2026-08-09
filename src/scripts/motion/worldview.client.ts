@@ -164,6 +164,7 @@ const COUNTRY_LABELS: ReadonlyArray<{ name: string; lat: number; lon: number }> 
 interface WorldViewRefs {
   root: HTMLElement;
   svg: SVGSVGElement;
+  canvas: HTMLCanvasElement;
   tickerList: HTMLUListElement;
   status: HTMLElement;
   hint: HTMLElement;
@@ -187,6 +188,12 @@ interface VenuePin {
 // === Globe renderer ===================================================
 class Globe {
   private svg: SVGSVGElement;
+  private canvas: HTMLCanvasElement;
+  private ctx: CanvasRenderingContext2D;
+  private earthImage: HTMLImageElement | null = null;
+  private earthImageData: ImageData | null = null;
+  private textureLoaded = false;
+  private textureRenderPending = true;
   private width = GLOBE_SIZE;
   private height = GLOBE_SIZE;
   private rotation: [number, number] = [20, 80]; // [lon, lat]
@@ -215,8 +222,12 @@ class Globe {
   private cachedFc: FeatureCollection<Geometry> | null = null;
   private hoveredVenue: string | null = null;
 
-  constructor(svg: SVGSVGElement, d3: any, topoFeature: any) {
+  constructor(svg: SVGSVGElement, canvas: HTMLCanvasElement, d3: any, topoFeature: any) {
     this.svg = svg;
+    this.canvas = canvas;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) throw new Error('2d context unavailable');
+    this.ctx = ctx;
     this.d3 = d3;
     this.topoFeature = topoFeature;
     this.reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -232,6 +243,31 @@ class Globe {
     this.svg.setAttribute('viewBox', `0 0 ${this.width} ${this.height}`);
     this.svg.setAttribute('role', 'img');
     this.svg.setAttribute('aria-label', 'Spinning earth with global event pins (institutional data terminal)');
+
+    // v13.1.4 polish-7 : NASA Blue Marble texture. Loaded async; once
+    // available the renderer re-projects it onto the visible hemisphere
+    // via d3.geoOrthographic.invert per frame. ImageData is cached so
+    // pixel sampling is a flat array read (no canvas re-fetch per frame).
+    this.earthImage = new Image();
+    this.earthImage.crossOrigin = 'anonymous';
+    this.earthImage.decoding = 'async';
+    this.earthImage.onload = () => {
+      if (!this.earthImage) return;
+      const tmp = document.createElement('canvas');
+      tmp.width = this.earthImage.naturalWidth;
+      tmp.height = this.earthImage.naturalHeight;
+      const tmpCtx = tmp.getContext('2d');
+      if (!tmpCtx) return;
+      tmpCtx.drawImage(this.earthImage, 0, 0);
+      this.earthImageData = tmpCtx.getImageData(0, 0, tmp.width, tmp.height);
+      this.textureLoaded = true;
+      this.textureRenderPending = true;
+    };
+    this.earthImage.onerror = () => {
+      // Texture unavailable — globe falls back to flat-fill lands.
+      this.textureLoaded = false;
+    };
+    this.earthImage.src = '/textures/earth-blue-marble.jpg';
 
     // Ocean disc : fills the whole SVG bounding box behind the limb. The
     // limb circle (drawn next) covers most of this with a darker ocean
@@ -477,17 +513,21 @@ class Globe {
   /** Re-render both land and pins at the current rotation. */
   reframe(): void {
     this.path.projection().rotate(this.rotation);
-    // Re-project each land path by re-running on the cached d-strings.
-    // d3-geo's path only re-projects via `path(feature)`, so we use the
-    // path's projection as a function and re-run each path's parsed
-    // geometry. Easiest: re-derive d via projection([lon, lat]) on every
-    // vertex of every cached ring. For 1:110m at 360px this is fast.
     const proj = this.path.projection();
     if (!proj) return;
-    // Re-parse cached strings is heavy; we instead keep the FeatureCollection
-    // around. Simpler implementation: hold a single string cache and accept
-    // that re-rendering lands costs an O(N) walk per frame.
-    // For 1:110m and ~140 countries at 360px, this is bounded.
+    // v13.1.4 polish-7 : real NASA Blue Marble satellite texture.
+    // Render the projected equirectangular texture onto the canvas
+    // (behind the SVG) via d3.geoOrthographic.invert per pixel. The
+    // SVG layer above carries stroke-only country borders + cities +
+    // labels + pins + venues, so the satellite imagery shows through
+    // transparent fills.
+    if (this.textureLoaded) {
+      this.renderEarthTexture();
+      this.textureRenderPending = false;
+    }
+    // Land layer : stroke-only paths. The satellite imagery on the
+    // canvas behind provides the visual fill; the SVG carries the
+    // borders (and a fallback fill for the no-texture path below).
     this.landGroup.replaceChildren();
     if (this.cachedFc) {
       for (const f of this.cachedFc.features) {
@@ -496,19 +536,21 @@ class Globe {
         const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         p.setAttribute('d', d);
         p.setAttribute('class', 'wv-globe__land-shape');
-        // v13.1.4 polish-6 : per-country biome coloring. Each country
-        // maps to a flat fill from COUNTRY_BIOME (desert / forest /
-        // boreal / tundra / agricultural); unmapped countries fall
-        // through to LAND_TAN. The 0.6px BORDER_COLOR stroke is darker
-        // than COASTLINE so adjacent-country borders stay visible
-        // against both sand and forest biomes. No glow, no gradient —
-        // flat fill per the institutional register.
-        const id = f.id !== undefined ? String(f.id) : '';
-        const biome = COUNTRY_BIOME[id] ?? LAND_TAN;
-        p.setAttribute('fill', biome);
-        p.setAttribute('stroke', BORDER_COLOR);
-        p.setAttribute('stroke-width', '0.6');
-        p.setAttribute('stroke-opacity', '0.9');
+        if (this.textureLoaded) {
+          // Texture mode : transparent fill, border stroke only.
+          p.setAttribute('fill', 'none');
+          p.setAttribute('stroke', BORDER_COLOR);
+          p.setAttribute('stroke-width', '0.7');
+          p.setAttribute('stroke-opacity', '0.85');
+        } else {
+          // Fallback : flat-fill biome coloring while texture loads.
+          const id = f.id !== undefined ? String(f.id) : '';
+          const biome = COUNTRY_BIOME[id] ?? LAND_TAN;
+          p.setAttribute('fill', biome);
+          p.setAttribute('stroke', BORDER_COLOR);
+          p.setAttribute('stroke-width', '0.6');
+          p.setAttribute('stroke-opacity', '0.9');
+        }
         p.setAttribute('stroke-linejoin', 'round');
         this.landGroup.appendChild(p);
       }
@@ -551,6 +593,84 @@ class Globe {
       this.rafHandle = requestAnimationFrame(loop);
     };
     this.rafHandle = requestAnimationFrame(loop);
+  }
+
+  /**
+   * v13.1.4 polish-7 : project the equirectangular NASA Blue Marble
+   * texture onto the orthographic sphere. For each canvas pixel inside
+   * the visible disc, invert the projection to get (lon, lat), then
+   * sample the source image at the corresponding equirectangular pixel.
+   *
+   * Performance : 360 × 360 = 129 600 pixels per re-project. At the
+   * ~100ms re-frame cadence this is ~1.3M pixels/sec — well within
+   * modern JS engine budgets. The source ImageData is cached as a
+   * flat Uint8ClampedArray so per-pixel sampling is a single indexed
+   * read (no canvas re-fetch).
+   */
+  private renderEarthTexture(): void {
+    if (!this.textureLoaded || !this.earthImageData) return;
+    const proj = this.path.projection();
+    if (!proj) return;
+
+    const w = this.canvas.width;
+    const h = this.canvas.height;
+    const cx = w / 2;
+    const cy = h / 2;
+    const sphereR = GLOBE_SIZE / 2 - 6;
+    const sphereR2 = sphereR * sphereR;
+
+    const srcData = this.earthImageData.data;
+    const srcW = this.earthImageData.width;
+    const srcH = this.earthImageData.height;
+    const srcMaxX = srcW - 1;
+    const srcMaxY = srcH - 1;
+
+    const out = this.ctx.createImageData(w, h);
+    const outArr = out.data;
+
+    for (let y = 0; y < h; y++) {
+      const dy = y - cy;
+      const dy2 = dy * dy;
+      for (let x = 0; x < w; x++) {
+        const dx = x - cx;
+        const r2 = dx * dx + dy2;
+        const outIdx = (y * w + x) * 4;
+
+        if (r2 > sphereR2) {
+          outArr[outIdx + 3] = 0; // outside sphere : transparent
+          continue;
+        }
+
+        // Invert projection to get (lon, lat) for this disc pixel.
+        const coords = proj.invert([dx, dy]);
+        if (!coords) {
+          outArr[outIdx + 3] = 0;
+          continue;
+        }
+
+        // Equirectangular mapping : lon ∈ [-180,180] → x ∈ [0,srcW],
+        // lat ∈ [-90,90] → y ∈ [0,srcH] (flipped : north = top).
+        let imgX = ((coords[0] + 180) / 360) * srcW;
+        let imgY = ((90 - coords[1]) / 180) * srcH;
+
+        // Wrap longitude (rotation can shift pixels past the seam).
+        imgX = ((imgX % srcW) + srcW) % srcW;
+        if (imgY < 0) imgY = 0;
+        else if (imgY > srcMaxY) imgY = srcMaxY;
+
+        // Nearest-neighbor sample (fast; bilinear is overkill for a
+        // 2048×1024 texture on a 360px disc — at most ~3 texels/pixel).
+        const ix = imgX | 0;
+        const iy = imgY | 0;
+        const srcIdx = (iy * srcW + ix) * 4;
+        outArr[outIdx] = srcData[srcIdx];
+        outArr[outIdx + 1] = srcData[srcIdx + 1];
+        outArr[outIdx + 2] = srcData[srcIdx + 2];
+        outArr[outIdx + 3] = 255;
+      }
+    }
+
+    this.ctx.putImageData(out, 0, 0);
   }
 
   stop(): void {
@@ -1023,7 +1143,7 @@ async function openModal(): Promise<void> {
     }
   }
   if (!activeGlobe) {
-    activeGlobe = new Globe(activeRefs.svg, d3geoMod, topoMod.feature);
+    activeGlobe = new Globe(activeRefs.svg, activeRefs.canvas, d3geoMod, topoMod.feature);
   }
   if (topoCache && topoCache.objects && topoCache.objects.countries) {
     const fc = topoMod.feature(
@@ -1099,6 +1219,7 @@ function bind(refs: WorldViewRefs): void {
 function init(): void {
   const root = document.querySelector<HTMLElement>('[data-worldview]');
   const svg = document.querySelector<SVGSVGElement>('[data-worldview-svg]');
+  const canvas = document.querySelector<HTMLCanvasElement>('[data-worldview-canvas]');
   const tickerList = document.querySelector<HTMLUListElement>('[data-worldview-ticker]');
   const status = document.querySelector<HTMLElement>('[data-worldview-status]');
   const hint = document.querySelector<HTMLElement>('[data-worldview-hint]');
@@ -1137,6 +1258,7 @@ function init(): void {
   bind({
     root,
     svg: svg ?? document.createElementNS('http://www.w3.org/2000/svg', 'svg'),
+    canvas: canvas ?? document.createElement('canvas'),
     tickerList: tickerList ?? document.createElement('ul'),
     status,
     hint: hint ?? status,
