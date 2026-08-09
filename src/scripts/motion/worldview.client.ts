@@ -34,6 +34,19 @@ const AMBER = '#B45309';
 const INK_3 = '#666666'; // ring stroke + label text
 const LABEL_BG = '#FAFAFA'; // matches modal --c-bg
 
+// v13.1.4 polish-4 : realistic Earth palette. Scene-local colors chosen
+// to read as a Blue Marble view from space without crossing into
+// halo/glow territory. Each value is muted enough to keep the
+// institutional register (Bloomberg terminal Earth, not NASA infographic).
+const OCEAN_DEEP = '#1B4A6B';
+const OCEAN_SHALLOW = '#2D6A8E';
+const LAND_TAN = '#A89968';
+const LAND_GREEN = '#6B7B4A';
+const COASTLINE = '#2A3540';
+const LIMB_RIM = '#5A7A98';
+const STAR_DIM = '#9CA3A8';
+const DEEP_SPACE = '#0A1825';
+
 // === Type contracts ===================================================
 interface WorldViewRefs {
   root: HTMLElement;
@@ -104,25 +117,69 @@ class Globe {
     this.svg.setAttribute('role', 'img');
     this.svg.setAttribute('aria-label', 'Spinning earth with global event pins (institutional data terminal)');
 
-    // Ocean disc (transparent — the limb circle below supplies the visible
-    // ocean fill so the disc edge carries the hairline outline).
+    // Ocean disc : fills the whole SVG bounding box behind the limb. The
+    // limb circle (drawn next) covers most of this with a darker ocean
+    // color; the corners that poke outside the sphere read as deep-space
+    // background. A static starfield (small sub-pixel dots, no glow per
+    // the no-halo binding) is sprinkled across the corners so the
+    // "sky" reads as sky, not as panel bg.
     this.oceanRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
     this.oceanRect.setAttribute('x', '0');
     this.oceanRect.setAttribute('y', '0');
     this.oceanRect.setAttribute('width', String(this.width));
     this.oceanRect.setAttribute('height', String(this.height));
-    this.oceanRect.setAttribute('fill', 'transparent');
+    this.oceanRect.setAttribute('fill', '#0A1825'); // near-black deep space
     this.svg.appendChild(this.oceanRect);
 
-    // Limb circle : the visible disc edge + ocean fill. Subtle warm
-    // cream so the landmasses have readable contrast against the ocean.
+    // Starfield : tiny dots outside the limb circle. Deterministic seed
+    // (no Math.random per CLAUDE.md §8) — a 16-step rejection-sampled
+    // grid in viewport coordinates, skipping any dot that lands within
+    // 0.85 × radius of the sphere center. Sub-pixel size, no glow.
+    const starfieldGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    starfieldGroup.setAttribute('class', 'wv-globe__stars');
+    const cx = this.width / 2;
+    const cy = this.height / 2;
+    const starR = (GLOBE_SIZE / 2) - 6;
+    let sIdx = 0;
+    // Step in 18px grid increments across the viewport; deterministic seed.
+    for (let sy = 9; sy < this.height; sy += 18) {
+      for (let sx = 9; sx < this.width; sx += 18) {
+        // Per-cell deterministic offset (no Math.random).
+        const o = ((sx * 31 + sy * 17) % 12) - 6;
+        const px = sx + o;
+        const py = sy + ((sx * 7 + sy * 13) % 10) - 5;
+        const dx = px - cx;
+        const dy = py - cy;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        // Skip dots inside the limb (leave the sphere itself clean).
+        if (dist < starR * 1.02) continue;
+        const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        dot.setAttribute('cx', String(px));
+        dot.setAttribute('cy', String(py));
+        // Vary star size deterministically (small 0.5-1.2 px).
+        const r = 0.5 + (((sx * 11 + sy * 23) % 8) / 10);
+        dot.setAttribute('r', String(r));
+        dot.setAttribute('fill', STAR_DIM);
+        dot.setAttribute('opacity', String(0.35 + (((sx + sy) % 5) / 10)));
+        starfieldGroup.appendChild(dot);
+        sIdx++;
+        if (sIdx > 320) break; // hard cap; deterministic coverage
+      }
+      if (sIdx > 320) break;
+    }
+    this.svg.appendChild(starfieldGroup);
+
+    // Limb circle : the visible sphere disc + ocean fill. Deep ocean blue
+    // so the sphere reads as Earth from space. Pale steel-blue rim
+    // (1px) at the limb gives a subtle non-glow edge definition.
     const limb = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
     limb.setAttribute('cx', String(this.width / 2));
     limb.setAttribute('cy', String(this.height / 2));
     limb.setAttribute('r', String((GLOBE_SIZE / 2) - 6));
-    limb.setAttribute('fill', 'var(--c-bg-2)');
-    limb.setAttribute('stroke', 'var(--c-rule)');
-    limb.setAttribute('stroke-width', '1');
+    limb.setAttribute('fill', OCEAN_DEEP);
+    limb.setAttribute('stroke', LIMB_RIM);
+    limb.setAttribute('stroke-width', '0.8');
+    limb.setAttribute('stroke-opacity', '0.6');
     this.svg.appendChild(limb);
 
     // Graticule layer (lat/lon grid) — hairline 0.4px at 45% opacity so
@@ -307,16 +364,13 @@ class Globe {
         const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         p.setAttribute('d', d);
         p.setAttribute('class', 'wv-globe__land-shape');
-        // Land fill : warm cream that contrasts with the panel bg
-        // (#FAFAFA). The previous polish pass set this to var(--c-bg)
-        // which equalled the page bg, so countries disappeared into the
-        // surface (visitor saw dots floating on a UFO outline, not a
-        // globe). Bumping to a tinted beige + amber-ink stroke at
-        // higher opacity makes the earth read as earth.
-        p.setAttribute('fill', '#E8E4DC');
-        p.setAttribute('stroke', '#8B7355');
-        p.setAttribute('stroke-width', '0.45');
-        p.setAttribute('stroke-opacity', '0.75');
+        // Realistic Earth landmass : natural tan/olive against the deep
+        // ocean (#1B4A6B). The 1px dark coastline gives crisp shorelines.
+        // No glow, no gradient — flat fill per the institutional register.
+        p.setAttribute('fill', LAND_TAN);
+        p.setAttribute('stroke', COASTLINE);
+        p.setAttribute('stroke-width', '0.5');
+        p.setAttribute('stroke-opacity', '0.85');
         p.setAttribute('stroke-linejoin', 'round');
         this.landGroup.appendChild(p);
       }
