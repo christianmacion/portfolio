@@ -234,6 +234,10 @@ class Globe {
   private topoFeature: any = null;
   private cachedFc: FeatureCollection<Geometry> | null = null;
   private hoveredVenue: string | null = null;
+  // v13.1.4 polish-7k : resize observer for the canvas pixel buffer.
+  // Re-renders the texture when the stage size changes (viewport resize,
+  // panel open/close, mobile sheet).
+  private resizeObserver: ResizeObserver | null = null;
 
   constructor(svg: SVGSVGElement, canvas: HTMLCanvasElement, d3: any, topoFeature: any) {
     this.svg = svg;
@@ -395,6 +399,15 @@ class Globe {
     this.svg.appendChild(this.displayCityLabels);
 
     // Drag to rotate (improves UX; does not interfere with scroll on modal body).
+    // v13.1.4 polish-7k : Pointer Events are mouse + touch + pen in one
+    // code path. setPointerCapture routes pointermove/pointerup to the
+    // SVG even when the pointer drifts outside the SVG bounds (common
+    // on touch devices when the finger jitters). pointercancel handles
+    // the case where the browser steals the gesture (scroll, system
+    // gesture, notification). pointerleave only resets the hover-pause
+    // — it does NOT reset dragging — so the drag survives the pointer
+    // briefly leaving the SVG bounds. CSS touch-action: none on the SVG
+    // prevents the browser from interpreting the gesture as scroll.
     let dragging = false;
     let dragX = 0;
     let dragY = 0;
@@ -414,18 +427,55 @@ class Globe {
       dragY = e.clientY;
       this.reframe();
     });
-    this.svg.addEventListener('pointerup', (e) => {
+    const endDrag = (e: PointerEvent): void => {
       dragging = false;
       this.hoverPaused = false;
-      this.svg.releasePointerCapture(e.pointerId);
-    });
+      if (this.svg.hasPointerCapture(e.pointerId)) {
+        this.svg.releasePointerCapture(e.pointerId);
+      }
+    };
+    this.svg.addEventListener('pointerup', endDrag);
+    this.svg.addEventListener('pointercancel', endDrag);
     this.svg.addEventListener('pointerenter', () => {
       this.hoverPaused = true;
     });
     this.svg.addEventListener('pointerleave', () => {
+      // Only reset hover-pause here. Drag state is owned by pointerup /
+      // pointercancel so the drag survives the pointer briefly leaving
+      // the SVG bounds (common on touch devices when the finger jitters).
       this.hoverPaused = false;
-      dragging = false;
     });
+
+    // v13.1.4 polish-7k : resize observer. Updates the canvas pixel
+    // buffer to match the display size × DPR so the texture is crisp
+    // on high-DPR devices. The SVG viewBox stays at 360×360 (the
+    // browser scales the SVG to fit the display). The canvas pixel
+    // buffer is always square so the disc is always circular.
+    if (typeof ResizeObserver !== 'undefined') {
+      this.resizeObserver = new ResizeObserver(() => {
+        this.resizeCanvas();
+      });
+      const stage = this.canvas.parentElement;
+      if (stage) this.resizeObserver.observe(stage);
+    }
+    this.resizeCanvas();
+  }
+
+  /** Update the canvas pixel buffer to match the stage size × DPR so the
+   *  texture is crisp on high-DPR devices. The buffer is always square
+   *  (min of stage width / height × DPR) so the disc is always circular. */
+  private resizeCanvas(): void {
+    const stage = this.canvas.parentElement;
+    if (!stage) return;
+    const rect = stage.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) return;
+    const dpr = window.devicePixelRatio || 1;
+    const size = Math.round(Math.min(rect.width, rect.height) * dpr);
+    if (this.canvas.width !== size || this.canvas.height !== size) {
+      this.canvas.width = size;
+      this.canvas.height = size;
+      this.textureRenderPending = true;
+    }
   }
 
   /** Load the world topology from /countries-110m.json (108KB, lazy). */
@@ -612,7 +662,11 @@ class Globe {
     const h = this.canvas.height;
     const cx = w / 2;
     const cy = h / 2;
-    const sphereR = GLOBE_SIZE / 2 - 6;
+    // v13.1.4 polish-7k : sphere radius tracks the canvas pixel buffer
+    // (set by resizeCanvas to display size × DPR) instead of the
+    // hardcoded GLOBE_SIZE. This keeps the disc filling the canvas
+    // regardless of the pixel buffer size.
+    const sphereR = Math.min(w, h) / 2 - 6;
     const sphereR2 = sphereR * sphereR;
 
     const srcData = this.earthImageData.data;

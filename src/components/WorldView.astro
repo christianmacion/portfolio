@@ -357,6 +357,14 @@ const buildStamp = new Date().toISOString().slice(11, 19) + 'Z';
        before the texture finishes downloading. Matches the ocean color
        so the swap is invisible. */
     background: var(--c-ink-deep, #0a1825);
+    /* v13.1.4 polish-7k : prevent the browser from interpreting the
+       drag gesture as scroll/zoom on touch devices. Combined with the
+       Pointer Events in worldview.client.ts, the globe drag works on
+       iOS Safari + Android Chrome touch. user-select: none stops the
+       browser from selecting text during the drag. */
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
   }
   .wv-globe {
     position: relative;
@@ -366,6 +374,14 @@ const buildStamp = new Date().toISOString().slice(11, 19) + 'Z';
     aspect-ratio: 1 / 1;
     display: block;
     z-index: 1;
+    /* v13.1.4 polish-7k : touch-action: none on the SVG too so the
+       drag gesture is captured before the browser decides it's a
+       scroll. Both the canvas and the SVG need touch-action: none
+       because the SVG is the drag target (Pointer Events bound on
+       the SVG), but the canvas is visually behind it. */
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
   }
   .wv__globe-hint {
     margin: 0;
