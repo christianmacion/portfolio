@@ -75,38 +75,40 @@ const avgDD = eras.reduce((s, e) => s + e.dd, 0) / eras.length;
     </ol>
   </div>
 
-  <table class="fiveera__table">
-    <thead>
-      <tr>
-        <th>Era</th>
-        <th>Period</th>
-        <th>Regime</th>
-        <th class="num">N trades</th>
-        <th class="num">Sharpe</th>
-        <th class="num">Max DD</th>
-      </tr>
-    </thead>
-    <tbody>
-      {eras.map((e) => (
+  <div class="fiveera__table-wrap">
+    <table class="fiveera__table">
+      <thead>
         <tr>
-          <td class="mono">{e.label}</td>
-          <td class="mono">{e.period}</td>
-          <td>{e.regime}</td>
-          <td class="mono num">{e.n.toLocaleString()}</td>
-          <td class="mono num">{e.sharpe.toFixed(2)}</td>
-          <td class="mono num">{e.dd.toFixed(1)}%</td>
+          <th>Era</th>
+          <th>Period</th>
+          <th>Regime</th>
+          <th class="num">N trades</th>
+          <th class="num">Sharpe</th>
+          <th class="num">Max DD</th>
         </tr>
-      ))}
-      <tr class="fiveera__total">
-        <td>Aggregate</td>
-        <td>2018-2024</td>
-        <td>5 regimes</td>
-        <td class="mono num">{totalN.toLocaleString()}</td>
-        <td class="mono num">{avgSharpe.toFixed(2)} avg</td>
-        <td class="mono num">{avgDD.toFixed(1)}% avg</td>
-      </tr>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        {eras.map((e) => (
+          <tr>
+            <td class="mono">{e.label}</td>
+            <td class="mono">{e.period}</td>
+            <td>{e.regime}</td>
+            <td class="mono num">{e.n.toLocaleString()}</td>
+            <td class="mono num">{e.sharpe.toFixed(2)}</td>
+            <td class="mono num">{e.dd.toFixed(1)}%</td>
+          </tr>
+        ))}
+        <tr class="fiveera__total">
+          <td>Aggregate</td>
+          <td>2018-2024</td>
+          <td>5 regimes</td>
+          <td class="mono num">{totalN.toLocaleString()}</td>
+          <td class="mono num">{avgSharpe.toFixed(2)} avg</td>
+          <td class="mono num">{avgDD.toFixed(1)}% avg</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
   <footer class="fiveera__foot">
     <p class="fiveera__caption mono">
@@ -152,7 +154,8 @@ const avgDD = eras.reduce((s, e) => s + e.dd, 0) / eras.length;
   .fiveera__regime { list-style: none; padding: 0; margin: 8px 0 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.08em; color: var(--fiveera-ink-2); text-align: center; }
   .fiveera__regime li { padding: 6px 0; border-top: 1px solid var(--fiveera-rule); }
 
-  .fiveera__table { max-width: 880px; margin: 24px auto 0; width: 100%; border-collapse: collapse; font-size: 13px; }
+  .fiveera__table-wrap { max-width: 880px; margin: 24px auto 0; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .fiveera__table { width: 100%; min-width: 560px; border-collapse: collapse; font-size: 13px; }
   .fiveera__table th, .fiveera__table td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--fiveera-rule); color: var(--fiveera-ink); }
   .fiveera__table th { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--fiveera-ink-2); font-weight: 500; }
   .fiveera__table .num { text-align: right; }
@@ -162,6 +165,23 @@ const avgDD = eras.reduce((s, e) => s + e.dd, 0) / eras.length;
   .fiveera__foot { max-width: 880px; margin: 24px auto 0; }
   .fiveera__caption { font-size: 11px; letter-spacing: 0.08em; color: var(--fiveera-ink-2); margin: 0 0 4px; font-weight: 500; }
   .fiveera__caveat { font-size: 10px; letter-spacing: 0.06em; color: var(--fiveera-ink-2); margin: 0; font-weight: 600; opacity: 0.85; }
+
+  @media (max-width: 600px) {
+    .fiveera { padding: 40px 16px; }
+    .fiveera__table { table-layout: fixed; font-size: 11px; }
+    .fiveera__table th, .fiveera__table td { padding: 6px 8px; word-break: break-word; overflow-wrap: anywhere; }
+    .fiveera__table th:nth-child(1), .fiveera__table td:nth-child(1) { width: 56px; }
+    .fiveera__table th:nth-child(2), .fiveera__table td:nth-child(2) { width: 78px; }
+    .fiveera__table th:nth-child(3), .fiveera__table td:nth-child(3) { width: auto; }
+    .fiveera__table th:nth-child(4), .fiveera__table td:nth-child(4) { width: 70px; }
+    .fiveera__table th:nth-child(5), .fiveera__table td:nth-child(5) { width: 56px; }
+    .fiveera__table th:nth-child(6), .fiveera__table td:nth-child(6) { width: 64px; }
+  }
+
+  @media (max-width: 480px) {
+    .fiveera__regime { font-size: 9px; letter-spacing: 0.04em; }
+    .fiveera__regime li { padding: 4px 0; }
+  }
 
   @media (prefers-reduced-motion: reduce) {
     .fiveera__curve { stroke-dasharray: none; stroke-dashoffset: 0; animation: none; }
