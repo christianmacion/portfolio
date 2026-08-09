@@ -23,6 +23,8 @@
  *     ...
  *   ]} />
  */
+type LabelPlacement = 'top' | 'right' | 'bottom' | 'left';
+
 interface Point {
   city: string;
   lat: number;
@@ -32,6 +34,13 @@ interface Point {
   href?: string;
   /** Optional 1-line label rendered under the dot. */
   caption?: string;
+  /**
+   * Label position relative to the dot. Default 'top' (above dot, centered).
+   * Use 'right' / 'left' / 'bottom' to break label collisions in dense
+   * clusters (e.g. London/Zurich, Digos/Singapore on this equirectangular
+   * projection). The render computes x/y/text-anchor from this value.
+   */
+  labelPlacement?: LabelPlacement;
 }
 interface Props {
   points?: Point[];
@@ -49,12 +58,17 @@ const { points, width = 720, height = 360, bgStep = 20 } = Astro.props;
 // exchange timezones. `href` cross-links where a page exists; otherwise
 // the dot is informational only. Coordinates are public-domain facts.
 const defaultPoints: Point[] = [
-  { city: 'Digos City', lat: 6.74, lon: 125.36, weight: 1.0, caption: 'home base', href: '/about' },
-  { city: 'Singapore', lat: 1.35, lon: 103.82, weight: 0.8, caption: 'APAC ops' },
-  { city: 'Tokyo', lat: 35.68, lon: 139.69, weight: 0.7, caption: 'JPX' },
-  { city: 'Zurich', lat: 47.38, lon: 8.54, weight: 0.85, caption: 'CTA' },
-  { city: 'London', lat: 51.51, lon: -0.13, weight: 0.95, caption: 'LSE' },
-  { city: 'New York', lat: 40.71, lon: -74.01, weight: 0.9, caption: 'NYSE / Nasdaq' },
+  // Label placements are deliberate: London/Zurich sit only 17u apart in
+  // viewBox x so stacking both 'top' overlays the names. Same with
+  // Digos/Singapore (~43u apart, labels measure ~50-62u). The chosen
+  // placements are the minimal set that breaks both collisions without
+  // shifting any dot.
+  { city: 'Digos City', lat: 6.74, lon: 125.36, weight: 1.0, caption: 'home base', href: '/about', labelPlacement: 'right' },
+  { city: 'Singapore', lat: 1.35, lon: 103.82, weight: 0.8, caption: 'APAC ops', labelPlacement: 'left' },
+  { city: 'Tokyo', lat: 35.68, lon: 139.69, weight: 0.7, caption: 'JPX', labelPlacement: 'top' },
+  { city: 'Zurich', lat: 47.38, lon: 8.54, weight: 0.85, caption: 'CTA', labelPlacement: 'bottom' },
+  { city: 'London', lat: 51.51, lon: -0.13, weight: 0.95, caption: 'LSE', labelPlacement: 'top' },
+  { city: 'New York', lat: 40.71, lon: -74.01, weight: 0.9, caption: 'NYSE / Nasdaq', labelPlacement: 'right' },
 ];
 const cities = points ?? defaultPoints;
 
@@ -65,6 +79,31 @@ function project(lat: number, lon: number): { x: number; y: number } {
   const x = ((lon + 180) / 360) * width;
   const y = ((90 - lat) / 180) * height;
   return { x, y };
+}
+
+// === Label placement ===
+// Given a city dot (x, y, r) and a placement side, return the SVG-space
+// anchor (x, y, text-anchor) for the label. The default 'top' matches the
+// legacy v6.1 layout (centered above the dot); the other three sides are
+// used to break label collisions in dense clusters (London/Zurich and
+// Digos/Singapore on the default 6 cities).
+function labelPosition(
+  c: { x: number; y: number; r: number },
+  placement: LabelPlacement
+): { x: number; y: number; anchor: 'start' | 'middle' | 'end' } {
+  const gap = 4; // gap between dot edge and label baseline
+  const dotEdge = c.r + gap;
+  switch (placement) {
+    case 'right':
+      return { x: c.x + dotEdge, y: c.y + 3, anchor: 'start' };
+    case 'left':
+      return { x: c.x - dotEdge, y: c.y + 3, anchor: 'end' };
+    case 'bottom':
+      return { x: c.x, y: c.y + dotEdge + 9, anchor: 'middle' };
+    case 'top':
+    default:
+      return { x: c.x, y: c.y - dotEdge, anchor: 'middle' };
+  }
 }
 
 // === Background landmass dot grid ===
@@ -109,7 +148,7 @@ const cityPositions = cities.map((c) => {
   const { x, y } = project(c.lat, c.lon);
   // Dot radius scales 4..9 with weight 0..1.
   const r = 4 + c.weight * 5;
-  return { ...c, x, y, r };
+  return { ...c, x, y, r, labelPlacement: (c.labelPlacement ?? 'top') as LabelPlacement };
 });
 
 // === Reference grid lines (equator + prime meridian) ===
@@ -143,7 +182,9 @@ const primeX = project(0, 0).x;
 
     {/* City dots + pulse ring for the high-weight ones */}
     {
-      cityPositions.map((c) => (
+      cityPositions.map((c) => {
+        const lbl = labelPosition(c, c.labelPlacement);
+        return (
         <g>
           {c.weight >= 0.7 && <circle cx={c.x} cy={c.y} r={c.r + 5} class="globe__pulse" />}
           {c.href ? (
@@ -168,11 +209,12 @@ const primeX = project(0, 0).x;
               </title>
             </circle>
           )}
-          <text x={c.x} y={c.y - c.r - 4} text-anchor="middle" class="globe__label">
+          <text x={lbl.x} y={lbl.y} text-anchor={lbl.anchor} class="globe__label" data-placement={c.labelPlacement}>
             {c.city}
           </text>
         </g>
-      ))
+      );
+      })
     }
   </svg>
 
