@@ -43,7 +43,7 @@ interface Props {
 const {
   symbols,
   durationSec = 60,
-  trailing = 'series seeded from BUILD_DATE for reproducibility',
+  trailing = 'seeded build',
 } = Astro.props;
 
 const rng = seedFromString(buildSeed() + '::tape');
@@ -331,6 +331,7 @@ const stop = trailing;
     display: flex;
     align-items: center;
     gap: var(--s-2);
+    max-width: clamp(120px, 30vw, 240px);
     padding-inline: var(--s-4);
     color: var(--c-ink-3);
     font-size: var(--type-caption-size-mobile);
@@ -339,6 +340,12 @@ const stop = trailing;
     background: var(--surface-paper-deep);
     border-left: 1px solid var(--c-rule);
     pointer-events: none;
+  }
+  .tape__stop-label {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .tape__stop-sep {
     color: var(--c-ink-4);
@@ -365,9 +372,18 @@ const stop = trailing;
     }
   }
 
-  @media (max-width: 1279px) {
-    .tape__trailing {
+  @media (max-width: 639px) {
+    .tape__stop-label,
+    .tape__stop-sep {
       display: none;
+    }
+
+    .tape__stop {
+      max-width: clamp(120px, 30vw, 240px);
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 0;
     }
   }
 </style>
