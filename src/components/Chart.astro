@@ -74,10 +74,13 @@ const instanceSeed = instanceId
     }`;
 const gradId = `chart-grad-${type}-${hashInstance(instanceSeed)}`;
 
-// Layout constants
-const padL = 44,
+// Layout constants.
+// padL (56) and padT (28) are sized to accommodate 5-char y-tick labels
+// (e.g. "-1.96") at the 14px mobile font size used in @media (max-width:
+// 500px) below — without clipping into the SVG left/top edge.
+const padL = 56,
   padR = 16,
-  padT = 20,
+  padT = 28,
   padB = 36;
 const innerW = width - padL - padR;
 const innerH = height - padT - padB;
@@ -392,5 +395,23 @@ if (isLine) {
     color: var(--c-ink-2);
     margin-top: var(--sp-2);
     line-height: var(--lh-loose);
+  }
+
+  /* v13.1.4p2 : mobile label legibility. The SVG is rendered at width:100%
+     inside a container-narrow that has 24px padding-inline per side. On a
+     375px iPhone SE viewport the SVG renders at ~327x113px (≈0.51x viewBox
+     scale), so the existing 8-9px viewBox font sizes scale to 4.1-4.6px
+     effective on screen — below the legibility floor. Bump all four text
+     classes to 14px in viewBox coords below 500px viewport. 14 * 0.51 = 7.1px
+     effective on iPhone SE (matches EquityCurveChart.astro v13.1.4p1). The
+     padL=56 / padT=28 constants above ensure 5-char tick labels (e.g. "-1.96")
+     and the SR̂ mark fit without clipping at this larger size. */
+  @media (max-width: 500px) {
+    .chart__tick,
+    .chart__bar-label,
+    .chart__bar-val,
+    .chart__mark {
+      font-size: 14px;
+    }
   }
 </style>
