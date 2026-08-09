@@ -465,19 +465,23 @@ const ICONS: Record<string, string> = {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 4px 8px;
-    margin-bottom: 4px;
-    color: var(--accent);
+    padding: 10px 12px;
+    margin-bottom: 6px;
+    color: var(--accent-ink);
     text-decoration: none;
     font-family: var(--ff-mono);
-    font-size: 9.5px;
+    font-size: 10.5px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     font-weight: 600;
     border: 1px solid var(--accent);
     border-radius: var(--radius-sm, 0);
     align-self: flex-start;
-    min-height: 24px;
+    /* v13.1.4 audit-fix : WCAG 2.5.5 touch target ≥44×44 px (was 24px,
+       font-size 9.5px). Density slightly looser (10.5px / 10 12 padding)
+       to keep the rail compact while clearing the WCAG floor. */
+    min-height: 44px;
+    min-width: 44px;
     transition:
       background var(--mv-dur-snap, 120ms) var(--mv-ease-settle, ease),
       color var(--mv-dur-snap, 120ms) var(--mv-ease-settle, ease);
@@ -512,11 +516,14 @@ const ICONS: Record<string, string> = {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 5px 10px;
-    min-height: 30px;
+    padding: 8px 12px;
+    /* v13.1.4 audit-fix : WCAG 2.5.5 touch target ≥44×44 px (was 30px,
+       padding 5 10). Padding 8 12 + line-height closes the WCAG floor
+       while keeping the rail compact at 240px column width. */
+    min-height: 44px;
     color: var(--ink-2);
     text-decoration: none;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     font-weight: 400;
     border-left: 1px solid transparent;
     transition:
