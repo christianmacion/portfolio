@@ -325,7 +325,11 @@ const monogram = (issuer: string) =>
     appearance: none;
     background: transparent;
     border: 0;
-    padding: 8px 14px;
+    /* v13.1.4 audit-fix : WCAG 2.5.5 touch target ≥44×44 px (was 33px,
+       padding 8 14). Padding 13 16 + line-height closes the floor
+       while keeping the tab strip compact. */
+    padding: 13px 16px;
+    min-height: 44px;
     font-family: inherit;
     font-size: 10.5px;
     letter-spacing: 0.14em;
