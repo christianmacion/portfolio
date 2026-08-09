@@ -43,9 +43,122 @@ const OCEAN_SHALLOW = '#2D6A8E';
 const LAND_TAN = '#A89968';
 const LAND_GREEN = '#6B7B4A';
 const COASTLINE = '#2A3540';
+const BORDER_COLOR = '#1F2937'; // country borders (slightly darker than coast)
 const LIMB_RIM = '#5A7A98';
 const STAR_DIM = '#9CA3A8';
 const DEEP_SPACE = '#0A1825';
+// v13.1.4 polish-6 : country biome palette. Inspired by NASA Blue Marble
+// casein-paint reading (no gradient, no glow). Each biome has 4-5 muted
+// tones derived from the LAND_TAN base. ISO 3166-1 numeric codes per
+// countries-110m.json topology. Unmapped countries fall through to LAND_TAN.
+const COUNTRY_BIOME: Record<string, string> = {
+  // Desert / arid — sandy tan
+  '012': '#C9A876', '024': '#C9A876', '148': '#C9A876', '364': '#C9A876',
+  '368': '#C9A876', '376': '#C9A876', '398': '#C9A876', '400': '#C9A876',
+  '417': '#C9A876', '422': '#C9A876', '434': '#C9A876', '466': '#C9A876',
+  '478': '#C9A876', '496': '#C9A876', '504': '#C9A876', '512': '#C9A876',
+  '562': '#C9A876', '682': '#C9A876', '728': '#C9A876', '729': '#C9A876',
+  '732': '#C9A876', '748': '#C9A876', '762': '#C9A876', '784': '#C9A876',
+  '792': '#C9A876', '795': '#C9A876', '860': '#C9A876', '887': '#C9A876',
+  // Tropical / forest — deep green (Amazon, Congo, SE Asia, Central America)
+  '050': '#4A6B3A', '064': '#4A6B3A', '068': '#4A6B3A', '084': '#4A6B3A',
+  '090': '#4A6B3A', '104': '#4A6B3A', '116': '#4A6B3A', '144': '#4A6B3A',
+  '170': '#4A6B3A', '174': '#4A6B3A', '178': '#4A6B3A', '180': '#4A6B3A',
+  '188': '#4A6B3A', '192': '#4A6B3A', '214': '#4A6B3A', '218': '#4A6B3A',
+  '222': '#4A6B3A', '320': '#4A6B3A', '324': '#4A6B3A', '332': '#4A6B3A',
+  '340': '#4A6B3A', '360': '#4A6B3A', '384': '#4A6B3A', '388': '#4A6B3A',
+  '450': '#4A6B3A', '454': '#4A6B3A', '458': '#4A6B3A', '508': '#4A6B3A',
+  '524': '#4A6B3A', '548': '#4A6B3A', '566': '#4A6B3A', '586': '#4A6B3A',
+  '591': '#4A6B3A', '598': '#4A6B3A', '604': '#4A6B3A', '608': '#4A6B3A',
+  '630': '#4A6B3A', '646': '#4A6B3A', '704': '#4A6B3A', '764': '#4A6B3A',
+  '800': '#4A6B3A', '834': '#4A6B3A', '862': '#4A6B3A',
+  // Boreal / taiga — bluish-green
+  '124': '#5A6B5A', '246': '#5A6B5A', '578': '#5A6B5A', '643': '#5A6B5A',
+  '752': '#5A6B5A',
+  // Tundra / polar — light grey
+  '304': '#C8C8C0', '352': '#C8C8C0',
+  // Agricultural / temperate — olive
+  '032': '#6B7B4A', '040': '#6B7B4A', '056': '#6B7B4A', '072': '#6B7B4A',
+  '100': '#6B7B4A', '112': '#6B7B4A', '152': '#6B7B4A', '156': '#6B7B4A',
+  '158': '#6B7B4A', '191': '#6B7B4A', '203': '#6B7B4A', '208': '#6B7B4A',
+  '233': '#6B7B4A', '250': '#6B7B4A', '276': '#6B7B4A', '300': '#6B7B4A',
+  '348': '#6B7B4A', '372': '#6B7B4A', '380': '#6B7B4A', '392': '#6B7B4A',
+  '408': '#6B7B4A', '410': '#6B7B4A', '428': '#6B7B4A', '440': '#6B7B4A',
+  '554': '#6B7B4A', '616': '#6B7B4A', '620': '#6B7B4A', '642': '#6B7B4A',
+  '703': '#6B7B4A', '705': '#6B7B4A', '710': '#6B7B4A', '724': '#6B7B4A',
+  '756': '#6B7B4A', '804': '#6B7B4A', '826': '#6B7B4A',
+};
+
+// v13.1.4 polish-6 : always-visible major cities. Pop-scaled dot size +
+// label with backdrop. Digos + Dagupan are Owner's hometown accents.
+// 38 cities cover the major continents; population drives visual hierarchy.
+interface DisplayCity {
+  name: string;
+  lat: number;
+  lon: number;
+  pop: number; // millions
+}
+const DISPLAY_CITIES: readonly DisplayCity[] = [
+  { name: 'NEW YORK', lat: 40.71, lon: -74.0, pop: 8.3 },
+  { name: 'LOS ANGELES', lat: 34.05, lon: -118.24, pop: 4.0 },
+  { name: 'CHICAGO', lat: 41.88, lon: -87.63, pop: 2.7 },
+  { name: 'MEXICO CITY', lat: 19.43, lon: -99.13, pop: 9.2 },
+  { name: 'TORONTO', lat: 43.65, lon: -79.38, pop: 2.9 },
+  { name: 'LIMA', lat: -12.05, lon: -77.04, pop: 11.0 },
+  { name: 'BOGOTA', lat: 4.71, lon: -74.07, pop: 11.0 },
+  { name: 'SAO PAULO', lat: -23.55, lon: -46.63, pop: 22.4 },
+  { name: 'BUENOS AIRES', lat: -34.6, lon: -58.38, pop: 15.4 },
+  { name: 'SANTIAGO', lat: -33.45, lon: -70.67, pop: 6.8 },
+  { name: 'CARACAS', lat: 10.48, lon: -66.9, pop: 3.2 },
+  { name: 'LONDON', lat: 51.51, lon: -0.13, pop: 9.0 },
+  { name: 'PARIS', lat: 48.86, lon: 2.35, pop: 2.2 },
+  { name: 'BERLIN', lat: 52.52, lon: 13.4, pop: 3.7 },
+  { name: 'MADRID', lat: 40.42, lon: -3.7, pop: 3.3 },
+  { name: 'ROME', lat: 41.9, lon: 12.5, pop: 2.9 },
+  { name: 'MOSCOW', lat: 55.76, lon: 37.62, pop: 12.5 },
+  { name: 'ISTANBUL', lat: 41.01, lon: 28.98, pop: 15.5 },
+  { name: 'CAIRO', lat: 30.04, lon: 31.24, pop: 20.9 },
+  { name: 'LAGOS', lat: 6.52, lon: 3.38, pop: 14.4 },
+  { name: 'NAIROBI', lat: -1.29, lon: 36.82, pop: 4.4 },
+  { name: 'JOHANNESBURG', lat: -26.2, lon: 28.05, pop: 5.6 },
+  { name: 'DUBAI', lat: 25.2, lon: 55.27, pop: 3.4 },
+  { name: 'MUMBAI', lat: 19.08, lon: 72.88, pop: 20.4 },
+  { name: 'DELHI', lat: 28.61, lon: 77.21, pop: 31.2 },
+  { name: 'BANGKOK', lat: 13.76, lon: 100.5, pop: 10.5 },
+  { name: 'SINGAPORE', lat: 1.35, lon: 103.82, pop: 5.7 },
+  { name: 'HONG KONG', lat: 22.32, lon: 114.17, pop: 7.5 },
+  { name: 'BEIJING', lat: 39.9, lon: 116.41, pop: 21.5 },
+  { name: 'SHANGHAI', lat: 31.23, lon: 121.47, pop: 28.5 },
+  { name: 'TOKYO', lat: 35.68, lon: 139.69, pop: 37.4 },
+  { name: 'SEOUL', lat: 37.57, lon: 126.98, pop: 9.9 },
+  { name: 'MANILA', lat: 14.6, lon: 120.98, pop: 1.8 },
+  { name: 'DIGOS', lat: 6.74, lon: 125.36, pop: 0.2 },
+  { name: 'DAGUPAN', lat: 16.04, lon: 120.34, pop: 0.2 },
+  { name: 'SYDNEY', lat: -33.87, lon: 151.21, pop: 5.3 },
+  { name: 'MELBOURNE', lat: -37.81, lon: 144.96, pop: 5.1 },
+  { name: 'AUCKLAND', lat: -36.85, lon: 174.76, pop: 1.6 },
+];
+
+// v13.1.4 polish-6 : major country labels (text only, no dot). Centroid
+// coordinates chosen so the label falls inside the country even at globe
+// rotation extremes. 14 labels — enough to anchor continents without
+// crowding the institutional register.
+const COUNTRY_LABELS: ReadonlyArray<{ name: string; lat: number; lon: number }> = [
+  { name: 'USA', lat: 39.5, lon: -98.5 },
+  { name: 'CANADA', lat: 56.0, lon: -106.0 },
+  { name: 'BRAZIL', lat: -14.2, lon: -51.9 },
+  { name: 'RUSSIA', lat: 61.5, lon: 105.0 },
+  { name: 'CHINA', lat: 35.0, lon: 104.0 },
+  { name: 'INDIA', lat: 22.0, lon: 79.0 },
+  { name: 'AUSTRALIA', lat: -25.0, lon: 133.0 },
+  { name: 'EUROPE', lat: 50.0, lon: 9.0 },
+  { name: 'AFRICA', lat: 0.0, lon: 20.0 },
+  { name: 'SAUDI ARABIA', lat: 24.0, lon: 45.0 },
+  { name: 'ARGENTINA', lat: -38.0, lon: -64.0 },
+  { name: 'MEXICO', lat: 23.0, lon: -102.0 },
+  { name: 'INDONESIA', lat: -2.0, lon: 118.0 },
+  { name: 'GREENLAND', lat: 72.0, lon: -42.0 },
+];
 
 // === Type contracts ===================================================
 interface WorldViewRefs {
@@ -92,6 +205,9 @@ class Globe {
   private pinGroup: SVGGElement;
   private venueGroup: SVGGElement;
   private labelGroup: SVGGElement;
+  private displayCityGroup: SVGGElement;
+  private displayCityLabels: SVGGElement;
+  private countryLabelGroup: SVGGElement;
   private pins = new Map<string, { el: SVGCircleElement; born: number; lat: number; lon: number }>();
   private venues = new Map<string, VenuePin>();
   private d3: any = null;
@@ -235,6 +351,22 @@ class Globe {
     this.labelGroup.setAttribute('class', 'wv-globe__labels');
     this.svg.appendChild(this.labelGroup);
 
+    // v13.1.4 polish-6 : always-visible major cities + country labels.
+    // Three nested groups so the z-order is clean: country labels render
+    // above land but below city dots, city labels render above dots.
+    // Hover label group (labelGroup) stays on top of everything.
+    this.countryLabelGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    this.countryLabelGroup.setAttribute('class', 'wv-globe__country-labels');
+    this.svg.appendChild(this.countryLabelGroup);
+
+    this.displayCityGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    this.displayCityGroup.setAttribute('class', 'wv-globe__display-cities');
+    this.svg.appendChild(this.displayCityGroup);
+
+    this.displayCityLabels = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    this.displayCityLabels.setAttribute('class', 'wv-globe__display-city-labels');
+    this.svg.appendChild(this.displayCityLabels);
+
     // Drag to rotate (improves UX; does not interfere with scroll on modal body).
     let dragging = false;
     let dragX = 0;
@@ -364,13 +496,19 @@ class Globe {
         const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         p.setAttribute('d', d);
         p.setAttribute('class', 'wv-globe__land-shape');
-        // Realistic Earth landmass : natural tan/olive against the deep
-        // ocean (#1B4A6B). The 1px dark coastline gives crisp shorelines.
-        // No glow, no gradient — flat fill per the institutional register.
-        p.setAttribute('fill', LAND_TAN);
-        p.setAttribute('stroke', COASTLINE);
-        p.setAttribute('stroke-width', '0.5');
-        p.setAttribute('stroke-opacity', '0.85');
+        // v13.1.4 polish-6 : per-country biome coloring. Each country
+        // maps to a flat fill from COUNTRY_BIOME (desert / forest /
+        // boreal / tundra / agricultural); unmapped countries fall
+        // through to LAND_TAN. The 0.6px BORDER_COLOR stroke is darker
+        // than COASTLINE so adjacent-country borders stay visible
+        // against both sand and forest biomes. No glow, no gradient —
+        // flat fill per the institutional register.
+        const id = f.id !== undefined ? String(f.id) : '';
+        const biome = COUNTRY_BIOME[id] ?? LAND_TAN;
+        p.setAttribute('fill', biome);
+        p.setAttribute('stroke', BORDER_COLOR);
+        p.setAttribute('stroke-width', '0.6');
+        p.setAttribute('stroke-opacity', '0.9');
         p.setAttribute('stroke-linejoin', 'round');
         this.landGroup.appendChild(p);
       }
@@ -388,6 +526,8 @@ class Globe {
     this.meridianPath.setAttribute('d', meD ?? '');
     this.renderPins();
     this.renderVenues();
+    this.renderDisplayCities();
+    this.renderCountryLabels();
   }
 
   /** Inject the loaded FeatureCollection for re-projection on each frame. */
@@ -557,6 +697,116 @@ class Globe {
       t.textContent = text;
       this.labelGroup.appendChild(t);
     });
+  }
+
+  /** Render always-visible major cities (pop-scaled dot + dark backdrop
+   *  label). 38 cities cover the major continents; population drives the
+   *  visual hierarchy. Digos + Dagupan are the Owner's hometown accents.
+   *  Uses geoDistance (not just coord) to detect back-side positions,
+   *  since d3-projection always returns a coordinate for any point on
+   *  the sphere even when the point is on the far side. */
+  renderDisplayCities(): void {
+    this.displayCityGroup.replaceChildren();
+    this.displayCityLabels.replaceChildren();
+    const proj = this.path.projection();
+    if (!proj) return;
+    const rot = proj.rotate();
+    const cx = GLOBE_SIZE / 2;
+    const cy = GLOBE_SIZE / 2;
+    const r = GLOBE_SIZE / 2 - 6;
+    for (const c of DISPLAY_CITIES) {
+      // Back-side detection via angular distance from view center.
+      const angDist = this.d3.geoDistance(rot, [c.lon, c.lat]);
+      if (angDist > Math.PI / 2 + 0.05) continue; // hide back-side cities
+      const coord = proj([c.lon, c.lat]);
+      if (!coord || isNaN(coord[0])) continue;
+      const dx = coord[0] - cx;
+      const dy = coord[1] - cy;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist > r * 0.92) continue; // hide near limb edge
+      // Pop-scaled dot radius (5 tiers).
+      const dotR = c.pop > 20 ? 2.4 : c.pop > 10 ? 2.0 : c.pop > 5 ? 1.6 : c.pop > 1 ? 1.2 : 0.9;
+      const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      dot.setAttribute('cx', String(coord[0]));
+      dot.setAttribute('cy', String(coord[1]));
+      dot.setAttribute('r', String(dotR));
+      dot.setAttribute('fill', '#E8E6E1'); // cream paper
+      dot.setAttribute('stroke', '#1A1A1A');
+      dot.setAttribute('stroke-width', '0.4');
+      this.displayCityGroup.appendChild(dot);
+      // Label with dark backdrop. Placed to the right of the dot by
+      // default; flips left if the city is on the right half of the
+      // globe so the label doesn't overflow the viewport.
+      const flipLeft = coord[0] > cx;
+      const charW = 4.6;
+      const w = c.name.length * charW + 6;
+      const labelX = flipLeft ? coord[0] - dotR - 3 - w : coord[0] + dotR + 3;
+      const labelY = coord[1] + 2.6;
+      const plate = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      plate.setAttribute('x', String(labelX));
+      plate.setAttribute('y', String(labelY - 8));
+      plate.setAttribute('width', String(w));
+      plate.setAttribute('height', String(11));
+      plate.setAttribute('fill', '#0A1825');
+      plate.setAttribute('fill-opacity', '0.74');
+      plate.setAttribute('rx', '1.2');
+      this.displayCityLabels.appendChild(plate);
+      const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      t.setAttribute('x', String(labelX + 3));
+      t.setAttribute('y', String(labelY));
+      t.setAttribute('font-family', 'ui-monospace, SFMono-Regular, Menlo, monospace');
+      t.setAttribute('font-size', '7.5');
+      t.setAttribute('letter-spacing', '0.05em');
+      t.setAttribute('fill', '#E8E6E1');
+      t.textContent = c.name;
+      this.displayCityLabels.appendChild(t);
+    }
+  }
+
+  /** Render major country labels (text only, with dark backdrop). 14
+   *  labels — enough to anchor continents without crowding the
+   *  institutional register. Renders below city labels so cities win
+   *  the z-fight at the same latitude. */
+  renderCountryLabels(): void {
+    this.countryLabelGroup.replaceChildren();
+    const proj = this.path.projection();
+    if (!proj) return;
+    const rot = proj.rotate();
+    const cx = GLOBE_SIZE / 2;
+    const cy = GLOBE_SIZE / 2;
+    const r = GLOBE_SIZE / 2 - 6;
+    for (const c of COUNTRY_LABELS) {
+      const angDist = this.d3.geoDistance(rot, [c.lon, c.lat]);
+      if (angDist > Math.PI / 2 + 0.05) continue;
+      const coord = proj([c.lon, c.lat]);
+      if (!coord || isNaN(coord[0])) continue;
+      const dx = coord[0] - cx;
+      const dy = coord[1] - cy;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist > r * 0.85) continue; // hide near limb edge
+      const charW = 5.4;
+      const w = c.name.length * charW + 8;
+      const plate = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      plate.setAttribute('x', String(coord[0] - w / 2));
+      plate.setAttribute('y', String(coord[1] - 7));
+      plate.setAttribute('width', String(w));
+      plate.setAttribute('height', String(13));
+      plate.setAttribute('fill', '#0A1825');
+      plate.setAttribute('fill-opacity', '0.82');
+      plate.setAttribute('rx', '1.5');
+      this.countryLabelGroup.appendChild(plate);
+      const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      t.setAttribute('x', String(coord[0]));
+      t.setAttribute('y', String(coord[1] + 3));
+      t.setAttribute('text-anchor', 'middle');
+      t.setAttribute('font-family', 'ui-monospace, SFMono-Regular, Menlo, monospace');
+      t.setAttribute('font-size', '9');
+      t.setAttribute('font-weight', '600');
+      t.setAttribute('letter-spacing', '0.1em');
+      t.setAttribute('fill', '#E8E6E1');
+      t.textContent = c.name;
+      this.countryLabelGroup.appendChild(t);
+    }
   }
 }
 
