@@ -267,7 +267,13 @@ class Globe {
       // Texture unavailable — globe falls back to flat-fill lands.
       this.textureLoaded = false;
     };
-    this.earthImage.src = '/textures/earth-blue-marble.jpg';
+    // v13.1.4 polish-7c : prefix the texture URL with Astro's base path.
+    // The site lives at https://christianmacion.github.io/portfolio/ so
+    // the absolute path must include /portfolio/ — a bare `/textures/...`
+    // resolves to the org pages root and 404s. import.meta.env.BASE_URL
+    // is set by astro.config.mjs (`base: '/portfolio'` by default) and
+    // ships to the client at build time.
+    this.earthImage.src = `${import.meta.env.BASE_URL}textures/earth-blue-marble.jpg`;
 
     // v13.1.4 polish-7 : ocean disc is REMOVED. The canvas behind the
     // SVG (data-worldview-canvas) renders the projected NASA Blue
@@ -442,7 +448,7 @@ class Globe {
   /** Load the world topology from /countries-110m.json (108KB, lazy). */
   async loadLand(): Promise<void> {
     try {
-      const res = await fetch('/countries-110m.json', { cache: 'force-cache' });
+      const res = await fetch(`${import.meta.env.BASE_URL}countries-110m.json`, { cache: 'force-cache' });
       if (!res.ok) throw new Error('topology fetch failed');
       const topo = (await res.json()) as Topology;
       const fc = this.topoFeature(topo, topo.objects.countries) as unknown as FeatureCollection<Geometry>;
@@ -1141,7 +1147,7 @@ async function openModal(): Promise<void> {
   await loadDeps();
   if (!topoCache) {
     try {
-      const res = await fetch('/countries-110m.json', { cache: 'force-cache' });
+      const res = await fetch(`${import.meta.env.BASE_URL}countries-110m.json`, { cache: 'force-cache' });
       if (res.ok) topoCache = (await res.json()) as Topology;
     } catch {
       topoCache = null;
