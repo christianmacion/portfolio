@@ -246,29 +246,54 @@ const ICONS: Record<string, string> = {
         }
       </ul>
 
-      <!-- v13.1.4 : Bryllim-style shortcuts strip. Two rows : ⌘K opens
-           the command palette (cmdk:open event, handled by CommandPalette),
-           ⌘J opens the live data terminal (WorldView modal). Each row is
-           [label][kbd][+][kbd] matching Bryllim's `Ask anything ⌘ + K`
-           register. The kbd badges are decorative : the canonical handlers
-           live in their respective components and in CommandPalette's
-           capture-phase listener. -->
-      <ul class="side-rail__shortcuts" role="list" aria-label="Keyboard shortcuts">
+      <!-- v13.1.4 polish-7f : touch-parity tap targets. The previous
+           version was a display-only shortcut list (kbd badges were
+           decorative). Phones + tablets have no keyboard, so the
+           Ask Anything palette + Live Data Terminal were unreachable.
+           Each shortcut is now a <button> that dispatches the same
+           open event the keyboard shortcut uses (data-cmdk-open /
+           data-worldview-open are picked up by the existing event-bus
+           listeners in CommandPalette.astro + worldview.client.ts). -->
+      <ul class="side-rail__shortcuts" role="list" aria-label="Quick actions">
         <li class="side-rail__shortcut">
-          <span class="side-rail__shortcut-label">Command palette</span>
-          <span class="side-rail__shortcut-keys mono" aria-hidden="true">
-            <kbd class="side-rail__kbd">⌘</kbd>
-            <span class="side-rail__kbd-sep">+</span>
-            <kbd class="side-rail__kbd">K</kbd>
-          </span>
+          <button
+            type="button"
+            class="side-rail__shortcut-btn"
+            data-cmdk-open
+            aria-label="Ask anything (Cmd+K)"
+            aria-keyshortcuts="Meta+K Control+K"
+          >
+            <svg class="side-rail__shortcut-ic" viewBox="0 0 16 16" width="13" height="13" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.4">
+              <circle cx="7" cy="7" r="4.5"></circle>
+              <line x1="10.5" y1="10.5" x2="14" y2="14"></line>
+            </svg>
+            <span class="side-rail__shortcut-label">Ask anything</span>
+            <span class="side-rail__shortcut-keys mono" aria-hidden="true">
+              <kbd class="side-rail__kbd">⌘</kbd>
+              <span class="side-rail__kbd-sep">+</span>
+              <kbd class="side-rail__kbd">K</kbd>
+            </span>
+          </button>
         </li>
         <li class="side-rail__shortcut">
-          <span class="side-rail__shortcut-label">Live terminal</span>
-          <span class="side-rail__shortcut-keys mono" aria-hidden="true">
-            <kbd class="side-rail__kbd">⌘</kbd>
-            <span class="side-rail__kbd-sep">+</span>
-            <kbd class="side-rail__kbd">J</kbd>
-          </span>
+          <button
+            type="button"
+            class="side-rail__shortcut-btn"
+            data-worldview-open
+            aria-label="Open live data terminal (Cmd+J)"
+            aria-keyshortcuts="Meta+J Control+J"
+          >
+            <svg class="side-rail__shortcut-ic" viewBox="0 0 16 16" width="13" height="13" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.4">
+              <circle cx="8" cy="8" r="5.5"></circle>
+              <path d="M8 5 L8 8 L10.5 9.5"></path>
+            </svg>
+            <span class="side-rail__shortcut-label">Live terminal</span>
+            <span class="side-rail__shortcut-keys mono" aria-hidden="true">
+              <kbd class="side-rail__kbd">⌘</kbd>
+              <span class="side-rail__kbd-sep">+</span>
+              <kbd class="side-rail__kbd">J</kbd>
+            </span>
+          </button>
         </li>
       </ul>
     </nav>
@@ -592,6 +617,65 @@ const ICONS: Record<string, string> = {
     padding: 4px 0;
     font-size: 10px;
     color: var(--ink-2);
+  }
+  /* v13.1.4 polish-7f : touch-parity tap target. The previous shortcut
+     was a display-only <span> pair; phones + tablets had no way to
+     open Ask Anything or Live Data Terminal. The button is full-width,
+     36px tall on desktop, 44px on mobile (WCAG 2.2 AA + Apple HIG).
+     Hover mirrors the tier-2 link treatment (color shift + accent
+     underline). Focus ring is a 2px amber outline (no halo / glow). */
+  .side-rail__shortcut-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    width: 100%;
+    min-height: 36px;
+    padding: 6px 4px;
+    background: transparent;
+    color: inherit;
+    border: 0;
+    border-bottom: 1px solid transparent;
+    border-radius: 0;
+    font: inherit;
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    text-align: left;
+    cursor: pointer;
+    transition: color 120ms ease, border-color 120ms ease;
+  }
+  .side-rail__shortcut-btn:hover {
+    color: var(--ink-1);
+    border-bottom-color: var(--c-amber, #b5530a);
+  }
+  .side-rail__shortcut-btn:focus-visible {
+    outline: 2px solid var(--c-amber, #b5530a);
+    outline-offset: 2px;
+  }
+  .side-rail__shortcut-btn:active {
+    background: var(--rule);
+  }
+  .side-rail__shortcut-ic {
+    flex-shrink: 0;
+    color: var(--ink-2);
+  }
+  .side-rail__shortcut-btn:hover .side-rail__shortcut-ic {
+    color: var(--ink-1);
+  }
+  /* v13.1.4 polish-7f : mobile touch target. 44×44 minimum per WCAG
+     2.2 AA + Apple HIG. The whole shortcut row becomes tappable
+     instead of just the kbd badge. */
+  @media (max-width: 760px) {
+    .side-rail__shortcut-btn {
+      min-height: 44px;
+      padding: 12px 8px;
+    }
+  }
+  /* v13.1.4 polish-7f : reduced-motion disables hover transitions. */
+  @media (prefers-reduced-motion: reduce) {
+    .side-rail__shortcut-btn {
+      transition: none;
+    }
   }
   .side-rail__shortcut-label {
     font-family: var(--ff-mono);
