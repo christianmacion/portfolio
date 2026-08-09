@@ -361,12 +361,37 @@ const fmTagJson = JSON.stringify(financialMarketsTag);
     line-height: 1.2;
   }
 
-  @media (max-width: 720px) {
+  /* v13.1.4 polish-7g : mobile sheet. Below 760px the modal becomes a
+     full-screen sheet (width 100vw, height 100dvh) so the touch keyboard
+     + result list fit comfortably on phones. The 2px amber top rule stays
+     so the institutional register is preserved. Items bump to ≥44px tall
+     to clear WCAG 2.5.5 SC 2.5.8 (Target Size Minimum). */
+  @media (max-width: 760px) {
     .cmdk {
-      padding-top: 6vh;
+      padding-top: 0;
+      place-items: stretch;
     }
     .cmdk__panel {
-      width: min(94vw, 560px);
+      width: 100vw;
+      max-width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      max-height: 100vh;
+      max-height: 100dvh;
+      border-top: 2px solid var(--c-amber);
+    }
+    .cmdk__item {
+      padding: 14px 16px;
+      min-height: 44px;
+      font-size: 14px;
+    }
+    .cmdk__item-icon {
+      width: 16px;
+      height: 16px;
+    }
+    .cmdk__hint {
+      font-size: 10px;
+      padding: 10px 16px;
     }
   }
 

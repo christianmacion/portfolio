@@ -186,6 +186,22 @@ interface VenuePin {
   venue: string;
 }
 
+// === Utilities =========================================================
+/** Minimal HTML escape for the detail panel payload. Trusts the row's
+ *  visible-text inputs (event titles from the GDELT cache, tick symbols
+ *  from the market-ticks cache) and emits a safe string for innerHTML.
+ *  Keeps the row interactive (innerHTML is much cheaper than building
+ *  6 nested elements per render tick) without opening an XSS surface
+ *  on the institutional register. */
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 // === Globe renderer ===================================================
 class Globe {
   private svg: SVGSVGElement;
@@ -914,6 +930,23 @@ class Globe {
 }
 
 // === Ticker scheduler =================================================
+/** v13.1.4 polish-7g : shape of a single ticker row. Extends the
+ *  visible-row fields with the raw fields the detail panel renders
+ *  (price, changePct, severity, etc.). Local to this file so the
+ *  public Ticker surface stays unchanged. */
+interface TickerItem {
+  ts: string;
+  src: string;
+  region: string;
+  head: string;
+  signal: string;
+  badge?: string;
+  type: 'gdelt' | 'tick';
+  severity?: string;
+  priceLabel?: string;
+  changeLabel?: string;
+}
+
 class Ticker {
   private list: HTMLUListElement;
   private events: GdeltEvent[] = [];
@@ -925,10 +958,38 @@ class Ticker {
     this.list = list;
   }
 
-  private row(timestamp: string, source: string, region: string, headline: string, signal: string, badge?: string): HTMLLIElement {
+  private row(
+    timestamp: string,
+    source: string,
+    region: string,
+    headline: string,
+    signal: string,
+    badge: string | undefined,
+    detailHtml: string,
+  ): HTMLLIElement {
+    // v13.1.4 polish-7g : ticker row is now interactive. <li> wraps a
+    // <button class="wv-ticker__row"> (the visible grid) + a hidden
+    // <div class="wv-ticker__detail"> that expands on tap. aria-expanded
+    // + aria-controls wire the button to the detail panel for screen
+    // readers. The detail holds the untruncated headline + the full
+    // timestamp + the source/signal/level grid. WCAG 2.5.5 SC 2.5.8:
+    // 44×44 minimum touch target is set via the .wv-ticker__row
+    // min-height on mobile (CSS in WorldView.astro).
     const li = document.createElement('li');
-    li.className = 'wv-ticker__row';
+    li.className = 'wv-ticker__item';
     li.setAttribute('role', 'listitem');
+
+    const detailId = `wv-ticker-detail-${Math.random().toString(36).slice(2, 10)}`;
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'wv-ticker__row';
+    btn.setAttribute('aria-expanded', 'false');
+    btn.setAttribute('aria-controls', detailId);
+    btn.setAttribute(
+      'aria-label',
+      `${region} · ${headline} · ${signal}${badge ? ' · ' + badge : ''}. Tap to expand details.`,
+    );
+
     const t = document.createElement('span');
     t.className = 'wv-ticker__time mono';
     t.textContent = timestamp.slice(11, 19) + 'Z';
@@ -944,15 +1005,80 @@ class Ticker {
     const h = document.createElement('span');
     h.className = 'wv-ticker__head';
     h.textContent = headline;
-    li.append(t, s, r, sig, h);
+    btn.append(t, s, r, sig, h);
     if (badge) {
       const b = document.createElement('span');
       const lvl = badge.toLowerCase();
       b.className = 'wv-ticker__badge mono wv-ticker__badge--' + lvl;
       b.textContent = badge;
-      li.appendChild(b);
+      btn.appendChild(b);
     }
+
+    // Inline detail panel : hidden until the row is tapped.
+    const detail = document.createElement('div');
+    detail.className = 'wv-ticker__detail';
+    detail.id = detailId;
+    detail.hidden = true;
+    detail.setAttribute('role', 'region');
+    detail.setAttribute('aria-label', `${region} details`);
+    detail.innerHTML = detailHtml;
+
+    // Toggle handler : single source of truth for the open/close state.
+    // aria-expanded + hidden + .wv-ticker__row--open class are all kept
+    // in sync so the CSS, the screen-reader announcement, and the DOM
+    // truth stay aligned.
+    const toggle = (open?: boolean): void => {
+      const next =
+        open === undefined
+          ? btn.getAttribute('aria-expanded') !== 'true'
+          : open;
+      btn.setAttribute('aria-expanded', next ? 'true' : 'false');
+      btn.classList.toggle('wv-ticker__row--open', next);
+      detail.hidden = !next;
+    };
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggle();
+    });
+    btn.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggle();
+        return;
+      }
+      if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') {
+        e.preventDefault();
+        toggle(false);
+        btn.focus();
+      }
+    });
+
+    li.append(btn, detail);
     return li;
+  }
+
+  /** Build the detail panel HTML for a single row. Pure string return;
+   *  uses innerHTML at the call site (event/tick payloads come from the
+   *  same trusted JSON caches the visible row already consumes). */
+  private detailHtml(item: TickerItem): string {
+    const rows: Array<[string, string]> = [
+      ['Time', item.ts + 'Z'],
+      ['Source', item.src],
+      ['Region', item.region],
+      ['Signal', item.signal],
+    ];
+    if (item.badge) rows.push(['Level', item.badge]);
+    if (item.type === 'gdelt' && item.severity) rows.push(['Severity', item.severity]);
+    if (item.type === 'tick') {
+      rows.push(['Symbol', item.region]);
+      rows.push(['Price', item.priceLabel ?? '—']);
+      rows.push(['Change', item.changeLabel ?? '—']);
+    }
+    const dl = rows
+      .map(([k, v]) => `<dt>${escapeHtml(k)}</dt><dd>${escapeHtml(v)}</dd>`)
+      .join('');
+    return `<p class="wv-ticker__detail-head">${escapeHtml(item.head)}</p>`
+      + `<dl class="wv-ticker__detail-grid">${dl}</dl>`;
   }
 
   private render(): void {
@@ -961,7 +1087,7 @@ class Ticker {
     const prevBySymbol = new Map<string, { price: number; changePct: number }>();
     for (const t of this.ticks) prevBySymbol.set(t.symbol, { price: t.price, changePct: t.changePct });
 
-    const items: { ts: string; src: string; region: string; head: string; signal: string; badge?: string }[] = [];
+    const items: TickerItem[] = [];
     for (const ev of this.events) {
       // GDELT rows read as alpha signals: critical = L3 with HIGH-conviction tag,
       // moderate = L2 with NEUTRAL, mild = L1 with LOW. Headline is the
@@ -974,24 +1100,27 @@ class Ticker {
         head: ev.title,
         signal: tag,
         badge: ev.severity === 'critical' ? 'L3' : ev.severity === 'moderate' ? 'L2' : 'L1',
+        type: 'gdelt',
+        severity: ev.severity,
       });
     }
     for (const t of this.ticks) {
       // TICK rows show the price + changePct as headline; signal column
       // shows the direction. Mapping: ▲ → LONG, ▼ → SHORT. The 'tag'
       // (RSI/MA/volume) is reserved for future research overlays.
+      const priceLabel = t.price.toLocaleString('en-US', { maximumFractionDigits: 4 });
+      const changeLabel =
+        (t.changePct >= 0 ? '+' : '') + t.changePct.toFixed(2) + '%';
       items.push({
         ts: t.timestamp,
         src: 'TICK',
         region: t.symbol,
-        head:
-          t.price.toLocaleString('en-US', { maximumFractionDigits: 4 }) +
-          ' · ' +
-          (t.changePct >= 0 ? '+' : '') +
-          t.changePct.toFixed(2) +
-          '%',
+        head: priceLabel + ' · ' + changeLabel,
         signal: t.changePct >= 0 ? '▲ LONG' : '▼ SHORT',
         badge: t.level,
+        type: 'tick',
+        priceLabel,
+        changeLabel,
       });
     }
     items.sort((a, b) => (a.ts < b.ts ? 1 : a.ts > b.ts ? -1 : 0));
@@ -1008,12 +1137,24 @@ class Ticker {
     }
     this.list.replaceChildren(
       ...visible.map((v) => {
-        const row = this.row(v.ts, v.src, v.region, v.head, v.signal, v.badge);
+        const row = this.row(
+          v.ts,
+          v.src,
+          v.region,
+          v.head,
+          v.signal,
+          v.badge,
+          this.detailHtml(v),
+        );
         // Beat 2 : newest row lands with slide + fade.
-        if (v.region === freshestRegion) row.classList.add('wv-ticker__row--fresh');
+        if (v.region === freshestRegion) {
+          const btn = row.querySelector<HTMLButtonElement>('.wv-ticker__row');
+          if (btn) btn.classList.add('wv-ticker__row--fresh');
+        }
         // Beat 4 : ticks whose price/% changed get a one-shot tint sweep.
         if (v.src === 'TICK' && tickedRegions.has(v.region)) {
-          row.classList.add('wv-ticker__row--ticked');
+          const btn = row.querySelector<HTMLButtonElement>('.wv-ticker__row');
+          if (btn) btn.classList.add('wv-ticker__row--ticked');
         }
         return row;
       }),
