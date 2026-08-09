@@ -775,7 +775,12 @@ const buildStamp = new Date().toISOString().slice(11, 19) + 'Z';
     }
     .wv__panes {
       grid-template-columns: 1fr;
-      grid-template-rows: auto auto;
+      /* v13.1.4p3 fix(worldview-mobile) : the ticker pane needs a
+         minmax with a 1fr track so it claims remaining vertical space
+         after the globe-pane takes its content height. With auto auto,
+         both rows claim content height and the ticker silently collapses
+         to ~60px on iPhone SE (375×667), clipping every row. */
+      grid-template-rows: auto minmax(140px, 1fr);
     }
     .wv__globe-pane {
       border-right: 0;
@@ -790,6 +795,30 @@ const buildStamp = new Date().toISOString().slice(11, 19) + 'Z';
     }
     .wv-globe__stage {
       max-width: 280px;
+    }
+  }
+
+  /* v13.1.4p3 fix(worldview-mobile) : on short viewports (≤600px tall)
+     the 280×280 globe + key + hint consume too much of the vertical
+     budget and squeeze the ticker to a single row. Drop the globe to
+     200×200 — venue markers are 3–7px circles in a 360 viewBox so they
+     remain legible when the svg is rendered at 56% scale. */
+  @media (max-width: 760px) and (max-height: 600px) {
+    .wv-globe {
+      max-width: 200px;
+    }
+    .wv-globe__stage {
+      max-width: 200px;
+    }
+  }
+
+  /* v13.1.4p3 fix(worldview-mobile) : on the narrowest viewports
+     (≤380px, e.g. iPhone SE in portrait) the L1/L2/L3 marker-tier key
+     eats another ~30px without adding data — the same legend lives in
+     the provenance strip and the footer. Hide it on these screens. */
+  @media (max-width: 380px) {
+    .wv__key {
+      display: none;
     }
   }
 
