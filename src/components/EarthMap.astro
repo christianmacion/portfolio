@@ -95,8 +95,31 @@ const defaultVenues: Venue[] = [
   { city: 'Digos City', lat: 6.74, lon: 125.36, weight: 1.0, caption: 'home base' },
   { city: 'Singapore', lat: 1.35, lon: 103.82, weight: 0.8, caption: 'APAC ops' },
   { city: 'Tokyo', lat: 35.68, lon: 139.69, weight: 0.7, caption: 'JPX' },
-  { city: 'Zurich', lat: 47.38, lon: 8.54, weight: 0.85, caption: 'CTA' },
-  { city: 'London', lat: 51.51, lon: -0.13, weight: 0.95, caption: 'LSE' },
+  // v13.1.4 polish-7p : European cluster (Zurich + London) centers are
+  // only ~17 viewBox units apart. At 375px viewport (scale 0.521) the
+  // default 'auto' above-the-dot labels overlap ~33px horizontally.
+  // Spread Zurich up-left, London down-right so the labels stack
+  // diagonally instead of colliding on a single baseline.
+  {
+    city: 'Zurich',
+    lat: 47.38,
+    lon: 8.54,
+    weight: 0.85,
+    caption: 'CTA',
+    labelAnchor: 'top',
+    labelDy: -12,
+    labelDx: -22,
+  },
+  {
+    city: 'London',
+    lat: 51.51,
+    lon: -0.13,
+    weight: 0.95,
+    caption: 'LSE',
+    labelAnchor: 'bottom',
+    labelDy: 14,
+    labelDx: 22,
+  },
   { city: 'New York', lat: 40.71, lon: -74.01, weight: 0.9, caption: 'NYSE / Nasdaq' },
 ];
 const venues: Venue[] = pointsProp ?? defaultVenues;
@@ -662,13 +685,17 @@ const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circ
     stroke-width: 1;
   }
   .earth-map__label {
-    font-size: 10px;
+    /* v13.1.4 polish-7p : clamp font-size with viewport so label width
+       scales down on mobile (375px → ~9px, 768px → 10.7px, desktop
+       caps at 10px). Defense-in-depth against future cluster
+       collisions where per-point offsets haven't been tuned. */
+    font-size: clamp(8px, 1.4vw, 10px);
     fill: var(--c-ink);
     font-weight: 600;
     letter-spacing: 0.04em;
   }
   .earth-map__label--home {
-    font-size: 11px;
+    font-size: clamp(9px, 1.5vw, 11px);
     font-weight: 700;
     letter-spacing: 0.08em;
     fill: var(--c-ink);
