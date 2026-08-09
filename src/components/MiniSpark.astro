@@ -11,6 +11,12 @@
  * color from --j-sage / --j-terracotta / --j-ink-2. Custom `stroke` still
  * overrides (escape hatch for chart-specific palette calls).
  *
+ * v13.1.5 : responsive aspect. Removed preserveAspectRatio="none" and added
+ * max-width:100% + height:auto so a narrow flex parent on phones letterboxes
+ * the polyline (uniform scale) instead of stretching the X-axis. Was breaking
+ * on /markets ≤540px where the stat cell shrinks to ~143px while the SVG is
+ * intrinsic 220x26 — polyline shape now preserves aspect ratio.
+ *
  * Usage:
  *   <MiniSpark points={[1, 2, 3, 4, 5, 6, 4, 3, 5, 7]} />
  *   <MiniSpark points={...} stroke="var(--c-pass)" />
@@ -77,7 +83,6 @@ const path = points
   viewBox={`0 0 ${width} ${height}`}
   role="img"
   aria-label={ariaLabel}
-  preserveAspectRatio="none"
 >
   {
     /* v6.18 : data-spark hooks into reveal-on-scroll.ts to trigger a
@@ -100,6 +105,13 @@ const path = points
     display: inline-block;
     vertical-align: middle;
     opacity: 0.85;
+    /* v13.1.5 : responsive aspect. min-width:0 lets a flex parent shrink the
+       SVG below its intrinsic 220px; max-width:100% + height:auto letterbox
+       the polyline (uniform scale) rather than stretching the X-axis when the
+       parent is narrower than the SVG's intrinsic width. */
+    min-width: 0;
+    max-width: 100%;
+    height: auto;
   }
   /* v6.18 : draw-in animation. JS adds `.is-revealed` to the path
      when it scrolls into view; CSS transitions stroke-dashoffset from
