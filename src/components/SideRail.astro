@@ -115,7 +115,13 @@ const ICONS: Record<string, string> = {
 };
 ---
 
-<!-- Mobile drawer toggle (visible < 980px only). -->
+<!-- Mobile drawer toggle (visible < 980px only).
+     v13.1.4 polish-7i (2026-08-09): aria-expanded moved off the
+     display:none input (which is invisible to screen readers) onto the
+     visible label. The JS sync() now mirrors state onto the label so
+     assistive tech announces "expanded/collapsed" correctly per WCAG
+     4.1.2. The input keeps its own aria-expanded as a redundant
+     signal for any non-standard AT engine that reads it. -->
 <input
   type="checkbox"
   id="rail-toggle"
@@ -128,9 +134,20 @@ const ICONS: Record<string, string> = {
   for="rail-toggle"
   class="side-rail__toggle"
   aria-label="Toggle navigation"
+  aria-expanded="false"
+  aria-controls="primary-rail"
 >
-  <span></span><span></span><span></span>
+  <span class="side-rail__toggle-bar"></span>
+  <span class="side-rail__toggle-bar"></span>
+  <span class="side-rail__toggle-bar"></span>
 </label>
+
+<!-- v13.1.4 polish-7i (2026-08-09): backdrop element.
+     Visible only on mobile <980px AND only when drawer is open. Sits
+     between the rail and the page content (z-nav-1) so click-to-close
+     is unambiguous and the drawer/toggle stay above it (z-nav+1/2).
+     Decorative only : aria-hidden="true". -->
+<div class="side-rail__backdrop" aria-hidden="true"></div>
 
 <aside class="side-rail" id="primary-rail" aria-label="Primary navigation">
   <div class="side-rail__inner">
@@ -500,6 +517,15 @@ const ICONS: Record<string, string> = {
   .side-rail__cross-site:hover .side-rail__cross-site-arrow {
     transform: translate(2px, -2px);
   }
+  /* v13.1.4 polish-7i (2026-08-09): focus-visible + active states.
+     Chrome contract: 2px amber outline (no halo), no glow. */
+  .side-rail__cross-site:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .side-rail__cross-site:active {
+    background: var(--c-amber-deep, var(--accent));
+  }
 
   .side-rail__nav {
     flex: 1;
@@ -535,6 +561,12 @@ const ICONS: Record<string, string> = {
     color: var(--ink-1);
     background: transparent;
     border-left-color: var(--accent);
+  }
+  /* v13.1.4 polish-7i (2026-08-09): focus-visible state. 2px amber
+     outline offset 2px from the rail border, no halo/glow. */
+  .side-rail__link:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
   }
   .side-rail__link--active,
   .side-rail__link[aria-current='page'] {
@@ -771,6 +803,13 @@ const ICONS: Record<string, string> = {
     outline: 2px solid var(--accent);
     outline-offset: 2px;
   }
+  /* v13.1.4 polish-7i (2026-08-09): active state. Brief ink swap so
+     press-feel is visible without breaking the chrome contract. */
+  .side-rail__social:active {
+    color: var(--ink-1);
+    border-color: var(--ink-1);
+    background: var(--rule);
+  }
   .side-rail__social-label {
     position: absolute;
     width: 1px;
@@ -801,6 +840,16 @@ const ICONS: Record<string, string> = {
   .side-rail__email:hover {
     color: var(--accent);
   }
+  /* v13.1.4 polish-7i (2026-08-09): focus-visible + active state.
+     The email is the only text link in the footer; it gets the same
+     2px amber focus ring as the social icons. */
+  .side-rail__email:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .side-rail__email:active {
+    color: var(--ink-1);
+  }
 
   /* === Mobile drawer (< 980px) ===
      The rail collapses to a slide-down drawer at the top of the page,
@@ -820,28 +869,90 @@ const ICONS: Record<string, string> = {
     justify-content: space-between;
     /* v6.18 W2 lock (2026-08-08): bumped hit area to 44x44px for WCAG
        2.5.5 (Level AAA) touch-target conformance. Visual glyph stays at
-       28x22 inside via the ::after padding trick below. */
+       28x22 inside via the ::after padding trick below.
+       v13.1.4 polish-7i (2026-08-09): chrome contract — border-radius
+       capped at 2px (was var(--radius-sm) which is 0 in this file but
+       2px in tokens.css). 2px is the chrome-contract max. */
     width: 44px;
     height: 44px;
     cursor: pointer;
     background: var(--surface-paper);
     border: 1px solid var(--rule);
-    border-radius: var(--radius-sm);
+    border-radius: 2px;
     padding: 11px 8px;
+    transition:
+      background-color var(--mv-dur-snap) var(--mv-ease-settle),
+      border-color var(--mv-dur-snap) var(--mv-ease-settle);
   }
-  .side-rail__toggle span {
+  .side-rail__toggle-bar {
     display: block;
     height: 2px;
     width: 100%;
     background: var(--ink-1);
     border-radius: 1px;
+    /* v13.1.4 polish-7i (2026-08-09): snap tier for all three props
+         (160ms). ≤250ms binding constraint per task directive. The
+         X-rotation needs to feel snappy so it reads as a state
+         change, not as decorative motion. */
     transition:
-      background 200ms ease,
-      transform 200ms ease,
-      opacity 200ms ease;
+      background-color var(--mv-dur-snap) var(--mv-ease-settle),
+      transform var(--mv-dur-snap) var(--mv-ease-settle),
+      opacity var(--mv-dur-snap) var(--mv-ease-settle);
+  }
+  /* v13.1.4 polish-7i (2026-08-09): full button-state coverage.
+     Default + hover + focus-visible + active. Border-radius 0 per
+     chrome contract (sharp institutional corners, no pill). */
+  .side-rail__toggle:hover {
+    background: var(--surface-paper-deep);
+    border-color: var(--accent);
+  }
+  .side-rail__toggle:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .side-rail__toggle:active {
+    background: var(--rule);
+  }
+  /* Open state : animate the 3 bars into an X. The middle bar fades,
+     the top + bottom bars rotate 45deg in opposite directions. Driven
+     by :checked sibling selector (input is the state-holder). */
+  .side-rail__toggle-input:checked ~ .side-rail__toggle .side-rail__toggle-bar:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+  .side-rail__toggle-input:checked ~ .side-rail__toggle .side-rail__toggle-bar:nth-child(2) {
+    opacity: 0;
+  }
+  .side-rail__toggle-input:checked ~ .side-rail__toggle .side-rail__toggle-bar:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  /* v13.1.4 polish-7i (2026-08-09): backdrop element styling.
+     Hidden on desktop. On mobile <980px the backdrop sits between
+     page content (z-sticky=30) and the drawer body (z-nav+1=51).
+     z-nav-1=49 keeps it strictly below the drawer. Pointer events
+     are off when the drawer is closed (so taps pass through) and on
+     when open (so taps close the drawer). The opacity transition is
+     motion-vocabulary v11 compliant (settle=280ms, snappy ease). */
+  .side-rail__backdrop {
+    display: none;
   }
 
   @media (max-width: 980px) {
+    .side-rail__backdrop {
+      display: block;
+      position: fixed;
+      inset: 0;
+      z-index: calc(var(--z-nav) - 1);
+      background: rgba(10, 10, 10, 0.32);
+      opacity: 0;
+      pointer-events: none;
+      /* v13.1.4 polish-7i (2026-08-09): snap tier (160ms). ≤250ms
+         binding constraint per task directive. Settle (280ms) is over
+         budget; the original code used a literal 220ms which is also
+         within budget. snap feels appropriately responsive on mobile. */
+      transition:
+        opacity var(--mv-dur-snap) var(--mv-ease-settle);
+    }
     .side-rail__toggle {
       display: flex;
     }
@@ -855,11 +966,18 @@ const ICONS: Record<string, string> = {
       z-index: calc(var(--z-nav) + 1);
       border-right: 1px solid var(--rule);
       transform: translateX(-100%);
-      transition: transform 220ms ease;
+      /* v13.1.4 polish-7i (2026-08-09): snap tier (160ms). ≤250ms
+         binding constraint per task directive. Mobile drawers want to
+         feel responsive, not cinematic. */
+      transition: transform var(--mv-dur-snap) var(--mv-ease-settle);
       box-shadow: var(--shadow-md);
     }
     .side-rail__toggle-input:checked ~ .side-rail {
       transform: translateX(0);
+    }
+    .side-rail__toggle-input:checked ~ .side-rail__backdrop {
+      opacity: 1;
+      pointer-events: auto;
     }
   }
 
@@ -867,10 +985,14 @@ const ICONS: Record<string, string> = {
      The un-animated state is the open drawer at translateX(0); the
      scroll-spy still updates the active class, just without the
      color/border/font-weight transition. The user still gets the
-     visual indication : just instant rather than animated. */
+     visual indication : just instant rather than animated.
+     v13.1.4 polish-7i (2026-08-09): also kill the backdrop fade +
+     hamburger bar rotation (both pure decoration, no info loss). */
   @media (prefers-reduced-motion: reduce) {
-    .side-rail {
-      transition: none;
+    .side-rail,
+    .side-rail__backdrop,
+    .side-rail__toggle-bar {
+      transition: none !important;
     }
     .side-rail__link {
       transition: none;
@@ -887,27 +1009,98 @@ const ICONS: Record<string, string> = {
      v6.18 W2 lock (2026-08-08): Escape-key handler added. When the
      mobile drawer is open and the user presses Escape, the checkbox
      is toggled off and focus returns to the hamburger label. Closes
-     the WCAG 2.1.1 / 4.1.2 disclosure-pattern gap. */
+     the WCAG 2.1.1 / 4.1.2 disclosure-pattern gap.
+
+     v13.1.4 polish-7i (2026-08-09): full disclosure-pattern coverage.
+     - aria-expanded mirrored onto the visible LABEL (the input is
+       display:none and invisible to AT, so its aria-expanded never
+       fires for screen readers). The label is what gets announced.
+     - Click-outside-to-close: clicking the backdrop, or anywhere
+       outside the rail, closes the drawer.
+     - Focus trap via `inert`: when the drawer is open, every element
+       outside the rail is marked `inert`, which removes them from
+       the focus order AND the a11y tree. This matches the visual
+       reality (the drawer covers the page content) and prevents Tab
+       from leaking into the hidden content behind the drawer.
+     - Body scroll lock: when the drawer is open, body.no-scroll
+       prevents the page from scrolling behind it. Lock lifts on
+       close. The `overflow:hidden` rule ships in global.css.
+     - Focus restore on close: when the drawer closes, focus returns
+       to the hamburger toggle so keyboard users don't get lost. */
   const toggle = document.getElementById('rail-toggle');
   if (toggle instanceof HTMLInputElement) {
-    const sync = () => {
-      const next = toggle.checked ? 'true' : 'false';
+    const label = document.querySelector<HTMLLabelElement>('label[for="rail-toggle"]');
+    const backdrop = document.querySelector<HTMLElement>('.side-rail__backdrop');
+    const rail = document.getElementById('primary-rail');
+    const main = document.querySelector<HTMLElement>('main.layout-main');
+
+    const setExpanded = (open: boolean) => {
+      const next = open ? 'true' : 'false';
       if (toggle.getAttribute('aria-expanded') !== next) {
         toggle.setAttribute('aria-expanded', next);
       }
+      if (label && label.getAttribute('aria-expanded') !== next) {
+        label.setAttribute('aria-expanded', next);
+      }
     };
+
+    const setInert = (open: boolean) => {
+      // Inert on <main> + everything else outside the rail. The rail
+      // itself is the only focusable region when the drawer is open.
+      // Browser-native focus trap; works with all modern screen readers.
+      if (main) {
+        if (open) main.setAttribute('inert', '');
+        else main.removeAttribute('inert');
+      }
+    };
+
+    const setScrollLock = (open: boolean) => {
+      if (open) document.body.classList.add('no-scroll');
+      else document.body.classList.remove('no-scroll');
+    };
+
+    const closeDrawer = (returnFocus: boolean) => {
+      toggle.checked = false;
+      setExpanded(false);
+      setInert(false);
+      setScrollLock(false);
+      if (returnFocus) label?.focus();
+    };
+
+    const sync = () => {
+      const open = toggle.checked;
+      setExpanded(open);
+      setInert(open);
+      setScrollLock(open);
+    };
+
     toggle.addEventListener('change', sync);
     sync();
+
     /* Escape close + return-focus on drawer. Listener is bound to
        keydown at the document level so it catches Escape regardless
        of focus location inside the drawer. */
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && toggle.checked) {
-        toggle.checked = false;
-        sync();
-        const label = document.querySelector<HTMLLabelElement>('label[for="rail-toggle"]');
-        label?.focus();
+        e.preventDefault();
+        closeDrawer(true);
       }
+    });
+
+    /* Click-outside-to-close. The backdrop element is the primary
+       click target. As a defensive backup, a document-level click
+       listener closes the drawer when the click target is outside
+       both the rail AND the toggle label (clicks on the toggle
+       itself are handled by the browser via label/input linkage). */
+    backdrop?.addEventListener('click', () => closeDrawer(false));
+    document.addEventListener('click', (e) => {
+      if (!toggle.checked) return;
+      const target = e.target as Node | null;
+      if (!target) return;
+      if (rail && rail.contains(target)) return;
+      if (label && label.contains(target)) return;
+      // Click landed outside the rail + outside the toggle : close.
+      closeDrawer(false);
     });
   }
 

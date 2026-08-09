@@ -70,7 +70,12 @@
 
 html {
   font-family: var(--ff-sans);
-  font-size: 16px;
+  /* v13.1.5 : fluid root. Allows `rem` values across the design system
+     to scale smoothly between mobile and ultra-wide viewports without
+     every component having to re-declare clamp(). 14.4px floor on tiny
+     screens keeps body text legible; 16px on desktop preserves design
+     intent. */
+  font-size: clamp(0.9rem, 0.85rem + 0.4vw, 1rem);
   line-height: var(--lh-normal);
   color: var(--c-ink);
   background: var(--c-bg);
@@ -256,6 +261,35 @@ h4 {
 }
 p {
   line-height: var(--lh-loose);
+}
+
+/* v13.1.5 : DEFAULT PROSE COLUMN.
+   Without an explicit max-width, body text inside the wide
+   `.container` (1024px) stretches to ~140 characters per line —
+   way past the comfortable reading threshold (65ch). This rule
+   applies only to bare <p> elements that aren't already inside a
+   narrower container, since max-width: 65ch is harmless when the
+   parent is narrower. Per-context overrides (.section__sub 60ch,
+   .bio-prose 64ch, etc.) still win because they're more specific
+   or apply later in the cascade. */
+p {
+  max-width: 65ch;
+  text-wrap: pretty;
+}
+
+/* v13.1.5 : .prose utility — explicit 65ch clamp for prose blocks
+   (long-form copy, lede paragraphs, methodology intros). Use this
+   class when a non-<p> element (div, section) needs the prose
+   column bound. */
+.prose {
+  max-width: 65ch;
+  text-wrap: pretty;
+}
+.prose--narrow {
+  max-width: 56ch;
+}
+.prose--wide {
+  max-width: 72ch;
 }
 
 code,
@@ -1071,6 +1105,25 @@ li {
   margin: 0;
 }
 
+/* === v13.1.4 polish-7i (2026-08-09) · Body scroll lock ===
+   The SideRail mobile drawer sets body.no-scroll when the hamburger
+   toggle is checked. overflow:hidden on <html> + <body> prevents the
+   page from scrolling behind the drawer (the standard mobile-drawer
+   pattern). touch-action:none on html keeps iOS Safari from rubber-
+   banding the scroll position. The lock lifts when the drawer closes
+   (the SideRail script removes the class). */
+html:has(body.no-scroll),
+body.no-scroll {
+  overflow: hidden;
+}
+html:has(body.no-scroll) {
+  touch-action: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  /* The drawer slide is killed by SideRail.astro's reduced-motion
+     block; no extra rules needed here. The lock is instant. */
+}
+
 /* === Phase D · Reveal-on-scroll (one-shot, opacity 0→1 + 8px translateY) ===
    Activated by src/scripts/reveal-on-scroll.ts. The JS adds `.is-revealed`
    to each [data-reveal] target when it scrolls into view. Two safety nets:
@@ -1295,7 +1348,8 @@ li {
    footnote register. Same chrome as for-recruiters__intro. */
 .method-head__intro {
   font-family: var(--ff-mono, ui-monospace);
-  font-size: 13px;
+  /* v13.1.5 : fluid mono caption. 12px on mobile, 13px on desktop. */
+  font-size: clamp(0.75rem, 0.7rem + 0.25vw, 0.8125rem);
   line-height: 1.6;
   color: var(--c-ink-3);
   margin: var(--sp-5) 0 var(--sp-6);
