@@ -269,18 +269,19 @@ class Globe {
     };
     this.earthImage.src = '/textures/earth-blue-marble.jpg';
 
-    // Ocean disc : fills the whole SVG bounding box behind the limb. The
-    // limb circle (drawn next) covers most of this with a darker ocean
-    // color; the corners that poke outside the sphere read as deep-space
-    // background. A static starfield (small sub-pixel dots, no glow per
-    // the no-halo binding) is sprinkled across the corners so the
-    // "sky" reads as sky, not as panel bg.
+    // v13.1.4 polish-7 : ocean disc is REMOVED. The canvas behind the
+    // SVG (data-worldview-canvas) renders the projected NASA Blue
+    // Marble satellite texture per frame, so the SVG must NOT have an
+    // opaque backdrop or the texture is hidden. Starfield + limb rim
+    // + graticule + borders + pins + cities + labels still render in
+    // the SVG above the canvas.
     this.oceanRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
     this.oceanRect.setAttribute('x', '0');
     this.oceanRect.setAttribute('y', '0');
     this.oceanRect.setAttribute('width', String(this.width));
     this.oceanRect.setAttribute('height', String(this.height));
-    this.oceanRect.setAttribute('fill', '#0A1825'); // near-black deep space
+    this.oceanRect.setAttribute('fill', '#0A1825'); // fallback only (texture load failed)
+    this.oceanRect.setAttribute('fill-opacity', '0'); // invisible by default; canvas shows through
     this.svg.appendChild(this.oceanRect);
 
     // Starfield : tiny dots outside the limb circle. Deterministic seed
@@ -321,17 +322,18 @@ class Globe {
     }
     this.svg.appendChild(starfieldGroup);
 
-    // Limb circle : the visible sphere disc + ocean fill. Deep ocean blue
-    // so the sphere reads as Earth from space. Pale steel-blue rim
-    // (1px) at the limb gives a subtle non-glow edge definition.
+    // Limb circle : subtle steel-blue rim (stroke only, no fill) so the
+    // edge of the disc reads against the canvas texture. The texture
+    // itself provides the ocean/land fill; the SVG only adds the edge
+    // definition.
     const limb = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
     limb.setAttribute('cx', String(this.width / 2));
     limb.setAttribute('cy', String(this.height / 2));
     limb.setAttribute('r', String((GLOBE_SIZE / 2) - 6));
-    limb.setAttribute('fill', OCEAN_DEEP);
+    limb.setAttribute('fill', 'none');
     limb.setAttribute('stroke', LIMB_RIM);
     limb.setAttribute('stroke-width', '0.8');
-    limb.setAttribute('stroke-opacity', '0.6');
+    limb.setAttribute('stroke-opacity', '0.7');
     this.svg.appendChild(limb);
 
     // Graticule layer (lat/lon grid) — hairline 0.4px at 45% opacity so
@@ -642,7 +644,10 @@ class Globe {
         }
 
         // Invert projection to get (lon, lat) for this disc pixel.
-        const coords = proj.invert([dx, dy]);
+        // proj.invert expects SCREEN coordinates (the projection's
+        // translate is applied internally), so we pass [x, y] directly
+        // (not the offsets [dx, dy]).
+        const coords = proj.invert([x, y]);
         if (!coords) {
           outArr[outIdx + 3] = 0;
           continue;
