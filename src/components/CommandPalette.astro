@@ -407,7 +407,37 @@ const fmTagJson = JSON.stringify(financialMarketsTag);
 >
   /* v11.W2 : ⌘K command palette script.
      Vanilla TS / JS, no deps. ~3.6KB minified.
-     Idempotent: only attaches if data-cmdk exists. */
+     Idempotent: only attaches if data-cmdk exists.
+
+     v13.1.4 polish-7n : ICON_MAP / DEFAULT_ICON / iconFor are inlined
+     here. Astro scopes frontmatter and <script> separately — without
+     this the runtime would see `iconFor is not defined` and the result
+     list would never render (B1 blocker). */
+  /* v13.1.4 polish : per-route icon glyphs. 14x14 stroke-only svg, matches
+     the SideRail icon vocabulary. Unknown routes fall back to a chevron
+     so the column never feels empty. Inlined from frontmatter so the
+     <script> block has it at runtime. */
+  const ICON_MAP = {
+    '/':                '<path d="M3 9 L9 3 L15 9 M5 8 V14 H13 V8"/>',
+    '/now/':            '<circle cx="9" cy="9" r="5.5"/><path d="M9 6 V9 L11 11"/>',
+    '/for-recruiters/': '<path d="M3 7 H15 M3 11 H15 M5 4 H13 M5 14 H13"/>',
+    '/screening-call/': '<path d="M4 5 H14 V13 H4 Z M4 8 H14 M7 5 V13"/>',
+    '/proof/':          '<path d="M9 2 L14 5 V11 L9 14 L4 11 V5 Z"/>',
+    '/projects/':       '<rect x="3" y="3" width="5" height="5"/><rect x="10" y="3" width="5" height="5"/><rect x="3" y="10" width="5" height="5"/><rect x="10" y="10" width="5" height="5"/>',
+    '/work/':           '<path d="M3 4 H15 V12 H3 Z M3 7 H15 M6 4 V12"/>',
+    '/experience/':     '<path d="M3 6 L9 2 L15 6 V14 H3 Z M7 14 V9 H11 V14"/>',
+    '/skills/':         '<path d="M3 9 L9 3 L15 9 M9 3 V14"/>',
+    '/glossary/':       '<path d="M3 4 H10 V14 H3 Z M11 4 H15 V14 H11"/>',
+    '/certifications/': '<circle cx="9" cy="9" r="5.5"/><path d="M6 9 L8.5 11.5 L12 7"/>',
+    '/positions/':      '<rect x="3" y="4" width="12" height="10" rx="1"/><path d="M6 8 H12 M6 11 H10"/>',
+    '/publications/':   '<path d="M4 3 H10 L13 6 V14 H4 Z M10 3 V6 H13"/>',
+    '/methodology/':    '<path d="M3 9 H7 M11 9 H15 M3 5 H15 M3 13 H15"/>',
+    '/talks/':          '<path d="M3 6 H13 V12 H3 Z M13 8 L16 6 V12 L13 10"/>',
+    '/contact/':        '<rect x="3" y="5" width="12" height="9" rx="0.5"/><path d="M3 6 L9 10 L15 6"/>',
+  };
+  const DEFAULT_ICON = '<path d="M6 4 L12 9 L6 14"/>';
+  const iconFor = (href) => ICON_MAP[href] ?? DEFAULT_ICON;
+
   (() => {
     const ROUTES = JSON.parse(routesJson);
     const FM_TAGS = JSON.parse(fmTagJson);

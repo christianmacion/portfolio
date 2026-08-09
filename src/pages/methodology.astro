@@ -404,3 +404,129 @@ const charter = [
     </div>
   </section>
 </BaseLayout>
+
+<style is:global>
+  /* v13.1.4 polish-7n : gate-stack summary table. Re-introduced because
+     the previous scoped <style> block was removed at v12.W4. Without
+     these rules the table layout falls back to browser defaults and
+     inline glossary links miss WCAG 2.5.5 (≥44×44 px).
+
+     is:global: required because the gates table body is rendered via
+     `set:html={g.desc}` — Astro scoped styles do not apply to raw
+     HTML injected that way. Without is:global the rules below would
+     compile to `.gates__cell--desc[data-astro-cid-XXX]` and miss the
+     cells entirely (they have no cid attribute). */
+
+  .gates {
+    display: grid;
+    gap: 0;
+    border-top: 1px solid var(--c-rule);
+  }
+
+  .gates__row {
+    display: grid;
+    grid-template-columns: minmax(120px, 18%) minmax(160px, 22%) 1fr;
+    gap: var(--sp-4);
+    padding: var(--sp-3) var(--sp-4);
+    border-bottom: 1px solid var(--c-rule-soft);
+    align-items: baseline;
+  }
+
+  .gates__row--head {
+    background: var(--c-bg-2);
+    padding: var(--sp-2) var(--sp-4);
+  }
+
+  .gates__row:hover:not(.gates__row--head) {
+    background: var(--c-bg-2);
+  }
+
+  .gates__cell {
+    color: var(--c-ink-2);
+    font-size: var(--fs-sm);
+    line-height: var(--lh-loose);
+  }
+
+  .gates__cell--range {
+    font-weight: 600;
+    color: var(--c-ink);
+    letter-spacing: 0.02em;
+  }
+
+  .gates__row--head .gates__cell--range {
+    font-size: var(--fs-xs);
+    color: var(--c-ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .gates__cell--name {
+    color: var(--c-ink);
+    font-weight: 600;
+  }
+
+  .gates__row--head .gates__cell--name {
+    font-size: var(--fs-xs);
+    color: var(--c-ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+  }
+
+  .gates__cell--desc {
+    font-size: var(--fs-sm);
+    color: var(--c-ink-2);
+    line-height: var(--lh-loose);
+    margin: 0;
+  }
+
+  .gates__row--head .gates__cell--desc {
+    font-size: var(--fs-xs);
+    color: var(--c-ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* v13.1.4 polish-7n : inline glossary links. M1 medium fix — the
+     <a> inside a paragraph inherits the paragraph's line-height (~44px)
+     so the hit-area is tall but the visible glyph is narrow, failing
+     WCAG 2.5.5 on the width dimension. `display: inline-flex` with
+     `align-items: center` plus `min-width: 44px` / `min-height: 44px`
+     expands the hit-area to the WCAG 2.5.5 minimum without changing
+     the visual chrome (no halo, no glow, no rounded chrome). `line-height: 1`
+     keeps the glyph vertically centered inside the 44px box. */
+  .gates__cell--desc a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0 8px;
+    line-height: 1;
+    color: var(--c-primary);
+    text-decoration: underline;
+    text-decoration-color: var(--c-rule-strong);
+    text-underline-offset: 3px;
+  }
+
+  .gates__cell--desc a:hover,
+  .gates__cell--desc a:focus-visible {
+    color: var(--c-amber);
+    text-decoration-color: var(--c-amber);
+  }
+
+  .gates__cell--desc a:focus-visible {
+    outline: 2px solid var(--c-amber);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 720px) {
+    .gates__row {
+      grid-template-columns: 1fr;
+      gap: var(--sp-1);
+    }
+    .gates__row--head {
+      display: none;
+    }
+  }
+</style>
