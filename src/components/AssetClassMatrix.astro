@@ -313,6 +313,9 @@ const COL_LABEL: Record<(typeof COLS)[number], { title: string; sub: string }> =
     font-size: var(--fs-base);
     font-weight: 600;
     letter-spacing: 0.02em;
+    /* v6.10.12 : nowrap so "Rates / Vol" stays on one line at narrow
+       rowhead widths (≤90px content area on the ≤640px breakpoint). */
+    white-space: nowrap;
   }
 
   .acm__cell {
@@ -411,10 +414,45 @@ const COL_LABEL: Record<(typeof COLS)[number], { title: string; sub: string }> =
     }
     .acm__rowhead-title {
       font-size: var(--fs-sm);
+      /* v6.10.12 : letter-spacing 0 at ≤640px so "Rates / Vol" fits the
+         90px rowhead content area (66px usable after 12px h-padding × 2).
+         nowrap above keeps it on one line if the matrix ever widens. */
+      letter-spacing: 0;
     }
     .acm__cell,
     .acm__colhead {
       padding: var(--sp-2);
+    }
+  }
+
+  /* v6.10.12 : ≤480px stacked 2×2 layout. The 4-column cell grid collapses
+     to ~63-72px cells at this width (container 343-380px inner ÷ 4 cells),
+     which is too narrow for labels like "Cross-sectional Momentum" (24
+     chars, ~180px) — they wrap to 3-7 lines per label. Switching to a 2×2
+     cell grid gives each cell ~150-180px (labels fit on 1-2 lines) and the
+     rowhead becomes a full-width banner so "Rates / Vol" no longer crowds
+     against the cells. The header row uses the same rule so the column
+     heads stay aligned with the cells below. Header corner spans both
+     columns; rowhead spans both columns. */
+  @media (max-width: 480px) {
+    .acm__row,
+    .acm__row--header {
+      grid-template-columns: 1fr 1fr;
+    }
+    .acm__rowhead,
+    .acm__corner {
+      grid-column: 1 / -1;
+    }
+    .acm__rowhead {
+      padding: var(--sp-3) var(--sp-4);
+      border-right: none;
+    }
+    .acm__cell {
+      padding: var(--sp-3);
+    }
+    .acm__link-label {
+      font-size: var(--fs-xs);
+      line-height: 1.25;
     }
   }
 </style>
