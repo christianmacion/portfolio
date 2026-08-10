@@ -8,7 +8,7 @@
 | File | Size | Last known role | Replaced by |
 |---|---|---|---|
 | `HeroCurve.astro` | 8K | Animated SVG equity curve (v9.4 flagship hero) | `HeroSkills.astro` (matrix of searchable proof) |
-| `HeroCursor.astro` | 8K | Custom hero cursor accent | `BrandMotif.astro` (subtle) |
+| `HeroCursor.astro` | 8K | Custom hero cursor accent | none — `BrandMotif.astro` itself had no live consumer (deleted 2026-08-10; was orphan code) |
 | `ArchitectureBrief.astro` | 8K | Architecture-doc card | `ProofCard.astro` |
 | `EntryStations.astro` | 24K | Map entry stations | inline `<EarthDrawer>` references in `index.astro` |
 | `EarthDrawer.astro` | 24K | Side drawer for EarthMap details | inline detail-row pattern |
