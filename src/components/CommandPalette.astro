@@ -84,14 +84,35 @@ const financialMarketsTag: Record<string, string> = {
   engagement: 'Engagement model for financial markets, quant research, and AI engineering',
 };
 
+// v13.1.W3 (2026-08-10) : "Ask anything" AI mode.
+// Edge AI gateway URL — the Worker is a separate repo
+// (~/Contingency/christianmacion-ai-proxy/) deployed to
+// Cloudflare Workers (NOT Pages; the site is on GH Pages).
+// The Worker proxies Cloudflare Workers AI (llama-3.1-8b-instruct),
+// enforces origin allowlist + 20/day per-IP rate limit, and
+// streams the answer back as Server-Sent Events. The portfolio
+// (static GH Pages) holds only the URL — no key, no secret.
+//
+// To swap the endpoint, change the URL here and rebuild.
+// To kill the feature, set AI_PROXY_URL to '' (the JS will
+// then disable ask mode and the "?" prefix will fall through
+// to a no-op search).
+const AI_PROXY_URL = 'https://christianmacion-ai-proxy.christianmacion.workers.dev';
+const ASK_TRIGGER = '?'; // type "?" at the start of the input → ask mode
+
 const allRoutes = [
   ...staticRoutes.map((r) => ({ ...r, href: basePath(r.href) })),
   ...dynamicRoutes,
 ];
 
 // JSON payload embedded for the script (no extra fetch).
+// v13.1.W3 (2026-08-10) : aiProxyUrl + askTrigger added so the
+// client-side ask-mode script can wire to the edge Worker without
+// a runtime env lookup (the site is static).
 const routesJson = JSON.stringify(allRoutes);
 const fmTagJson = JSON.stringify(financialMarketsTag);
+const aiProxyUrl = AI_PROXY_URL;
+const askTrigger = ASK_TRIGGER;
 ---
 
 <!-- Hidden trigger button. Site-header pill (data-cmdk-open) is the
@@ -155,9 +176,26 @@ const fmTagJson = JSON.stringify(financialMarketsTag);
       role="listbox"
       aria-label="Search results"
     ></ul>
+    <!-- v13.1.W3 (2026-08-10) : "Ask anything" AI mode. Sibling to
+         the search list; toggled visible when the input starts with
+         the ask trigger ("?"). Hosts the streamed AI answer bubbles.
+         role="log" + aria-live="polite" so screen readers announce
+         new tokens as they arrive, without interrupting the user. -->
+    <div
+      class="cmdk__chat"
+      data-cmdk-chat
+      role="log"
+      aria-live="polite"
+      aria-label="AI answer"
+      hidden
+    >
+      <ol class="cmdk__chat-thread" data-cmdk-thread></ol>
+      <p class="cmdk__chat-status mono" data-cmdk-status aria-hidden="true"></p>
+    </div>
     <p class="cmdk__hint mono" aria-hidden="true">
-      <span><kbd>↑</kbd><kbd>↓</kbd> NAVIGATE</span>
-      <span><kbd>↵</kbd> OPEN</span>
+      <span data-cmdk-hint-nav><kbd>↑</kbd><kbd>↓</kbd> NAVIGATE</span>
+      <span data-cmdk-hint-open><kbd>↵</kbd> OPEN</span>
+      <span data-cmdk-hint-ask><kbd>?</kbd> ASK · <kbd>↵</kbd> SEND</span>
       <span><kbd>esc</kbd> CLOSE</span>
     </p>
   </div>
@@ -400,10 +438,144 @@ const fmTagJson = JSON.stringify(financialMarketsTag);
       transition: none;
     }
   }
+
+  /* ============================================================
+   * v13.1.W3 (2026-08-10) : "Ask anything" AI mode.
+   * Chat thread (question + answer bubbles), typed indicator,
+   * status row. Mono answer text. Sharp 0-2px corners, hairline
+   * 1px borders, amber accent only — chrome contract held.
+   * No halo, no glow, no gradient, no transform on motion.
+   * ============================================================ */
+  .cmdk__chat {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 12px 16px;
+    overflow-y: auto;
+    background: transparent;
+  }
+  .cmdk__chat[hidden] {
+    display: none;
+  }
+  .cmdk__chat-thread {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .cmdk__bubble {
+    max-width: 88%;
+    padding: 8px 12px;
+    border: 1px solid var(--c-rule);
+    border-radius: 2px;
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: var(--c-ink);
+    background: var(--c-bg);
+    word-wrap: break-word;
+    overflow-wrap: anywhere;
+  }
+  .cmdk__bubble--user {
+    align-self: flex-end;
+    background: var(--c-bg-2);
+    border-color: var(--c-rule);
+    font-family: var(--ff-sans);
+  }
+  .cmdk__bubble--model {
+    align-self: flex-start;
+    background: var(--c-bg);
+    border-color: var(--c-rule);
+    font-family: var(--ff-mono);
+    font-size: 12.5px;
+    line-height: 1.55;
+    white-space: pre-wrap;
+  }
+  .cmdk__bubble--error {
+    align-self: stretch;
+    max-width: 100%;
+    background: var(--c-bg);
+    border-left: 3px solid var(--c-amber);
+    color: var(--c-ink-2);
+    font-family: var(--ff-mono);
+    font-size: 12px;
+  }
+  /* Typing indicator: 3 dots, opacity-blink only (no transform,
+     no scale, no translate). Honors prefers-reduced-motion. */
+  .cmdk__typing {
+    display: inline-flex;
+    gap: 4px;
+    align-items: center;
+    height: 12px;
+  }
+  .cmdk__typing span {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--c-ink-3);
+    animation: cmdk-blink 900ms ease-in-out infinite;
+  }
+  .cmdk__typing span:nth-child(2) {
+    animation-delay: 200ms;
+  }
+  .cmdk__typing span:nth-child(3) {
+    animation-delay: 400ms;
+  }
+  @keyframes cmdk-blink {
+    0%,
+    60%,
+    100% {
+      opacity: 0.25;
+    }
+    30% {
+      opacity: 1;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cmdk__typing span {
+      animation: none;
+      opacity: 0.6;
+    }
+  }
+  .cmdk__chat-status {
+    margin: 0;
+    padding: 0 2px;
+    color: var(--c-ink-3);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    min-height: 12px;
+  }
+  /* Hide ask-mode-only hints when the palette opens in search mode. */
+  [data-cmdk-mode='search'] [data-cmdk-hint-ask] {
+    display: none;
+  }
+  [data-cmdk-mode='ask'] [data-cmdk-hint-nav],
+  [data-cmdk-mode='ask'] [data-cmdk-hint-open] {
+    display: none;
+  }
+  [data-cmdk-mode='ask'] .cmdk__list {
+    display: none;
+  }
+  [data-cmdk-mode='ask'] .cmdk__chat {
+    display: flex;
+  }
+
+  @media (max-width: 760px) {
+    .cmdk__bubble {
+      max-width: 100%;
+      font-size: 14px;
+    }
+    .cmdk__bubble--model {
+      font-size: 13px;
+    }
+  }
 </style>
 
 <script
-  define:vars={{ routesJson, fmTagJson }}
+  define:vars={{ routesJson, fmTagJson, aiProxyUrl, askTrigger }}
 >
   /* v11.W2 : ⌘K command palette script.
      Vanilla TS / JS, no deps. ~3.6KB minified.
@@ -446,7 +618,14 @@ const fmTagJson = JSON.stringify(financialMarketsTag);
     const input = document.querySelector('[data-cmdk-input]');
     const list = document.querySelector('[data-cmdk-list]');
     const closeBtn = document.querySelector('[data-cmdk-close]');
+    // v13.1.W3 (2026-08-10) : "Ask anything" AI mode.
+    const chat = document.querySelector('[data-cmdk-chat]');
+    const thread = document.querySelector('[data-cmdk-thread]');
+    const status = document.querySelector('[data-cmdk-status]');
     if (!root || !trigger || !input || !list || !closeBtn) return;
+    if (!chat || !thread || !status) {
+      // chat DOM is missing — degrade to search-only (no error).
+    }
 
     /* Build the section index from the current page (in-page anchors).
        No-op when the page has zero [data-section-id] elements. */
@@ -588,11 +767,43 @@ const fmTagJson = JSON.stringify(financialMarketsTag);
        Trap focus inside the input on open, restore on close.
        Reduced-motion: no slide animation; the panel is just there. */
     let lastFocus = null;
+    // v13.1.W3 (2026-08-10) : "Ask anything" AI mode. Two states:
+    //   - 'search' : default, fuzzy-search routes + sections
+    //   - 'ask'    : chat with the edge Worker (SSE stream)
+    // Toggle: when the input starts with the ask trigger ("?"),
+    // we switch to ask mode and the question text is whatever
+    // follows the "?" (the "?" itself is stripped on submit).
+    let mode = 'search';
+    let askAbort = null; // AbortController for an in-flight stream
+    function setMode(next) {
+      mode = next;
+      root.setAttribute('data-cmdk-mode', next);
+      // Update placeholder + aria so the input advertises the mode.
+      if (next === 'ask') {
+        input.setAttribute(
+          'placeholder',
+          'Ask anything about Christian’s work, methodology, or background…',
+        );
+        input.setAttribute('aria-label', 'Ask a question');
+      } else {
+        input.setAttribute('placeholder', 'Ask anything…');
+        input.setAttribute('aria-label', 'Search routes and sections');
+      }
+    }
+    setMode('search');
     function open() {
       if (!root.hasAttribute('hidden')) return;
       lastFocus = document.activeElement;
       root.removeAttribute('hidden');
       input.value = '';
+      setMode('search');
+      if (thread) thread.innerHTML = '';
+      if (status) status.textContent = '';
+      // Cancel any in-flight ask stream from a previous open.
+      if (askAbort) {
+        try { askAbort.abort(); } catch (_) {}
+        askAbort = null;
+      }
       render('');
       // Focus the input synchronously. The L04 audit flags
       // `rAF` near a scroll/key handler as a parallax
@@ -602,6 +813,10 @@ const fmTagJson = JSON.stringify(financialMarketsTag);
     function close() {
       if (root.hasAttribute('hidden')) return;
       root.setAttribute('hidden', '');
+      if (askAbort) {
+        try { askAbort.abort(); } catch (_) {}
+        askAbort = null;
+      }
       if (lastFocus && typeof lastFocus.focus === 'function') {
         lastFocus.focus({ preventScroll: true });
       }
@@ -650,12 +865,31 @@ const fmTagJson = JSON.stringify(financialMarketsTag);
         }
         if (e.key === 'Enter') {
           e.preventDefault();
+          // v13.1.W3 : Enter submits the question in ask mode;
+          // otherwise it activates the highlighted search result.
+          if (mode === 'ask') {
+            submitAsk();
+            return;
+          }
           const r = currentResults[activeIdx];
           if (r) navigate(r);
           return;
         }
         if (e.key === 'Tab') {
-          // Trap focus inside the dialog (simple single-focusable case).
+          // v13.1.W3 : Tab toggles between search and ask modes
+          // when the input has text. Without text, it traps focus
+          // (the original behavior).
+          if (input.value.length > 0) {
+            e.preventDefault();
+            if (mode === 'search') {
+              // Prepend the ask trigger so the mode flip is visible.
+              input.value = askTrigger + input.value;
+            } else {
+              input.value = input.value.replace(/^\?+\s*/, '');
+            }
+            refreshMode();
+            return;
+          }
           e.preventDefault();
           input.focus();
         }
@@ -663,7 +897,193 @@ const fmTagJson = JSON.stringify(financialMarketsTag);
       true /* capture phase : must beat other ⌘K listeners */,
     );
 
-    input.addEventListener('input', () => render(input.value));
+    /* === v13.1.W3 (2026-08-10) : ask-mode input handler.
+       Detect the "?" trigger prefix and toggle the mode. The
+       "?" is NOT stripped from the visible input (so the user
+       sees the question framing); we strip it on submit. */
+    function refreshMode() {
+      const v = input.value;
+      if (v.startsWith(askTrigger)) {
+        if (mode !== 'ask') setMode('ask');
+        if (status && status.textContent === '') {
+          status.textContent = 'Ask anything. Enter to send. Esc to clear.';
+        }
+      } else {
+        if (mode !== 'search') {
+          setMode('search');
+          if (status) status.textContent = '';
+        }
+        render(v);
+      }
+    }
+    input.addEventListener('input', refreshMode);
+
+    /* === v13.1.W3 : append a chat bubble. Returns the bubble so
+       streaming tokens can write into it incrementally. */
+    function appendBubble(role, text) {
+      if (!thread) return null;
+      const li = document.createElement('li');
+      li.className = 'cmdk__bubble cmdk__bubble--' + role;
+      li.textContent = text;
+      thread.appendChild(li);
+      // Scroll the chat container to the new bubble.
+      if (chat) chat.scrollTop = chat.scrollHeight;
+      return li;
+    }
+    function appendTyping() {
+      if (!thread) return null;
+      const li = document.createElement('li');
+      li.className = 'cmdk__bubble cmdk__bubble--model cmdk__bubble--typing';
+      li.innerHTML =
+        '<span class="cmdk__typing" aria-label="AI is typing"><span></span><span></span><span></span></span>';
+      thread.appendChild(li);
+      if (chat) chat.scrollTop = chat.scrollHeight;
+      return li;
+    }
+    function clearTyping(node) {
+      if (node && node.parentNode) node.parentNode.removeChild(node);
+    }
+    function appendError(message) {
+      if (!thread) return;
+      const li = document.createElement('li');
+      li.className = 'cmdk__bubble cmdk__bubble--error';
+      li.textContent = message;
+      thread.appendChild(li);
+      if (chat) chat.scrollTop = chat.scrollHeight;
+    }
+
+    /* === v13.1.W3 : stream a question to the edge Worker and
+       append tokens to the answer bubble as they arrive.
+
+       Wire protocol (SSE):
+         data: {"event":"meta","request_id":"..."}\n\n
+         data: {"event":"token","delta":"..."}\n\n
+         data: {"event":"done","request_id":"...","latency_ms":N}\n\n
+         data: {"event":"error","error":"..."}\n\n
+
+       Failure modes:
+         - Worker down / network error → error bubble
+         - HTTP 4xx/5xx with envelope → surface the message
+         - Mid-stream abort (Esc / re-open) → swallow quietly
+         - aiProxyUrl === '' → no-op, ask mode disabled
+    */
+    async function askWorker(question) {
+      if (!aiProxyUrl) {
+        appendError('AI is currently unavailable. Try again later.');
+        return;
+      }
+      const bubble = appendBubble('model', '');
+      const typing = appendTyping();
+      askAbort = new AbortController();
+      if (status) status.textContent = 'Streaming…';
+      try {
+        const resp = await fetch(aiProxyUrl.replace(/\/$/, '') + '/ask', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ question }),
+          signal: askAbort.signal,
+        });
+        if (!resp.ok) {
+          clearTyping(typing);
+          // Try to surface the structured error envelope if present.
+          let msg = 'AI temporarily unavailable. Please try again.';
+          try {
+            const env = await resp.json();
+            if (env && env.error) msg = env.error;
+          } catch (_) { /* non-JSON error body */ }
+          bubble.textContent = msg;
+          bubble.classList.add('cmdk__bubble--error');
+          if (status) status.textContent = 'Error · HTTP ' + resp.status;
+          return;
+        }
+        if (!resp.body) {
+          clearTyping(typing);
+          bubble.textContent = 'AI temporarily unavailable (no stream).';
+          bubble.classList.add('cmdk__bubble--error');
+          return;
+        }
+        const reader = resp.body.getReader();
+        const decoder = new TextDecoder();
+        let buf = '';
+        let started = false;
+        for (;;) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          buf += decoder.decode(value, { stream: true });
+          let idx;
+          while ((idx = buf.indexOf('\n\n')) >= 0) {
+            const evt = buf.slice(0, idx);
+            buf = buf.slice(idx + 2);
+            const line = evt.split('\n').find((l) => l.startsWith('data: '));
+            if (!line) continue;
+            const payload = line.slice(6);
+            if (payload === '[DONE]') continue;
+            let obj;
+            try {
+              obj = JSON.parse(payload);
+            } catch (_) {
+              continue;
+            }
+            if (obj.event === 'token' && typeof obj.delta === 'string') {
+              if (!started) {
+                clearTyping(typing);
+                started = true;
+              }
+              bubble.textContent += obj.delta;
+              if (chat) chat.scrollTop = chat.scrollHeight;
+            } else if (obj.event === 'done') {
+              if (status) {
+                status.textContent =
+                  'Done · ' + (obj.latency_ms ?? '?') + ' ms';
+              }
+            } else if (obj.event === 'error') {
+              if (!started) clearTyping(typing);
+              bubble.textContent =
+                obj.error || 'AI temporarily unavailable.';
+              bubble.classList.add('cmdk__bubble--error');
+              if (status) status.textContent = 'Error';
+            }
+          }
+        }
+        if (!started) clearTyping(typing);
+        if (!bubble.textContent) {
+          bubble.textContent =
+            'No response. The model may be rate-limited; try again in a moment.';
+          bubble.classList.add('cmdk__bubble--error');
+        }
+      } catch (err) {
+        clearTyping(typing);
+        if (err && err.name === 'AbortError') {
+          bubble.textContent = 'Cancelled.';
+        } else {
+          bubble.textContent =
+            'AI temporarily unavailable. Check your connection and retry.';
+          bubble.classList.add('cmdk__bubble--error');
+        }
+        if (status) status.textContent = 'Error';
+      } finally {
+        askAbort = null;
+      }
+    }
+
+    /* === v13.1.W3 : ask-mode submit handler. Strip the "?" trigger
+       from the visible value, append the user bubble, then call the
+       Worker. Trim to the schema's 500-char cap. */
+    function submitAsk() {
+      const raw = input.value;
+      const question = raw.replace(/^\?+\s*/, '').trim();
+      if (!question) {
+        if (status) status.textContent = 'Type a question after the "?".';
+        return;
+      }
+      const trimmed =
+        question.length > 500 ? question.slice(0, 500) : question;
+      appendBubble('user', trimmed);
+      if (status) status.textContent = 'Sending…';
+      // Clear input but keep ask mode + scroll lock for follow-ups.
+      input.value = '';
+      askWorker(trimmed);
+    }
 
     closeBtn.addEventListener('click', close);
 
