@@ -26,6 +26,13 @@ const quantTerms = terms
 const aiTerms = terms
   .filter((t) => t.category === 'AI')
   .sort((a, b) => a.term.localeCompare(b.term));
+
+// The five most recently added terms. The file was first authored in
+// v6.1.1 (commit 1d685d7) and last touched in v12.W4 (9003283); git
+// cannot tell us per-term timestamps, so the array order is the
+// source of truth for "recent" — the last five entries are the most
+// recently added. Dedupe key = `id` (stable across rebuilds).
+const recentTerms = terms.slice(-5);
 ---
 
 <BaseLayout
@@ -57,10 +64,99 @@ const aiTerms = terms
     </div>
   </section>
 
-  <section class="section">
+  <section class="section section--alt" aria-labelledby="recent-heading">
     <div class="container container--narrow">
       <header class="section__head">
-        <SectionMark index="00" title="glossary" />
+        <SectionMark index="01" title="recent" />
+        <h2 class="section__title" id="recent-heading">Recently updated terms</h2>
+        <p class="section__sub">
+          The five most recently added definitions. Each one is short enough to read in thirty
+          seconds and stable enough to deep-link to from /methodology or /proof.
+        </p>
+      </header>
+      <ul class="recent-list">
+        {
+          recentTerms.map((t) => (
+            <li class="recent-item">
+              <a href={path(`/glossary/${t.id}`)} class="recent-link">
+                <span class="recent-term">{t.term}</span>
+                <span class="recent-short">{t.short}</span>
+                <span class="recent-cat" aria-hidden="true">
+                  {t.category}
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="browse-heading">
+    <div class="container container--narrow">
+      <header class="section__head">
+        <SectionMark index="02" title="browse" />
+        <h2 class="section__title" id="browse-heading">Browse by category</h2>
+        <p class="section__sub">
+          Two vocabularies, one canonical list. Each card is a fast lane to a category of terms;
+          the examples below are the three most-referenced terms in that lane.
+        </p>
+      </header>
+      <div class="preview-grid">
+        <a
+          href="#quant"
+          class="preview-card"
+          aria-labelledby="preview-quant-title"
+          aria-describedby="preview-quant-sub"
+        >
+          <span class="preview-card__count">{quantTerms.length} terms</span>
+          <h3 class="preview-card__title" id="preview-quant-title">Quant</h3>
+          <p class="preview-card__sub" id="preview-quant-sub">
+            Statistical-evaluation vocabulary. The terms behind the {GATE_RANGE} validation stack
+            on /methodology.
+          </p>
+          <ul class="preview-card__examples" aria-label="Example Quant terms">
+            <li class="preview-card__example">alpha</li>
+            <li class="preview-card__example">sharpe</li>
+            <li class="preview-card__example">walk-forward</li>
+          </ul>
+          <span class="preview-card__cta" aria-hidden="true">Jump to Quant terms →</span>
+        </a>
+        <a
+          href="#ai"
+          class="preview-card"
+          aria-labelledby="preview-ai-title"
+          aria-describedby="preview-ai-sub"
+        >
+          <span class="preview-card__count">{aiTerms.length} terms</span>
+          <h3 class="preview-card__title" id="preview-ai-title">AI</h3>
+          <p class="preview-card__sub" id="preview-ai-sub">
+            Multi-agent, retrieval, and evaluation vocabulary used across the AI lane of this site.
+          </p>
+          <ul class="preview-card__examples" aria-label="Example AI terms">
+            <li class="preview-card__example">agent-charter</li>
+            <li class="preview-card__example">eval-harness</li>
+            <li class="preview-card__example">frozen-spec</li>
+          </ul>
+          <span class="preview-card__cta" aria-hidden="true">Jump to AI terms →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container container--narrow">
+      <nav class="jump-nav" aria-label="Jump to category">
+        <a href="#quant" class="jump-nav__link">
+          Quant · {quantTerms.length} terms
+        </a>
+        <span class="jump-nav__sep" aria-hidden="true">·</span>
+        <a href="#ai" class="jump-nav__link">
+          AI · {aiTerms.length} terms
+        </a>
+      </nav>
+      <header class="section__head">
+        <SectionMark index="03" title="all terms" />
         <h2 class="section__title" id="quant">Quant terms · {quantTerms.length}</h2>
         <p class="section__sub">
           Statistical-evaluation vocabulary. Where possible, terms link to the methodology page
@@ -246,5 +342,170 @@ const aiTerms = terms
     font-size: var(--fs-sm);
     line-height: var(--lh-loose);
     margin: 0;
+  }
+
+  /* v13.1.4 polish-7o : recent + preview + jump-nav chrome.
+     Uses the existing color/spacing/border tokens so the visual
+     register stays institutional; no new palette, no new font. */
+
+  .recent-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--sp-3);
+  }
+  @media (max-width: 720px) {
+    .recent-list {
+      grid-template-columns: 1fr;
+    }
+  }
+  .recent-item {
+    margin: 0;
+  }
+  .recent-link {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-2);
+    padding: var(--sp-4);
+    background: var(--c-bg);
+    border: var(--border);
+    border-radius: var(--radius);
+    text-decoration: none;
+    color: var(--c-ink);
+    transition:
+      border-color var(--transition),
+      box-shadow var(--transition);
+    height: 100%;
+  }
+  .recent-link:hover {
+    border-color: var(--c-amber);
+    box-shadow: var(--shadow-sm);
+  }
+  .recent-term {
+    font-weight: 600;
+    color: var(--c-ink);
+    font-size: var(--fs-base);
+    letter-spacing: -0.005em;
+  }
+  .recent-short {
+    color: var(--c-ink-2);
+    font-size: var(--fs-sm);
+    line-height: var(--lh-loose);
+    flex: 1;
+  }
+  .recent-cat {
+    font-size: var(--fs-2xs);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--c-ink-3);
+    font-weight: 600;
+    margin-top: var(--sp-1);
+  }
+
+  .preview-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--sp-5);
+    margin: 0;
+  }
+  @media (max-width: 720px) {
+    .preview-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .preview-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+    padding: var(--sp-5);
+    background: var(--c-bg);
+    border: var(--border);
+    border-radius: var(--radius);
+    text-decoration: none;
+    color: var(--c-ink);
+    transition:
+      border-color var(--transition),
+      box-shadow var(--transition);
+  }
+  .preview-card:hover {
+    border-color: var(--c-amber);
+    box-shadow: var(--shadow-sm);
+  }
+  .preview-card__count {
+    font-size: var(--fs-2xs);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--c-amber);
+    font-weight: 600;
+  }
+  .preview-card__title {
+    font-size: var(--fs-xl);
+    font-weight: 600;
+    margin: 0;
+    color: var(--c-ink);
+    letter-spacing: -0.01em;
+  }
+  .preview-card__sub {
+    color: var(--c-ink-2);
+    font-size: var(--fs-sm);
+    line-height: var(--lh-loose);
+    margin: 0;
+    max-width: 50ch;
+  }
+  .preview-card__examples {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+  }
+  .preview-card__example {
+    font-family: var(--ff-mono);
+    font-size: var(--fs-xs);
+    padding: 2px var(--sp-2);
+    border: 1px solid var(--c-rule);
+    border-radius: var(--radius);
+    color: var(--c-ink-2);
+    background: var(--c-paper);
+  }
+  .preview-card__cta {
+    margin-top: auto;
+    padding-top: var(--sp-3);
+    font-size: var(--fs-sm);
+    color: var(--c-amber);
+    font-weight: 600;
+    letter-spacing: -0.005em;
+  }
+
+  .jump-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+    align-items: center;
+    padding: var(--sp-3) 0;
+    margin-bottom: var(--sp-5);
+    border-bottom: var(--border);
+    font-size: var(--fs-sm);
+  }
+  .jump-nav__link {
+    color: var(--c-ink-2);
+    text-decoration: none;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    padding: var(--sp-1) var(--sp-2);
+    border-radius: var(--radius);
+    transition:
+      color var(--transition),
+      background var(--transition);
+  }
+  .jump-nav__link:hover {
+    color: var(--c-amber);
+    background: var(--c-amber-soft);
+  }
+  .jump-nav__sep {
+    color: var(--c-ink-3);
   }
 </style>
