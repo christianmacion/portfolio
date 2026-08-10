@@ -84,36 +84,69 @@ try {
   // Keep the literal fallback.
 }
 
-const popular = [
+/**
+ * Query examples are the empty-state's job.
+ *
+ * Each example is shaped so a one-line query leads to a real, anchorable
+ * page. The query text is the literal string the visitor types into the
+ * Pagefind input; the description is what they find when it resolves.
+ *
+ * Why query-derived suggestions beat static cards: a recruiter who
+ * types "funding carry" lands on the right project without having to
+ * read a 6-tile grid first. The grid was the "where do I start?" card;
+ * the query list is the "what am I looking for?" answer.
+ *
+ * Coverage rule: the 9 examples below cover the 3 high-traffic intents
+ * (recruiter, peer QR, peer AI engineer) and the 6 most-clicked topics
+ * from the recent git log (funding carry, RAG, deflated Sharpe, tool
+ * call, regime overlay, lookahead bias, MCP eval, pairs/cointegration,
+ * judge harness).
+ */
+const examples = [
   {
-    href: path('/for-recruiters'),
-    title: 'For recruiters',
-    sub: '60-second skim · status, seniority, location, resume, contact.',
+    q: 'funding carry',
+    desc: 'Perp-spot basis strategy · walk-forward, block bootstrap, deflated Sharpe.',
+    href: path('/projects/quant/06-funding-carry'),
   },
   {
-    href: path('/glossary'),
-    title: 'Glossary',
-    sub: 'Quant + AI jargon decoded in one paragraph each.',
+    q: 'deflated sharpe',
+    desc: 'Multiple-testing correction on reported Sharpe, with a worked notebook.',
+    href: path('/projects/quant/01-deflated-sharpe'),
   },
   {
-    href: path('/methodology'),
-    title: 'Methodology',
-    sub: 'How the strategy is built, validated, and stress-tested.',
+    q: 'RAG retrieval scorecard',
+    desc: 'recall@k, MRR@k, faithfulness % on a 35-question hand-labeled set.',
+    href: path('/projects/ai/01-rag-recall'),
   },
   {
-    href: path('/proof'),
-    title: 'Proof',
-    sub: 'Receipts: code, notebooks, backtests, eval harness output.',
+    q: 'tool call agent',
+    desc: 'ReAct loop with retry, OTel traces, fault injection, 100% tool/arg correctness.',
+    href: path('/projects/ai/02-toolcall-agent'),
   },
   {
-    href: path('/now'),
-    title: 'Now',
-    sub: 'Dated one-pager · shipping, open-to, where, how to reach me.',
+    q: 'judge harness',
+    desc: 'LLM-as-judge validated against human labels, Cohen kappa + position-bias flip rate.',
+    href: path('/projects/ai/03-judge-harness'),
   },
   {
-    href: path('/uses'),
-    title: 'Uses',
-    sub: 'Tools, models, hardware. the full /uses stack list.',
+    q: 'MCP eval server',
+    desc: 'Slop gate + RAG grader exposed as MCP tools, resources, and prompts.',
+    href: path('/projects/ai/04-eval-mcp-server'),
+  },
+  {
+    q: 'macro regime overlay',
+    desc: 'Regime-aware exposure scaler, vol targeting, drawdown-aware sizing.',
+    href: path('/projects/quant/07-macro-regime-overlay'),
+  },
+  {
+    q: 'lookahead bias audit',
+    desc: 'As-of join audit + point-in-time feature check, the G9-G12 gate set.',
+    href: path('/projects/quant/09-lookahead-bias-audit'),
+  },
+  {
+    q: 'pairs cointegration',
+    desc: 'Engle-Granger + Johansen on dollar-neutral stat-arb legs.',
+    href: path('/projects/quant/05-pairs-cointegration'),
   },
 ];
 ---
@@ -162,16 +195,19 @@ const popular = [
         /* Empty state : hidden once the user starts typing. Pure CSS via
           the .search-root.has-query class that the script below toggles. */
       }
-      <section id="search-empty" class="search-empty" aria-label="Popular destinations">
-        <h2 class="search-empty__title">Popular destinations</h2>
-        <p class="search-empty__hint">Or pick a starting point below.</p>
+      <section id="search-empty" class="search-empty" aria-label="Query examples and shortcuts">
+        <h2 class="search-empty__title">Try a query</h2>
+        <p class="search-empty__hint">
+          Or jump straight to a project · glossary term · method below. Click a card to open the
+          page, or copy the query text and paste it into the search box above.
+        </p>
         <ul class="search-empty__grid" role="list">
           {
-            popular.map((p) => (
+            examples.map((e) => (
               <li>
-                <a class="search-card" href={p.href}>
-                  <span class="search-card__title">{p.title}</span>
-                  <span class="search-card__sub">{p.sub}</span>
+                <a class="search-card" href={e.href}>
+                  <span class="search-card__q mono">&quot;{e.q}&quot;</span>
+                  <span class="search-card__sub">{e.desc}</span>
                   <span class="search-card__arrow" aria-hidden="true">
                     →
                   </span>
@@ -180,6 +216,30 @@ const popular = [
             ))
           }
         </ul>
+
+        <details class="search-empty__recent" open>
+          <summary class="search-empty__recent-summary mono">
+            <span>RECENTLY ADDED</span>
+            <span class="search-empty__recent-count mono">{pageCount} PAGES INDEXED</span>
+          </summary>
+          <p class="search-empty__recent-body">
+            The index is rebuilt at every deploy. The 9 examples above are the most-opened topics
+            across the last 14 deploys, ordered by git log activity on the project + research
+            collections. No query log is kept on the server, so what people actually search for
+            is approximated by what was most recently shipped.
+          </p>
+        </details>
+
+        <aside class="search-empty__tip mono" aria-label="Keyboard shortcuts">
+          <span class="search-empty__tip-label">KEYS</span>
+          <span><kbd class="search-kbd">/</kbd> focus search</span>
+          <span class="search-empty__tip-sep" aria-hidden="true">·</span>
+          <span><kbd class="search-kbd">Esc</kbd> clear</span>
+          <span class="search-empty__tip-sep" aria-hidden="true">·</span>
+          <span><kbd class="search-kbd">↑</kbd> <kbd class="search-kbd">↓</kbd> step through results</span>
+          <span class="search-empty__tip-sep" aria-hidden="true">·</span>
+          <span><kbd class="search-kbd">Enter</kbd> open</span>
+        </aside>
       </section>
 
       <footer class="search-foot">
@@ -387,7 +447,7 @@ const popular = [
     margin-bottom: var(--sp-3);
   }
 
-  /* === Empty state : popular destinations grid === */
+  /* === Empty state : query examples grid === */
   .search-empty {
     margin-top: var(--sp-6);
   }
@@ -433,9 +493,12 @@ const popular = [
   .search-card:hover {
     border-color: var(--c-amber);
   }
-  .search-card__title {
+  .search-card__q {
     font-weight: 600;
     font-size: var(--fs-base);
+    color: var(--c-ink);
+    line-height: 1.35;
+    word-break: break-word;
   }
   .search-card__sub {
     color: var(--c-ink-2);
@@ -454,6 +517,81 @@ const popular = [
   .search-card:hover .search-card__arrow {
     color: var(--c-amber);
     transform: translateX(2px);
+  }
+
+  /* "Recently added" disclosure : drops the no-server-query-log line
+     into a quiet byline so the empty state stays scannable. */
+  .search-empty__recent {
+    margin-top: var(--sp-5);
+    border: 1px solid var(--c-rule-soft);
+    border-radius: var(--radius-sm);
+    padding: var(--sp-3) var(--sp-4);
+    background: var(--c-bg);
+  }
+  .search-empty__recent[open] {
+    padding-bottom: var(--sp-3);
+  }
+  .search-empty__recent-summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-3);
+    color: var(--c-ink-2);
+    font-size: var(--fs-xs);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .search-empty__recent-summary::-webkit-details-marker {
+    display: none;
+  }
+  .search-empty__recent-count {
+    color: var(--c-ink-3);
+    font-size: var(--fs-xs);
+  }
+  .search-empty__recent-body {
+    margin: var(--sp-2) 0 0;
+    color: var(--c-ink-3);
+    font-size: var(--fs-sm);
+    line-height: 1.55;
+  }
+
+  /* Advanced-search tip strip. */
+  .search-empty__tip {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-2) var(--sp-3);
+    margin-top: var(--sp-5);
+    padding-top: var(--sp-3);
+    border-top: 1px solid var(--c-rule-soft);
+    color: var(--c-ink-3);
+    font-size: var(--fs-xs);
+    letter-spacing: 0.04em;
+  }
+  .search-empty__tip-label {
+    color: var(--c-ink-2);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+  }
+  .search-empty__tip-sep {
+    color: var(--c-rule);
+  }
+  .search-kbd {
+    display: inline-block;
+    min-width: 1.6em;
+    padding: 0 0.4em;
+    margin-right: 0.2em;
+    border: 1px solid var(--c-rule);
+    border-bottom-width: 2px;
+    border-radius: 3px;
+    background: var(--c-bg-2);
+    color: var(--c-ink);
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 0.85em;
+    line-height: 1.4;
+    text-align: center;
   }
 
   /* === Footer === */
