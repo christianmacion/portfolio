@@ -34,9 +34,11 @@ interface Props {
 }
 const { events, width = 1080, height = 320, buildDate = '2026-07-10' } = Astro.props;
 
-// Layout constants : padL/R/T/B sized for axis labels + legend
+// Layout constants : padL/R/T/B sized for axis labels (legend renders as HTML siblings, not inside SVG).
+// padR kept narrow so plot uses full SVG width on desktop. On mobile (<720px), the chart scrolls
+// horizontally inside .prob-decay__svg-wrap at min-width 560 so in-SVG text stays legible.
 const padL = 56,
-  padR = 220,
+  padR = 24,
   padT = 24,
   padB = 44;
 const innerW = width - padL - padR;
@@ -113,6 +115,11 @@ interface Series {
   points: { x: number; y: number; implied: number }[];
   endpoint: { x: number; y: number; label: string; implied: number };
   edgeLabel: string;
+  /** Per-point labelPlacement : 'top' / 'bottom' / 'right' / 'left'.
+   *  Used to stagger the endpoint labels so adjacent series don't
+   *  collide on the right edge. The pattern is ported from
+   *  CoverageGlobe / EarthMap (polish-7o, commit 5cd377c). */
+  labelPlacement: 'top' | 'bottom' | 'right';
 }
 
 const series: Series[] = events.map((e) => {
@@ -140,6 +147,13 @@ const series: Series[] = events.map((e) => {
   pts[pts.length - 1] = { x, y: yForProb(endImplied), implied: endImplied };
   const edgeSign = e.edge >= 0 ? '+' : '−';
   const edgeLabel = `${edgeSign}${Math.abs(e.edge * 100).toFixed(0)}¢`;
+  // v13.1.4 polish-7p : assign labelPlacement per series. The pattern is
+  // seeded by the slug so the same event always renders in the same
+  // position across builds. Sorted by endpoint.y to keep the alternation
+  // deterministic after the initial sort.
+  const placementSeed = slugSeed(e.id + ':placement');
+  const placements: ('top' | 'bottom' | 'right')[] = ['top', 'bottom', 'right'];
+  const labelPlacement = placements[Math.floor(placementSeed * 3) % 3]!;
   return {
     id: e.id,
     title: e.title,
@@ -148,8 +162,104 @@ const series: Series[] = events.map((e) => {
     points: pts,
     endpoint: { x, y: yForProb(endImplied), label, implied: endImplied },
     edgeLabel,
+    labelPlacement,
   };
 });
+
+// Sort series by endpoint.y so the labelPlacement alternation processing
+// runs in deterministic vertical order. Otherwise the slugSeed-driven
+// placement would be random across series.
+const seriesSortedByY = [...series].sort((a, b) => a.endpoint.y - b.endpoint.y);
+
+// v13.1.4 polish-7p : greedy labelCollision resolver. Walks the sorted
+// series in vertical order and reassigns labelPlacement to 'right' if
+// the chosen placement would overlap the previous label's bounding box.
+// This is the same collision-avoidance pattern as CoverageGlobe, just
+// applied to overlapping endpoint labels on the right edge.
+type Label = {
+  series: Series;
+  placement: 'top' | 'bottom' | 'right';
+  px: number;
+  py: number;
+  // Approximate label size (browser-default 9-10px mono).
+  w: number;
+  h: number;
+};
+const labelH = 12;
+const labelGap = 2;
+const labelWSide = 56; // 'top' / 'bottom' label virtual width
+const labelWRight = 80; // 'right' label virtual width (event title may be long)
+const placedLabels: Label[] = [];
+const labelMinX = padL; // don't overlap the y-axis ticks
+for (const s of seriesSortedByY) {
+  const px = padL + s.endpoint.x * innerW;
+  const py = s.endpoint.y;
+  let placement = s.labelPlacement;
+  // Helper: would (placement, px, py) overlap an already-placed label?
+  const overlaps = (p: typeof placement, x: number, y: number): boolean => {
+    const w = p === 'right' ? labelWRight : labelWSide;
+    const top = p === 'top' ? y - labelH - labelGap : y - labelH / 2;
+    const bottom = p === 'bottom' ? y + labelGap : y + labelH / 2;
+    const right = p === 'right' ? x + w : x + w / 2;
+    const left = p === 'right' ? x : x - w / 2;
+    for (const prev of placedLabels) {
+      const pTop = prev.py - prev.h / 2;
+      const pBottom = prev.py + prev.h / 2;
+      const pLeft = prev.px - prev.w / 2;
+      const pRight = prev.px + prev.w / 2;
+      if (
+        right >= pLeft - labelGap &&
+        left <= pRight + labelGap &&
+        bottom >= pTop - labelGap &&
+        top <= pBottom + labelGap
+      ) {
+        return true;
+      }
+    }
+    return false;
+  };
+  // Try the chosen placement first; fall back to 'right' on collision.
+  if (overlaps(placement, px, py)) {
+    placement = 'right';
+  }
+  // If 'right' still collides, push to top OR bottom based on nearest free
+  // slot. (Rarely fires — only when >3 series stack tightly.)
+  if (overlaps(placement, px, py)) {
+    placement = py < padT + innerH / 2 ? 'bottom' : 'top';
+  }
+  placedLabels.push({
+    series: s,
+    placement,
+    px,
+    py,
+    w: placement === 'right' ? labelWRight : labelWSide,
+    h: labelH,
+  });
+}
+
+// Build a quick lookup of resolved placement per series id.
+const resolvedPlacementById = new Map<string, 'top' | 'bottom' | 'right'>();
+for (const lb of placedLabels) {
+  resolvedPlacementById.set(lb.series.id, lb.placement);
+}
+
+// Helper: render-position for a label given (series, placement).
+function labelXY(
+  s: Series,
+  placement: 'top' | 'bottom' | 'right',
+): { x: number; y: number; anchor: 'start' | 'middle' | 'end' } {
+  const px = padL + s.endpoint.x * innerW;
+  const py = s.endpoint.y;
+  switch (placement) {
+    case 'top':
+      return { x: px, y: py - 6, anchor: 'end' };
+    case 'bottom':
+      return { x: px, y: py + 12, anchor: 'end' };
+    case 'right':
+    default:
+      return { x: px + 6, y: py + 3, anchor: 'start' };
+  }
+}
 
 function linePath(pts: { x: number; y: number }[]): string {
   return pts
@@ -160,7 +270,8 @@ function linePath(pts: { x: number; y: number }[]): string {
     .join(' ');
 }
 
-// Legend rows (one per series), rendered as anchor labels at right edge.
+// Legend rows (one per series), rendered as HTML siblings below the SVG so labels stay
+// legible on mobile (the SVG can shrink uniformly, but HTML chips do not).
 ---
 
 <figure class="prob-decay">
@@ -171,111 +282,130 @@ function linePath(pts: { x: number; y: number }[]): string {
     >
   </figcaption>
 
-  <svg
-    class="prob-decay__svg"
-    viewBox={`0 0 ${width} ${height}`}
-    role="img"
-    aria-label={`Probability decay across tenors for ${events.length} binary event markets`}
-  >
-    {/* Y grid + ticks (price in cents) */}
-    {
-      yTicks.map((t) => (
-        <g>
-          <line x1={padL} y1={t.y} x2={padL + innerW} y2={t.y} class="prob-decay__grid" />
-          <text x={padL - 8} y={t.y + 3} class="prob-decay__tick mono" text-anchor="end">
-            {(t.p * 100).toFixed(0)}¢
-          </text>
-        </g>
-      ))
-    }
-
-    {/* X axis line */}
-    <line
-      x1={padL}
-      y1={padT + innerH}
-      x2={padL + innerW}
-      y2={padT + innerH}
-      class="prob-decay__axis"></line>
-
-    {/* X-axis date ticks */}
-    {
-      tickDates.map((t) => {
-        const px = padL + t.x * innerW;
-        return (
+  <div class="prob-decay__svg-wrap">
+    <svg
+      class="prob-decay__svg"
+      viewBox={`0 0 ${width} ${height}`}
+      role="img"
+      aria-label={`Probability decay across tenors for ${events.length} binary event markets`}
+    >
+      {/* Y grid + ticks (price in cents) */}
+      {
+        yTicks.map((t) => (
           <g>
-            <line
-              x1={px}
-              y1={padT + innerH}
-              x2={px}
-              y2={padT + innerH + 4}
-              class="prob-decay__axis"
-            />
-            <text x={px} y={padT + innerH + 16} class="prob-decay__tick mono" text-anchor="middle">
-              {t.label}
+            <line x1={padL} y1={t.y} x2={padL + innerW} y2={t.y} class="prob-decay__grid" />
+            <text x={padL - 8} y={t.y + 3} class="prob-decay__tick mono" text-anchor="end">
+              {(t.p * 100).toFixed(0)}¢
             </text>
           </g>
-        );
-      })
-    }
+        ))
+      }
 
-    {/* Series polylines */}
+      {/* X axis line */}
+      <line
+        x1={padL}
+        y1={padT + innerH}
+        x2={padL + innerW}
+        y2={padT + innerH}
+        class="prob-decay__axis"></line>
+
+      {/* X-axis date ticks */}
+      {
+        tickDates.map((t) => {
+          const px = padL + t.x * innerW;
+          return (
+            <g>
+              <line
+                x1={px}
+                y1={padT + innerH}
+                x2={px}
+                y2={padT + innerH + 4}
+                class="prob-decay__axis"
+              />
+              <text x={px} y={padT + innerH + 16} class="prob-decay__tick mono" text-anchor="middle">
+                {t.label}
+              </text>
+            </g>
+          );
+        })
+      }
+
+      {/* Series polylines */}
+      {
+        series.map((s) => (
+          <path
+            d={linePath(s.points)}
+            fill="none"
+            stroke={s.color}
+            stroke-width="1.4"
+            stroke-linejoin="round"
+            stroke-linecap="round"
+            opacity="0.85"
+          />
+        ))
+      }
+
+      {/* Terminal anchor markers (right-edge implied-fair dots) */}
+      {
+        series.map((s) => {
+          const px = padL + s.endpoint.x * innerW;
+          return (
+            <g>
+              <circle cx={px} cy={s.endpoint.y} r="3" fill={s.color} />
+              <line
+                x1={px}
+                y1={s.endpoint.y}
+                x2={px + 6}
+                y2={s.endpoint.y}
+                stroke={s.color}
+                stroke-width="1"
+                opacity="0.6"
+              />
+            </g>
+          );
+        })
+      }
+
+      {/* v13.1.4 polish-7p : endpoint labels. Each series' right-edge
+          dot is tagged with a short text label (the event title),
+          positioned via a per-series labelPlacement so adjacent series
+          don't overlap. The placement is collision-resolved at build
+          time (see `placedLabels` above); SVG renders the resolved
+          labels at the resolved x/y/anchor. */}
+      {
+        placedLabels.map((lb) => {
+          const xy = labelXY(lb.series, lb.placement);
+          return (
+            <text
+              x={xy.x}
+              y={xy.y}
+              text-anchor={xy.anchor}
+              class="prob-decay__endpoint-label"
+              data-placement={lb.placement}
+              fill={lb.series.color}
+            >
+              {lb.series.title}
+            </text>
+          );
+        })
+      }
+    </svg>
+  </div>
+
+  <ul class="prob-decay__legend" aria-label="Series legend">
     {
       series.map((s) => (
-        <path
-          d={linePath(s.points)}
-          fill="none"
-          stroke={s.color}
-          stroke-width="1.4"
-          stroke-linejoin="round"
-          stroke-linecap="round"
-          opacity="0.85"
-        />
+        <li class="prob-decay__legend-item">
+          <span
+            class="prob-decay__legend-swatch"
+            style={`background:${s.color}`}
+            aria-hidden="true"
+          />
+          <span class="prob-decay__legend-label">{s.title}</span>
+        </li>
       ))
     }
-
-    {/* Terminal anchor markers (right-edge implied-fair dots) */}
-    {
-      series.map((s) => {
-        const px = padL + s.endpoint.x * innerW;
-        return (
-          <g>
-            <circle cx={px} cy={s.endpoint.y} r="3" fill={s.color} />
-            <line
-              x1={px}
-              y1={s.endpoint.y}
-              x2={px + 6}
-              y2={s.endpoint.y}
-              stroke={s.color}
-              stroke-width="1"
-              opacity="0.6"
-            />
-          </g>
-        );
-      })
-    }
-
-    {/* Legend strip on the right edge */}
-    {
-      series.map((s, i) => {
-        const ly = padT + 4 + i * 14;
-        return (
-          <g>
-            <rect
-              x={padL + innerW + 12}
-              y={ly - 5}
-              width="8"
-              height="8"
-              fill={s.color}
-              opacity="0.85"
-            />
-            <text x={padL + innerW + 26} y={ly + 1} class="prob-decay__legend-text">
-              {s.title.length > 30 ? s.title.slice(0, 28) + '…' : s.title}
-            </text>
-          </g>
-        );
-      })
-    }
-  </svg>
+  </ul>
 
   <div class="prob-decay__table-wrap">
     <table class="prob-decay__table">
@@ -345,6 +475,9 @@ function linePath(pts: { x: number; y: number }[]): string {
     font-family: var(--ff-mono);
     letter-spacing: 0.04em;
   }
+  .prob-decay__svg-wrap {
+    width: 100%;
+  }
   .prob-decay__svg {
     width: 100%;
     height: auto;
@@ -366,10 +499,35 @@ function linePath(pts: { x: number; y: number }[]): string {
     font-size: var(--fs-3xs);
     fill: var(--c-ink-2);
   }
-  .prob-decay__legend-text {
-    font-size: 9.5px;
-    fill: var(--c-ink);
+  .prob-decay__legend {
+    list-style: none;
+    margin: var(--sp-3) 0 0;
+    padding: var(--sp-3);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-3) var(--sp-4);
+    background: var(--c-tape-3);
+    border: 1px solid var(--c-rule-soft);
+    border-radius: var(--radius-sm);
+  }
+  .prob-decay__legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-2);
+    min-width: 0;
+  }
+  .prob-decay__legend-swatch {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    flex: 0 0 auto;
+    border-radius: 1px;
+  }
+  .prob-decay__legend-label {
+    font-size: var(--fs-xs);
+    color: var(--c-ink);
     font-family: var(--ff-mono);
+    letter-spacing: 0.02em;
   }
   .prob-decay__table-wrap {
     margin-top: var(--sp-4);
@@ -402,6 +560,28 @@ function linePath(pts: { x: number; y: number }[]): string {
     border-radius: 1px;
     vertical-align: middle;
   }
+  /* v13.1.4 polish-7p : endpoint label. 9.5px mono, ink-3, no halo.
+     The fill is set per-series via the inline `fill` attribute so the
+     label color matches the line color. text-anchor (start/middle/end)
+     + offset y are set by labelXY() above. */
+  .prob-decay__endpoint-label {
+    font-family: var(--ff-mono);
+    font-size: 9.5px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    paint-order: stroke;
+    stroke: var(--c-bg);
+    stroke-width: 2.5px;
+    stroke-linejoin: round;
+  }
+  /* Mobile: lift the label slightly so it doesn't overlap the data line
+     or the endpoint marker. Min-width 560px on the SVG keeps the labels
+     legible without further scaling. */
+  @media (max-width: 720px) {
+    .prob-decay__endpoint-label {
+      font-size: 9px;
+    }
+  }
   /* v6.11.9 : F14 amber-only. Was --c-pass / --c-fail traffic-light.
      Now amber for positive edge, ink-2 for negative edge. Sign carries
      via the value's own glyph (+/-) : the color is no longer a crutch. */
@@ -422,8 +602,22 @@ function linePath(pts: { x: number; y: number }[]): string {
       flex-direction: column;
       align-items: flex-start;
     }
-    .prob-decay__legend-text {
-      font-size: var(--fs-3xs);
+    /* On mobile the SVG would shrink uniformly with the container, scaling in-SVG
+       text + strokes into illegibility. Hold min-width so viewBox-coordinate text
+       renders at the desktop size and let the wrap scroll horizontally. */
+    .prob-decay__svg-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .prob-decay__svg {
+      min-width: 560px;
+    }
+    .prob-decay__legend {
+      gap: var(--sp-2) var(--sp-3);
+      padding: var(--sp-2) var(--sp-3);
+    }
+    .prob-decay__legend-label {
+      font-size: var(--fs-2xs);
     }
   }
 </style>

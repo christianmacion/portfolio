@@ -293,6 +293,13 @@ const activeLength = activeEdges.reduce((acc, e) => acc + dist(e.x1, e.y1, e.x2,
 ---
 
 <div class:list={['agent-graph', className]}>
+  {/* v13.1.4 polish-7p : wrap the SVG in a scroll container so the
+     in-SVG text (13px label, 10px sub) stays legible on mobile. The
+     container scrolls horizontally on viewports <720px while the SVG
+     keeps its 800x440 desktop viewBox. Same pattern as
+     ProbabilityDecay.astro (polish-7p). On desktop the wrap is plain
+     block and the SVG fills the container as before. */}
+  <div class="agent-graph__svg-wrap">
   <svg
     class="agent-graph__svg"
     viewBox={`0 0 ${W} ${H}`}
@@ -426,6 +433,7 @@ const activeLength = activeEdges.reduce((acc, e) => acc + dist(e.x1, e.y1, e.x2,
       </text>
     </g>
   </svg>
+  </div>
 </div>
 
 <style>
@@ -442,6 +450,23 @@ const activeLength = activeEdges.reduce((acc, e) => acc + dist(e.x1, e.y1, e.x2,
     display: block;
     overflow: visible;
     font-family: var(--ff-sans);
+  }
+  /* v13.1.4 polish-7p : svg-wrap. Block on desktop (SVG fills the
+     container). On viewports <720px the wrap scrolls horizontally so
+     the in-SVG text (13px label, 10px sub) keeps its desktop-relative
+     size — no scaling into illegibility. Min-width 560px mirrors the
+     ProbabilityDecay pattern (same data-density / typography budget). */
+  .agent-graph__svg-wrap {
+    width: 100%;
+  }
+  @media (max-width: 720px) {
+    .agent-graph__svg-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .agent-graph__svg {
+      min-width: 560px;
+    }
   }
 
   /* === Grid === */
