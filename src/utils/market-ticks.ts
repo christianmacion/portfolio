@@ -60,7 +60,14 @@ let cached: {
   ticks: MarketTick[];
   bySource: Record<string, string>;
 } | null = null;
-const TTL_MS = 30_000; // 30s ticker cache (CoinGecko cadence)
+// v13.1.4 polish-7o : TTL_MS dropped from 30_000 → 25_000 so each 30s
+// ticker interval (worldview.client.ts : Ticker.start refreshTimer)
+// triggers a fresh fetch. With TTL = interval, the cache was still
+// "fresh" at the next interval tick (because cached.fetchedAt is the
+// function-return time, not the call time), so the user saw the same
+// 3 ticks for 60-90s instead of 30s. TTL_MS = 25s forces a fetch on
+// every 30s interval.
+const TTL_MS = 25_000; // 25s ticker cache (forces refresh on each 30s interval)
 
 /** ECB cache is longer (daily cadence, fetch-once-per-session is fine). */
 let ecbCache: { fetchedAt: number; rates: Record<string, number> } | null = null;
@@ -442,7 +449,6 @@ export async function loadMarketTicksWithMeta(): Promise<MarketTicksPayload> {
     return { ticks: cached.ticks, bySource: cached.bySource };
   }
 
-  const now = new Date().toISOString();
   const ticks: MarketTick[] = [];
   const bySource: Record<string, string> = {};
 
@@ -450,10 +456,16 @@ export async function loadMarketTicksWithMeta(): Promise<MarketTicksPayload> {
   try {
     const ecb = await loadEcbRates();
     if (Object.keys(ecb).length > 0) {
-      bySource.ECB = now;
-      if (ecb.EUR) ticks.push(ecbTick('EUR', 1 / ecb.EUR, undefined, now));
-      if (ecb.JPY) ticks.push(ecbTick('JPY', 1 / ecb.JPY, undefined, now));
-      if (ecb.GBP) ticks.push(ecbTick('GBP', 1 / ecb.GBP, undefined, now));
+      // v13.1.4 polish-7o : per-source bySource stamp captured AFTER
+      // the fetch returns (not at function entry). Each source's stamp
+      // now reflects the moment the data actually arrived, so the
+      // Binance / CoinGecko / Yahoo / ECB footer stamps stop drifting
+      // ahead of the tick-row timestamps.
+      const stamp = new Date().toISOString();
+      bySource.ECB = stamp;
+      if (ecb.EUR) ticks.push(ecbTick('EUR', 1 / ecb.EUR, undefined, stamp));
+      if (ecb.JPY) ticks.push(ecbTick('JPY', 1 / ecb.JPY, undefined, stamp));
+      if (ecb.GBP) ticks.push(ecbTick('GBP', 1 / ecb.GBP, undefined, stamp));
     }
   } catch {
     // ECB failure is non-fatal : Yahoo + CoinGecko cover most tickers.
@@ -463,8 +475,9 @@ export async function loadMarketTicksWithMeta(): Promise<MarketTicksPayload> {
   try {
     const yahoo = await loadYahooQuotes();
     if (yahoo.length > 0) {
-      bySource.Yahoo = now;
-      for (const q of yahoo) ticks.push(yahooTick(q, now));
+      const stamp = new Date().toISOString();
+      bySource.Yahoo = stamp;
+      for (const q of yahoo) ticks.push(yahooTick(q, stamp));
     }
   } catch {
     // CORS / network : fall through to CoinGecko + static fallback.
@@ -474,8 +487,9 @@ export async function loadMarketTicksWithMeta(): Promise<MarketTicksPayload> {
   try {
     const cg = await loadCoinGecko();
     if (cg.length > 0) {
-      bySource.CoinGecko = now;
-      for (const q of cg) ticks.push(coingeckoTick(q, now));
+      const stamp = new Date().toISOString();
+      bySource.CoinGecko = stamp;
+      for (const q of cg) ticks.push(coingeckoTick(q, stamp));
     }
   } catch {
     // CORS / network : fall through to static fallback.
@@ -488,7 +502,8 @@ export async function loadMarketTicksWithMeta(): Promise<MarketTicksPayload> {
   try {
     const bz = await loadBinance24hr();
     if (bz.length > 0) {
-      bySource.Binance = now;
+      const stamp = new Date().toISOString();
+      bySource.Binance = stamp;
       const covered = new Set(bz.map((q) => q.id));
       // Remove any CoinGecko tick that Binance just overrode.
       for (let i = ticks.length - 1; i >= 0; i--) {
@@ -497,7 +512,7 @@ export async function loadMarketTicksWithMeta(): Promise<MarketTicksPayload> {
         if (covered.has('ethereum') && ticks[i].source === 'CoinGecko' && ticks[i].symbol === 'ETH/USD') ticks.splice(i, 1);
         void id;
       }
-      for (const q of bz) ticks.push(binanceTick(q, now));
+      for (const q of bz) ticks.push(binanceTick(q, stamp));
     }
   } catch {
     // Binance failure is non-fatal : CoinGecko BTC/ETH stays in the ticker.

@@ -61,7 +61,7 @@
   Permissions-Policy: camera=(), microphone=(), geolocation=()
   Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
   Cross-Origin-Opener-Policy: same-origin
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com blob:; script-src-attr 'unsafe-inline'; style-src 'self' 'unsafe-inline'; style-src-attr 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://challenges.cloudflare.com https://data-api.ecb.europa.eu https://query1.finance.yahoo.com https://api.coingecko.com https://data.gdeltproject.org; frame-src https://challenges.cloudflare.com https://cal.com https://*.cal.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests; report-uri /api/csp-report
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com blob:; script-src-attr 'unsafe-inline'; style-src 'self' 'unsafe-inline'; style-src-attr 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://challenges.cloudflare.com https://data-api.ecb.europa.eu https://query1.finance.yahoo.com https://api.coingecko.com https://data.gdeltproject.org https://api.binance.com; frame-src https://challenges.cloudflare.com https://cal.com https://*.cal.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests; report-uri /api/csp-report
 
 # Immutable hashed assets — strict CSP (no 'unsafe-inline' needed).
 # These are Astro-emitted JS/CSS bundles with no inline content. Cloudflare's

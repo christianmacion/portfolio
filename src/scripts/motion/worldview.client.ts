@@ -1005,6 +1005,12 @@ class Ticker {
   private list: HTMLUListElement;
   private events: GdeltEvent[] = [];
   private ticks: MarketTick[] = [];
+  // v13.1.4 polish-7o : prevTicks holds the snapshot taken BEFORE
+  // refreshTicks() replaces this.ticks. The Beat-4 tint-sweep diff
+  // (render()) reads from prevTicks so it compares incoming vs.
+  // previous, not incoming vs. incoming (the previous code re-read
+  // this.ticks AFTER the assignment, so the diff was always 0).
+  private prevTicks: MarketTick[] = [];
   private refreshTimer = 0;
   private gdeltTimer = 0;
   private regimeChip: HTMLElement | null = null;
@@ -1138,8 +1144,12 @@ class Ticker {
   private render(): void {
     // v13.1.4 polish-7e Beat 4 : diff previous ticks vs incoming. Symbols
     // whose price or changePct moved get a one-shot tint sweep on render.
+    // v13.1.4 polish-7o : previous state is now captured in this.prevTicks
+    // (snapshot taken at the top of refreshTicks()) instead of re-reading
+    // this.ticks AFTER it was replaced — that bug made the diff always 0
+    // and the tint sweep never fired.
     const prevBySymbol = new Map<string, { price: number; changePct: number }>();
-    for (const t of this.ticks) prevBySymbol.set(t.symbol, { price: t.price, changePct: t.changePct });
+    for (const t of this.prevTicks) prevBySymbol.set(t.symbol, { price: t.price, changePct: t.changePct });
 
     const items: TickerItem[] = [];
     for (const ev of this.events) {
@@ -1249,9 +1259,16 @@ class Ticker {
   }
 
   async refreshTicks(): Promise<void> {
+    // v13.1.4 polish-7o : snapshot the current ticks BEFORE we replace
+    // them, so the Beat-4 diff in render() compares incoming vs. previous
+    // (not incoming vs. incoming). The Ticker instance is reused across
+    // modal opens, so the first refresh keeps prevTicks = [] which is the
+    // intended behaviour (every row is "fresh" on the very first render).
+    const prevTicks = this.ticks;
     const out = await loadMarketTicksWithMeta();
     this.ticks = out.ticks;
     this.lastBySource = out.bySource;
+    this.prevTicks = prevTicks;
     this.render();
   }
 
@@ -1275,15 +1292,39 @@ class Ticker {
 
   private paintSync(target: HTMLElement | null, iso: string | undefined): void {
     if (!target) return;
-    target.textContent = iso ? iso.slice(11, 16) + 'Z' : '--:--Z';
+    // v13.1.4 polish-7o : use HH:MM:SSZ (8 chars) to match the build-time
+    // {buildStamp} format so the footer reads as one consistent clock
+    // whether the stamp came from the static SSR or from the live
+    // paintSync call. Previously paintSync emitted HH:MMZ (5 chars)
+    // which made the live stamps visibly narrower than the build ones.
+    target.textContent = iso ? iso.slice(11, 19) + 'Z' : '--:--:--Z';
     // v13.1.4 polish-7e Beat 3 : one-shot acknowledgment dip when a
     // sync stamp refreshes. No loop, no color — just a quiet opacity dip.
     target.classList.add('wv__legend--flash');
     window.setTimeout(() => target.classList.remove('wv__legend--flash'), 240);
   }
 
-  start(globe: Globe, status: HTMLElement, regimeChip: HTMLElement | null = null): void {
+  start(
+    globe: Globe,
+    status: HTMLElement,
+    regimeChip: HTMLElement | null = null,
+    syncRefs?: {
+      syncGdelt: HTMLElement;
+      syncCoinGecko: HTMLElement;
+      syncBinance: HTMLElement;
+      syncYahoo: HTMLElement;
+    },
+  ): void {
     this.regimeChip = regimeChip;
+    // v13.1.4 polish-7o : setSyncTargets was previously defined but
+    // never called, which left this.syncBinance / this.syncCoinGecko /
+    // this.syncYahoo / this.syncGdelt as null. paintSync() bails out
+    // when its target is null, so every interval tick silently no-op'd
+    // and the Binance / CoinGecko / Yahoo / GDELT stamps in the footer
+    // stayed frozen at the build-time {buildStamp}. Wire the DOM refs
+    // here, BEFORE the first refreshTicks() fires, so paintSync has
+    // real targets to update.
+    if (syncRefs) this.setSyncTargets(syncRefs);
     void this.refreshGlobePins(globe).then(() => {
       status.textContent = 'last sync ' + new Date().toISOString().slice(11, 19) + 'Z';
       this.paintSync(this.syncGdelt, new Date().toISOString());
@@ -1376,7 +1417,17 @@ async function openModal(): Promise<void> {
   if (!activeTicker) {
     activeTicker = new Ticker(activeRefs.tickerList);
   }
-  activeTicker.start(activeGlobe, activeRefs.status, activeRefs.regimeChip);
+  activeTicker.start(activeGlobe, activeRefs.status, activeRefs.regimeChip, {
+    // v13.1.4 polish-7o : pass the footer sync-stamp refs through so
+    // Ticker.paintSync has real DOM targets to update. Without this
+    // the Binance / CoinGecko / Yahoo / GDELT stamps in the footer
+    // stayed frozen at the build-time {buildStamp} (see the long
+    // standing `setSyncTargets defined but never called` bug).
+    syncGdelt: activeRefs.syncGdelt,
+    syncCoinGecko: activeRefs.syncCoinGecko,
+    syncBinance: activeRefs.syncBinance,
+    syncYahoo: activeRefs.syncYahoo,
+  });
   activeRefs.hint.textContent = 'globe auto-rotates · drag to pan · hover pins for venue · 12 venues L1/L2/L3';
 }
 
