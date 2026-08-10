@@ -92,14 +92,44 @@ interface VenuePosition extends Venue {
   r: number;
 }
 const defaultVenues: Venue[] = [
-  { city: 'Digos City', lat: 6.74, lon: 125.36, weight: 1.0, caption: 'home base' },
-  { city: 'Singapore', lat: 1.35, lon: 103.82, weight: 0.8, caption: 'APAC ops' },
+  // v13.1.4 polish-7o : APAC cluster (Digos City + Singapore) centers
+  // are only ~44 viewBox units apart. Without explicit offsets the
+  // anchor='middle' home label "Digos City" (10 chars) overlaps
+  // Singapore's narrower label ~5-7 viewBox units at iPad/desktop.
+  // Spread Digos down-left, Singapore up-right so labels stack on a
+  // diagonal with a clean ~10 viewBox-unit gap. Mirror of the Zurich
+  // + London treatment in polish-7p.
+  {
+    city: 'Digos City',
+    lat: 6.74,
+    lon: 125.36,
+    weight: 1.0,
+    caption: 'home base',
+    labelAnchor: 'bottom',
+    labelDx: -30,
+    labelDy: 20,
+  },
+  {
+    city: 'Singapore',
+    lat: 1.35,
+    lon: 103.82,
+    weight: 0.8,
+    caption: 'APAC ops',
+    labelAnchor: 'top',
+    labelDx: 30,
+    labelDy: -16,
+  },
   { city: 'Tokyo', lat: 35.68, lon: 139.69, weight: 0.7, caption: 'JPX' },
   // v13.1.4 polish-7p : European cluster (Zurich + London) centers are
   // only ~17 viewBox units apart. At 375px viewport (scale 0.521) the
   // default 'auto' above-the-dot labels overlap ~33px horizontally.
   // Spread Zurich up-left, London down-right so the labels stack
   // diagonally instead of colliding on a single baseline.
+  //
+  // v13.1.4 polish-7o : increased Zurich labelDy -12 → -22 and London
+  // labelDy +14 → +24 so the vertical gap is 46 viewBox units
+  // (~29 CSS px at iPad 768, ~12 CSS px at iPhone SE), clearing any
+  // glyph-height overlap at every viewport.
   {
     city: 'Zurich',
     lat: 47.38,
@@ -107,7 +137,7 @@ const defaultVenues: Venue[] = [
     weight: 0.85,
     caption: 'CTA',
     labelAnchor: 'top',
-    labelDy: -12,
+    labelDy: -22,
     labelDx: -22,
   },
   {
@@ -117,7 +147,7 @@ const defaultVenues: Venue[] = [
     weight: 0.95,
     caption: 'LSE',
     labelAnchor: 'bottom',
-    labelDy: 14,
+    labelDy: 24,
     labelDx: 22,
   },
   { city: 'New York', lat: 40.71, lon: -74.01, weight: 0.9, caption: 'NYSE / Nasdaq' },
@@ -847,6 +877,27 @@ const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circ
     .earth-map__cap-note {
       margin-left: 0;
       flex-basis: 100%;
+    }
+  }
+
+  /* === v13.1.4 polish-7o : mobile readability ===
+     SVG font-size is interpreted in user units (viewBox 1080×540), so on
+     a 285 CSS-px-wide mobile container (scale 0.264) an 8 vbu font
+     renders at ~2.1 CSS-px actual — sub-readable. Hide Layer B (world
+     events), Layer C (GDELT overlay), Layer D (live-data hairlines),
+     and the SVG text labels below 760px so the map reads as a clean
+     institutional dot-map. Dots stay visible at full size; per-venue
+     names remain accessible via the aria-label + per-circle <title>
+     tooltips, and the count remains in the caption below. The four
+     problem clusters (Zurich/London, Singapore/Digos) get aggressive
+     labelDx/labelDy offsets above so they stay clean at iPad 768+
+     where labels are still visible. */
+  @media (max-width: 760px) {
+    .earth-map__label,
+    .earth-map__event,
+    .earth-map__gdelt,
+    .earth-map__live {
+      display: none;
     }
   }
 </style>
