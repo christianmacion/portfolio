@@ -77,6 +77,26 @@ const buildDate = new Date().toISOString().slice(0, 10);
        HTML5 disallows nested <main>; axe-core landmark-unique fails.
        Replaced with <div> so BaseLayout remains the single main landmark. -->
   <div class="work-body container container-narrow">
+    <!-- v13.1.4 (2026-08-10, work-uplift) : single-card highlight
+         strip for the most-recent deliverable since the last /work/
+         refresh. Same pattern as /now/ polish-7o commit 6ee3793.
+         Mono + amber + 1 accent; border-left 2px is the load-bearing
+         accent (≤ 2px corner rule honored). -->
+    <aside class="work-shipped" aria-label="Most recent deliverable since last /work/ refresh">
+      <p class="work-shipped__eyebrow mono">SHIPPED SINCE LAST /WORK/ REFRESH</p>
+      <h2 class="work-shipped__title">Mobile SVG label legibility on ProbabilityDecay + AgentGraph</h2>
+      <p class="work-shipped__meta mono">
+        <a
+          href="https://github.com/christianmacion/christianmacion.github.io/commit/2986156"
+          target="_blank"
+          rel="noopener noreferrer">commit 2986156</a
+        > · 2026-08-10 · 2 components · +324 / −105
+      </p>
+      <p class="work-shipped__impact">
+        Eliminated the SVG <code>&lt;text&gt;</code> font-size clamp on ProbabilityDecay + AgentGraph at ≤760px. 4-phone coverage (iPhone SE, iPhone 12, Pixel 5, Galaxy S20) confirmed: 0 label collisions and consistent component-level render across all four viewports.
+      </p>
+    </aside>
+
     <!-- § 01 : The Work Loop -->
     <section class="work-section" id="work-loop" aria-labelledby="work-loop-h" data-section-id="work">
       <!-- v9.7.2 : migrated non-canonical `.work-section__mark` → canonical
@@ -158,9 +178,9 @@ const buildDate = new Date().toISOString().slice(0, 10);
       <SectionMark index="03" title="AI engineering case studies" ariaHidden={false} />
       <h2 class="work-section__title" id="work-ai-h">Three reproducible eval-first cases.</h2>
       <p class="work-section__body">
-        Every AI case ships with a reproducible scorecard. The eval harness is the headline artifact
- to not the demo. Each project below commits to an in-repo labeled set, runs the harness, and
-        reports the numbers in a single PDF.
+        Every AI case ships with a reproducible scorecard. The eval harness is the headline
+        artifact, not the demo. Each project below commits to an in-repo labeled set, runs the
+        harness, and reports the numbers in a single PDF.
       </p>
 
       <ul class="work-grid" role="list">
@@ -211,6 +231,13 @@ const buildDate = new Date().toISOString().slice(0, 10);
             VIX. Updated at build.
           </p>
           <a class="work-live__link" href={path('/markets')}>Open the terminal →</a>
+          <p class="work-live__meta mono">
+            SHIPPED · 2026-08-08 · <a
+              href="https://github.com/christianmacion/christianmacion.github.io/commit/9003283"
+              target="_blank"
+              rel="noopener noreferrer">commit 9003283</a
+            > · <a href={path('/markets/')}>/markets/</a>
+          </p>
         </div>
 
         <div class="work-live__card">
@@ -221,6 +248,13 @@ const buildDate = new Date().toISOString().slice(0, 10);
             NDA-safe by construction.
           </p>
           <a class="work-live__link" href={path('/prediction-markets')}>Open the book →</a>
+          <p class="work-live__meta mono">
+            SHIPPED · 2026-08-08 · <a
+              href="https://github.com/christianmacion/christianmacion.github.io/commit/9003283"
+              target="_blank"
+              rel="noopener noreferrer">commit 9003283</a
+            > · <a href={path('/prediction-markets/')}>/prediction-markets/</a>
+          </p>
         </div>
 
         <div class="work-live__card">
@@ -231,6 +265,13 @@ const buildDate = new Date().toISOString().slice(0, 10);
             job-change or regime-event override.
           </p>
           <a class="work-live__link" href={path('/now')}>Open the page →</a>
+          <p class="work-live__meta mono">
+            SHIPPED · 2026-08-10 · <a
+              href="https://github.com/christianmacion/christianmacion.github.io/commit/6ee3793"
+              target="_blank"
+              rel="noopener noreferrer">commit 6ee3793</a
+            > · <a href={path('/now/')}>/now/</a>
+          </p>
         </div>
       </div>
     </section>
@@ -243,7 +284,7 @@ const buildDate = new Date().toISOString().slice(0, 10);
       </h2>
       <p class="work-section__body">
         The shipped record is downstream of the build rhythm. Three workstreams compound
-        upstream. Each ships with a real artifact you can verify. not a claim backed only by a
+        upstream. Each ships with a real artifact you can verify, not a claim backed only by a
         name. The discipline is the same in every lane: ship behind a gate, widen the funnel
         second, log the postmortem.
       </p>
@@ -275,7 +316,13 @@ const buildDate = new Date().toISOString().slice(0, 10);
       />
     </section>
 
-    <p class="work-stamp mono">Last build: {buildDate} · Quant Researcher · 31-gate eval-first</p>
+    <p class="work-stamp mono">
+      Last updated: 2026-08-10 · <a
+        href="https://github.com/christianmacion/christianmacion.github.io/commit/2986156"
+        target="_blank"
+        rel="noopener noreferrer">commit 2986156</a
+      > · Quant Researcher · 31-gate eval-first
+    </p>
   </div>
 </BaseLayout>
 
@@ -484,6 +531,101 @@ const buildDate = new Date().toISOString().slice(0, 10);
   }
   .work-live__link:hover {
     text-decoration: underline;
+  }
+
+  /* v13.1.4 (2026-08-10, work-uplift) : per-bullet metadata line
+     below each LIVE card link. Status (SHIPPED / IN FLIGHT) + date
+     + commit + path. Mono, ink-3, footnote register. Lives below
+     the link, never inline. Same pattern as /now/ polish-7o
+     .now-list__meta (commit 6ee3793). */
+  .work-live__meta {
+    margin-top: var(--space-xs, 0.25rem);
+    font-size: var(--text-2xs, 0.6875rem);
+    color: var(--c-ink-3);
+    letter-spacing: 0.04em;
+    line-height: 1.5;
+  }
+  .work-live__meta a {
+    color: var(--c-ink-2);
+    text-decoration: underline;
+    text-decoration-color: var(--c-rule);
+    text-underline-offset: 2px;
+  }
+  .work-live__meta a:hover {
+    text-decoration-color: var(--c-amber);
+  }
+
+  /* v13.1.4 (2026-08-10, work-uplift) : single-card highlight
+     strip for the most-recent deliverable. Mono + amber + 1 accent.
+     No halo, no glow, no gradient. Border-left 2px is the
+     load-bearing accent (≤ 2px corner rule honored). Same pattern
+     as /now/ polish-7o .now-shipped (commit 6ee3793). */
+  .work-shipped {
+    margin: var(--space-lg, 1.5rem) 0 var(--space-xl, 2rem);
+    padding: var(--space-md, 0.75rem) var(--space-lg, 1.25rem);
+    background: var(--c-paper);
+    border: 1px solid var(--c-rule);
+    border-left: 2px solid var(--c-amber);
+    border-radius: var(--radius-sm, 4px);
+  }
+  .work-shipped__eyebrow {
+    margin: 0 0 var(--space-sm, 0.5rem);
+    font-size: var(--text-2xs, 0.6875rem);
+    color: var(--c-ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-weight: 500;
+  }
+  .work-shipped__title {
+    font-family: var(--j-ff-display);
+    font-size: var(--text-lg, 1.125rem);
+    color: var(--c-ink);
+    font-weight: 700;
+    letter-spacing: -0.005em;
+    line-height: 1.25;
+    margin: 0 0 var(--space-sm, 0.5rem);
+    max-width: 60ch;
+  }
+  .work-shipped__meta {
+    font-size: var(--text-2xs, 0.6875rem);
+    color: var(--c-ink-3);
+    margin: 0 0 var(--space-md, 0.75rem);
+    letter-spacing: 0.04em;
+  }
+  .work-shipped__meta a {
+    color: var(--c-ink-2);
+    text-decoration: underline;
+    text-decoration-color: var(--c-rule);
+    text-underline-offset: 2px;
+  }
+  .work-shipped__meta a:hover {
+    text-decoration-color: var(--c-amber);
+  }
+  .work-shipped__impact {
+    font-size: var(--text-sm, 0.875rem);
+    color: var(--c-ink-2);
+    line-height: 1.6;
+    margin: 0;
+    max-width: 64ch;
+  }
+  .work-shipped__impact code {
+    font-family: var(--ff-mono);
+    font-size: 0.875em;
+    background: var(--c-bg-2);
+    padding: 0.05rem 0.3rem;
+    border-radius: 3px;
+  }
+
+  /* v13.1.4 (2026-08-10, work-uplift) : commit-link styling on the
+     bottom recency stamp. Matches .work-shipped__meta. */
+  .work-stamp a {
+    color: var(--c-ink-2);
+    text-decoration: underline;
+    text-decoration-color: var(--c-rule);
+    text-underline-offset: 2px;
+  }
+  .work-stamp a:hover {
+    text-decoration-color: var(--c-amber);
   }
 
   .work-cta {
