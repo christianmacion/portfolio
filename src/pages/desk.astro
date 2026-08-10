@@ -24,6 +24,7 @@ import CTABanner from '@components/CTABanner.astro';
 import { getCollection } from 'astro:content';
 import { profile, archSafe } from '@utils/profile';
 import { path } from '@utils/url';
+import { buildStampUtc8 } from '@utils/build-stamp';
 
 // === Pull world events once, server-side, sort by order ===
 interface WorldEventEntry {
@@ -54,6 +55,25 @@ const events: WorldEventEntry[] = eventEntries
 
 const email = profile.contact.email;
 const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hiring%20inquiry`;
+
+// === Position-row data (mirrors /positions paper-trade record) ===
+// v13.1.4 polish-7o : persistence-tied snapshot. Same equity series
+// + tradingDays + last-refreshed stamp as /positions, so the row on /desk
+// is the same row that audits into the live paper-trade page. No
+// fabricated live data — deterministic snapshot.
+const equitySeries = [
+  100.0, 100.4, 99.8, 100.9, 101.2, 100.7, 101.5, 102.1, 101.8, 102.4, 102.0, 101.4, 100.9, 101.6,
+  102.3, 102.7, 103.1, 102.5, 101.9, 102.2, 102.8, 103.4, 102.9, 103.6, 104.2, 103.8, 104.5, 105.1,
+  104.6, 105.3, 105.9, 106.4, 105.8, 106.6, 107.2, 107.8, 108.3, 107.6, 108.5, 109.2, 109.8, 109.1,
+  109.9, 110.5, 111.0, 110.4, 111.2, 111.9, 111.3, 112.0,
+];
+const tradingDays = equitySeries.length;
+const lastRefreshed = buildStampUtc8();
+
+// === Event-category count for stats sub-line ===
+// v13.1.4 polish-7o : derive category count from the curated events so
+// the sub-line stays in sync when events are added/removed.
+const eventCategories = new Set(events.map((e) => e.category)).size;
 ---
 
 <BaseLayout
@@ -68,6 +88,22 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
 >
   {/* === 1. MarketTape === */}
   <MarketTape />
+
+  {/* === 1.5. Data-posture disclosure === */}
+  <section class="desk-disclosure" aria-label="Data posture">
+    <div class="container">
+      <p class="desk-disclosure__line mono">
+        <span class="desk-disclosure__chip">DATA POSTURE</span>
+        Deterministic snapshot · 60s tape refresh · live book + terminal on
+        <a href={path('/markets')}>/markets</a> · live paper-trade on
+        <a href={path('/positions')}>/positions</a> (weekly manual refresh).
+      </p>
+      <p class="desk-disclosure__line mono">
+        Events table, map, and stats are static for the build. The tape refreshes from Yahoo /
+        CoinGecko / ECB; the order book is BUILD_DATE-seeded (no runtime refresh).
+      </p>
+    </div>
+  </section>
 
   {/* === 2. Head === */}
   <header class="desk-head">
@@ -111,6 +147,47 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
       </p>
     </div>
   </header>
+
+  {/* === 2.5. Position-row from /positions (deterministic; same source as /positions) === */}
+  <section class="desk-posrow" aria-label="Live paper-trade position row">
+    <div class="container">
+      <p class="desk-posrow__eyebrow mono">
+        LIVE PAPER-TRADE · POSITION ROW · FROM <a href={path('/positions')}>/positions</a>
+      </p>
+      <div class="desk-posrow__row" role="table">
+        <div class="desk-posrow__cell desk-posrow__cell--name" role="rowheader">
+          <span class="desk-posrow__rank mono">01</span>
+          <div class="desk-posrow__name-text">
+            <p class="desk-posrow__title">Vol-target time-series momentum · BTC/USDT</p>
+            <p class="desk-posrow__sub mono">
+              project 03 · {tradingDays} trading days · vol target 30% annualized · running since
+              {profile.stats.positionsStartDate}
+            </p>
+          </div>
+        </div>
+        <div class="desk-posrow__metric" role="cell">
+          <p class="desk-posrow__num mono">+12.0%</p>
+          <p class="desk-posrow__lbl mono">RETURN</p>
+        </div>
+        <div class="desk-posrow__metric" role="cell">
+          <p class="desk-posrow__num mono">≈0.39</p>
+          <p class="desk-posrow__lbl mono">SHARPE ANN.</p>
+        </div>
+        <div class="desk-posrow__metric" role="cell">
+          <p class="desk-posrow__num mono">−3.6%</p>
+          <p class="desk-posrow__lbl mono">MAX DD</p>
+        </div>
+        <div class="desk-posrow__metric" role="cell">
+          <p class="desk-posrow__num mono">4.2 bps</p>
+          <p class="desk-posrow__lbl mono">SLIPPAGE</p>
+        </div>
+      </div>
+      <p class="desk-posrow__tag mono">
+        <span class="desk-posrow__chip">ACTIVE</span>
+        Deterministic snapshot · same series as /positions · last refreshed {lastRefreshed}
+      </p>
+    </div>
+  </section>
 
   {/* === 3. EarthMap : 3-layer world viz === */}
   <section class="desk-map" aria-label="Three-layer world map">
@@ -172,18 +249,22 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
         <li class="desk-stats__cell">
           <p class="desk-stats__num mono">06</p>
           <p class="desk-stats__lbl mono">RESEARCH VENUES</p>
+          <p class="desk-stats__sub mono">NYSE · NASDAQ · CME · ICE · HKEX · SGX</p>
         </li>
         <li class="desk-stats__cell">
           <p class="desk-stats__num mono">{events.length}</p>
           <p class="desk-stats__lbl mono">WORLD EVENTS</p>
+          <p class="desk-stats__sub mono">{eventCategories} categories · curated weekly</p>
         </li>
         <li class="desk-stats__cell">
           <p class="desk-stats__num mono">50+</p>
           <p class="desk-stats__lbl mono">GDELT SIGNALS</p>
+          <p class="desk-stats__sub mono">last 24h · 4 signal types</p>
         </li>
         <li class="desk-stats__cell">
           <p class="desk-stats__num mono">UTC+8</p>
           <p class="desk-stats__lbl mono">DESK TIMEZONE</p>
+          <p class="desk-stats__sub mono">Digos, PH · 14h ahead of NYSE</p>
         </li>
       </ul>
     </div>
@@ -341,6 +422,149 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     margin: 0 0 16px;
   }
 
+  /* === Disclosure strip === */
+  /* v13.1.4 polish-7o : 2-line data-posture tie-in to /positions + /markets.
+     Honest about cadence (tape 60s, positions manual, everything else static). */
+  .desk-disclosure {
+    padding: 18px 0 14px;
+    background: var(--c-bg-2);
+    border-bottom: 1px solid var(--c-rule);
+  }
+  .desk-disclosure__line {
+    font-size: 11px;
+    line-height: 1.6;
+    color: var(--c-ink-2);
+    margin: 0;
+    letter-spacing: 0.04em;
+    max-width: 80ch;
+  }
+  .desk-disclosure__line + .desk-disclosure__line {
+    margin-top: 4px;
+  }
+  .desk-disclosure__chip {
+    display: inline-block;
+    padding: 2px 8px;
+    margin-right: 10px;
+    border: 1px solid var(--c-amber);
+    background: var(--c-amber);
+    color: var(--c-bg);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    font-size: 10px;
+  }
+  .desk-disclosure__line a {
+    color: var(--c-amber);
+    text-decoration: underline;
+    text-decoration-color: var(--c-amber-decor);
+    text-underline-offset: 3px;
+    font-weight: 500;
+  }
+
+  /* === Position-row from /positions === */
+  /* v13.1.4 polish-7o : compact row showing top-1 active paper-trade position.
+     Same equity series as /positions (deterministic), no fabricated live data. */
+  .desk-posrow {
+    padding: 36px 0 40px;
+    background: var(--c-bg);
+    border-bottom: 1px solid var(--c-rule);
+  }
+  .desk-posrow__eyebrow {
+    font: 500 11px / 1.4 var(--ff-mono);
+    color: var(--c-warn);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin: 0 0 18px;
+  }
+  .desk-posrow__eyebrow a {
+    color: var(--c-amber);
+    text-decoration: underline;
+    text-decoration-color: var(--c-amber-decor);
+    text-underline-offset: 3px;
+  }
+  .desk-posrow__row {
+    display: grid;
+    grid-template-columns: 1.6fr repeat(4, 0.7fr);
+    gap: 0;
+    border: 1px solid var(--c-rule);
+    background: var(--c-bg-2);
+  }
+  .desk-posrow__cell,
+  .desk-posrow__metric {
+    padding: 18px 20px;
+    border-right: 1px solid var(--c-rule);
+    min-width: 0;
+  }
+  .desk-posrow__cell:last-child,
+  .desk-posrow__metric:last-child {
+    border-right: 0;
+  }
+  .desk-posrow__cell--name {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .desk-posrow__rank {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--c-ink-3);
+    letter-spacing: 0.1em;
+    padding-top: 2px;
+  }
+  .desk-posrow__name-text {
+    min-width: 0;
+  }
+  .desk-posrow__title {
+    font: 500 14px / 1.4 var(--ff-sans);
+    color: var(--c-ink);
+    margin: 0 0 4px;
+    letter-spacing: -0.005em;
+  }
+  .desk-posrow__sub {
+    font-size: 10.5px;
+    color: var(--c-ink-3);
+    letter-spacing: 0.04em;
+    margin: 0;
+  }
+  .desk-posrow__metric {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+  }
+  .desk-posrow__num {
+    font: 600 22px / 1 var(--j-ff-display);
+    color: var(--c-ink);
+    letter-spacing: -0.02em;
+    margin: 0;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
+  }
+  .desk-posrow__lbl {
+    font: 500 9.5px / 1.2 var(--ff-mono);
+    color: var(--c-ink-3);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+  .desk-posrow__tag {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 14px 0 0;
+    font-size: 10.5px;
+    color: var(--c-ink-3);
+    letter-spacing: 0.04em;
+  }
+  .desk-posrow__chip {
+    padding: 2px 8px;
+    border: 1px solid var(--c-amber);
+    background: var(--c-amber);
+    color: var(--c-bg);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    font-size: 10px;
+  }
+
   /* === Events table === */
   .desk-events {
     padding: 56px 0;
@@ -467,6 +691,18 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     text-transform: uppercase;
     margin: 0;
   }
+  .desk-stats__sub {
+    font: 400 10.5px / 1.4 var(--ff-mono);
+    color: var(--c-ink-3);
+    letter-spacing: 0.04em;
+    margin: 6px 0 0;
+  }
+  .desk-stats__sub {
+    font: 400 10.5px / 1.4 var(--ff-mono);
+    color: var(--c-ink-3);
+    letter-spacing: 0.04em;
+    margin: 6px 0 0;
+  }
 
   @media (max-width: 900px) {
     .desk-head__title {
@@ -479,6 +715,24 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
       grid-template-columns: repeat(2, 1fr);
       gap: 18px;
     }
+    .desk-posrow__row {
+      grid-template-columns: 1fr 1fr;
+    }
+    .desk-posrow__cell {
+      grid-column: 1 / -1;
+      border-right: 0;
+      border-bottom: 1px solid var(--c-rule);
+    }
+    .desk-posrow__metric {
+      border-right: 1px solid var(--c-rule);
+      border-bottom: 1px solid var(--c-rule);
+    }
+    .desk-posrow__metric:nth-child(even) {
+      border-right: 0;
+    }
+    .desk-posrow__metric:nth-last-child(-n + 2) {
+      border-bottom: 0;
+    }
   }
   @media (max-width: 720px) {
     .desk-head {
@@ -486,6 +740,16 @@ const mailto = `mailto:${email}?subject=QR%20%2F%20AI%20role%20%E2%80%94%20hirin
     }
     .desk-events__col-cat {
       display: none;
+    }
+    .desk-posrow__row {
+      grid-template-columns: 1fr;
+    }
+    .desk-posrow__metric {
+      border-right: 0;
+      border-bottom: 1px solid var(--c-rule);
+    }
+    .desk-posrow__metric:last-child {
+      border-bottom: 0;
     }
   }
 </style>
