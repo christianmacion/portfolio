@@ -1,6 +1,6 @@
 ---
 /**
- * resources.astro :  /resources/ · v12.W4 hub page.
+ * resources.astro :  /resources/ · v13.1.4 hub page.
  *
  * Parent for the three reference surfaces that were previously orphaned
  * (reachable by URL, unreachable by navigation):
@@ -12,10 +12,14 @@
  * those three a single institutional entry point rather than three
  * separate rail items competing with the hiring path.
  *
+ * v13.1.4 polish-7o : per-card previews + recency badge + 2-3 sentence blurbs.
+ * The depth preview is the position the surface occupies in the visitor's
+ * mind — not the surface itself. (Ries/Trout · Positioning)
+ *
  * Section layout (single column, editorial register):
  *   02 :  reference   (SectionMark)
  *   H2   :  The reference shelf.
- *   §    :  three cards (notes / repos / glossary)
+ *   §    :  three cards (notes / repos / glossary) with depth previews
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
 import SectionMark from '@components/SectionMark.astro';
@@ -36,11 +40,23 @@ const subpage = {
 
 const lastUpdated = buildStampUtc8();
 
+// Recent site-wide sweeps that touched the three surfaces below
+// (derived from `git log` on the four target pages). The recency
+// badge preserves the "appears current" reputation — Machiavelli
+// Ch.15 — so a returning visitor sees that the shelf is alive.
+const recentUpdates = [
+  'v12.W4 Bryllim parity + live data terminal',
+  'v9.5 → v11.W8 Bryllim chrome + quant-researcher polish',
+  'v9.3.1 chrome discipline sweep across glossary',
+];
+
 interface Resource {
   href: string;
   label: string;
   kicker: string;
   body: string;
+  previewLabel: string;
+  preview: string[];
 }
 
 const resources: Resource[] = [
@@ -49,21 +65,53 @@ const resources: Resource[] = [
     label: 'Notes',
     kicker: 'RESEARCH LOG',
     body:
-      'Working notebook. Postmortems, sharp observations, lessons that survived review. Written when the work has something to teach, not on an editorial calendar.',
+      'Working notebook: postmortems, sharp observations, and the lessons that survived review. ' +
+      'Six entries across two lanes (three quant, three AI), written when the work has something ' +
+      'to teach — not on an editorial calendar. Best read by the hiring manager who wants to ' +
+      'see how the practitioner thinks, not just what they shipped.',
+    previewLabel: 'RECENT ENTRIES',
+    preview: [
+      'PBO is a multiple-testing tax, not a model-fitting tax. (2026-08-04)',
+      'The eval harness is the product. The LLM is the demo. (2026-08-03)',
+      'Regime-conditional deployment > a single Sharpe ratio. (2026-08-01)',
+      'Deflated Sharpe is a backtest validator, not a forward-edge oracle. (2026-07-29)',
+      'Multi-agent ≠ faster. Multi-agent = more checks per minute. (2026-07-31)',
+    ],
   },
   {
     href: path('/repos'),
     label: 'Repos',
     kicker: 'PUBLIC CODE',
     body:
-      'Public repositories: research harnesses, backtest scaffolding, the tooling that makes the loop reproducible. Read the code before you read the claims.',
+      'Eight public repositories across three lanes (quant, AI, infra). Each ships a runnable ' +
+      'scorecard or a reproducible methodology — read the code before you read the claims. ' +
+      'Best read by the engineer who wants to verify the work, not just describe it.',
+    previewLabel: 'REPO LANES',
+    preview: [
+      '4 quant · mcp-backtest-server · qfin-rag-harness · factor-table-research · regime-conditional-deploy',
+      '2 AI · numerical-faithfulness-eval · eval-mcp-server',
+      '2 infra · portfolio-site (this site) · doctrine-corpus',
+      'Lane tag + language badge + runnable scorecard on every entry',
+      'Every repo ships with a README and a reproducible methodology or a live demo',
+    ],
   },
   {
     href: path('/glossary'),
     label: 'Glossary',
     kicker: 'WORKING DEFINITIONS',
     body:
-      'Terms used across methodology and proof, defined the way they are actually used here, not the way a textbook uses them. Ambiguity is where backtests go to die.',
+      "Twenty-five terms used across methodology and proof, defined the way they are actually " +
+      "used here — not the way a textbook uses them. Each definition is short enough to read " +
+      "in thirty seconds and stable enough to deep-link from the methodology page. Best read " +
+      "by the recruiter who doesn't yet know the field.",
+    previewLabel: 'CATEGORIES',
+    preview: [
+      '17 quant · alpha · block bootstrap · CSCV/PBO · deflated Sharpe · drawdown · embargo · walk-forward · slippage · survivorship bias · G1–G31 evaluation stack',
+      '8 AI · agent charter · eval harness · frozen spec · JSON Schema · LLM-as-judge · MCP · multi-agent · RAG',
+      'Each term · 280-char blurb on the index + long-form prose on /glossary/[slug]',
+      'Alphabetical · 2-column on desktop · 1-column on mobile',
+      'Stable anchor IDs · deep-linkable from methodology and proof',
+    ],
   },
 ];
 ---
@@ -91,6 +139,12 @@ const resources: Resource[] = [
   </SubpageHero>
 
   <div class="resources-body container container-narrow">
+    <aside class="resources-recency" aria-label="Recent site updates">
+      <span class="resources-recency__dot" aria-hidden="true"></span>
+      <span class="resources-recency__label mono">RECENT</span>
+      <span class="resources-recency__text mono">{recentUpdates.join(' · ')}</span>
+    </aside>
+
     <ul class="resources-list" role="list">
       {
         resources.map((r) => (
@@ -100,6 +154,14 @@ const resources: Resource[] = [
               <a class="resource-card__link" href={r.href}>{r.label}</a>
             </h2>
             <p class="resource-card__body">{r.body}</p>
+            <div class="resource-card__preview">
+              <p class="resource-card__preview-label mono">{r.previewLabel}</p>
+              <ul class="resource-card__preview-list mono" role="list">
+                {r.preview.map((b) => (
+                  <li>{b}</li>
+                ))}
+              </ul>
+            </div>
           </li>
         ))
       }
@@ -153,6 +215,52 @@ const resources: Resource[] = [
   .resource-card__body {
     margin: 0;
     color: var(--c-ink-2);
+  }
+  .resource-card__preview {
+    margin-top: var(--sp-3);
+    padding-top: var(--sp-3);
+    border-top: 1px dotted var(--c-rule);
+  }
+  .resource-card__preview-label {
+    margin: 0 0 var(--sp-2);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--c-ink-3);
+  }
+  .resource-card__preview-list {
+    margin: 0;
+    padding-left: var(--sp-4);
+    color: var(--c-ink-2);
+    font-size: 12px;
+    line-height: 1.55;
+  }
+  .resource-card__preview-list li {
+    margin-bottom: 2px;
+  }
+  .resources-recency {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+    margin-bottom: var(--sp-7);
+    padding: var(--sp-3) 0;
+    border-bottom: 1px dashed var(--c-rule);
+  }
+  .resources-recency__dot {
+    width: 6px;
+    height: 6px;
+    background: var(--c-amber);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .resources-recency__label {
+    color: var(--c-amber);
+    letter-spacing: 0.12em;
+    font-size: var(--fs-xs, 11px);
+  }
+  .resources-recency__text {
+    color: var(--c-ink-3);
+    letter-spacing: 0.06em;
+    font-size: var(--fs-xs, 11px);
   }
   .resources-stamp {
     font-size: var(--fs-xs, 11px);
