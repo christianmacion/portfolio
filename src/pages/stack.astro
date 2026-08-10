@@ -30,46 +30,185 @@ const subpage = {
 
 const lastUpdated = buildStampUtc8();
 
+/**
+ * Verification fields (v13.1.4 polish-7o) :
+ *   version : the pin actually resolved on this machine. Node/npm packages
+ *             read from package-lock.json; Python packages from the local
+ *             interpreter; protocols from the published spec revision.
+ *   license : upstream license as declared by the package metadata.
+ *   usedIn  : count of the 15 shipped projects under src/content/projects/
+ *             (6 AI + 9 quant) whose declared `stack:` frontmatter lists
+ *             the tool. Site-only tooling honestly reports 0.
+ */
 interface StackCard {
   category: string;
-  items: Array<{ name: string; tag: string; note: string }>;
+  items: Array<{
+    name: string;
+    tag: string;
+    note: string;
+    version: string;
+    license: string;
+    usedIn: string;
+  }>;
 }
+
+const PROJECT_COUNT = 15; // 6 under projects/ai + 9 under projects/quant
 
 const stack: StackCard[] = [
   {
     category: 'language & runtime',
     items: [
-      { name: 'TypeScript', tag: 'lang', note: 'Portfolio · Astro · front-end · eval harness glue.' },
-      { name: 'Python', tag: 'lang', note: 'Backtests · RAG · MCP servers · data plumbing.' },
-      { name: 'Astro 7', tag: 'framework', note: 'Static-first portfolio; per-route islands <100KB gz.' },
-      { name: 'Node 22', tag: 'runtime', note: 'Astro SSR · local script glue · GitHub API helpers.' },
+      {
+        name: 'Python',
+        tag: 'lang',
+        version: '3.12+ (local 3.14.5)',
+        license: 'PSF-2.0',
+        usedIn: '15 of 15',
+        note: 'Every shipped project is Python : backtests, RAG, judge harness, MCP server.',
+      },
+      {
+        name: 'TypeScript',
+        tag: 'lang',
+        version: '5.9.3',
+        license: 'Apache-2.0',
+        usedIn: '0 of 15 · this site + tooling',
+        note: 'Types the site, the content schemas, and the build scripts. No research code.',
+      },
+      {
+        name: 'Astro',
+        tag: 'framework',
+        version: '7.2.0',
+        license: 'MIT',
+        usedIn: '0 of 15 · this site',
+        note: 'Static-first, zero JS by default; islands only where a chart needs them.',
+      },
+      {
+        name: 'Node',
+        tag: 'runtime',
+        version: '22 LTS (CI pin)',
+        license: 'MIT',
+        usedIn: '0 of 15 · build only',
+        note: 'Runs the prebuild chain : resumes, OG image, GDELT pull, graph snapshot.',
+      },
     ],
   },
   {
-    category: 'data + retrieval',
+    category: 'data + numerics',
     items: [
-      { name: 'Postgres', tag: 'db', note: 'Production ledger · strategy state · audit log.' },
-      { name: 'SQLite', tag: 'db', note: 'Eval fixtures · local scorecards · portable snapshots.' },
-      { name: 'TF-IDF cosine', tag: 'rag', note: 'Citation-grounded retrieval over curated corpus.' },
-      { name: 'KaTeX', tag: 'math', note: 'In-line equations on /skills, /methodology, /markets.' },
+      {
+        name: 'NumPy',
+        tag: 'numerics',
+        version: '2.5.1',
+        license: 'BSD-3-Clause',
+        usedIn: '9 of 15',
+        note: 'The array layer under every quant study : returns, bootstraps, null draws.',
+      },
+      {
+        name: 'pandas',
+        tag: 'data',
+        version: '3.0.5',
+        license: 'BSD-3-Clause',
+        usedIn: '9 of 15',
+        note: 'Panel alignment and resampling. Point-in-time joins, never a forward fill.',
+      },
+      {
+        name: 'Matplotlib',
+        tag: 'charts',
+        version: '3.11.1',
+        license: 'Matplotlib (BSD-style)',
+        usedIn: '9 of 15',
+        note: 'Equity curves and diagnostic panels rendered straight from the trade ledger.',
+      },
+      {
+        name: 'TF-IDF cosine',
+        tag: 'rag',
+        version: 'from-scratch (stdlib)',
+        license: 'own code · MIT',
+        usedIn: '1 of 15',
+        note: 'Retrieval for rag-recall : no vector DB, no API key, recall@3 = 0.886.',
+      },
+      {
+        name: 'KaTeX',
+        tag: 'math',
+        version: '0.17.0',
+        license: 'MIT',
+        usedIn: '0 of 15 · site rendering',
+        note: 'In-line equations on /skills, /methodology, /markets. Server-rendered, no runtime JS.',
+      },
     ],
   },
   {
     category: 'infra + deploy',
     items: [
-      { name: 'Cloudflare Pages', tag: 'host', note: 'Static + Functions + Pages CI from main.' },
-      { name: 'GitHub Actions', tag: 'ci', note: 'Lighthouse, axe-core, NDA-guard, asset audit.' },
-      { name: 'Wrangler', tag: 'deploy', note: 'Pages deploy via npm run deploy:mirror.' },
-      { name: 'Workers', tag: 'edge', note: 'Functions middleware: CSP, security headers.' },
+      {
+        name: 'GitHub Pages',
+        tag: 'host',
+        version: 'actions/deploy-pages@v4',
+        license: 'service (no license)',
+        usedIn: '0 of 15 · hosts this site',
+        note: 'One deploy target, no mirror. Every push to main ships the whole static build.',
+      },
+      {
+        name: 'GitHub Actions',
+        tag: 'ci',
+        version: '7 workflows',
+        license: 'service (no license)',
+        usedIn: '0 of 15 · CI',
+        note: 'Build, deploy gate, Lighthouse, a11y sweep, vibe audit, NDA guard, nightly GDELT.',
+      },
+      {
+        name: 'Pagefind',
+        tag: 'search',
+        version: '1.5.2',
+        license: 'MIT',
+        usedIn: '0 of 15 · site search',
+        note: 'Static index built postbuild. Search runs client-side with no backend.',
+      },
+      {
+        name: 'Sharp',
+        tag: 'assets',
+        version: '0.35.3',
+        license: 'Apache-2.0',
+        usedIn: '0 of 15 · asset pipeline',
+        note: 'Image optimisation and OG-card generation at build time.',
+      },
     ],
   },
   {
     category: 'ai + eval',
     items: [
-      { name: 'MCP', tag: 'protocol', note: 'Backtest server · eval-mcp-server · primitives 3/3.' },
-      { name: 'RAG harness', tag: 'eval', note: '16-paper corpus · 0 LLM calls · deterministic.' },
-      { name: 'numerical-faithfulness', tag: 'eval', note: '10 demo claims · 5 pass · 5 fail-by-design.' },
-      { name: 'Axe-core', tag: 'a11y', note: 'WCAG 2.2 AA · CI gate · lighthouse ≥ 95 floor.' },
+      {
+        name: 'MCP',
+        tag: 'protocol',
+        version: 'spec rev 2025-06-18',
+        license: 'MIT (spec)',
+        usedIn: '1 of 15',
+        note: 'eval-mcp-server implements all three primitives : Tools, Resources, Prompts.',
+      },
+      {
+        name: 'OpenTelemetry GenAI',
+        tag: 'tracing',
+        version: 'semconv gen_ai.*',
+        license: 'Apache-2.0',
+        usedIn: '1 of 15',
+        note: 'toolcall-agent emits spans per tool call, so failures are readable after the fact.',
+      },
+      {
+        name: 'Streamlit',
+        tag: 'demo',
+        version: 'rolling (1.x)',
+        license: 'Apache-2.0',
+        usedIn: '2 of 15',
+        note: 'Reviewer-facing front door for rag-recall and slop-scanner. One command to run.',
+      },
+      {
+        name: 'axe-core',
+        tag: 'a11y',
+        version: '4.12.1',
+        license: 'MPL-2.0',
+        usedIn: '0 of 15 · site CI gate',
+        note: 'WCAG 2.2 AA sweep on every route. Red axe run blocks the deploy gate.',
+      },
     ],
   },
 ];
@@ -86,16 +225,17 @@ const stack: StackCard[] = [
   <SubpageHero slug={subpage.slug} label={subpage.pageTitle} roleLine={subpage.roleLine}>
     <p class="page-head__eyebrow mono">
       <span class="page-head__eyebrow-chip">{subpage.chip}</span>
-      <span class="page-head__eyebrow-line">{stack.length} CATEGORIES · {stack.reduce((s, c) => s + c.items.length, 0)} ITEMS · UPDATED ON SHIP</span>
+      <span class="page-head__eyebrow-line">{stack.length} CATEGORIES · {stack.reduce((s, c) => s + c.items.length, 0)} ITEMS · VERSION + LICENSE PINNED</span>
     </p>
     <SectionMark index={subpage.index} title={subpage.title} ariaHidden={false} />
     <h2 class="page-head__title" data-words>
-      What runs in prod. <span class="hl">What is on the bench</span>.
+      What runs in prod. <span class="hl">Pinned, licensed, counted</span>.
     </h2>
     <p class="page-head__lede">
-      The inventory. Production tools ship with a tag and a one-line note explaining why
-      the choice, not the alternative. The bench list is the next-iteration pipeline :  what
-      is installed but not yet load-bearing.
+      The inventory, with the receipts. Every tool carries the version actually resolved on
+      this machine, its upstream license, and how many of the {PROJECT_COUNT} shipped projects
+      declare it. Site-only tooling reports zero rather than borrowing credit from the research
+      work.
     </p>
   </SubpageHero>
 
@@ -115,6 +255,20 @@ const stack: StackCard[] = [
                     <span class="stack-card__tag mono">{it.tag}</span>
                   </div>
                   <p class="stack-card__note">{it.note}</p>
+                  <dl class="stack-card__meta mono">
+                    <div class="stack-card__meta-row">
+                      <dt>version</dt>
+                      <dd>{it.version}</dd>
+                    </div>
+                    <div class="stack-card__meta-row">
+                      <dt>license</dt>
+                      <dd>{it.license}</dd>
+                    </div>
+                    <div class="stack-card__meta-row">
+                      <dt>used in</dt>
+                      <dd>{it.usedIn}</dd>
+                    </div>
+                  </dl>
                 </li>
               ))
             }
@@ -194,6 +348,30 @@ const stack: StackCard[] = [
     font-size: 13px;
     color: var(--c-ink-2);
     line-height: 1.45;
+  }
+  .stack-card__meta {
+    margin: 0;
+    padding-top: var(--sp-3);
+    border-top: 1px solid var(--c-rule);
+    display: grid;
+    gap: 3px;
+    font-size: 11px;
+    line-height: 1.4;
+  }
+  .stack-card__meta-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .stack-card__meta dt {
+    color: var(--c-ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .stack-card__meta dd {
+    margin: 0;
+    color: var(--c-ink-2);
+    text-align: right;
   }
   .stack-stamp {
     margin-top: var(--sp-10);
