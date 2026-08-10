@@ -41,46 +41,91 @@ const updatedHuman = new Date(updated).toLocaleDateString('en-GB', {
       <p class="now-head__caption mono">
         Dated. Honest. Manual-only posture. Updated only when something changes that matters.
       </p>
-      <!-- v13.1 (positioning brief): 44-word intro paragraph. Three
-           sentences. Live terminal running manual-only + Stage 2.5
+      <!-- v13.1.4 (2026-08-10, now-uplift): 44-word intro paragraph.
+           Three sentences. Live terminal running manual-only + Stage 2.5
            sweep result + Vanguard 2K synthesis + WFO roll-out ETA. -->
       <p class="now-head__intro mono">
-        Live trading terminal running manual-only on a $2K Upcomer Vanguard account. Stage 2.5
-        multi-asset sweep: 37 cells scored at 15m resolution, 0 survived FDR at q=0.10. Vanguard 2K
-        synthesis: 0/26 cleared. Walk-forward OOS standardization rolling out across 8 quant
-        projects by end of August.
+        Live trading terminal running manual-only on a $2,000 Upcomer Vanguard account. Stage 2.5
+        multi-asset sweep: 37 cells scored at 15m resolution, 0 survived FDR at q=0.10. Vanguard
+        2K synthesis: 0/26 cleared. Walk-forward OOS standardization rolling out across 8 quant
+        projects by 2026-08-31.
       </p>
     </div>
   </header>
 
   <section class="section">
     <div class="container container-narrow">
+      <!-- v13.1.4 (2026-08-10, now-uplift) : single-card highlight
+           of the most recent deliverable since the last /now update.
+           One-line title + commit + 1-sentence impact. The dated-
+           work-log feel survives — this is a "latest beat" strip, not
+           a hero. -->
+      <aside class="now-shipped" aria-label="Most recent deliverable since last /now update">
+        <p class="now-shipped__eyebrow mono">SHIPPED SINCE LAST /NOW UPDATE</p>
+        <h2 class="now-shipped__title">EarthMap mobile label collisions + layer readability</h2>
+        <p class="now-shipped__meta mono">
+          <a
+            href="https://github.com/christianmacion/christianmacion.github.io/commit/5cd377c"
+            target="_blank"
+            rel="noopener noreferrer">commit 5cd377c</a
+          > · 2026-08-10 · 1 file · +55 / −4
+        </p>
+        <p class="now-shipped__impact">
+          Eliminated Zurich + London label overlap (~33px → 0px) and Digos + Singapore collision
+          on iPhone SE / 12 / Pixel 5 / Galaxy S20. &lt;760px viewport now hides world-events,
+          GDELT, and live-data layers so Layer A venue labels stay legible.
+        </p>
+      </aside>
+
       <h2 class="now-h2">Currently shipping</h2>
       <ul class="now-list">
         <li>
           <strong>Bloomberg-style trading terminal.</strong>
-          9-panel layout for the live Upcomer Vanguard $2k account. Manual-only posture binding. Yahoo
-          + Binance live data. 6-hour AFK build, CONVERGED 2026-08-08.
+          9-panel layout for the live Upcomer Vanguard $2,000 account. Manual-only posture binding.
+          Yahoo + Binance live data. 6-hour AFK build, CONVERGED 2026-08-08.
+          <div class="now-list__meta mono">
+            SHIPPED · 2026-08-08 · <a
+              href="https://github.com/christianmacion/christianmacion.github.io/commit/9003283"
+              target="_blank"
+              rel="noopener noreferrer">commit 9003283</a
+            > · <a href={path('/desk/')}>/desk/</a>
+          </div>
         </li>
         <li>
           <strong>Stage 2.5 multi-asset sweep.</strong>
           37 cells scored at 15m resolution across XAU/XAG/BTC/ETH. 11 carry the G16 monotone-positive
-          fingerprint, 0 survive FDR at q=0.10. Resolution-invariant. Vector coverage is the constraint.
+          fingerprint; 0 survive FDR at q=0.10. Resolution-invariant. Vector coverage is the constraint.
+          <div class="now-list__meta mono">
+            IN FLIGHT · <a href={path('/methodology/#stage-2-5')}>methodology §2.5</a>
+          </div>
         </li>
         <li>
           <strong>Vanguard 2K synthesis.</strong>
-          0/26 cleared (BTC 3/3 + Gold 19/19 + Silver 3/3 KILL). Signal firer dormant, manual-only. Top-3
-          priorities queued.
+          0/26 cleared (BTC 3/3 + Gold 19/19 + Silver 3/3 KILL). Signal firer dormant; manual-only
+          posture. Top-3 priorities queued.
+          <div class="now-list__meta mono">
+            IN FLIGHT · <a href={path('/methodology/')}>methodology</a>
+          </div>
         </li>
         <li>
           <strong>Portfolio v12.W4 Bryllim parity.</strong>
-          10-hub nav (6 icon+label + 4 plain text). 5 v12.W3 regression fixes. Headshot re-crop to home
-          hero. Site-wide axe sweep queued.
+          10-hub nav (6 icon+label + 4 plain text). 5 v12.W3 regression fixes. Headshot re-crop to
+          home hero. Site-wide axe sweep queued.
+          <div class="now-list__meta mono">
+            SHIPPED · <a
+              href="https://github.com/christianmacion/christianmacion.github.io/commit/9003283"
+              target="_blank"
+              rel="noopener noreferrer">commit 9003283</a
+            > · <a href={path('/portfolio/')}>portfolio</a>
+          </div>
         </li>
         <li>
           <strong>Walk-forward OOS standardization.</strong>
-          Applying the locked-window pattern from project 06 to the remaining 8 quant projects. ETA end
-          of August 2026.
+          Applying the locked-window pattern from project 06 to the remaining 8 quant projects. ETA
+          2026-08-31.
+          <div class="now-list__meta mono">
+            IN FLIGHT · ETA 2026-08-31 · <a href={path('/methodology/#gates')}>methodology §gates</a>
+          </div>
         </li>
       </ul>
 
@@ -89,15 +134,18 @@ const updatedHuman = new Date(updated).toLocaleDateString('en-GB', {
         <li>
           <strong>Shreve, Stochastic Calculus for Finance II.</strong>
           Ch. 4. Itô lemma + change-of-numéraire. Anchors the vol-target time-series momentum framework.
+          <div class="now-list__meta mono">READING · ch. 4 / 6</div>
         </li>
         <li>
           <strong>Bailey &amp; López de Prado, Deflated Sharpe Ratio.</strong>
           Re-read for the G16 rule wording across the methodology page.
+          <div class="now-list__meta mono">RE-READ · <a href={path('/methodology/')}>methodology</a></div>
         </li>
         <li>
           <strong>Deming, Out of the Crisis.</strong>
-          System of Profound Knowledge. Common cause vs special cause. Maps cleanly onto the 31-gate eval
-          harness.
+          System of Profound Knowledge. Common cause vs special cause. Maps cleanly onto the 31-gate
+          eval harness.
+          <div class="now-list__meta mono">READING · SoPK ch. 4</div>
         </li>
       </ul>
 
@@ -107,11 +155,13 @@ const updatedHuman = new Date(updated).toLocaleDateString('en-GB', {
           <strong>The vector-coverage gap.</strong>
           Stage 2 keeps killing on coverage, not edge. Worth adding a G-candidate for regime-stratified
           sample-size minimums before Stage 3 burns another sweep.
+          <div class="now-list__meta mono">OPEN · G-candidate draft</div>
         </li>
         <li>
           <strong>Eval bars for LLM-eval claims.</strong>
-          A single Brier + FDR pair beats every "vibe" leaderboard. Standardizing the wording so multi-agent
-          eval pages cite the same gate IDs as quant research.
+          A single Brier + FDR pair beats every "vibe" leaderboard. Standardizing the wording so
+          multi-agent eval pages cite the same gate IDs as quant research.
+          <div class="now-list__meta mono">OPEN · <a href={path('/methodology/#gates')}>gates</a></div>
         </li>
       </ul>
 
@@ -242,5 +292,79 @@ const updatedHuman = new Date(updated).toLocaleDateString('en-GB', {
        --c-amber #6b5220 on --c-paper #f3ede1 = 7.39:1 pass. */
     color: var(--c-amber);
     text-decoration: underline;
+  }
+
+  /* v13.1.4 (2026-08-10, now-uplift) : single-card highlight strip
+     for the most-recent deliverable. Mono + amber + 1 accent. No
+     halo, no glow, no gradient. Border-left 2px is the load-bearing
+     accent (≤ 2px corner rule honored). */
+  .now-shipped {
+    margin: var(--sp-4) 0 var(--sp-7);
+    padding: var(--sp-3) var(--sp-4);
+    background: var(--c-paper);
+    border: 1px solid var(--c-rule);
+    border-left: 2px solid var(--c-amber);
+    border-radius: var(--radius-sm);
+  }
+  .now-shipped__eyebrow {
+    margin: 0 0 var(--sp-2);
+    font-size: 10.5px;
+    color: var(--c-ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-weight: 500;
+  }
+  .now-shipped__title {
+    font-family: var(--j-ff-display);
+    font-size: 1.0625rem;
+    color: var(--c-ink);
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    line-height: 1.25;
+    margin: 0 0 var(--sp-2);
+    max-width: 60ch;
+  }
+  .now-shipped__meta {
+    font-size: 11px;
+    color: var(--c-ink-3);
+    margin: 0 0 var(--sp-3);
+    letter-spacing: 0.02em;
+  }
+  .now-shipped__meta a {
+    color: var(--c-ink-2);
+    text-decoration: underline;
+    text-decoration-color: var(--c-rule);
+    text-underline-offset: 2px;
+  }
+  .now-shipped__meta a:hover {
+    text-decoration-color: var(--c-amber);
+  }
+  .now-shipped__impact {
+    font-size: 13.5px;
+    color: var(--c-ink-2);
+    line-height: var(--lh-loose);
+    margin: 0;
+    max-width: 64ch;
+  }
+
+  /* v13.1.4 (2026-08-10, now-uplift) : per-bullet metadata line.
+     Status (SHIPPED / IN FLIGHT / READING / OPEN) + date + commit
+     or path. Mono, ink-3, footnote register. Lives below the
+     bullet prose, never inline. */
+  .now-list__meta {
+    margin-top: var(--sp-2);
+    font-size: 11px;
+    color: var(--c-ink-3);
+    letter-spacing: 0.04em;
+    line-height: 1.5;
+  }
+  .now-list__meta a {
+    color: var(--c-ink-2);
+    text-decoration: underline;
+    text-decoration-color: var(--c-rule);
+    text-underline-offset: 2px;
+  }
+  .now-list__meta a:hover {
+    text-decoration-color: var(--c-amber);
   }
 </style>
