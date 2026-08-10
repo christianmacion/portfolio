@@ -3,13 +3,27 @@
  * repos.astro :  /repos/ · v9.8 Wave B GitHub portfolio grid.
  *
  * Public repos from the GitHub portfolio. Each repo card binds name +
- * one-line purpose + language + link to the live repo. The grid is
- * the public surface :  every entry has a runnable scorecard or
- * reproducible methodology behind it.
+ * one-line purpose + quickstart + last-commit + what-I-learned + LOC +
+ * link to the live repo. The grid is the public surface :  every entry
+ * has a runnable scorecard or reproducible methodology behind it.
  *
  * Section layout (single grid of repo-cards):
  *   03 :  github portfolio   (SectionMark)
- *   §    :  8 public repos (4 quant + 4 ai/infra)
+ *   §    :  8 public repos (4 quant + 2 ai + 2 infra)
+ *
+ * v13.1.4 polish-7o :  each card carries 4 load-bearing data points
+ *   - quickstart  : minimum runnable command(s), mono font
+ *   - last-commit : git log -1 output, cross-checked against GitHub
+ *   - what-I-learned : genuine learning, not marketing copy
+ *   - LOC         : git ls-files | wc -l, ~ rounded
+ *
+ * v13.1.4 polish-7o (CARD SWAP) : 4 cards from the original set
+ * (factor-table-research, regime-conditional-deploy, doctrine-corpus,
+ * plus mcp-backtest-server which had no upstream + qfin-rag-harness +
+ * numerical-faithfulness-eval with stale christianmacion26 URLs) were
+ * swapped for verified-live repos from the post-rename christianmacion
+ * account + the local portfolio_v2 mirror. Every URL on this page
+ * resolves to a real public repo. See AAR 2026-08-10-repos-uplift.
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
 import SectionMark from '@components/SectionMark.astro';
@@ -35,65 +49,101 @@ interface RepoCard {
   lane: 'quant' | 'ai' | 'infra';
   language: string;
   purpose: string;
+  quickstart: string;       // mono · minimum runnable command(s)
+  lastCommit: string;        // mono · YYYY-MM-DD · 7-char sha
+  learned: string;           // 1 sentence · genuine learning
+  loc: string;               // mono · "~Nk LOC"
   href: string;
 }
 
 const repos: RepoCard[] = [
   {
-    name: 'mcp-backtest-server',
+    name: 'cross-asset-carry',
     lane: 'quant',
     language: 'Python',
-    purpose: 'IP-clean backtest tools over the Model Context Protocol. 4 strategies · 0 market data.',
-    href: 'https://github.com/christianmacion26/portfolio_v2/tree/master/mcp-backtest-server',
+    purpose: 'FX + bond + commodity carry portfolio. IS Sharpe 0.62 · OOS Sharpe −0.78 (honest null on 2020-2025).',
+    quickstart: 'python3 run.py',
+    lastCommit: '2026-07-09 · 1589555',
+    learned: 'Carry is academic lore until OOS data. The IS→OOS decay taught me that chronological train/test + vol-weighting kills selection bias — a negative Sharpe is more useful evidence than a positive one.',
+    loc: '~3.1k LOC',
+    href: 'https://github.com/christianmacion/cross-asset-carry',
   },
   {
-    name: 'qfin-rag-harness',
+    name: 'vol-regime-classifier',
     lane: 'quant',
     language: 'Python',
-    purpose: 'Citation-grounded retrieval over a 16-paper q-fin corpus. 0 LLM calls · 0 API keys.',
-    href: 'https://github.com/christianmacion26/portfolio_v2/tree/master/qfin-rag-harness',
+    purpose: '2-state Gaussian HMM on SPX realized vol (numpy from-scratch, no hmmlearn/sklearn). Overlay Sharpe 0.75→1.08.',
+    quickstart: 'python3 run.py',
+    lastCommit: '2026-07-09 · 628da1c',
+    learned: 'Sometimes the value is in the lag, not the model. Building the HMM from scratch forced me to read the math; the dumbest possible tilt (1.5×/0.5×) lifted Sharpe +43.9% on the back of it.',
+    loc: '~30k LOC',
+    href: 'https://github.com/christianmacion/vol-regime-classifier',
   },
   {
-    name: 'numerical-faithfulness-eval',
-    lane: 'ai',
+    name: 'validation-gate-stack',
+    lane: 'quant',
     language: 'Python',
-    purpose: 'Verify LLM numerical claims against deterministic fixtures. 10 demo · 5 pass · 5 fail.',
-    href: 'https://github.com/christianmacion26/portfolio_v2/tree/master/numerical-faithfulness-eval',
+    purpose: '24-gate statistical validation stack. Real-edge PASS · Placebo FAIL on same marginals.',
+    quickstart: 'python3 run_demo.py',
+    lastCommit: '2026-07-09 · bd5c89a',
+    learned: 'A single Sharpe ratio is a hostage to its own pathology. Stacking 24 gates — each catching a distinct failure mode — was the first time I trusted a backtest because of how it failed, not how it passed.',
+    loc: '~1.9k LOC',
+    href: 'https://github.com/christianmacion/validation-gate-stack',
+  },
+  {
+    name: 'skew-term-structure',
+    lane: 'quant',
+    language: 'Python',
+    purpose: 'VIX term-structure + realized-skew overlay on 16y SPX. Sharpe flat · max DD −33.9%→−8.7% (defensive, not alpha).',
+    quickstart: 'python3 run.py',
+    lastCommit: '2026-07-09 · 535f903',
+    learned: 'Sharpe parity plus drawdown halving is not alpha — it is a defensive overlay. That distinction forced me to ship a result I was tempted to over-claim: a lower-CAGR + lower-DD position reducer is honest value.',
+    loc: '~19k LOC',
+    href: 'https://github.com/christianmacion/skew-term-structure',
   },
   {
     name: 'eval-mcp-server',
     lane: 'ai',
     language: 'Python',
-    purpose: 'Slop-evaluation gate as MCP. Primitives 3/3 · round-trip parity 100%.',
-    href: 'https://github.com/christianmacion26/portfolio_v2/tree/master/eval-mcp-server',
+    purpose: 'MCP server exposing an eval gate. 3 primitives (Tools/Resource/Prompt) · tool-schema-validity 100% · round-trip parity 100%.',
+    quickstart: 'python3 tests/test_conformance.py',
+    lastCommit: '2026-07-09 · 1af4068',
+    learned: 'Most MCP demos ship Tools only. The Resources + Prompts primitives are what make MCP host-aware; shipping all three taught me that protocol surfaces are designed to be used, not just to exist.',
+    loc: '~1.4k LOC',
+    href: 'https://github.com/christianmacion/eval-mcp-server',
   },
   {
-    name: 'factor-table-research',
-    lane: 'quant',
+    name: 'slop-scanner',
+    lane: 'ai',
     language: 'Python',
-    purpose: 'Cross-sectional factor model with multiple-testing layer. PBO + CSCV + walk-forward.',
-    href: 'https://github.com/christianmacion26/portfolio_v2/tree/master/factor-table',
-  },
-  {
-    name: 'regime-conditional-deploy',
-    lane: 'quant',
-    language: 'Python',
-    purpose: '10-regime × 8-archetype deployment grid. Carry ~95% · vol rare <0.5%.',
-    href: 'https://github.com/christianmacion26/portfolio_v2/tree/master/regime-grid',
+    purpose: 'AI-slop quality gate. 13 rule-graded metrics · 4-tier verdict (CLEAN→HEAVY SLOP). Streamlit UI · stdlib engine.',
+    quickstart: 'pip install -r requirements.txt && streamlit run app.py',
+    lastCommit: '2026-07-09 · 848abfd',
+    learned: 'Quality-of-output gates must be numerical or they are theatre. Watching one draft traverse SLOP INDEX 81 → 3 in a single rewrite taught me that calibrated measurement beats taste arguments every time.',
+    loc: '~0.6k LOC',
+    href: 'https://github.com/christianmacion/slop-scanner',
   },
   {
     name: 'portfolio-site',
     lane: 'infra',
     language: 'TypeScript',
-    purpose: 'This site. Astro 7 · 91 routes · Lighthouse ≥ 95 · WCAG 2.2 AA 100%.',
-    href: 'https://github.com/christianmacion26/christianmacion.github.io',
+    purpose: 'This site. Astro 7 · ~104 routes · Lighthouse ≥ 95 · WCAG 2.2 AA 100%.',
+    quickstart: 'npm install && npm run dev',
+    lastCommit: '2026-08-10 · b5be203',
+    learned: 'Owning the chrome contract forces every UI choice through the same vocabulary. An institutional design language is the output of accepting that constraint, not the constraint itself.',
+    loc: '~65k LOC (src/)',
+    href: 'https://github.com/christianmacion/christianmacion.github.io',
   },
   {
-    name: 'doctrine-corpus',
+    name: 'mcn-library',
     lane: 'infra',
     language: 'Markdown',
-    purpose: '8-corpus + 3-specialist doctrine pack. Sagan · Arendt · Kahneman · Goldratt · Tetlock · Munger · Deming.',
-    href: 'https://github.com/christianmacion26/doctrine-corpus',
+    purpose: 'Public teaching library: workbooks, research dossiers, field guides. MIT · ~25 entries indexed.',
+    quickstart: 'open INDEX.md   # hand-readable in repo view',
+    lastCommit: '2026-07-10 · d3485ff',
+    learned: 'A teaching corpus survives if its index outlives its entries. INDEX.md + chapter conventions are load-bearing infrastructure, not decoration — without them the library becomes a pile of files.',
+    loc: '~301k LOC',
+    href: 'https://github.com/christianmacion/mcn-library',
   },
 ];
 ---
@@ -117,8 +167,9 @@ const repos: RepoCard[] = [
     </h2>
     <p class="page-head__lede">
       The public record of shipped work. Every repo either ships a runnable scorecard, a
-      reproducible methodology, or a chrome contract that survives review. Click through for
-      the README and the source.
+      reproducible methodology, or a chrome contract that survives review. Each card carries
+      a quickstart line, the last-commit stamp, the single most important learning, and a
+      line count — so the work is verifiable, not declared.
     </p>
   </SubpageHero>
 
@@ -134,6 +185,21 @@ const repos: RepoCard[] = [
               </div>
               <h2 class="repo-card__name">{r.name}</h2>
               <p class="repo-card__purpose">{r.purpose}</p>
+              <div class="repo-card__meta">
+                <p class="repo-card__quickstart mono" aria-label="Quickstart">
+                  $ {r.quickstart}
+                </p>
+                <p class="repo-card__commit mono" aria-label="Last commit">
+                  last commit · {r.lastCommit}
+                </p>
+                <p class="repo-card__learned" aria-label="What I learned">
+                  <span class="repo-card__learned-label mono">LEARNED</span>
+                  {r.learned}
+                </p>
+                <p class="repo-card__loc mono" aria-label="Lines of code">
+                  {r.loc}
+                </p>
+              </div>
               <span class="repo-card__cta mono" aria-hidden="true">VIEW ON GITHUB →</span>
             </a>
           </li>
@@ -156,7 +222,7 @@ const repos: RepoCard[] = [
     padding: 0;
     margin: 0;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
     gap: var(--sp-4);
   }
   .repo-card {
@@ -178,7 +244,6 @@ const repos: RepoCard[] = [
     padding: var(--sp-4);
     text-decoration: none;
     color: inherit;
-    min-height: 132px;
   }
   .repo-card__head {
     display: flex;
@@ -222,6 +287,50 @@ const repos: RepoCard[] = [
     color: var(--c-ink-2);
     line-height: 1.45;
     flex: 1;
+    margin: 0;
+  }
+  .repo-card__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-top: 6px;
+    border-top: 1px solid var(--c-rule);
+  }
+  .repo-card__quickstart {
+    font-size: 11.5px;
+    color: var(--c-ink);
+    margin: 0;
+    padding: 4px 6px;
+    background: var(--c-bg-1, var(--c-bg-2));
+    border-left: 2px solid var(--c-amber);
+  }
+  .repo-card__commit {
+    font-size: 10.5px;
+    color: var(--c-ink-3);
+    margin: 0;
+    letter-spacing: 0.02em;
+  }
+  .repo-card__learned {
+    font-size: 12px;
+    font-style: italic;
+    color: var(--c-ink-2);
+    line-height: 1.4;
+    margin: 0;
+    padding-top: 2px;
+  }
+  .repo-card__learned-label {
+    font-size: 9px;
+    color: var(--c-amber);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-right: 4px;
+    font-style: normal;
+  }
+  .repo-card__loc {
+    font-size: 10px;
+    color: var(--c-ink-3);
+    margin: 0;
+    letter-spacing: 0.04em;
   }
   .repo-card__cta {
     font-size: 10.5px;
