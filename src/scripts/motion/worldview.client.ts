@@ -1014,6 +1014,12 @@ class Ticker {
   private refreshTimer = 0;
   private gdeltTimer = 0;
   private regimeChip: HTMLElement | null = null;
+  // v13.1.4 polish-7p : deterministic counter for detail-panel IDs.
+  // Replaces Math.random() (forbidden by CLAUDE.md §8) — each row()
+  // call increments the counter and the id is unique within a single
+  // render pass. Counter is per-instance so the modal can be reopened
+  // and the IDs reset to a fresh range.
+  private nextDetailId = 0;
   constructor(list: HTMLUListElement) {
     this.list = list;
   }
@@ -1039,7 +1045,7 @@ class Ticker {
     li.className = 'wv-ticker__item';
     li.setAttribute('role', 'listitem');
 
-    const detailId = `wv-ticker-detail-${Math.random().toString(36).slice(2, 10)}`;
+    const detailId = `wv-ticker-detail-${++this.nextDetailId}`;
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'wv-ticker__row';
@@ -1363,6 +1369,57 @@ let activeGlobe: Globe | null = null;
 let activeTicker: Ticker | null = null;
 let activeRefs: WorldViewRefs | null = null;
 let topoCache: Topology | null = null;
+// v13.1.4 polish-7p : focus trap. WCAG 2.4.3 (focus order) + 2.1.2
+// (no keyboard trap) requires us to move focus into the dialog on open
+// and keep Tab/Shift+Tab cycling inside the dialog while it is open.
+// previouslyFocus holds the element to restore on close (the trigger
+// that opened the modal).
+let previouslyFocus: HTMLElement | null = null;
+
+// Selectors for focusable elements inside the dialog. Matches the chrome
+// contract: <button>, <a href>, <input>, <select>, <textarea>, plus any
+// element with a non-negative tabindex.
+const FOCUSABLE_SELECTOR = [
+  'a[href]',
+  'button:not([disabled])',
+  'input:not([disabled])',
+  'select:not([disabled])',
+  'textarea:not([disabled])',
+  '[tabindex]:not([tabindex="-1"])',
+].join(',');
+
+function getFocusable(): HTMLElement[] {
+  if (!activeRefs) return [];
+  const panel = activeRefs.root.querySelector<HTMLElement>('.wv__panel');
+  if (!panel) return [];
+  return Array.from(panel.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)).filter((el) => {
+    return !el.hasAttribute('hidden') && el.offsetParent !== null;
+  });
+}
+
+function trapFocus(e: KeyboardEvent): void {
+  if (!activeRefs || activeRefs.root.hasAttribute('hidden')) return;
+  if (e.key !== 'Tab') return;
+  const focusable = getFocusable();
+  if (focusable.length === 0) {
+    e.preventDefault();
+    return;
+  }
+  const first = focusable[0]!;
+  const last = focusable[focusable.length - 1]!;
+  const active = document.activeElement as HTMLElement | null;
+  if (e.shiftKey) {
+    if (active === first || !active || !activeRefs.root.contains(active)) {
+      e.preventDefault();
+      last.focus();
+    }
+  } else {
+    if (active === last || !active || !activeRefs.root.contains(active)) {
+      e.preventDefault();
+      first.focus();
+    }
+  }
+}
 // d3-geo + topojson-client are loaded DYNAMICALLY so they only enter the
 // network/cache when ⌘J is first pressed. Until then the BaseLayout bundle
 // stays slim (~5 KB added by worldview.client.ts).
@@ -1383,8 +1440,18 @@ async function loadDeps(): Promise<void> {
 async function openModal(): Promise<void> {
   if (!activeRefs) return;
   if (activeRefs.root.hasAttribute('hidden')) {
+    // v13.1.4 polish-7p : focus trap. Save the trigger so we can restore
+    // focus on close (WCAG 2.4.3). Move focus into the dialog (the skip
+    // link is the first focusable element so keyboard users can jump
+    // straight to the ticker; if missing, fall back to the close button).
+    previouslyFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     activeRefs.root.removeAttribute('hidden');
     document.body.dataset.worldviewOpen = '1';
+    queueMicrotask(() => {
+      const focusable = getFocusable();
+      const target = focusable[0] ?? activeRefs!.root.querySelector<HTMLElement>('.wv__close');
+      target?.focus();
+    });
   }
   await loadDeps();
   if (!topoCache) {
@@ -1436,6 +1503,13 @@ function closeModal(): void {
   if (!activeRefs.root.hasAttribute('hidden')) {
     activeRefs.root.setAttribute('hidden', '');
     delete document.body.dataset.worldviewOpen;
+    // v13.1.4 polish-7p : restore focus to the trigger that opened the
+    // modal (WCAG 2.4.3). Falls back to body if the trigger is gone.
+    const restore = previouslyFocus;
+    previouslyFocus = null;
+    if (restore && document.contains(restore)) {
+      queueMicrotask(() => restore.focus());
+    }
   }
   activeGlobe?.stop();
   activeTicker?.stop();
@@ -1457,7 +1531,12 @@ function bind(refs: WorldViewRefs): void {
       if (e.key === 'Escape' && !refs.root.hasAttribute('hidden')) {
         e.preventDefault();
         closeModal();
+        return;
       }
+      // v13.1.4 polish-7p : focus trap (Tab/Shift+Tab). Only runs while
+      // the modal is open, so the rest of the page keeps its normal
+      // tab order when the dialog is closed.
+      trapFocus(e);
     },
     true,
   );

@@ -107,6 +107,15 @@ const buildStamp = new Date().toISOString().slice(11, 19) + 'Z';
              NASA Earth Observatory "Blue Marble" (Reto Stöckli, NASA
              GSFC) — public domain. */}
           <div class="wv-globe__stage">
+            {/* v13.1.4 polish-7p : NASA attribution visible alongside the
+               globe. Per NASA Earth Observatory policy, satellite imagery
+               must carry visible credit to the source. The line is 9px
+               mono, hairline rule, matching the chrome contract. Sits
+               inside the globe pane so the credit is never more than a
+               glance away from the texture it describes. */}
+            <p class="wv__globe-credit mono" aria-label="Earth texture attribution">
+              Earth imagery · NASA Earth Observatory · Blue Marble (Reto Stöckli, NASA GSFC) · public domain
+            </p>
             <canvas
               data-worldview-canvas
               class="wv-globe__canvas"
@@ -390,6 +399,29 @@ const buildStamp = new Date().toISOString().slice(11, 19) + 'Z';
     text-transform: uppercase;
     color: var(--c-ink-3);
     text-align: center;
+  }
+  /* v13.1.4 polish-7p : NASA attribution. 9px mono, hairline rule above,
+     uppercase, ink-3 — same register as the footer legend. The credit
+     sits inside the globe pane so it's always visible alongside the
+     texture it describes. */
+  .wv__globe-credit {
+    margin: 0;
+    padding: 6px 4px 0;
+    border-top: 1px solid var(--c-rule-soft);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--c-ink-3);
+    text-align: center;
+    line-height: 1.4;
+  }
+  /* Mobile sheet: emphasize the credit so the small type stays readable
+     on the 280px globe. Same chrome, just a hair bigger. */
+  @media (max-width: 760px) {
+    .wv__globe-credit {
+      font-size: 9.5px;
+      padding: 5px 4px 0;
+    }
   }
 
   /* v13.1.4 polish : skip-link. Hidden by default; only visible when
