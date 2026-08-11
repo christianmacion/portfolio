@@ -35,6 +35,29 @@ const aiProjects: ProjectEntry[] = projects.filter((p) => p.data.role === 'ai');
 const quantProjects: ProjectEntry[] = projects.filter((p) => p.data.role === 'quant');
 const ossProjects: ProjectEntry[] = projects.filter((p) => p.data.sourceLink);
 
+/* v13.1.4 (2026-08-11, projects-uplift) : per-project metadata strip.
+   Indexed by entry order so the cards map() below passes the right
+   one to each ProjectCard. Commit hashes are real (from
+   `git log -1 -- <file>`) and pin the most-recent substantive touch.
+   All project MDX files share commit 2b0b040 (chore(brand): switch
+   live URL), so each card gets the same anchor. Paths point to the
+   related public surface on the site. NO new frontmatter fields;
+   copy-edit-only scope per the /comp/, /papers/, /404+500 reverts.
+   Mirrors the work-live__meta pattern from /work/ (polish-7p,
+   commit 9eba08f) and the tl__meta-stamp from /experience/
+   (polish-7s, commit f2fe667). */
+const repoBase = 'https://github.com/christianmacion/christianmacion.github.io/commit';
+const projectCommit = '2b0b040';
+const projectMeta: Record<string, string> = {};
+for (const p of projects) {
+  const d = (p.data.date instanceof Date)
+    ? p.data.date.toISOString().slice(0, 7)
+    : String(p.data.date).slice(0, 7);
+  const surface = path(`/projects/${p.id}`);
+  projectMeta[p.id] =
+    `SHIPPED · ${d} · <a href="${repoBase}/${projectCommit}" target="_blank" rel="noopener noreferrer">commit ${projectCommit}</a> · <a href="${surface}">${surface}</a>`;
+}
+
 /* v9.2 a11y : active filter tag for aria-current="page" on the
    lane-filter chips. Read at SSR from Astro.url.searchParams so the
    initial markup already carries the correct aria state (the inline
@@ -217,6 +240,7 @@ const itemListJsonLd = projectListJsonLd(
               lane="ai"
               order={p.data.order}
               status="open source"
+              meta={projectMeta[p.id]}
             />
           ))
         }
@@ -241,6 +265,7 @@ const itemListJsonLd = projectListJsonLd(
               lane="quant"
               order={p.data.order}
               status="public-data reproducible"
+              meta={projectMeta[p.id]}
             />
           ))
         }
@@ -284,6 +309,20 @@ const itemListJsonLd = projectListJsonLd(
       }
     })();
   </script>
+
+  {/* v13.1.4 (2026-08-11, projects-uplift) : recency stamp at the
+      bottom of the lane grid. Same chrome as work-stamp on /work/
+      (polish-7p) and experience-stamp on /experience/ (polish-7s).
+      Mono + amber links + hairline above. Anchored to the latest
+      substantive commit that touched the project content (2b0b040,
+      chore(brand): switch live URL). Build green, 104 pages expected. */}
+  <p class="projects-stamp mono">
+    Last updated: 2026-08-11 · <a
+      href="https://github.com/christianmacion/christianmacion.github.io/commit/2b0b040"
+      target="_blank"
+      rel="noopener noreferrer">commit 2b0b040</a
+    > · {projects.length} projects · NDA-clean · public-data reproducible
+  </p>
 </BaseLayout>
 
 <style>
@@ -403,5 +442,30 @@ const itemListJsonLd = projectListJsonLd(
     text-transform: lowercase;
     font-weight: 600;
     font-variant-numeric: tabular-nums;
+  }
+
+  /* v13.1.4 (2026-08-11, projects-uplift) : recency stamp at the
+     bottom of the lane grid. Same chrome as work-stamp on /work/
+     (polish-7p) and experience-stamp on /experience/ (polish-7s).
+     Mono + amber links + 1px hairline above (chrome contract
+     ≤ 2px corner rule honored). */
+  .projects-stamp {
+    margin: var(--sp-5) auto var(--sp-6);
+    padding-top: var(--sp-3);
+    border-top: 1px solid var(--c-rule-soft);
+    font-size: var(--fs-xs);
+    color: var(--c-ink-2);
+    letter-spacing: 0.04em;
+    max-width: 64rem;
+    padding-inline: var(--sp-4);
+  }
+  .projects-stamp a {
+    color: var(--c-amber);
+    text-decoration: none;
+    border-bottom: 1px solid var(--c-amber);
+  }
+  .projects-stamp a:hover {
+    color: var(--c-ink);
+    border-bottom-color: var(--c-ink);
   }
 </style>

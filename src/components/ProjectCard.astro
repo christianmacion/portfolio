@@ -10,8 +10,16 @@ interface Props {
   lane: 'ai' | 'quant';
   order?: number;
   status?: string;
+  /**
+   * v13.1.4 (2026-08-11, projects-uplift) : per-project metadata strip.
+   * Mirrors the experience-uplift pattern (polish-7s, commit f2fe667).
+   * Status + date + commit hash + path. Copy-edit-only scope; no new
+   * frontmatter fields. Renders as a single mono line under the
+   * "Read more" link. Pass HTML for the commit/path links.
+   */
+  meta?: string;
 }
-const { href, title, summary, metrics, lane, order, status } = Astro.props;
+const { href, title, summary, metrics, lane, order, status, meta } = Astro.props;
 const laneLabel = lane === 'ai' ? 'AI' : 'Quant';
 const laneClass = lane === 'ai' ? 'pill--brand' : 'pill--accent';
 ---
@@ -46,6 +54,13 @@ const laneClass = lane === 'ai' ? 'pill--brand' : 'pill--accent';
   <a class="proj-card__more" href={href} aria-label={`Read more about ${title}`}>
     Read more <span aria-hidden="true">→</span>
   </a>
+
+  {/* v13.1.4 (2026-08-11, projects-uplift) : per-project metadata strip.
+      Status + date + commit + path. Mono + amber accent + 1px hairline.
+      Mirrors tl__meta-stamp on TimelineEntry (polish-7s, f2fe667) and
+      work-live__meta on /work/ (polish-7p, 9eba08f). Renders only when
+      the caller passes a meta prop; other call sites stay untouched. */}
+  {meta && <p class="proj-card__meta-stamp mono" set:html={meta} />}
 </article>
 
 <style>
@@ -81,6 +96,12 @@ const laneClass = lane === 'ai' ? 'pill--brand' : 'pill--accent';
     align-items: center;
     justify-content: space-between;
     gap: var(--sp-3);
+    /* v6.19 mobile-break fix (2026-08-10): wrap lane + status pills to a
+       second row when they exceed narrowest viewport content width
+       (iPhone SE 279px, iPad 2-col 264px). Pills have white-space:nowrap
+       so they cannot compress; wrapping is the only safe fallback. */
+    flex-wrap: wrap;
+    row-gap: var(--sp-2);
   }
   .proj-card__lane {
     display: flex;
@@ -155,5 +176,30 @@ const laneClass = lane === 'ai' ? 'pill--brand' : 'pill--accent';
   }
   .proj-card__more:hover {
     color: var(--c-amber-light);
+  }
+
+  /* v13.1.4 (2026-08-11, projects-uplift) : per-project metadata strip.
+     Mono + amber accent + 1px hairline above (chrome contract ≤ 2px
+     corner rule honored). Same shape as work-live__meta on /work/
+     (polish-7p) and tl__meta-stamp on /experience/ (polish-7s).
+     Color stays on --c-ink-2 so the strip reads as supporting chrome,
+     not a new accent. */
+  .proj-card__meta-stamp {
+    margin-top: var(--sp-3);
+    padding-top: var(--sp-2);
+    border-top: 1px solid var(--c-rule-soft);
+    font-size: var(--fs-xs);
+    color: var(--c-ink-2);
+    letter-spacing: 0.04em;
+    line-height: var(--lh-normal);
+  }
+  .proj-card__meta-stamp :global(a) {
+    color: var(--c-amber);
+    text-decoration: none;
+    border-bottom: 1px solid var(--c-amber);
+  }
+  .proj-card__meta-stamp :global(a:hover) {
+    color: var(--c-ink);
+    border-bottom-color: var(--c-ink);
   }
 </style>
