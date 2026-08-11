@@ -213,7 +213,7 @@ class Globe {
   private textureRenderPending = true;
   private width = GLOBE_SIZE;
   private height = GLOBE_SIZE;
-  private rotation: [number, number] = [20, 80]; // [lon, lat]
+  private rotation: [number, number] = [30, 10]; // [lon, lat] — v13.1.4 polish-7u: lowered lat 80→10 so West Africa (Lagos) renders inside the visible disc instead of at the limb where it was filtered by the dist > r*0.92 cull.
   private rafHandle = 0;
   private lastTick = 0;
   private hoverPaused = false;
