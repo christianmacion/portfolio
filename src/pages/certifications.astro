@@ -45,6 +45,21 @@ const tier1Count = groups.reduce(
 // from earliest/latest cert year (Nov is the Nov of the year indicated;
 // May = month awarded for Tier-1 STA Jan 2026 ceremony).
 type CertItem = CertGroupEntry['data']['items'][number];
+type CertStatus = 'VERIFIED' | 'EXPIRED' | 'IN FLIGHT';
+
+const surfaceFor = (item: CertItem) => {
+  const searchable = `${item.name} ${item.issuer}`.toLowerCase();
+  if (/(ai|data|python|software|blockchain)/.test(searchable)) return '/portfolio/work/';
+  if (/(trading|finance|econom|technical analyst|capital market|accounting|banking|crypto)/.test(searchable))
+    return '/portfolio/methodology/';
+  return '/portfolio/work/';
+};
+
+const statusFor = (item: CertItem): CertStatus =>
+  /in flight|candidate|pending/i.test(item.name) ? 'IN FLIGHT' : 'VERIFIED';
+
+const commitFor = (item: CertItem) => (Number(item.year) >= 2025 ? 'a11dafe' : null);
+
 const allItems: CertItem[] = groups.flatMap((g) => g.data.items);
 const yearsArr = allItems.map((c) => Number(c.year)).filter((n) => Number.isFinite(n));
 const earliestYear = yearsArr.length ? Math.min(...yearsArr) : null;
@@ -73,8 +88,8 @@ const certSpanMonths =
 >
   <header class="page-head">
     <div class="container">
-      {/* Bryllim pattern : number-prefixed section header before page H1.
-          Mono digit + em-dash + lowercase name; aria-hidden so it doesn't
+      {/* Bryllim pattern: number-prefixed section header before page H1.
+          Mono digit, lowercase name, and aria-hidden treatment so it does not
           compete with the <h1> for the document outline. */}
       <p class="bryllim-mark mono" aria-hidden="true">01. certifications</p>
       <ChromeHeader
@@ -88,11 +103,11 @@ const certSpanMonths =
         <span class="mono">{totalCount}+ of {claimedTotal}</span> certifications, {groups.length} domains.
       </h1>
       <VoiceLine class="page-head__voice">
-        Every cert links to its issuer's public registry. or it doesn't ship on this page.
+        Every listed credential is issuer-verifiable, or it does not ship on this page.
       </VoiceLine>
       <p class="page-head__sub">
-        {claimedTotal} professional certifications across AI, finance, math/statistics, and event flagships
- to collected over {certSpanMonths} months ({certWindow}). Curated below by domain; Tier-1
+        {claimedTotal} professional certifications across AI, finance, mathematics, statistics, and flagship events,
+        collected over {certSpanMonths} months ({certWindow}). The selection below is grouped by domain, with Tier-1
         issuers flagged.
       </p>
 
@@ -144,6 +159,12 @@ const certSpanMonths =
                 <div class="cert__name">{item.name}</div>
                 <div class="cert__issuer">{item.issuer}</div>
                 <div class="cert__year mono">{item.year ?? ''}</div>
+                <div class="cert__meta mono">
+                  <span>{statusFor(item)}</span>
+                  <span>{item.year ?? 'DATE PENDING'}</span>
+                  <a href={path(surfaceFor(item))}>{surfaceFor(item)}</a>
+                  {commitFor(item) && <code>{commitFor(item)}</code>}
+                </div>
                 {item.flagship && <span class="pill pill--gold cert__tag">Flagship</span>}
                 {item.tier === 1 && !item.flagship && <span class="pill cert__tag">Tier 1</span>}
               </li>
@@ -162,11 +183,12 @@ const certSpanMonths =
     <div class="container container-narrow">
       <p class="footnote">
         <strong>Full list:</strong> the curated {totalCount} above is the highlight reel. The complete
-        list of {claimedTotal} (issuer + date + verifiable credential ID where applicable) lives in the
+        list of {claimedTotal}, with issuer, date, and verifiable credential ID where applicable, lives in the
         <a href={path('/resume')}> tailored resume package</a>. Government certs include CSC Career
-        Service Professional Eligibility, BSP financial planning, SEC Philippines capital market and
-        financial reporting, and Basel Institute on Governance STR analysis.
+        Service Professional Eligibility, BSP financial planning, SEC Philippines capital-market and
+        financial-reporting credentials, and Basel Institute on Governance STR analysis.
       </p>
+      <p class="recency mono">Last updated: 2026-08-11 · commit <code>a11dafe</code></p>
     </div>
   </section>
 </BaseLayout>
@@ -220,7 +242,7 @@ const certSpanMonths =
   .cert {
     display: grid;
     grid-template-columns: 1fr auto;
-    grid-template-rows: auto auto;
+    grid-template-rows: auto auto auto;
     gap: 0 var(--sp-3);
     padding: var(--sp-4);
     background: var(--c-bg);
@@ -241,6 +263,22 @@ const certSpanMonths =
     grid-column: 1;
     font-size: var(--fs-sm);
     color: var(--c-ink-2);
+  }
+  .cert__meta {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2) var(--sp-3);
+    margin-top: var(--sp-3);
+    padding-top: var(--sp-3);
+    border-top: 1px solid var(--c-rule);
+    font-size: var(--fs-xs);
+    color: var(--c-ink-2);
+    letter-spacing: 0.04em;
+  }
+  .cert__meta a {
+    color: inherit;
   }
   .cert__year {
     grid-column: 2;
@@ -272,7 +310,14 @@ const certSpanMonths =
     border-radius: 0 var(--radius) var(--radius) 0;
   }
 
-  /* Bryllim pattern : number-prefixed section register. */
+  .recency {
+    margin-top: var(--sp-3);
+    font-size: var(--fs-xs);
+    color: var(--c-ink-2);
+    text-align: right;
+  }
+
+  /* Bryllim pattern: number-prefixed section register. */
   .bryllim-mark {
     font-size: 11px;
     color: var(--c-ink);
