@@ -10,6 +10,12 @@ import VoiceLine from '@components/VoiceLine.astro';
 
 const GATE_RANGE = `G1 to G${profile.stats.evalGates}`;
 
+// v13.1.4 (2026-08-11, contact-uplift) : per-channel metadata. Status +
+// date + response expectation + commit hash. Same register as /about/
+// `.bio-prose__meta` (polish-7t commit 3781944). NDA-safe; closed
+// channels can be flagged ARCHIVED here without changes elsewhere.
+const CONTACT_COMMIT = '2d75d97';
+
 const channels = [
   {
     label: 'Open roles · JDs',
@@ -18,6 +24,7 @@ const channels = [
     href: `mailto:${profile.contact.email}?subject=JD%20%E2%80%94%20%5Brole%5D`,
     primary: true,
     use: 'I reply within 24h with: problem → approach → evidence → outcome → proof.',
+    meta: { status: 'ACTIVE', date: '2026-08-11', response: '24h reply' },
   },
   {
     label: 'Casual · paper-trail',
@@ -26,6 +33,7 @@ const channels = [
     href: profile.contact.linkedin,
     external: true,
     use: 'DMs open · recruiter-friendly.',
+    meta: { status: 'ACTIVE', date: '2026-08-11', response: '4h weekday' },
   },
   {
     label: 'Public work · proof',
@@ -34,6 +42,7 @@ const channels = [
     href: profile.contact.github,
     external: true,
     use: `${profile.stats.repoCount} repos · runnable scorecards · reproducible methodology.`,
+    meta: { status: 'ACTIVE', date: '2026-08-11', response: 'async, no SLA' },
   },
   {
     label: 'Writing · long-form',
@@ -42,6 +51,7 @@ const channels = [
     href: profile.contact.medium,
     external: true,
     use: 'Quant research notes, multi-agent build logs, eval-harness write-ups. 2 posts / month.',
+    meta: { status: 'ACTIVE', date: '2026-08-11', response: '2 posts / month' },
   },
   {
     label: 'Phone',
@@ -49,6 +59,7 @@ const channels = [
     value: profile.contact.phoneDisplay,
     href: `tel:${profile.contact.phone}`,
     use: 'UTC+8 · best 9 AM to 6 PM PHT.',
+    meta: { status: 'ACTIVE', date: '2026-08-11', response: 'after email only' },
   },
 ];
 
@@ -58,12 +69,14 @@ const platforms = [
     value: 'v2.onlinejobs.ph/jobseekers/info/4760383',
     href: profile.contact.ojp,
     use: 'Filipino remote roles · OJP applications.',
+    meta: { status: 'ACTIVE', date: '2026-08-11', response: '12h weekday' },
   },
   {
     label: 'Upwork',
     value: 'upwork.com/freelancers/~01785a76c001e4acd8',
     href: profile.contact.upwork,
     use: 'Contract engagements · hourly or fixed-price.',
+    meta: { status: 'ACTIVE', date: '2026-08-11', response: '12h weekday' },
   },
 ];
 ---
@@ -141,6 +154,13 @@ const platforms = [
               <div class="contact-card__sub">{c.sub}</div>
               <div class="contact-card__value mono">{c.value}</div>
               <div class="contact-card__hint">{c.use}</div>
+              {/* v13.1.4 (2026-08-11, contact-uplift) : per-channel
+                  metadata. Status + date + response-time + commit hash.
+                  Lives inside the card anchor so the meta stays visually
+                  attached to the channel. Text only, no nested anchor. */}
+              <div class="contact-card__meta mono">
+                {c.meta.status} · {c.meta.date} · {c.meta.response} · commit <code>{CONTACT_COMMIT}</code>
+              </div>
             </a>
           ))
         }
@@ -197,6 +217,12 @@ const platforms = [
               <div class="platform-card__label mono">{p.label}</div>
               <div class="platform-card__value mono">{p.value}</div>
               <div class="platform-card__hint">{p.use}</div>
+              {/* v13.1.4 (2026-08-11, contact-uplift) : per-platform
+                  metadata line. Same register as the contact-card
+                  meta. Text only, no nested anchor. */}
+              <div class="platform-card__meta mono">
+                {p.meta.status} · {p.meta.date} · {p.meta.response} · commit <code>{CONTACT_COMMIT}</code>
+              </div>
             </a>
           ))
         }
@@ -250,6 +276,19 @@ const platforms = [
       </ol>
     </div>
   </section>
+
+  {/* v13.1.4 (2026-08-11, contact-uplift) : recency stamp at bottom.
+      Anchors the page to its last content-edit commit. Same register as
+      the /about/ `.about-recency` (polish-7t commit 3781944) and
+      /work/ `.work-stamp` (polish-7p commit 9eba08f). Chrome contract v1:
+      hairline rule + mono + 1 accent on hover; no halo, no glow. */}
+  <p class="contact-recency mono">
+    Last updated: 2026-08-11 · <a
+      href="https://github.com/christianmacion/christianmacion.github.io/commit/{CONTACT_COMMIT}"
+      target="_blank"
+      rel="noopener noreferrer">commit {CONTACT_COMMIT}</a
+    > · /contact/
+  </p>
 </BaseLayout>
 
 <style>
@@ -439,6 +478,27 @@ const platforms = [
     font-size: var(--fs-sm);
     color: var(--c-ink-2);
   }
+  /* v13.1.4 (2026-08-11, contact-uplift) : per-channel metadata line.
+     Status + date + response-time + commit hash. Lives below the hint,
+     footnote register. Same chrome as /about/ `.bio-prose__meta`
+     (polish-7t commit 3781944) and /work/ `.work-live__meta`
+     (polish-7p commit 9eba08f). Hairline rule + mono + 1 accent on
+     hover; no halo, no glow, no gradient. */
+  .contact-card__meta {
+    margin-top: var(--sp-3);
+    padding-top: var(--sp-2);
+    border-top: 1px dashed var(--c-rule-soft);
+    font-size: var(--fs-xs);
+    color: var(--c-ink-3);
+    letter-spacing: 0.04em;
+    line-height: 1.5;
+  }
+  .contact-card__meta code {
+    font-family: var(--ff-mono);
+    color: var(--c-ink-2);
+    background: transparent;
+    padding: 0;
+  }
 
   .platforms-grid {
     display: grid;
@@ -475,6 +535,47 @@ const platforms = [
   .platform-card__hint {
     font-size: var(--fs-xs);
     color: var(--c-ink-3);
+  }
+  /* v13.1.4 (2026-08-11, contact-uplift) : per-platform metadata line.
+     Same register as `.contact-card__meta`. Hairline divider + mono +
+     ink-3 footnote. */
+  .platform-card__meta {
+    margin-top: var(--sp-3);
+    padding-top: var(--sp-2);
+    border-top: 1px dashed var(--c-rule-soft);
+    font-size: var(--fs-xs);
+    color: var(--c-ink-3);
+    letter-spacing: 0.04em;
+    line-height: 1.5;
+  }
+  .platform-card__meta code {
+    font-family: var(--ff-mono);
+    color: var(--c-ink-2);
+    background: transparent;
+    padding: 0;
+  }
+
+  /* v13.1.4 (2026-08-11, contact-uplift) : recency stamp at bottom.
+     Anchors the page to its last content-edit commit. Same register as
+     /about/ `.about-recency` (polish-7t commit 3781944) and
+     /work/ `.work-stamp` (polish-7p commit 9eba08f). */
+  .contact-recency {
+    margin: var(--sp-3) 0 0;
+    padding: var(--sp-3) var(--sp-4);
+    font-size: var(--fs-xs);
+    color: var(--c-ink-3);
+    letter-spacing: 0.06em;
+    line-height: 1.5;
+    text-align: center;
+  }
+  .contact-recency a {
+    color: var(--c-ink-2);
+    text-decoration: underline;
+    text-decoration-color: var(--c-rule);
+    text-underline-offset: 2px;
+  }
+  .contact-recency a:hover {
+    text-decoration-color: var(--c-amber);
   }
 
   .how-i-reply {
