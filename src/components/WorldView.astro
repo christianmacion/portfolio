@@ -221,8 +221,19 @@ const buildStamp = new Date().toISOString().slice(11, 19) + 'Z';
 
   .wv {
     position: fixed;
-    inset: 0;
-    z-index: calc(var(--z-nav) + 10);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* v13.1.4 polish-7q : use the canonical --z-modal token (100) instead
+       of calc(--z-nav + 10) = 60. The lower value let sticky page chrome
+       (SideRail drawer at z-nav+1=51, mobile backdrop at z-nav-1=49) and
+       any future z-nav-adjacent surfaces win the stacking order in some
+       browsers, which made the modal scrim appear transparent. Bumping
+       to --z-modal keeps the modal unambiguously above every named
+       surface below it (z-nav, z-nav-more, z-sticky, z-toast) and below
+       the skip-link (z=1000, only painted when focused). */
+    z-index: var(--z-modal);
     display: grid;
     place-items: start center;
     padding-top: 6vh;
@@ -233,13 +244,27 @@ const buildStamp = new Date().toISOString().slice(11, 19) + 'Z';
 
   .wv__scrim {
     position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    /* v13.1.4 polish-7q : explicit display:block defeats the UA button
+       inline-block default. Without it, the <button> UA box sometimes
+       inherits its inline-block sizing model when placed inside a
+       display:grid container, which left the scrim at 0×0 in Firefox.
+       Also: width/height switched from 100% (relative to the grid track)
+       to 100vw / 100vh (relative to the viewport), so the backdrop
+       guarantees full viewport coverage regardless of grid auto-track
+       behavior. */
+    display: block;
     background: rgba(13, 17, 23, 0.85);
     cursor: pointer;
     border: 0;
     padding: 0;
+    margin: 0;
+    font: inherit;
+    color: inherit;
+    appearance: none;
   }
 
   .wv__panel {
