@@ -20,6 +20,12 @@ import { profile } from '@utils/profile';
 
 type ProjectEntry = CollectionEntry<'project'>;
 
+// v13.1.4 (2026-08-11, publications-uplift) : per-publication metadata.
+// Status + date + related surface + commit hash. Same register as
+// /contact/ `.contact-card__meta` (polish-7x commit 19aa5ef) and
+// /positions/ `.positions-card__meta` (polish-7z commit ec1674b).
+const PUBLICATIONS_COMMIT = '2b0b040';
+
 const allProjects: ProjectEntry[] = await getCollection('project');
 const projects = allProjects.sort((a, b) => a.data.order - b.data.order);
 const aiPubs: ProjectEntry[] = projects.filter((p) => p.data.role === 'ai');
@@ -316,6 +322,18 @@ const totalCount = quantPubs.length + aiPubs.length + workbooks.length + press.l
                         <span class="pill">{s}</span>
                       ))}
                     </div>
+                    {/* v13.1.4 (2026-08-11, publications-uplift) :
+                        per-publication metadata. Status + date + related
+                        surface + commit hash. Inline copy-edit; lives
+                        inside the card body so the meta stays visually
+                        attached to the publication. Text only, no
+                        nested anchor (the parent pub__title anchor
+                        would otherwise swallow the click). */}
+                    <div class="pub__meta-strip mono">
+                      PUBLISHED · {fmtDate(p.data.date)} ·
+                      <a href={path(`/projects/${p.id}`)}>related surface →</a>
+                      · commit <code>{PUBLICATIONS_COMMIT}</code>
+                    </div>
                   </div>
                   <div class="pub__action">
                     <div class="pub__date mono">{fmtDate(p.data.date)}</div>
@@ -365,6 +383,16 @@ const totalCount = quantPubs.length + aiPubs.length + workbooks.length + press.l
                       {p.data.stack.slice(0, 6).map((s: string) => (
                         <span class="pill">{s}</span>
                       ))}
+                    </div>
+                    {/* v13.1.4 (2026-08-11, publications-uplift) :
+                        per-publication metadata for OSS rows. Same
+                        register as the quant section above; status
+                        flag = OPEN SOURCE so the row reads as a
+                        public repo, not a draft memo. */}
+                    <div class="pub__meta-strip mono">
+                      OPEN SOURCE · {fmtDate(p.data.date)} ·
+                      <a href={path(`/projects/${p.id}`)}>related surface →</a>
+                      · commit <code>{PUBLICATIONS_COMMIT}</code>
                     </div>
                   </div>
                   <div class="pub__action">
@@ -449,6 +477,17 @@ const totalCount = quantPubs.length + aiPubs.length + workbooks.length + press.l
                   ' to early-reader draft; full PDF available on request (non-public, gated by topic)'
                 )}
               </div>
+              {/* v13.1.4 (2026-08-11, publications-uplift) :
+                  per-workbook metadata. Status flag maps the existing
+                  wb__status chip onto the inline-strip register so the
+                  row reads as PUBLISHED or DRAFT consistently with
+                  papers and OSS. Related surface = /workbooks/ PDF
+                  (when published) or /proof/ (when in progress). */}
+              <div class="wb__meta-strip mono">
+                {(w.status ?? 'DRAFT').toUpperCase()} · {w.date ?? 'unfiled'} ·
+                <a href={w.url ?? path('/proof')}>related surface →</a>
+                · commit <code>{PUBLICATIONS_COMMIT}</code>
+              </div>
             </article>
           ))
         }
@@ -471,6 +510,16 @@ const totalCount = quantPubs.length + aiPubs.length + workbooks.length + press.l
                 <h3 class="press__title">{p.title}</h3>
                 <div class="press__venue mono">Venue: {p.venue}</div>
                 <p class="press__detail">{p.detail}</p>
+                {/* v13.1.4 (2026-08-11, publications-uplift) :
+                    per-press-row metadata. Status + date + related
+                    surface (proof page when no own URL) + commit hash.
+                    Inline copy-edit; lives inside the press body so
+                    the meta stays visually attached to the row. */}
+                <div class="press__meta-strip mono">
+                  PUBLIC TALK · {p.date} ·
+                  <a href={p.url ?? path('/proof')}>related surface →</a>
+                  · commit <code>{PUBLICATIONS_COMMIT}</code>
+                </div>
               </div>
             </li>
           ))
@@ -486,6 +535,18 @@ const totalCount = quantPubs.length + aiPubs.length + workbooks.length + press.l
     secondaryLabel="See methodology"
     secondaryHref={path('/methodology')}
   />
+
+  {/* v13.1.4 (2026-08-11, publications-uplift) : recency stamp at
+      bottom of page. Anchors the page to its last content-edit
+      commit. Same register as /contact/ `.contact-recency`
+      (polish-7x commit 19aa5ef) and /positions/ `.positions-recency`
+      (polish-7z commit ec1674b). */}
+  <p class="pub-recency mono">
+    Last updated: 2026-08-11 · commit
+    <a href={`https://github.com/christianmacion/christianmacion.github.io/commit/${PUBLICATIONS_COMMIT}`}
+      ><code>{PUBLICATIONS_COMMIT}</code></a
+    >
+  </p>
 </BaseLayout>
 
 <style>
@@ -857,4 +918,66 @@ const totalCount = quantPubs.length + aiPubs.length + workbooks.length + press.l
       gap: var(--sp-1);
     }
   }
-</style>
+
+  /* v13.1.4 (2026-08-11, publications-uplift) : per-publication
+     metadata strip. Same register as /contact/ `.contact-card__meta`
+     (polish-7x commit 19aa5ef) and /positions/ `.positions-card__meta`
+     (polish-7z commit ec1674b). Chrome-neutral (ink-3 + primary
+     link), dashed hairline, mono caps. */
+  .pub__meta-strip,
+  .wb__meta-strip,
+  .press__meta-strip {
+    margin-top: var(--sp-2);
+    padding-top: var(--sp-2);
+    border-top: 1px dashed var(--c-rule-soft);
+    font-size: var(--fs-xs);
+    color: var(--c-ink-3);
+    letter-spacing: 0.04em;
+    line-height: 1.5;
+  }
+  .pub__meta-strip a,
+  .wb__meta-strip a,
+  .press__meta-strip a {
+    color: var(--c-primary);
+    text-decoration: underline;
+    text-decoration-color: var(--c-amber-decor);
+    text-underline-offset: 2px;
+  }
+  .pub__meta-strip code,
+  .wb__meta-strip code,
+  .press__meta-strip code {
+    font-family: var(--ff-mono);
+    color: var(--c-ink-2);
+    background: transparent;
+    padding: 0;
+  }
+
+  /* v13.1.4 (2026-08-11, publications-uplift) : recency stamp at
+     bottom of page. Same register as /contact/ `.contact-recency`
+     (polish-7x commit 19aa5ef) and /positions/ `.positions-recency`
+     (polish-7z commit ec1674b). */
+  .pub-recency {
+    margin: var(--sp-4) auto var(--sp-6);
+    padding: var(--sp-3) var(--sp-4);
+    font-size: var(--fs-xs);
+    color: var(--c-ink-3);
+    letter-spacing: 0.06em;
+    line-height: 1.5;
+    text-align: center;
+    max-width: 640px;
+  }
+  .pub-recency a {
+    color: var(--c-ink-2);
+    text-decoration: underline;
+    text-decoration-color: var(--c-rule);
+    text-underline-offset: 2px;
+  }
+  .pub-recency a:hover {
+    text-decoration-color: var(--c-amber);
+  }
+  .pub-recency code {
+    font-family: var(--ff-mono);
+    color: var(--c-ink-2);
+    background: transparent;
+    padding: 0;
+  }</style>
