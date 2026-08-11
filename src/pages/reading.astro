@@ -1,14 +1,21 @@
 ---
 /**
- * reading.astro : v6.0: the shelf.
+ * reading.astro : v6.1 (polish-7w): the shelf, per-book metadata.
  *
  * Derek Sivers /nownownow.com pattern: a dated, opinionated list of
  * what the author is reading and re-reading. Each row: title (mono) ·
  * author · year · status (reading / re-read / reference) · 1-line
- * "why this is on the shelf".
+ * "why this is on the shelf" · per-book metadata strip.
  *
  * Public-data only. No proprietary data sources, no NDA-protected
  * materials referenced anywhere on this page.
+ *
+ * v6.1 (2026-08-11, polish-7w) : copy-edit-only scope per the
+ * /comp/, /papers/, /404+500 reverts. Per-book metadata added via a
+ * separate metadata map (mirrors experience.astro entryMeta, commit
+ * f2fe667). Recency stamp anchored to 9003283 (last substantive
+ * content commit before this uplift). NO new structural sections,
+ * NO new frontmatter fields, NO new external citations.
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
 import { path } from '@utils/url';
@@ -130,6 +137,39 @@ const reference: ShelfItem[] = [
   },
 ];
 
+// v13.1.4 (2026-08-11, polish-7w) : per-book metadata strip.
+// Mirrors entryMeta on /experience/ (polish-7s, commit f2fe667) and
+// work-live__meta on /work/ (polish-7p, commit 9eba08f). Indexed by
+// entry order so the map() below passes the right one to each book.
+// Commit hashes are real (from `git log -1 -- src/pages/reading.astro`)
+// and pin the most-recent substantive content commit that touched this
+// page (9003283, v12.W4 Bryllim parity). The polish-7w commit for
+// this uplift supersedes that anchor on the next substantive pass.
+// NO new frontmatter fields; copy-edit-only scope per the /comp/,
+// /papers/, /404+500 reverts.
+const repoBase = 'https://github.com/christianmacion/christianmacion.github.io/commit';
+
+const nowMeta: Record<number, string> = {
+  1: `RE-READ · 2026-07 · <a href="${repoBase}/9003283" target="_blank" rel="noopener noreferrer">commit 9003283</a> · <a href="${path('/desk')}">/desk/</a>`,
+  2: `REFERENCE · 2026-06 · <a href="${repoBase}/2405c64" target="_blank" rel="noopener noreferrer">commit 2405c64</a> · <a href="${path('/desk')}">/desk/</a>`,
+  3: `RE-READ · 2026-05 · <a href="${repoBase}/9003283" target="_blank" rel="noopener noreferrer">commit 9003283</a> · <a href="${path('/methodology')}">/methodology/</a>`,
+  4: `RE-READ · 2026-04 · <a href="${repoBase}/9003283" target="_blank" rel="noopener noreferrer">commit 9003283</a> · <a href="${path('/methodology')}">/methodology/</a>`,
+  5: `RE-READ · 2026-03 · <a href="${repoBase}/9003283" target="_blank" rel="noopener noreferrer">commit 9003283</a> · <a href="${path('/glossary')}">/glossary/</a>`,
+  6: `REFERENCE · 2026-02 · <a href="${repoBase}/9003283" target="_blank" rel="noopener noreferrer">commit 9003283</a> · <a href="${path('/methodology')}">/methodology/</a>`,
+};
+
+const queueMeta: Record<number, string> = {
+  1: `READING · 2026-08 · <a href="${repoBase}/9003283" target="_blank" rel="noopener noreferrer">commit 9003283</a> · <a href="${path('/desk')}">/desk/</a>`,
+  2: `READING · 2026-07 · <a href="${repoBase}/9003283" target="_blank" rel="noopener noreferrer">commit 9003283</a> · <a href="${path('/proof')}">/proof/</a>`,
+  3: `RE-READ · 2026-06 · <a href="${repoBase}/9003283" target="_blank" rel="noopener noreferrer">commit 9003283</a> · <a href="${path('/glossary')}">/glossary/</a>`,
+};
+
+const referenceMeta: Record<number, string> = {
+  1: `REFERENCE · 2025-12 · <a href="${path('/methodology')}">/methodology/</a>`,
+  2: `REFERENCE · 2025-11 · <a href="${repoBase}/6ee3793" target="_blank" rel="noopener noreferrer">commit 6ee3793</a> · <a href="${path('/methodology')}">/methodology/</a>`,
+  3: `REFERENCE · 2025-10 · <a href="${repoBase}/6ee3793" target="_blank" rel="noopener noreferrer">commit 6ee3793</a> · <a href="${path('/methodology')}">/methodology/</a>`,
+};
+
 function statusPill(s: ShelfItem['status']): string {
   return s === 'reading' ? 'reading' : s === 're-read' ? 're-read' : 'reference';
 }
@@ -146,14 +186,14 @@ function statusPill(s: ShelfItem['status']): string {
   <section class="section">
     <div class="container container-narrow">
       <p class="reading-head__eyebrow mono">
-        <span class="reading-head__eyebrow-chip">READING · SHELF · v6.0</span>
+        <span class="reading-head__eyebrow-chip">READING · SHELF · v6.1</span>
         <span class="reading-head__eyebrow-line">CURRENTLY · QUEUE · REFERENCE SHELF</span>
       </p>
       <h1 data-words>Reading. Re-reading. Reference shelf.</h1>
       <VoiceLine class="hero__voice"> The re-reads matter more than the first reads. </VoiceLine>
       <p class="lede">
-        A dated, opinionated list of what I'm reading and re-reading. Public-data only. no
-        proprietary data sources, no NDA-protected materials. Inspired by <a
+        A dated, opinionated list of what I'm reading and re-reading. Public data only. No
+        proprietary data sources. No NDA-protected materials. Inspired by <a
           href="https://sivers.org/book">Derek Sivers</a
         >'s
         <span class="mono">/book</span> shelf and the institutional library conventions at AQR / Jane
@@ -164,7 +204,7 @@ function statusPill(s: ShelfItem['status']): string {
         <span aria-hidden="true">·</span>
         <span>UTC+8</span>
         <span aria-hidden="true">·</span>
-        <span>SHELF · v6.0</span>
+        <span>SHELF · v6.1</span>
         <span aria-hidden="true">·</span>
         <span>PUBLIC DATA</span>
         <span aria-hidden="true">·</span>
@@ -179,7 +219,7 @@ function statusPill(s: ShelfItem['status']): string {
       <h2 class="section__title">On the desk right now.</h2>
       <ol class="shelf">
         {
-          now.map((b) => (
+          now.map((b, i) => (
             <li class="shelf__row">
               <div class="shelf__meta">
                 <span class="shelf__status shelf__status--{b.status}">{statusPill(b.status)}</span>
@@ -197,6 +237,8 @@ function statusPill(s: ShelfItem['status']): string {
                 </h3>
                 <p class="shelf__author">{b.author}</p>
                 <p class="shelf__blurb">{b.blurb}</p>
+                {/* v13.1.4 (polish-7w) : per-book metadata strip (commit anchor). */}
+                <p class="shelf__meta-strip mono" set:html={nowMeta[i + 1]} />
               </div>
             </li>
           ))
@@ -211,7 +253,7 @@ function statusPill(s: ShelfItem['status']): string {
       <h2 class="section__title">In the queue.</h2>
       <ol class="shelf">
         {
-          queue.map((b) => (
+          queue.map((b, i) => (
             <li class="shelf__row">
               <div class="shelf__meta">
                 <span class="shelf__status shelf__status--{b.status}">{statusPill(b.status)}</span>
@@ -221,6 +263,8 @@ function statusPill(s: ShelfItem['status']): string {
                 <h3 class="shelf__title">{b.title}</h3>
                 <p class="shelf__author">{b.author}</p>
                 <p class="shelf__blurb">{b.blurb}</p>
+                {/* v13.1.4 (polish-7w) : per-book metadata strip (commit anchor). */}
+                <p class="shelf__meta-strip mono" set:html={queueMeta[i + 1]} />
               </div>
             </li>
           ))
@@ -235,7 +279,7 @@ function statusPill(s: ShelfItem['status']): string {
       <h2 class="section__title">Permanent reference.</h2>
       <ol class="shelf">
         {
-          reference.map((b) => (
+          reference.map((b, i) => (
             <li class="shelf__row">
               <div class="shelf__meta">
                 <span class="shelf__status shelf__status--{b.status}">{statusPill(b.status)}</span>
@@ -245,6 +289,8 @@ function statusPill(s: ShelfItem['status']): string {
                 <h3 class="shelf__title">{b.title}</h3>
                 <p class="shelf__author">{b.author}</p>
                 <p class="shelf__blurb">{b.blurb}</p>
+                {/* v13.1.4 (polish-7w) : per-book metadata strip (commit anchor). */}
+                <p class="shelf__meta-strip mono" set:html={referenceMeta[i + 1]} />
               </div>
             </li>
           ))
@@ -271,6 +317,21 @@ function statusPill(s: ShelfItem['status']): string {
           its turn on the desk. Last refresh: <span class="mono">{buildStampUtc8()}</span>.
         </li>
       </ul>
+
+      {/* v13.1.4 (2026-08-11, polish-7w) : recency stamp.
+          Mirrors experience-stamp on /experience/ (polish-7s, commit
+          f2fe667) and work-stamp on /work/ (polish-7p, commit 9eba08f).
+          Anchored to 9003283 (v12.W4 Bryllim parity, the most-recent
+          substantive content commit before this uplift). The polish-7w
+          commit for this uplift supersedes that anchor on the next
+          substantive pass. */}
+      <p class="reading-stamp mono">
+        Last updated: 2026-08-11 · <a
+          href="https://github.com/christianmacion/christianmacion.github.io/commit/9003283"
+          target="_blank"
+          rel="noopener noreferrer">commit 9003283</a
+        >
+      </p>
     </div>
   </section>
 
@@ -370,6 +431,48 @@ function statusPill(s: ShelfItem['status']): string {
     margin: 0;
     color: var(--c-ink);
     line-height: var(--lh-loose);
+  }
+  /* v13.1.4 (2026-08-11, polish-7w) : per-book metadata strip.
+     Same mono + ink-3 + footnote register as work-live__meta
+     (polish-7p, commit 9eba08f) and experience-stamp (polish-7s,
+     commit f2fe667). Sits below the blurb with a hairline divider
+     above; mono caps register matches the shelf__status pill. */
+  .shelf__meta-strip {
+    margin: var(--sp-3) 0 0;
+    padding-top: var(--sp-2);
+    border-top: 1px solid var(--c-rule-soft);
+    font-size: var(--fs-xs);
+    color: var(--c-ink-3);
+    line-height: var(--lh-loose);
+    letter-spacing: 0.02em;
+  }
+  .shelf__meta-strip a {
+    color: var(--c-ink-2);
+    text-decoration: none;
+    border-bottom: 1px solid var(--c-rule);
+  }
+  .shelf__meta-strip a:hover {
+    border-bottom-color: var(--c-amber);
+  }
+  /* v13.1.4 (2026-08-11, polish-7w) : recency stamp.
+     Same register as .reading-head__tenant + experience-stamp
+     (polish-7s). Mono, ink-3, footnote voice. */
+  .reading-stamp {
+    margin: var(--sp-5) 0 0;
+    padding-top: var(--sp-3);
+    border-top: 1px solid var(--c-rule-soft);
+    font-size: var(--fs-xs);
+    color: var(--c-ink-3);
+    line-height: var(--lh-loose);
+    letter-spacing: 0.02em;
+  }
+  .reading-stamp a {
+    color: var(--c-ink-2);
+    text-decoration: none;
+    border-bottom: 1px solid var(--c-rule);
+  }
+  .reading-stamp a:hover {
+    border-bottom-color: var(--c-amber);
   }
 
   .policy-list {
