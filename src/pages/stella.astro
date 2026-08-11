@@ -8,6 +8,13 @@
  *
  * NDA-clean: no employer names. No protected paths. Public-facing only.
  * Senior QR register. No em-dashes. No signal lights. No halo.
+ *
+ * v13.1.4 polish-7ai (2026-08-11, squads-uplift) :
+ *   copy-edit-only pass :  per-squad metadata line under each
+ *   roster row + LAST UPDATED stamp in the receipts section.
+ *   Same register as /notes/ `.note-entry__meta`
+ *   (polish-7ah commit 4e2cee3) and /proof/ `.proof-meta`
+ *   (polish-7af commit 9b0ced6).
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
 import { profile } from '@utils/profile';
@@ -19,16 +26,21 @@ import AgentGraph from '@components/AgentGraph.astro';
 const title = 'STELLA : the office that builds the work';
 const description = '9 squads. 8 doctrine-corpus owners. 142 skills. 5-must-have loop contract. The office behind this portfolio.';
 
+// v13.1.4 (2026-08-11, squads-uplift) : recency stamp anchor.
+// Last content-edit commit that touched /stella/ directly :  v12.W4
+// Bryllim parity + live data terminal + Functions-only architecture.
+const STELLA_COMMIT = '9003283';
+
 const squads = [
-  { code: 'G', name: 'IT and Web Engineering', pm: 'tech_lead', specialists: 8, mission: 'Build, harden, audit, and ship the production surfaces that publish every artifact.', ship: 'Portfolio v9.x chrome contract · WCAG 2.2 AA site-wide axe sweep · 47 routes clean' },
-  { code: 'A', name: 'Public Surface', pm: 'communications_officer', specialists: 3, mission: 'Hold the institutional voice, the positioning, and the recruiter-read of every public artifact.', ship: 'v9.4.1 hireability hero · H1 as role title, not name' },
-  { code: 'B', name: 'AI Engineering', pm: 'eval_harness_lead', specialists: 1, mission: 'Operate the eval harness that gates every claim before it ships.', ship: 'Deflated Sharpe · walk-forward validation · block bootstrap' },
-  { code: 'C', name: 'Quant Research', pm: 'alpha_researcher', specialists: 1, mission: 'Mine, prototype, and reject alpha ideas before capital sees them.', ship: 'Strategy Workbook v1 · 8 strategies · 4 READY · $164.50 deployable' },
-  { code: 'D', name: 'Platform and Infra', pm: 'logistics_officer', specialists: 1, mission: 'Data plumbing, ETL, cron hygiene, silent-cap regressions.', ship: 'MEXC L1/L2/L3 data pull · 5.5y · 36 files' },
-  { code: 'E', name: 'Research and Intelligence', pm: 'intelligence_officer', specialists: 1, mission: 'Market scan, web fetch, OSINT, source verification.', ship: 'Coinglass panel · Deribit options chain · 19 OSINT specialists' },
-  { code: 'F', name: 'Pedagogy and Doctrine', pm: 'strategist_consultant', specialists: 11, mission: 'Sharpen every recommendation against a named corpus and a named operator.', ship: '8 doctrine-corpus owners · 3 specialists · 6-corpus synthesis rule' },
-  { code: 'H', name: 'HR and Talent', pm: 'hr_director', specialists: 5, mission: 'Agent health, performance review, weekly roster audit.', ship: 'Self-improvement cycle · 14 of 14 surfacings closed · 2 audit cycles' },
-  { code: 'K', name: 'Knowledge and Graph', pm: 'graph_engineer', specialists: 2, mission: 'Own the shared graph · gate every loop primitive on verify_graph.', ship: 'Reflection journal repair · 3 to 1 component · 56+ new rows' },
+  { code: 'G', name: 'IT and Web Engineering', pm: 'tech_lead', specialists: 8, mission: 'Build, harden, audit, and ship the production surfaces that publish every artifact.', ship: 'Portfolio v9.x chrome contract · WCAG 2.2 AA site-wide axe sweep · 47 routes clean', status: 'LIVE', date: '2026-08', relatedSurface: '/methodology', relatedHref: path('/methodology') },
+  { code: 'A', name: 'Public Surface', pm: 'communications_officer', specialists: 3, mission: 'Hold the institutional voice, the positioning, and the recruiter-read of every public artifact.', ship: 'v9.4.1 hireability hero · H1 as role title, not name', status: 'LIVE', date: '2026-08', relatedSurface: '/contact', relatedHref: path('/contact') },
+  { code: 'B', name: 'AI Engineering', pm: 'eval_harness_lead', specialists: 1, mission: 'Operate the eval harness that gates every claim before it ships.', ship: 'Deflated Sharpe · walk-forward validation · block bootstrap', status: 'LIVE', date: '2026-08', relatedSurface: '/ai', relatedHref: path('/ai') },
+  { code: 'C', name: 'Quant Research', pm: 'alpha_researcher', specialists: 1, mission: 'Mine, prototype, and reject alpha ideas before capital sees them.', ship: 'Strategy Workbook v1 · 8 strategies · 4 READY · $164.50 deployable', status: 'LIVE', date: '2026-08', relatedSurface: '/methodology', relatedHref: path('/methodology') },
+  { code: 'D', name: 'Platform and Infra', pm: 'logistics_officer', specialists: 1, mission: 'Data plumbing, ETL, cron hygiene, silent-cap regressions.', ship: 'MEXC L1/L2/L3 data pull · 5.5y span · 36 files', status: 'LIVE', date: '2026-08', relatedSurface: '/desk', relatedHref: path('/desk') },
+  { code: 'E', name: 'Research and Intelligence', pm: 'intelligence_officer', specialists: 1, mission: 'Market scan, web fetch, OSINT, source verification.', ship: 'Coinglass panel · Deribit options chain · 19 OSINT specialists', status: 'LIVE', date: '2026-08', relatedSurface: '/methodology', relatedHref: path('/methodology') },
+  { code: 'F', name: 'Pedagogy and Doctrine', pm: 'strategist_consultant', specialists: 11, mission: 'Sharpen every recommendation against a named corpus and a named operator.', ship: '8 doctrine-corpus owners · 3 specialists · 6-corpus synthesis rule', status: 'LIVE', date: '2026-08', relatedSurface: '/workbooks', relatedHref: path('/workbooks') },
+  { code: 'H', name: 'HR and Talent', pm: 'hr_director', specialists: 5, mission: 'Agent health, performance review, weekly roster audit.', ship: 'Self-improvement cycle · 14 of 14 surfacings closed · 2 audit cycles', status: 'LIVE', date: '2026-08', relatedSurface: '/about', relatedHref: path('/about') },
+  { code: 'K', name: 'Knowledge and Graph', pm: 'graph_engineer', specialists: 2, mission: 'Own the shared graph · gate every loop primitive on verify_graph.', ship: 'Reflection journal repair · 3 to 1 component · 56+ new rows', status: 'LIVE', date: '2026-08', relatedSurface: '/methodology', relatedHref: path('/methodology') },
 ];
 
 const corpora = [
@@ -96,7 +108,14 @@ const graphStats = [
                 <td><code class="pm">{s.pm}</code></td>
                 <td class="num mono">{s.specialists}</td>
                 <td>{s.mission}</td>
-                <td>{s.ship}</td>
+                <td>
+                  {s.ship}
+                  <p class="squad-meta mono" aria-label="Squad metadata">
+                    {s.status} · {s.date} · related
+                    <a href={s.relatedHref}>{s.relatedSurface}</a>
+                    · commit <code>{STELLA_COMMIT}</code>
+                  </p>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -200,6 +219,9 @@ const graphStats = [
         <a class="cta cta--secondary" href={path('/methodology')}>Validation methodology</a>
         <a class="cta cta--secondary" href={path('/strategies')}>Strategy workbooks</a>
       </div>
+      <p class="stella-stamp mono" aria-label="Last updated">
+        LAST UPDATED · 2026-08-11 · commit <code>{STELLA_COMMIT}</code>
+      </p>
     </Section>
   </main>
 </BaseLayout>
@@ -283,4 +305,14 @@ const graphStats = [
   .lineage-list strong { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.04em; color: var(--stella-amber); margin-right: 8px; }
 
   .out__cta { display: flex; gap: 12px; flex-wrap: wrap; }
+
+  /* v13.1.4 polish-7ai : per-squad metadata line + recency stamp.
+     Match the /notes/ `.note-entry__meta` and /proof/ `.proof-meta`
+     register (mono, 11px, ink-2 on dark paper). */
+  .squad-meta { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--stella-ink-3); margin: 8px 0 0; padding-top: 8px; border-top: 1px solid var(--stella-rule); letter-spacing: 0.02em; line-height: 1.5; }
+  .squad-meta a { color: var(--stella-ink-2); text-decoration: none; border-bottom: 1px dotted var(--stella-ink-3); }
+  .squad-meta a:hover { color: var(--stella-amber); border-bottom-color: var(--stella-amber); }
+  .squad-meta code { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--stella-ink-2); background: rgba(255, 255, 255, 0.04); padding: 1px 4px; }
+  .stella-stamp { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--stella-ink-3); margin: 24px 0 0; padding-top: 16px; border-top: 1px solid var(--stella-rule); letter-spacing: 0.04em; }
+  .stella-stamp code { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--stella-ink-2); background: rgba(255, 255, 255, 0.04); padding: 1px 4px; }
 </style>
