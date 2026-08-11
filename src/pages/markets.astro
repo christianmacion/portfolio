@@ -121,15 +121,15 @@ const secondarySymbol = 'BTC-USD';
         An institutional terminal for a portfolio that ships systems, not screenshots.
       </h1>
       <VoiceLine class="mk-hero__voice" ruled={false} size="md">
-        Every number on this page is reproducible from <code>BUILD_DATE</code>n/a same seed, same series,
-        every render. The order book doesn't move because the data isn't moving.
+        Every number on this page is reproducible from <code>BUILD_DATE</code>. Same seed, same
+        series, every render. The order book doesn't move because the data isn't moving.
       </VoiceLine>
       <p class="mk-hero__sub">
         A research view of what a quant desk reads in the first five minutes of the session: the
         tape, the book, the term structure, and the coverage map. All four primitives are reusable
-        components. they ship on <a href={path('/research')}>research</a>,
+        components and they also ship on <a href={path('/research')}>research</a>,
         <a href={path('/positions')}>positions</a>, and the
-        <a href={path('/prediction-markets')}>prediction page</a> too.
+        <a href={path('/prediction-markets')}>prediction page</a>.
       </p>
     </div>
   </section>
@@ -154,6 +154,15 @@ const secondarySymbol = 'BTC-USD';
                   ariaLabel={`${c.sym} 30-day series`}
                 />
               </div>
+              <p class="mk-stats__meta mono">
+                <span class="mk-stats__meta-status">LIVE</span>
+                <span class="mk-stats__meta-sep">·</span>
+                <span class="mk-stats__meta-date">2024-01</span>
+                <span class="mk-stats__meta-sep">·</span>
+                <a href={path('/research')} class="mk-stats__meta-surface">/research/</a>
+                <span class="mk-stats__meta-sep">·</span>
+                <span class="mk-stats__meta-commit">9eba08f</span>
+              </p>
             </div>
           ))
         }
@@ -173,7 +182,7 @@ const secondarySymbol = 'BTC-USD';
         <p class="section__eyebrow">Book · Strategy · Book</p>
         <h2 class="mk-terminal__title">Live microstructure, three panels.</h2>
         <p class="section__sub">
-          The center column is a real series, not a screenshot. drawn from a 60-day Gaussian walk
+          The center column is a real series, not a screenshot. Drawn from a 60-day Gaussian walk
           with a 6% annualized vol target. The book columns share the seed string so the ladders
           move coherently with the index tape above.
         </p>
@@ -277,9 +286,13 @@ const secondarySymbol = 'BTC-USD';
     (Apache-2.0 core / AGPL-3.0 studio) to reference-only.
   </p>
 
+  <p class="mk-recency mono">
+    Last updated: 2026-08-11 · commit <code class="mk-recency__commit">0619ea6</code>
+  </p>
+
   <CTABanner
     title="Want to see the eval harness behind the numbers?"
-    sub="Every primitive here ships as a reusable Astro component. The PRNG, the book ladder, the term-structure curve. all of it is the same code on /research and /positions."
+    sub="Every primitive here ships as a reusable Astro component. The PRNG, the book ladder, the term-structure curve. All of it is the same code on /research and /positions."
     primaryLabel="Read methodology"
     primaryHref={path('/methodology')}
     secondaryLabel="See research projects"
@@ -407,6 +420,40 @@ const secondarySymbol = 'BTC-USD';
     margin-top: -1px;
     display: flex;
     align-items: center;
+  }
+  .mk-stats__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+    align-items: center;
+    margin: var(--sp-2) 0 0;
+    padding: var(--sp-2) 0 0;
+    border-top: 1px dashed var(--c-rule);
+    font-size: 0.66rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--c-ink-3);
+  }
+  .mk-stats__meta-status {
+    color: var(--c-amber);
+    font-weight: 600;
+  }
+  .mk-stats__meta-sep {
+    color: var(--c-ink-3);
+    opacity: 0.5;
+  }
+  .mk-stats__meta-surface {
+    color: var(--c-ink-2);
+    text-decoration: none;
+  }
+  .mk-stats__meta-surface:hover {
+    color: var(--c-amber);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .mk-stats__meta-commit {
+    color: var(--c-ink-3);
+    font-variant-numeric: tabular-nums;
   }
   @media (max-width: 880px) {
     .mk-stats__grid {
@@ -551,5 +598,28 @@ const secondarySymbol = 'BTC-USD';
   }
   .mk-band__indices-delta--flat {
     color: var(--c-ink-3);
+  }
+
+  /* ============================================================
+     RECENCY STAMP : small mono line at the page foot, citing the
+     most recent polish commit. Institutional register; amber dot.
+     ============================================================ */
+  .mk-recency {
+    margin: var(--sp-6) auto 0;
+    max-width: 1080px;
+    padding: var(--sp-3) var(--sp-4);
+    border-top: 1px solid var(--c-rule);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    color: var(--c-ink-3);
+    text-transform: uppercase;
+  }
+  .mk-recency__commit {
+    color: var(--c-amber);
+    font-family: var(--ff-mono);
+    font-size: 0.78rem;
+    background: color-mix(in oklab, var(--c-amber) 8%, transparent);
+    padding: 0.05em 0.4em;
+    border-radius: 1px;
   }
 </style>
