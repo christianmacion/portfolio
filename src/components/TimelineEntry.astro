@@ -13,6 +13,14 @@ interface Props {
   summary?: string;
   contributions?: { label: string; evidence: string; proof?: string }[];
   proofs?: string[];
+  /**
+   * v13.1.4 (2026-08-11, experience-uplift) : per-entry metadata strip.
+   * Mirrors the work/ polish-7p (9eba08f) pattern. Status + date range
+   * + commit hash + related surface path. Copy-edit-only scope; no new
+   * frontmatter fields, no schema bump. Renders as a single mono line
+   * under the proofs list.
+   */
+  meta?: string;
 }
 const {
   title,
@@ -24,6 +32,7 @@ const {
   summary,
   contributions = [],
   proofs = [],
+  meta,
 } = Astro.props;
 
 function formatDate(iso: string): string {
@@ -92,6 +101,13 @@ const dateRange = `${formatDate(startDate)} to ${formatDate(endDate)}`;
         </div>
       )
     }
+
+    {/* v13.1.4 (2026-08-11, experience-uplift) : per-entry metadata.
+        Status + date range + commit + related surface. Mono + amber
+        hairline above the rule. Same pattern as work-live__meta on
+        /work/ (polish-7p, commit 9eba08f). Renders only when the
+        page passes a meta prop, so other call sites stay untouched. */}
+    {meta && <p class="tl__meta-stamp mono" set:html={meta} />}
   </div>
 </article>
 
@@ -125,16 +141,26 @@ const dateRange = `${formatDate(startDate)} to ${formatDate(endDate)}`;
     background: var(--c-rule-soft);
     margin-top: var(--sp-2);
   }
+  /* Grid item must be allowed to shrink below its min-content width,
+     otherwise the 1fr track expands and clips the role text on phones. */
+  .tl__body {
+    min-width: 0;
+  }
   .tl__head {
+    min-width: 0;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     gap: var(--sp-4);
     flex-wrap: wrap;
   }
+  .tl__head > div {
+    min-width: 0;
+  }
   .tl__role {
     font-size: var(--fs-lg);
     margin: 0;
+    overflow-wrap: anywhere;
   }
   .tl__meta {
     margin-top: 0.25rem;
@@ -161,6 +187,7 @@ const dateRange = `${formatDate(startDate)} to ${formatDate(endDate)}`;
     white-space: nowrap;
   }
   .tl__summary {
+    overflow-wrap: anywhere;
     margin-top: var(--sp-3);
     color: var(--c-ink-2);
     font-size: var(--fs-base);
@@ -223,6 +250,15 @@ const dateRange = `${formatDate(startDate)} to ${formatDate(endDate)}`;
     border-left: 2px solid var(--c-primary);
     padding-left: var(--sp-3);
   }
+  /* Long unbroken tokens (e.g. "Binance/Bybit/OKX/Kraken/Coinbase") raise the
+     body min-content above the 1fr track on phones and clip the entry. */
+  .tl__contribution-label,
+  .tl__contribution-evidence,
+  .tl__contribution-proof,
+  .tl__proofs-list li {
+    overflow-wrap: anywhere;
+    min-width: 0;
+  }
   .tl__contribution-label {
     font-size: var(--fs-sm);
     font-weight: 600;
@@ -264,5 +300,28 @@ const dateRange = `${formatDate(startDate)} to ${formatDate(endDate)}`;
   .tl__proof-glyph {
     color: var(--c-amber);
     font-weight: 600;
+  }
+
+  /* v13.1.4 (2026-08-11, experience-uplift) : per-entry metadata strip.
+     Mono + amber accent + 1px hairline above (chrome contract ≤ 2px
+     corner rule honored). Fits under the proofs list, mirrors the
+     work-live__meta pattern from /work/ polish-7p. */
+  .tl__meta-stamp {
+    margin-top: var(--sp-4);
+    padding-top: var(--sp-2);
+    border-top: 1px solid var(--c-rule-soft);
+    font-size: var(--fs-xs);
+    color: var(--c-ink-2);
+    letter-spacing: 0.04em;
+    line-height: var(--lh-loose);
+  }
+  .tl__meta-stamp :global(a) {
+    color: var(--c-amber);
+    text-decoration: none;
+    border-bottom: 1px solid var(--c-amber);
+  }
+  .tl__meta-stamp :global(a:hover) {
+    color: var(--c-ink);
+    border-bottom-color: var(--c-ink);
   }
 </style>

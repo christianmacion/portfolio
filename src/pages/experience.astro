@@ -75,6 +75,25 @@ const sortedMonths = [...monthKeys].sort();
 const expWindowEarliest = sortedMonths[0] ?? '';
 const expWindowLatest = sortedMonths[sortedMonths.length - 1] ?? '';
 const expWindow = `${expWindowEarliest} → ${expWindowLatest}`;
+
+// v13.1.4 (2026-08-11, experience-uplift) : per-entry metadata strip.
+// Mirrors work-live__meta on /work/ (polish-7p, commit 9eba08f).
+// Indexed by entry order so the map() below passes the right one to
+// each TimelineEntry. Commit hashes are real (from `git log -1 -- <file>`)
+// and pin the most-recent substantive touch per entry. Paths point to
+// the related public surface on the site. NO new frontmatter fields;
+// copy-edit-only scope per the /comp/, /papers/, /404+500 reverts.
+const repoBase = 'https://github.com/christianmacion/christianmacion.github.io/commit';
+const entryMeta: Record<number, string> = {
+  1: `SHIPPED · 2026-03 to 2026-06 · <a href="${repoBase}/9003283" target="_blank" rel="noopener noreferrer">commit 9003283</a> · <a href="${path('/methodology')}">/methodology/</a>`,
+  2: `SHIPPED · 2025-01 to 2026-05 · <a href="${repoBase}/9003283" target="_blank" rel="noopener noreferrer">commit 9003283</a> · <a href="${path('/publications')}">/publications/</a>`,
+  3: `SHIPPED · 2024-12 to 2025-12 · <a href="${repoBase}/9003283" target="_blank" rel="noopener noreferrer">commit 9003283</a> · <a href="${path('/projects/slop-scanner')}">/projects/slop-scanner/</a>`,
+  4: `SHIPPED · 2026-04 to 2026-06 · <a href="${repoBase}/9003283" target="_blank" rel="noopener noreferrer">commit 9003283</a> · <a href="${path('/proof')}">/proof/</a>`,
+  5: `SHIPPED · 2025-10 to 2026-04 · <a href="${repoBase}/9003283" target="_blank" rel="noopener noreferrer">commit 9003283</a> · <a href="${path('/proof')}">/proof/</a>`,
+  6: `SHIPPED · 2025-01 to 2026-05 · <a href="${repoBase}/9003283" target="_blank" rel="noopener noreferrer">commit 9003283</a> · <a href="${path('/projects')}">/projects/</a>`,
+  7: `IN FLIGHT · 2024-12 to present · <a href="${repoBase}/08456c0" target="_blank" rel="noopener noreferrer">commit 08456c0</a> · <a href="${path('/publications')}">/publications/</a>`,
+  8: `SHIPPED · 2024-09 to 2024-09 · <a href="${repoBase}/884b3d2" target="_blank" rel="noopener noreferrer">commit 884b3d2</a> · <a href="${path('/proof')}">/proof/</a>`,
+};
 ---
 
 <BaseLayout
@@ -97,7 +116,7 @@ const expWindow = `${expWindowEarliest} → ${expWindowLatest}`;
         hideTenet
       />
       <h1 class="page-head__title" data-words>
-        Where the work happened. and how to <span class="hl">verify</span> it.
+        Where the work happened, and how to <span class="hl">verify</span> it.
       </h1>
       <VoiceLine class="page-head__voice">
         Each engagement ships with proof. If the proof isn't public, the entry isn't here.
@@ -163,6 +182,7 @@ const expWindow = `${expWindowEarliest} → ${expWindowLatest}`;
               summary={entry.data.summary}
               contributions={entry.data.contributions}
               proofs={entry.data.proofs}
+              meta={entryMeta[entry.data.order]}
             >
               <Content />
             </TimelineEntry>
@@ -172,6 +192,19 @@ const expWindow = `${expWindowEarliest} → ${expWindowLatest}`;
       {/* Bryllim overflow : section list ends with right-aligned "ALL X →". */}
       <p class="timeline__overflow">
         <a href={path('/proof')} class="bryllim-overflow mono">ALL {totalProofs} PROOFS →</a>
+      </p>
+
+      {/* v13.1.4 (2026-08-11, experience-uplift) : recency stamp.
+          Mirrors work-stamp on /work/ (polish-7p). Anchored to the
+          most-recent substantive commit that touched the experience
+          content (9003283, v12.W4 Bryllim parity). Build green,
+          104 pages expected. */}
+      <p class="experience-stamp mono">
+        Last updated: 2026-08-11 · <a
+          href="https://github.com/christianmacion/christianmacion.github.io/commit/9003283"
+          target="_blank"
+          rel="noopener noreferrer">commit 9003283</a
+        > · {entries.length} engagements · NDA-clean · proof-per-row
       </p>
     </div>
   </section>
@@ -311,5 +344,26 @@ const expWindow = `${expWindowEarliest} → ${expWindowLatest}`;
   .timeline__overflow {
     text-align: right;
     margin: var(--sp-5) 0 0;
+  }
+
+  /* v13.1.4 (2026-08-11, experience-uplift) : recency stamp at the
+     bottom of the timeline. Same chrome as work-stamp on /work/.
+     Mono + amber links + hairline above. */
+  .experience-stamp {
+    margin-top: var(--sp-5);
+    padding-top: var(--sp-3);
+    border-top: 1px solid var(--c-rule-soft);
+    font-size: var(--fs-xs);
+    color: var(--c-ink-2);
+    letter-spacing: 0.04em;
+  }
+  .experience-stamp a {
+    color: var(--c-amber);
+    text-decoration: none;
+    border-bottom: 1px solid var(--c-amber);
+  }
+  .experience-stamp a:hover {
+    color: var(--c-ink);
+    border-bottom-color: var(--c-ink);
   }
 </style>
