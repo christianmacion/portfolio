@@ -1,14 +1,21 @@
 ---
 /**
- * talks.astro : v1.0 · public talks, lectures, and recorded walkthroughs.
+ * talks.astro :  /talks/ · public lectures, conference & meetup appearances.
  *
  * Two sections:
- *   1) Public lectures : VideoEmbed cards, 2-up, sourced from /public/proof.
+ *   1) Public lectures  : VideoEmbed cards, 2-up, sourced from /proof.
  *   2) Conference & meetup appearances : tight list of public-facing events.
  *
  * Every artifact below is either a video on disk or a named event with a
  * public attestation (image, certificate, or institutional record). No
  * NDA-protected content; no proprietary data.
+ *
+ * v13.1.4 polish-7ai (2026-08-11, talks-uplift) :
+ *   copy-edit-only pass : per-talk metadata (status + date + related
+ *   surface + commit hash) + recency stamp at bottom. Anchored to /proof/
+ *   polish-7af commit (9b0ced6) because the videos + cert images surfaced
+ *   here live in /proof/. Same register as /notes/ polish-7ah (4e2cee3)
+ *   + /proof/ polish-7af (9b0ced6) + /contact/ polish-7x (19aa5ef).
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
 import VideoEmbed from '@components/VideoEmbed.astro';
@@ -21,7 +28,16 @@ import SectionMark from '@components/SectionMark.astro';
 const fullName = profile.fullName.split(',')[0];
 const NGATE = `${profile.stats.evalGates}-gate`;
 
+// v13.1.4 (2026-08-11, talks-uplift) : per-page recency-stamp anchor.
+// Held constant across all 8 entries so a single edit re-anchors the page.
+// Points to /proof/ polish-7af (9b0ced6) because the videos + cert images
+// surfaced here live in /proof/.
+const TALKS_COMMIT = '9b0ced6';
+
 // === Public lectures (VideoEmbed, 2-up) =====================================
+// Per-entry status + related surface for the polish-7ai metadata strip.
+// Status legend: DELIVERED (past, attested) | SCHEDULED (upcoming)
+// | DRAFT (in prep). All entries below are DELIVERED.
 const lectures = [
   {
     title: 'USeP EGE 313 Manobo lecture. live presenter view',
@@ -32,6 +48,9 @@ const lectures = [
     src: path('/proof/usep-lecture.mp4'),
     poster: path('/proof/usep-lecture.jpg'),
     duration: 55,
+    status: 'DELIVERED' as const,
+    relatedSurface: '/proof',
+    relatedHref: path('/proof'),
   },
   {
     title: 'AI workflow. same lecture, drafted via ChatGPT-assisted authoring',
@@ -41,16 +60,26 @@ const lectures = [
     src: path('/proof/ai-workflow.mp4'),
     poster: path('/proof/ai-workflow.jpg'),
     duration: 55,
+    status: 'DELIVERED' as const,
+    relatedSurface: '/proof',
+    relatedHref: path('/proof'),
   },
 ];
 
 // === Conference & meetup appearances (tight list) ===========================
+// Per-entry status + related surface for the polish-7ai metadata strip.
+// Related surfaces: /proof/ for video + cert image attestations;
+// /methodology/ for the systematic-trading research guest lecture;
+// /certifications/ for the STA Tier-1 CTA program graduate entry.
 interface Appearance {
   date: string;
   dateLabel: string;
   title: string;
   audience: string;
   description: string;
+  status: 'DELIVERED' | 'SCHEDULED' | 'DRAFT';
+  relatedSurface: string;
+  relatedHref: string;
   link?: { label: string; href: string };
 }
 
@@ -62,6 +91,9 @@ const appearances: Appearance[] = [
     audience: 'NASA Space Apps · Zurich global cohort',
     description:
       'Forty-eight-hour global hackathon; awarded the Galactic Problem Solver distinction for the open-data space-physics challenge track.',
+    status: 'DELIVERED',
+    relatedSurface: '/proof',
+    relatedHref: path('/proof'),
     link: { label: 'Proof photo', href: path('/proof') },
   },
   {
@@ -71,6 +103,9 @@ const appearances: Appearance[] = [
     audience: 'Philippine Science High School. Southern Mindanao Campus',
     description:
       'Alumni talk on AI engineering, the math curriculum, and the educational path from PSHS-SMC to AI and quant careers. ~80 attendees, alumni and current students.',
+    status: 'DELIVERED',
+    relatedSurface: '/proof',
+    relatedHref: path('/proof'),
   },
   {
     date: '2025-03-22',
@@ -79,6 +114,9 @@ const appearances: Appearance[] = [
     audience: 'University of Southeastern Philippines · College of Engineering',
     description:
       'Guest lecture on systematic trading research, multiple-testing discipline, and applied AI for engineering students. CpE / EE 5th-year elective cohort.',
+    status: 'DELIVERED',
+    relatedSurface: '/methodology',
+    relatedHref: path('/methodology'),
   },
   {
     date: '2025-11-08',
@@ -87,6 +125,9 @@ const appearances: Appearance[] = [
     audience: 'Ateneo de Davao University · US Embassy Manila',
     description:
       'Selected cohort for the AI for the Modern Workforce program; co-hosted by Ateneo de Davao and the US Embassy. AI-literacy curriculum for working professionals.',
+    status: 'DELIVERED',
+    relatedSurface: '/proof',
+    relatedHref: path('/proof'),
     link: { label: 'Cert image', href: path('/proof/ateneo-american-corner-2025-11.jpg') },
   },
   {
@@ -96,6 +137,9 @@ const appearances: Appearance[] = [
     audience: 'Board of Investments × Bayan Academy × Meta Philippines',
     description:
       'Five-day hybrid training on applied AI for Philippine MSMEs; co-signed certificate from BIDA, Bayan Academy, and Meta Philippines. Awarded Dec 17 2025.',
+    status: 'DELIVERED',
+    relatedSurface: '/proof',
+    relatedHref: path('/proof'),
     link: { label: 'Cert image', href: path('/proof/bida-meta-aiccelerate-2025-11.jpg') },
   },
   {
@@ -105,6 +149,9 @@ const appearances: Appearance[] = [
     audience: 'STA Philippines · Tier-1 CTA program',
     description:
       'Tier-1 Certified Technical Analyst program, completed Jan 19 2026 (cert #260197). Final capstone: regime-classification case study on ASEAN equities.',
+    status: 'DELIVERED',
+    relatedSurface: '/certifications',
+    relatedHref: path('/certifications'),
     link: { label: 'Cert image', href: path('/proof/cta-cert-portrait-2026-01.jpg') },
   },
 ];
@@ -183,6 +230,20 @@ const appearances: Appearance[] = [
               </div>
               <h3 class="talks-card__title">{lec.title}</h3>
               <p class="talks-card__desc">{lec.description}</p>
+              {/* v13.1.4 polish-7ai (talks-uplift) : per-lecture metadata strip.
+                  status + date + related surface + commit. Same register as
+                  /notes/ `.note-entry__meta` (polish-7ah 4e2cee3). */}
+              <p class="talks-card__meta-strip mono" aria-label="Lecture metadata">
+                <span class="talks-card__status">{lec.status}</span>
+                <span class="talks-card__sep" aria-hidden="true">·</span>
+                <time datetime={lec.date}>{lec.date}</time>
+                <span class="talks-card__sep" aria-hidden="true">·</span>
+                <span>related</span>
+                <a href={lec.relatedHref}>{lec.relatedSurface}</a>
+                <span class="talks-card__sep" aria-hidden="true">·</span>
+                <span>commit</span>
+                <code>{TALKS_COMMIT}</code>
+              </p>
               <a
                 class="talks-card__link"
                 href={lec.src}
@@ -228,6 +289,20 @@ const appearances: Appearance[] = [
                     {a.link.label} →
                   </a>
                 )}
+                {/* v13.1.4 polish-7ai (talks-uplift) : per-appearance metadata strip.
+                    status + date + related surface + commit. Same register as
+                    /notes/ `.note-entry__meta` (polish-7ah 4e2cee3). */}
+                <p class="talks-row__meta-strip mono" aria-label="Appearance metadata">
+                  <span class="talks-row__status">{a.status}</span>
+                  <span class="talks-row__sep" aria-hidden="true">·</span>
+                  <time datetime={a.date}>{a.date}</time>
+                  <span class="talks-row__sep" aria-hidden="true">·</span>
+                  <span>related</span>
+                  <a href={a.relatedHref}>{a.relatedSurface}</a>
+                  <span class="talks-row__sep" aria-hidden="true">·</span>
+                  <span>commit</span>
+                  <code>{TALKS_COMMIT}</code>
+                </p>
               </div>
             </li>
           ))
@@ -243,6 +318,18 @@ const appearances: Appearance[] = [
     secondaryLabel="See methodology"
     secondaryHref={path('/methodology')}
   />
+
+  {/* v13.1.4 polish-7ai (talks-uplift) : recency stamp at bottom. Same
+      register as /proof/ `.proof-recency` (polish-7af 9b0ced6) and /contact/
+      `.contact-recency` (polish-7x 19aa5ef). Anchors the page to its last
+      content-edit commit (TALKS_COMMIT). */}
+  <p class="talks-recency mono">
+    Last updated: 2026-08-11 · <a
+      href={`https://github.com/christianmacion/christianmacion.github.io/commit/${TALKS_COMMIT}`}
+      target="_blank"
+      rel="noopener noreferrer">commit {TALKS_COMMIT}</a
+    > · /talks/ · Quant Researcher · 31-gate eval-first
+  </p>
 </BaseLayout>
 
 <style>
@@ -326,6 +413,41 @@ const appearances: Appearance[] = [
     align-self: flex-start;
   }
 
+  /* v13.1.4 polish-7ai (talks-uplift) : per-lecture metadata strip.
+     Same register as /notes/ `.note-entry__meta` (polish-7ah 4e2cee3).
+     Status chip in amber to match the existing date chip. */
+  .talks-card__meta-strip {
+    font-size: 10.5px;
+    color: var(--c-ink-3);
+    letter-spacing: 0.06em;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 6px;
+    align-items: center;
+  }
+  .talks-card__status {
+    color: var(--c-amber);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+  }
+  .talks-card__sep {
+    color: var(--c-rule);
+  }
+  .talks-card__meta-strip a {
+    color: var(--c-ink-2);
+    text-decoration: none;
+    letter-spacing: 0.06em;
+  }
+  .talks-card__meta-strip a:hover {
+    color: var(--c-amber);
+  }
+  .talks-card__meta-strip code {
+    color: var(--c-ink-2);
+    font-family: ui-monospace, monospace;
+    font-size: 10.5px;
+  }
+
   /* === Tight appearances list === */
   .talks-list {
     list-style: none;
@@ -374,6 +496,62 @@ const appearances: Appearance[] = [
     text-decoration: underline;
     text-decoration-color: var(--c-amber-decor);
     text-underline-offset: 3px;
+  }
+
+  /* v13.1.4 polish-7ai (talks-uplift) : per-appearance metadata strip.
+     Same register as /notes/ `.note-entry__meta` (polish-7ah 4e2cee3). */
+  .talks-row__meta-strip {
+    font-size: 10.5px;
+    color: var(--c-ink-3);
+    letter-spacing: 0.06em;
+    margin: 8px 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 6px;
+    align-items: center;
+  }
+  .talks-row__status {
+    color: var(--c-amber);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+  }
+  .talks-row__sep {
+    color: var(--c-rule);
+  }
+  .talks-row__meta-strip a {
+    color: var(--c-ink-2);
+    text-decoration: none;
+    letter-spacing: 0.06em;
+  }
+  .talks-row__meta-strip a:hover {
+    color: var(--c-amber);
+  }
+  .talks-row__meta-strip code {
+    color: var(--c-ink-2);
+    font-family: ui-monospace, monospace;
+    font-size: 10.5px;
+  }
+
+  /* v13.1.4 polish-7ai (talks-uplift) : recency stamp at bottom.
+     Same register as /proof/ `.proof-recency` (polish-7af 9b0ced6). */
+  .talks-recency {
+    margin: var(--sp-3) 0 var(--sp-6);
+    padding: 0 var(--sp-4);
+    font-size: var(--fs-xs);
+    color: var(--c-ink-3);
+    letter-spacing: 0.06em;
+    line-height: 1.5;
+    text-align: center;
+  }
+  .talks-recency a {
+    color: var(--c-ink-2);
+    text-decoration: underline;
+    text-decoration-color: var(--c-rule);
+    text-underline-offset: 2px;
+  }
+  .talks-recency a:hover {
+    color: var(--c-amber);
+    text-decoration-color: var(--c-amber);
   }
 
   /* === Responsive === */
