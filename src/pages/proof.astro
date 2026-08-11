@@ -49,6 +49,11 @@ const heroAiCount = aiProjects.length;
 // quantProjects + aiProjects + 1 ProofCard (the operator-discretion chart).
 const proofCountOnDisk = heroArtifactCount + 1; /* ProofCard */
 
+// v13.1.4 (2026-08-11, proof-uplift) : recency stamp at bottom.
+// Anchors the page to its last content-edit commit. Same register
+// as /contact/ `.contact-recency` (polish-7x commit 19aa5ef).
+const PROOF_COMMIT = '9003283';
+
 const formatProjectMetric = (p: (typeof projects)[number]) => {
   if (!p.data.metrics?.length) return null;
   const first = p.data.metrics[0];
@@ -171,7 +176,7 @@ const paginate = (items: any[]) => {
       </VoiceLine>
 
       <p class="proof-head__sub">
-        Strongest evidence first: {quantProjects.length} quant strategies with public-data backtests, then
+        Strongest evidence first. {quantProjects.length} quant strategies with public-data backtests, then
         {aiProjects.length} AI projects with frozen-spec eval harnesses. Each row links to the write-up. Metrics
         come from project frontmatter, not hand-written.
       </p>
@@ -460,22 +465,36 @@ const paginate = (items: any[]) => {
       </header>
 
       <div class="proof-grid proof-grid--video">
-        <VideoEmbed
-          src={path('/proof/usep-lecture.mp4')}
-          poster={path('/proof/usep-lecture.jpg')}
-          title="USeP EGE 313 Manobo lecture. live presenter view"
-          duration={55}
-          caption="Live Presenter-view delivery, Sep 13 2024. Webcam lower-right; deck filename 'MACION. MANOBO. PIC. ECE3A. 230pm. MW' visible in the PPT Edit-mode frame."
-          mode="gallery"
-        />
-        <VideoEmbed
-          src={path('/proof/ai-workflow.mp4')}
-          poster={path('/proof/ai-workflow.jpg')}
-          title="AI workflow. same lecture, authored via ChatGPT-assisted drafting"
-          duration={55}
-          caption={`Three weeks before the lecture: same deck, drafted end-to-end via a ChatGPT session. The precursor pattern to the current ${NGATE} authoring harness.`}
-          mode="gallery"
-        />
+        <div>
+          <VideoEmbed
+            src={path('/proof/usep-lecture.mp4')}
+            poster={path('/proof/usep-lecture.jpg')}
+            title="USeP EGE 313 Manobo lecture. live presenter view"
+            duration={55}
+            caption="Live Presenter-view delivery, 2024-09-13. Webcam lower-right; deck filename 'MACION. MANOBO. PIC. ECE3A. 230pm. MW' visible in the PPT Edit-mode frame."
+            mode="gallery"
+          />
+          {/* v13.1.4 (2026-08-11, proof-uplift): per-proof metadata. */}
+          <p class="proof-meta mono">
+            VERIFIED · 2024-09-13 · related surface
+            <a href={path('/methodology')}>· /methodology ·</a> commit <code>{PROOF_COMMIT}</code>
+          </p>
+        </div>
+        <div>
+          <VideoEmbed
+            src={path('/proof/ai-workflow.mp4')}
+            poster={path('/proof/ai-workflow.jpg')}
+            title="AI workflow. same lecture, authored via ChatGPT-assisted drafting"
+            duration={55}
+            caption={`Three weeks before the lecture: same deck, drafted end-to-end via a ChatGPT session. The precursor pattern to the current ${NGATE} authoring harness.`}
+            mode="gallery"
+          />
+          {/* v13.1.4 (2026-08-11, proof-uplift): per-proof metadata. */}
+          <p class="proof-meta mono">
+            VERIFIED · 2024-08-22 · related surface
+            <a href={path('/methodology')}>· /methodology ·</a> commit <code>{PROOF_COMMIT}</code>
+          </p>
+        </div>
       </div>
 
       <h3 class="proof-list__heading">Operator-discretion chart</h3>
@@ -483,18 +502,28 @@ const paginate = (items: any[]) => {
         src={path('/proof/cryptoneeds-christ-chart.jpg')}
         alt="TradingView chart of XAUT/USDT (tokenized gold) on the 1-hour timeframe with Elliott Wave counts. Public chart by @CryptoneedsChrist."
         caption="XAUT/USDT perpetual futures, 1h, MEXC. Elliott Wave count by @CryptoneedsChrist (public TradingView handle). Operator-discretion; not part of the systematic book."
-        credit="@CryptoneedsChrist · public TradingView · Jan 3 2026"
+        credit="@CryptoneedsChrist · public TradingView · 2026-01-03"
         aspect="16/9"
       />
+      {/* v13.1.4 (2026-08-11, proof-uplift): per-proof metadata. */}
+      <p class="proof-meta mono">
+        ARCHIVED · 2026-01-03 · related surface
+        <a href={path('/positions')}>· /positions ·</a> commit <code>{PROOF_COMMIT}</code>
+      </p>
 
       <h3 class="proof-list__heading">Atom feeds. 3 streams</h3>
       <ul class="proof-feeds mono">
-        <li><a href={path('/feed.xml')}>{path('/feed.xml')}</a> · portfolio updates</li>
+        <li>
+          <a href={path('/feed.xml')}>{path('/feed.xml')}</a> · portfolio updates
+          <span class="proof-feeds__meta"> · LIVE · 2026-08-11 · commit <code>{PROOF_COMMIT}</code></span>
+        </li>
         <li>
           <a href={path('/feed-projects.xml')}>{path('/feed-projects.xml')}</a> · project updates
+          <span class="proof-feeds__meta"> · LIVE · 2026-08-11 · commit <code>{PROOF_COMMIT}</code></span>
         </li>
         <li>
           <a href={path('/feed-solutions.xml')}>{path('/feed-solutions.xml')}</a> · solution updates
+          <span class="proof-feeds__meta"> · LIVE · 2026-08-11 · commit <code>{PROOF_COMMIT}</code></span>
         </li>
       </ul>
     </div>
@@ -533,6 +562,7 @@ const paginate = (items: any[]) => {
           <div class="ptr__cell ptr__cell--link" role="cell">
             <a href={path('/positions')} class="ptr__link mono">see /positions</a>
           </div>
+          <div class="ptr__cell ptr__cell--meta mono" role="cell">ARCHIVED · 2026-08-11 · commit <code>{PROOF_COMMIT}</code></div>
         </div>
         <div class="ptr__row" role="row">
           <div class="ptr__cell ptr__cell--platform" role="cell">HuggingFace</div>
@@ -543,6 +573,7 @@ const paginate = (items: any[]) => {
               >/projects/ai/04-eval-mcp-server</a
             >
           </div>
+          <div class="ptr__cell ptr__cell--meta mono" role="cell">VERIFIED · 2026-08-11 · commit <code>{PROOF_COMMIT}</code></div>
         </div>
         <div class="ptr__row" role="row">
           <div class="ptr__cell ptr__cell--platform" role="cell">GitHub</div>
@@ -555,6 +586,7 @@ const paginate = (items: any[]) => {
               >github.com/christianmacion26</a
             >
           </div>
+          <div class="ptr__cell ptr__cell--meta mono" role="cell">VERIFIED · 2026-08-11 · commit <code>{PROOF_COMMIT}</code></div>
         </div>
         <div class="ptr__row" role="row">
           <div class="ptr__cell ptr__cell--platform" role="cell">TradingView</div>
@@ -569,6 +601,7 @@ const paginate = (items: any[]) => {
               rel="noopener noreferrer">tradingview.com/u/CryptoneedsChrist</a
             >
           </div>
+          <div class="ptr__cell ptr__cell--meta mono" role="cell">VERIFIED · 2026-08-11 · commit <code>{PROOF_COMMIT}</code></div>
         </div>
         <div class="ptr__row" role="row">
           <div class="ptr__cell ptr__cell--platform" role="cell">Atom feeds</div>
@@ -579,6 +612,7 @@ const paginate = (items: any[]) => {
           <div class="ptr__cell ptr__cell--link" role="cell">
             <a href={path('/feed.xml')} class="ptr__link mono">/feed.xml</a>
           </div>
+          <div class="ptr__cell ptr__cell--meta mono" role="cell">LIVE · 2026-08-11 · commit <code>{PROOF_COMMIT}</code></div>
         </div>
         <div class="ptr__row" role="row">
           <div class="ptr__cell ptr__cell--platform" role="cell">Medium</div>
@@ -591,6 +625,7 @@ const paginate = (items: any[]) => {
               rel="noopener noreferrer">medium.com/@christianmacion</a
             >
           </div>
+          <div class="ptr__cell ptr__cell--meta mono" role="cell">VERIFIED · 2026-08-11 · commit <code>{PROOF_COMMIT}</code></div>
         </div>
       </div>
     </div>
@@ -782,6 +817,17 @@ const paginate = (items: any[]) => {
     secondaryLabel="Read /experience"
     secondaryHref={path('/experience')}
   />
+
+  {/* v13.1.4 (2026-08-11, proof-uplift): recency stamp at bottom.
+      Anchors the page to its last content-edit commit. Same register
+      as /contact/ `.contact-recency` (polish-7x commit 19aa5ef). */}
+  <p class="proof-recency mono">
+    Last updated: 2026-08-11 · <a
+      href={`https://github.com/christianmacion/christianmacion.github.io/commit/${PROOF_COMMIT}`}
+      target="_blank"
+      rel="noopener noreferrer">commit {PROOF_COMMIT}</a
+    > · /proof/ · Quant Researcher · 31-gate eval-first
+  </p>
 </BaseLayout>
 
 <style>
@@ -1015,6 +1061,38 @@ const paginate = (items: any[]) => {
     text-underline-offset: 3px;
   }
 
+  /* v13.1.4 (2026-08-11, proof-uplift) : per-proof metadata line.
+     Inline copy-edit. status + date + related surface + commit hash.
+     Same register as /positions/ `.positions-card__meta`
+     (polish-7z commit ec1674b). */
+  .proof-meta {
+    margin: var(--sp-2) 0 var(--sp-4);
+    font-size: var(--fs-xs);
+    color: var(--c-ink-3);
+    letter-spacing: 0.04em;
+  }
+  .proof-meta a {
+    color: var(--c-ink-2);
+    text-decoration: underline;
+    text-decoration-color: var(--c-rule);
+    text-underline-offset: 2px;
+  }
+  .proof-meta a:hover {
+    color: var(--c-amber);
+    text-decoration-color: var(--c-amber);
+  }
+  .proof-meta code {
+    color: var(--c-ink-2);
+    font-size: var(--fs-xs);
+  }
+  .proof-feeds__meta {
+    color: var(--c-ink-3);
+    font-size: var(--fs-xs);
+  }
+  .proof-feeds__meta code {
+    color: var(--c-ink-3);
+  }
+
   /* === P.5c testimonials (pending attestation) === */
   .testimonials-pending {
     padding: var(--sp-5);
@@ -1117,6 +1195,29 @@ const paginate = (items: any[]) => {
   .proof-neg strong {
     color: var(--c-primary);
     font-weight: 600;
+  }
+
+  /* v13.1.4 (2026-08-11, proof-uplift) : recency stamp at bottom.
+     Anchors the page to its last build commit. Same register as
+     /about/ `.about-recency` (polish-7t commit 3781944). */
+  .proof-recency {
+    margin: var(--sp-3) 0 var(--sp-6);
+    padding: 0 var(--sp-4);
+    font-size: var(--fs-xs);
+    color: var(--c-ink-3);
+    letter-spacing: 0.06em;
+    line-height: 1.5;
+    text-align: center;
+  }
+  .proof-recency a {
+    color: var(--c-ink-2);
+    text-decoration: underline;
+    text-decoration-color: var(--c-rule);
+    text-underline-offset: 2px;
+  }
+  .proof-recency a:hover {
+    color: var(--c-amber);
+    text-decoration-color: var(--c-amber);
   }
 
   /* ===========================================================
@@ -1324,6 +1425,19 @@ const paginate = (items: any[]) => {
     align-items: baseline;
     transition: background var(--transition);
   }
+  /* v13.1.4 (2026-08-11, proof-uplift) : PTR meta column. Wraps
+     onto a new row beneath the existing 4-col layout on desktop;
+     stacks into the row on mobile (≤720px). */
+  .ptr__cell--meta {
+    grid-column: 1 / -1;
+    margin-top: var(--sp-1);
+    font-size: var(--fs-xs);
+    color: var(--c-ink-3);
+    letter-spacing: 0.04em;
+  }
+  .ptr__cell--meta code {
+    color: var(--c-ink-2);
+  }
   .ptr__row:hover {
     background: var(--c-bg-2);
   }
@@ -1384,6 +1498,9 @@ const paginate = (items: any[]) => {
     }
     .ptr__cell--link {
       text-align: left;
+    }
+    .ptr__cell--meta {
+      margin-top: var(--sp-2);
     }
   }
 </style>
