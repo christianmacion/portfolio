@@ -184,9 +184,36 @@ const NGATE = `${profile.stats.evalGates}-gate`;
           />
         </div>
         <ul class="method-ribbon__list mono">
-          <li><strong>G1 to G12</strong> · single-strategy guardrails</li>
-          <li><strong>G16 to G20</strong> · multiple-testing layer</li>
-          <li><strong>{`G23 to G${profile.stats.evalGates}`}</strong> · LLM-output validation</li>
+          <li>
+            <strong>G1 to G12</strong> · single-strategy guardrails
+            <span class="method-ribbon__meta mono"
+              >CURRENT · 2026-08 · <a
+                href="https://github.com/christianmacion/christianmacion.github.io/commit/2d75d97"
+                target="_blank"
+                rel="noopener noreferrer">commit 2d75d97</a
+              > · <a href={path('/methodology/')}>/methodology/</a></span
+            >
+          </li>
+          <li>
+            <strong>G16 to G20</strong> · multiple-testing layer
+            <span class="method-ribbon__meta mono"
+              >CURRENT · 2026-08 · <a
+                href="https://github.com/christianmacion/christianmacion.github.io/commit/2d75d97"
+                target="_blank"
+                rel="noopener noreferrer">commit 2d75d97</a
+              > · <a href={path('/methodology/')}>/methodology/</a></span
+            >
+          </li>
+          <li>
+            <strong>{`G23 to G${profile.stats.evalGates}`}</strong> · LLM-output validation
+            <span class="method-ribbon__meta mono"
+              >CURRENT · 2026-08 · <a
+                href="https://github.com/christianmacion/christianmacion.github.io/commit/2d75d97"
+                target="_blank"
+                rel="noopener noreferrer">commit 2d75d97</a
+              > · <a href={path('/methodology/')}>/methodology/</a></span
+            >
+          </li>
         </ul>
       </div>
 
@@ -218,9 +245,36 @@ const NGATE = `${profile.stats.evalGates}-gate`;
           />
         </div>
         <ul class="method-ribbon__list mono">
-          <li><strong>{quantProjectCount}</strong> public-data projects shipped</li>
-          <li><strong>5</strong> asset classes covered</li>
-          <li><strong>3</strong> strategy families validated end-to-end</li>
+          <li>
+            <strong>{quantProjectCount}</strong> public-data projects shipped
+            <span class="method-ribbon__meta mono"
+              >CURRENT · 2026-08 · <a
+                href="https://github.com/christianmacion/christianmacion.github.io/commit/2d75d97"
+                target="_blank"
+                rel="noopener noreferrer">commit 2d75d97</a
+              > · <a href={path('/solutions/')}>/solutions/</a></span
+            >
+          </li>
+          <li>
+            <strong>5</strong> asset classes covered
+            <span class="method-ribbon__meta mono"
+              >CURRENT · 2026-08 · <a
+                href="https://github.com/christianmacion/christianmacion.github.io/commit/2d75d97"
+                target="_blank"
+                rel="noopener noreferrer">commit 2d75d97</a
+              > · <a href={path('/solutions/')}>/solutions/</a></span
+            >
+          </li>
+          <li>
+            <strong>3</strong> strategy families validated end-to-end
+            <span class="method-ribbon__meta mono"
+              >CURRENT · 2026-08 · <a
+                href="https://github.com/christianmacion/christianmacion.github.io/commit/2d75d97"
+                target="_blank"
+                rel="noopener noreferrer">commit 2d75d97</a
+              > · <a href={path('/solutions/')}>/solutions/</a></span
+            >
+          </li>
         </ul>
       </div>
 
@@ -254,6 +308,13 @@ const NGATE = `${profile.stats.evalGates}-gate`;
           evaluation harness. Pre-registered research windows. Public-data reproducibility. Headline metrics
           you can verify.
         </p>
+        <p class="bio-prose__meta mono">
+          CURRENT · 2026-08 · <a
+            href="https://github.com/christianmacion/christianmacion.github.io/commit/2d75d97"
+            target="_blank"
+            rel="noopener noreferrer">commit 2d75d97</a
+          > · <a href={path('/methodology/')}>/methodology/</a>
+        </p>
 
         <p>
           Most recently I shipped the same {NGATE} harness against LLM outputs and systematic strategies
@@ -263,21 +324,42 @@ const NGATE = `${profile.stats.evalGates}-gate`;
           tool-calling agent, MCP eval server, LLM-as-judge harness, reflection agent, AI-slop evaluation
           gate.
         </p>
+        <p class="bio-prose__meta mono">
+          CURRENT · 2026-08 · <a
+            href="https://github.com/christianmacion/christianmacion.github.io/commit/2d75d97"
+            target="_blank"
+            rel="noopener noreferrer">commit 2d75d97</a
+          > · <a href={path('/experience/')}>/experience/</a>
+        </p>
 
         <p>
-          On the quant side I design and backtest systematic strategies on crypto and equities :
+          On the quant side I design and backtest systematic strategies on crypto and equities:
           {quantProjectCount} reproducible public-data projects spanning multiple-testing (Deflated Sharpe),
           cross-sectional and time-series alpha, volatility carry, cointegration, funding-carry, regime
           overlays, transaction-cost realism, and look-ahead-bias audits. Every project ships with the
-          senior-research discipline: locked OOS windows, block-bootstrap CIs, methodology declared up-front,
+          senior-research discipline: locked OOS windows, block-bootstrap CIs, methodology declared up front,
           not bolted on at the end.
+        </p>
+        <p class="bio-prose__meta mono">
+          CURRENT · 2026-08 · <a
+            href="https://github.com/christianmacion/christianmacion.github.io/commit/2d75d97"
+            target="_blank"
+            rel="noopener noreferrer">commit 2d75d97</a
+          > · <a href={path('/solutions/')}>/solutions/</a>
         </p>
 
         <p>
           Based in {profile.location.display} (UTC+8). {profile.availability.hours} remote, APAC + US-premarket
           overlap. {profile.stats.certCount} professional certifications across AI, finance, math/statistics,
-          and event flagships. built up in {profile.stats.ageMonths} months. I write about what I'm learning
+          and event flagships. Built up in {profile.stats.ageMonths} months. I write about what I'm learning
           and ship the things I'm building.
+        </p>
+        <p class="bio-prose__meta mono">
+          CURRENT · 2026-08 · <a
+            href="https://github.com/christianmacion/christianmacion.github.io/commit/2d75d97"
+            target="_blank"
+            rel="noopener noreferrer">commit 2d75d97</a
+          > · <a href={path('/about/')}>/about/</a>
         </p>
       </div>
     </div>
@@ -304,6 +386,13 @@ const NGATE = `${profile.stats.evalGates}-gate`;
         Mindanao (1st Semester, AY 2026 to 27). Completed the Certified Technical Analyst Program at
         the Society of Technical Analysts of the Philippines (Tier-1, December 2025).
       </p>
+      <p class="long-form-prose__meta mono">
+        CURRENT · 2025-12 · <a
+          href="https://github.com/christianmacion/christianmacion.github.io/commit/2d75d97"
+          target="_blank"
+          rel="noopener noreferrer">commit 2d75d97</a
+        > · <a href={path('/about/')}>/about/</a>
+      </p>
     </div>
   </section>
 
@@ -329,6 +418,13 @@ const NGATE = `${profile.stats.evalGates}-gate`;
         open-source runnable projects. If a proof you need is missing, email me the JD and I'll send
         back a tailored version within 24 hours.
       </p>
+      <p class="long-form-prose__meta mono">
+        CURRENT · 2026-06 · <a
+          href="https://github.com/christianmacion/christianmacion.github.io/commit/2d75d97"
+          target="_blank"
+          rel="noopener noreferrer">commit 2d75d97</a
+        > · <a href={path('/experience/')}>/experience/</a>
+      </p>
 
       <nav class="orphan-crosslinks" aria-label="Related surfaces">
         <p class="mono orphan-crosslinks__eyebrow">Source code + failure log</p>
@@ -352,6 +448,13 @@ const NGATE = `${profile.stats.evalGates}-gate`;
   <p class="about-canref mono">
     References the open-source canon. see
     <a href={path('/methodology')}>{path('/methodology')} → References &amp; licenses</a>.
+  </p>
+  <p class="about-recency mono">
+    Last updated: 2026-08-11 · <a
+      href="https://github.com/christianmacion/christianmacion.github.io/commit/2d75d97"
+      target="_blank"
+      rel="noopener noreferrer">commit 2d75d97</a
+    > · Quant Researcher · 31-gate eval-first
   </p>
 </BaseLayout>
 
@@ -674,6 +777,93 @@ const NGATE = `${profile.stats.evalGates}-gate`;
     color: var(--c-ink);
     max-width: 64ch;
     margin: 0;
+  }
+
+  /* v13.1.4 (2026-08-11, about-uplift) : per-paragraph metadata line.
+     Status (CURRENT / ARCHIVED) + date + commit + path. Mono, ink-3,
+     footnote register. Lives below the paragraph, never inline.
+     Same pattern as /work/ polish-7p .work-live__meta (commit 9eba08f).
+     Chrome contract v1: hairline rule + mono + 1 accent on hover;
+     no halo, no glow, no gradient. */
+  .bio-prose__meta {
+    margin: calc(var(--sp-5) * -1 + var(--sp-3)) 0 var(--sp-5);
+    font-size: var(--fs-xs);
+    color: var(--c-ink-3);
+    letter-spacing: 0.04em;
+    line-height: 1.5;
+  }
+  .bio-prose__meta a {
+    color: var(--c-ink-2);
+    text-decoration: underline;
+    text-decoration-color: var(--c-rule);
+    text-underline-offset: 2px;
+  }
+  .bio-prose__meta a:hover {
+    text-decoration-color: var(--c-amber);
+  }
+
+  /* v13.1.4 (2026-08-11, about-uplift) : per-bullet metadata inside
+     method-ribbon__list items. Same register as .bio-prose__meta.
+     Block display so each <li> stays a clean two-line block:
+     bold label line + small mono meta line. */
+  .method-ribbon__meta {
+    display: block;
+    margin-top: var(--sp-1);
+    font-size: var(--fs-xs);
+    color: var(--c-ink-3);
+    letter-spacing: 0.04em;
+    line-height: 1.5;
+  }
+  .method-ribbon__meta a {
+    color: var(--c-ink-2);
+    text-decoration: underline;
+    text-decoration-color: var(--c-rule);
+    text-underline-offset: 2px;
+  }
+  .method-ribbon__meta a:hover {
+    text-decoration-color: var(--c-amber);
+  }
+
+  /* v13.1.4 (2026-08-11, about-uplift) : metadata for long-form prose
+     sections (Education + Disclosure). Same register as the other
+     meta lines. Sits below the paragraph, footnote anchor. */
+  .long-form-prose__meta {
+    margin-top: var(--sp-3);
+    font-size: var(--fs-xs);
+    color: var(--c-ink-3);
+    letter-spacing: 0.04em;
+    line-height: 1.5;
+    max-width: 64ch;
+  }
+  .long-form-prose__meta a {
+    color: var(--c-ink-2);
+    text-decoration: underline;
+    text-decoration-color: var(--c-rule);
+    text-underline-offset: 2px;
+  }
+  .long-form-prose__meta a:hover {
+    text-decoration-color: var(--c-amber);
+  }
+
+  /* v13.1.4 (2026-08-11, about-uplift) : recency stamp at bottom.
+     Anchors the page to its last build commit. Same register as the
+     /work/ .work-stamp recency stamp (polish-7p commit 9eba08f). */
+  .about-recency {
+    margin: var(--sp-3) 0 0;
+    font-size: var(--fs-xs);
+    color: var(--c-ink-3);
+    letter-spacing: 0.06em;
+    line-height: 1.5;
+    text-align: center;
+  }
+  .about-recency a {
+    color: var(--c-ink-2);
+    text-decoration: underline;
+    text-decoration-color: var(--c-rule);
+    text-underline-offset: 2px;
+  }
+  .about-recency a:hover {
+    text-decoration-color: var(--c-amber);
   }
 
   @media (max-width: 880px) {
