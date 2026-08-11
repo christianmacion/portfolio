@@ -222,7 +222,7 @@ function statusPill(s: ShelfItem['status']): string {
           now.map((b, i) => (
             <li class="shelf__row">
               <div class="shelf__meta">
-                <span class="shelf__status shelf__status--{b.status}">{statusPill(b.status)}</span>
+                <span class={`shelf__status shelf__status--${b.status}`}>{statusPill(b.status)}</span>
                 <span class="shelf__year mono">{b.year}</span>
               </div>
               <div class="shelf__body">
@@ -256,7 +256,7 @@ function statusPill(s: ShelfItem['status']): string {
           queue.map((b, i) => (
             <li class="shelf__row">
               <div class="shelf__meta">
-                <span class="shelf__status shelf__status--{b.status}">{statusPill(b.status)}</span>
+                <span class={`shelf__status shelf__status--${b.status}`}>{statusPill(b.status)}</span>
                 <span class="shelf__year mono">{b.year}</span>
               </div>
               <div class="shelf__body">
@@ -282,7 +282,7 @@ function statusPill(s: ShelfItem['status']): string {
           reference.map((b, i) => (
             <li class="shelf__row">
               <div class="shelf__meta">
-                <span class="shelf__status shelf__status--{b.status}">{statusPill(b.status)}</span>
+                <span class={`shelf__status shelf__status--${b.status}`}>{statusPill(b.status)}</span>
                 <span class="shelf__year mono">{b.year}</span>
               </div>
               <div class="shelf__body">
