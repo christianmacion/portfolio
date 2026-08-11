@@ -53,6 +53,14 @@ const email = profile.contact.email;
 // v9.3.5 : deployedStamp + buildTime moved to SiteHeader.astro (single source of truth).
 // v13.0 : SiteHeader removed from render; values now live on the global Nav chrome.
 
+// v13.1.4 (2026-08-11, polish-7ag) : per-section metadata + recency stamp.
+// Status + date + commit hash + related surface, mirroring the /about/
+// `.bio-prose__meta` (polish-7t commit 3781944) and /contact/
+// `.contact-card__meta` (polish-7x commit 19aa5ef). Copy-edit-only scope
+// per the /comp/, /papers/, /404+500 reverts. NDA-safe: no 19V Capital
+// or Macion Capital references; past NDA contracts framed as closed.
+const HOME_COMMIT = '0279f24';
+
 // Live counters : v9.4.1 hireability-facing. All sourced from profile.stats.ts.
 // Stripped AARs / evalGates / pagesBuilt from first viewport (internal jargon);
 // yearsExperience + aiProjectCount added so the strip answers a recruiter's
@@ -248,6 +256,9 @@ const liveCounters = [
            artefact name maps to a real, accessible page or repo. -->
       <SectionMark index="01" title="projects" />
       <h2 class="lede__mark mono">§ 01. The Work</h2>
+      <p class="home-meta mono">
+        LIVE · 2026-08 · commit <code>9eba08f</code> · <a href={path('/projects/')}>→ /projects/</a>
+      </p>
       <p class="lede__body">
         Quant research, production AI engineering, and the chrome discipline that makes the work
         legible to a hiring reader are not adjacent skills. They are one cross-validated practice. A
@@ -270,6 +281,9 @@ const liveCounters = [
          personal shipped records. Renders as a horizontal strip on
          desktop, vertical stack on mobile (auto via media query). -->
     <section class="trend" aria-label="Trend-tracking arc">
+      <p class="home-meta mono">
+        LIVE · 2026-08 · commit <code>2405c64</code> · <a href={path('/desk/')}>→ /desk/</a>
+      </p>
       <AIHistoryTimeline
         variant="strip"
         chip="AI · HISTORY · THE LEAD"
@@ -282,6 +296,9 @@ const liveCounters = [
     <section class="artifacts" aria-label="What I ship" data-section-id="proof">
       <SectionMark index="02" title="proof" />
       <h2 class="artifacts__mark mono">§ 02. What I Ship</h2>
+      <p class="home-meta mono">
+        LIVE · 2026-08 · commit <code>9eba08f</code> · <a href={path('/proof/')}>→ /proof/</a>
+      </p>
       <p class="artifacts__sub">
         9 quant strategies with published methodology. 6 production AI projects. 31-gate eval
         harness with public kill log. Numbers below are counted at deploy time, not rounded.
@@ -359,6 +376,9 @@ const liveCounters = [
 
     <!-- ============= § 03 : CERTIFICATIONS WALL ============= -->
     <SectionMark index="03" title="certifications" />
+    <p class="home-meta mono">
+      LIVE · 2026-08 · commit <code>ed4742c</code> · <a href={path('/certifications/')}>→ /certifications/</a>
+    </p>
     <section aria-label="Strategy validation discipline" data-section-id="validation">
       <div class="home-section">
         <FiveEraCurve />
@@ -381,6 +401,9 @@ const liveCounters = [
     <section class="help" aria-label="How I help" data-section-id="now">
       <SectionMark index="04" title="now" />
       <h2 class="help__mark mono">§ 04. What I Ship</h2>
+      <p class="home-meta mono">
+        LIVE · 2026-08 · commit <code>9eba08f</code> · <a href={path('/proof/')}>→ /proof/</a>
+      </p>
       <p class="reading__sub">
         Four engagement shapes. Not services I list. Live systems built, deployed, kept honest with
         verifiable evidence.
@@ -432,6 +455,9 @@ const liveCounters = [
     <!-- ============= § 05 : FOOTPRINT ============= -->
     <section class="footprint" aria-label="Footprint">
       <h2 class="footprint__mark mono">§ 05. Footprint</h2>
+      <p class="home-meta mono">
+        LIVE · 2026-08 · commit <code>32dafde</code> · <a href={path('/desk/')}>→ /desk/</a>
+      </p>
       <p class="footprint__sub">
         20 venues across 3 regions. Real counterparts, real exchanges, real alt-data feeds.
         Verifiable, not decorative.
@@ -442,6 +468,9 @@ const liveCounters = [
     <!-- ============= § 06 : CONTACT ============= -->
     <footer class="contact" aria-label="Contact">
       <h2 class="contact__mark mono">§ 06. Contact</h2>
+      <p class="home-meta mono">
+        LIVE · 2026-08 · commit <code>19aa5ef</code> · <a href={path('/contact/')}>→ /contact/</a>
+      </p>
       <p class="contact__line mono">
         <a href={`mailto:${email}`}>{email}</a>
         <span aria-hidden="true">·</span>
@@ -463,6 +492,20 @@ const liveCounters = [
         <a href={path('/positions')}>Live positions</a>
       </p>
     </footer>
+
+    {/* v13.1.4 (2026-08-11, polish-7ag) : recency stamp at bottom.
+        Anchors the page to its last content-edit commit. Same register
+        as /about/ `.about-recency` (polish-7t commit 3781944) and
+        /contact/ `.contact-recency` (polish-7x commit 19aa5ef). Chrome
+        contract v1: hairline rule + mono + 1 accent on hover; no halo,
+        no glow. Text only, no nested anchor. */}
+    <p class="home-recency mono">
+      Last updated: 2026-08-11 · <a
+        href={`https://github.com/christianmacion/christianmacion.github.io/commit/${HOME_COMMIT}`}
+        target="_blank"
+        rel="noopener noreferrer">commit {HOME_COMMIT}</a
+      > · Quant Researcher · 31-gate eval-first
+    </p>
   </section>
 </BaseLayout>
 
@@ -1037,6 +1080,63 @@ const liveCounters = [
     padding: 8px 0;
     background: var(--c-bg-elev);
     margin: 0;
+  }
+
+  /* v13.1.4 (2026-08-11, polish-7ag) : per-section metadata line.
+     Same register as /about/ `.bio-prose__meta` (polish-7t commit 3781944)
+     and /contact/ `.contact-card__meta` (polish-7x commit 19aa5ef). Chrome
+     contract v1: mono caps + 11px + c-ink-3 (no halo, no glow), 1 accent
+     on hover. Lives directly under the H2 so the meta stays visually
+     attached to the section header. */
+  .home-meta {
+    font-size: 11px;
+    color: var(--c-ink-3);
+    letter-spacing: 0.06em;
+    margin: 0 0 var(--s-5);
+    text-transform: uppercase;
+  }
+  .home-meta a {
+    color: var(--c-ink-2);
+    text-decoration: none;
+    border-bottom: 1px solid var(--c-rule);
+    padding-bottom: 1px;
+    transition: border-color 120ms ease;
+  }
+  .home-meta a:hover {
+    color: var(--c-ink);
+    border-bottom-color: var(--c-amber);
+  }
+  .home-meta code {
+    font: 400 11px var(--ff-mono);
+    background: transparent;
+    color: var(--c-ink-2);
+  }
+
+  /* v13.1.4 (2026-08-11, polish-7ag) : recency stamp at bottom.
+     Same register as /about/ `.about-recency` (commit 3781944) and
+     /contact/ `.contact-recency` (commit 19aa5ef). Hairline rule on top
+     so the stamp reads as a closing band, not a competing CTA. The
+     commit hash links to the GitHub commit; the surrounding text stays
+     text-only (no nested anchor per polish-7ac). */
+  .home-recency {
+    font-size: 11px;
+    color: var(--c-ink-3);
+    letter-spacing: 0.06em;
+    margin: var(--s-7) 0 0;
+    padding-top: var(--s-5);
+    border-top: 1px solid var(--c-rule);
+    text-transform: uppercase;
+  }
+  .home-recency a {
+    color: var(--c-ink-2);
+    text-decoration: none;
+    border-bottom: 1px solid var(--c-rule);
+    padding-bottom: 1px;
+    transition: border-color 120ms ease;
+  }
+  .home-recency a:hover {
+    color: var(--c-ink);
+    border-bottom-color: var(--c-amber);
   }
 
   @media (max-width: 860px) {
