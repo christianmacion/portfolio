@@ -12,12 +12,24 @@
  *   H1   :  The notes page is not a blog.
  *   §    :  six sample entries (3 quant, 3 AI) with date + chip + body
  *   CTA  :  read the methodology / contact
+ *
+ * v13.1.4 polish-7ah (2026-08-11, notes-uplift) :
+ *   copy-edit-only pass :  per-note metadata + recency stamp at
+ *   bottom. Anchored to methodology polish-7ae commit (3547b73)
+ *   because the research log is the methodology surface, not the
+ *   institution surface. Same register as /proof/ `.proof-meta`
+ *   (polish-7af commit 9b0ced6) and /contact/ `.contact-recency`
+ *   (polish-7x commit 19aa5ef).
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
 import SectionMark from '@components/SectionMark.astro';
 import SubpageHero from '@components/SubpageHero.astro';
 import { path } from '@utils/url';
-import { buildStampUtc8 } from '@utils/build-stamp';
+
+// v13.1.4 (2026-08-11, notes-uplift) : recency stamp anchor.
+// Held constant across all 6 entries for a single-edit source of
+// truth; matches the /proof/ PROOF_COMMIT pattern (polish-7af).
+const NOTES_COMMIT = '3547b73';
 
 const subpage = {
   slug: 'notes',
@@ -31,15 +43,14 @@ const subpage = {
   roleLine: 'Notes on financial markets, quant research, and AI engineering',
 };
 
-const lastUpdated = buildStampUtc8();
-
 interface NoteEntry {
   date: string;
   lane: 'quant' | 'ai';
   title: string;
   body: string;
-  href?: string;
-  hrefLabel?: string;
+  status: 'PUBLISHED' | 'DRAFT' | 'ARCHIVED';
+  relatedSurface: string;
+  relatedHref: string;
 }
 
 const notes: NoteEntry[] = [
@@ -49,8 +60,9 @@ const notes: NoteEntry[] = [
     title: 'PBO is a multiple-testing tax, not a model-fitting tax.',
     body:
       'The combinatorial-symmetric-cross-validation (CSCV) result is best read as a tax on the search procedure, not on the strategy itself. When the search is narrow (one model, one feature set, one decay), PBO stays low. When the search is wide (50 candidates, all backtested with full hyperparameter sweep), PBO eats the headline Sharpe before fees. The cleanest way to deflate it is to pre-register the candidate count BEFORE running the backtests :  that one line of process collapses the false-discovery tax by half on a typical quant funnel.',
-    href: path('/methodology'),
-    hrefLabel: 'Methodology · multiple-testing layer',
+    status: 'PUBLISHED',
+    relatedSurface: '· /methodology ·',
+    relatedHref: path('/methodology'),
   },
   {
     date: '2026-08-01',
@@ -58,6 +70,9 @@ const notes: NoteEntry[] = [
     title: 'Regime-conditional deployment > a single Sharpe ratio.',
     body:
       'A 0.6 Sharpe over 4 regimes is not the same artifact as a 0.6 Sharpe over one regime with 3 silent failures. Splitting the equity curve by regime (carry / momentum / vol / macro) and shipping a strategy only when every regime clears its own threshold is the cheapest insurance a quant book can buy. The hard part is naming the regimes :  most "regime detectors" are just lagged rolling z-scores on the wrong variable.',
+    status: 'PUBLISHED',
+    relatedSurface: '· /proof ·',
+    relatedHref: path('/proof'),
   },
   {
     date: '2026-07-29',
@@ -65,8 +80,9 @@ const notes: NoteEntry[] = [
     title: 'Deflated Sharpe is a backtest validator, not a forward-edge oracle.',
     body:
       'Deflated Sharpe tells you whether the headline number is consistent with the number of trials you ran. It does NOT tell you the strategy will work out-of-sample. The two are often confused, and the confusion costs real money. Treat deflated Sharpe as a sanity gate: if it fails, you definitely have a curve-fit. If it passes, you still need walk-forward + paper + live evidence before capital.',
-    href: path('/proof'),
-    hrefLabel: 'Proof · ship gates',
+    status: 'PUBLISHED',
+    relatedSurface: '· /proof ·',
+    relatedHref: path('/proof'),
   },
   {
     date: '2026-08-03',
@@ -74,6 +90,9 @@ const notes: NoteEntry[] = [
     title: 'The eval harness is the product. The LLM is the demo.',
     body:
       'Most "AI products" are demos. The product is the eval harness :  the deterministic suite that scores the LLM on its own claim, catches regressions, and freezes the spec so the prompt engineer knows what success looks like. Without that suite, every prompt change is a coin flip. With it, every change has a P95 latency, a pass-rate, and a regression budget. The 30 hours spent building the harness beat the 300 hours spent iterating prompts blind.',
+    status: 'PUBLISHED',
+    relatedSurface: '· /ai ·',
+    relatedHref: path('/ai'),
   },
   {
     date: '2026-07-31',
@@ -81,6 +100,9 @@ const notes: NoteEntry[] = [
     title: 'Multi-agent ≠ faster. Multi-agent = more checks per minute.',
     body:
       'A common failure mode is "we have 5 agents, so we ship 5× faster." In practice, the agents spend most of their time waiting for the orchestrator, and the orchestrator spends most of its time reconciling. The win is not throughput :  it is coverage: each agent independently checks a different failure mode (numerical faithfulness, citation grounding, schema conformance, tone drift, hallucinated entities). The harness stays the bottleneck; the agents are just additional lenses.',
+    status: 'PUBLISHED',
+    relatedSurface: '· /ai ·',
+    relatedHref: path('/ai'),
   },
   {
     date: '2026-07-27',
@@ -88,8 +110,9 @@ const notes: NoteEntry[] = [
     title: 'Citation grounding > "look at the source."',
     body:
       'Asking an LLM to "look at the source" is not grounding. Grounding is: every claim is followed by a (chunk_id, relevance) tuple from a deterministic retriever, and the tuple is checked at eval time. Without the tuple, "grounded" is a vibe. With the tuple, you can audit which chunks the model actually used and which it ignored, which is the only signal that survives a real-world corpus.',
-    href: path('/ai'),
-    hrefLabel: 'AI page · eval layer',
+    status: 'PUBLISHED',
+    relatedSurface: '· /ai ·',
+    relatedHref: path('/ai'),
   },
 ];
 
@@ -136,13 +159,17 @@ const lanes = {
             </header>
             <h2 class="note-entry__title">{n.title}</h2>
             <p class="note-entry__body">{n.body}</p>
-            {
-              n.href && (
-                <a class="note-entry__link mono" href={n.href}>
-                  {n.hrefLabel ?? 'Read more'} →
-                </a>
-              )
-            }
+            <p class="note-entry__meta mono" aria-label="Note metadata">
+              <span class="note-entry__status">{n.status}</span>
+              <span class="note-entry__sep">·</span>
+              <time datetime={n.date}>{n.date}</time>
+              <span class="note-entry__sep">·</span>
+              <span>related surface</span>
+              <a href={n.relatedHref}>{n.relatedSurface}</a>
+              <span class="note-entry__sep">·</span>
+              <span>commit</span>
+              <code>{NOTES_COMMIT}</code>
+            </p>
           </li>
         ))
       }
@@ -158,7 +185,7 @@ const lanes = {
     </aside>
 
     <p class="notes-stamp mono" aria-label="Last updated">
-      LAST UPDATED · {lastUpdated} · UTC+8
+      LAST UPDATED · 2026-08-11 · commit <code>{NOTES_COMMIT}</code>
     </p>
   </div>
 </BaseLayout>
@@ -225,14 +252,36 @@ const lanes = {
     line-height: var(--line-height-relaxed, 1.6);
     max-width: 70ch;
   }
-  .note-entry__link {
-    font-size: var(--fs-xs, 11px);
+  .note-entry__meta {
+    font-size: 10.5px;
+    color: var(--c-ink-3);
+    letter-spacing: 0.06em;
+    margin-top: 4px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 6px;
+    align-items: center;
+  }
+  .note-entry__status {
     color: var(--c-amber);
+    font-weight: var(--font-weight-semibold, 600);
+    letter-spacing: 0.08em;
+  }
+  .note-entry__sep {
+    color: var(--c-rule);
+  }
+  .note-entry__meta a {
+    color: var(--c-ink-2);
     text-decoration: none;
     letter-spacing: 0.06em;
   }
-  .note-entry__link:hover {
-    text-decoration: underline;
+  .note-entry__meta a:hover {
+    color: var(--c-amber);
+  }
+  .note-entry__meta code {
+    color: var(--c-ink-2);
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 10.5px;
   }
   .notes-cta {
     margin-top: var(--sp-10);
@@ -273,7 +322,7 @@ const lanes = {
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .note-entry__link,
+    .note-entry__meta a,
     .notes-cta__link {
       transition: none;
     }
