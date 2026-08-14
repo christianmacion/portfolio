@@ -211,11 +211,17 @@ const askTrigger = ASK_TRIGGER;
     display: none;
   }
 
-  /* Modal: fixed full-viewport, single grid placement. */
+  /* Modal: fixed full-viewport, single grid placement.
+     v13.1.4 polish-7ax (2026-08-14): use --z-modal (100) instead of
+     calc(--z-nav + 10) = 60 so the palette sits above WorldView
+     (also fixed, z-index: var(--z-modal) = 100). DOM-order tie-break
+     (CommandPalette mounts after WorldView) + anchored panel below
+     the modal z-index prevent the SVG bleed that painted a giant
+     triangle behind the empty-state "No matches..." line. */
   .cmdk {
     position: fixed;
     inset: 0;
-    z-index: calc(var(--z-nav) + 10);
+    z-index: var(--z-modal);
     display: grid;
     place-items: start center;
     padding-top: 12vh;
@@ -240,6 +246,11 @@ const askTrigger = ASK_TRIGGER;
      on top per chrome contract v9.9.1 (no halo/glow/gradient). */
   .cmdk__panel {
     position: relative;
+    /* v13.1.4 polish-7ax (2026-08-14): anchor the panel's own stacking
+       context at z-index: 1 so no child paints at the modal's z-0
+       baseline — defends against any SVG bleed from sibling fixed
+       surfaces (e.g. WorldView at z-index: var(--z-modal)). */
+    z-index: 1;
     width: min(560px, 92vw);
     max-height: 72vh;
     background: var(--c-bg);
