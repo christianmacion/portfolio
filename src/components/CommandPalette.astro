@@ -502,6 +502,39 @@ const askTrigger = ASK_TRIGGER;
     font-family: var(--ff-mono);
     font-size: 12px;
   }
+  /* Graceful degradation : amber outline button, sharp 0px, mono. The
+     only chrome break from the bubble is the button itself; chrome
+     contract v1 holds (1px hairline + amber + mono + no halo/glow).
+     Honors prefers-reduced-motion. */
+  .cmdk__bubble-retry {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 8px;
+    padding: 4px 10px;
+    border: 1px solid var(--c-amber);
+    border-radius: 0;
+    background: transparent;
+    color: var(--c-amber);
+    font-family: var(--ff-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 100ms ease, color 100ms ease;
+  }
+  .cmdk__bubble-retry:hover {
+    background: var(--c-bg-2);
+    color: var(--c-amber);
+  }
+  .cmdk__bubble-retry:focus-visible {
+    outline: 2px solid var(--c-amber);
+    outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cmdk__bubble-retry {
+      transition: none;
+    }
+  }
   /* Typing indicator: 3 dots, opacity-blink only (no transform,
      no scale, no translate). Honors prefers-reduced-motion. */
   .cmdk__typing {
@@ -775,6 +808,7 @@ const askTrigger = ASK_TRIGGER;
     // follows the "?" (the "?" itself is stripped on submit).
     let mode = 'search';
     let askAbort = null; // AbortController for an in-flight stream
+    let lastQuestion = ''; // last submitted question (for Retry button)
     function setMode(next) {
       mode = next;
       root.setAttribute('data-cmdk-mode', next);
@@ -950,7 +984,37 @@ const askTrigger = ASK_TRIGGER;
       li.textContent = message;
       thread.appendChild(li);
       if (chat) chat.scrollTop = chat.scrollHeight;
+      return li;
     }
+    // Graceful degradation : decorate an existing error bubble with a
+    // Retry button that re-invokes askWorker(lastQuestion). Used for
+    // recoverable failures (network / DNS / 5xx). Terminal failures
+    // (rate-limited, forbidden, cancelled) skip the button.
+    function attachRetry(bubble) {
+      if (!bubble || !lastQuestion) return;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'cmdk__bubble-retry';
+      btn.textContent = 'Retry';
+      btn.setAttribute('aria-label', 'Retry the last question');
+      btn.addEventListener('click', () => {
+        if (!lastQuestion) return;
+        askWorker(lastQuestion);
+      });
+      bubble.appendChild(btn);
+    }
+    // Friendly offline message with email fallback. The Worker is the
+    // sole source for live answers; if it is down the visitor can still
+    // email Christian directly.
+    const OFFLINE_MSG =
+      'AI is offline right now. Try again in a moment, or email christianmacion26@gmail.com directly.';
+    const SERVER_MSG =
+      'AI is temporarily unavailable. Retry in a moment, or email christianmacion26@gmail.com.';
+    const RATE_MSG =
+      'Daily AI limit reached (20 questions per IP). Try again tomorrow, or email christianmacion26@gmail.com.';
+    const FORBIDDEN_MSG =
+      'This site is not authorized to call the AI proxy. Check the deployment.';
+    const CANCEL_MSG = 'Cancelled.';
 
     /* === v13.1.W3 : stream a question to the edge Worker and
        append tokens to the answer bubble as they arrive.
@@ -969,9 +1033,10 @@ const askTrigger = ASK_TRIGGER;
     */
     async function askWorker(question) {
       if (!aiProxyUrl) {
-        appendError('AI is currently unavailable. Try again later.');
+        appendError(OFFLINE_MSG);
         return;
       }
+      lastQuestion = question;
       const bubble = appendBubble('model', '');
       const typing = appendTyping();
       askAbort = new AbortController();
@@ -985,21 +1050,37 @@ const askTrigger = ASK_TRIGGER;
         });
         if (!resp.ok) {
           clearTyping(typing);
-          // Try to surface the structured error envelope if present.
-          let msg = 'AI temporarily unavailable. Please try again.';
-          try {
-            const env = await resp.json();
-            if (env && env.error) msg = env.error;
-          } catch (_) { /* non-JSON error body */ }
+          // Categorize by HTTP status so the visitor knows what to do.
+          // 429 = rate-limited (terminal, no retry). 403 = forbidden
+          // (terminal, no retry; means the origin allowlist rejected the
+          // request and a deploy is misconfigured). 5xx / 502 = server
+          // (recoverable; retry button). Default = server-class.
+          let msg = SERVER_MSG;
+          let retryable = true;
+          if (resp.status === 429) {
+            msg = RATE_MSG;
+            retryable = false;
+          } else if (resp.status === 403) {
+            msg = FORBIDDEN_MSG;
+            retryable = false;
+          } else {
+            try {
+              const env = await resp.json();
+              if (env && env.error) msg = env.error + ' (HTTP ' + resp.status + ')';
+            } catch (_) { /* non-JSON error body */ }
+          }
           bubble.textContent = msg;
           bubble.classList.add('cmdk__bubble--error');
-          if (status) status.textContent = 'Error · HTTP ' + resp.status;
+          if (retryable) attachRetry(bubble);
+          if (status)
+            status.textContent = 'Error · HTTP ' + resp.status;
           return;
         }
         if (!resp.body) {
           clearTyping(typing);
-          bubble.textContent = 'AI temporarily unavailable (no stream).';
+          bubble.textContent = SERVER_MSG;
           bubble.classList.add('cmdk__bubble--error');
+          attachRetry(bubble);
           return;
         }
         const reader = resp.body.getReader();
@@ -1038,29 +1119,33 @@ const askTrigger = ASK_TRIGGER;
               }
             } else if (obj.event === 'error') {
               if (!started) clearTyping(typing);
-              bubble.textContent =
-                obj.error || 'AI temporarily unavailable.';
+              bubble.textContent = obj.error || SERVER_MSG;
               bubble.classList.add('cmdk__bubble--error');
+              attachRetry(bubble);
               if (status) status.textContent = 'Error';
             }
           }
         }
         if (!started) clearTyping(typing);
         if (!bubble.textContent) {
-          bubble.textContent =
-            'No response. The model may be rate-limited; try again in a moment.';
+          bubble.textContent = SERVER_MSG;
           bubble.classList.add('cmdk__bubble--error');
+          attachRetry(bubble);
         }
       } catch (err) {
         clearTyping(typing);
         if (err && err.name === 'AbortError') {
-          bubble.textContent = 'Cancelled.';
+          // Mid-stream cancel (Esc, re-open, retry clicked) -> quiet cancel.
+          bubble.textContent = CANCEL_MSG;
+          if (status) status.textContent = 'Cancelled';
         } else {
-          bubble.textContent =
-            'AI temporarily unavailable. Check your connection and retry.';
+          // Network / DNS / offline. The Worker is the only route;
+          // surface the email fallback so the visitor has a path.
+          bubble.textContent = OFFLINE_MSG;
           bubble.classList.add('cmdk__bubble--error');
+          attachRetry(bubble);
+          if (status) status.textContent = 'Offline';
         }
-        if (status) status.textContent = 'Error';
       } finally {
         askAbort = null;
       }
