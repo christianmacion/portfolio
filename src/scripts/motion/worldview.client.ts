@@ -754,7 +754,7 @@ class Globe {
     g.setAttribute('transform', 'translate(0 0)');
     // Concentric rings drawn first so the solid dot renders on top.
     for (let i = visual.rings; i >= 1; i--) {
-      const ring = document.createElementNS('http://www.w3.org/2000.svg', 'circle');
+      const ring = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
       const ringR = visual.radius + i * 2.5;
       ring.setAttribute('r', String(ringR));
       ring.setAttribute('fill', 'none');
