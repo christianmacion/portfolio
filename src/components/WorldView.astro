@@ -557,7 +557,10 @@ const buildStamp = new Date().toISOString().slice(11, 19) + 'Z';
      (which can be longer than the symbol cell allows). */
   :global(.wv-ticker__row) {
     display: grid;
-    grid-template-columns: 60px 44px 60px 64px auto 28px;
+    /* v13.1.4 polish-7ay : widen src column 44px → 60px so COINGECKO
+       (9 chars at 10px mono) doesn't clip. The signal column
+       adjusts 64px → 60px to keep the row width balanced. */
+    grid-template-columns: 60px 60px 60px 60px auto 28px;
     gap: 8px;
     align-items: center;
     padding: 5px 8px;
@@ -620,7 +623,10 @@ const buildStamp = new Date().toISOString().slice(11, 19) + 'Z';
   }
   :global(.wv-ticker__row) {
     display: grid;
-    grid-template-columns: 60px 44px 60px 64px auto 28px;
+    /* v13.1.4 polish-7ay : widen src column 44px → 60px so COINGECKO
+       (9 chars at 10px mono) doesn't clip. The signal column
+       adjusts 64px → 60px to keep the row width balanced. */
+    grid-template-columns: 60px 60px 60px 60px auto 28px;
     gap: 8px;
     align-items: center;
     width: 100%;
@@ -703,7 +709,9 @@ const buildStamp = new Date().toISOString().slice(11, 19) + 'Z';
      row 2 = [signal + head] full width. */
   @media (max-width: 760px) {
     :global(.wv-ticker__row) {
-      grid-template-columns: 56px 56px 1fr 56px;
+      /* v13.1.4 polish-7ay : widen src column 56px → 64px so COINGECKO
+         (9 chars at 12px) doesn't clip on mobile either. */
+      grid-template-columns: 56px 64px 1fr 56px;
       grid-template-rows: auto auto;
       gap: 4px 10px;
       padding: 12px 12px;

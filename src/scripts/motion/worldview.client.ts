@@ -660,14 +660,25 @@ class Globe {
 
     const w = this.canvas.width;
     const h = this.canvas.height;
-    const cx = w / 2;
-    const cy = h / 2;
-    // v13.1.4 polish-7k : sphere radius tracks the canvas pixel buffer
-    // (set by resizeCanvas to display size × DPR) instead of the
-    // hardcoded GLOBE_SIZE. This keeps the disc filling the canvas
-    // regardless of the pixel buffer size.
-    const sphereR = Math.min(w, h) / 2 - 6;
+    // v13.1.4 polish-7ay : the projection's sphere sits at SVG coords
+    // (translate + scale), but the canvas pixel buffer is display size
+    // × DPR — a different extent than the SVG viewBox. d3.geoProjection
+    // does NOT clip proj.invert at the sphere boundary, so passing
+    // canvas pixel coords straight through returns valid (lon, lat) for
+    // canvas pixels OUTSIDE the projection's sphere (essentially the
+    // back of the sphere). The texture then samples from the wrong
+    // region, producing the "Jupiter with rings" stretching artifact.
+    //
+    // Fix : scale canvas pixel → SVG coord BEFORE proj.invert, and use
+    // the projection's sphere for the radial check. The projection
+    // setup itself is untouched (no refactor of scale/translate).
+    const t = proj.translate();
+    const tx = t[0];
+    const ty = t[1];
+    const sphereR = proj.scale();
     const sphereR2 = sphereR * sphereR;
+    const sx = this.width / w;   // SVG-viewBox / canvas-pixel X scale
+    const sy = this.height / h; // SVG-viewBox / canvas-pixel Y scale
 
     const srcData = this.earthImageData.data;
     const srcW = this.earthImageData.width;
@@ -679,24 +690,27 @@ class Globe {
     const outArr = out.data;
 
     for (let y = 0; y < h; y++) {
-      const dy = y - cy;
+      const svgY = y * sy;
+      const dy = svgY - ty;
       const dy2 = dy * dy;
       for (let x = 0; x < w; x++) {
-        const dx = x - cx;
+        const svgX = x * sx;
+        const dx = svgX - tx;
         const r2 = dx * dx + dy2;
         const outIdx = (y * w + x) * 4;
 
         if (r2 > sphereR2) {
-          outArr[outIdx + 3] = 0; // outside sphere : transparent
+          outArr[outIdx + 3] = 0; // outside projection's sphere : transparent
           continue;
         }
 
         // Invert projection to get (lon, lat) for this disc pixel.
         // proj.invert expects SCREEN coordinates (the projection's
-        // translate is applied internally), so we pass [x, y] directly
-        // (not the offsets [dx, dy]).
-        const coords = proj.invert([x, y]);
-        if (!coords) {
+        // translate is applied internally), so we pass [svgX, svgY]
+        // directly (not the offsets [dx, dy]). Both inputs are in the
+        // projection's SVG coord frame — see the comment block above.
+        const coords = proj.invert([svgX, svgY]);
+        if (!coords || !Number.isFinite(coords[0]) || !Number.isFinite(coords[1])) {
           outArr[outIdx + 3] = 0;
           continue;
         }
@@ -1183,7 +1197,11 @@ class Ticker {
         (t.changePct >= 0 ? '+' : '') + t.changePct.toFixed(2) + '%';
       items.push({
         ts: t.timestamp,
-        src: 'TICK',
+        // v13.1.4 polish-7ay : surface the actual source (CoinGecko /
+        // Yahoo / Binance / ECB) instead of the hardcoded 'TICK' label,
+        // which was hiding all crypto rows as "TICK" in the ticker pane
+        // even though the footer correctly surfaced Y/B/C labels.
+        src: t.source,
         region: t.symbol,
         head: priceLabel + ' · ' + changeLabel,
         signal: t.changePct >= 0 ? '▲ LONG' : '▼ SHORT',
