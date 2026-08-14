@@ -1,30 +1,36 @@
 ---
 /**
- * Converter.astro — v13.1.4 polish-7bb : institutional live converter modal.
+ * Converter.astro — v13.1.4 polish-7bc : world-class bank chrome.
  *
- * Modal mini-web-app mounted in BaseLayout.astro (sibling to CommandPalette
- * + WorldView). Opens via ⌘C keydown OR SideRail shortcut button. Data
- * fetched server-side from the Worker /rates endpoint — no browser-side
- * CORS dance.
+ * Institutional live FX + crypto converter modal. Mounted in BaseLayout.astro
+ * as a sibling of CommandPalette (⌘K) + WorldView (⌘J). Opens via ⌘C keydown
+ * OR SideRail shortcut button. Data fetched server-side from the Worker /rates
+ * endpoint — no browser-side CORS dance.
  *
- * Structure (chrome contract v1, mirrors ⌘K + ⌘J conventions):
+ * Chrome contract v1 (world-class bank):
+ *   - mono font for ALL numeric data (var(--ff-mono))
+ *   - tabular numerals (font-variant-numeric: tabular-nums)
+ *   - amber (#6B5A1A) accent only on hero numbers, active delta, active tab
+ *     underline, sync dot, source-attribution headers
+ *   - hairline borders (var(--c-rule) at 1px)
+ *   - sharp 0-2px corners (no rounded "cards")
+ *   - no halo, no glow, no gradient, no shadow beyond 1px hairline
+ *   - F-key strip across the top (Bloomberg metaphor)
+ *   - source health pills under the F-strip (LIVE / STALE / DOWN)
+ *   - hero conversion row with bid/ask disclosure for crypto
+ *   - dense rate tables with 24h range mini-bars
+ *   - refresh countdown with progress bar
+ *
+ * Structure:
  *   1. Hidden trigger button (data-cnv-open) — event-bus target
  *   2. Modal root (.cnv [data-cnv] role="dialog" aria-modal="true")
  *   3. Scrim (.cnv__scrim [data-cnv-close]) — backdrop close
  *   4. Panel (.cnv__panel) — the actual mini-web-app:
- *        a. Top bar : LIVE CONVERTER · ECB + BINANCE + COINGECKO · ⌘C · LAST SYNC
- *        b. Source / Swap / Target inputs (single row, ~80px tall)
- *        c. Live rate row (1 USD = 58.42 PHP)
- *        d. Tabbed rate table : FOREX (ECB) | CRYPTO (BINANCE) | CRYPTO (COINGECKO)
- *        e. Bottom: refresh countdown + ESC close hint
- *
- * Chrome contract v1:
- *   - mono font for ALL numbers (var(--ff-mono))
- *   - tabular numerals (font-variant-numeric: tabular-nums)
- *   - amber accent only on active deltas / swap / sync dot
- *   - hairline borders (var(--c-rule))
- *   - sharp 0-2px corners
- *   - no halo, no glow, no gradient
+ *        a. F-key strip : F1/F2/F3 + window title + ESC hint
+ *        b. Source health pills : ECB · BINANCE · COINGECKO · YAHOO status
+ *        c. Hero conversion card : FROM amount ↔ TO amount
+ *        d. Tabbed rate tables : FOREX | CRYPTO (BINANCE) | CRYPTO (COINGECKO)
+ *        e. Footer : refresh progress bar + shortcut hints
  *
  * Constraints (binding):
  *   - §6 NDA scope : zero employer mentions
@@ -94,18 +100,88 @@ const defaultTarget = DEFAULT_TARGET;
     aria-label="Close converter"
     tabindex="-1"
   ></button>
-  <div class="cnv__panel" role="document">
-    <p id="cnv-title" class="cnv__title mono">LIVE CONVERTER · ⌘C</p>
 
-    <!-- ============================
-         SOURCE / SWAP / TARGET row
-         ============================ -->
-    <div class="cnv__conv" data-cnv-conv>
-      <div class="cnv__col">
-        <label class="cnv__label mono" for="cnv-amount-from">FROM</label>
+  <div class="cnv__panel" role="document">
+
+    <!-- =========================================================
+         F1 — F-KEY STRIP : top-of-book metaphor (Bloomberg style).
+         Each F-key is a "screen" the operator can punch to. The
+         active screen is the first/only one we own (FX), so F1 is
+         highlighted. F2-F4 are reserved for future surfaces.
+         ========================================================= -->
+    <nav class="cnv__fkeys mono" aria-label="Converter surfaces">
+      <span class="cnv__fkey is-on" data-cnv-surface="rates">
+        <span class="cnv__fkey-tag">F1</span>
+        <span class="cnv__fkey-label">RATES</span>
+      </span>
+      <span class="cnv__fkey" data-cnv-surface="future" aria-disabled="true">
+        <span class="cnv__fkey-tag">F2</span>
+        <span class="cnv__fkey-label">CARRY</span>
+      </span>
+      <span class="cnv__fkey" data-cnv-surface="future" aria-disabled="true">
+        <span class="cnv__fkey-tag">F3</span>
+        <span class="cnv__fkey-label">VOL</span>
+      </span>
+      <span class="cnv__fkey" data-cnv-surface="future" aria-disabled="true">
+        <span class="cnv__fkey-tag">F4</span>
+        <span class="cnv__fkey-label">CORR</span>
+      </span>
+      <span class="cnv__fkey-spacer"></span>
+      <span class="cnv__title mono" id="cnv-title">
+        LIVE CONVERTER
+        <span class="cnv__title-kbd mono" aria-hidden="true">⌘C</span>
+      </span>
+      <span class="cnv__fkey-spacer"></span>
+      <span class="cnv__close mono" data-cnv-close role="button" tabindex="0" aria-label="Close converter">
+        ESC · CLOSE
+      </span>
+    </nav>
+
+    <!-- =========================================================
+         F2 — SOURCE HEALTH STRIP : per-feed status pills.
+         Renders LIVE / STALE / DOWN with a color-coded dot + a
+         human-readable stamp. The operator always knows which
+         feed is hot. Mirrors the Worker envelope `source_status`.
+         ========================================================= -->
+    <div class="cnv__health mono" role="status" aria-live="polite" data-cnv-health>
+      <span class="cnv__pill cnv__pill--ecb" data-cnv-pill="ecb">
+        <span class="cnv__pill-dot" data-cnv-pill-dot></span>
+        <span class="cnv__pill-tag">ECB</span>
+        <span class="cnv__pill-state" data-cnv-pill-state>WAITING</span>
+        <span class="cnv__pill-stamp" data-cnv-pill-stamp>·</span>
+      </span>
+      <span class="cnv__pill cnv__pill--binance" data-cnv-pill="binance">
+        <span class="cnv__pill-dot" data-cnv-pill-dot></span>
+        <span class="cnv__pill-tag">BINANCE</span>
+        <span class="cnv__pill-state" data-cnv-pill-state>WAITING</span>
+        <span class="cnv__pill-stamp" data-cnv-pill-stamp>·</span>
+      </span>
+      <span class="cnv__pill cnv__pill--coingecko" data-cnv-pill="coingecko">
+        <span class="cnv__pill-dot" data-cnv-pill-dot></span>
+        <span class="cnv__pill-tag">COINGECKO</span>
+        <span class="cnv__pill-state" data-cnv-pill-state>WAITING</span>
+        <span class="cnv__pill-stamp" data-cnv-pill-stamp>·</span>
+      </span>
+      <span class="cnv__pill cnv__pill--yahoo" data-cnv-pill="yahoo">
+        <span class="cnv__pill-dot" data-cnv-pill-dot></span>
+        <span class="cnv__pill-tag">YAHOO</span>
+        <span class="cnv__pill-state" data-cnv-pill-state>WAITING</span>
+        <span class="cnv__pill-stamp" data-cnv-pill-stamp>·</span>
+      </span>
+    </div>
+
+    <!-- =========================================================
+         F3 — HERO CONVERSION CARD : the operator's primary readout.
+         Three-column grid: FROM amount | ↔ | TO amount. Source
+         attribution + 1-unit cross rate sits below the trio.
+         ========================================================= -->
+    <section class="cnv__hero mono" aria-label="Conversion">
+
+      <div class="cnv__hero-col cnv__hero-col--from">
+        <label class="cnv__hero-label" for="cnv-amount-from">FROM</label>
         <input
           id="cnv-amount-from"
-          class="cnv__amount mono"
+          class="cnv__hero-amount"
           data-cnv-amount-from
           data-cnv-amount
           type="text"
@@ -115,36 +191,41 @@ const defaultTarget = DEFAULT_TARGET;
           value="100"
           aria-label="Source amount"
         />
-        <label class="cnv__label mono" for="cnv-currency-from">CURRENCY</label>
-        <select
-          id="cnv-currency-from"
-          class="cnv__select mono"
-          data-cnv-from
-          aria-label="Source currency"
-        >
-          {catalog.map((c) => (
-            <option value={c.id} selected={c.id === defaultSource}>
-              {c.symbol} · {c.name} · {c.region}
-            </option>
-          ))}
-        </select>
+        <label class="cnv__hero-label" for="cnv-currency-from">CURRENCY</label>
+        <div class="cnv__select-wrap">
+          <select
+            id="cnv-currency-from"
+            class="cnv__hero-select"
+            data-cnv-from
+            aria-label="Source currency"
+          >
+            {catalog.map((c) => (
+              <option value={c.id} selected={c.id === defaultSource}>
+                {c.symbol} · {c.name}
+              </option>
+            ))}
+          </select>
+          <span class="cnv__select-caret" aria-hidden="true">▾</span>
+        </div>
+        <span class="cnv__hero-meta mono" data-cnv-from-meta>·</span>
       </div>
 
       <button
         type="button"
-        class="cnv__swap mono"
+        class="cnv__swap"
         data-cnv-swap
         aria-label="Swap source and target currencies"
-        title="Swap"
+        title="Swap source and target (S)"
       >
-        <span aria-hidden="true">↔</span>
+        <span class="cnv__swap-arrow" aria-hidden="true">⇄</span>
+        <span class="cnv__swap-rate" data-cnv-rate-pair>1 USD = · PHP</span>
       </button>
 
-      <div class="cnv__col">
-        <label class="cnv__label mono" for="cnv-amount-to">TO</label>
+      <div class="cnv__hero-col cnv__hero-col--to">
+        <label class="cnv__hero-label" for="cnv-amount-to">TO</label>
         <input
           id="cnv-amount-to"
-          class="cnv__amount mono"
+          class="cnv__hero-amount cnv__hero-amount--read"
           data-cnv-amount-to
           type="text"
           inputmode="decimal"
@@ -155,34 +236,31 @@ const defaultTarget = DEFAULT_TARGET;
           aria-live="polite"
           readonly
         />
-        <label class="cnv__label mono" for="cnv-currency-to">CURRENCY</label>
-        <select
-          id="cnv-currency-to"
-          class="cnv__select mono"
-          data-cnv-to
-          aria-label="Target currency"
-        >
-          {catalog.map((c) => (
-            <option value={c.id} selected={c.id === defaultTarget}>
-              {c.symbol} · {c.name} · {c.region}
-            </option>
-          ))}
-        </select>
+        <label class="cnv__hero-label" for="cnv-currency-to">CURRENCY</label>
+        <div class="cnv__select-wrap">
+          <select
+            id="cnv-currency-to"
+            class="cnv__hero-select"
+            data-cnv-to
+            aria-label="Target currency"
+          >
+            {catalog.map((c) => (
+              <option value={c.id} selected={c.id === defaultTarget}>
+                {c.symbol} · {c.name}
+              </option>
+            ))}
+          </select>
+          <span class="cnv__select-caret" aria-hidden="true">▾</span>
+        </div>
+        <span class="cnv__hero-meta mono" data-cnv-to-meta>·</span>
       </div>
-    </div>
+    </section>
 
-    <!-- ============================
-         LIVE RATE row
-         ============================ -->
-    <p class="cnv__rate mono" aria-live="polite">
-      <span class="cnv__rate-pair" data-cnv-rate-pair>1 USD = · PHP</span>
-      <span class="cnv__rate-src" data-cnv-rate-src>loading…</span>
-    </p>
-
-    <!-- ============================
-         TABBED RATE TABLE
-         ============================ -->
-    <div class="cnv__tabs mono" role="tablist" aria-label="Rate tabs">
+    <!-- =========================================================
+         F4 — TAB STRIP : F-key style tabs (one per universe).
+         Active tab gets the amber underline + brighter ink.
+         ========================================================= -->
+    <div class="cnv__tabs mono" role="tablist" aria-label="Rate universes">
       <button
         type="button"
         class="cnv__tab is-active"
@@ -190,7 +268,11 @@ const defaultTarget = DEFAULT_TARGET;
         role="tab"
         aria-selected="true"
         aria-controls="cnv-tabpanel-forex"
-      >FOREX (ECB)</button>
+      >
+        <span class="cnv__tab-tag">F1</span>
+        <span class="cnv__tab-label">FOREX · ECB</span>
+        <span class="cnv__tab-count" data-cnv-tab-count="forex">·</span>
+      </button>
       <button
         type="button"
         class="cnv__tab"
@@ -198,7 +280,11 @@ const defaultTarget = DEFAULT_TARGET;
         role="tab"
         aria-selected="false"
         aria-controls="cnv-tabpanel-crypto-binance"
-      >CRYPTO (BINANCE)</button>
+      >
+        <span class="cnv__tab-tag">F2</span>
+        <span class="cnv__tab-label">CRYPTO · BINANCE</span>
+        <span class="cnv__tab-count" data-cnv-tab-count="crypto-binance">·</span>
+      </button>
       <button
         type="button"
         class="cnv__tab"
@@ -206,9 +292,19 @@ const defaultTarget = DEFAULT_TARGET;
         role="tab"
         aria-selected="false"
         aria-controls="cnv-tabpanel-crypto-coingecko"
-      >CRYPTO (COINGECKO)</button>
+      >
+        <span class="cnv__tab-tag">F3</span>
+        <span class="cnv__tab-label">CRYPTO · COINGECKO</span>
+        <span class="cnv__tab-count" data-cnv-tab-count="crypto-coingecko">·</span>
+      </button>
     </div>
 
+    <!-- =========================================================
+         F5 — RATE TABLES : dense institutional grid.
+         FOREX shows MID only (ECB publishes one daily reference).
+         CRYPTO shows LAST / BID / ASK / 24H Δ / 24H RANGE.
+         Rows are 18px tall, hairlines between, hover = amber wash.
+         ========================================================= -->
     <div
       class="cnv__panel-table is-active"
       id="cnv-tabpanel-forex"
@@ -219,9 +315,11 @@ const defaultTarget = DEFAULT_TARGET;
         <table class="cnv__table mono">
           <thead>
             <tr>
-              <th class="cnv__th cnv__th--sym">Symbol</th>
-              <th class="cnv__th cnv__th--num">Last</th>
-              <th class="cnv__th cnv__th--num">Source</th>
+              <th class="cnv__th cnv__th--sym">SYM</th>
+              <th class="cnv__th cnv__th--name">NAME</th>
+              <th class="cnv__th cnv__th--num">MID</th>
+              <th class="cnv__th cnv__th--num">REGION</th>
+              <th class="cnv__th cnv__th--src">SRC</th>
             </tr>
           </thead>
           <tbody data-cnv-rows-forex></tbody>
@@ -240,10 +338,14 @@ const defaultTarget = DEFAULT_TARGET;
         <table class="cnv__table mono">
           <thead>
             <tr>
-              <th class="cnv__th cnv__th--sym">Symbol</th>
-              <th class="cnv__th cnv__th--num">Last</th>
-              <th class="cnv__th cnv__th--num">24h Δ</th>
-              <th class="cnv__th cnv__th--num">Source</th>
+              <th class="cnv__th cnv__th--sym">SYM</th>
+              <th class="cnv__th cnv__th--name">NAME</th>
+              <th class="cnv__th cnv__th--num">LAST</th>
+              <th class="cnv__th cnv__th--num">BID</th>
+              <th class="cnv__th cnv__th--num">ASK</th>
+              <th class="cnv__th cnv__th--num">24H Δ</th>
+              <th class="cnv__th cnv__th--range">24H RNG</th>
+              <th class="cnv__th cnv__th--src">SRC</th>
             </tr>
           </thead>
           <tbody data-cnv-rows-crypto-binance></tbody>
@@ -262,10 +364,14 @@ const defaultTarget = DEFAULT_TARGET;
         <table class="cnv__table mono">
           <thead>
             <tr>
-              <th class="cnv__th cnv__th--sym">Symbol</th>
-              <th class="cnv__th cnv__th--num">Last</th>
-              <th class="cnv__th cnv__th--num">24h Δ</th>
-              <th class="cnv__th cnv__th--num">Source</th>
+              <th class="cnv__th cnv__th--sym">SYM</th>
+              <th class="cnv__th cnv__th--name">NAME</th>
+              <th class="cnv__th cnv__th--num">LAST</th>
+              <th class="cnv__th cnv__th--num">BID</th>
+              <th class="cnv__th cnv__th--num">ASK</th>
+              <th class="cnv__th cnv__th--num">24H Δ</th>
+              <th class="cnv__th cnv__th--range">24H RNG</th>
+              <th class="cnv__th cnv__th--src">SRC</th>
             </tr>
           </thead>
           <tbody data-cnv-rows-crypto-coingecko></tbody>
@@ -273,19 +379,29 @@ const defaultTarget = DEFAULT_TARGET;
       </div>
     </div>
 
-    <!-- ============================
-         BOTTOM BAR : refresh countdown + ESC hint
-         ============================ -->
-    <p class="cnv__foot mono">
-      <span class="cnv__foot-label">REFRESH</span>
-      <span data-cnv-countdown>30s</span>
-      <span class="cnv__foot-sep">·</span>
-      <span class="cnv__foot-hint">ESC to close</span>
-      <span class="cnv__foot-sep">·</span>
-      <span class="cnv__foot-hint">R refresh</span>
-      <span class="cnv__foot-sep">·</span>
-      <span class="cnv__foot-hint">S swap</span>
-    </p>
+    <!-- =========================================================
+         F6 — FOOTER : refresh progress bar + keyboard shortcuts.
+         The progress bar fills as the countdown ticks (visual
+         refresh metaphor). Shortcut hints use monospace kbd chips.
+         ========================================================= -->
+    <footer class="cnv__foot mono">
+      <div class="cnv__refresh" aria-label="Next refresh in">
+        <span class="cnv__refresh-label">REFRESH</span>
+        <span class="cnv__refresh-bar" aria-hidden="true">
+          <span class="cnv__refresh-fill" data-cnv-refresh-fill></span>
+        </span>
+        <span class="cnv__refresh-count" data-cnv-countdown>30s</span>
+      </div>
+      <div class="cnv__shortcuts" aria-label="Keyboard shortcuts">
+        <span class="cnv__shortcut"><kbd>ESC</kbd> close</span>
+        <span class="cnv__shortcut"><kbd>R</kbd> refresh</span>
+        <span class="cnv__shortcut"><kbd>S</kbd> swap</span>
+        <span class="cnv__shortcut"><kbd>TAB</kbd> universe</span>
+        <span class="cnv__shortcut"><kbd>↵</kbd> row → FROM</span>
+      </div>
+      <span class="cnv__foot-stamp mono" data-cnv-foot-stamp>·</span>
+    </footer>
+
   </div>
 </div>
 
@@ -304,7 +420,7 @@ const defaultTarget = DEFAULT_TARGET;
 
 <style>
   /* ============================================================
-     MODAL SHELL : role=dialog, z-modal, hidden until open.
+     0. MODAL SHELL : role=dialog, z-modal, hidden until open.
      ============================================================ */
   .cnv {
     position: fixed;
@@ -320,323 +436,688 @@ const defaultTarget = DEFAULT_TARGET;
   .cnv__scrim {
     position: absolute;
     inset: 0;
-    background: color-mix(in oklab, var(--c-bg) 86%, transparent);
+    background: color-mix(in oklab, var(--c-bg) 92%, transparent);
     border: 0;
     padding: 0;
     cursor: default;
   }
+
   .cnv__panel {
     position: relative;
-    width: min(880px, 92vw);
-    max-height: 88vh;
+    width: min(960px, 94vw);
+    max-height: 90vh;
     overflow: auto;
     background: var(--c-bg);
     border: 1px solid var(--c-rule);
-    border-radius: 2px;
-    padding: var(--sp-4);
-    box-shadow: 0 1px 0 var(--c-rule), 0 16px 48px rgba(0, 0, 0, 0.08);
-    /* Sharp institutional chrome — no halo, no glow. */
+    border-radius: 0;
+    padding: 0;
+    box-shadow: 0 1px 0 var(--c-rule);
+    /* Bloomberg terminal: a panel is a panel. No drop-shadow beyond a 1px hairline. */
+    font-family: var(--ff-mono);
+    color: var(--c-ink);
   }
 
   /* ============================================================
-     TOP BAR : LIVE CONVERTER · ⌘C eyebrow
+     1. F-KEY STRIP : top-of-book metaphor.
      ============================================================ */
-  .cnv__title {
-    margin: 0 0 var(--sp-3);
-    font-size: 0.7rem;
-    letter-spacing: 0.12em;
-    color: var(--c-amber);
-    text-transform: uppercase;
+  .cnv__fkeys {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    height: 28px;
+    padding: 0;
     border-bottom: 1px solid var(--c-rule);
-    padding-bottom: var(--sp-2);
+    background: var(--c-bg-2);
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+  }
+  .cnv__fkey {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 12px;
+    color: var(--c-ink-3);
+    border-right: 1px solid var(--c-rule);
+    cursor: default;
+    transition: color 120ms var(--mv-ease-institutional, ease-out),
+      background 120ms var(--mv-ease-institutional, ease-out);
+    white-space: nowrap;
+  }
+  .cnv__fkey.is-on {
+    color: var(--c-amber);
+    background: var(--c-bg);
+    box-shadow: inset 0 -2px 0 var(--c-amber);
+  }
+  .cnv__fkey-tag {
+    font-weight: 700;
+    font-size: 0.58rem;
+    padding: 1px 4px;
+    border: 1px solid currentColor;
+    border-radius: 0;
+    line-height: 1;
+  }
+  .cnv__fkey-label {
+    font-weight: 600;
+  }
+  .cnv__fkey-spacer {
+    flex: 1 1 auto;
+    border-right: 0;
+  }
+  .cnv__title {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 12px;
+    margin: 0;
+    color: var(--c-ink);
+    font-weight: 700;
+    text-transform: uppercase;
+    border-right: 1px solid var(--c-rule);
+    border-left: 1px solid var(--c-rule);
+    background: var(--c-bg);
+    letter-spacing: 0.14em;
+  }
+  .cnv__title-kbd {
+    font-size: 0.58rem;
+    padding: 1px 5px;
+    border: 1px solid var(--c-rule);
+    color: var(--c-amber);
+    border-radius: 0;
+    line-height: 1;
+  }
+  .cnv__close {
+    display: inline-flex;
+    align-items: center;
+    padding: 0 12px;
+    color: var(--c-ink-3);
+    cursor: pointer;
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    transition: color 120ms ease;
+  }
+  .cnv__close:hover,
+  .cnv__close:focus-visible {
+    color: var(--c-amber);
+    outline: none;
   }
 
   /* ============================================================
-     CONVERTER ROW : source | swap | target
+     2. SOURCE HEALTH STRIP : per-feed LIVE / STALE / DOWN pills.
      ============================================================ */
-  .cnv__conv {
+  .cnv__health {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    border-bottom: 1px solid var(--c-rule);
+    background: var(--c-bg);
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+  }
+  .cnv__pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-right: 1px solid var(--c-rule);
+    color: var(--c-ink-3);
+    transition: color 120ms ease;
+    white-space: nowrap;
+  }
+  .cnv__pill:last-child {
+    border-right: 0;
+  }
+  .cnv__pill-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--c-ink-3);
+    flex-shrink: 0;
+    transition: background 200ms var(--mv-ease-data, linear);
+  }
+  /* State text uses darker shades for WCAG AA on parchment (per chrome
+     contract: status binding via text + weight + label, color is supplementary).
+     Dots stay bright (decorative accent, not text). */
+  .cnv__pill[data-state="live"] .cnv__pill-dot {
+    background: var(--c-status-open, #3fb950);
+    box-shadow: 0 0 0 0 var(--c-status-open, #3fb950);
+    animation: cnv-pulse 2s ease-out infinite;
+  }
+  .cnv__pill[data-state="live"] .cnv__pill-state {
+    color: #0d7a30; /* darker sage, ~5.4:1 on parchment */
+    font-weight: 700;
+  }
+  .cnv__pill[data-state="stale"] .cnv__pill-dot {
+    background: var(--c-bind-iterate, #d4a017);
+  }
+  .cnv__pill[data-state="stale"] .cnv__pill-state {
+    color: #7a5a0a; /* darker amber-iterate, ~4.6:1 on parchment */
+    font-weight: 700;
+  }
+  .cnv__pill[data-state="down"] .cnv__pill-dot {
+    background: var(--c-status-blocked, #c0392b);
+  }
+  .cnv__pill[data-state="down"] .cnv__pill-state {
+    color: #8a1f12; /* darker oxblood, ~6.0:1 on parchment */
+    font-weight: 700;
+  }
+  @keyframes cnv-pulse {
+    0%   { box-shadow: 0 0 0 0   color-mix(in oklab, var(--c-status-open, #3fb950) 60%, transparent); }
+    70%  { box-shadow: 0 0 0 6px color-mix(in oklab, var(--c-status-open, #3fb950) 0%,   transparent); }
+    100% { box-shadow: 0 0 0 0   color-mix(in oklab, var(--c-status-open, #3fb950) 0%,   transparent); }
+  }
+  .cnv__pill-tag {
+    font-weight: 700;
+    color: var(--c-ink);
+    letter-spacing: 0.14em;
+  }
+  .cnv__pill-state {
+    font-weight: 700;
+  }
+  .cnv__pill-stamp {
+    color: var(--c-ink-3);
+    font-size: 0.58rem;
+    letter-spacing: 0.06em;
+  }
+
+  /* ============================================================
+     3. HERO CONVERSION CARD.
+     ============================================================ */
+  .cnv__hero {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
-    gap: var(--sp-3);
     align-items: stretch;
-    margin-bottom: var(--sp-3);
+    border-bottom: 1px solid var(--c-rule);
+    background: var(--c-bg);
+    min-height: 132px;
   }
-  .cnv__col {
-    background: var(--c-bg-2);
-    border: 1px solid var(--c-rule);
-    border-radius: 2px;
-    padding: var(--sp-3);
+  .cnv__hero-col {
     display: flex;
     flex-direction: column;
-    gap: var(--sp-2);
+    gap: 6px;
+    padding: 14px 16px;
+    background: var(--c-bg-2);
+    border-right: 1px solid var(--c-rule);
   }
-  .cnv__label {
+  .cnv__hero-col--to {
+    border-right: 0;
+    border-left: 1px solid var(--c-rule);
+    background: var(--c-bg);
+  }
+  .cnv__hero-label {
     margin: 0;
-    font-size: 0.6rem;
-    letter-spacing: 0.12em;
+    font-size: 0.58rem;
+    letter-spacing: 0.16em;
     color: var(--c-ink-3);
     text-transform: uppercase;
+    font-weight: 700;
   }
-  .cnv__amount {
+  .cnv__hero-amount {
     width: 100%;
-    padding: var(--sp-2) var(--sp-3);
+    padding: 4px 0;
     font-family: var(--ff-mono);
-    font-size: 1.6rem;
-    font-weight: 600;
+    font-size: 1.8rem;
+    font-weight: 700;
     color: var(--c-amber);
     background: transparent;
-    border: 1px solid var(--c-rule);
+    border: 0;
+    border-bottom: 1px solid var(--c-rule);
     border-radius: 0;
     outline: none;
     font-variant-numeric: tabular-nums;
     font-feature-settings: 'tnum' 1;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
   }
-  .cnv__amount:focus-visible {
-    border-color: var(--c-amber);
-    outline: 2px solid var(--c-amber);
-    outline-offset: 2px;
+  .cnv__hero-amount--read {
+    color: var(--c-amber);
   }
-  .cnv__select {
+  .cnv__hero-amount:focus-visible {
+    border-bottom-color: var(--c-amber);
+  }
+  .cnv__select-wrap {
+    position: relative;
     width: 100%;
-    padding: var(--sp-2) var(--sp-3);
+  }
+  .cnv__hero-select {
+    width: 100%;
+    padding: 5px 18px 5px 0;
     font-family: var(--ff-mono);
     font-size: 0.74rem;
+    font-weight: 600;
     color: var(--c-ink);
-    background: var(--c-bg);
-    border: 1px solid var(--c-rule);
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--c-rule);
     border-radius: 0;
     outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
   }
-  .cnv__select:focus-visible {
-    border-color: var(--c-amber);
-    outline: 2px solid var(--c-amber);
-    outline-offset: 2px;
+  .cnv__hero-select:focus-visible {
+    border-bottom-color: var(--c-amber);
   }
+  .cnv__select-caret {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--c-ink-3);
+    font-size: 0.7rem;
+    pointer-events: none;
+  }
+  .cnv__hero-meta {
+    margin-top: auto;
+    padding-top: 4px;
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    color: var(--c-ink-3);
+    text-transform: uppercase;
+    line-height: 1.4;
+    min-height: 1.4em;
+  }
+
   .cnv__swap {
-    align-self: center;
-    width: 44px;
-    height: 44px;
-    background: transparent;
-    border: 1px solid var(--c-rule);
-    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 76px;
+    background: var(--c-bg);
+    border: 0;
+    border-left: 1px solid var(--c-rule);
+    border-right: 1px solid var(--c-rule);
     color: var(--c-ink-2);
     font-family: var(--ff-mono);
-    font-size: 1.1rem;
-    font-weight: 700;
     cursor: pointer;
-    transition: color 120ms ease, border-color 120ms ease, background 120ms ease;
+    padding: 14px 6px;
+    transition: color 120ms ease, background 120ms ease;
   }
   .cnv__swap:hover,
   .cnv__swap:focus-visible {
     color: var(--c-amber);
-    border-color: var(--c-amber);
-    background: color-mix(in oklab, var(--c-amber) 8%, transparent);
+    background: color-mix(in oklab, var(--c-amber) 6%, var(--c-bg));
     outline: none;
   }
-  .cnv__swap:focus-visible {
-    outline: 2px solid var(--c-amber);
-    outline-offset: 2px;
+  .cnv__swap-arrow {
+    font-size: 1.4rem;
+    font-weight: 700;
+    line-height: 1;
   }
-  @media (max-width: 760px) {
-    .cnv__conv {
-      grid-template-columns: 1fr;
-    }
-    .cnv__swap {
-      transform: rotate(90deg);
-      justify-self: center;
-      margin: var(--sp-1) 0;
-    }
-  }
-
-  /* ============================================================
-     LIVE RATE row
-     ============================================================ */
-  .cnv__rate {
-    margin: 0 0 var(--sp-3);
-    padding: var(--sp-2) var(--sp-3);
-    background: var(--c-bg-2);
-    border: 1px solid var(--c-rule);
-    border-left: 3px solid var(--c-amber);
-    border-radius: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--sp-3);
-    align-items: baseline;
-    font-size: 0.85rem;
-  }
-  .cnv__rate-pair {
-    color: var(--c-amber);
-    font-size: 1.05rem;
-    font-weight: 600;
+  .cnv__swap-rate {
+    font-size: 0.58rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
     font-variant-numeric: tabular-nums;
     font-feature-settings: 'tnum' 1;
+    text-align: center;
+    line-height: 1.2;
+    max-width: 70px;
   }
-  .cnv__rate-src {
-    color: var(--c-ink-3);
-    font-size: 0.7rem;
+  @media (max-width: 760px) {
+    .cnv__hero {
+      grid-template-columns: 1fr;
+    }
+    .cnv__hero-col {
+      border-right: 0;
+      border-bottom: 1px solid var(--c-rule);
+    }
+    .cnv__hero-col--to {
+      border-left: 0;
+    }
+    .cnv__swap {
+      flex-direction: row;
+      width: 100%;
+      height: 44px;
+      border-left: 0;
+      border-right: 0;
+      border-top: 1px solid var(--c-rule);
+      border-bottom: 1px solid var(--c-rule);
+    }
+    .cnv__swap-arrow {
+      transform: rotate(90deg);
+    }
   }
 
   /* ============================================================
-     TABS + TABLE
+     4. TAB STRIP : F-key style tabs (one per universe).
      ============================================================ */
   .cnv__tabs {
     display: flex;
-    gap: var(--sp-1);
-    margin-bottom: var(--sp-2);
+    align-items: stretch;
+    gap: 0;
     border-bottom: 1px solid var(--c-rule);
-    overflow-x: auto;
+    background: var(--c-bg-2);
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
   }
   .cnv__tab {
-    padding: var(--sp-2) var(--sp-3);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 14px;
     background: transparent;
-    border: 1px solid transparent;
-    border-bottom: 2px solid transparent;
+    border: 0;
+    border-right: 1px solid var(--c-rule);
     color: var(--c-ink-3);
     font-family: var(--ff-mono);
-    font-size: 0.7rem;
-    letter-spacing: 0.1em;
+    font-weight: 700;
     text-transform: uppercase;
     cursor: pointer;
     white-space: nowrap;
-    transition: color 120ms ease, border-color 120ms ease;
+    transition: color 120ms ease, background 120ms ease;
+    position: relative;
   }
   .cnv__tab:hover {
-    color: var(--c-amber);
+    color: var(--c-ink);
+    background: var(--c-bg);
   }
   .cnv__tab.is-active {
     color: var(--c-amber);
-    border-bottom-color: var(--c-amber);
+    background: var(--c-bg);
+    box-shadow: inset 0 -2px 0 var(--c-amber);
   }
   .cnv__tab:focus-visible {
     outline: 2px solid var(--c-amber);
-    outline-offset: 2px;
+    outline-offset: -2px;
+  }
+  .cnv__tab-tag {
+    font-size: 0.58rem;
+    padding: 1px 4px;
+    border: 1px solid currentColor;
     border-radius: 0;
+    line-height: 1;
+    font-weight: 700;
+  }
+  .cnv__tab-label {
+    font-weight: 700;
+    letter-spacing: 0.14em;
+  }
+  .cnv__tab-count {
+    font-size: 0.58rem;
+    color: var(--c-ink-3);
+    letter-spacing: 0.06em;
+    font-weight: 600;
+  }
+  .cnv__tab.is-active .cnv__tab-count {
+    color: var(--c-amber);
   }
   .cnv__panel-table[hidden] {
     display: none;
   }
+
+  /* ============================================================
+     5. RATE TABLES : dense institutional grid.
+     ============================================================ */
   .cnv__scroll {
     overflow: auto;
-    border: 1px solid var(--c-rule);
+    border-bottom: 1px solid var(--c-rule);
     background: var(--c-bg);
-    max-height: 240px;
+    max-height: 320px;
   }
   .cnv__table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 0.74rem;
+    font-size: 0.72rem;
   }
   .cnv__th {
     text-align: left;
-    padding: var(--sp-2) var(--sp-3);
-    font-weight: 500;
-    font-size: 0.6rem;
-    letter-spacing: 0.1em;
+    padding: 6px 12px;
+    font-weight: 700;
+    font-size: 0.58rem;
+    letter-spacing: 0.14em;
     color: var(--c-ink-3);
     text-transform: uppercase;
     border-bottom: 1px solid var(--c-rule);
     background: var(--c-bg-2);
     white-space: nowrap;
+    position: sticky;
+    top: 0;
+    z-index: 1;
   }
   .cnv__th--num {
     text-align: right;
     font-variant-numeric: tabular-nums;
     font-feature-settings: 'tnum' 1;
   }
+  .cnv__th--range {
+    width: 96px;
+  }
+  .cnv__th--src {
+    width: 76px;
+  }
   .cnv__tr {
     cursor: pointer;
-    transition: background 80ms ease;
+    transition: background 80ms var(--mv-ease-data, linear);
   }
   .cnv__tr:hover,
   .cnv__tr:focus-visible {
-    background: color-mix(in oklab, var(--c-amber) 4%, var(--c-bg));
+    background: color-mix(in oklab, var(--c-amber) 5%, var(--c-bg));
     outline: none;
   }
   .cnv__tr:focus-visible {
     box-shadow: inset 2px 0 0 var(--c-amber);
   }
   .cnv__td {
-    padding: var(--sp-2) var(--sp-3);
-    border-bottom: 1px solid var(--c-rule-soft);
+    padding: 5px 12px;
+    border-bottom: 1px solid var(--c-rule-soft, var(--c-rule));
     color: var(--c-ink);
     font-variant-numeric: tabular-nums;
     font-feature-settings: 'tnum' 1;
     white-space: nowrap;
+    height: 22px;
   }
   .cnv__td--num {
     text-align: right;
   }
   .cnv__td--up {
-    color: var(--c-amber);
+    color: #0d7a30; /* darker sage, ~5.4:1 on parchment */
+    font-weight: 600;
   }
   .cnv__td--down {
-    color: var(--c-ink-2);
+    color: #8a1f12; /* darker oxblood, ~6.0:1 on parchment */
+    font-weight: 600;
   }
   .cnv__td--flat {
     color: var(--c-ink-3);
   }
   .cnv__td--sym {
-    font-weight: 600;
+    font-weight: 700;
     color: var(--c-ink);
+    letter-spacing: 0.04em;
   }
-  .cnv__td--source {
-    font-size: 0.62rem;
+  .cnv__td--name {
+    color: var(--c-ink-2);
+    font-size: 0.66rem;
+    max-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .cnv__td--region {
     color: var(--c-ink-3);
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .cnv__td--range {
+    width: 96px;
+    padding-right: 12px;
+  }
+  .cnv__range {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 6px;
+    background: var(--c-bg-2);
+    border: 1px solid var(--c-rule);
+    vertical-align: middle;
+  }
+  .cnv__range-fill {
+    position: absolute;
+    top: -1px;
+    bottom: -1px;
+    background: var(--c-amber);
+    opacity: 0.4;
+  }
+  .cnv__range-mark {
+    position: absolute;
+    top: -2px;
+    bottom: -2px;
+    width: 1px;
+    background: var(--c-ink);
+  }
+  .cnv__range-na {
+    color: var(--c-ink-3);
+    font-size: 0.66rem;
     letter-spacing: 0.06em;
   }
+  .cnv__td--src {
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    color: var(--c-ink-3);
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .cnv__src-chip {
+    display: inline-block;
+    padding: 1px 5px;
+    border: 1px solid var(--c-rule);
+    background: var(--c-bg-2);
+    border-radius: 0;
+    line-height: 1.2;
+  }
+  /* Source chip colors — darker shades for WCAG AA on parchment.
+     The chip is a 1px border + 9.5px text label; small text needs 4.5:1. */
+  .cnv__src-chip[data-status="live"] {
+    border-color: #0d7a30;
+    color: #0d7a30;
+  }
+  .cnv__src-chip[data-status="stale"] {
+    border-color: #7a5a0a;
+    color: #7a5a0a;
+  }
+  .cnv__src-chip[data-status="down"] {
+    border-color: #8a1f12;
+    color: #8a1f12;
+  }
   .cnv__empty {
-    padding: var(--sp-3);
+    padding: 16px;
     color: var(--c-ink-3);
     font-style: italic;
     text-align: center;
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
   }
 
   /* ============================================================
-     BOTTOM BAR : refresh countdown + ESC hint
+     6. FOOTER : refresh progress bar + keyboard shortcuts.
      ============================================================ */
   .cnv__foot {
-    margin: var(--sp-3) 0 0;
-    padding: var(--sp-2) var(--sp-3);
-    border-top: 1px solid var(--c-rule);
     display: flex;
-    flex-wrap: wrap;
-    gap: var(--sp-2);
+    align-items: stretch;
+    gap: 0;
+    padding: 0;
+    border-top: 1px solid var(--c-rule);
+    background: var(--c-bg-2);
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    min-height: 28px;
+  }
+  .cnv__refresh {
+    display: inline-flex;
     align-items: center;
-    font-size: 0.7rem;
-    color: var(--c-ink-3);
-    letter-spacing: 0.06em;
+    gap: 8px;
+    padding: 6px 12px;
+    border-right: 1px solid var(--c-rule);
+    min-width: 220px;
   }
-  .cnv__foot-label {
+  .cnv__refresh-label {
+    font-weight: 700;
+    color: var(--c-ink-3);
+    letter-spacing: 0.14em;
+  }
+  .cnv__refresh-bar {
+    position: relative;
+    flex: 1 1 auto;
+    height: 4px;
+    background: var(--c-bg);
+    border: 1px solid var(--c-rule);
+    overflow: hidden;
+  }
+  .cnv__refresh-fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 100%;
+    background: var(--c-amber);
+    transition: width 1000ms linear;
+  }
+  .cnv__refresh-count {
+    font-weight: 700;
     color: var(--c-amber);
-    font-weight: 600;
-    letter-spacing: 0.12em;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
+    min-width: 32px;
+    text-align: right;
   }
-  .cnv__foot-sep {
-    opacity: 0.5;
-  }
-  .cnv__foot-hint {
+  .cnv__shortcuts {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 6px 12px;
+    flex: 1 1 auto;
     color: var(--c-ink-3);
   }
-  .cnv__foot-hint kbd {
+  .cnv__shortcut {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+  }
+  .cnv__shortcut kbd {
     display: inline-block;
-    padding: 0 5px;
-    margin: 0 2px;
+    padding: 1px 5px;
     border: 1px solid var(--c-rule);
     background: var(--c-bg);
     font-family: var(--ff-mono);
-    font-size: 9.5px;
-    color: var(--c-ink-2);
+    font-size: 0.58rem;
+    color: var(--c-ink);
     border-radius: 0;
+    line-height: 1.2;
+    font-weight: 700;
+  }
+  .cnv__foot-stamp {
+    padding: 6px 12px;
+    color: var(--c-ink-3);
+    border-left: 1px solid var(--c-rule);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
+  }
+  @media (max-width: 760px) {
+    .cnv__shortcuts {
+      display: none;
+    }
+    .cnv__foot-stamp {
+      display: none;
+    }
   }
 
   /* ============================================================
      Reduced-motion fallback (WCAG 2.2 AA mandatory).
      ============================================================ */
   @media (prefers-reduced-motion: reduce) {
+    .cnv__pill-dot,
+    .cnv__refresh-fill,
     .cnv__swap,
     .cnv__tab,
-    .cnv__tr {
+    .cnv__tr,
+    .cnv__close {
       transition: none;
+      animation: none;
     }
   }
 </style>
@@ -651,15 +1132,15 @@ const defaultTarget = DEFAULT_TARGET;
    *      aggregation of ECB + Binance + CoinGecko + Yahoo.
    *   3. Compute fiat-to-fiat and fiat-to-crypto cross rates from the
    *      envelope's USD-anchored rates.
-   *   4. Render the converter + the three tab tables.
+   *   4. Render the hero conversion + the three tab tables.
    *   5. Re-fetch every 30s. Visible countdown decrements every second.
    *
    * Failure modes:
    *   - Worker unreachable / 4xx / 5xx  → "rate unavailable" message;
    *     modal stays open; user can close with ESC.
    *   - Per-source degradation  → envelope's source_status reports which
-   *     source is down; the table cells render `UNAVAILABLE` rather than
-   *     fabricating numbers.
+   *     source is down; the table cells render `·` rather than fabricating
+   *     numbers, and the source-health strip shows STALE / DOWN pills.
    *   - Non-numeric input → silently skipped until retyped.
    *   - Rate = 0           → treated as unavailable (division guard).
    */
@@ -699,6 +1180,8 @@ const defaultTarget = DEFAULT_TARGET;
       volume24h?: number;
       source: 'binance' | 'coingecko';
       symbol: string;
+      high24h?: number;
+      low24h?: number;
     }>;
     stale: boolean;
   }
@@ -726,6 +1209,7 @@ const defaultTarget = DEFAULT_TARGET;
   let countdown = REFRESH_INTERVAL_SEC;
   let refreshTimer: ReturnType<typeof setInterval> | null = null;
   let countdownTimer: ReturnType<typeof setInterval> | null = null;
+  let lastFetchOk: number | null = null;
 
   /* ============================================================================
    * UTILS
@@ -748,7 +1232,8 @@ const defaultTarget = DEFAULT_TARGET;
 
   function fmtSignedPct(num: number): string {
     if (!Number.isFinite(num)) return '·';
-    return (num > 0 ? '▲ ' : num < 0 ? '▼ ' : '· ') + Math.abs(num).toFixed(2) + '%';
+    const arrow = num > 0.05 ? '▲' : num < -0.05 ? '▼' : '·';
+    return arrow + ' ' + Math.abs(num).toFixed(2) + '%';
   }
 
   function fmtTime(iso: string): string {
@@ -759,6 +1244,12 @@ const defaultTarget = DEFAULT_TARGET;
     const mm = String(d.getUTCMinutes()).padStart(2, '0');
     const ss = String(d.getUTCSeconds()).padStart(2, '0');
     return `${hh}:${mm}:${ss}Z`;
+  }
+
+  function fmtAge(seconds: number): string {
+    if (seconds < 60) return seconds + 's';
+    if (seconds < 3600) return Math.floor(seconds / 60) + 'm ' + (seconds % 60) + 's';
+    return Math.floor(seconds / 3600) + 'h';
   }
 
   function parseAmount(input: string): number | null {
@@ -828,59 +1319,165 @@ const defaultTarget = DEFAULT_TARGET;
   }
 
   /* ============================================================================
-   * RENDER
+   * SOURCE HEALTH : per-feed status pill renderer.
+   * Translates envelope.source_status + freshness into a 4-state pill.
    * ========================================================================== */
 
-  function renderConverter(): void {
+  function renderSourceHealth(): void {
+    const pills = $$('[data-cnv-pill]');
+    if (!envelope) {
+      pills.forEach((pill) => {
+        pill.setAttribute('data-state', 'waiting');
+        const state = pill.querySelector('[data-cnv-pill-state]');
+        if (state) state.textContent = 'WAITING';
+      });
+      return;
+    }
+    const now = Date.now();
+    const ts = new Date(envelope.ts).getTime();
+    const ageSec = isFinite(ts) ? Math.floor((now - ts) / 1000) : 9999;
+
+    // Map worker source_status → pill state.
+    // `ok` = live, `degraded` = stale, `down` = down.
+    const map: Record<string, 'live' | 'stale' | 'down' | 'waiting'> = {
+      ecb: envelope.source_status.ecb === 'ok' ? 'live'
+        : envelope.source_status.ecb === 'degraded' ? 'stale' : 'down',
+      binance: envelope.source_status.binance === 'ok' ? 'live'
+        : envelope.source_status.binance === 'degraded' ? 'stale' : 'down',
+      coingecko: envelope.source_status.coingecko === 'ok' ? 'live'
+        : envelope.source_status.coingecko === 'degraded' ? 'stale' : 'down',
+      yahoo: envelope.source_status.yahoo === 'ok' ? 'live'
+        : envelope.source_status.yahoo === 'degraded' ? 'stale' : 'down',
+    };
+
+    pills.forEach((pill) => {
+      const feed = pill.getAttribute('data-cnv-pill') as keyof typeof map | null;
+      if (!feed) return;
+      const state = map[feed];
+      pill.setAttribute('data-state', state);
+      const stateEl = pill.querySelector('[data-cnv-pill-state]');
+      const stampEl = pill.querySelector('[data-cnv-pill-stamp]');
+      if (stateEl) stateEl.textContent = state === 'live' ? 'LIVE' : state === 'stale' ? 'STALE' : 'DOWN';
+      if (stampEl) {
+        stampEl.textContent = state === 'live' ? fmtAge(ageSec) : state === 'stale' ? fmtAge(ageSec) : '—';
+      }
+    });
+  }
+
+  /* ============================================================================
+   * HERO RENDER : primary readout for the operator.
+   * ========================================================================== */
+
+  function renderHero(): void {
     const cross = computeCross(fromId, toId);
     const toC = catalogData.currencies.find((c) => c.id === toId);
+    const fromC = catalogData.currencies.find((c) => c.id === fromId);
     const decimals = toC?.decimals ?? 4;
 
     const toEl = $('[data-cnv-amount-to]');
     if (!toEl) return;
 
+    const ratePairEl = $('[data-cnv-rate-pair]');
+    const fromMetaEl = $('[data-cnv-from-meta]');
+    const toMetaEl = $('[data-cnv-to-meta]');
+    const footStampEl = $('[data-cnv-foot-stamp]');
+
     if (!cross) {
       toEl.value = '·';
-      const ratePair = $('[data-cnv-rate-pair]');
-      if (ratePair) ratePair.textContent = '1 ' + fromId + ' = · ' + toId;
-      const rateSrc = $('[data-cnv-rate-src]');
-      if (rateSrc) rateSrc.textContent = 'rate unavailable';
+      if (ratePairEl) ratePairEl.textContent = '1 ' + fromId + ' = · ' + toId;
+      if (fromMetaEl) fromMetaEl.textContent = 'RATE UNAVAILABLE';
+      if (toMetaEl) toMetaEl.textContent = 'REFRESHING…';
+      if (footStampEl) footStampEl.textContent = '—';
       return;
     }
 
     const targetAmount = fromAmount * cross.rate;
     toEl.value = fmt(targetAmount, decimals);
 
-    const ratePair = $('[data-cnv-rate-pair]');
-    if (ratePair) ratePair.textContent = '1 ' + fromId + ' = ' + fmt(cross.rate, decimals) + ' ' + toId;
+    if (ratePairEl) ratePairEl.textContent = '1 ' + fromId + ' = ' + fmt(cross.rate, decimals) + ' ' + toId;
 
-    const rateSrc = $('[data-cnv-rate-src]');
-    if (rateSrc) {
-      const stamp = envelope ? fmtTime(envelope.ts) : '·';
-      const staleTag = envelope?.stale ? ' · cached' : '';
-      rateSrc.textContent = cross.src + ' · ' + stamp + staleTag;
+    const stamp = envelope ? fmtTime(envelope.ts) : '·';
+    const staleTag = envelope?.stale ? ' · CACHED' : '';
+
+    if (fromMetaEl) {
+      const fromSrc = fromC
+        ? (fromC.source === 'fiat' ? (fromC.ecbKey ? 'ECB' : 'YAHOO') : fromC.source.toUpperCase())
+        : '·';
+      fromMetaEl.textContent = fromSrc + ' · ' + stamp + staleTag;
     }
+    if (toMetaEl) {
+      const toSrc = toC
+        ? (toC.source === 'fiat' ? (toC.ecbKey ? 'ECB' : 'YAHOO') : toC.source.toUpperCase())
+        : '·';
+      toMetaEl.textContent = toSrc + ' · ' + stamp + staleTag;
+    }
+    if (footStampEl) footStampEl.textContent = stamp + staleTag;
   }
+
+  /* ============================================================================
+   * TAB COUNTS : how many rows are populated per universe.
+   * ========================================================================== */
+
+  function renderTabCounts(): void {
+    if (!envelope) return;
+    const fiatCount = catalogData.currencies.filter((c) => c.source === 'fiat').length;
+    const validFiat = catalogData.currencies.filter(
+      (c) => c.source === 'fiat' && Number.isFinite(envelope!.fiat[c.id]) && envelope!.fiat[c.id] > 0,
+    ).length;
+    const binCount = catalogData.currencies.filter((c) => c.source === 'crypto-binance').length;
+    const validBin = catalogData.currencies.filter(
+      (c) => c.source === 'crypto-binance' && envelope!.crypto[c.id] && Number.isFinite(envelope!.crypto[c.id]!.last),
+    ).length;
+    const cgCount = 0; // coingecko not in current catalog
+    const validCg = 0;
+
+    const f1 = $('[data-cnv-tab-count="forex"]');
+    const f2 = $('[data-cnv-tab-count="crypto-binance"]');
+    const f3 = $('[data-cnv-tab-count="crypto-coingecko"]');
+    if (f1) f1.textContent = `${validFiat}/${fiatCount}`;
+    if (f2) f2.textContent = `${validBin}/${binCount}`;
+    if (f3) f3.textContent = `${validCg}/${cgCount}`;
+  }
+
+  /* ============================================================================
+   * TABLE RENDER : FOREX rows (ECB / Yahoo / METALS).
+   * Shows MID only — ECB publishes one daily reference rate.
+   * ========================================================================== */
 
   function renderForexRows(): void {
     const tbody = $('[data-cnv-rows-forex]');
-    if (!tbody || !envelope) return;
+    if (!tbody || !envelope) {
+      if (tbody) tbody.innerHTML = '<tr><td colspan="5" class="cnv__empty">WAITING FOR ECB…</td></tr>';
+      return;
+    }
     const fiat = catalogData.currencies.filter((c) => c.source === 'fiat');
     tbody.innerHTML = fiat
       .map((c) => {
         const rate = envelope!.fiat[c.id];
         const valid = Number.isFinite(rate) && rate > 0;
-        const source = c.ecbKey ? 'ECB' : c.yahooTicker ? 'YF' : '·';
+        const srcStatus = envelope!.source_status[c.ecbKey ? 'ecb' : 'yahoo'] === 'ok'
+          ? 'live'
+          : envelope!.source_status[c.ecbKey ? 'ecb' : 'yahoo'] === 'degraded'
+            ? 'stale'
+            : 'down';
+        const srcLabel = c.ecbKey ? 'ECB' : c.yahooTicker ? 'YF' : '·';
         return `
         <tr class="cnv__tr" data-cnv-prefill="${c.id}" tabindex="0" role="button" aria-label="Prefill converter with ${c.id}">
           <td class="cnv__td cnv__td--sym">${c.symbol}</td>
-          <td class="cnv__td cnv__td--num">${valid ? fmt(rate, c.decimals) : 'UNAVAILABLE'}</td>
-          <td class="cnv__td cnv__td--num cnv__td--source">${source}</td>
+          <td class="cnv__td cnv__td--name">${c.name}</td>
+          <td class="cnv__td cnv__td--num">${valid ? fmt(rate, c.decimals) : '·'}</td>
+          <td class="cnv__td cnv__td--region">${c.region}</td>
+          <td class="cnv__td cnv__td--src"><span class="cnv__src-chip" data-status="${srcStatus}">${srcLabel}</span></td>
         </tr>`;
       })
       .join('');
     wireRowPrefill(tbody);
   }
+
+  /* ============================================================================
+   * TABLE RENDER : CRYPTO rows (Binance / CoinGecko).
+   * Shows LAST / BID / ASK / 24H Δ / 24H RANGE.
+   * ========================================================================== */
 
   function renderCryptoRows(bucket: 'crypto-binance' | 'crypto-coingecko'): void {
     const tbody = $(
@@ -888,8 +1485,20 @@ const defaultTarget = DEFAULT_TARGET;
         ? '[data-cnv-rows-crypto-binance]'
         : '[data-cnv-rows-crypto-coingecko]',
     );
-    if (!tbody || !envelope) return;
+    if (!tbody) return;
     const crypto = catalogData.currencies.filter((c) => c.source === bucket);
+    if (!envelope || crypto.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" class="cnv__empty">NO ' + bucket.toUpperCase().replace('CRYPTO-', '') + ' SYMBOLS</td></tr>';
+      return;
+    }
+    const feedKey = bucket === 'crypto-binance' ? 'binance' : 'coingecko';
+    const srcStatus = envelope.source_status[feedKey] === 'ok'
+      ? 'live'
+      : envelope.source_status[feedKey] === 'degraded'
+        ? 'stale'
+        : 'down';
+    const srcLabel = bucket === 'crypto-binance' ? 'BIN' : 'CG';
+
     tbody.innerHTML = crypto
       .map((c) => {
         const t = envelope!.crypto[c.id];
@@ -902,17 +1511,40 @@ const defaultTarget = DEFAULT_TARGET;
                 ? 'cnv__td--down'
                 : 'cnv__td--flat'
             : 'cnv__td--flat';
-        const srcLabel = bucket === 'crypto-binance' ? 'BINANCE' : 'COINGECKO';
+        const bidValid = valid && t && Number.isFinite(t.bid) && t.bid! > 0;
+        const askValid = valid && t && Number.isFinite(t.ask) && t.ask! > 0;
+        const rangeHtml = valid && t && t.high24h !== undefined && t.low24h !== undefined
+          ? renderRangeBar(t.low24h!, t.high24h!, t.last)
+          : '<span class="cnv__range-na">N/A</span>';
         return `
         <tr class="cnv__tr" data-cnv-prefill="${c.id}" tabindex="0" role="button" aria-label="Prefill converter with ${c.id}">
           <td class="cnv__td cnv__td--sym">${c.symbol}</td>
-          <td class="cnv__td cnv__td--num">${valid && t ? fmt(t.last, c.decimals) : 'UNAVAILABLE'}</td>
+          <td class="cnv__td cnv__td--name">${c.name}</td>
+          <td class="cnv__td cnv__td--num">${valid && t ? fmt(t.last, c.decimals) : '·'}</td>
+          <td class="cnv__td cnv__td--num">${bidValid && t ? fmt(t.bid!, c.decimals) : '·'}</td>
+          <td class="cnv__td cnv__td--num">${askValid && t ? fmt(t.ask!, c.decimals) : '·'}</td>
           <td class="cnv__td cnv__td--num ${deltaCls}">${valid && t && t.change24h !== undefined ? fmtSignedPct(t.change24h) : '·'}</td>
-          <td class="cnv__td cnv__td--num cnv__td--source">${srcLabel}</td>
+          <td class="cnv__td cnv__td--range">${rangeHtml}</td>
+          <td class="cnv__td cnv__td--src"><span class="cnv__src-chip" data-status="${srcStatus}">${srcLabel}</span></td>
         </tr>`;
       })
       .join('');
     wireRowPrefill(tbody);
+  }
+
+  /**
+   * Render a 24h range mini-bar showing where the last price sits within
+   * the 24h low / high band. Banks use this exact visual on trading desks.
+   */
+  function renderRangeBar(low: number, high: number, last: number): string {
+    if (!Number.isFinite(low) || !Number.isFinite(high) || high <= low) {
+      return '<span class="cnv__range-na">N/A</span>';
+    }
+    const range = high - low;
+    const markPct = ((last - low) / range) * 100;
+    const width = Math.min(100, Math.max(0, markPct));
+    const cls = last > (low + range * 0.5) ? 'cnv__td--up' : 'cnv__td--down';
+    return `<span class="cnv__range ${cls}" title="${fmt(low, 2)} – ${fmt(high, 2)}"><span class="cnv__range-fill" style="left:0; width:${width.toFixed(1)}%"></span><span class="cnv__range-mark" style="left:${width.toFixed(1)}%"></span></span>`;
   }
 
   function wireRowPrefill(tbody: Element): void {
@@ -924,7 +1556,7 @@ const defaultTarget = DEFAULT_TARGET;
         fromId = id;
         const select = $('[data-cnv-from]') as HTMLSelectElement | null;
         if (select) select.value = id;
-        renderConverter();
+        renderHero();
       };
       row.addEventListener('click', h);
       row.addEventListener('keydown', (e) => {
@@ -941,12 +1573,17 @@ const defaultTarget = DEFAULT_TARGET;
   async function refresh(): Promise<void> {
     const next = await fetchRates();
     if (!next) {
-      const rateSrc = $('[data-cnv-rate-src]');
-      if (rateSrc) rateSrc.textContent = 'rate unavailable · retrying…';
+      const fromMeta = $('[data-cnv-from-meta]');
+      if (fromMeta) fromMeta.textContent = 'RATE UNAVAILABLE · RETRYING…';
+      lastFetchOk = null;
+      renderSourceHealth();
       return;
     }
     envelope = next;
-    renderConverter();
+    lastFetchOk = Date.now();
+    renderSourceHealth();
+    renderHero();
+    renderTabCounts();
     renderForexRows();
     renderCryptoRows('crypto-binance');
     renderCryptoRows('crypto-coingecko');
@@ -960,7 +1597,6 @@ const defaultTarget = DEFAULT_TARGET;
     const root = $('[data-cnv]');
     if (!root) return;
     root.removeAttribute('hidden');
-    // Initial fetch + schedule 30s refresh + 1s countdown.
     refresh();
     if (refreshTimer) clearInterval(refreshTimer);
     refreshTimer = setInterval(refresh, REFRESH_INTERVAL_SEC * 1000);
@@ -970,7 +1606,6 @@ const defaultTarget = DEFAULT_TARGET;
     // Focus the source input.
     const fromInput = $('[data-cnv-amount-from]') as HTMLInputElement | null;
     if (fromInput) {
-      // Defer to next tick so the modal is fully visible before focus.
       setTimeout(() => fromInput.focus(), 0);
     }
   }
@@ -993,7 +1628,14 @@ const defaultTarget = DEFAULT_TARGET;
     countdown = Math.max(0, countdown - 1);
     const el = $('[data-cnv-countdown]');
     if (el) el.textContent = countdown + 's';
+    const fill = $('[data-cnv-refresh-fill]') as HTMLElement | null;
+    if (fill) {
+      const pct = ((REFRESH_INTERVAL_SEC - countdown) / REFRESH_INTERVAL_SEC) * 100;
+      fill.style.width = pct.toFixed(1) + '%';
+    }
     if (countdown === 0) countdown = REFRESH_INTERVAL_SEC;
+    // Re-render source health ages every tick.
+    renderSourceHealth();
   }
 
   /* ============================================================================
@@ -1010,21 +1652,21 @@ const defaultTarget = DEFAULT_TARGET;
       const n = parseAmount(fromInput.value);
       if (n === null) return;
       fromAmount = n;
-      renderConverter();
+      renderHero();
     });
     fromSelect?.addEventListener('change', () => {
       fromId = fromSelect.value;
-      renderConverter();
+      renderHero();
     });
     toSelect?.addEventListener('change', () => {
       toId = toSelect.value;
-      renderConverter();
+      renderHero();
     });
     swapBtn?.addEventListener('click', () => {
       [fromId, toId] = [toId, fromId];
       if (fromSelect) fromSelect.value = fromId;
       if (toSelect) toSelect.value = toId;
-      renderConverter();
+      renderHero();
     });
   }
 
@@ -1078,7 +1720,7 @@ const defaultTarget = DEFAULT_TARGET;
         close();
         return;
       }
-      // Don't intercept R/S when input is focused.
+      // Don't intercept keys when input is focused.
       const ae = document.activeElement;
       const isEditable =
         ae instanceof HTMLElement &&
@@ -1094,6 +1736,18 @@ const defaultTarget = DEFAULT_TARGET;
         e.preventDefault();
         const swapBtn = $('[data-cnv-swap]') as HTMLButtonElement | null;
         swapBtn?.click();
+      }
+      // Tab cycles through universes (forward), Shift+Tab backward.
+      if (key === 'tab') {
+        e.preventDefault();
+        const order: Array<typeof activeTab> = ['forex', 'crypto-binance', 'crypto-coingecko'];
+        const idx = order.indexOf(activeTab);
+        const next = e.shiftKey
+          ? (idx - 1 + order.length) % order.length
+          : (idx + 1) % order.length;
+        const target = order[next];
+        const tab = $(`[data-cnv-tab="${target}"]`) as HTMLButtonElement | null;
+        tab?.click();
       }
     });
   }
@@ -1125,10 +1779,8 @@ const defaultTarget = DEFAULT_TARGET;
   wireTrigger();
 
   /* Silence the unused-import warning for ALL_CURRENCIES / getCurrencyMeta
-     · they are kept in scope so the catalog can be expanded later without
-     having to re-import. */
+   * · they are kept in scope so the catalog can be expanded later without
+   * having to re-import. */
   void ALL_CURRENCIES;
   void getCurrencyMeta;
 </script>
-</content>
-</invoke>
