@@ -6,6 +6,14 @@
  * Hero equation: skill_stack = build + validate + ship (one stack across two lanes).
  * Proficiency is a 5-dot ladder (1 = exposure, 5 = production-grade).
  * `years` is self-rated practice time (not tenure).
+ *
+ * v13.1.4 (2026-08-11, polish-7aq) : copy-edit-only scope per the
+ * /comp/, /papers/, /404+500 reverts. Per-skill metadata added via a
+ * derived map (mirrors certifications.astro statusFor/surfaceFor/commitFor,
+ * commit f7822c3). Recency stamp anchored to f7822c3 (last polish-7 chrome
+ * manifest before this uplift). NO new structural sections, NO new
+ * frontmatter fields, NO new external citations. NDA scope preserved
+ * (per-item status + date + related-surface, no employer names).
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
 import Equation from '@components/Equation.astro';
@@ -13,6 +21,7 @@ import Stat from '@components/Stat.astro';
 import ChromeHeader from '@components/ChromeHeader.astro';
 import SectionMark from '@components/SectionMark.astro';
 import { profile } from '@utils/profile';
+import { path } from '@utils/url';
 import { getCollection, type CollectionEntry } from 'astro:content';
 
 type SkillGroupEntry = CollectionEntry<'skillGroup'>;
@@ -49,6 +58,55 @@ const levelLabel: Record<1 | 2 | 3 | 4 | 5, string> = {
   4: 'strong',
   5: 'production',
 };
+
+// v13.1.4 (2026-08-11, polish-7aq) : chrome manifest anchor. Same register
+// as /certifications/ (commit f7822c3) — last polish-7 chrome manifest
+// before this uplift. Per-skill meta lines + the recency stamp both
+// reference this hash for traceability.
+const SKILLS_COMMIT = 'f7822c3';
+
+// v13.1.4 (2026-08-11, polish-7aq) : per-skill status derived from level.
+// Same chrome register as /certifications/ statusFor (commit f7822c3).
+// CURRENT is the default for any actively-practiced skill (years >= 1).
+// IN FLIGHT tags tier-1 only — saw it, didn't ship it. ARCHIVED reserved
+// for retired skills (none in the current matrix).
+type SkillStatus = 'CURRENT' | 'IN FLIGHT';
+type SkillItem = SkillGroupEntry['data']['items'][number];
+type SkillGroup = SkillGroupEntry;
+
+const statusFor = (item: SkillItem): SkillStatus => {
+  if (typeof item.level === 'number' && item.level <= 1) return 'IN FLIGHT';
+  return 'CURRENT';
+};
+
+const levelAdjective = (item: SkillItem): string => {
+  if (typeof item.level !== 'number') return 'TRACKED';
+  return levelLabel[item.level as 1 | 2 | 3 | 4 | 5].toUpperCase();
+};
+
+// v13.1.4 (2026-08-11, polish-7aq) : per-skill practice span derived from
+// `years`. Today's anchor is 2026-08-11; years count back. Format = ISO
+// month span (matches polish-7a*'s month-precision chrome register).
+const dateFor = (item: SkillItem): string => {
+  if (typeof item.years !== 'number') return 'DATE PENDING';
+  const startYear = 2026 - item.years;
+  return `${startYear}-08..present`;
+};
+
+// v13.1.4 (2026-08-11, polish-7aq) : per-skill related-surface derived
+// from group title. AI + Tools domain = /portfolio/work/ (project evidence).
+// Quant domain = /portfolio/methodology/ (gate-stack evidence).
+const surfaceFor = (_item: SkillItem, group: SkillGroup): string => {
+  if (group.data.title === 'Quantitative Research & Statistics')
+    return '/portfolio/methodology/';
+  return '/portfolio/work/';
+};
+
+// v13.1.4 (2026-08-11, polish-7aq) : per-skill commit attribution. All
+// current-matrix skills anchor to f7822c3 — the last polish-7 chrome
+// manifest before this uplift. Future polish-7* ships pick up the
+// chrome anchor and re-anchor.
+const commitFor = (_item: SkillItem): string => SKILLS_COMMIT;
 ---
 
 <BaseLayout
@@ -84,9 +142,8 @@ const levelLabel: Record<1 | 2 | 3 | 4 | 5, string> = {
         <div>
           <strong>Self-rated, not self-inflated.</strong> Proficiency dots are my honest answer to <em
             >"could I ship this to production on Monday without help?"</em
-          > Tradeoffs between languages, libraries, and domains are explicit: e.g., I can ship production
-          Python but my Docker is <em>working</em>, not <em>expert</em>. Years of practice reflect
-          actual use, not calendar time since first exposure.
+          > Tradeoffs explicit: I ship production Python, but Docker is <em>working</em>, not <em>expert</em>.
+          Years reflect practice, not calendar time.
         </div>
       </div>
 
@@ -202,6 +259,20 @@ const levelLabel: Record<1 | 2 | 3 | 4 | 5, string> = {
                       <span class="muted">yr{item.years === 1 ? '' : 's'}</span>
                     </div>
                   )}
+
+                  {/* v13.1.4 (2026-08-11, polish-7aq) : per-skill metadata.
+                      Status + level-adjective + practice span + related
+                      surface + chrome-manifest commit. Same register as
+                      /certifications/ `.cert__meta` (commit f7822c3) and
+                      /contact/ `.contact-card__meta` (commit 2d75d97).
+                      Hairline rule + mono + ink-3 footnote. Lives inside
+                      the card article so the meta stays visually attached
+                      to the skill. Text only, no nested anchor. */}
+                  <div class="skill__meta mono">
+                    {statusFor(item)} · {levelAdjective(item)} · {dateFor(item)} ·
+                    <a href={path(surfaceFor(item, group))}>{surfaceFor(item, group)}</a>
+                    · commit <code>{commitFor(item)}</code>
+                  </div>
                 </article>
               );
             })}
