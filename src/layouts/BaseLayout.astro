@@ -22,6 +22,7 @@ import '@styles/print.css';
 import SideRail from '@components/SideRail.astro';
 import CommandPalette from '@components/CommandPalette.astro';
 import WorldView from '@components/WorldView.astro';
+import Converter from '@components/Converter.astro';
 import { profile } from '@utils/profile';
 import { buildMeta, personJsonLd, websiteJsonLd, breadcrumbJsonLd } from '@utils/seo';
 import { path } from '@utils/url';
@@ -199,6 +200,7 @@ const crumbsJsonLd = breadcrumbs ? breadcrumbJsonLd(breadcrumbs) : null;
 
     <CommandPalette />
     <WorldView />
+    <Converter />
 
     {/* Scrollable-region-focusable bridge */}
     <script is:inline>

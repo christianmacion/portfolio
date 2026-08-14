@@ -895,10 +895,11 @@ const askTrigger = ASK_TRIGGER;
           else open();
           return;
         }
-        /* v13.1.4 polish-7az (2026-08-14): ⌘C / Ctrl+C quick-jump to the
-           live converter. Skipped when the converter is already open
-           (avoid double-history push) and when the active element is
-           a text input / content-editable (don't hijack ⌘C copy). */
+        /* v13.1.4 polish-7bb (2026-08-14): ⌘C / Ctrl+C opens the converter
+           modal (was: navigate to /converter/). Skipped when the active
+           element is a text input / content-editable (don't hijack ⌘C copy).
+           The converter modal is mounted in BaseLayout.astro; we dispatch
+           the `cnv:open` event the modal listens for. */
         if (
           (e.metaKey || e.ctrlKey) &&
           k === 'c' &&
@@ -913,10 +914,9 @@ const askTrigger = ASK_TRIGGER;
               ae.tagName === 'SELECT' ||
               ae.isContentEditable);
           if (isEditable) return;
-          if (window.location.pathname.replace(/\/$/, '') === '/portfolio/converter') return;
           e.preventDefault();
           e.stopImmediatePropagation();
-          window.location.href = basePath('/converter/');
+          document.dispatchEvent(new CustomEvent('cnv:open'));
           return;
         }
         if (!isOpen) return;
