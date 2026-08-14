@@ -33,6 +33,7 @@ const staticRoutes: Array<{ href: string; label: string; tag: string }> = [
   { href: '/proof/',          label: 'Proof',           tag: 'PAGE' },
   { href: '/projects/',       label: 'Projects',        tag: 'PAGE' },
   { href: '/work/',           label: 'Work',            tag: 'PAGE' },
+  { href: '/converter/',      label: 'Converter',       tag: 'PAGE' },
   { href: '/experience/',     label: 'Experience',      tag: 'PAGE' },
   { href: '/skills/',         label: 'Skills',          tag: 'PAGE' },
   { href: '/glossary/',       label: 'Glossary',        tag: 'PAGE' },
@@ -61,6 +62,7 @@ const ICON_MAP: Record<string, string> = {
   '/proof/':          '<path d="M9 2 L14 5 V11 L9 14 L4 11 V5 Z"/>',
   '/projects/':       '<rect x="3" y="3" width="5" height="5"/><rect x="10" y="3" width="5" height="5"/><rect x="3" y="10" width="5" height="5"/><rect x="10" y="10" width="5" height="5"/>',
   '/work/':           '<path d="M3 4 H15 V12 H3 Z M3 7 H15 M6 4 V12"/>',
+  '/converter/':      '<path d="M3 5 H11 M9 3 L11 5 L9 7 M13 11 H5 M7 9 L5 11 L7 13"/>',
   '/experience/':     '<path d="M3 6 L9 2 L15 6 V14 H3 Z M7 14 V9 H11 V14"/>',
   '/skills/':         '<path d="M3 9 L9 3 L15 9 M9 3 V14"/>',
   '/glossary/':       '<path d="M3 4 H10 V14 H3 Z M11 4 H15 V14 H11"/>',
@@ -641,6 +643,7 @@ const askTrigger = ASK_TRIGGER;
     '/proof/':          '<path d="M9 2 L14 5 V11 L9 14 L4 11 V5 Z"/>',
     '/projects/':       '<rect x="3" y="3" width="5" height="5"/><rect x="10" y="3" width="5" height="5"/><rect x="3" y="10" width="5" height="5"/><rect x="10" y="10" width="5" height="5"/>',
     '/work/':           '<path d="M3 4 H15 V12 H3 Z M3 7 H15 M6 4 V12"/>',
+    '/converter/':      '<path d="M3 5 H11 M9 3 L11 5 L9 7 M13 11 H5 M7 9 L5 11 L7 13"/>',
     '/experience/':     '<path d="M3 6 L9 2 L15 6 V14 H3 Z M7 14 V9 H11 V14"/>',
     '/skills/':         '<path d="M3 9 L9 3 L15 9 M9 3 V14"/>',
     '/glossary/':       '<path d="M3 4 H10 V14 H3 Z M11 4 H15 V14 H11"/>',
@@ -890,6 +893,30 @@ const askTrigger = ASK_TRIGGER;
           e.stopImmediatePropagation();
           if (isOpen) close();
           else open();
+          return;
+        }
+        /* v13.1.4 polish-7az (2026-08-14): ⌘C / Ctrl+C quick-jump to the
+           live converter. Skipped when the converter is already open
+           (avoid double-history push) and when the active element is
+           a text input / content-editable (don't hijack ⌘C copy). */
+        if (
+          (e.metaKey || e.ctrlKey) &&
+          k === 'c' &&
+          !e.altKey &&
+          !e.shiftKey
+        ) {
+          const ae = document.activeElement;
+          const isEditable =
+            ae instanceof HTMLElement &&
+            (ae.tagName === 'INPUT' ||
+              ae.tagName === 'TEXTAREA' ||
+              ae.tagName === 'SELECT' ||
+              ae.isContentEditable);
+          if (isEditable) return;
+          if (window.location.pathname.replace(/\/$/, '') === '/portfolio/converter') return;
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          window.location.href = basePath('/converter/');
           return;
         }
         if (!isOpen) return;

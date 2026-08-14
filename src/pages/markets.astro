@@ -30,6 +30,7 @@ import ChromeHeader from '@components/ChromeHeader.astro';
 import { seedFromString, walk, buildSeed } from '@utils/prng';
 import { path } from '@utils/url';
 import { getIndexSnap } from '@utils/markets-data';
+import { MARKETS_PREVIEW_ROWS, getCurrencyMeta } from '@data/currencies';
 
 // === Index stats (PRNG-seeded from BUILD_DATE) ===
 // Four headline indices with deterministic mid-prices and a small
@@ -84,6 +85,22 @@ const yieldCurve = [
 const secondarySnap = getIndexSnap('BTC-USD');
 const secondaryMidPx = secondarySnap?.px;
 const secondarySymbol = 'BTC-USD';
+
+// === Mini converter widget (v13.1.4 polish-7az) ===
+// Resolve the 8-row preview set to its currency metadata so the static
+// widget renders the same labels the converter page uses. The rate
+// values themselves load client-side from ECB / Binance.
+const previewCurrencies = MARKETS_PREVIEW_ROWS.map((id) => {
+  const m = getCurrencyMeta(id);
+  if (!m) throw new Error(`markets: missing currency ${id}`);
+  return {
+    id: m.id,
+    symbol: m.symbol,
+    name: m.name,
+    source: m.source,
+    decimals: m.decimals,
+  };
+});
 ---
 
 <BaseLayout
@@ -272,6 +289,64 @@ const secondarySymbol = 'BTC-USD';
           </div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <section class="mk-conv">
+    <div class="container">
+      <header class="mk-conv__head">
+        <p class="section__eyebrow">Mini converter · 8 rows · live</p>
+        <h2 class="mk-conv__title">Wire rates at a glance.</h2>
+        <p class="section__sub">
+          Six largest crypto by 24h turnover plus USD and PHP (Owner home base).
+          Each row prefills the <a href={path('/converter/')}>full converter</a> on
+          click and reuses the same ECB FX + Binance public REST endpoints.
+        </p>
+      </header>
+
+      <div class="mk-conv__scroll" role="region" aria-label="Mini converter">
+        <table class="mk-conv__table mono">
+          <thead>
+            <tr>
+              <th class="mk-conv__th mk-conv__th--sym">Symbol</th>
+              <th class="mk-conv__th">Name</th>
+              <th class="mk-conv__th">Source</th>
+              <th class="mk-conv__th mk-conv__th--num">Last (USD)</th>
+              <th class="mk-conv__th mk-conv__th--num">24h Δ</th>
+              <th class="mk-conv__th mk-conv__th--num">Updated</th>
+            </tr>
+          </thead>
+          <tbody data-mk-conv-rows>
+            {
+              previewCurrencies.map((c) => (
+                <tr
+                  class="mk-conv__tr"
+                  data-mk-conv-prefill={c.id}
+                  tabindex="0"
+                  role="button"
+                  aria-label={`Open converter with ${c.symbol}`}
+                >
+                  <td class="mk-conv__td mk-conv__td--sym">{c.symbol}</td>
+                  <td class="mk-conv__td mk-conv__td--name">{c.name}</td>
+                  <td class="mk-conv__td mk-conv__td--source">
+                    {c.source === 'crypto-binance'
+                      ? 'BINANCE'
+                      : c.source === 'fiat'
+                        ? 'ECB / YF'
+                        : 'COINGECKO'}
+                  </td>
+                  <td class="mk-conv__td mk-conv__td--num" data-mk-conv-px={c.id}>·</td>
+                  <td class="mk-conv__td mk-conv__td--num" data-mk-conv-delta={c.id}>·</td>
+                  <td class="mk-conv__td mk-conv__td--num" data-mk-conv-ts={c.id}>·</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      <p class="mk-conv__cta mono">
+        <a href={path('/converter/')} class="mk-conv__link">Open the full 30+ row converter →</a>
+      </p>
     </div>
   </section>
 
@@ -622,4 +697,241 @@ const secondarySymbol = 'BTC-USD';
     padding: 0.05em 0.4em;
     border-radius: 1px;
   }
+
+  /* ============================================================
+     MINI CONVERTER (v13.1.4 polish-7az) : 8-row institutional
+     preview of the full /converter/ page. Mono numbers, amber
+     deltas, hairline rows, sharp corners. Chrome contract v1
+     held (mono + amber + hairline + 0-2px radius).
+     ============================================================ */
+  .mk-conv {
+    padding-block: var(--sp-7);
+    background: var(--c-bg);
+    border-block: 1px solid var(--c-rule);
+  }
+  .mk-conv__head {
+    margin-bottom: var(--sp-5);
+  }
+  .mk-conv__title {
+    font-size: var(--fs-xl);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin: var(--sp-2) 0 var(--sp-3);
+  }
+  .mk-conv__head a {
+    color: var(--c-amber);
+    text-decoration: underline;
+    text-decoration-color: var(--c-amber-decor);
+    text-underline-offset: 3px;
+  }
+  .mk-conv__scroll {
+    overflow-x: auto;
+    border: 1px solid var(--c-rule);
+    background: var(--c-bg-2);
+  }
+  .mk-conv__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.78rem;
+  }
+  .mk-conv__th {
+    text-align: left;
+    padding: var(--sp-2) var(--sp-3);
+    font-weight: 500;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--c-ink-3);
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--c-rule);
+    background: var(--c-bg);
+    white-space: nowrap;
+  }
+  .mk-conv__th--num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
+  }
+  .mk-conv__tr {
+    cursor: pointer;
+    transition: background 80ms ease;
+  }
+  .mk-conv__tr:hover,
+  .mk-conv__tr:focus-visible {
+    background: color-mix(in oklab, var(--c-amber) 4%, var(--c-bg-2));
+    outline: none;
+  }
+  .mk-conv__tr:focus-visible {
+    box-shadow: inset 2px 0 0 var(--c-amber);
+  }
+  .mk-conv__td {
+    padding: var(--sp-2) var(--sp-3);
+    border-bottom: 1px solid var(--c-rule-soft);
+    color: var(--c-ink);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
+    white-space: nowrap;
+  }
+  .mk-conv__td--num {
+    text-align: right;
+  }
+  .mk-conv__td--sym {
+    font-weight: 600;
+    color: var(--c-ink);
+  }
+  .mk-conv__td--name {
+    color: var(--c-ink-2);
+    font-size: 0.72rem;
+  }
+  .mk-conv__td--source {
+    font-size: 0.66rem;
+    color: var(--c-ink-3);
+    letter-spacing: 0.06em;
+  }
+  .mk-conv__cta {
+    margin: var(--sp-4) 0 0;
+    text-align: right;
+    font-size: 0.74rem;
+  }
+  .mk-conv__link {
+    color: var(--c-amber);
+    text-decoration: none;
+    border-bottom: 1px dashed var(--c-amber-decor);
+    padding-bottom: 2px;
+  }
+  .mk-conv__link:hover {
+    border-bottom-style: solid;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mk-conv__tr {
+      transition: none;
+    }
+  }
 </style>
+
+<script>
+  /**
+   * Mini converter boot script (/markets/): populate the 8-row table
+   * with live rates from the same ECB / Binance endpoints the full
+   * /converter/ page uses. Click any row to navigate to the full
+   * converter prefilled with that currency.
+   */
+
+  (() => {
+    const fxCurrencies = ['USD', 'PHP'];
+    const cryptoSymbols: Record<string, string> = {
+      BTC: 'BTCUSDT',
+      ETH: 'ETHUSDT',
+      SOL: 'SOLUSDT',
+      BNB: 'BNBUSDT',
+      XRP: 'XRPUSDT',
+      ADA: 'ADAUSDT',
+    };
+
+    function $n<T extends HTMLElement>(sel: string): T | null {
+      return document.querySelector(sel) as T | null;
+    }
+    function fmt(n: number, d: number): string {
+      if (!Number.isFinite(n) || n === 0) return '·';
+      return new Intl.NumberFormat('en-US', {
+        minimumFractionDigits: d,
+        maximumFractionDigits: d,
+      }).format(n);
+    }
+    function fmtSigned(n: number): string {
+      if (!Number.isFinite(n)) return '·';
+      return (n > 0 ? '▲ ' : n < 0 ? '▼ ' : '· ') + Math.abs(n).toFixed(2) + '%';
+    }
+    function ts(): string {
+      const d = new Date();
+      return `${String(d.getUTCHours()).padStart(2, '0')}:${String(d.getUTCMinutes()).padStart(2, '0')}:${String(d.getUTCSeconds()).padStart(2, '0')}Z`;
+    }
+
+    async function fetchYahoo(ticker: string): Promise<number> {
+      const url = 'https://query1.finance.yahoo.com/v8/finance/chart/' + encodeURIComponent(ticker) + '?interval=1d&range=1d';
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error('YF ' + resp.status);
+      const j = await resp.json();
+      const px = j?.chart?.result?.[0]?.meta?.regularMarketPrice;
+      if (!Number.isFinite(px)) throw new Error('YF: no px');
+      return 1 / px; // USD per 1 unit of quote ticker
+    }
+    async function fetchBinance(sym: string): Promise<{ last: number; change: number }> {
+      const resp = await fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=' + sym);
+      if (!resp.ok) throw new Error('BIN ' + resp.status);
+      const t = await resp.json();
+      return {
+        last: parseFloat(t.lastPrice ?? '0'),
+        change: parseFloat(t.priceChangePercent ?? '0'),
+      };
+    }
+
+    async function populate(): Promise<void> {
+      const stamp = ts();
+
+      // Crypto first : independent per-row fetches.
+      for (const [id, sym] of Object.entries(cryptoSymbols)) {
+        try {
+          const r = await fetchBinance(sym);
+          const px = $n<HTMLElement>(`[data-mk-conv-px="${id}"]`);
+          const d = $n<HTMLElement>(`[data-mk-conv-delta="${id}"]`);
+          const tEl = $n<HTMLElement>(`[data-mk-conv-ts="${id}"]`);
+          if (px) px.textContent = '$' + fmt(r.last, id === 'BTC' ? 2 : 4);
+          if (d) {
+            d.textContent = fmtSigned(r.change);
+            d.classList.add(
+              r.change > 0.05
+                ? 'mk-conv__td--up'
+                : r.change < -0.05
+                  ? 'mk-conv__td--down'
+                  : 'mk-conv__td--flat',
+            );
+          }
+          if (tEl) tEl.textContent = stamp;
+        } catch (_e) {
+          /* leave cells as · */
+        }
+      }
+
+      // USD is the anchor : 1 USD = 1 USD.
+      const usdPx = $n<HTMLElement>('[data-mk-conv-px="USD"]');
+      const usdTs = $n<HTMLElement>('[data-mk-conv-ts="USD"]');
+      if (usdPx) usdPx.textContent = '$1.00';
+      if (usdTs) usdTs.textContent = stamp;
+
+      // PHP : resolve via Yahoo Finance (ECB does not publish PHP).
+      try {
+        const usdPerPhp = await fetchYahoo('PHP=X');
+        const phpPx = $n<HTMLElement>('[data-mk-conv-px="PHP"]');
+        const phpTs = $n<HTMLElement>('[data-mk-conv-ts="PHP"]');
+        if (phpPx) phpPx.textContent = '$' + fmt(usdPerPhp, 6);
+        if (phpTs) phpTs.textContent = stamp;
+      } catch (_e) {
+        /* leave PHP cells as · */
+      }
+    }
+
+    function wireRowPrefill(): void {
+      const tbody = $n<HTMLElement>('[data-mk-conv-rows]');
+      if (!tbody) return;
+      tbody.querySelectorAll<HTMLElement>('[data-mk-conv-prefill]').forEach((row) => {
+        const id = row.getAttribute('data-mk-conv-prefill');
+        if (!id) return;
+        const go = (e: Event) => {
+          e.preventDefault();
+          const base = (import.meta as any).env?.BASE_URL?.replace(/\/$/, '') ?? '';
+          window.location.href = base + '/converter/?from=' + id;
+        };
+        row.addEventListener('click', go);
+        row.addEventListener('keydown', (e: KeyboardEvent) => {
+          if (e.key === 'Enter' || e.key === ' ') go(e);
+        });
+      });
+    }
+
+    wireRowPrefill();
+    populate();
+    // Refresh every 30s for both tables; keeps the preview honest.
+    // without thrashing the upstream endpoints.
+    setInterval(populate, 30000);
+  })();
+</script>
