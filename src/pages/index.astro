@@ -159,6 +159,17 @@ const liveCounters = [
           proof sits one click below: strategy workbooks, trade logs, and the G1 to G31 gate stack.
         </p>
 
+        <!-- v13.1.4 (2026-08-14, polish-7aw) : money-making proof strip
+             in the hero region. Single line, no new section. Numbers
+             verbatim from memory (content-uplift-scope = copy-edit-only).
+             Both candidates' return characters visible at first glance.
+             Manual-only posture preserved (no live capital claim). -->
+        <p class="hero-flagship__proof mono">
+          RECENT ALPHA-HUNT · V2K Donchian(20) XAU/USD · $1,781/yr at 1 micro lot · 14 months to $2K
+          payout · 4 of 4 walk-forward positive · Funding carry top-8 · Sharpe 5.29 · ann 9.76% ·
+          manual only
+        </p>
+
         <!-- v13.1 (Bryllim parity) : social-links row. Mono caps + ↗
              arrow on each cell matches the Bryllim reference spacing.
              github / linkedin / medium / email — the four canonical
@@ -1037,6 +1048,27 @@ const liveCounters = [
     flex-wrap: wrap;
     align-items: baseline;
     gap: 10px;
+  }
+  /* v13.1.4 (2026-08-14, polish-7aw) : hero proof strip. Mono caps
+     + ink-3 + hairline rules + 2px amber left-strip (editorial
+     exception, same as the work-shipped left-strip on /work/).
+     Same register as .home-meta (polish-7ag commit 0279f24) and
+     .page-head__intro (polish-7t commit 3781944). Numbers verbatim
+     from memory. No halo, no glow, no transform. */
+  .hero-flagship__proof {
+    font-family: var(--ff-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--c-ink-3);
+    line-height: 1.6;
+    margin: 4px 0 0;
+    padding: 10px 14px;
+    border-left: 2px solid var(--c-amber);
+    border-top: 1px solid var(--c-rule);
+    border-bottom: 1px solid var(--c-rule);
+    background: var(--c-bg-elev, transparent);
+    max-width: 78ch;
+    text-transform: uppercase;
   }
   .hero-flagship__markets-sep {
     color: var(--c-ink-3);
