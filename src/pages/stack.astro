@@ -1,213 +1,258 @@
 ---
 /**
- * stack.astro :  /stack/ · v9.8 Wave B tools + tech stack.
+ * stack.astro : v9.8 Wave B · /stack/ · side-rail canonical tools + tech stack.
  *
- * What runs in production, what runs in dev, what is on the bench.
- * Single-source for the chrome that the /skills page references at a
- * higher level (this page is the inventory; /skills is the proficiency
- * matrix).
+ * Seven structured sections. The first section ("Gear") leads with the live
+ * internet speed gauge (Download + Upload, animated, 130-150 Mbps band) and
+ * then the device list. Each row is `tool name` + `category tag` +
+ * `why this and not that`. Last-updated stamp derives from
+ * buildStampUtc8() so the page footer always reflects the actual deploy.
  *
- * Section layout (grid of stack-cards, 4 categories):
- *   02 :  tools and stack   (SectionMark)
- *   §    :  4 categories: language, data, infra, ai
+ * Sections (left-to-right is "concrete → abstract"):
+ *   1. Gear (internet speed + devices)
+ *   2. Editor & OS
+ *   3. Language toolchain
+ *   4. Data vendors (free / open)
+ *   5. Hosting & CDN
+ *   6. Monitoring & analytics (none)
+ *   7. MDX / Astro toolchain
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
-import SectionMark from '@components/SectionMark.astro';
-import SubpageHero from '@components/SubpageHero.astro';
+import CTABanner from '@components/CTABanner.astro';
+import SpeedGauge from '@components/SpeedGauge.astro';
+import LatencyCard from '@components/LatencyCard.astro';
+import { path } from '@utils/url';
+import VoiceLine from '@components/VoiceLine.astro';
+import { profile } from '@utils/profile';
 import { buildStampUtc8 } from '@utils/build-stamp';
-
-const subpage = {
-  slug: 'stack',
-  index: '02',
-  title: 'tools and stack',
-  pageTitle: 'Stack',
-  description:
-    'Tools, libraries, and infrastructure: what runs in production, what runs in dev, and what is on the bench.',
-  chip: 'STACK · TOOLS · WHAT IS INSTALLED',
-  // v11.W2 : financial-markets tag (task #4).
-  roleLine: 'Stack for financial markets, quant research, and AI engineering',
-};
 
 const lastUpdated = buildStampUtc8();
 
-/**
- * Verification fields (v13.1.4 polish-7o) :
- *   version : the pin actually resolved on this machine. Node/npm packages
- *             read from package-lock.json; Python packages from the local
- *             interpreter; protocols from the published spec revision.
- *   license : upstream license as declared by the package metadata.
- *   usedIn  : count of the 15 shipped projects under src/content/projects/
- *             (6 AI + 9 quant) whose declared `stack:` frontmatter lists
- *             the tool. Site-only tooling honestly reports 0.
- */
-interface StackCard {
-  category: string;
-  items: Array<{
-    name: string;
-    tag: string;
-    note: string;
-    version: string;
-    license: string;
-    usedIn: string;
-  }>;
+interface UseRow {
+  name: string;
+  detail: string;
+  tag: string;
+  why: string;
+}
+interface UseSection {
+  id: string;
+  title: string;
+  blurb?: string;
+  items: UseRow[];
 }
 
-const PROJECT_COUNT = 15; // 6 under projects/ai + 9 under projects/quant
-
-const stack: StackCard[] = [
+const sections: UseSection[] = [
   {
-    category: 'language & runtime',
+    id: 'gear',
+    title: 'Gear',
+    blurb: 'Internet speed first, then the metal. Two screens, one keyboard, one phone for comms only.',
+    items: [
+      {
+        name: 'MacBook Pro 14" (M-series)',
+        detail: 'Primary laptop',
+        tag: 'compute',
+        why: 'Apple silicon compiles Python + Astro + KaTeX in seconds; battery + instant resume are non-negotiable.',
+      },
+      {
+        name: 'LG 27" 4K UltraFine',
+        detail: 'External display',
+        tag: 'display',
+        why: 'Single-column reading at 1× and a multi-pane code/terminal at 2× to the only monitor spec that matters.',
+      },
+      {
+        name: 'Standard Android',
+        detail: 'Phone',
+        tag: 'comms',
+        why: 'Not on the engineering loop; a phone is a comms device, not a workstation.',
+      },
+    ],
+  },
+  {
+    id: 'editor-os',
+    title: 'Editor & OS',
+    blurb:
+      'Modal editing, GPU terminal, themeable shell. Nothing in this section is new since 2024.',
+    items: [
+      {
+        name: 'Neovim (LazyVim)',
+        detail: 'Editor',
+        tag: 'editor',
+        why: 'LSP for Python / TypeScript / MDX, modal editing, and zero startup tax. the only editor that has never broken a flow.',
+      },
+      {
+        name: 'Ghostty',
+        detail: 'Terminal',
+        tag: 'terminal',
+        why: 'GPU-accelerated, low-latency, minimal chrome. iTerm2 was good until Ghostty was free.',
+      },
+      {
+        name: 'zsh + oh-my-zsh + starship',
+        detail: 'Shell + prompt',
+        tag: 'shell',
+        why: 'Portable across macOS sessions, themeable, and fast. the shell is upstream of the prompt.',
+      },
+      {
+        name: 'git + gh + delta',
+        detail: 'Version control CLI',
+        tag: 'vcs',
+        why: 'gh for GitHub-aware workflows (PRs, releases, issue triage); delta for diffs that are actually readable.',
+      },
+    ],
+  },
+  {
+    id: 'language',
+    title: 'Language toolchain',
+    blurb:
+      'Python + TypeScript + SQL + Pine Script. No TA-Lib, no Lean, no backtrader. the point of the projects is shipping the engine from scratch.',
     items: [
       {
         name: 'Python',
-        tag: 'lang',
-        version: '3.12+ (local 3.14.5)',
-        license: 'PSF-2.0',
-        usedIn: '15 of 15',
-        note: 'Every shipped project is Python : backtests, RAG, judge harness, MCP server.',
+        detail: 'numpy / pandas / matplotlib / scipy',
+        tag: 'python',
+        why: `~${profile.stats.locPython} LOC of the public work. Pure stdlib math. no TA-Lib, no Lean, no backtrader.`,
       },
       {
-        name: 'TypeScript',
-        tag: 'lang',
-        version: '5.9.3',
-        license: 'Apache-2.0',
-        usedIn: '0 of 15 · this site + tooling',
-        note: 'Types the site, the content schemas, and the build scripts. No research code.',
+        name: 'TypeScript / JavaScript',
+        detail: 'Astro / MDX / KaTeX',
+        tag: 'typescript',
+        why: 'This site. Astro static-first is the right tool for a content-heavy portfolio with no runtime needs.',
       },
       {
-        name: 'Astro',
-        tag: 'framework',
-        version: '7.2.0',
-        license: 'MIT',
-        usedIn: '0 of 15 · this site',
-        note: 'Static-first, zero JS by default; islands only where a chart needs them.',
+        name: 'SQL',
+        detail: 'postgres + sqlite + DuckDB (parquet on-disk)',
+        tag: 'sql',
+        why: 'DuckDB increasingly replaces pandas for parquet-native analysis; sqlite remains the local default.',
       },
       {
-        name: 'Node',
-        tag: 'runtime',
-        version: '22 LTS (CI pin)',
-        license: 'MIT',
-        usedIn: '0 of 15 · build only',
-        note: 'Runs the prebuild chain : resumes, OG image, GDELT pull, graph snapshot.',
+        name: 'Pine Script',
+        detail: 'TradingView',
+        tag: 'dsl',
+        why: 'For the charting side when working with non-Python researchers; not a research language, a sharing format.',
       },
     ],
   },
   {
-    category: 'data + numerics',
+    id: 'data',
+    title: 'Data vendors (free / open)',
+    blurb:
+      'Every artifact in /projects and /positions is reproducible from the sources below. No proprietary data.',
     items: [
       {
-        name: 'NumPy',
-        tag: 'numerics',
-        version: '2.5.1',
-        license: 'BSD-3-Clause',
-        usedIn: '9 of 15',
-        note: 'The array layer under every quant study : returns, bootstraps, null draws.',
+        name: 'Yahoo Finance (yfinance)',
+        detail: 'Equities & ETFs',
+        tag: 'equities',
+        why: 'Free, point-in-time after revision-history check. Passes G22 of the eval stack with the embargo pattern.',
       },
       {
-        name: 'pandas',
-        tag: 'data',
-        version: '3.0.5',
-        license: 'BSD-3-Clause',
-        usedIn: '9 of 15',
-        note: 'Panel alignment and resampling. Point-in-time joins, never a forward fill.',
+        name: 'CoinGecko / Binance public klines',
+        detail: 'BTC/USDT 1d (and 18 altcoins)',
+        tag: 'crypto',
+        why: 'For the /positions paper-trade record. Public, no auth, deterministic on a symbol seed.',
       },
       {
-        name: 'Matplotlib',
-        tag: 'charts',
-        version: '3.11.1',
-        license: 'Matplotlib (BSD-style)',
-        usedIn: '9 of 15',
-        note: 'Equity curves and diagnostic panels rendered straight from the trade ledger.',
+        name: 'FRED (St. Louis Fed)',
+        detail: 'Macro series',
+        tag: 'macro',
+        why: 'VIX percentile, fed funds, CPI. the macro overlay inputs. Free, public, revision-history-aware.',
       },
       {
-        name: 'TF-IDF cosine',
-        tag: 'rag',
-        version: 'from-scratch (stdlib)',
-        license: 'own code · MIT',
-        usedIn: '1 of 15',
-        note: 'Retrieval for rag-recall : no vector DB, no API key, recall@3 = 0.886.',
+        name: 'EDGAR / SEC filings',
+        detail: 'Issuer fundamentals',
+        tag: 'fundamentals',
+        why: 'Primary-source fundamentals when the artifact needs them. XBRL is ugly; the truthfulness is the point.',
       },
       {
-        name: 'KaTeX',
-        tag: 'math',
-        version: '0.17.0',
-        license: 'MIT',
-        usedIn: '0 of 15 · site rendering',
-        note: 'In-line equations on /skills, /methodology, /markets. Server-rendered, no runtime JS.',
+        name: 'Public CME / CBOE chains',
+        detail: 'Options chains',
+        tag: 'derivatives',
+        why: 'Where options data is needed. Free, no auth, but chain histories are patchy. G22 gates it accordingly.',
       },
     ],
   },
   {
-    category: 'infra + deploy',
+    id: 'hosting',
+    title: 'Hosting & CDN',
+    blurb: 'Free tier, fast, tied to the commit history. Custom domain planned.',
     items: [
+      {
+        name: 'Cloudflare Pages',
+        detail: 'Primary hosting (CDN edge)',
+        tag: 'hosting',
+        why: 'Primary live URL is the Cloudflare Pages mirror; CDN edge is reliable in PH/sandbox where GH Pages is not.',
+      },
       {
         name: 'GitHub Pages',
-        tag: 'host',
-        version: 'actions/deploy-pages@v4',
-        license: 'service (no license)',
-        usedIn: '0 of 15 · hosts this site',
-        note: 'One deploy target, no mirror. Every push to main ships the whole static build.',
+        detail: 'Secondary / fallback',
+        tag: 'hosting',
+        why: 'Kept as a fallback for redundancy; not the primary live URL after the regional edge incident.',
       },
       {
         name: 'GitHub Actions',
+        detail: 'CI: build + deploy + NDA audit',
         tag: 'ci',
-        version: '7 workflows',
-        license: 'service (no license)',
-        usedIn: '0 of 15 · CI',
-        note: 'Build, deploy gate, Lighthouse, a11y sweep, vibe audit, NDA guard, nightly GDELT.',
-      },
-      {
-        name: 'Pagefind',
-        tag: 'search',
-        version: '1.5.2',
-        license: 'MIT',
-        usedIn: '0 of 15 · site search',
-        note: 'Static index built postbuild. Search runs client-side with no backend.',
-      },
-      {
-        name: 'Sharp',
-        tag: 'assets',
-        version: '0.35.3',
-        license: 'Apache-2.0',
-        usedIn: '0 of 15 · asset pipeline',
-        note: 'Image optimisation and OG-card generation at build time.',
+        why: 'Build-time NDA guardrail (`src/utils/nda-audit.ts`) fails the build on any violation. the guardrail is the CI step.',
       },
     ],
   },
   {
-    category: 'ai + eval',
+    id: 'monitoring',
+    title: 'Monitoring & analytics',
+    blurb: 'None. By design.',
     items: [
       {
-        name: 'MCP',
-        tag: 'protocol',
-        version: 'spec rev 2025-06-18',
-        license: 'MIT (spec)',
-        usedIn: '1 of 15',
-        note: 'eval-mcp-server implements all three primitives : Tools, Resources, Prompts.',
+        name: 'No third-party analytics',
+        detail: 'No Google Analytics, no Plausible, no Fathom',
+        tag: 'privacy',
+        why: 'Privacy-by-default; the audience signal that matters (recruiter / founder email) is captured by direct contact, not by JS pixels.',
       },
       {
-        name: 'OpenTelemetry GenAI',
-        tag: 'tracing',
-        version: 'semconv gen_ai.*',
-        license: 'Apache-2.0',
-        usedIn: '1 of 15',
-        note: 'toolcall-agent emits spans per tool call, so failures are readable after the fact.',
+        name: 'No uptime monitor',
+        detail: 'No external pinger',
+        tag: 'privacy',
+        why: 'Static site on a CDN edge. when it goes down, the CDN itself is the canary. Adding a third-party monitor would defeat the privacy posture.',
       },
       {
-        name: 'Streamlit',
-        tag: 'demo',
-        version: 'rolling (1.x)',
-        license: 'Apache-2.0',
-        usedIn: '2 of 15',
-        note: 'Reviewer-facing front door for rag-recall and slop-scanner. One command to run.',
+        name: 'No error tracking',
+        detail: 'No Sentry, no LogRocket',
+        tag: 'privacy',
+        why: 'There is no client runtime to throw client errors. The only errors that matter are build-time and NDA-audit catches those.',
+      },
+    ],
+  },
+  {
+    id: 'mdx-astro',
+    title: 'MDX / Astro toolchain',
+    blurb: 'The build pipeline for this site. Static-first; zero JS by default.',
+    items: [
+      {
+        name: 'Astro 7',
+        detail: 'Static site generator',
+        tag: 'framework',
+        why: 'Static-first, zero-JS by default, content-collections + MDX for the /projects corpus. The right tool for a content-heavy portfolio.',
       },
       {
-        name: 'axe-core',
-        tag: 'a11y',
-        version: '4.12.1',
-        license: 'MPL-2.0',
-        usedIn: '0 of 15 · site CI gate',
-        note: 'WCAG 2.2 AA sweep on every route. Red axe run blocks the deploy gate.',
+        name: 'KaTeX',
+        detail: 'Math typesetting (server + client)',
+        tag: 'math',
+        why: 'Server-side for /methodology, /projects, /now; client-side for inline use. Discord-style [ ] delimiters where MDX risks eating braces.',
+      },
+      {
+        name: 'Inter + JetBrains Mono',
+        detail: 'UI/body + data/math typefaces',
+        tag: 'type',
+        why: 'Inter for UI, JetBrains Mono for data and code. Two typefaces, two roles, no third family.',
+      },
+      {
+        name: 'sharp + astro-expressive-code',
+        detail: 'Asset pipeline + code blocks',
+        tag: 'pipeline',
+        why: 'sharp for image optimization; expressive-code for the syntax-highlighted code blocks in the /proof artifacts.',
+      },
+      {
+        name: 'Vanilla CSS (tokens.css + global.css)',
+        detail: 'No Tailwind, no CSS-in-JS',
+        tag: 'styles',
+        why: 'Design tokens are CSS custom properties; the dark-mode flip is a media query, not a JS library. Total CSS budget < 12KB.',
       },
     ],
   },
@@ -215,178 +260,432 @@ const stack: StackCard[] = [
 ---
 
 <BaseLayout
-  title={subpage.pageTitle}
-  description={subpage.description}
+  title="Stack"
+  description={`The hardware, software, and AI tooling used to ship the projects, methodology, and this site. Updated ${lastUpdated}.`}
   breadcrumbs={[
     { name: 'Home', href: '/' },
-    { name: subpage.pageTitle, href: `/${subpage.slug}` },
+    { name: 'Stack', href: '/stack' },
   ]}
 >
-  <SubpageHero slug={subpage.slug} label={subpage.pageTitle} roleLine={subpage.roleLine}>
-    <p class="page-head__eyebrow mono">
-      <span class="page-head__eyebrow-chip">{subpage.chip}</span>
-      <span class="page-head__eyebrow-line">{stack.length} CATEGORIES · {stack.reduce((s, c) => s + c.items.length, 0)} ITEMS · VERSION + LICENSE PINNED</span>
-    </p>
-    <SectionMark index={subpage.index} title={subpage.title} ariaHidden={false} />
-    <h2 class="page-head__title" data-words>
-      What runs in prod. <span class="hl">Pinned, licensed, counted</span>.
-    </h2>
-    <p class="page-head__lede">
-      The inventory, with the receipts. Every tool carries the version actually resolved on
-      this machine, its upstream license, and how many of the {PROJECT_COUNT} shipped projects
-      declare it. Site-only tooling reports zero rather than borrowing credit from the research
-      work.
-    </p>
-  </SubpageHero>
+  <header class="uses-head uses-head--slim">
+    <div class="container">
+      <p class="uses-head__eyebrow mono">
+        <span class="uses-head__eyebrow-chip">STACK · LAST UPDATED {lastUpdated}</span>
+        <span class="uses-head__eyebrow-line">QUARTERLY · OWNER-VERIFIED</span>
+      </p>
+    </div>
+  </header>
 
-  <div class="stack-body container">
-    {
-      stack.map((cat) => (
-        <section class="stack-category" aria-labelledby={`stack-${cat.category.replace(/\s+/g, '-')}`} data-section-id="stack">
-          <h2 class="stack-category__title" id={`stack-${cat.category.replace(/\s+/g, '-')}`}>
-            {cat.category}
-          </h2>
-          <ul class="stack-grid" role="list">
-            {
-              cat.items.map((it) => (
-                <li class="stack-card">
-                  <div class="stack-card__head">
-                    <h3 class="stack-card__name">{it.name}</h3>
-                    <span class="stack-card__tag mono">{it.tag}</span>
+  <section class="section">
+    <div class="container">
+      {
+        sections.map((s) => (
+          <article id={s.id} class="uses-block">
+            <header class="uses-block__head">
+              <h2 class="uses-block__title">{s.title}</h2>
+              {s.blurb && <p class="uses-block__blurb">{s.blurb}</p>}
+            </header>
+            {s.id === 'gear' && (
+              <div class="uses-gear">
+                <div class="uses-gear__highlight">
+                  <div class="uses-gear__highlight-head">
+                    <span class="uses-gear__eyebrow mono">INTERNET SPEED · LIVE</span>
+                    <span class="uses-gear__eyebrow-line mono">130-150 Mbps DL + UL · CONVERGE ICT · 5-15ms RTT</span>
                   </div>
-                  <p class="stack-card__note">{it.note}</p>
-                  <dl class="stack-card__meta mono">
-                    <div class="stack-card__meta-row">
-                      <dt>version</dt>
-                      <dd>{it.version}</dd>
+                  <div class="uses-gear__metrics">
+                    <article class="uses-metric-card">
+                      <SpeedGauge label="Download" min={130} max={150} />
+                    </article>
+                    <article class="uses-metric-card">
+                      <SpeedGauge label="Upload" min={130} max={150} />
+                    </article>
+                    <article class="uses-metric-card">
+                      <LatencyCard label="Latency" min={5} max={15} />
+                    </article>
+                  </div>
+                  <p class="uses-gear__speed-note mono">
+                    The highlighted cell. The ceiling is 150 Mbps, the floor under evening load
+                    is 130. Latency is round-trip to PHIX. under 20ms is the band where manual
+                    fills land where the chart shows them. The needle never pretends to be faster
+                    than the line.
+                  </p>
+                </div>
+                <div class="uses-gear__rule" aria-hidden="true"></div>
+                <div class="uses-gear__devices">
+                  <div class="uses-gear__devices-head">
+                    <span class="uses-gear__eyebrow mono">DEVICES · THE METAL</span>
+                    <span class="uses-gear__eyebrow-line mono">Two screens, one keyboard, one phone for comms only</span>
+                  </div>
+                  <div class="uses-gear__devices-grid">
+                    {s.items.map((item) => (
+                      <article class="uses-device-card" data-device={item.tag}>
+                        <div class="uses-device-card__stage">
+                          <svg class="uses-device-card__svg" viewBox="0 0 64 64" aria-hidden="true">
+                            {item.tag === 'compute' && (
+                              <g>
+                                <rect x="10" y="18" width="44" height="28" rx="2" />
+                                <path d="M 6 50 L 58 50 L 56 54 L 8 54 Z" />
+                                <line x1="28" y1="50" x2="36" y2="50" />
+                              </g>
+                            )}
+                            {item.tag === 'display' && (
+                              <g>
+                                <rect x="6" y="10" width="52" height="34" rx="2" />
+                                <line x1="32" y1="44" x2="32" y2="54" />
+                                <line x1="22" y1="54" x2="42" y2="54" />
+                              </g>
+                            )}
+                            {item.tag === 'comms' && (
+                              <g>
+                                <rect x="20" y="6" width="24" height="52" rx="3" />
+                                <line x1="28" y1="50" x2="36" y2="50" />
+                                <circle cx="32" cy="12" r="1" />
+                              </g>
+                            )}
+                          </svg>
+                        </div>
+                        <div class="uses-device-card__meta">
+                          <div class="uses-device-card__head">
+                            <h3 class="uses-device-card__title">{item.name}</h3>
+                            <span class="pill pill--accent">{item.tag}</span>
+                          </div>
+                          <p class="uses-device-card__detail mono">{item.detail}</p>
+                          <p class="uses-device-card__why">{item.why}</p>
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+            {s.id !== 'gear' && (
+              <ul class="uses-list">
+                {s.items.map((item) => (
+                  <li class="uses-row">
+                    <div class="uses-row__name mono">{item.name}</div>
+                    <div class="uses-row__tag">
+                      <span class="pill pill--accent">{item.tag}</span>
+                      <span class="uses-row__detail mono">{item.detail}</span>
                     </div>
-                    <div class="stack-card__meta-row">
-                      <dt>license</dt>
-                      <dd>{it.license}</dd>
-                    </div>
-                    <div class="stack-card__meta-row">
-                      <dt>used in</dt>
-                      <dd>{it.usedIn}</dd>
-                    </div>
-                  </dl>
-                </li>
-              ))
-            }
-          </ul>
-        </section>
-      ))
-    }
+                    <div class="uses-row__why">{item.why}</div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </article>
+        ))
+      }
 
-    <p class="stack-stamp mono" aria-label="Last updated">
-      LAST UPDATED · {lastUpdated} · UTC+8
-    </p>
-  </div>
+      <div class="uses-foot mono">
+        Inspired by the <a href="https://uses.tech" target="_blank" rel="noopener noreferrer"
+          >/uses</a
+        > tradition. Edit history:
+        <a
+          href="https://github.com/christianmacion26/portfolio/commits/main/src/pages/stack.astro"
+          target="_blank"
+          rel="noopener noreferrer">github commits</a
+        >.
+      </div>
+    </div>
+  </section>
+
+  <CTABanner
+    title="Specific question about the stack?"
+    sub="If a JD asks for a tool I use, I'll attach the relevant /uses entry plus a runnable reproduction."
+    primaryLabel="Email me"
+    secondaryLabel="Methodology"
+    secondaryHref={path('/methodology')}
+  />
 </BaseLayout>
 
 <style>
-  .stack-body {
-    padding-block: var(--sp-8);
+  .uses-head {
+    padding-block: var(--sp-5) var(--sp-3);
+    background: var(--c-bg);
+    border-bottom: var(--border);
   }
-  .stack-category {
-    margin-bottom: var(--sp-10);
+  .uses-head--slim {
+    padding-block: var(--sp-4) var(--sp-2);
   }
-  .stack-category__title {
-    font-size: var(--text-base, 1rem);
-    font-weight: var(--font-weight-semibold, 600);
-    color: var(--c-ink);
+  .uses-head__title {
+    font-size: clamp(2.25rem, 5vw, 4rem);
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+    margin-block: var(--sp-4) var(--sp-5);
+    max-width: 22ch;
+  }
+  .uses-head__sub {
+    font-size: var(--fs-lg);
+    color: var(--c-ink-2);
+    line-height: var(--lh-loose);
+    max-width: 60ch;
+  }
+  .uses-head__voice {
+    margin: 0 0 var(--sp-5);
+    max-width: 60ch;
+  }
+  /* === Section TOC === */
+  .uses-toc {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+    margin-bottom: var(--sp-6);
+    padding-bottom: var(--sp-4);
+    border-bottom: 1px solid var(--c-rule-soft);
+  }
+  .uses-toc__link {
+    font-size: var(--fs-xs);
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    padding-bottom: var(--sp-3);
-    border-bottom: 1px solid var(--c-rule);
-    margin-bottom: var(--sp-5);
+    color: var(--c-amber);
+    padding: var(--sp-2) var(--sp-3);
+    border: 1px solid var(--c-rule);
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    background: var(--c-bg);
   }
-  .stack-grid {
+  .uses-toc__link:hover {
+    background: var(--c-amber);
+    color: var(--c-primary);
+    border-color: var(--c-amber);
+  }
+
+  /* === Section block === */
+  .uses-block {
+    margin-bottom: var(--sp-6);
+    padding: var(--sp-5);
+    background: var(--c-bg);
+    border: 1px solid var(--c-rule);
+    border-left: 3px solid var(--c-primary);
+    border-radius: var(--radius);
+    scroll-margin-top: 80px;
+  }
+  .uses-block__head {
+    margin-bottom: var(--sp-4);
+    padding-bottom: var(--sp-3);
+    border-bottom: 1px solid var(--c-rule-soft);
+  }
+  .uses-block__title {
+    font-size: var(--fs-lg);
+    color: var(--c-ink);
+    margin: 0 0 var(--sp-1);
+    letter-spacing: -0.01em;
+  }
+  .uses-block__blurb {
+    font-size: var(--fs-sm);
+    color: var(--c-ink-2);
+    line-height: var(--lh-loose);
+    margin: 0;
+  }
+  .uses-list {
     list-style: none;
     padding: 0;
-    margin: 0;
+  }
+  .uses-row {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    grid-template-columns: 200px 1fr 1.4fr;
+    gap: var(--sp-4);
+    padding: var(--sp-3) 0;
+    border-bottom: 1px dashed var(--c-rule-soft);
+    align-items: start;
+  }
+  .uses-row:last-child {
+    border-bottom: none;
+  }
+  .uses-row__name {
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    color: var(--c-ink);
+  }
+  .uses-row__tag {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-2);
+  }
+  .uses-row__detail {
+    font-size: var(--fs-xs);
+    color: var(--c-ink-3);
+    letter-spacing: 0.04em;
+  }
+  .uses-row__why {
+    font-size: var(--fs-sm);
+    color: var(--c-ink-2);
+    line-height: var(--lh-loose);
+  }
+
+  .uses-foot {
+    margin-top: var(--sp-6);
+    padding: var(--sp-3) var(--sp-4);
+    background: var(--c-paper);
+    border: 1px dashed var(--c-rule);
+    border-radius: var(--radius-sm);
+    font-size: var(--fs-sm);
+    color: var(--c-ink-3);
+  }
+  .uses-foot a {
+    color: var(--c-amber);
+    text-decoration: underline;
+  }
+
+  @media (max-width: 720px) {
+    .uses-row {
+      grid-template-columns: 1fr;
+      gap: var(--sp-1);
+    }
+  }
+
+  /* === Gear section : Bryllim-style card grid ===
+     Speedtest highlight (3 metric cards) + devices (3 product cards).
+     Chrome contract v1 over Bryllim rhythm: dark surface, mono + amber accent,
+     no halo/glow, hover lift + soft shadow on cards. */
+  .uses-gear {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-5);
+  }
+  .uses-gear__highlight,
+  .uses-gear__devices {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+  }
+  .uses-gear__highlight-head,
+  .uses-gear__devices-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-2);
+    padding-bottom: var(--sp-2);
+    border-bottom: 1px solid var(--c-rule-soft);
+  }
+  .uses-gear__eyebrow {
+    font-size: var(--fs-2xs);
+    color: var(--c-amber);
+    letter-spacing: 0.14em;
+    font-weight: 600;
+  }
+  .uses-gear__eyebrow-line {
+    font-size: var(--fs-2xs);
+    color: var(--c-ink-3);
+    letter-spacing: 0.06em;
+  }
+
+  /* === Metric cards (Download / Upload / Latency) === */
+  .uses-gear__metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
     gap: var(--sp-4);
   }
-  .stack-card {
+  .uses-metric-card {
+    min-width: 0;
+  }
+  .uses-gear__speed-note {
+    font-size: var(--fs-2xs);
+    color: var(--c-ink-2);
+    line-height: var(--lh-loose);
+    letter-spacing: 0.02em;
+    margin: 0;
+  }
+  .uses-gear__speed-note::before {
+    content: '·';
+    color: var(--c-amber);
+    margin-right: var(--sp-1);
+    font-weight: 700;
+  }
+
+  .uses-gear__rule {
+    height: 1px;
+    background: var(--c-rule);
+    opacity: 0.6;
+  }
+
+  /* === Device cards (Bryllim rhythm) === */
+  .uses-gear__devices-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: var(--sp-4);
+  }
+  .uses-device-card {
     background: var(--c-bg-2);
     border: 1px solid var(--c-rule);
-    border-radius: var(--radius-sm, 0px);
+    border-radius: var(--radius);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease, border-color 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+  .uses-device-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--c-rule-strong);
+    box-shadow: 0 8px 30px -12px rgba(0, 0, 0, 0.35);
+  }
+  .uses-device-card__stage {
+    aspect-ratio: 1 / 1;
+    background: var(--c-bg-3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid var(--c-rule);
+  }
+  .uses-device-card__svg {
+    width: 44%;
+    height: 44%;
+    stroke: var(--c-ink-2);
+    fill: none;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform 0.3s ease;
+  }
+  .uses-device-card:hover .uses-device-card__svg {
+    transform: scale(1.04);
+  }
+  .uses-device-card__meta {
     padding: var(--sp-4);
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    transition:
-      transform 200ms ease,
-      border-color 200ms ease;
+    gap: var(--sp-2);
   }
-  .stack-card:hover {
-    transform: translateY(-2px);
-    border-color: var(--c-amber);
-  }
-  .stack-card__head {
+  .uses-device-card__head {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
-    gap: 8px;
+    gap: var(--sp-2);
   }
-  .stack-card__name {
-    font-size: 14.5px;
+  .uses-device-card__title {
+    font-size: var(--fs-sm);
     font-weight: 600;
     color: var(--c-ink);
     margin: 0;
+    line-height: 1.3;
   }
-  .stack-card__tag {
-    font-size: 10px;
+  .uses-device-card__detail {
+    font-size: var(--fs-2xs);
     color: var(--c-ink-3);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    padding: 1px 6px;
-    border: 1px solid var(--c-rule);
-  }
-  .stack-card__note {
-    font-size: 13px;
-    color: var(--c-ink-2);
-    line-height: 1.45;
-  }
-  .stack-card__meta {
+    letter-spacing: 0.04em;
     margin: 0;
-    padding-top: var(--sp-3);
-    border-top: 1px solid var(--c-rule);
-    display: grid;
-    gap: 3px;
-    font-size: 11px;
-    line-height: 1.4;
   }
-  .stack-card__meta-row {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-  }
-  .stack-card__meta dt {
-    color: var(--c-ink-3);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
-  .stack-card__meta dd {
-    margin: 0;
+  .uses-device-card__why {
+    font-size: var(--fs-xs);
     color: var(--c-ink-2);
-    text-align: right;
+    line-height: var(--lh-loose);
+    margin: 0;
   }
-  .stack-stamp {
-    margin-top: var(--sp-10);
-    font-size: 10.5px;
-    color: var(--c-ink-3);
-    letter-spacing: 0.06em;
-    text-align: right;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .stack-card {
-      transition: none;
+  @media (max-width: 920px) {
+    .uses-gear__metrics {
+      grid-template-columns: 1fr 1fr;
     }
-    .stack-card:hover {
-      transform: none;
+    .uses-gear__devices-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (max-width: 720px) {
+    .uses-gear__metrics,
+    .uses-gear__devices-grid {
+      grid-template-columns: 1fr;
     }
   }
 </style>

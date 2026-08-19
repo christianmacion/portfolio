@@ -1,20 +1,18 @@
 ---
 /**
- * SpeedGauge.astro — Animated speedometer for the /uses Gear section.
+ * SpeedGauge.astro — v2 · sharp speedtest-style needle gauge.
  *
- * Mimics the speedtest.net gauge aesthetic (log-scale ticks, dynamic needle,
- * pulsing LIVE indicator) but rendered in the chrome contract v1 palette:
- * mono + 1 amber accent, no halo/glow/gradient, hairline rules.
- *
- * Hover band: 130-150 Mbps (configurable per-Props), with realistic jitter
- * that respects the speedtest-style log scale. Vanilla SVG + JS, no deps.
- * Reduced-motion fallback: static at the band midpoint.
+ * Linear scale 0-200 Mbps, 9 ticks, highlighted 130-150 band, animated
+ * needle that jitters inside the configured band. Bigger needle, thicker
+ * shaft, sharper tip, 44px tabular readout that flickers 2 decimals.
+ * No rAF — needle is CSS keyframes, readout is setInterval.
+ * Honors prefers-reduced-motion.
  *
  * Geometry:
- *   - viewBox 260x180, arc center (130, 145), radius 110
- *   - Sweep 180° → 0° counter-clockwise through the top (270° = 10 Mbps mark)
- *   - Log scale 0.1 → 1000 Mbps so 130-150 sits in the upper-right
- *   - Pivot at 270° (pointing up by default); rotation = angle - 270
+ *   - viewBox 320x200, arc center (160, 170), radius 130
+ *   - Linear scale 0-200 Mbps, semicircle sweep
+ *   - 130-150 hover band: 297° to 315° (18° arc swing)
+ *   - Pivot at 270° (pointing up); rotation = angle - 270
  */
 
 export interface Props {
@@ -28,21 +26,18 @@ const {
   label,
   min = 130,
   max = 150,
-  maxScale = 1000,
+  maxScale = 200,
 } = Astro.props;
 
-const cx = 130;
-const cy = 145;
-const rOuter = 110;
-const rTickInner = 88;
-const rLabel = 72;
-const vMin = 0.1;
+const cx = 160;
+const cy = 170;
+const rArc = 130;
+const rTickOuter = 130;
+const rTickInner = 108;
+const rLabel = 92;
 
-function angleFor(v: number): number {
-  const lv = Math.log10(Math.max(v, vMin));
-  const lLo = Math.log10(vMin);
-  const lHi = Math.log10(maxScale);
-  return 180 + ((lv - lLo) / (lHi - lLo)) * 180;
+function angleAt(v: number): number {
+  return 180 + (v / maxScale) * 180;
 }
 
 interface Tick {
@@ -55,14 +50,14 @@ interface Tick {
   yl: number;
 }
 
-const tickValues = [0, 5, 10, 50, 100, 250, 500, 750, 1000];
+const tickValues = [0, 25, 50, 75, 100, 125, 150, 175, 200];
 
 const ticks: Tick[] = tickValues.map((v) => {
-  const a = (angleFor(v) * Math.PI) / 180;
+  const a = (angleAt(v) * Math.PI) / 180;
   return {
     v,
-    xo: cx + rOuter * Math.cos(a),
-    yo: cy + rOuter * Math.sin(a),
+    xo: cx + rTickOuter * Math.cos(a),
+    yo: cy + rTickOuter * Math.sin(a),
     xi: cx + rTickInner * Math.cos(a),
     yi: cy + rTickInner * Math.sin(a),
     xl: cx + rLabel * Math.cos(a),
@@ -70,12 +65,23 @@ const ticks: Tick[] = tickValues.map((v) => {
   };
 });
 
-const arcPath = `M ${cx - rOuter} ${cy} A ${rOuter} ${rOuter} 0 0 1 ${cx + rOuter} ${cy}`;
-const initialAngle = angleFor((min + max) / 2);
+// Background arc (full sweep)
+const arcPath = `M ${cx - rArc} ${cy} A ${rArc} ${rArc} 0 0 1 ${cx + rArc} ${cy}`;
+
+// Highlight band on the 130-150 hover band (computed from angles)
+const bandStart = angleAt(min);
+const bandEnd = angleAt(max);
+const bs = (bandStart * Math.PI) / 180;
+const be = (bandEnd * Math.PI) / 180;
+const bandInner = rArc - 16;
+const bandPath = `M ${cx + bandInner * Math.cos(bs)} ${cy + bandInner * Math.sin(bs)} A ${bandInner} ${bandInner} 0 0 1 ${cx + bandInner * Math.cos(be)} ${cy + bandInner * Math.sin(be)}`;
+
+// Initial needle rotation at the band midpoint
+const initialAngle = angleAt((min + max) / 2);
 const initialRotation = initialAngle - 270;
 ---
 
-<div class="speedgauge" data-gauge data-min={min} data-max={max} data-label={label}>
+<div class="speedgauge" data-gauge data-min={min} data-max={max} data-max-scale={maxScale} data-label={label}>
   <div class="speedgauge__head">
     <span class="speedgauge__chip mono">{label.toUpperCase()}</span>
     <span class="speedgauge__live mono" aria-hidden="true">
@@ -85,11 +91,12 @@ const initialRotation = initialAngle - 270;
   </div>
   <svg
     class="speedgauge__svg"
-    viewBox="0 0 260 180"
+    viewBox="0 0 320 200"
     role="img"
     aria-label={`${label} speed gauge, hovering between ${min} and ${max} Mbps`}
   >
     <path class="speedgauge__track" d={arcPath} />
+    <path class="speedgauge__band" d={bandPath} />
     {
       ticks.map((t) => (
         <line class="speedgauge__tick" x1={t.xo} y1={t.yo} x2={t.xi} y2={t.yi} />
@@ -113,18 +120,23 @@ const initialRotation = initialAngle - 270;
       data-needle
       transform={`rotate(${initialRotation} ${cx} ${cy})`}
     >
+      <polygon
+        class="speedgauge__needle-arrow"
+        points={`${cx},${cy - rArc + 6} ${cx - 5},${cy - rArc + 22} ${cx + 5},${cy - rArc + 22}`}
+      />
       <line
         class="speedgauge__needle-shaft"
         x1={cx}
-        y1={cy}
+        y1={cy - 26}
         x2={cx}
-        y2={cy - rOuter + 14}
+        y2={cy - rArc + 22}
       />
-      <circle class="speedgauge__needle-pivot" cx={cx} cy={cy} r="6" />
+      <circle class="speedgauge__needle-pivot" cx={cx} cy={cy} r="9" />
+      <circle class="speedgauge__needle-pivot-dot" cx={cx} cy={cy} r="3" />
     </g>
   </svg>
   <div class="speedgauge__readout">
-    <div class="speedgauge__value" data-readout>{((min + max) / 2).toFixed(1)}</div>
+    <div class="speedgauge__value" data-readout>{((min + max) / 2).toFixed(2)}</div>
     <div class="speedgauge__unit mono">Mbps</div>
   </div>
 </div>
@@ -141,6 +153,22 @@ const initialRotation = initialAngle - 270;
     gap: var(--sp-2);
     position: relative;
     min-width: 0;
+    overflow: hidden;
+  }
+  /* Subtle pulsing border on the active band — chrome contract allows
+     border-color motion, no halo / no glow. */
+  .speedgauge::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius);
+    border: 1px solid var(--c-amber-soft);
+    pointer-events: none;
+    animation: speedgauge-border 2.4s ease-in-out infinite;
+  }
+  @keyframes speedgauge-border {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
   }
   .speedgauge__head {
     width: 100%;
@@ -148,6 +176,8 @@ const initialRotation = initialAngle - 270;
     align-items: center;
     justify-content: space-between;
     gap: var(--sp-2);
+    position: relative;
+    z-index: 1;
   }
   .speedgauge__chip {
     font-size: var(--fs-2xs);
@@ -165,99 +195,118 @@ const initialRotation = initialAngle - 270;
     font-weight: 600;
   }
   .speedgauge__pulse {
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
     background: var(--c-amber);
-    box-shadow: 0 0 0 0 var(--c-amber-soft);
-    animation: speedgauge-pulse 1.4s ease-in-out infinite;
+    animation: speedgauge-pulse 1.2s ease-in-out infinite;
   }
   @keyframes speedgauge-pulse {
-    0%,
-    100% {
-      opacity: 1;
-      transform: scale(1);
-    }
-    50% {
-      opacity: 0.4;
-      transform: scale(0.7);
-    }
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.35; transform: scale(0.6); }
   }
   .speedgauge__svg {
     width: 100%;
-    max-width: 280px;
+    max-width: 320px;
     display: block;
     overflow: visible;
+    position: relative;
+    z-index: 1;
   }
   .speedgauge__track {
     fill: none;
-    stroke: var(--c-amber-decor);
-    stroke-width: 12;
+    stroke: var(--c-rule);
+    stroke-width: 14;
     stroke-linecap: round;
+  }
+  .speedgauge__band {
+    fill: none;
+    stroke: var(--c-amber);
+    stroke-width: 14;
+    stroke-linecap: round;
+    animation: speedgauge-band 1.6s ease-in-out infinite;
+  }
+  @keyframes speedgauge-band {
+    0%, 100% { opacity: 0.55; }
+    50% { opacity: 1; }
   }
   .speedgauge__tick {
     stroke: var(--c-rule-strong);
-    stroke-width: 1;
-    opacity: 0.55;
+    stroke-width: 1.2;
+    opacity: 0.6;
   }
   .speedgauge__label {
     fill: var(--c-ink-3);
     font-family: var(--font-mono, ui-monospace, monospace);
-    font-size: 9px;
+    font-size: 8.5px;
     font-weight: 500;
   }
+  /* Needle : arrow + shaft + pivot. SVG transform-origin = pivot center. */
   .speedgauge__needle {
-    animation: speedgauge-needle 12s linear infinite;
-    transform-origin: 130px 145px;
+    animation: speedgauge-needle 6s linear infinite;
+    transform-origin: 160px 170px;
   }
-  @keyframes speedgauge-needle {
-    0% { transform: rotate(51.6deg); }
-    4% { transform: rotate(50.8deg); }
-    8% { transform: rotate(52.1deg); }
-    12% { transform: rotate(51.2deg); }
-    16% { transform: rotate(50.5deg); }
-    20% { transform: rotate(52.4deg); }
-    24% { transform: rotate(51.7deg); }
-    28% { transform: rotate(50.3deg); }
-    32% { transform: rotate(52.6deg); }
-    36% { transform: rotate(51.4deg); }
-    40% { transform: rotate(50.9deg); }
-    44% { transform: rotate(52.8deg); }
-    48% { transform: rotate(51.1deg); }
-    52% { transform: rotate(50.6deg); }
-    56% { transform: rotate(52.2deg); }
-    60% { transform: rotate(51.5deg); }
-    64% { transform: rotate(50.4deg); }
-    68% { transform: rotate(52.7deg); }
-    72% { transform: rotate(51.3deg); }
-    76% { transform: rotate(50.7deg); }
-    80% { transform: rotate(52.0deg); }
-    84% { transform: rotate(51.8deg); }
-    88% { transform: rotate(50.2deg); }
-    92% { transform: rotate(52.5deg); }
-    96% { transform: rotate(51.0deg); }
-    100% { transform: rotate(51.6deg); }
+  .speedgauge__needle-arrow {
+    fill: var(--c-amber);
+    stroke: var(--c-ink);
+    stroke-width: 0.8;
+    stroke-linejoin: round;
   }
   .speedgauge__needle-shaft {
     stroke: var(--c-ink);
-    stroke-width: 2.5;
+    stroke-width: 3.5;
     stroke-linecap: round;
   }
   .speedgauge__needle-pivot {
+    fill: var(--c-ink);
+    stroke: var(--c-amber);
+    stroke-width: 2;
+  }
+  .speedgauge__needle-pivot-dot {
     fill: var(--c-amber);
-    stroke: var(--c-ink);
-    stroke-width: 1.5;
+  }
+  /* 25 stops — wider swing than v1 (linear scale 130-150 = 18° arc).
+     Bias toward mid-point with realistic jitter. */
+  @keyframes speedgauge-needle {
+    0% { transform: rotate(27deg); }
+    4% { transform: rotate(29.2deg); }
+    8% { transform: rotate(31.5deg); }
+    12% { transform: rotate(28.4deg); }
+    16% { transform: rotate(33.0deg); }
+    20% { transform: rotate(30.1deg); }
+    24% { transform: rotate(35.6deg); }
+    28% { transform: rotate(32.8deg); }
+    32% { transform: rotate(37.4deg); }
+    36% { transform: rotate(34.2deg); }
+    40% { transform: rotate(39.8deg); }
+    44% { transform: rotate(36.5deg); }
+    48% { transform: rotate(41.2deg); }
+    52% { transform: rotate(38.0deg); }
+    56% { transform: rotate(42.7deg); }
+    60% { transform: rotate(39.5deg); }
+    64% { transform: rotate(44.1deg); }
+    68% { transform: rotate(41.0deg); }
+    72% { transform: rotate(43.5deg); }
+    76% { transform: rotate(40.3deg); }
+    80% { transform: rotate(42.8deg); }
+    84% { transform: rotate(38.5deg); }
+    88% { transform: rotate(41.6deg); }
+    92% { transform: rotate(36.9deg); }
+    96% { transform: rotate(33.2deg); }
+    100% { transform: rotate(27deg); }
   }
   .speedgauge__readout {
     text-align: center;
     margin-top: var(--sp-1);
+    position: relative;
+    z-index: 1;
   }
   .speedgauge__value {
     font-family: var(--font-mono, ui-monospace, monospace);
-    font-size: var(--fs-2xl);
-    font-weight: 600;
+    font-size: 44px;
+    font-weight: 700;
     color: var(--c-ink);
-    letter-spacing: -0.02em;
+    letter-spacing: -0.04em;
     line-height: 1;
     font-variant-numeric: tabular-nums;
   }
@@ -270,21 +319,24 @@ const initialRotation = initialAngle - 270;
   @media (prefers-reduced-motion: reduce) {
     .speedgauge__needle {
       animation: none;
-      transform: rotate(51.6deg);
+      transform: rotate(36deg);
     }
-    .speedgauge__pulse {
+    .speedgauge__pulse,
+    .speedgauge__band {
       animation: none;
-      opacity: 1;
-      transform: none;
+        opacity: 1;
+    }
+    .speedgauge::before {
+      animation: none;
+      opacity: 0.7;
     }
   }
 </style>
 
 <script>
-  // SpeedGauge readout ticks — vanilla JS, no deps, no animation loop.
-  // The needle itself is CSS-driven (see @keyframes speedgauge-needle).
-  // This script only updates the readout number so the value flickers
-  // realistically inside the 130-150 Mbps band. Honors reduced-motion.
+  // SpeedGauge readout ticks — vanilla JS, no rAF.
+  // Both the needle (CSS) and the readout (setInterval) jitter inside the
+  // configured band for the live feel. Honors reduced-motion.
 
   const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -299,21 +351,21 @@ const initialRotation = initialAngle - 270;
     const halfRange = (max - min) / 2;
 
     if (REDUCED) {
-      readout.textContent = mid.toFixed(1);
-      readout.setAttribute('aria-label', `${label} ${mid.toFixed(1)} Mbps`);
+      readout.textContent = mid.toFixed(2);
+      readout.setAttribute('aria-label', `${label} ${mid.toFixed(2)} Mbps`);
       return;
     }
 
     function tick() {
-      // Mild bias toward midpoint, with bounce
-      const value = mid + (Math.random() - 0.5) * 1.6 * halfRange;
+      // Bias toward mid-point with bounce. 2 decimals for digital-readout look.
+      const value = mid + (Math.random() - 0.5) * 1.7 * halfRange;
       const clamped = Math.max(min, Math.min(max, value));
-      readout!.textContent = clamped.toFixed(1);
-      readout!.setAttribute('aria-label', `${label} ${clamped.toFixed(1)} Mbps`);
+      readout!.textContent = clamped.toFixed(2);
+      readout!.setAttribute('aria-label', `${label} ${clamped.toFixed(2)} Mbps`);
     }
 
     tick();
-    setInterval(tick, 820);
+    setInterval(tick, 620);
   }
 
   function boot() {
