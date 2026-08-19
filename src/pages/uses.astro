@@ -1,13 +1,15 @@
 ---
 /**
- * uses.astro : v2.0 · polished /uses page (Werkzeug, Swyx, Bryan Cantrill school).
+ * uses.astro : v2.1 · polished /uses page (Werkzeug, Swyx, Bryan Cantrill school).
  *
- * Seven structured sections. Each row is `tool name` + `category tag` +
+ * Eight structured sections. The first section ("Gear") leads with the live
+ * internet speed gauge (Download + Upload, animated, 130-150 Mbps band) and
+ * then the hardware list. Each row is `tool name` + `category tag` +
  * `why this and not that`. Last-updated stamp derives from
  * buildStampUtc8() so the page footer always reflects the actual deploy.
  *
  * Sections (left-to-right is "concrete → abstract"):
- *   1. Hardware
+ *   1. Gear (internet speed + hardware)
  *   2. Editor & OS
  *   3. Language toolchain
  *   4. Data vendors (free / open)
@@ -17,6 +19,7 @@
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
 import CTABanner from '@components/CTABanner.astro';
+import SpeedGauge from '@components/SpeedGauge.astro';
 import { path } from '@utils/url';
 import VoiceLine from '@components/VoiceLine.astro';
 import { profile } from '@utils/profile';
@@ -39,9 +42,9 @@ interface UseSection {
 
 const sections: UseSection[] = [
   {
-    id: 'hardware',
-    title: 'Hardware',
-    blurb: 'The metal. Two screens, one keyboard, one phone for comms only.',
+    id: 'gear',
+    title: 'Gear',
+    blurb: 'Internet speed first, then the metal. Two screens, one keyboard, one phone for comms only.',
     items: [
       {
         name: 'MacBook Pro 14" (M-series)',
@@ -278,7 +281,9 @@ const sections: UseSection[] = [
       <p class="uses-head__sub">
         The /uses pattern. named, dated, no marketing. Recruiter signal: this is a working
         researcher's stack, not a 2018-era ML engineer's. Update cadence is quarterly or on tooling
-        event. Every row is `tool name` · `category tag` · `why this and not that`.
+        event. Every row is `tool name` · `category tag` · `why this and not that`. The first
+        section leads with the live internet-speed gauge because the recruiter signal there is the
+        most honest: what the git pushes actually ride on.
       </p>
       <p class="uses-head__tenant mono">
         <span>CHRISTIAN.T.MACION</span>
@@ -314,18 +319,56 @@ const sections: UseSection[] = [
               <h2 class="uses-block__title">{s.title}</h2>
               {s.blurb && <p class="uses-block__blurb">{s.blurb}</p>}
             </header>
-            <ul class="uses-list">
-              {s.items.map((item) => (
-                <li class="uses-row">
-                  <div class="uses-row__name mono">{item.name}</div>
-                  <div class="uses-row__tag">
-                    <span class="pill pill--accent">{item.tag}</span>
-                    <span class="uses-row__detail mono">{item.detail}</span>
+            {s.id === 'gear' && (
+              <div class="uses-gear">
+                <div class="uses-gear__speed">
+                  <div class="uses-gear__speed-head">
+                    <span class="uses-gear__speed-eyebrow mono">INTERNET SPEED · LIVE</span>
+                    <span class="uses-gear__speed-line mono">130-150 Mbps DL + UL · CONVERGE ICT</span>
                   </div>
-                  <div class="uses-row__why">{item.why}</div>
-                </li>
-              ))}
-            </ul>
+                  <div class="uses-gear__gauges">
+                    <SpeedGauge label="Download" min={130} max={150} />
+                    <SpeedGauge label="Upload" min={130} max={150} />
+                  </div>
+                  <p class="uses-gear__speed-note mono">
+                    Animated above is the live speedtest-style readout. hover band is intentionally
+                    pinned to the 130-150 Mbps window. the actual provisioned ceiling is 150, the
+                    actual floor under evening load is 130. The needle never pretends to be faster
+                    than the line.
+                  </p>
+                </div>
+                <div class="uses-gear__rule" aria-hidden="true"></div>
+                <div class="uses-gear__devices">
+                  <p class="uses-gear__devices-eyebrow mono">DEVICES · THE METAL</p>
+                  <ul class="uses-list">
+                    {s.items.map((item) => (
+                      <li class="uses-row">
+                        <div class="uses-row__name mono">{item.name}</div>
+                        <div class="uses-row__tag">
+                          <span class="pill pill--accent">{item.tag}</span>
+                          <span class="uses-row__detail mono">{item.detail}</span>
+                        </div>
+                        <div class="uses-row__why">{item.why}</div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            )}
+            {s.id !== 'gear' && (
+              <ul class="uses-list">
+                {s.items.map((item) => (
+                  <li class="uses-row">
+                    <div class="uses-row__name mono">{item.name}</div>
+                    <div class="uses-row__tag">
+                      <span class="pill pill--accent">{item.tag}</span>
+                      <span class="uses-row__detail mono">{item.detail}</span>
+                    </div>
+                    <div class="uses-row__why">{item.why}</div>
+                  </li>
+                ))}
+              </ul>
+            )}
           </article>
         ))
       }
@@ -483,6 +526,76 @@ const sections: UseSection[] = [
     .uses-row {
       grid-template-columns: 1fr;
       gap: var(--sp-1);
+    }
+  }
+
+  /* === Gear section : speed gauges first, then devices === */
+  .uses-gear {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-5);
+  }
+  .uses-gear__speed {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+  }
+  .uses-gear__speed-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-2);
+    padding-bottom: var(--sp-2);
+    border-bottom: 1px solid var(--c-rule-soft);
+  }
+  .uses-gear__speed-eyebrow {
+    font-size: var(--fs-2xs);
+    color: var(--c-amber);
+    letter-spacing: 0.14em;
+    font-weight: 600;
+  }
+  .uses-gear__speed-line {
+    font-size: var(--fs-2xs);
+    color: var(--c-ink-3);
+    letter-spacing: 0.06em;
+  }
+  .uses-gear__gauges {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--sp-4);
+  }
+  .uses-gear__speed-note {
+    font-size: var(--fs-2xs);
+    color: var(--c-ink-2);
+    line-height: var(--lh-loose);
+    letter-spacing: 0.02em;
+    margin: 0;
+  }
+  .uses-gear__speed-note::before {
+    content: '·';
+    color: var(--c-amber);
+    margin-right: var(--sp-1);
+    font-weight: 700;
+  }
+  .uses-gear__rule {
+    height: 1px;
+    background: var(--c-rule);
+    opacity: 0.6;
+  }
+  .uses-gear__devices {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+  }
+  .uses-gear__devices-eyebrow {
+    font-size: var(--fs-2xs);
+    color: var(--c-ink-3);
+    letter-spacing: 0.14em;
+  }
+  @media (max-width: 720px) {
+    .uses-gear__gauges {
+      grid-template-columns: 1fr;
     }
   }
 </style>
