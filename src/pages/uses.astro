@@ -20,6 +20,7 @@
 import BaseLayout from '@layouts/BaseLayout.astro';
 import CTABanner from '@components/CTABanner.astro';
 import SpeedGauge from '@components/SpeedGauge.astro';
+import LatencyCard from '@components/LatencyCard.astro';
 import { path } from '@utils/url';
 import VoiceLine from '@components/VoiceLine.astro';
 import { profile } from '@utils/profile';
@@ -321,37 +322,74 @@ const sections: UseSection[] = [
             </header>
             {s.id === 'gear' && (
               <div class="uses-gear">
-                <div class="uses-gear__speed">
-                  <div class="uses-gear__speed-head">
-                    <span class="uses-gear__speed-eyebrow mono">INTERNET SPEED · LIVE</span>
-                    <span class="uses-gear__speed-line mono">130-150 Mbps DL + UL · CONVERGE ICT</span>
+                <div class="uses-gear__highlight">
+                  <div class="uses-gear__highlight-head">
+                    <span class="uses-gear__eyebrow mono">INTERNET SPEED · LIVE</span>
+                    <span class="uses-gear__eyebrow-line mono">130-150 Mbps DL + UL · CONVERGE ICT · 5-15ms RTT</span>
                   </div>
-                  <div class="uses-gear__gauges">
-                    <SpeedGauge label="Download" min={130} max={150} />
-                    <SpeedGauge label="Upload" min={130} max={150} />
+                  <div class="uses-gear__metrics">
+                    <article class="uses-metric-card">
+                      <SpeedGauge label="Download" min={130} max={150} />
+                    </article>
+                    <article class="uses-metric-card">
+                      <SpeedGauge label="Upload" min={130} max={150} />
+                    </article>
+                    <article class="uses-metric-card">
+                      <LatencyCard label="Latency" min={5} max={15} />
+                    </article>
                   </div>
                   <p class="uses-gear__speed-note mono">
-                    Animated above is the live speedtest-style readout. hover band is intentionally
-                    pinned to the 130-150 Mbps window. the actual provisioned ceiling is 150, the
-                    actual floor under evening load is 130. The needle never pretends to be faster
+                    The highlighted cell. The ceiling is 150 Mbps, the floor under evening load
+                    is 130. Latency is round-trip to PHIX. under 20ms is the band where manual
+                    fills land where the chart shows them. The needle never pretends to be faster
                     than the line.
                   </p>
                 </div>
                 <div class="uses-gear__rule" aria-hidden="true"></div>
                 <div class="uses-gear__devices">
-                  <p class="uses-gear__devices-eyebrow mono">DEVICES · THE METAL</p>
-                  <ul class="uses-list">
+                  <div class="uses-gear__devices-head">
+                    <span class="uses-gear__eyebrow mono">DEVICES · THE METAL</span>
+                    <span class="uses-gear__eyebrow-line mono">Two screens, one keyboard, one phone for comms only</span>
+                  </div>
+                  <div class="uses-gear__devices-grid">
                     {s.items.map((item) => (
-                      <li class="uses-row">
-                        <div class="uses-row__name mono">{item.name}</div>
-                        <div class="uses-row__tag">
-                          <span class="pill pill--accent">{item.tag}</span>
-                          <span class="uses-row__detail mono">{item.detail}</span>
+                      <article class="uses-device-card" data-device={item.tag}>
+                        <div class="uses-device-card__stage">
+                          <svg class="uses-device-card__svg" viewBox="0 0 64 64" aria-hidden="true">
+                            {item.tag === 'compute' && (
+                              <g>
+                                <rect x="10" y="18" width="44" height="28" rx="2" />
+                                <path d="M 6 50 L 58 50 L 56 54 L 8 54 Z" />
+                                <line x1="28" y1="50" x2="36" y2="50" />
+                              </g>
+                            )}
+                            {item.tag === 'display' && (
+                              <g>
+                                <rect x="6" y="10" width="52" height="34" rx="2" />
+                                <line x1="32" y1="44" x2="32" y2="54" />
+                                <line x1="22" y1="54" x2="42" y2="54" />
+                              </g>
+                            )}
+                            {item.tag === 'comms' && (
+                              <g>
+                                <rect x="20" y="6" width="24" height="52" rx="3" />
+                                <line x1="28" y1="50" x2="36" y2="50" />
+                                <circle cx="32" cy="12" r="1" />
+                              </g>
+                            )}
+                          </svg>
                         </div>
-                        <div class="uses-row__why">{item.why}</div>
-                      </li>
+                        <div class="uses-device-card__meta">
+                          <div class="uses-device-card__head">
+                            <h3 class="uses-device-card__title">{item.name}</h3>
+                            <span class="pill pill--accent">{item.tag}</span>
+                          </div>
+                          <p class="uses-device-card__detail mono">{item.detail}</p>
+                          <p class="uses-device-card__why">{item.why}</p>
+                        </div>
+                      </article>
                     ))}
-                  </ul>
+                  </div>
                 </div>
               </div>
             )}
@@ -529,18 +567,23 @@ const sections: UseSection[] = [
     }
   }
 
-  /* === Gear section : speed gauges first, then devices === */
+  /* === Gear section : Bryllim-style card grid ===
+     Speedtest highlight (3 metric cards) + devices (3 product cards).
+     Chrome contract v1 over Bryllim rhythm: dark surface, mono + amber accent,
+     no halo/glow, hover lift + soft shadow on cards. */
   .uses-gear {
     display: flex;
     flex-direction: column;
     gap: var(--sp-5);
   }
-  .uses-gear__speed {
+  .uses-gear__highlight,
+  .uses-gear__devices {
     display: flex;
     flex-direction: column;
     gap: var(--sp-3);
   }
-  .uses-gear__speed-head {
+  .uses-gear__highlight-head,
+  .uses-gear__devices-head {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -549,21 +592,26 @@ const sections: UseSection[] = [
     padding-bottom: var(--sp-2);
     border-bottom: 1px solid var(--c-rule-soft);
   }
-  .uses-gear__speed-eyebrow {
+  .uses-gear__eyebrow {
     font-size: var(--fs-2xs);
     color: var(--c-amber);
     letter-spacing: 0.14em;
     font-weight: 600;
   }
-  .uses-gear__speed-line {
+  .uses-gear__eyebrow-line {
     font-size: var(--fs-2xs);
     color: var(--c-ink-3);
     letter-spacing: 0.06em;
   }
-  .uses-gear__gauges {
+
+  /* === Metric cards (Download / Upload / Latency) === */
+  .uses-gear__metrics {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     gap: var(--sp-4);
+  }
+  .uses-metric-card {
+    min-width: 0;
   }
   .uses-gear__speed-note {
     font-size: var(--fs-2xs);
@@ -578,23 +626,97 @@ const sections: UseSection[] = [
     margin-right: var(--sp-1);
     font-weight: 700;
   }
+
   .uses-gear__rule {
     height: 1px;
     background: var(--c-rule);
     opacity: 0.6;
   }
-  .uses-gear__devices {
+
+  /* === Device cards (Bryllim rhythm) === */
+  .uses-gear__devices-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: var(--sp-4);
+  }
+  .uses-device-card {
+    background: var(--c-bg-2);
+    border: 1px solid var(--c-rule);
+    border-radius: var(--radius);
+    overflow: hidden;
     display: flex;
     flex-direction: column;
-    gap: var(--sp-3);
+    transition: transform 0.2s ease, border-color 0.2s ease,
+      box-shadow 0.2s ease;
   }
-  .uses-gear__devices-eyebrow {
+  .uses-device-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--c-rule-strong);
+    box-shadow: 0 8px 30px -12px rgba(0, 0, 0, 0.35);
+  }
+  .uses-device-card__stage {
+    aspect-ratio: 1 / 1;
+    background: var(--c-bg-3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid var(--c-rule);
+  }
+  .uses-device-card__svg {
+    width: 44%;
+    height: 44%;
+    stroke: var(--c-ink-2);
+    fill: none;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform 0.3s ease;
+  }
+  .uses-device-card:hover .uses-device-card__svg {
+    transform: scale(1.04);
+  }
+  .uses-device-card__meta {
+    padding: var(--sp-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-2);
+  }
+  .uses-device-card__head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--sp-2);
+  }
+  .uses-device-card__title {
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    color: var(--c-ink);
+    margin: 0;
+    line-height: 1.3;
+  }
+  .uses-device-card__detail {
     font-size: var(--fs-2xs);
     color: var(--c-ink-3);
-    letter-spacing: 0.14em;
+    letter-spacing: 0.04em;
+    margin: 0;
+  }
+  .uses-device-card__why {
+    font-size: var(--fs-xs);
+    color: var(--c-ink-2);
+    line-height: var(--lh-loose);
+    margin: 0;
+  }
+  @media (max-width: 920px) {
+    .uses-gear__metrics {
+      grid-template-columns: 1fr 1fr;
+    }
+    .uses-gear__devices-grid {
+      grid-template-columns: 1fr 1fr;
+    }
   }
   @media (max-width: 720px) {
-    .uses-gear__gauges {
+    .uses-gear__metrics,
+    .uses-gear__devices-grid {
       grid-template-columns: 1fr;
     }
   }

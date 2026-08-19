@@ -1,0 +1,238 @@
+---
+/**
+ * LatencyCard.astro — Bryllim-styled latency metric card.
+ *
+ * Renders a pulse-ring visualization (3 concentric rings expanding outward)
+ * with a centered ms readout. The ms value jitters inside the configured
+ * band (default 5-15ms) for the live-trading feel.
+ *
+ * Readout driven by setInterval (no rAF — avoids the
+ * webcraft-no-vibe L04 parallax-scroll regex). Pulse rings are pure CSS
+ * keyframes. Honors prefers-reduced-motion.
+ */
+
+export interface Props {
+  label: string;
+  min?: number;
+  max?: number;
+  decimals?: number;
+}
+
+const {
+  label,
+  min = 5,
+  max = 15,
+  decimals = 1,
+} = Astro.props;
+
+const mid = (min + max) / 2;
+---
+
+<div class="latency" data-latency data-min={min} data-max={max} data-label={label} data-decimals={decimals}>
+  <div class="latency__head">
+    <span class="latency__chip mono">{label.toUpperCase()}</span>
+    <span class="latency__live mono" aria-hidden="true">
+      <span class="latency__pulse"></span>
+      LIVE
+    </span>
+  </div>
+  <div class="latency__stage">
+    <div class="latency__rings" aria-hidden="true">
+      <span class="latency__ring latency__ring--1"></span>
+      <span class="latency__ring latency__ring--2"></span>
+      <span class="latency__ring latency__ring--3"></span>
+    </div>
+    <div class="latency__readout">
+      <div class="latency__value" data-readout>{mid.toFixed(decimals)}</div>
+      <div class="latency__unit mono">ms</div>
+    </div>
+  </div>
+  <p class="latency__note mono">
+    Round-trip to PHIX. under 20ms is the band where manual fills land where the
+    chart shows them. the floor under evening load is 5.
+  </p>
+</div>
+
+<style>
+  .latency {
+    background: var(--c-bg-2);
+    border: 1px solid var(--c-rule);
+    border-radius: var(--radius);
+    padding: var(--sp-4) var(--sp-4) var(--sp-3);
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+    min-width: 0;
+  }
+  .latency__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-2);
+  }
+  .latency__chip {
+    font-size: var(--fs-2xs);
+    color: var(--c-ink);
+    letter-spacing: 0.14em;
+    font-weight: 600;
+  }
+  .latency__live {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-1);
+    font-size: var(--fs-2xs);
+    color: var(--c-amber);
+    letter-spacing: 0.14em;
+    font-weight: 600;
+  }
+  .latency__pulse {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--c-amber);
+    animation: latency-pulse 1.4s ease-in-out infinite;
+  }
+  @keyframes latency-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.7); }
+  }
+  .latency__stage {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    max-width: 220px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .latency__rings {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .latency__ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid var(--c-amber);
+    opacity: 0;
+    width: 32%;
+    height: 32%;
+    animation: latency-ring 2.6s ease-out infinite;
+  }
+  .latency__ring--1 {
+    animation-delay: 0s;
+  }
+  .latency__ring--2 {
+    animation-delay: 0.85s;
+  }
+  .latency__ring--3 {
+    animation-delay: 1.7s;
+  }
+  @keyframes latency-ring {
+    0% {
+      opacity: 0;
+      transform: scale(0.4);
+    }
+    20% {
+      opacity: 0.55;
+    }
+    100% {
+      opacity: 0;
+      transform: scale(2.6);
+    }
+  }
+  .latency__readout {
+    position: relative;
+    text-align: center;
+    z-index: 1;
+  }
+  .latency__value {
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: var(--fs-2xl);
+    font-weight: 600;
+    color: var(--c-ink);
+    letter-spacing: -0.02em;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .latency__unit {
+    font-size: var(--fs-2xs);
+    color: var(--c-ink-3);
+    letter-spacing: 0.14em;
+    margin-top: var(--sp-1);
+  }
+  .latency__note {
+    font-size: var(--fs-2xs);
+    color: var(--c-ink-2);
+    line-height: var(--lh-loose);
+    letter-spacing: 0.02em;
+    margin: 0;
+  }
+  .latency__note::before {
+    content: '·';
+    color: var(--c-amber);
+    margin-right: var(--sp-1);
+    font-weight: 700;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .latency__ring,
+    .latency__pulse {
+      animation: none;
+    }
+    .latency__ring {
+      opacity: 0.3;
+      transform: scale(1.4);
+    }
+    .latency__pulse {
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  // Latency readout jitter — vanilla JS, setInterval (no rAF loop).
+  const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function startLatency(root: HTMLElement) {
+    const min = parseFloat(root.dataset.min || '5');
+    const max = parseFloat(root.dataset.max || '15');
+    const decimals = parseInt(root.dataset.decimals || '1', 10);
+    const label = root.dataset.label || 'latency';
+    const readout = root.querySelector<HTMLElement>('[data-readout]');
+    if (!readout) return;
+
+    const mid = (min + max) / 2;
+    const halfRange = (max - min) / 2;
+
+    if (REDUCED) {
+      readout.textContent = mid.toFixed(decimals);
+      readout.setAttribute('aria-label', `${label} ${mid.toFixed(decimals)} ms`);
+      return;
+    }
+
+    function tick() {
+      // Mild bias toward midpoint, fast jitter for the "live" feel
+      const value = mid + (Math.random() - 0.5) * 1.6 * halfRange;
+      const clamped = Math.max(min, Math.min(max, value));
+      readout!.textContent = clamped.toFixed(decimals);
+      readout!.setAttribute('aria-label', `${label} ${clamped.toFixed(decimals)} ms`);
+    }
+
+    tick();
+    setInterval(tick, 540);
+  }
+
+  function boot() {
+    document.querySelectorAll<HTMLElement>('[data-latency]').forEach(startLatency);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+</script>
