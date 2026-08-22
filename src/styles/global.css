@@ -172,6 +172,36 @@ button {
   border: none;
   cursor: pointer;
 }
+/* v14.1 polish-7q PI-19 (2026-08-23) : target-size selective fix.
+   The audit's 583-node count < 24×24 floor breaks down to two
+   classes : (a) short inline text-links whose WIDTH is below 24px
+   even though `a { min-height:44px }` already covers height, and
+   (b) <button> + form controls that have no min-height rule at all.
+
+   Strategy (ii)+(iii) hybrid from the task brief : only touch
+   interactive nodes, and use a CSS stretch (min-height/min-width
+   + padding) to bundle the fix rather than wrap each node.
+   Non-interactive nodes (text spans, decorative marks) are not
+   touched. Inline text-links stay inline-flex — no layout drift.
+
+   Universal 24×24 floor is below the WCAG 2.2 SC 2.5.8 minimum
+   (the rule is "at least 24×24 CSS px"). Anchors already exceed
+   the floor at 44px tall; the new 24px min-width only kicks in
+   on the rare 1-2 char inline link (e.g. "↗" or single-glyph
+   affordances). */
+button,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+[role="button"] {
+  min-height: 24px;
+  min-width: 24px;
+}
+input[type="checkbox"],
+input[type="radio"] {
+  min-width: 24px;
+  min-height: 24px;
+}
 
 a {
   color: var(--c-primary);
@@ -193,6 +223,12 @@ a {
      collapsed bounding box is still reported but the rule doesn't
      broaden it (skip-link width/height are explicitly 1px). */
   min-height: 44px;
+  /* v14.1 polish-7q PI-19 : 24px min-width floor for inline text-links
+     that ship short labels (1-3 char glyphs like "↗", "→", mono
+     acronyms). Per WCAG 2.2 SC 2.5.8 : every interactive target
+     needs at least 24×24 CSS px on touch devices. Existing 44px
+     min-height covers vertical; this rule covers horizontal. */
+  min-width: 24px;
   display: inline-flex;
   align-items: center;
 }

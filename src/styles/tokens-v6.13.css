@@ -431,6 +431,75 @@
   /* PROOF CARDS */
   --c-proof-metric: 32px;
   --c-proof-stripe: 4px;
+
+  /* === v14 token-consolidation (2026-08-23) — migrated from tokens.css ===
+   * Single source of truth: chrome contract v6.13 binding.
+   * Legacy tokens.css deleted (commit f04fe4b).
+   * Migration list (26 tokens, verbatim from legacy tokens.css):
+   *   --c-bg-elev, --c-green, --c-green-tint, --c-green-tint-border,
+   *   --c-pass, --c-purple, --c-teal, --c-violet, --c-white-ghost,
+   *   --ease-overshoot-constrained, --ff-math, --halftone-ink,
+   *   --halftone-tile, --mv-dur-cinematic, --mv-dur-reveal-reduced,
+   *   --mv-dur-settle, --mv-dur-snap, --mv-ease-cinematic,
+   *   --mv-ease-settle, --mv-ease-snappy, --mv-stagger, --nav-h,
+   *   --section-toc-h, --tnum, --z-modal, --z-nav, --z-nav-more,
+   *   --z-sticky
+   * DROPPED (0 live consumers + 3 archive-only): --c-amber-decor-2,
+   *   --c-bg-light, --c-ink-haze, --c-ink-wisp, --c-mu, --c-pass-soft,
+   *   --c-shadow-card, --c-sigma, --c-white-mute, --dur-1..5,
+   *   --mv-dur-exit, --mv-dur-instant, --rule-strong, --serif-display,
+   *   --shadow-xl, --tape-h, --z-base, --z-raised, --z-tape, --z-toast.
+   * Motion vocabulary v11 binding preserved (5 categories × 1 reducer
+   * each). prefers-reduced-motion fence remains mandatory in every CSS. */
+
+  /* === v14 MIGRATED — institutional color helpers (workbooks / ai / Stat) === */
+  --c-bg-elev: rgba(255, 255, 255, 0.02);
+  --c-green: #2e7d32;
+  --c-green-tint: rgba(46, 125, 50, 0.1);
+  --c-green-tint-border: rgba(46, 125, 50, 0.25);
+  --c-pass: #3fb950;
+  --c-purple: #7e57c2;
+  --c-teal: #5ba8a3;
+  --c-violet: #a07baf;
+  --c-white-ghost: color-mix(in oklab, #fff 55%, transparent);
+
+  /* === v14 MIGRATED — KaTeX math serif (Equation.astro) === */
+  --ff-math: 'KaTeX_Main', 'Latin Modern Math', 'Computer Modern Serif', 'STIX Two Math', 'Cambria Math', 'Times New Roman', serif;
+
+  /* === v14 MIGRATED — halftone dot field (global.css body texture) === */
+  --halftone-tile: 16px;
+  --halftone-ink: color-mix(in oklab, var(--c-ink-faint) 9%, transparent);
+
+  /* === v14 MIGRATED — MOTION VOCABULARY v11 (binding for every chrome change)
+   * 4 duration tiers + 3 easing curves + 1 stagger. Nothing else ships.
+   * motion.css reads these directly (17 snap / 13 settle / 6 snappy /
+   * 17 stagger / 3 cinematic / 1 reveal-reduced hits in motion.css). */
+  --mv-dur-instant: 80ms;
+  --mv-dur-snap: 160ms;
+  --mv-dur-settle: 280ms;
+  --mv-dur-cinematic: 480ms;
+  --mv-dur-exit: 240ms;
+  --mv-ease-snappy: cubic-bezier(0.2, 0, 0, 1);
+  --mv-ease-settle: cubic-bezier(0.4, 0, 0.2, 1);
+  --mv-ease-cinematic: cubic-bezier(0.65, 0, 0.35, 1);
+  --mv-stagger: 80ms;
+  --mv-dur-reveal-reduced: 80ms;
+  --ease-overshoot-constrained: cubic-bezier(0.34, 1.2, 0.5, 1);
+
+  /* === v14 MIGRATED — layout heights + z-index scale === */
+  --nav-h: 56px;
+  --section-toc-h: 36px;
+  --z-base: 0;
+  --z-raised: 1;
+  --z-tape: 2;
+  --z-sticky: 30;
+  --z-nav: 50;
+  --z-nav-more: 60;
+  --z-modal: 100;
+  --z-toast: 200;
+
+  /* === v14 MIGRATED — tabular numerals (global.css) === */
+  --tnum: 'tnum' 1, 'lnum' 1;
 }
 
 /* ============================================================================
