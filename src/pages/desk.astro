@@ -148,14 +148,18 @@ const eventCategories = new Set(events.map((e) => e.category)).size;
     </div>
   </header>
 
-  {/* === 2.5. Position-row from /positions (deterministic; same source as /positions) === */}
+  {/* === 2.5. Position-row from /positions (deterministic; same source as /positions) ===
+     v14 PI-21 fix: removed `role="table"` / `role="rowheader"` / `role="cell"` because
+     the visual grid is not a true table — those roles require role="row" wrappers which
+     we don't have. The parent <section> already carries aria-label="Live paper-trade
+     position row" so the semantic label survives. axe-core 0 violations on /desk/. */}
   <section class="desk-posrow" aria-label="Live paper-trade position row">
     <div class="container">
       <p class="desk-posrow__eyebrow mono">
         LIVE PAPER-TRADE · POSITION ROW · FROM <a href={path('/positions')}>/positions</a>
       </p>
-      <div class="desk-posrow__row" role="table">
-        <div class="desk-posrow__cell desk-posrow__cell--name" role="rowheader">
+      <div class="desk-posrow__row">
+        <div class="desk-posrow__cell desk-posrow__cell--name">
           <span class="desk-posrow__rank mono">01</span>
           <div class="desk-posrow__name-text">
             <p class="desk-posrow__title">Vol-target time-series momentum · BTC/USDT</p>
@@ -165,19 +169,19 @@ const eventCategories = new Set(events.map((e) => e.category)).size;
             </p>
           </div>
         </div>
-        <div class="desk-posrow__metric" role="cell">
+        <div class="desk-posrow__metric">
           <p class="desk-posrow__num mono">+12.0%</p>
           <p class="desk-posrow__lbl mono">RETURN</p>
         </div>
-        <div class="desk-posrow__metric" role="cell">
+        <div class="desk-posrow__metric">
           <p class="desk-posrow__num mono">≈0.39</p>
           <p class="desk-posrow__lbl mono">SHARPE ANN.</p>
         </div>
-        <div class="desk-posrow__metric" role="cell">
+        <div class="desk-posrow__metric">
           <p class="desk-posrow__num mono">−3.6%</p>
           <p class="desk-posrow__lbl mono">MAX DD</p>
         </div>
-        <div class="desk-posrow__metric" role="cell">
+        <div class="desk-posrow__metric">
           <p class="desk-posrow__num mono">4.2 bps</p>
           <p class="desk-posrow__lbl mono">SLIPPAGE</p>
         </div>
