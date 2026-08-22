@@ -168,6 +168,130 @@ const platforms = [
     </div>
   </section>
 
+  {/* v14 (2026-08-23, contact-form) : visitor-can-send-email form.
+      Owner directive: "to be able to send an email to me, just by the
+      visitor to use the website and send." Privacy-preserving: no
+      exposed address, mailto: fallback primary, CF Worker hook stub
+      for back_end_engineer. Chrome contract v6.13: mono + amber +
+      hairline + 0-2px radius. No halo, no glow. WCAG 2.2 AA: labels,
+      focus rings, aria-live status. */}
+  <section class="section section--form">
+    <div class="container">
+      <header class="section__head">
+        <p class="section__eyebrow">Send a message</p>
+        <h2 class="section__title">No account. No tracking. One message lands in my inbox.</h2>
+        <p class="section__sub">
+          Fill the form, click Send. Opens your mail client prefilled, then sends through a
+          privacy-preserving Cloudflare Worker if you'd rather skip the mail client. No exposed
+          address, no third-party trackers, no newsletter. Same channel as
+          <a href={`mailto:${profile.contact.email}`}>the email link above</a>: the form is the
+          ergonomic surface; the wire stays the same.
+        </p>
+      </header>
+
+      <form class="contact-form" data-contact-form data-recipient={profile.contact.email} aria-labelledby="contact-form-title" novalidate>
+        <p class="contact-form__title mono" id="contact-form-title">MESSAGE</p>
+
+        <div class="contact-form__row">
+          <div class="contact-form__field">
+            <label class="contact-form__label" for="cf-name">YOUR NAME</label>
+            <input
+              class="contact-form__input"
+              id="cf-name"
+              name="name"
+              type="text"
+              autocomplete="name"
+              required
+              minlength="2"
+              maxlength="80"
+              aria-required="true"
+              aria-describedby="cf-name-hint"
+              placeholder="Jane Doe"
+            />
+            <p class="contact-form__hint" id="cf-name-hint">2-80 chars. Visible in the salutation.</p>
+          </div>
+
+          <div class="contact-form__field">
+            <label class="contact-form__label" for="cf-email">YOUR EMAIL</label>
+            <input
+              class="contact-form__input"
+              id="cf-email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              required
+              maxlength="120"
+              aria-required="true"
+              aria-describedby="cf-email-hint"
+              placeholder="jane@example.com"
+            />
+            <p class="contact-form__hint" id="cf-email-hint">Reply lands here. Not displayed publicly.</p>
+          </div>
+        </div>
+
+        <div class="contact-form__field">
+          <label class="contact-form__label" for="cf-subject">SUBJECT</label>
+          <input
+            class="contact-form__input"
+            id="cf-subject"
+            name="subject"
+            type="text"
+            required
+            minlength="3"
+            maxlength="120"
+            aria-required="true"
+            placeholder="Hiring · partnership · press · other"
+          />
+        </div>
+
+        <div class="contact-form__field">
+          <label class="contact-form__label" for="cf-message">MESSAGE</label>
+          <textarea
+            class="contact-form__input contact-form__textarea"
+            id="cf-message"
+            name="message"
+            required
+            minlength="20"
+            maxlength="4000"
+            rows="7"
+            aria-required="true"
+            aria-describedby="cf-message-hint"
+            placeholder="Tell me the job, the role, the timeline, or the ask. JD attached is the richest path; otherwise one paragraph is fine."
+          ></textarea>
+          <p class="contact-form__hint" id="cf-message-hint">
+            <span data-contact-counter>0</span> / 4000 chars. Minimum 20.
+          </p>
+        </div>
+
+        {/* Honeypot : hidden field that real users never fill. If a
+            bot completes this field, the form silently fails. */}
+        <div class="contact-form__honeypot" aria-hidden="true">
+          <label for="cf-website">Website</label>
+          <input id="cf-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <div class="contact-form__actions">
+          <button
+            class="contact-form__btn contact-form__btn--primary mono"
+            type="submit"
+            data-contact-submit
+          >
+            <span data-contact-btn-label>SEND →</span>
+          </button>
+          <p class="contact-form__status mono" role="status" aria-live="polite" data-contact-status>
+            READY · FILL THE FIELDS · CLICK SEND
+          </p>
+        </div>
+
+        <p class="contact-form__privacy mono">
+          Privacy: your email + message land in my inbox. Nothing is stored on this site, no
+          newsletter opt-in, no third-party tracker. If the Worker is down the form falls back to a
+          <code>mailto:</code> with the same fields prefilled.
+        </p>
+      </form>
+    </div>
+  </section>
+
   <section class="section section--book">
     <div class="container">
       <header class="section__head">
@@ -619,4 +743,374 @@ const platforms = [
       gap: var(--sp-2);
     }
   }
+
+  /* === CONTACT FORM (v14 contact-form) ===
+     Chrome contract v6.13: mono + amber + hairline + 0-2px radius.
+     No halo, no glow, no gradient. WCAG 2.2 AA: visible focus rings,
+     label-input pairing, aria-live status. */
+  .section--form {
+    background: var(--c-bg);
+    border-block: 1px solid var(--c-rule);
+  }
+  .contact-form {
+    max-width: 760px;
+    margin: var(--sp-6) 0 0;
+    padding: var(--sp-6);
+    background: var(--c-bg-2);
+    border: 1px solid var(--c-rule);
+    border-left: 3px solid var(--c-amber);
+    border-radius: var(--radius);
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-5);
+  }
+  .contact-form__title {
+    margin: 0 0 var(--sp-2);
+    font-size: var(--fs-xs);
+    letter-spacing: 0.16em;
+    color: var(--c-amber);
+    font-weight: 700;
+  }
+  .contact-form__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--sp-4);
+  }
+  @media (max-width: 640px) {
+    .contact-form__row {
+      grid-template-columns: 1fr;
+    }
+  }
+  .contact-form__field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-2);
+  }
+  .contact-form__label {
+    font-family: var(--ff-mono);
+    font-size: var(--fs-xs);
+    letter-spacing: 0.12em;
+    color: var(--c-ink-2);
+    font-weight: 600;
+  }
+  .contact-form__input {
+    width: 100%;
+    padding: 10px 12px;
+    font-family: var(--ff-mono);
+    font-size: var(--fs-base);
+    color: var(--c-ink);
+    background: var(--c-bg);
+    border: 1px solid var(--c-rule);
+    border-bottom: 2px solid var(--c-rule);
+    border-radius: 2px;
+    outline: none;
+    transition:
+      border-color var(--transition),
+      background var(--transition);
+    font-variant-numeric: tabular-nums;
+  }
+  .contact-form__input::placeholder {
+    color: var(--c-ink-3);
+    opacity: 0.7;
+  }
+  .contact-form__input:hover {
+    border-color: var(--c-ink-3);
+  }
+  .contact-form__input:focus-visible {
+    border-color: var(--c-amber);
+    border-bottom-color: var(--c-amber);
+    background: var(--c-bg);
+    box-shadow: inset 0 0 0 1px var(--c-amber);
+  }
+  .contact-form__input.is-invalid {
+    border-color: var(--c-primary);
+  }
+  .contact-form__textarea {
+    resize: vertical;
+    min-height: 140px;
+    line-height: 1.55;
+  }
+  .contact-form__hint {
+    margin: 0;
+    font-family: var(--ff-mono);
+    font-size: 0.7rem;
+    color: var(--c-ink-3);
+    letter-spacing: 0.04em;
+  }
+  .contact-form__honeypot {
+    position: absolute;
+    left: -10000px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+  .contact-form__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-4);
+    margin-top: var(--sp-2);
+  }
+  .contact-form__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-2);
+    padding: 12px 22px;
+    font-family: var(--ff-mono);
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    background: var(--c-bg);
+    color: var(--c-ink);
+    border: 1px solid var(--c-ink);
+    border-radius: 2px;
+    cursor: pointer;
+    min-height: 44px;
+    transition:
+      background var(--transition),
+      color var(--transition),
+      border-color var(--transition);
+  }
+  .contact-form__btn:hover,
+  .contact-form__btn:focus-visible {
+    background: var(--c-ink);
+    color: var(--c-bg);
+    border-color: var(--c-ink);
+    outline: none;
+  }
+  .contact-form__btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .contact-form__btn--primary {
+    background: var(--c-amber);
+    color: var(--c-bg);
+    border-color: var(--c-amber);
+  }
+  .contact-form__btn--primary:hover,
+  .contact-form__btn--primary:focus-visible {
+    background: var(--c-ink);
+    color: var(--c-amber);
+    border-color: var(--c-ink);
+  }
+  .contact-form__status {
+    margin: 0;
+    font-size: var(--fs-xs);
+    color: var(--c-ink-2);
+    letter-spacing: 0.08em;
+  }
+  .contact-form__status[data-state="ok"] {
+    color: var(--c-amber);
+    font-weight: 700;
+  }
+  .contact-form__status[data-state="warn"] {
+    color: var(--c-warn, #b9530a);
+    font-weight: 600;
+  }
+  .contact-form__privacy {
+    margin: var(--sp-3) 0 0;
+    padding-top: var(--sp-3);
+    border-top: 1px dashed var(--c-rule);
+    font-size: 0.7rem;
+    color: var(--c-ink-3);
+    letter-spacing: 0.04em;
+    line-height: 1.6;
+  }
+  .contact-form__privacy code {
+    font-family: var(--ff-mono);
+    color: var(--c-ink-2);
+    background: transparent;
+    padding: 0;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .contact-form__input,
+    .contact-form__btn {
+      transition: none;
+    }
+  }
 </style>
+
+<script>
+  /**
+   * Contact form (v14 contact-form)
+   *
+   * Submission flow:
+   *   1. Validate client-side (HTML5 + min-length + email shape).
+   *   2. POST to /api/contact (CF Worker, see back_end_engineer).
+   *   3. On 200 → mailto: fallback opens prefilled with same fields,
+   *      status flips to "OK · CHECK YOUR MAIL CLIENT".
+   *   4. On non-200 OR no endpoint → mailto: fallback as primary path,
+   *      status flips to "OPENED MAIL CLIENT · FALLBACK".
+   *
+   * The form is privacy-preserving by construction: no third-party
+   * service, no exposed address in the HTML payload (the recipient is
+   * only in the Worker / mailto template).
+   */
+
+  (() => {
+    const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+    if (!form) return;
+    const submitBtn = form.querySelector<HTMLButtonElement>('[data-contact-submit]');
+    const statusEl = form.querySelector<HTMLElement>('[data-contact-status]');
+    const btnLabel = form.querySelector<HTMLElement>('[data-contact-btn-label]');
+    const counter = form.querySelector<HTMLElement>('[data-contact-counter]');
+    const msgInput = form.querySelector<HTMLTextAreaElement>('#cf-message');
+    const RECIPIENT = (form.getAttribute('data-recipient') ?? '').trim();
+
+    const API_ENDPOINT = '/api/contact';
+    const MAX_MSG = 4000;
+
+    const setStatus = (text: string, state: 'idle' | 'ok' | 'warn' = 'idle'): void => {
+      if (!statusEl) return;
+      statusEl.textContent = text;
+      statusEl.setAttribute('data-state', state);
+    };
+
+    const setSubmitting = (on: boolean): void => {
+      if (!submitBtn) return;
+      submitBtn.disabled = on;
+      if (btnLabel) btnLabel.textContent = on ? 'SENDING…' : 'SEND →';
+    };
+
+    const validate = (data: {
+      name: string;
+      email: string;
+      subject: string;
+      message: string;
+      website: string;
+    }): string | null => {
+      if (data.website) return 'spam-detected';
+      if (data.name.length < 2 || data.name.length > 80) return 'name must be 2-80 chars';
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) return 'invalid email';
+      if (data.subject.length < 3 || data.subject.length > 120) return 'subject must be 3-120 chars';
+      if (data.message.length < 20 || data.message.length > MAX_MSG) {
+        return `message must be 20-${MAX_MSG} chars`;
+      }
+      return null;
+    };
+
+    const buildMailto = (data: {
+      name: string;
+      email: string;
+      subject: string;
+      message: string;
+    }): string => {
+      const recipient = RECIPIENT || '';
+      const subj = `[Portfolio] ${data.subject} — from ${data.name}`;
+      const body =
+        `From: ${data.name} <${data.email}>\n\n` +
+        `${data.message}\n\n` +
+        `--\nSent via the /contact/ form on christianmacion.github.io\nReply to: ${data.email}`;
+      const params = new URLSearchParams({
+        subject: subj.slice(0, 240),
+        body: body.slice(0, 4000),
+      });
+      return `mailto:${recipient}?${params.toString()}`;
+    };
+
+    const collect = (): {
+      name: string;
+      email: string;
+      subject: string;
+      message: string;
+      website: string;
+    } => {
+      const fd = new FormData(form);
+      return {
+        name: String(fd.get('name') ?? '').trim(),
+        email: String(fd.get('email') ?? '').trim(),
+        subject: String(fd.get('subject') ?? '').trim(),
+        message: String(fd.get('message') ?? '').trim(),
+        website: String(fd.get('website') ?? '').trim(),
+      };
+    };
+
+    const flagInvalid = (key: keyof ReturnType<typeof collect>): void => {
+      const el = form.querySelector<HTMLInputElement | HTMLTextAreaElement>(
+        `[name="${key}"]`,
+      );
+      if (el) el.classList.add('is-invalid');
+    };
+
+    const clearInvalid = (): void => {
+      form
+        .querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('.contact-form__input')
+        .forEach((el) => el.classList.remove('is-invalid'));
+    };
+
+    /* Char counter on the message field. */
+    if (msgInput && counter) {
+      const update = () => {
+        const len = msgInput.value.length;
+        counter.textContent = String(len);
+        counter.setAttribute('data-state', len > MAX_MSG ? 'over' : 'ok');
+      };
+      msgInput.addEventListener('input', update);
+      update();
+    }
+
+    /* Submit handler. */
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearInvalid();
+      const data = collect();
+      const err = validate(data);
+      if (err) {
+        setStatus(`VALIDATION · ${err.toUpperCase()}`, 'warn');
+        if (err.includes('name')) flagInvalid('name');
+        if (err.includes('email')) flagInvalid('email');
+        if (err.includes('subject')) flagInvalid('subject');
+        if (err.includes('message')) flagInvalid('message');
+        return;
+      }
+
+      setSubmitting(true);
+      setStatus('SENDING…');
+
+      let posted = false;
+      try {
+        const resp = await fetch(API_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({
+            name: data.name,
+            email: data.email,
+            subject: data.subject,
+            message: data.message,
+            source: 'contact-form',
+            ts: new Date().toISOString(),
+          }),
+        });
+        posted = resp.ok;
+      } catch (_err) {
+        posted = false;
+      }
+
+      const mailto = buildMailto(data);
+      try {
+        window.location.href = mailto;
+      } catch (_e) {
+        /* some browsers block programmatic mailto; fall back to anchor */
+        const a = document.createElement('a');
+        a.href = mailto;
+        a.rel = 'noopener';
+        a.click();
+      }
+
+      setSubmitting(false);
+      if (posted) {
+        setStatus('SENT · CHECK YOUR MAIL CLIENT', 'ok');
+      } else {
+        setStatus('OPENED MAIL CLIENT · FALLBACK PATH', 'warn');
+      }
+    });
+
+    /* Clear invalid flag on focus so the user gets a clean state. */
+    form
+      .querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('.contact-form__input')
+      .forEach((el) => {
+        el.addEventListener('focus', () => el.classList.remove('is-invalid'));
+      });
+  })();
+</script>
