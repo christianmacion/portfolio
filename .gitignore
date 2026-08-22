@@ -63,3 +63,29 @@ public/resume-*.docx
 # canonical artifact; the .cjs/.mjs scripts are regenerated on demand and never referenced.
 .audit/**/*.cjs
 .audit/**/*.mjs
+
+# v2026-08-23 cleanup : transient per-wave verify/probe scripts in scripts/
+# that regenerated ad-hoc on qa_engineer runs. The canonical evidence is in
+# .audit/lighthouse/ + .audit/a11y/. These _*.mjs scripts are ad-hoc probe
+# scripts and are never imported from app code; archived 2026-08-23 to
+# ~/Contingency/portfolio-improvement/audit-archive/2026-08-23/scripts/.
+scripts/_*.mjs
+
+# v2026-08-23 cleanup : one-off verify scripts that landed in scripts/ at root.
+# Pattern still applies : never imported, never referenced from app code.
+scripts/audit-*.mjs
+scripts/axe-*.mjs
+scripts/build-graph-snapshot.mjs
+scripts/cross-device-audit.mjs
+scripts/debug-*.mjs
+scripts/probe.mjs
+scripts/vibe-audit-*.mjs
+scripts/w3-*.mjs
+scripts/worldview-verify.mjs
+scripts/wv-verify2.mjs
+
+# v2026-08-23 cleanup : root-level audit debris. _audit-* and _verify-* files
+# were ad-hoc timeline / tape / axe verification scripts and screenshots.
+# Archived 2026-08-23 to ~/Contingency/portfolio-improvement/audit-archive/.
+_audit-*
+_verify-*
