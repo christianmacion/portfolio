@@ -1,0 +1,57 @@
+# workers/contact/wrangler.toml — standalone Worker config.
+#
+# This Worker is deployed independently of the static site (CF Pages
+# project was DELETED per Owner directive). Wire the Worker to a route
+# at api.christianmacion.com/contact or similar; the static site's
+# contact form posts to that URL.
+#
+# Deploy:
+#   wrangler deploy --config workers/contact/wrangler.toml
+#
+# Set secrets (one-time):
+#   wrangler secret put OWNER_EMAIL
+#   wrangler secret put RESEND_API_KEY
+#   wrangler secret put IP_HASH_PEPPER_PRIMARY
+#
+# KV namespace binding `RATELIMIT` is shared with the rest of the CF
+# account; the same namespace ID is used by functions/ in the repo
+# (local-dev only). For prod, create a fresh KV namespace:
+#   wrangler kv:namespace create RATELIMIT
+# and paste the returned `id` below.
+
+name = "christianmacion-contact"
+main = "index.ts"
+compatibility_date = "2026-07-31"
+compatibility_flags = ["nodejs_compat"]
+
+# === KV ================================================================
+# This is the SAME namespace used by the legacy CF Pages Functions
+# (functions/api/contact.ts). After Pages was deleted, the namespace
+# survives — Worker + KV are independent deployables. The id below
+# matches wrangler.toml at the repo root.
+[[kv_namespaces]]
+binding = "RATELIMIT"
+id = "94b15ec48d9644f99599655618fc7afd"
+
+# === Secrets (set via `wrangler secret put`, NOT listed here) =========
+# OWNER_EMAIL         — recipient (e.g. christianmacion26@gmail.com)
+# RESEND_API_KEY      — Resend API key (https://resend.com/api-keys)
+# IP_HASH_PEPPER_PRIMARY — random 32+ char string for IP HMAC
+
+# === Optional vars (plaintext, fine to commit) =======================
+[vars]
+ALLOWED_ORIGIN = "https://christianmacion.github.io"
+RESEND_FROM = "Christian Macion <noreply@christianmacion.com>"
+# RESEND_API_URL is intentionally not set in production; defaults to
+# https://api.resend.com/emails. Local dev sets it via .dev.vars to point
+# at a Python mock server (see workers/contact/README.md).
+
+# === Custom route =====================================================
+# Wire the Worker to a custom domain. Owner to update `zone_id` and
+# `domain` when they stand up api.christianmacion.com. Until then,
+# the Worker is reachable at https://christianmacion-contact.<account>.workers.dev
+# which the front-end form can target with an absolute URL.
+#
+# [[routes]]
+# pattern = "api.christianmacion.com/contact"
+# custom_domain = true

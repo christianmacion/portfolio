@@ -1,0 +1,185 @@
+{
+  "dedupe_key": "minispark-mobile-verify-v1",
+  "results": [
+    {
+      "name": "iPhone SE",
+      "width": 375,
+      "height": 667,
+      "pass": false,
+      "steps": [
+        {
+          "name": "chart renders (≥1 MiniSpark SVG with non-empty path)",
+          "pass": true,
+          "detail": "{\"ok\":true,\"svgCount\":4,\"drawnCount\":4,\"samplePathStart\":\"M 1.50 1.50 L 8.98 4.77 L 16.47 3.80 L 23.95 5.89 L 31.43 10.26 L 38.91 9.49 L 4\"}"
+        },
+        {
+          "name": "data is legible (rendered aspect ≈ viewBox aspect, drift < 5%)",
+          "pass": true,
+          "detail": "maxDrift=0.0011 count=4"
+        },
+        {
+          "name": "no horizontal overflow (scrollWidth ≤ viewport)",
+          "pass": true,
+          "detail": "{\"ok\":true,\"docW\":375,\"winW\":375,\"bodyW\":375,\"overflow\":false}"
+        },
+        {
+          "name": "no console errors",
+          "pass": false,
+          "detail": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+        },
+        {
+          "name": "stat-cell height ≥ 44px (touch target for embedded chart context)",
+          "pass": true,
+          "detail": "minH=248"
+        }
+      ],
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ]
+    },
+    {
+      "name": "iPhone 12",
+      "width": 390,
+      "height": 844,
+      "pass": false,
+      "steps": [
+        {
+          "name": "chart renders (≥1 MiniSpark SVG with non-empty path)",
+          "pass": true,
+          "detail": "{\"ok\":true,\"svgCount\":4,\"drawnCount\":4,\"samplePathStart\":\"M 1.50 1.50 L 8.98 4.77 L 16.47 3.80 L 23.95 5.89 L 31.43 10.26 L 38.91 9.49 L 4\"}"
+        },
+        {
+          "name": "data is legible (rendered aspect ≈ viewBox aspect, drift < 5%)",
+          "pass": true,
+          "detail": "maxDrift=0.0007 count=4"
+        },
+        {
+          "name": "no horizontal overflow (scrollWidth ≤ viewport)",
+          "pass": true,
+          "detail": "{\"ok\":true,\"docW\":390,\"winW\":390,\"bodyW\":390,\"overflow\":false}"
+        },
+        {
+          "name": "no console errors",
+          "pass": false,
+          "detail": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+        },
+        {
+          "name": "stat-cell height ≥ 44px (touch target for embedded chart context)",
+          "pass": true,
+          "detail": "minH=249"
+        }
+      ],
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ]
+    },
+    {
+      "name": "Pixel 5",
+      "width": 393,
+      "height": 851,
+      "pass": false,
+      "steps": [
+        {
+          "name": "chart renders (≥1 MiniSpark SVG with non-empty path)",
+          "pass": true,
+          "detail": "{\"ok\":true,\"svgCount\":4,\"drawnCount\":4,\"samplePathStart\":\"M 1.50 1.50 L 8.98 4.77 L 16.47 3.80 L 23.95 5.89 L 31.43 10.26 L 38.91 9.49 L 4\"}"
+        },
+        {
+          "name": "data is legible (rendered aspect ≈ viewBox aspect, drift < 5%)",
+          "pass": true,
+          "detail": "maxDrift=0.0016 count=4"
+        },
+        {
+          "name": "no horizontal overflow (scrollWidth ≤ viewport)",
+          "pass": true,
+          "detail": "{\"ok\":true,\"docW\":393,\"winW\":393,\"bodyW\":393,\"overflow\":false}"
+        },
+        {
+          "name": "no console errors",
+          "pass": false,
+          "detail": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+        },
+        {
+          "name": "stat-cell height ≥ 44px (touch target for embedded chart context)",
+          "pass": true,
+          "detail": "minH=249"
+        }
+      ],
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ]
+    },
+    {
+      "name": "Galaxy S20",
+      "width": 412,
+      "height": 915,
+      "pass": false,
+      "steps": [
+        {
+          "name": "chart renders (≥1 MiniSpark SVG with non-empty path)",
+          "pass": true,
+          "detail": "{\"ok\":true,\"svgCount\":4,\"drawnCount\":4,\"samplePathStart\":\"M 1.50 1.50 L 8.98 4.77 L 16.47 3.80 L 23.95 5.89 L 31.43 10.26 L 38.91 9.49 L 4\"}"
+        },
+        {
+          "name": "data is legible (rendered aspect ≈ viewBox aspect, drift < 5%)",
+          "pass": true,
+          "detail": "maxDrift=0.0008 count=4"
+        },
+        {
+          "name": "no horizontal overflow (scrollWidth ≤ viewport)",
+          "pass": true,
+          "detail": "{\"ok\":true,\"docW\":412,\"winW\":412,\"bodyW\":412,\"overflow\":false}"
+        },
+        {
+          "name": "no console errors",
+          "pass": false,
+          "detail": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+        },
+        {
+          "name": "stat-cell height ≥ 44px (touch target for embedded chart context)",
+          "pass": true,
+          "detail": "minH=236"
+        }
+      ],
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ]
+    },
+    {
+      "name": "iPad portrait",
+      "width": 768,
+      "height": 1024,
+      "pass": false,
+      "steps": [
+        {
+          "name": "chart renders (≥1 MiniSpark SVG with non-empty path)",
+          "pass": true,
+          "detail": "{\"ok\":true,\"svgCount\":4,\"drawnCount\":4,\"samplePathStart\":\"M 1.50 1.50 L 8.98 4.77 L 16.47 3.80 L 23.95 5.89 L 31.43 10.26 L 38.91 9.49 L 4\"}"
+        },
+        {
+          "name": "data is legible (rendered aspect ≈ viewBox aspect, drift < 5%)",
+          "pass": true,
+          "detail": "maxDrift=0 count=4"
+        },
+        {
+          "name": "no horizontal overflow (scrollWidth ≤ viewport)",
+          "pass": true,
+          "detail": "{\"ok\":true,\"docW\":768,\"winW\":768,\"bodyW\":768,\"overflow\":false}"
+        },
+        {
+          "name": "no console errors",
+          "pass": false,
+          "detail": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+        },
+        {
+          "name": "stat-cell height ≥ 44px (touch target for embedded chart context)",
+          "pass": true,
+          "detail": "minH=214"
+        }
+      ],
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ]
+    }
+  ]
+}
