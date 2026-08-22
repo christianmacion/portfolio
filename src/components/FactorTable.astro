@@ -250,7 +250,7 @@ function shortTitle(t: string): string {
 
   .factor__th {
     text-align: left;
-    padding: var(--sp-3) var(--sp-4);
+    padding: var(--sp-4) var(--sp-4);
     background: var(--c-tape-3);
     color: var(--c-phi);
     font-weight: 600;
@@ -276,9 +276,43 @@ function shortTitle(t: string): string {
     border-top: 1px solid var(--c-rule);
   }
 
+  /* v14.1 polish-7q CHROME-04 (2026-08-23) : institutional table chrome.
+     Per the CHROME.md §2 portfolio audit, the FactorTable read as
+     default <table> styling. Three consumer-side fixes (no new
+     tokens, no halo, no glow):
+
+       1. cell vertical padding bumped --sp-3 -> --sp-4 (12 -> 16px)
+          so the cells breathe like the institutional Bloomberg /
+          Bridgewater factor reports do, not the editor-default
+          12px. Horizontal padding unchanged at --sp-4.
+
+       2. zebra-striping via :nth-child(even) on .factor__row.
+          Background uses --c-bg-elev (migrated into tokens-v6.13.css
+          by the chrome-consolidation commit b51cba9) — a 2% white
+          lift that reads as a paper page-break without competing
+          with the data. The .factor__name column keeps its own
+          background (--c-tape-3) so the row names stay anchored.
+
+       3. overflow-x: auto wrapper already ships on .factor__tablewrap
+          (line 234 below). Six columns at 680px+ already triggered
+          the horizontal scroll on narrow viewports; the new padding
+          makes the table wider so the scroll gets exercised earlier.
+          aria-label on the wrapper stays — keyboard users can arrow-tab
+          into the region. */
+  .factor__row:nth-child(even) .factor__cell {
+    background: var(--c-bg-elev);
+  }
+  .factor__row:nth-child(even) .factor__name {
+    background: var(--c-tape-3);
+  }
+  /* Hover lift on the full row (subtle, no halo) */
+  .factor__row:hover .factor__cell {
+    background: var(--c-tape);
+  }
+
   .factor__name {
     text-align: left;
-    padding: var(--sp-3) var(--sp-4);
+    padding: var(--sp-4) var(--sp-4);
     background: var(--c-tape-3);
     color: var(--c-ink);
     font-weight: 600;
@@ -307,7 +341,7 @@ function shortTitle(t: string): string {
   }
 
   .factor__cell {
-    padding: var(--sp-3) var(--sp-4);
+    padding: var(--sp-4) var(--sp-4);
     color: var(--c-ink);
     vertical-align: top;
     font-variant-numeric: tabular-nums;
@@ -335,7 +369,7 @@ function shortTitle(t: string): string {
 
   .factor__notes {
     text-align: right;
-    padding: var(--sp-3) var(--sp-4);
+    padding: var(--sp-4) var(--sp-4);
     vertical-align: top;
     color: var(--c-ink-3);
     font-size: var(--fs-xs);
