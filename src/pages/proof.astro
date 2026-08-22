@@ -23,6 +23,7 @@ import SectionTOC from '@components/SectionTOC.astro';
 import VoiceLine from '@components/VoiceLine.astro';
 import ChromeHeader from '@components/ChromeHeader.astro';
 import SectionMark from '@components/SectionMark.astro';
+import StatTileRow from '@components/StatTileRow.astro';
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { path } from '@utils/url';
 import { profile } from '@utils/profile';
@@ -43,6 +44,15 @@ const heroArtifactCount = quantProjects.length + aiProjects.length;
 const ossProjectCount = projects.filter((p) => p.data.sourceLink).length;
 const heroQuantCount = quantProjects.length;
 const heroAiCount = aiProjects.length;
+
+// v14 EX-05b (2026-08-23) : page-level stat-tile row showing 3 aggregate
+// counters. Mirrors the EX-05b pattern per CHROME.md §4 — big number +
+// mono-caps label, no card chrome, hairline divider.
+const heroStatTiles = [
+  { value: String(heroQuantCount), label: 'quant projects' },
+  { value: String(heroAiCount), label: 'AI projects' },
+  { value: String(ossProjectCount), label: 'open-source' },
+];
 
 // v12.W4 : "on disk" = what this page can actually render now that
 // credentials moved to /certifications and code cards to /repos:
@@ -180,6 +190,12 @@ const paginate = (items: any[]) => {
         {aiProjects.length} AI projects with frozen-spec eval harnesses. Each row links to the write-up. Metrics
         come from project frontmatter, not hand-written.
       </p>
+
+      {/* v14 EX-05b (2026-08-23) : page-level stat-tile row. Big number +
+          mono-caps label, hairline divider, no card chrome. */}
+      <div class="proof-stat-row">
+        <StatTileRow tiles={heroStatTiles} withDivider={true} />
+      </div>
     </div>
   </header>
 
@@ -1502,6 +1518,15 @@ const paginate = (items: any[]) => {
     .ptr__cell--meta {
       margin-top: var(--sp-2);
     }
+  }
+
+  /* v14 EX-05b (2026-08-23) : page-level stat-row spacing. The StatTileRow
+     component owns its own grid; this just adds the breathing room above
+     the existing sub paragraph. */
+  .proof-stat-row {
+    margin-top: var(--sp-5);
+    padding-top: var(--sp-4);
+    border-top: 1px solid var(--c-rule);
   }
 </style>
 

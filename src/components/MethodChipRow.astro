@@ -1,0 +1,107 @@
+---
+/**
+ * MethodChipRow.astro : EX-05c chrome pattern adoption.
+ *
+ * Per CHROME.md §4 EX-05c spec (binding 2026-08-23):
+ *   - Geometry: Inline-flex row of chips. Each chip = 1px hairline border,
+ *     no fill, square corners (--j-r: 0).
+ *   - Type:
+ *     - Key (METHOD / DATASET / SOURCES): --ff-mono, --fs-2xs (12px),
+ *       weight 500, uppercase, tracking 0.04em, --j-ink-3.
+ *     - Value (the actual name): same family/size, weight 400,
+ *       --j-ink-1. Separated by a single "·" (typographic dot).
+ *   - Spacing: chip padding = --j-sp-1 (8px) vertical, --j-sp-2 (16px)
+ *     horizontal. Gap between chips = --j-sp-1 (8px).
+ *   - Layout: flex-wrap on narrow viewports. No horizontal scroll.
+ *   - No hover. Chips are static metadata.
+ *   - Optional accent: the FIRST chip's key uses --accent-ink (#6B5A1A
+ *     on amber bg) to draw the eye to the methodology anchor.
+ *
+ * Tokens used (all in tokens-v6.13.css): --j-b-hairline, --j-sp-1,
+ * --j-sp-2, --j-ff-mono, --j-ff-body, --fs-2xs, --j-ink-1, --j-ink-3,
+ * --accent, --accent-ink.
+ *
+ * Zero new tokens.
+ */
+interface Props {
+  /** Array of {key, value} pairs. The FIRST chip's key is accented. */
+  chips: { key: string; value: string }[];
+}
+const { chips } = Astro.props;
+---
+
+<div class="chip-row" role="list">
+  {
+    chips.map((c, i) => (
+      <div class:list={["chip", i === 0 && "chip--anchor"]} role="listitem">
+        <span class="chip__key">{c.key}</span>
+        <span class="chip__sep" aria-hidden="true">·</span>
+        <span class="chip__val">{c.value}</span>
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--j-sp-1);
+    /* No horizontal scroll on narrow viewports (per spec). */
+    max-width: 100%;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5ch;
+    /* Chip padding : --j-sp-1 (8px) vertical, --j-sp-2 (16px) horizontal. */
+    padding: var(--j-sp-1) var(--j-sp-2);
+    /* 1px hairline border, no fill, square corners (--j-r: 0). */
+    border: var(--j-b-hairline);
+    background: transparent;
+    border-radius: 0;
+    /* No hover (chips are static metadata per spec). */
+    line-height: 1.4;
+    /* Long values don't break the layout on narrow screens. */
+    max-width: 100%;
+  }
+
+  .chip__key {
+    /* Mono-caps key : --ff-mono, --fs-2xs (12px), weight 500, uppercase,
+       tracking 0.04em, --j-ink-3. */
+    font-family: var(--j-ff-mono);
+    font-size: var(--fs-2xs);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--j-ink-3);
+    white-space: nowrap;
+  }
+
+  .chip__sep {
+    /* Typographic dot separator (not a separator element). */
+    color: var(--j-ink-3);
+    font-family: var(--j-ff-body);
+    font-size: var(--fs-2xs);
+  }
+
+  .chip__val {
+    /* Value : same family/size, weight 400, --j-ink-1. */
+    font-family: var(--j-ff-mono);
+    font-size: var(--fs-2xs);
+    font-weight: 400;
+    color: var(--j-ink-1);
+    white-space: nowrap;
+  }
+
+  /* Optional accent : the FIRST chip's key uses --accent-ink to draw
+     the eye to the methodology anchor. Subtle institutional register,
+     not a "highlight" — just a different mono color. */
+  .chip--anchor .chip__key {
+    color: var(--accent-ink);
+  }
+  .chip--anchor .chip__sep {
+    color: var(--accent-ink);
+  }
+</style>

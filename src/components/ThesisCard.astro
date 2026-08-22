@@ -1,0 +1,148 @@
+---
+/**
+ * ThesisCard.astro : EX-05e chrome pattern adoption.
+ *
+ * Per CHROME.md §4 EX-05e spec (binding 2026-08-23):
+ *   - Geometry: single card surface. 1px hairline border (--rule).
+ *     No fill, no shadow. Internal 2-row layout:
+ *     Row 1: Title (h3, --fs-xl ≈ 28px, weight 600, --j-ink-1)
+ *            + 1-line subtitle (mono, --fs-xs ≈ 13px, --j-ink-3).
+ *     Row 2: Method-tag cluster (MethodChipRow, 3-5 chips)
+ *            + 1 status chip on the right (text + weight + label only,
+ *            NEVER fill — per chrome contract rule + status-binding rule).
+ *   - Spacing: card padding = --j-sp-3 (24px). Gap between rows =
+ *     --j-sp-2 (16px).
+ *   - Hover: border color --j-ink-2 (was --rule) in 120ms. NO lift.
+ *
+ * Status binding (text + weight + label, never fill):
+ *   - PROVEN  → --j-sage-deep (institutional green) + weight 600.
+ *   - DRAFT   → --j-ink-2 (neutral gray) + weight 500.
+ *   - KILLED  → --j-terracotta-deep + weight 600 (use sparingly).
+ *
+ * Tokens used (all in tokens-v6.13.css): --rule, --j-sp-2, --j-sp-3,
+ * --j-ink-1, --j-ink-2, --j-ink-3, --j-ff-body, --j-ff-mono, --fs-xl,
+ * --fs-xs, --j-dur-fast, --j-ease-snappy, --j-sage-deep,
+ * --j-terracotta-deep.
+ *
+ * Zero new tokens.
+ */
+import MethodChipRow from '@components/MethodChipRow.astro';
+
+type Status = 'PROVEN' | 'DRAFT' | 'KILLED';
+
+interface Props {
+  title: string;
+  subtitle?: string;
+  /** Method-tag chips (METHOD · DATASET · SOURCES style). */
+  methods?: { key: string; value: string }[];
+  /** Status chip — text + weight + label, NEVER fill. */
+  status: Status;
+}
+const { title, subtitle, methods = [], status } = Astro.props;
+
+const statusClass = `thesis__status--${status.toLowerCase()}`;
+---
+
+<article class="thesis">
+  <header class="thesis__head">
+    <h3 class="thesis__title">{title}</h3>
+    {subtitle && <p class="thesis__sub">{subtitle}</p>}
+  </header>
+  <footer class="thesis__foot">
+    {methods.length > 0 && <MethodChipRow chips={methods} />}
+    <span class:list={["thesis__status", statusClass]} aria-label={`Status: ${status}`}>
+      {status}
+    </span>
+  </footer>
+</article>
+
+<style>
+  .thesis {
+    /* Geometry : 1px hairline border, no fill, no shadow. */
+    padding: var(--j-sp-3);
+    background: transparent;
+    border: 1px solid var(--rule);
+    border-radius: 0;
+    /* Hover : 1px border-color shift to ink-2 in 120ms. NO lift. */
+    transition: border-color var(--j-dur-fast) var(--j-ease-snappy);
+    display: flex;
+    flex-direction: column;
+    gap: var(--j-sp-2);
+  }
+  .thesis:hover {
+    border-color: var(--j-ink-2);
+  }
+  .thesis:focus-within {
+    border-color: var(--j-ink-2);
+    outline: 2px solid var(--j-ink-2);
+    outline-offset: -2px;
+  }
+
+  .thesis__head {
+    display: flex;
+    flex-direction: column;
+    gap: var(--j-sp-1);
+  }
+
+  .thesis__title {
+    /* Title : h3, --fs-xl ≈ 28px, weight 600, --j-ink-1. */
+    font-family: var(--j-ff-body);
+    font-size: var(--fs-xl);
+    font-weight: 600;
+    color: var(--j-ink-1);
+    line-height: 1.2;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+
+  .thesis__sub {
+    /* Subtitle : mono, --fs-xs (13px), --j-ink-3. */
+    font-family: var(--j-ff-mono);
+    font-size: var(--fs-xs);
+    font-weight: 400;
+    color: var(--j-ink-3);
+    line-height: 1.4;
+    margin: 0;
+    letter-spacing: 0.02em;
+  }
+
+  .thesis__foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--j-sp-2);
+  }
+
+  /* Status binding : text + weight + label ONLY (never fill).
+     The chrome contract rule + feedback-no-status-indicators-signal-lights
+     forbid color fills on status; we use color + weight on the text only. */
+  .thesis__status {
+    flex-shrink: 0;
+    /* Mono-caps label : --ff-mono, --fs-2xs (12px), uppercase,
+       tracking 0.04em. NO background fill. */
+    font-family: var(--j-ff-mono);
+    font-size: var(--fs-2xs);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    /* 1px hairline border to anchor the label visually without fill. */
+    padding: 3px 8px;
+    border: 1px solid currentColor;
+    line-height: 1.3;
+  }
+  .thesis__status--proven {
+    /* PROVEN : institutional green, weight 600. */
+    color: var(--j-sage-deep);
+    font-weight: 600;
+  }
+  .thesis__status--draft {
+    /* DRAFT : neutral gray, weight 500. */
+    color: var(--j-ink-2);
+    font-weight: 500;
+  }
+  .thesis__status--killed {
+    /* KILLED : institutional red, weight 600. Used sparingly. */
+    color: var(--j-terracotta-deep);
+    font-weight: 600;
+  }
+</style>

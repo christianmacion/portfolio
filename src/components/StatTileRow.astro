@@ -1,0 +1,103 @@
+---
+/**
+ * StatTileRow.astro : EX-05b chrome pattern adoption.
+ *
+ * Per CHROME.md §4 EX-05b spec (binding 2026-08-23):
+ *   - Geometry: 3-column row of stat-tiles. Each tile = big number +
+ *     mono-caps label. NO card chrome (no border, no fill).
+ *   - Type:
+ *     - Number: --ff-sans, --fs-3xl (32px range), weight 600, --j-ink-1,
+ *       tabular-nums + lnum so the digits don't jump.
+ *     - Label: --ff-mono, --fs-2xs (12px), uppercase, tracking 0.04em,
+ *       --j-ink-3.
+ *   - Spacing: tile vertical = --j-sp-2 above, --j-sp-1 below.
+ *     Gap between tiles = --j-sp-6 (32px) horizontal.
+ *   - Optional connector: 1px hairline divider between tiles on desktop.
+ *     Hidden on mobile.
+ *   - Hover/focus: NONE — the tile is a presentation surface, not a CTA.
+ *
+ * Tokens used (all in tokens-v6.13.css): --fs-3xl, --fs-2xs, --j-ink-1,
+ * --j-ink-3, --j-ff-body, --j-ff-mono, --j-sp-1, --j-sp-2, --j-sp-6,
+ * --rule, --tnum, --j-b-hairline, --j-w-display.
+ *
+ * Zero new tokens.
+ */
+interface Props {
+  tiles: { value: string; label: string }[];
+  /** If true, render the hairline divider between tiles (desktop only). */
+  withDivider?: boolean;
+}
+const { tiles, withDivider = true } = Astro.props;
+---
+
+<div class:list={["stat-tile-row", withDivider && "stat-tile-row--divider"]} role="list">
+  {
+    tiles.map((t) => (
+      <div class="stat-tile" role="listitem">
+        <div class="stat-tile__value tnum">{t.value}</div>
+        <div class="stat-tile__label">{t.label}</div>
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .stat-tile-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* Gap = --j-sp-6 (32px) horizontal per spec. */
+    gap: var(--j-sp-6);
+    /* Vertical rhythm = --j-sp-2 above, --j-sp-1 below per spec. */
+    padding-block: var(--j-sp-2) var(--j-sp-1);
+  }
+
+  /* Optional connector : 1px hairline between stat tiles on desktop. */
+  .stat-tile-row--divider .stat-tile + .stat-tile {
+    border-left: var(--j-b-hairline);
+    padding-left: var(--j-sp-6);
+  }
+
+  .stat-tile {
+    display: flex;
+    flex-direction: column;
+    gap: var(--j-sp-1);
+    /* Hover/focus : NONE (tile is non-interactive per spec). */
+  }
+
+  .stat-tile__value {
+    /* Big number : --fs-3xl ≈ 32px, weight 600, --j-ink-1.
+       tnum utility (from global.css) wires tabular-nums + lnum. */
+    font-family: var(--j-ff-body);
+    font-size: var(--fs-3xl);
+    font-weight: 600;
+    color: var(--j-ink-1);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+
+  .stat-tile__label {
+    /* Mono-caps label : --ff-mono, --fs-2xs (12px), uppercase,
+       tracking 0.04em, --j-ink-3. */
+    font-family: var(--j-ff-mono);
+    font-size: var(--fs-2xs);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--j-ink-3);
+    line-height: 1.4;
+  }
+
+  /* Mobile fallback : 1 column, divider hidden, gap drops to sp-4. */
+  @media (max-width: 720px) {
+    .stat-tile-row {
+      grid-template-columns: 1fr;
+      gap: var(--j-sp-4);
+    }
+    .stat-tile-row--divider .stat-tile + .stat-tile {
+      border-left: none;
+      padding-left: 0;
+      border-top: var(--j-b-hairline);
+      padding-top: var(--j-sp-4);
+    }
+  }
+</style>

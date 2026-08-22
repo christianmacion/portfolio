@@ -2,7 +2,12 @@
 /**
  * TimelineEntry.astro : one experience entry, NDA-safe.
  * v2: renders contributions + proofs sub-blocks.
+ * v14 EX-05b (2026-08-23) : adds a 3-tile stat-row per role showing
+ * contributions + proofs + months-derived count. Chrome spec at
+ * CHROME.md §4 EX-05b.
  */
+import StatTileRow from '@components/StatTileRow.astro';
+
 interface Props {
   title: string;
   company: string;
@@ -42,6 +47,30 @@ function formatDate(iso: string): string {
   return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
 }
 const dateRange = `${formatDate(startDate)} to ${formatDate(endDate)}`;
+
+// v14 EX-05b (2026-08-23) : derive 3 stat tiles per role from existing
+// entry data. No new frontmatter fields. Months = union of months between
+// startDate and endDate (matches the experience.astro page header math).
+function parseIsoMonth(s: string): Date {
+  if (s.toLowerCase() === 'present') return new Date();
+  const [y, m] = s.split('-').map(Number);
+  return new Date(Number(y), (m ?? 1) - 1, 1);
+}
+const startD = parseIsoMonth(startDate);
+const endD = parseIsoMonth(endDate);
+let monthCount = 0;
+{
+  const cursor = new Date(startD);
+  while (cursor <= endD) {
+    monthCount++;
+    cursor.setMonth(cursor.getMonth() + 1);
+  }
+}
+const statTiles = [
+  { value: String(contributions.length), label: 'contributions' },
+  { value: String(proofs.length), label: 'proof pointers' },
+  { value: String(monthCount), label: 'months' },
+];
 ---
 
 <article class="tl">
@@ -63,6 +92,11 @@ const dateRange = `${formatDate(startDate)} to ${formatDate(endDate)}`;
       <div class="tl__date mono">{dateRange}</div>
     </header>
     {summary && <p class="tl__summary">{summary}</p>}
+
+    {/* v14 EX-05b (2026-08-23) : 3 stat tiles per role row.
+        Big number + mono-caps label, no card chrome, hairline divider. */}
+    <StatTileRow tiles={statTiles} withDivider={true} />
+
     <div class="tl__content"><slot /></div>
 
     {

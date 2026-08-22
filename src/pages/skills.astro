@@ -20,9 +20,41 @@ import Equation from '@components/Equation.astro';
 import Stat from '@components/Stat.astro';
 import ChromeHeader from '@components/ChromeHeader.astro';
 import SectionMark from '@components/SectionMark.astro';
+import SkillTile from '@components/SkillTile.astro';
 import { profile } from '@utils/profile';
 import { path } from '@utils/url';
 import { getCollection, type CollectionEntry } from 'astro:content';
+
+// v14 EX-05a (2026-08-23) : 6 featured skills rendered in the institutional
+// mono-caps label + sans description tile pattern (CHROME.md §4 EX-05a).
+// Zero new tokens. Each tile uses --rule border + --j-sp-3 padding +
+// --j-ink-1 mono label + --j-ink-2 grotesk description.
+const featuredTiles = [
+  {
+    label: 'Multi-Agent Orchestration',
+    description: '11-agent platform with separation-of-duties between generation, validation, and documentation agents.',
+  },
+  {
+    label: 'Eval Harness',
+    description: '31-gate statistical evaluation stack (G1 to G31) for both LLM outputs and systematic-trading strategies.',
+  },
+  {
+    label: 'Block-Bootstrap Nulls',
+    description: 'Same-autocorrelation null hypothesis with standardized block-length choice (Andrews 1991, Politis-Romano).',
+  },
+  {
+    label: 'Deflated Sharpe Ratio',
+    description: 'Multiple-testing correction per Bailey & López de Prado (2014) — conditions edge on the number of trials.',
+  },
+  {
+    label: 'Cloudflare Workers',
+    description: 'Edge functions + JSONL streaming pipelines for live data feeds, GDELT, forex, and the eval console.',
+  },
+  {
+    label: 'Python · numpy',
+    description: 'scipy-free implementations of the statistical gates; ~76,500 LOC of light-dependency research code.',
+  },
+];
 
 type SkillGroupEntry = CollectionEntry<'skillGroup'>;
 const allGroups: SkillGroupEntry[] = await getCollection('skillGroup');
@@ -154,6 +186,19 @@ const commitFor = (_item: SkillItem): string => SKILLS_COMMIT;
           size="md"
           label="(1)"
         />
+      </div>
+
+      {/* v14 EX-05a (2026-08-23) : featured skill tiles. Mono-caps label +
+          grotesk description, hairline border, hover shifts border color in
+          120ms. 2-col grid on desktop, 1-col on mobile. Per CHROME.md §4. */}
+      <div class="featured-tiles">
+        <div class="featured-tiles__head">
+          <span class="featured-tiles__eyebrow mono">FEATURED · EX-05A · INSTITUTIONAL TILE PATTERN</span>
+          <span class="featured-tiles__rule" aria-hidden="true"></span>
+        </div>
+        <div class="featured-tiles__grid">
+          {featuredTiles.map((t) => <SkillTile label={t.label} description={t.description} />)}
+        </div>
       </div>
 
       <div class="head-stats">
@@ -532,6 +577,36 @@ const commitFor = (_item: SkillItem): string => SKILLS_COMMIT;
     color: var(--c-ink);
   }
 
+  /* === v14 EX-05a featured-tiles section === */
+  .featured-tiles {
+    margin-block: var(--sp-5) var(--sp-6);
+  }
+  .featured-tiles__head {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+    margin-bottom: var(--sp-3);
+  }
+  .featured-tiles__eyebrow {
+    font-size: 10.5px;
+    color: var(--c-amber);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .featured-tiles__rule {
+    flex: 1;
+    height: 1px;
+    background: var(--c-rule);
+  }
+  /* 2-col on desktop, 1-col on mobile per EX-05a spec. */
+  .featured-tiles__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--sp-4);
+  }
+
   @media (max-width: 880px) {
     .head-stats {
       grid-template-columns: 1fr 1fr;
@@ -544,6 +619,10 @@ const commitFor = (_item: SkillItem): string => SKILLS_COMMIT;
       margin-left: 0;
       padding-left: 0;
       border-left: none;
+    }
+    /* v14 EX-05a : mobile collapse 2-col → 1-col. */
+    .featured-tiles__grid {
+      grid-template-columns: 1fr;
     }
   }
 </style>

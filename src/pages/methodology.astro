@@ -10,6 +10,7 @@ import DSRCalculator from '@components/DSRCalculator.astro';
 import SectionTOC from '@components/SectionTOC.astro';
 import PipelineDiagram from '@components/PipelineDiagram.astro';
 import ChromeHeader from '@components/ChromeHeader.astro';
+import MethodChipRow from '@components/MethodChipRow.astro';
 import { path } from '@utils/url';
 import VoiceLine from '@components/VoiceLine.astro';
 import SectionMark from '@components/SectionMark.astro';
@@ -80,6 +81,15 @@ const charter = [
   { tag: 'handoffs', value: 'What this agent must NOT do (anti-charter)' },
   { tag: 'gates', value: `Which of ${GATE_RANGE} apply, with exit codes` },
   { tag: 'evidence', value: 'What the agent must attach as proof' },
+];
+
+// v14 EX-05c (2026-08-23) : METHOD · DATASET · SOURCES chip cluster.
+// Per CHROME.md §4 EX-05c spec — fixed-key labels, hairline border, mono
+// caps. First chip (METHOD) gets the accent-ink color to anchor the eye.
+const methodChipCluster = [
+  { key: 'METHOD', value: 'Block-bootstrap null + 31-gate eval stack' },
+  { key: 'DATASET', value: 'Public market data (Binance · CFTC · Deribit · GDELT · EIA)' },
+  { key: 'SOURCES', value: 'arXiv · SSRN · Bailey & López de Prado 2014' },
 ];
 ---
 
@@ -173,6 +183,13 @@ const charter = [
         walk-forward OOS, multiple testing, look-ahead discipline, economic and cost realism. Same
         gate IDs mean the same thing whether the artifact is a trading strategy or an LLM output.
       </p>
+
+      {/* v14 EX-05c (2026-08-23) : METHOD · DATASET · SOURCES chip cluster.
+          Hairline border, mono caps key, grotesk value, first chip accented. */}
+      <div class="method-head__chips">
+        <span class="method-head__chips-label mono">METHOD · DATASET · SOURCES</span>
+        <MethodChipRow chips={methodChipCluster} />
+      </div>
 
       <div class="method-head__eq-block">
         <Equation
@@ -647,5 +664,23 @@ const charter = [
     font-family: var(--ff-mono);
     background: transparent;
     padding: 0;
+  }
+
+  /* v14 EX-05c (2026-08-23) : method-head chip cluster section. */
+  .method-head__chips {
+    margin-bottom: var(--sp-5);
+    padding: var(--sp-3) var(--sp-4);
+    background: var(--c-bg);
+    border: 1px solid var(--c-rule);
+    border-radius: var(--radius);
+  }
+  .method-head__chips-label {
+    display: block;
+    font-size: 10.5px;
+    color: var(--c-amber);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: var(--sp-2);
   }
 </style>

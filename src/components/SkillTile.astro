@@ -1,0 +1,81 @@
+---
+/**
+ * SkillTile.astro : EX-05a chrome pattern adoption.
+ *
+ * Per CHROME.md §4 EX-05a spec (binding 2026-08-23):
+ *   - Geometry: 1px hairline-bordered card (use existing --rule).
+ *     No fill, no shadow, sharp 0px corners.
+ *   - Layout: 2-column grid on desktop, 1-column mobile.
+ *   - Type:
+ *     - Label: --ff-mono, --fs-xs (≈13px), weight 500, tracking 0.04em,
+ *       uppercase. Color --j-ink-1.
+ *     - Description: --ff-sans, --fs-sm (≈14px), line-height 1.6,
+ *       color --j-ink-2.
+ *   - Spacing: Tile padding = --j-sp-3 (24px). Gap = --j-sp-2 (16px).
+ *   - Hover: Border color shifts to --j-ink-2 in 120ms. NO lift, no halo.
+ *   - No emojis, no icons inside tiles. Mono-caps label IS the icon.
+ *
+ * Tokens used (all already in tokens-v6.13.css): --rule, --j-sp-2, --j-sp-3,
+ * --j-ink-1, --j-ink-2, --j-ff-mono, --j-ff-body, --fs-xs, --fs-sm,
+ * --j-dur-fast, --j-ease-snappy, --lh-loose.
+ *
+ * Zero new tokens. Chrome contract v6.13 preserved.
+ */
+interface Props {
+  /** Mono-caps label. Already capitalized in source. */
+  label: string;
+  /** 1-2 line description (grotesk, regular). */
+  description: string;
+}
+const { label, description } = Astro.props;
+---
+
+<article class="skill-tile">
+  <div class="skill-tile__label">{label}</div>
+  <p class="skill-tile__desc">{description}</p>
+</article>
+
+<style>
+  .skill-tile {
+    /* Geometry : hairline border, no fill, no shadow, sharp corners. */
+    padding: var(--j-sp-3);
+    background: transparent;
+    border: 1px solid var(--rule);
+    border-radius: 0;
+    /* Hover : 1px border-color shift to ink-2 in 120ms snappy. No lift. */
+    transition: border-color var(--j-dur-fast) var(--j-ease-snappy);
+    display: flex;
+    flex-direction: column;
+    gap: var(--j-sp-2);
+    /* v14 chrome : keep the focus ring visible without a halo. */
+  }
+  .skill-tile:hover {
+    border-color: var(--j-ink-2);
+  }
+  .skill-tile:focus-within {
+    border-color: var(--j-ink-2);
+    outline: 2px solid var(--j-ink-2);
+    outline-offset: -2px;
+  }
+
+  .skill-tile__label {
+    /* Label : mono, 13px, weight 500, tracking 0.04em, uppercase.
+       Color = --j-ink-1 (per spec; primary text 19.05:1 AAA). */
+    font-family: var(--j-ff-mono);
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--j-ink-1);
+    line-height: 1.3;
+  }
+
+  .skill-tile__desc {
+    /* Description : grotesk, 14px, line-height 1.6, --j-ink-2. */
+    font-family: var(--j-ff-body);
+    font-size: var(--fs-sm);
+    line-height: 1.6;
+    color: var(--j-ink-2);
+    margin: 0;
+  }
+</style>

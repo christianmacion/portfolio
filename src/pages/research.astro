@@ -18,6 +18,7 @@
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
 import Stat from '@components/Stat.astro';
+import ThesisCard from '@components/ThesisCard.astro';
 // v9.3.2 motion contract : /research/ caps at 1 infinite loop. NewsRibbon
 // is the one (it is the institutional 2-track news line). Marquee lives
 // on /research/frontier-models/ (model-list semantic). MarketTape lives
@@ -56,6 +57,15 @@ const fmtDate10 = (d: Date | string | undefined): string => {
   if (!d) return 'unfiled';
   const date = typeof d === 'string' ? new Date(d) : d;
   return Number.isNaN(date.getTime()) ? 'unfiled' : date.toISOString().slice(0, 10);
+};
+
+// v14 EX-05e (2026-08-23) : headline metric extractor for the theses
+// section. Returns {label, value} pair from the first metric in the
+// project frontmatter (matches the existing r-card metric tile).
+const formatHeadline = (metrics: { label: string; value: string; sub?: string }[] | undefined) => {
+  if (!metrics?.length) return { label: 'metric', value: '—' };
+  const first = metrics[0];
+  return { label: first.label, value: first.value };
 };
 const paperMeta: Record<number, string> = {
   1: `OPEN SOURCE · 2025-09-20 · <a href="${path('/projects/deflated-sharpe')}">related surface →</a> · <a href="${repoBase}/9003283" target="_blank" rel="noopener noreferrer">commit 9003283</a>`,
@@ -382,6 +392,57 @@ statsRow[3].spark = sparkFor(2, 14, 0.5, 24);
   }
   <section id="math-corpus" aria-label="Math corpus">
     <FactorTable />
+  </section>
+
+  {
+    /* ============================================================
+       THESES (v14 EX-05e, 2026-08-23) : one ThesisCard per quant
+       project with method-tag cluster + status chip. The richer
+       9-card grid above is the visual evidence; the theses row
+       below is the institutional register: title + method chips +
+       PROVEN/DRAFT status binding (text + weight + label only).
+       ============================================================ */
+  }
+  <section
+    id="theses"
+    class="r-theses section section--alt"
+    aria-labelledby="r-theses-heading"
+  >
+    <div class="container">
+      <header class="section__head">
+        <p class="section__eyebrow">EX-05e · THESES</p>
+        <h2 id="r-theses-heading" class="section__title">
+          The book, as a stack of theses.
+        </h2>
+        <p class="section__sub">
+          Same 9 quant projects, restated in the institutional register. Each thesis card carries a
+          method-tag cluster and a status binding. No fill colors on status — text, weight, and
+          label only.
+        </p>
+      </header>
+
+      <div class="r-theses__grid">
+        {
+          quantProjects.map((p) => {
+            const headline = formatHeadline(p.data.metrics);
+            const m = (p.data.metrics ?? [])[0];
+            const status: 'PROVEN' | 'DRAFT' = m && m.value && m.value !== ':' ? 'PROVEN' : 'DRAFT';
+            return (
+              <ThesisCard
+                title={p.data.title}
+                subtitle={`${String(p.data.date ?? '').slice(0, 10)} · ${headline.label}: ${headline.value}`}
+                methods={[
+                  { key: 'METHOD', value: (p.data.stack?.[0] ?? 'public-data').slice(0, 48) },
+                  { key: 'DATASET', value: 'public-data · point-in-time' },
+                  { key: 'SOURCES', value: p.data.sourceLink ? 'OSS repo + writeup' : 'writeup' },
+                ]}
+                status={status}
+              />
+            );
+          })
+        }
+      </div>
+    </div>
   </section>
 
   {/* v9.3.2 motion contract (audit M-1): removed <Marquee /> here. The
@@ -853,6 +914,18 @@ statsRow[3].spark = sparkFor(2, 14, 0.5, 24);
     .r-card__cta,
     .r-card__ext {
       transition: none;
+    }
+  }
+
+  /* v14 EX-05e (2026-08-23) : theses grid. 2-col on desktop, 1-col on mobile. */
+  .r-theses__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--sp-4);
+  }
+  @media (max-width: 720px) {
+    .r-theses__grid {
+      grid-template-columns: 1fr;
     }
   }
 </style>

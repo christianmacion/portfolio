@@ -16,6 +16,7 @@
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
 import CTABanner from '@components/CTABanner.astro';
+import ThesisCard from '@components/ThesisCard.astro';
 import { profile } from '@utils/profile';
 import { path } from '@utils/url';
 import VoiceLine from '@components/VoiceLine.astro';
@@ -201,25 +202,16 @@ const shelf: Book[] = [
       <div class="memo-grid">
         {
           memos.map((m) => (
-            <article class="memo">
-              <header class="memo__head">
-                <span class="memo__date mono">{m.date}</span>
-                <span class="memo__status mono">{memoStatus}</span>
-              </header>
-              <h3 class="memo__title">{m.title}</h3>
-              <div class="memo__section">
-                <span class="memo__label mono">Abstract</span>
-                <p class="memo__p">{m.abstract}</p>
-              </div>
-              <div class="memo__section">
-                <span class="memo__label mono">Method</span>
-                <p class="memo__p">{m.method}</p>
-              </div>
-              <div class="memo__section">
-                <span class="memo__label mono">Finding</span>
-                <p class="memo__p">{m.finding}</p>
-              </div>
-            </article>
+            <ThesisCard
+              title={m.title}
+              subtitle={`${m.date} · ${memoStatus}`}
+              methods={[
+                { key: 'STAGE', value: 'Research / pre-flight' },
+                { key: 'GATES', value: `${profile.stats.evalGates}-gate` },
+                { key: 'STATUS', value: 'In flight' },
+              ]}
+              status="DRAFT"
+            />
           ))
         }
       </div>
