@@ -1,0 +1,23 @@
+name = "christianmacion-market-selected"
+main = "index.ts"
+compatibility_date = "2026-07-31"
+compatibility_flags = ["nodejs_compat"]
+
+# === Sibling Worker URLs (required) ====================================
+# These point at the three sibling Workers that the aggregator fans out
+# to. Owner to update after each sibling Worker is deployed.
+# Format: https://<worker-name>.<account-subdomain>.workers.dev/<path>
+[vars]
+FX_WORKER_URL = "https://christianmacion-market-fx.TBD.workers.dev/api/market/fx"
+QUOTES_WORKER_URL = "https://christianmacion-market-quotes.TBD.workers.dev/api/market/quotes"
+CRYPTO_WORKER_URL = "https://christianmacion-market-crypto.TBD.workers.dev/api/market/crypto"
+ALLOWED_ORIGIN = "https://christianmacion.github.io"
+
+# === Custom route =====================================================
+# Wire the Worker to a custom domain. Owner to update `zone_id` and
+# `domain` when they stand up api.christianmacion.com. Until then,
+# the Worker is reachable at https://christianmacion-market-selected.<account>.workers.dev/api/market/selected
+#
+# [[routes]]
+# pattern = "api.christianmacion.com/market/selected"
+# custom_domain = true
