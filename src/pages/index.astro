@@ -141,18 +141,25 @@ const liveCounters = [
            2-paragraph bio, then the social-links row, then the markets
            rail that closes the hero with the domain frame. -->
       <div class="hero-flagship__copy">
-        <p class="hero-flagship__eyebrow mono">
+        {/* v14 (2026-08-23, motion_designer WIN-02) : data-stagger="1..6"
+            wired on the 6 hero children. motion.css §2 (.hero-flagship
+            [data-stagger]) + motion.ts:96-104 add .is-revealed once the
+            page paints, driving the 480ms cinematic paint-time cascade:
+            eyebrow → H1 → capability → bio → proof → CTA cluster.
+            80ms cadence × 6 children = 480ms stagger + 480ms duration
+            ≈ 960ms total arc — institutional velocity, not ceremonial. */}
+        <p class="hero-flagship__eyebrow mono" data-stagger="1">
           CHRISTIAN T. MACION · DIGOS CITY, DAVAO DEL SUR, PHILIPPINES · REMOTE (UTC+8)
         </p>
-        <h1 class="hero-flagship__name">Quantitative Researcher</h1>
+        <h1 class="hero-flagship__name" data-stagger="2">Quantitative Researcher</h1>
         {/* v14 (2026-08-23, hero-capability) : 12-word capability statement
             lives right below the H1. Visitor evaluates Owner in 30s; this
             is the proof beat. Same register as the Bryllim subhead, just
             sharpened: capability + receipt in one line. */}
-        <p class="hero-flagship__subhead">
+        <p class="hero-flagship__subhead" data-stagger="3">
           Six years shipping alpha strategies and the AI systems behind them.
         </p>
-        <p class="hero-flagship__bio">
+        <p class="hero-flagship__bio" data-stagger="4">
           I'm a quant researcher who builds the eval harness behind the alpha. Six years across
           equities, futures, FX, and crypto. Same methodology, two lanes: systematic strategies on
           public data and multi-agent LLM systems behind frozen specs.
@@ -167,17 +174,22 @@ const liveCounters = [
              verbatim from memory (content-uplift-scope = copy-edit-only).
              Both candidates' return characters visible at first glance.
              Manual-only posture preserved (no live capital claim). -->
-        <p class="hero-flagship__proof mono">
+        <p class="hero-flagship__proof mono" data-stagger="5">
           RECENT ALPHA-HUNT · V2K Donchian(20) XAU/USD · $1,781/yr at 1 micro lot · 14 months to $2K
           payout · 4 of 4 walk-forward positive · Funding carry top-8 · Sharpe 5.29 · ann 9.76% ·
           manual only
         </p>
 
-        <!-- v13.1 (Bryllim parity) : social-links row. Mono caps + ↗
-             arrow on each cell matches the Bryllim reference spacing.
-             github / linkedin / medium / email — the four canonical
-             public surfaces. No new chrome tokens introduced. -->
-        <nav class="hero-flagship__links" aria-label="Public profiles">
+        {/* Wrap the social-links row + markets rail in a single
+            stagger=6 cluster. Both share the same choreography beat
+            (the "proof → CTA" landing) and reading order expects them
+            to arrive together. */}
+        <div data-stagger="6">
+          {/* v13.1 (Bryllim parity) : social-links row. Mono caps + ↗
+               arrow on each cell matches the Bryllim reference spacing.
+               github / linkedin / medium / email — the four canonical
+               public surfaces. No new chrome tokens introduced. */}
+          <nav class="hero-flagship__links" aria-label="Public profiles">
           <a
             href={profile.contact.github}
             class="hero-flagship__link"
@@ -216,6 +228,8 @@ const liveCounters = [
             download
           >1-PAGE RESUME <span aria-hidden="true">↗</span></a>
         </p>
+        </div>
+        {/* end of stagger=6 cluster : links + markets */}
       </div>
     </section>
 

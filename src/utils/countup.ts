@@ -55,7 +55,11 @@ export function animateCountUp(el: HTMLElement, opts: CountUpOptions = {}): void
   const parsed = parseNumeric(target);
   if (!parsed) return; // not numeric. leave alone
 
-  const { duration = 1400 } = opts;
+  // v2026-08-23 : default duration tightened from 1400 → 800ms. The home
+  // page's 6-cell strip animates on first viewport; 800ms is the
+  // institutional snappy register (under 1s = confident, not ceremonial).
+  // Callers can still override per-element via opts.duration.
+  const { duration = 800 } = opts;
 
   // v6.18 W2 lock (2026-08-08): aria-live="polite" on count-up targets
   // so screen readers announce the final numeric value when the
@@ -111,4 +115,20 @@ export function initCountUps(container: ParentNode = document): void {
     { threshold: 0.4 },
   );
   els.forEach((el) => io.observe(el));
+}
+
+/**
+ * Module-load auto-init (v2026-08-23, motion_designer WIN-01) :
+ * mirrors odometer.ts's DOMContentLoaded pattern so any page that
+ * imports this module via BaseLayout gets [data-countup] wired
+ * without a per-page import. Idempotent : calling initCountUps()
+ * twice produces the same DOM state (each element unobserve()s
+ * after firing once).
+ */
+if (typeof window !== 'undefined') {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => initCountUps());
+  } else {
+    initCountUps();
+  }
 }

@@ -1255,3 +1255,84 @@ main > section.footprint.is-revealed {
     transform: none;
   }
 }
+
+/* ============================================================
+ * 29h. HERO SOCIAL-LINK HOVER (v2026-08-23, motion_designer WIN-03)
+ *     The home page's social-links row (github / linkedin / medium /
+ *     email) is a critical hover target for the recruiter-grade first
+ *     impression. The §6 CTA arrow shift rule applies to .cta only;
+ *     this rule extends the 3px right-shift on the trailing ↗ glyph
+ *     to .hero-flagship__link so the outbound-link affordance reads
+ *     as engineered, not generic.
+ *
+ *     Motion category: hover (160ms snappy, per v11 vocabulary).
+ *     Chrome: no lift, no glow, no halo. The arrow translation is
+ *     the only visual delta; the link's color (var(--c-amber-light)
+ *     on hover) is inherited from the universal a:hover rule in
+ *     global.css line 199.
+ *
+ *     Reduced-motion: collapses to 0ms — arrow stays static, the
+ *     color shift still happens (color-only transition is non-vestibular
+ *     under WCAG 2.2 SC 2.3.3).
+ * ============================================================ */
+.hero-flagship__link {
+  transition:
+    color var(--mv-dur-snap) var(--mv-ease-snappy),
+    border-color var(--mv-dur-snap) var(--mv-ease-snappy);
+}
+.hero-flagship__link > span[aria-hidden='true'] {
+  display: inline-block;
+  transition: transform var(--mv-dur-snap) var(--mv-ease-snappy);
+}
+.hero-flagship__link:hover > span[aria-hidden='true'] {
+  transform: translateX(3px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-flagship__link > span[aria-hidden='true'] {
+    transition: none !important;
+  }
+  .hero-flagship__link:hover > span[aria-hidden='true'] {
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+ * 29i. LIVE DATA TICK HOOK (v2026-08-23, motion_designer HO-MOTION-05)
+ *     Foundation for the live-data-tick animation requested by the
+ *     directive (data-update · 200ms linear). back_end_engineer wires
+ *     the data feeds; once a forex pair / GDELT count / earth-globe
+ *     figure updates, the displayed number animates from old to new
+ *     using this CSS hook + the countup.ts formatLike() helper.
+ *
+ *     The hook is a single transition on the .data-tick class.
+ *     JS does:
+ *       const el = document.querySelector('.data-tick[data-tick-pair="EURUSD"]');
+ *       el.style.setProperty('--tick-from', el.textContent);
+ *       el.textContent = newValue;
+ *       el.style.setProperty('--tick-to', newValue);
+ *       el.classList.add('is-ticking');
+ *
+ *     Motion category: data-update (200ms linear, per directive).
+ *     Chrome: no scale, no color flash, no glow. The number swaps;
+ *     tabular-nums (from global.css line 45-69) prevents layout shift.
+ *
+ *     Reduced-motion: collapses to instant swap.
+ * ============================================================ */
+.data-tick {
+  font-variant-numeric: tabular-nums;
+  transition: opacity 200ms linear;
+}
+.data-tick.is-ticking {
+  opacity: 0.55;
+}
+.data-tick.is-ticking-end {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .data-tick,
+  .data-tick.is-ticking,
+  .data-tick.is-ticking-end {
+    transition: none !important;
+    opacity: 1 !important;
+  }
+}
