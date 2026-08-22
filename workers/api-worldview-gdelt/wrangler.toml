@@ -1,0 +1,26 @@
+name = "christianmacion-worldview-gdelt"
+main = "index.ts"
+compatibility_date = "2026-07-31"
+compatibility_flags = ["nodejs_compat"]
+
+# === KV ================================================================
+# Optional CACHE binding for a 1m rate-limit budget on the manifest pull.
+# The data path uses the Cloudflare Cache API (cf.cacheTtl: 60) so no KV
+# is required for the primary endpoint.
+#
+# [[kv_namespaces]]
+# binding = "CACHE"
+# id = "<TBD-via-wrangler-kv-namespace-create>"
+
+# === Optional vars (plaintext, fine to commit) =======================
+[vars]
+ALLOWED_ORIGIN = "https://christianmacion.github.io"
+
+# === Custom route =====================================================
+# Wire the Worker to a custom domain. Owner to update `zone_id` and
+# `domain` when they stand up api.christianmacion.com. Until then,
+# the Worker is reachable at https://christianmacion-worldview-gdelt.<account>.workers.dev/api/worldview/gdelt
+#
+# [[routes]]
+# pattern = "api.christianmacion.com/worldview/gdelt"
+# custom_domain = true
