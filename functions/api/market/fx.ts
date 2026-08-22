@@ -34,12 +34,14 @@ import {
  * ECB SDMX endpoint.
  * We pull 1 observation per (base, quote) pair.
  *   Base currencies: USD, GBP, JPY
- *   Quote currencies: EUR, USD
- *     - D.USD+GBP+JPY.EUR+USD
- * The ECB returns rows like: <USD, EUR, N> = 1 USD = N EUR.
+ *   Quote currencies: EUR (ECB publishes EUR-anchored reference rates
+ *   only — the URL is `D.<base>.<reference>`, not a cross-product).
+ *     - D.USD+GBP+JPY.EUR
+ * ECB returns rows like: <GBP, EUR, N> = 1 GBP = N EUR. Each rate is
+ * "1 EUR = N X" (alphabetical series index: GBP=0, JPY=1, USD=2).
  */
 const ECB_URL =
-  'https://data-api.ecb.europa.eu/service/data/EXR/D.USD+GBP+JPY.EUR+USD?lastNObservations=1&format=jsondata';
+  'https://data-api.ecb.europa.eu/service/data/EXR/D.USD+GBP+JPY.EUR.SP00.A?lastNObservations=1&format=jsondata';
 
 export interface FxItem {
   /** Display pair: "EUR/USD" (1 EUR = N USD) or "USD/JPY" (1 USD = N JPY). */
@@ -65,91 +67,84 @@ interface EcbObs {
 }
 
 /**
- * Convert an ECB observation into a display pair.
- * ECB gives 1 {base} = N {quote}; we want pairs in display order:
+ * Map alphabetical position in the bulk ECB response to currency code.
+ * The bulk URL `D.USD+GBP+JPY.EUR` returns series in alphabetical order:
+ *   keys[0] = GBP, keys[1] = JPY, keys[2] = USD
+ */
+const SERIES_INDEX_TO_CURRENCY = ['GBP', 'JPY', 'USD'] as const;
+
+/**
+ * Convert raw "1 EUR = N X" rates (one per X in the bulk query) into
+ * the display pairs the converter UI needs:
  *   - EUR/USD (1 EUR = N USD)
  *   - GBP/USD (1 GBP = N USD)
  *   - USD/JPY (1 USD = N JPY)
  *
- * For EUR/USD: ECB row D.USD.EUR gives 1 USD = N EUR → invert to 1 EUR = 1/N USD.
- * For GBP/USD: ECB row D.USD.GBP gives 1 USD = N GBP → invert to 1 GBP = 1/N USD.
- * For USD/JPY: ECB row D.JPY.USD gives 1 JPY = N USD → invert to 1 USD = 1/N USD.
+ * For EUR/USD: read EUR→USD directly.
+ * For GBP/USD: 1 GBP = (EUR→USD)/(EUR→GBP) USD.
+ * For USD/JPY: 1 USD = (EUR→JPY)/(EUR→USD) JPY → px = (EUR→JPY)/(EUR→USD).
  */
-function toDisplay(base: string, quote: string, rate: number): FxItem | null {
-  if (rate <= 0) return null;
-  if (base === 'USD' && quote === 'EUR') {
-    return { pair: 'EUR/USD', px: +(1 / rate).toFixed(4), base: 'EUR', quote: 'USD' };
+function buildDisplay(eurToGbp: number | null, eurToJpy: number | null, eurToUsd: number | null): FxItem[] {
+  const out: FxItem[] = [];
+  if (typeof eurToUsd === 'number' && eurToUsd > 0) {
+    out.push({ pair: 'EUR/USD', px: +eurToUsd.toFixed(4), base: 'EUR', quote: 'USD' });
   }
-  if (base === 'USD' && quote === 'GBP') {
-    return { pair: 'GBP/USD', px: +(1 / rate).toFixed(4), base: 'GBP', quote: 'USD' };
+  if (typeof eurToGbp === 'number' && eurToGbp > 0 && typeof eurToUsd === 'number' && eurToUsd > 0) {
+    out.push({ pair: 'GBP/USD', px: +(eurToUsd / eurToGbp).toFixed(4), base: 'GBP', quote: 'USD' });
   }
-  if (base === 'JPY' && quote === 'USD') {
-    return { pair: 'USD/JPY', px: +(1 / rate).toFixed(2), base: 'USD', quote: 'JPY' };
+  if (typeof eurToJpy === 'number' && eurToJpy > 0 && typeof eurToUsd === 'number' && eurToUsd > 0) {
+    out.push({ pair: 'USD/JPY', px: +(eurToJpy / eurToUsd).toFixed(2), base: 'USD', quote: 'JPY' });
   }
-  return null;
+  return out;
 }
 
 /** Walk the SDMX structure and pull observation values.
- *  ECB SDMX JSON shape (relevant subset):
+ *  ECB SDMX JSON shape for the bulk query
+ *  `D.USD+GBP+JPY.EUR.SP00.A?lastNObservations=1` (relevant subset):
  *    {
- *      "dataSets": [{ "series": { "0:0:0:0:0": { "observations": { "0": [N] } } } }],
- *      "structure": {
- *        "dimensions": {
- *          "series": [
- *            { "id": "FREQ",    "values": [{ "id": "D" }] },
- *            { "id": "CURRENCY", "values": [{ "id": "USD" }, { "id": "GBP" }, ...] },
- *            { "id": "CURRENCY_DENOM", "values": [{ "id": "EUR" }, ...] },
- *            ...
- *          ]
- *        }
- *      }
+ *      "dataSets": [{ "series": {
+ *          "0:0:0:0:0": { "observations": { "7137": [N] } },
+ *          "0:1:0:0:0": { "observations": { "7137": [N] } },
+ *          "0:2:0:0:0": { "observations": { "7137": [N] } }
+ *      }}],
+ *      "structure": { "dimensions": { "series": [
+ *        { "id": "FREQ", "values": [{ "id": "D" }] },
+ *        { "id": "CURRENCY", "values": [{ "id": "GBP" }, { "id": "JPY" }, { "id": "USD" }] },
+ *        { "id": "CURRENCY_DENOM", "values": [{ "id": "EUR" }] },
+ *        ...
+ *      ]}}
  *    }
+ *  Series index 0 = GBP, 1 = JPY, 2 = USD (alphabetical CURRENCY order).
+ *  Each rate is "1 EUR = N X". We take the LATEST observation per
+ *  series (highest numeric index) and triangulate to X/USD.
  */
 function parseEcbSdmx(raw: unknown): FxItem[] {
   if (!raw || typeof raw !== 'object' || raw === null) return [];
   const root = raw as Record<string, unknown>;
   const dataSets = Array.isArray(root.dataSets) ? root.dataSets : [];
-  const structure = root.structure as Record<string, unknown> | undefined;
-  const seriesDims =
-    structure && typeof structure === 'object' && structure !== null
-      ? ((structure as { dimensions?: { series?: Array<{ values?: Array<{ id?: string }> }> } })
-          .dimensions?.series ?? [])
-      : [];
-
-  // Identify which series dim holds base (CURRENCY) and which holds quote (CURRENCY_DENOM).
-  let baseDimIdx = -1;
-  let quoteDimIdx = -1;
-  seriesDims.forEach((dim, idx) => {
-    if (dim && typeof dim === 'object' && 'id' in dim) {
-      const id = (dim as { id?: string }).id;
-      if (id === 'CURRENCY') baseDimIdx = idx;
-      else if (id === 'CURRENCY_DENOM') quoteDimIdx = idx;
-    }
-  });
-  if (baseDimIdx < 0 || quoteDimIdx < 0) return [];
-
-  const items: FxItem[] = [];
+  const rates: Record<string, number> = {};
   for (const ds of dataSets) {
     if (!ds || typeof ds !== 'object') continue;
     const series =
       (ds as { series?: Record<string, { observations?: Record<string, number[]> }> }).series ?? {};
-    for (const [key, value] of Object.entries(series)) {
-      if (!value || typeof value !== 'object') continue;
+    Object.entries(series).forEach(([key, value]) => {
+      if (!value || typeof value !== 'object') return;
+      // The CURRENCY dim is the SECOND one in `0:N:0:0:0` (index 1).
       const idxs = key.split(':');
-      const baseIdx = Number(idxs[baseDimIdx] ?? -1);
-      const quoteIdx = Number(idxs[quoteDimIdx] ?? -1);
-      const baseValues = seriesDims[baseDimIdx]?.values ?? [];
-      const quoteValues = seriesDims[quoteDimIdx]?.values ?? [];
-      const base = String(baseValues[baseIdx]?.id ?? '');
-      const quote = String(quoteValues[quoteIdx]?.id ?? '');
+      const currencyIdx = Number(idxs[1] ?? -1);
+      const ccy = SERIES_INDEX_TO_CURRENCY[currencyIdx];
+      if (!ccy) return;
       const obs = (value.observations ?? {}) as Record<string, number[]>;
-      const firstObs = Object.values(obs)[0];
-      const rate = Number(firstObs?.[0] ?? 0);
-      const item = toDisplay(base, quote, rate);
-      if (item) items.push(item);
-    }
+      const obsKeys = Object.keys(obs);
+      if (obsKeys.length === 0) return;
+      // Numeric sort → take the highest = newest observation.
+      const lastKey = obsKeys.sort((a, b) => parseInt(a) - parseInt(b)).pop();
+      if (lastKey === undefined) return;
+      const v = obs[lastKey]?.[0];
+      if (typeof v === 'number' && v > 0) rates[ccy] = v;
+    });
   }
-  return items;
+  return buildDisplay(rates.GBP ?? null, rates.JPY ?? null, rates.USD ?? null);
 }
 
 export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
@@ -204,4 +199,5 @@ export const onRequestOptions: PagesFunction<Env> = async ({ request, env }) => 
 };
 
 /** Re-export the parser so unit tests can hit it without standing up a Worker. */
-export const __test__ = { parseEcbSdmx, toDisplay, type EcbObs };
+export const __test__ = { parseEcbSdmx, buildDisplay, SERIES_INDEX_TO_CURRENCY };
+export type { EcbObs };

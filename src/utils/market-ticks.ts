@@ -3,7 +3,8 @@
  *
  * Sources (all public, free, no auth):
  *   - ECB reference rates: data-api.ecb.europa.eu/service/data/EXR/...
- *     (daily FX; EUR base; cached 6h)
+ *     (daily FX; ECB publishes EUR-anchored rates; we triangulate to
+ *      X/USD via the EUR/USD rate; cached 6h)
  *   - CoinGecko simple/price: api.coingecko.com/api/v3/simple/price
  *     (BTC, ETH, SOL; cached 30s)
  *   - Yahoo Finance v7 quote: query1.finance.yahoo.com/v7/finance/quote
@@ -123,52 +124,86 @@ interface CoinGeckoQuote {
   level: 'L1';
 }
 
-/** Parse the ECB SDMX-JSON structure for a single time-series key.
- *  Shape: data.dataSets[0].series['0:0:0:0:0'].observations['0'] = [v] */
-function parseEcbSeries(json: unknown, key: string): number | null {
-  if (!json || typeof json !== 'object') return null;
-  const j = json as Record<string, unknown>;
-  const ds = (j as { dataSets?: Array<{ series?: Record<string, unknown> }> }).dataSets;
-  const series = ds?.[0]?.series;
-  if (!series) return null;
+/** Parse one observation from an ECB SDMX-JSON series.
+ *  Shape: data.dataSets[0].series['<key>'].observations['<idx>'] = [value].
+ *  Returns the value from the LATEST observation (highest numeric index
+ *  — observations are 0-indexed chronologically). */
+function parseEcbSeriesValue(series: Record<string, unknown>, key: string): number | null {
   const s = (series as Record<string, { observations?: Record<string, number[]> }>)[key];
   const obs = s?.observations;
   if (!obs) return null;
-  const keys = Object.keys(obs);
-  if (keys.length === 0) return null;
-  const lastKey = keys[keys.length - 1];
+  const obsKeys = Object.keys(obs);
+  if (obsKeys.length === 0) return null;
+  // Numeric sort → take the highest index = newest observation.
+  const lastKey = obsKeys.sort((a, b) => parseInt(a) - parseInt(b)).pop();
+  if (lastKey === undefined) return null;
   const arr = obs[lastKey];
   return typeof arr?.[0] === 'number' ? arr[0] : null;
 }
 
-/** Fetch ECB reference rates vs USD (daily). Returns { 'EUR': rate, 'JPY': rate, ... }. */
+/** Parse the ECB SDMX-JSON structure for a single time-series key.
+ *  Single-currency queries return one series; we take whatever key ECB
+ *  emitted (canonical "0:0:0:0:0" when only one series is returned). */
+function parseEcbSeries(json: unknown): number | null {
+  if (!json || typeof json !== 'object') return null;
+  const ds = (json as { dataSets?: Array<{ series?: Record<string, unknown> }> }).dataSets;
+  const series = ds?.[0]?.series;
+  if (!series) return null;
+  const keys = Object.keys(series);
+  if (keys.length === 0) return null;
+  return parseEcbSeriesValue(series, keys[0]);
+}
+
+/** Fetch ECB reference rates vs USD (daily). Returns { EUR, JPY, GBP } as
+ *  X/USD prices (1 X = N USD).
+ *
+ *  ECB publishes EUR-anchored reference rates only — the URL is
+ *    D.<base>.EUR.SP00.A
+ *  and the returned rate is "1 <base> = N EUR". For EUR/USD we read the
+ *  rate directly; for JPY/USD and GBP/USD we triangulate via the
+ *  EUR/USD rate:
+ *    X/USD = X/EUR * EUR/USD = (1 / (EUR→X)) * (1 / (EUR→USD))
+ *
+ *  Single bulk query avoids three round-trips and uses the ECB's
+ *  alphabetical ordering of series keys (GBP=0, JPY=1, USD=2).
+ */
 async function loadEcbRates(): Promise<Record<string, number>> {
   if (ecbCache && Date.now() - ecbCache.fetchedAt < ECB_TTL_MS) {
     return ecbCache.rates;
   }
-  const series: Array<{ ccy: string; key: string }> = [
-    { ccy: 'EUR', key: '0.EUR.USD.EUR' },
-    { ccy: 'JPY', key: '0.JPY.USD.JPY' },
-    { ccy: 'GBP', key: '0.GBP.USD.GBP' },
-  ];
-  const rates: Record<string, number> = {};
-  for (const { ccy, key } of series) {
-    try {
-      const u =
-        'https://data-api.ecb.europa.eu/service/data/EXR/D.' +
-        ccy +
-        '.USD.SP00.A?lastObservation=1&format=jsondata';
-      const res = await fetch(u, { cache: 'no-store' });
-      if (!res.ok) continue;
-      const json = await res.json();
-      const rate = parseEcbSeries(json, key);
-      if (typeof rate === 'number') rates[ccy] = rate;
-    } catch {
-      // single-currency fetch failure is non-fatal
+  // Bulk query: one HTTP call, alphabetical series index
+  //   keys[0] = GBP, keys[1] = JPY, keys[2] = USD
+  const url =
+    'https://data-api.ecb.europa.eu/service/data/EXR/D.USD+JPY+GBP.EUR.SP00.A' +
+    '?lastObservation=1&format=jsondata';
+  try {
+    const res = await fetch(url, { cache: 'no-store' });
+    if (!res.ok) return ecbCache?.rates ?? {};
+    const json = await res.json();
+    const series = (json as { dataSets?: Array<{ series?: Record<string, unknown> }> })
+      ?.dataSets?.[0]?.series;
+    if (!series) return ecbCache?.rates ?? {};
+    const keys = Object.keys(series);
+    // Each value below is "1 EUR = N X" (ECB reference direction).
+    // Invert to get "1 EUR = N USD" denominated in X (i.e., X/EUR).
+    const eurToGbp = parseEcbSeriesValue(series, keys[0] ?? '');
+    const eurToJpy = parseEcbSeriesValue(series, keys[1] ?? '');
+    const eurToUsd = parseEcbSeriesValue(series, keys[2] ?? '');
+    if (eurToUsd === null || eurToUsd <= 0) return ecbCache?.rates ?? {};
+    const rates: Record<string, number> = {};
+    // EUR/USD: 1 USD = 1/(EUR→USD) EUR → 1 EUR = (EUR→USD) USD
+    rates.EUR = eurToUsd;
+    // JPY/USD: 1 USD = 1/(EUR→USD) EUR; 1 JPY = 1/(EUR→JPY) EUR
+    //   1 USD = (1/(EUR→USD)) / (1/(EUR→JPY)) = (EUR→JPY)/(EUR→USD) JPY
+    //   1 JPY = (EUR→USD)/(EUR→JPY) USD
+    if (eurToJpy !== null && eurToJpy > 0) rates.JPY = eurToUsd / eurToJpy;
+    // GBP/USD: 1 GBP = (EUR→USD)/(EUR→GBP) USD
+    if (eurToGbp !== null && eurToGbp > 0) rates.GBP = eurToUsd / eurToGbp;
+    if (Object.keys(rates).length > 0) {
+      ecbCache = { fetchedAt: Date.now(), rates };
     }
-  }
-  if (Object.keys(rates).length > 0) {
-    ecbCache = { fetchedAt: Date.now(), rates };
+  } catch {
+    // network / parse failure → fall back to last-known cache, then empty
   }
   return ecbCache?.rates ?? {};
 }
@@ -463,9 +498,10 @@ export async function loadMarketTicksWithMeta(): Promise<MarketTicksPayload> {
       // ahead of the tick-row timestamps.
       const stamp = new Date().toISOString();
       bySource.ECB = stamp;
-      if (ecb.EUR) ticks.push(ecbTick('EUR', 1 / ecb.EUR, undefined, stamp));
-      if (ecb.JPY) ticks.push(ecbTick('JPY', 1 / ecb.JPY, undefined, stamp));
-      if (ecb.GBP) ticks.push(ecbTick('GBP', 1 / ecb.GBP, undefined, stamp));
+      // rates are X/USD prices (1 X = N USD), already in display units.
+      if (ecb.EUR) ticks.push(ecbTick('EUR', ecb.EUR, undefined, stamp));
+      if (ecb.JPY) ticks.push(ecbTick('JPY', ecb.JPY, undefined, stamp));
+      if (ecb.GBP) ticks.push(ecbTick('GBP', ecb.GBP, undefined, stamp));
     }
   } catch {
     // ECB failure is non-fatal : Yahoo + CoinGecko cover most tickers.

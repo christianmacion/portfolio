@@ -1,9 +1,9 @@
 {
-  "generated": "2026-08-14T12:28:41.150Z",
+  "generated": "2026-08-22T19:40:56.720Z",
   "counts": {
     "agents": 148,
-    "skills": 215,
-    "relations": 14929
+    "skills": 216,
+    "relations": 15079
   },
   "agents": [
     {
@@ -1280,6 +1280,11 @@
       "type": "skill"
     },
     {
+      "id": "skill:examprep",
+      "name": "examprep",
+      "type": "skill"
+    },
+    {
       "id": "skill:feedback-update",
       "name": "feedback-update",
       "type": "skill"
@@ -1537,11 +1542,6 @@
     {
       "id": "skill:graph-onboarding",
       "name": "graph-onboarding",
-      "type": "skill"
-    },
-    {
-      "id": "skill:graph-org",
-      "name": "graph-org",
       "type": "skill"
     }
   ],

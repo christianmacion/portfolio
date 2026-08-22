@@ -213,6 +213,30 @@ interface GdeltCache {
 }
 const cache = gdeltCache as GdeltCache;
 const gdeltEvents: GdeltEvent[] = cache.events;
+// === Cache freshness pill ===========================================
+// munger-inversion : the failure mode is "4-day-old cache labeled LIVE
+// erodes credibility." Compute age at SSR time so the pill is byte-
+// deterministic and shippable through the chrome contract. Threshold
+// matches the round 1 task brief: >1h old → STALE pill.
+//  - fresh  (<1h)   : pill = LIVE    (default; no chrome drift)
+//  - stale  (1-6h)  : pill = STALE
+//  - very stale (>6h): pill = STALE · Nh old (long-form suffix)
+const GDELT_FRESH_MS = 60 * 60 * 1000; // 1h
+const GDELT_VERY_STALE_MS = 6 * 60 * 60 * 1000; // 6h
+const gdeltCacheAgeMs = Date.now() - new Date(cache.fetchedAt).getTime();
+const gdeltCacheAgeH = Math.floor(gdeltCacheAgeMs / (60 * 60 * 1000));
+const gdeltCacheState: 'live' | 'stale' | 'very-stale' =
+  gdeltCacheAgeMs >= GDELT_VERY_STALE_MS
+    ? 'very-stale'
+    : gdeltCacheAgeMs >= GDELT_FRESH_MS
+      ? 'stale'
+      : 'live';
+const gdeltCacheLabel =
+  gdeltCacheState === 'live'
+    ? 'LIVE'
+    : gdeltCacheState === 'stale'
+      ? 'STALE'
+      : `STALE · ${gdeltCacheAgeH}h old`;
 // Dedupe by id, cap at 50 for the overlay.
 const dedupGdelt: GdeltEvent[] = (() => {
   const seen = new Set<string>();
@@ -508,6 +532,26 @@ const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circ
         'equirectangular · 24h desk coverage'
       )}
     </span>
+    {/*
+      === Cache freshness pill (round 1 data-pipeline fix) ===
+      Surfaces GDELT cache age honestly so the visitor sees
+      LIVE | STALE | STALE · Nh old instead of a static-LIVE vibe.
+      chrome-contract binding: text + weight + label only — NO color
+      fills, NO halo/glow (the cnv__pill convention from Converter.astro).
+    */}
+    {mode !== 'pins' && (
+      <span
+        class="earth-map__pill"
+        data-gdelt-state={gdeltCacheState}
+        aria-label={`GDELT cache state: ${gdeltCacheLabel}`}
+      >
+        <span class="earth-map__pill-dot" aria-hidden="true"></span>
+        <span class="earth-map__pill-tag">{gdeltCacheLabel}</span>
+        <span class="earth-map__pill-stamp mono">
+          cached {cache.fetchedAt.slice(0, 10)} {cache.fetchedAt.slice(11, 19)}Z
+        </span>
+      </span>
+    )}
   </figcaption>
 </figure>
 
@@ -873,8 +917,60 @@ const eventShape = (category: string): 'triangle' | 'square' | 'diamond' | 'circ
     letter-spacing: 0.02em;
   }
 
+  /* === Cache freshness pill (chrome-contract v6.13 status binding) ===
+     Text + weight + label only — no halo/glow/gradient per
+     feedback-portfolio-visual-bar-2026-07-31. Matches the
+     cnv__pill convention (Converter.astro §2). */
+  .earth-map__pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border: 1px solid var(--c-rule);
+    color: var(--c-ink-2);
+    margin-left: auto;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .earth-map__pill-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--c-ink-3);
+    flex-shrink: 0;
+  }
+  .earth-map__pill-tag {
+    font-weight: 700;
+    color: var(--c-ink);
+  }
+  .earth-map__pill-stamp {
+    color: var(--c-ink-3);
+    font-weight: 400;
+  }
+  /* State bindings — color is supplementary. Text + weight + label carry
+     the meaning (WCAG AA: pill-state text contrast ≥ 4.5:1 on parchment). */
+  .earth-map__pill[data-gdelt-state="live"] .earth-map__pill-dot {
+    background: var(--c-status-open, #3fb950);
+  }
+  .earth-map__pill[data-gdelt-state="live"] .earth-map__pill-tag {
+    color: #0d7a30;
+  }
+  .earth-map__pill[data-gdelt-state="stale"] .earth-map__pill-dot,
+  .earth-map__pill[data-gdelt-state="very-stale"] .earth-map__pill-dot {
+    background: var(--c-bind-iterate, #d4a017);
+  }
+  .earth-map__pill[data-gdelt-state="stale"] .earth-map__pill-tag,
+  .earth-map__pill[data-gdelt-state="very-stale"] .earth-map__pill-tag {
+    color: #7a5a0a;
+  }
+
   @media (max-width: 720px) {
     .earth-map__cap-note {
+      margin-left: 0;
+      flex-basis: 100%;
+    }
+    .earth-map__pill {
       margin-left: 0;
       flex-basis: 100%;
     }
